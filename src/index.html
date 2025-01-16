@@ -1,13 +1,100 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>HsBasekit</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-  <app-root></app-root>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>HsBasekit</title>
+    <base href="/" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="favicon.ico"
+    />
+    <style>
+      .hs-loader {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        background: rgba(255, 255, 255, 1);
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+      /* From Uiverse.io by cosnametv */
+      .loader {
+        --color: #a5a5b0;
+        --size: 70px;
+        width: var(--size);
+        height: var(--size);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        animation: keyframes-spin 1s infinite linear;
+        margin: auto;
+      }
+
+      .loader span {
+        width: 100%;
+        height: 100%;
+        background-color: var(--color);
+        animation: keyframes-blink 0.6s alternate infinite linear;
+      }
+
+      .loader span:nth-child(1) {
+        animation-delay: 0ms;
+      }
+
+      .loader span:nth-child(2) {
+        animation-delay: 200ms;
+      }
+
+      .loader span:nth-child(3) {
+        animation-delay: 300ms;
+      }
+
+      .loader span:nth-child(4) {
+        animation-delay: 400ms;
+      }
+
+      .loader span:nth-child(5) {
+        animation-delay: 500ms;
+      }
+
+      .loader span:nth-child(6) {
+        animation-delay: 600ms;
+      }
+
+      @keyframes keyframes-blink {
+        0% {
+          opacity: 0.3;
+          transform: scale(0.5) rotate(5deg);
+        }
+
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <app-root></app-root>
+
+    <div class="hs-loader">
+      <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </body>
 </html>
