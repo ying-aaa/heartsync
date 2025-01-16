@@ -4,10 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-uno": "ng serve & unocss --watch",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:hs-basekit": "node dist/hs-basekit/server/server.mjs"
+    "serve:ssr:hs-basekit": "node dist/hs-basekit/server/server.mjs",
+    "dev:css": "unocss --watch",
+    "build:css": "unocss"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +24,9 @@
     "@angular/platform-server": "^19.1.0",
     "@angular/router": "^19.1.0",
     "@angular/ssr": "^19.1.1",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2",
+    "eslint-plugin-unused-imports": "^4.1.4",
     "express": "^4.18.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -30,15 +36,20 @@
     "@angular-devkit/build-angular": "^19.1.1",
     "@angular/cli": "^19.1.1",
     "@angular/compiler-cli": "^19.1.0",
+    "@eslint/js": "^9.18.0",
     "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
     "jasmine-core": "~5.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.7.2"
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.20.0",
+    "unocss": "^65.4.2"
   }
 }
