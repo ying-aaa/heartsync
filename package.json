@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:hs-basekit": "node dist/hs-basekit/server/server.mjs",
-    "dev:css": "unocss --watch",
+    "uno": "unocss --watch",
     "build:css": "unocss"
   },
   "private": true,
