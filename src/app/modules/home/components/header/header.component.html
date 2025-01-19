@@ -1,26 +1,29 @@
 <div class="h-64px bg-#3D3D3D flex items-center">
   <div class="w-180px"></div>
-  <div class="flex-1">
+  <div class="flex-1 flex">
     @for (item of menuList; track $index) {
-      @if(item.path === outlet()!.activatedRoute.routeConfig?.path){
-        <a 
-          class="mr-16px"
-          mat-flat-button
-          [routerLink]="[item.path]"
-          >
-          {{ item.title }}
-        </a>
-      } @else {
-        <a 
-          class="mr-16px"
-          mat-button
-          [routerLink]="[item.path]"
-          >
-          {{ item.title }}
-        </a>
-      }
+      @let isActiveRoute =
+        item.path === outlet()!.activatedRoute.routeConfig?.path;
+      <div
+        class="h-50px line-height-50px rounded-8px px-16px"
+        [class]="{ 'bg-#2F90B9': isActiveRoute }"
+      >
+        <a [routerLink]="item.path">{{ item.title }}</a>
+      </div>
     }
   </div>
-  <div class="w-180px">1</div>
-  <div class="w-180px">2</div>
+  <div class="w-180px">
+    <mat-slide-toggle
+      [checked]="checked"
+      (change)="toggleChange($event)"
+    >
+      切换主题
+    </mat-slide-toggle>
+  </div>
+  <div
+    class="w-180px"
+    [class]="hsThemeService.getCurrentThemeConfig(['bg-#fff', 'bg-#000'])"
+  >
+    2
+  </div>
 </div>

@@ -1,4 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+
+// @use "./themes/light";
+
+// @include mat.core(typography.$my-app-typography);
+
+// @include mat.core-theme(light.$my-app-light-theme);
+// @include mat.button-theme(light.$my-app-light-theme);
+// @include components.theme(
+//   light.$my-app-light-theme,
+//   typography.$my-app-typography,
+//   light.$my-app-light-variants
+// );
 
 html,
 body {

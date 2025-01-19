@@ -91,6 +91,9 @@ video {
   font: inherit;
   vertical-align: baseline;
   box-sizing: border-box;
+  color: inherit; /* 继承父元素的颜色，去除默认的蓝色 */
+  text-decoration: none; /* 去除下划线 */
+
 }
 
 /* HTML5 display-role reset for older browsers */

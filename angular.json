@@ -33,7 +33,17 @@
             ],
             "styles": [
               "src/styles/index.scss",
-              "src/styles/uno.css"
+              "src/styles/uno.css",
+              {
+                "input": "src/styles/themes/light.scss",
+                "bundleName": "light-theme",
+                "inject": false
+              },
+              {
+                "input": "src/styles/themes/dark.scss",
+                "bundleName": "dark-theme",
+                "inject": false
+              }
             ],
             "scripts": []
           },
