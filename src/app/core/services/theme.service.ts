@@ -21,14 +21,38 @@ export class HsThemeService {
     if (this.currentTheme === theme) return;
     const previousTheme = this.currentTheme;
     this.currentTheme = theme;
-    this.localStorageService.setItem('theme', this.currentTheme);
+    document.documentElement.classList.add(concatSuffix(theme));
     this.loadCss(`${concatSuffix(theme)}.css`, theme).then(
       (e) => {
         this.loadingState = false;
-        !isFirst && this.removeUnusedTheme(previousTheme);
+        if (!isFirst) {
+          this.removeUnusedTheme(previousTheme);
+          this.localStorageService.setItem('theme', this.currentTheme);
+        }
       },
       (e) => {},
     );
+  }
+
+  private loadCss(href: string, id: string): Promise<Event> {
+    this.loadingState = true;
+    return new Promise((resolve, reject) => {
+      const style = document.createElement('link');
+      style.rel = 'stylesheet';
+      style.href = href;
+      style.id = id;
+      style.onload = resolve;
+      style.onerror = reject;
+      document.head.append(style);
+    });
+  }
+
+  private removeUnusedTheme(theme: IThemeType): void {
+    document.documentElement.classList.remove(concatSuffix(theme));
+    const removedThemeStyle = document.getElementById(theme);
+    if (removedThemeStyle) {
+      document.head.removeChild(removedThemeStyle);
+    }
   }
 
   public getCurrentThemeConfig(
@@ -47,27 +71,6 @@ export class HsThemeService {
       });
     }
     return themeConfigMap.get(this.currentTheme);
-  }
-
-  private loadCss(href: string, id: string): Promise<Event> {
-    this.loadingState = true;
-    return new Promise((resolve, reject) => {
-      const style = document.createElement('link');
-      style.rel = 'stylesheet';
-      style.href = href;
-      style.id = id;
-      style.onload = resolve;
-      style.onerror = reject;
-      document.head.append(style);
-    });
-  }
-
-  private removeUnusedTheme(theme: IThemeType): void {
-    document.documentElement.classList.remove(theme);
-    const removedThemeStyle = document.getElementById(theme);
-    if (removedThemeStyle) {
-      document.head.removeChild(removedThemeStyle);
-    }
   }
 }
 
