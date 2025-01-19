@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  computed,
-  effect,
-  input,
-  Signal,
-} from '@angular/core';
+import { Component, input } from '@angular/core';
 import {
   ActivatedRoute,
   Route,
@@ -20,11 +13,18 @@ import {
 } from '@angular/material/slide-toggle';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { IThemeType } from '@src/app/shared/models/system.model';
+import { MatRippleModule } from '@angular/material/core';
 
 @Component({
   selector: 'hs-header',
   templateUrl: './header.component.html',
-  imports: [MatButtonModule, RouterModule, MatSlideToggleModule],
+  styleUrls: ['./header.component.less'],
+  imports: [
+    MatButtonModule,
+    RouterModule,
+    MatSlideToggleModule,
+    MatRippleModule,
+  ],
 })
 export class HeaderComponent {
   menuList: Route[] = [];

@@ -1,14 +1,19 @@
-<div class="h-64px bg-#3D3D3D flex items-center">
+<div class="bg-#3D3D3D h-64px flex items-center">
   <div class="w-180px"></div>
   <div class="flex-1 flex">
     @for (item of menuList; track $index) {
       @let isActiveRoute =
         item.path === outlet()!.activatedRoute.routeConfig?.path;
       <div
-        class="h-50px line-height-50px rounded-8px px-16px"
+        class="h-50px line-height-50px rounded-8px"
         [class]="{ 'bg-#2F90B9': isActiveRoute }"
+        matRipple
       >
-        <a [routerLink]="item.path">{{ item.title }}</a>
+        <a
+          class="w-full h-full block px-16px"
+          [routerLink]="item.path"
+          >{{ item.title }}</a
+        >
       </div>
     }
   </div>

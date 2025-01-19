@@ -7,7 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "less"
         }
       },
       "root": "",
@@ -20,9 +20,7 @@
             "outputPath": "dist/hs-basekit",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "less",
             "assets": [
@@ -32,19 +30,22 @@
               }
             ],
             "styles": [
-              "src/styles/index.scss",
+              "src/styles/index.less",
               "src/styles/uno.css",
               {
-                "input": "src/styles/themes/light.scss",
+                "input": "src/styles/light.less",
                 "bundleName": "light-theme",
                 "inject": false
               },
               {
-                "input": "src/styles/themes/dark.scss",
+                "input": "src/styles/dark.less",
                 "bundleName": "dark-theme",
                 "inject": false
               }
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles/themes"]
+            },
             "scripts": []
           },
           "configurations": {
@@ -98,10 +99,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "less",
             "assets": [
