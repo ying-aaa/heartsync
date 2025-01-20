@@ -1,5 +1,5 @@
 <div class="bg-#19282d h-64px flex items-center">
-  <div class="w-180px"></div>
+  <div class="color-#fff w-180px flex-center">HeartSync</div>
   <div class="flex-1 flex">
     @for (item of menuList; track $index) {
       @let isActiveRoute =
@@ -8,7 +8,7 @@
         class="h-50px line-height-50px rounded-8px"
         [class]="{ 'bg-#2F90B9': isActiveRoute }"
         matRipple
-        matRippleColor="#ffffff10"
+        matRippleColor="#ffffff20"
       >
         <a
           class="w-full h-full block px-16px color-#fff"
@@ -19,19 +19,25 @@
       </div>
     }
   </div>
-  <div class="w-180px">
-    <!-- <mat-slide-toggle
-      [checked]="checked"
-      (change)="toggleChange($event)"
-    >
-      切换主题
-    </mat-slide-toggle> -->
+  <div class="w-auto flex gap-16px items-center px-20px">
     <hs-theme-handover></hs-theme-handover>
+    @let systemConfig =
+      [
+        { iconUrl: '/assets/workbench/system-settings.png', size: 20 },
+        { iconUrl: '/assets/workbench/system-message.png', size: 24 },
+      ];
+    @for (item of systemConfig; track $index) {
+      <div
+        class="bg-#ffffff20 rounded-20px w-40px h-40px flex flex-center cursor-pointer"
+        matRipple
+        matRippleColor="#ffffff20"
+      >
+        <img
+          [width]="item.size"
+          [src]="item.iconUrl"
+        />
+      </div>
+    }
   </div>
-  <div
-    class="w-180px"
-    [class]="hsThemeService.getCurrentThemeConfig(['bg-#fff', 'bg-#000'])"
-  >
-    2
-  </div>
+  <div class="color-#fff w-180px h-100% flex-center">随心管理员</div>
 </div>

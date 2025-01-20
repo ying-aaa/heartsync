@@ -1,2 +1,13 @@
+<style>
+  :host {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+</style>
+
 <hs-header [outlet]="outlet"></hs-header>
-<router-outlet #outlet="outlet"></router-outlet>
+<div class="h-0 flex-1">
+  <router-outlet #outlet="outlet"></router-outlet>
+</div>
