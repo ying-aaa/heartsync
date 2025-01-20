@@ -10,6 +10,10 @@ export class HsThemeService {
   public currentTheme!: IThemeType;
   public loadingState: boolean = false;
 
+  public get isDark() {
+    return this.currentTheme === IThemeType.DARK;
+  }
+
   constructor(private localStorageService: LocalStorageService) {
     this.toggleDarkTheme(
       this.localStorageService.getItem('theme') || IThemeType.LIGHT,
