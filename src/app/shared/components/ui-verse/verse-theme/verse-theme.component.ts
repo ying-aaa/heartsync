@@ -4,12 +4,12 @@ import { HsThemeService } from '@src/app/core/services/theme.service';
 import { IThemeType } from '@src/app/shared/models/system.model';
 
 @Component({
-  selector: 'hs-theme-handover',
-  templateUrl: './theme-handover.component.html',
-  styleUrls: ['./theme-handover.component.less'],
+  selector: 'verse-theme',
+  templateUrl: './verse-theme.component.html',
+  styleUrls: ['./verse-theme.component.less'],
   imports: [ReactiveFormsModule],
 })
-export class ThemeHandoverComponent implements OnInit {
+export class VerseThemeComponent implements OnInit {
   checkState = new FormControl(false);
 
   constructor(private HsThemeService: HsThemeService) {

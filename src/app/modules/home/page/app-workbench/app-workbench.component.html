@@ -1,1 +1,74 @@
-<div class="h-full flex-center">这里是工作台</div>
+<div class="flex flex-col px-20px h-full">
+  <div class="py-12px flex justify-between items-end">
+    <div class="h-120px flex flex-col justify-end gap-10px">
+      <!-- <div> -->
+      <div class="text-24px font-bold">嗨，随心管理员</div>
+      <div class="text-36px line-height-40px font-bold">下午好！</div>
+      <!-- </div> -->
+    </div>
+    <div>
+      <mat-form-field class="example-form-field w-240px">
+        <mat-label>搜索你的应用</mat-label>
+        <input
+          matInput
+          type="text"
+          [formControl]="appValue"
+          />
+        @if (appValue.getRawValue()) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="appValue.setValue('')"
+          >
+            <mat-icon aria-hidden="false">x</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="flex-1 flex flex-wrap w-full mt-48px mb-24px gap-24px overflow-y-scroll">
+    @let list = [1,2,3,4,5];
+    @for (item of list; track $index) {
+      <div class="workbench-app-card">
+        <div class="w-128px h-128px bg-red rounded-16px">
+          <img width="128px" height="128px" src="/assets/workbench/photo.jpg" />
+        </div>
+        <div class="flex flex-col flex-1 text-14px">
+          <div class="text-18px line-height-36px">宇宙奥妙</div>
+          <div class="flex line-height-24px">
+            <span class="w-84px truncate">系统管理员：</span>
+            <span class="truncate">2025-01-04 12:59:32</span>
+          </div>
+          <div class="flex line-height-24px">
+            <div class="w-84px">
+              当前版本：
+            </div>
+            <div>
+              12
+            </div>
+          </div>
+          <mat-divider class="w-100% opacity-30 mt-12px! mb-7px! my-auto!"></mat-divider>
+          <div class="flex line-height-24px h-0 flex-1 items-center justify-around">
+            @let actionaConfig =
+            [
+              { iconUrl: '/assets/workbench/edit.png', size: 16 },
+              { iconUrl: '/assets/workbench/preview.png', size: 20 },
+            ];
+            @for (item of actionaConfig; track $index) {
+              <span>
+                <img [width]="item.size" [height]="item.size" [src]="item.iconUrl" />
+              </span>
+              @if ($index < actionaConfig.length - 1) {
+                <mat-divider [vertical]="true" class="h-40% opacity-30"></mat-divider>
+              }
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div> 
+</div>
+
+

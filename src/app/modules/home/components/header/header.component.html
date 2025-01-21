@@ -1,4 +1,4 @@
-<div class="bg-#19282d h-64px flex items-center">
+<div class="bg-#19282d h-64px flex items-center overflow-hidden">
   <div class="color-#fff w-180px flex-center">HeartSync</div>
   <div class="flex-1 flex">
     @for (item of menuList; track $index) {
@@ -20,11 +20,11 @@
     }
   </div>
   <div class="w-auto flex gap-16px items-center px-20px">
-    <hs-theme-handover></hs-theme-handover>
+    <verse-theme></verse-theme>
     @let systemConfig =
       [
-        { iconUrl: '/assets/workbench/system-settings.png', size: 20 },
-        { iconUrl: '/assets/workbench/system-message.png', size: 24 },
+        { iconUrl: '/assets/workbench/settings.png', size: 20 },
+        { iconUrl: '/assets/workbench/message.png', size: 24 },
       ];
     @for (item of systemConfig; track $index) {
       <div

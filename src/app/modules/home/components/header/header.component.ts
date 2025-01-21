@@ -14,7 +14,7 @@ import {
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { IThemeType } from '@src/app/shared/models/system.model';
 import { MatRippleModule } from '@angular/material/core';
-import { ThemeHandoverComponent } from '@src/app/shared/components/ui-verse/theme-handover/theme-handover.component';
+import { VerseThemeComponent } from '@src/app/shared/components/ui-verse/verse-theme/verse-theme.component';
 
 @Component({
   selector: 'hs-header',
@@ -25,7 +25,7 @@ import { ThemeHandoverComponent } from '@src/app/shared/components/ui-verse/them
     RouterModule,
     MatSlideToggleModule,
     MatRippleModule,
-    ThemeHandoverComponent,
+    VerseThemeComponent,
   ],
 })
 export class HeaderComponent {
