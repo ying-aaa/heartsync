@@ -44,7 +44,6 @@
 .gap-16px{gap:16px;}
 .gap-24px{gap:24px;}
 .overflow-hidden{overflow:hidden;}
-.overflow-y-scroll{overflow-y:scroll;}
 .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .rounded-16px{border-radius:16px;}
 .rounded-20px{border-radius:20px;}
