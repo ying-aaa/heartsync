@@ -50,7 +50,7 @@
               }
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/styles/themes"]
+              "includePaths": ["src/styles", "src/styles/themes"]
             },
             "scripts": []
           },
@@ -87,7 +87,9 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "proxyConfig": "proxy.conf.js"
+            "proxyConfig": "proxy.conf.js",
+            "disableHostCheck": true,
+            "port": 4200
           },
           "configurations": {
             "production": {

@@ -1,4 +1,9 @@
-import { defineConfig, toEscapedSelector as e, presetUno, transformerDirectives } from "unocss";
+import {
+  defineConfig,
+  toEscapedSelector as e,
+  presetUno,
+  transformerDirectives,
+} from 'unocss';
 // import transformerVariantGroup from '@unocss/transformer-variant-group'
 
 export default defineConfig({
@@ -27,7 +32,7 @@ export default defineConfig({
               background-color: var(--el-bg-color-overlay);
             }
             `;
-      }
+      },
     ],
     [
       /^layout-border__left$/,
@@ -45,7 +50,7 @@ export default defineConfig({
                 z-index: 3;
               }
               `;
-      }
+      },
     ],
     [
       /^layout-border__right$/,
@@ -63,7 +68,7 @@ export default defineConfig({
               z-index: 3;
             }
             `;
-      }
+      },
     ],
     [
       /^layout-border__top$/,
@@ -81,7 +86,7 @@ export default defineConfig({
               z-index: 3;
             }
             `;
-      }
+      },
     ],
     [
       /^layout-border__bottom$/,
@@ -99,14 +104,15 @@ export default defineConfig({
               z-index: 3;
             }
             `;
-      }
-    ]
+      },
+    ],
   ],
-  presets: [presetUno({ dark: "class", attributify: false })],
+  presets: [presetUno({ dark: 'class', attributify: false })],
   // transformers: [transformerVariantGroup()],
   shortcuts: {
-    "wh-full": "w-full h-full",
-    "flex-center": "flex justify-center items-center"
+    'wh-full': 'w-full h-full',
+    'flex-center': 'flex justify-center items-center',
+    'backdrop-fit': 'bg-center bg-cover object-cover object-center',
   },
   cli: {
     entry: {
@@ -114,11 +120,11 @@ export default defineConfig({
        * Glob patterns to match files
        * Include HTML and inline templates in components.
        */
-      patterns: ["src/**/*.html", "src/**/*.ts"],
+      patterns: ['src/**/*.html', 'src/**/*.ts'],
       /**
        * The output filename for the generated UnoCSS file
        */
-      outFile: "./src/styles/uno.css"
-    }
-  }
+      outFile: './src/styles/uno.css',
+    },
+  },
 });

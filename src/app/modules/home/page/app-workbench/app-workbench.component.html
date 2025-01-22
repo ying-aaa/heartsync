@@ -1,5 +1,5 @@
-<div class="flex flex-col px-120px h-full">
-  <div class="py-12px flex justify-between items-end">
+<div class="workbench-wrapper flex flex-col h-full">
+  <header class="py-12px flex justify-between items-end">
     <div class="h-120px flex flex-col justify-end gap-10px">
       <!-- <div> -->
       <div class="text-24px font-bold">嗨，随心管理员</div>
@@ -26,21 +26,17 @@
         }
       </mat-form-field>
     </div>
-  </div>
-
-  <div class="flex-1 flex flex-wrap w-full pt-48px pb-24px gap-24px overflow-y-scroll">
+  </header>
+  
+  <main class="flex-1 flex flex-wrap w-full pt-48px pb-24px gap-24px overflow-y-scroll">
     @let list = [1,2,3,4,5];
     @for (item of list; track $index) {
       <div class="workbench-app-card">
-        <div class="w-128px h-128px bg-red rounded-16px">
-          <img width="128px" height="128px" src="/assets/workbench/photo.jpg" />
+        <div class="w-120px h-120px bg-red rounded-16px">
+          <img class="wh-full" src="/assets/workbench/photo.jpg" />
         </div>
         <div class="flex flex-col flex-1 text-14px">
           <div class="text-18px line-height-36px">宇宙奥妙</div>
-          <div class="flex line-height-24px">
-            <span class="w-84px truncate">系统管理员：</span>
-            <span class="truncate">2025-01-04 12:59:32</span>
-          </div>
           <div class="flex line-height-24px">
             <div class="w-84px">
               当前版本：
@@ -48,6 +44,10 @@
             <div>
               12
             </div>
+          </div>
+          <div class="flex line-height-24px text-12px">
+            <!-- <span class="w-84px truncate"></span> -->
+            <span class="truncate">2025-01-04 12:59</span>
           </div>
           <mat-divider class="w-100% opacity-20 mt-12px! mb-7px! my-auto!"></mat-divider>
           <div class="flex line-height-24px h-0 flex-1 items-center justify-around">
@@ -68,7 +68,7 @@
         </div>
       </div>
     }
-  </div> 
+  </main> 
 </div>
 
 

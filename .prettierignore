@@ -1,0 +1,5 @@
+# 忽略目录或文件
+build
+coverage
+# 不要忽略 LESS 文件
+!*.less

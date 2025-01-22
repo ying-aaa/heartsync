@@ -18,5 +18,6 @@
   "tabWidth": 2,
   "useTabs": false,
   "embeddedLanguageFormatting": "auto",
-  "quotes": "double"
+  "quotes": "double",
+  "parser": "css"
 }
