@@ -1,5 +1,5 @@
-<div class="bg-#19282d h-64px flex items-center overflow-hidden">
-  <div class="color-#fff w-180px flex-center">HeartSync</div>
+<div class="color-#f5f9fff2 bg-#19282d h-64px flex items-center overflow-hidden">
+  <div class=" w-180px flex-center">HeartSync</div>
   <div class="flex-1 flex">
     @for (item of menuList; track $index) {
       @let isActiveRoute =
@@ -11,7 +11,7 @@
         matRippleColor="#ffffff20"
       >
         <a
-          class="w-full h-full block px-16px color-#fff"
+          class="w-full h-full block px-16px"
           [routerLink]="item.path"
         >
           {{ item.title }}
