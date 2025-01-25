@@ -1,10 +1,25 @@
 <style>
-  :host{
+  :host {
     display: flex;
     width: 100%;
     height: 100%;
-    
   }
 </style>
-<div class="w-282 px h-100% bg-red"></div>
-<div class="w-0 flex-1 h-100% bg-green"></div>
+<!-- 左侧 -->
+<div class="w-284px h-100% px-16px pt-12px pb-24px">
+  <div class="flex gap-10px items-center h-48px">
+    <div class="w-32px h-32px flex-center">
+      <img
+        class="w-24px h-24px"
+        src="/assets/manage/classfile.png"
+      />
+    </div>
+    <div class="font-roboto text-18px font-bold leading-24px tracking-0">分类目录</div>
+  </div>
+  <mat-divider class="opacity-20 mt-10px! mb-20px!"></mat-divider>
+  <hs-tree></hs-tree>
+</div>
+<!-- 右侧 -->
+<div class="w-0 flex-1 h-100% bg-blue">
+
+</div>

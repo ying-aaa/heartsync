@@ -4,26 +4,37 @@
 .wh-full{width:100%;height:100%;}
 .flex-center{display:flex;align-items:center;justify-content:center;}
 /* layer: default */
+.visible{visibility:visible;}
 .fixed{position:fixed;}
 .static{position:static;}
 .grid{display:grid;}
 .my-auto\!{margin-top:auto !important;margin-bottom:auto !important;}
+.mb-20px\!{margin-bottom:20px !important;}
 .mb-7px\!{margin-bottom:7px !important;}
+.mt-10px\!{margin-top:10px !important;}
 .mt-12px\!{margin-top:12px !important;}
 .block{display:block;}
+.hidden{display:none;}
 .h-0{height:0;}
 .h-100\%,
 .h-full{height:100%;}
 .h-120px{height:120px;}
+.h-24px{height:24px;}
+.h-32px{height:32px;}
 .h-40px{height:40px;}
+.h-48px{height:48px;}
 .h-50px{height:50px;}
 .h-64px{height:64px;}
 .h-80\%{height:80%;}
+.w-0{width:0;}
 .w-100\%,
 .w-full{width:100%;}
 .w-120px{width:120px;}
 .w-180px{width:180px;}
 .w-240px{width:240px;}
+.w-24px{width:24px;}
+.w-284px{width:284px;}
+.w-32px{width:32px;}
 .w-40px{width:40px;}
 .w-84px{width:84px;}
 .w-auto{width:auto;}
@@ -51,11 +62,13 @@
 .bg-\#19282d{--un-bg-opacity:1;background-color:rgb(25 40 45 / var(--un-bg-opacity)) /* #19282d */;}
 .bg-\#2F90B9{--un-bg-opacity:1;background-color:rgb(47 144 185 / var(--un-bg-opacity)) /* #2F90B9 */;}
 .bg-\#ffffff20{--un-bg-opacity:0.13;background-color:rgb(255 255 255 / var(--un-bg-opacity)) /* #ffffff20 */;}
+.bg-blue{--un-bg-opacity:1;background-color:rgb(96 165 250 / var(--un-bg-opacity)) /* #60a5fa */;}
 .bg-red{--un-bg-opacity:1;background-color:rgb(248 113 113 / var(--un-bg-opacity)) /* #f87171 */;}
 .px-16px{padding-left:16px;padding-right:16px;}
 .px-20px{padding-left:20px;padding-right:20px;}
 .py-12px{padding-top:12px;padding-bottom:12px;}
 .pb-24px{padding-bottom:24px;}
+.pt-12px{padding-top:12px;}
 .pt-48px{padding-top:48px;}
 .text-12px{font-size:12px;}
 .text-14px{font-size:14px;}
@@ -65,8 +78,10 @@
 .color-\#f5f9fff2{--un-text-opacity:0.95;color:rgb(245 249 255 / var(--un-text-opacity)) /* #f5f9fff2 */;}
 .color-\#fff{--un-text-opacity:1;color:rgb(255 255 255 / var(--un-text-opacity)) /* #fff */;}
 .font-bold{font-weight:700;}
+.leading-24px,
 .line-height-24px{line-height:24px;}
 .line-height-36px{line-height:36px;}
 .line-height-40px{line-height:40px;}
 .line-height-50px{line-height:50px;}
+.tracking-0{letter-spacing:0;}
 .opacity-20{opacity:0.2;}

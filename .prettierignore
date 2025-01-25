@@ -3,3 +3,5 @@ build
 coverage
 # 不要忽略 LESS 文件
 !*.less
+!*.html
+!*.ts
