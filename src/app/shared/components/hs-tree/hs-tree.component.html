@@ -6,6 +6,7 @@
   <cdk-tree-node
     *cdkTreeNodeDef="let node"
     cdkTreeNodePadding
+    cdkTreeNodePaddingIndent="30px"
     [style.display]="shouldRender(node) ? 'flex' : 'none'"
     class="example-tree-node"
   >
@@ -14,12 +15,16 @@
       mat-icon-button
       disabled
     ></button>
+    <mat-icon class="mat-icon-rtl-mirror mr-10px">
+      {{treeControl.isExpanded(node) ? 'folder_open' : 'folder'}}
+    </mat-icon>
     {{node.name}}
   </cdk-tree-node>
   <!-- This is the tree node template for expandable nodes -->
   <cdk-tree-node
     *cdkTreeNodeDef="let node; when: hasChild"
     cdkTreeNodePadding
+    cdkTreeNodePaddingIndent="30px"
     [style.display]="shouldRender(node) ? 'flex' : 'none'"
     class="example-tree-node"
   >
@@ -34,6 +39,9 @@
         {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
       </mat-icon>
     </button>
+    <mat-icon class="mat-icon-rtl-mirror mr-10px">
+      {{treeControl.isExpanded(node) ? 'folder_open' : 'folder'}}
+    </mat-icon>
     {{node.name}}
   </cdk-tree-node>
 </cdk-tree>

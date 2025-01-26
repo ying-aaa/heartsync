@@ -5051,6 +5051,11 @@ make-fetch-happen@^14.0.0, make-fetch-happen@^14.0.1, make-fetch-happen@^14.0.3:
     promise-retry "^2.0.1"
     ssri "^12.0.0"
 
+material-icons@^1.13.13:
+  version "1.13.13"
+  resolved "https://registry.npmmirror.com/material-icons/-/material-icons-1.13.13.tgz"
+  integrity sha512-jYh0VkYvsYfArOIB1LqmmoXiONBk5YaIf0f8b5pTNQdVDl4b7htoqXuQF7G03fqFQpwvv1FcMdQ1rrLWd9ftWg==
+
 math-intrinsics@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmmirror.com/math-intrinsics/-/math-intrinsics-1.1.0.tgz"
