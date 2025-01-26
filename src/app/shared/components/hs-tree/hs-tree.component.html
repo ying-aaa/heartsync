@@ -1,51 +1,47 @@
 <cdk-tree
   [dataSource]="dataSource"
   [treeControl]="treeControl"
-  id="hs-tree"
 >
-  <cdk-tree-node
+  <cdk-nested-tree-node
     *cdkTreeNodeDef="let node"
-    cdkTreeNodePadding
-    cdkTreeNodePaddingIndent="30px"
-    [style.display]="shouldRender(node) ? 'flex' : 'none'"
-    (click)="node.isExpanded = !node.isExpanded"
-    (keydown.space)="node.isExpanded = !node.isExpanded"
-    cdkTreeNodeToggle
     class="example-tree-node"
   >
-    <button
-      mat-icon-button
-      disabled
-    ></button>
-    <mat-icon class="mat-icon-rtl-mirror mr-10px">
-      description
-    </mat-icon>
-    {{node.name}}
-  </cdk-tree-node>
-  <cdk-tree-node
-    *cdkTreeNodeDef="let node; when: hasChild"
-    cdkTreeNodePadding
-    cdkTreeNodePaddingIndent="30px"
-    [style.display]="shouldRender(node) ? 'flex' : 'none'"
-    (click)="node.isExpanded = !node.isExpanded"
-    (keydown.space)="node.isExpanded = !node.isExpanded"
-    cdkTreeNodeToggle
-    class="example-tree-node"
-  >
-    <button
-      mat-icon-button
-      cdkTreeNodeToggle
-      [attr.aria-label]="'Toggle ' + node.name"
-      (click)="node.isExpanded = !node.isExpanded"
-      [style.visibility]="node.expandable ? 'visible' : 'hidden'"
-    >
-      <mat-icon class="mat-icon-rtl-mirror">
-        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+    <div class="first-tree-node">
+      <button
+        mat-icon-button
+        disabled
+      ></button>
+      <mat-icon class="mat-icon-rtl-mirror mr-10px h-22px!">
+        description
       </mat-icon>
-    </button>
-    <mat-icon class="mat-icon-rtl-mirror mr-10px">
-      {{treeControl.isExpanded(node) ? 'folder_open' : 'folder'}}
-    </mat-icon>
-    {{node.name}}
-  </cdk-tree-node>
+      {{node.name}}
+    </div>
+  </cdk-nested-tree-node>
+  <cdk-nested-tree-node
+    *cdkTreeNodeDef="let node; when: hasChild"
+    class="example-tree-node"
+  >
+    <div
+      class="first-tree-node"
+      cdkTreeNodeToggle
+    >
+      <button
+        mat-icon-button
+        [attr.aria-label]="'Toggle ' + node.name"
+        cdkTreeNodeToggle
+        class="w-36px! h-36px! p-6px!"
+      >
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+      </button>
+      <mat-icon class="mat-icon-rtl-mirror mr-10px  h-22px!">
+        {{treeControl.isExpanded(node) ? 'folder_open' : 'folder'}}
+      </mat-icon>
+      {{node.name}}
+    </div>
+    <div [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+      <ng-container cdkTreeNodeOutlet></ng-container>
+    </div>
+  </cdk-nested-tree-node>
 </cdk-tree>
