@@ -4,5 +4,14 @@ export enum IThemeType {
 }
 
 export enum IPrefixes {
-  COMMON,
+  COMMON = "HS-",
+}
+
+export interface ICatalogStructure {
+  name: string;
+  id?: string;
+  level: number;
+  expandable: boolean;
+  isExpanded?: boolean;
+  children?: ICatalogStructure[];
 }

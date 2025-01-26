@@ -8,6 +8,9 @@
     cdkTreeNodePadding
     cdkTreeNodePaddingIndent="30px"
     [style.display]="shouldRender(node) ? 'flex' : 'none'"
+    (click)="node.isExpanded = !node.isExpanded"
+    (keydown.space)="node.isExpanded = !node.isExpanded"
+    cdkTreeNodeToggle
     class="example-tree-node"
   >
     <!-- use a disabled button to provide padding for tree leaf -->
@@ -16,7 +19,7 @@
       disabled
     ></button>
     <mat-icon class="mat-icon-rtl-mirror mr-10px">
-      {{treeControl.isExpanded(node) ? 'folder_open' : 'folder'}}
+      description
     </mat-icon>
     {{node.name}}
   </cdk-tree-node>
@@ -26,6 +29,9 @@
     cdkTreeNodePadding
     cdkTreeNodePaddingIndent="30px"
     [style.display]="shouldRender(node) ? 'flex' : 'none'"
+    (click)="node.isExpanded = !node.isExpanded"
+    (keydown.space)="node.isExpanded = !node.isExpanded"
+    cdkTreeNodeToggle
     class="example-tree-node"
   >
     <button
