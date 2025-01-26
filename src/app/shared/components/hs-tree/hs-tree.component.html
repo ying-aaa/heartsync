@@ -1,8 +1,8 @@
 <cdk-tree
   [dataSource]="dataSource"
   [treeControl]="treeControl"
+  id="hs-tree"
 >
-  <!-- This is the tree node template for leaf nodes -->
   <cdk-tree-node
     *cdkTreeNodeDef="let node"
     cdkTreeNodePadding
@@ -13,7 +13,6 @@
     cdkTreeNodeToggle
     class="example-tree-node"
   >
-    <!-- use a disabled button to provide padding for tree leaf -->
     <button
       mat-icon-button
       disabled
@@ -23,7 +22,6 @@
     </mat-icon>
     {{node.name}}
   </cdk-tree-node>
-  <!-- This is the tree node template for expandable nodes -->
   <cdk-tree-node
     *cdkTreeNodeDef="let node; when: hasChild"
     cdkTreeNodePadding

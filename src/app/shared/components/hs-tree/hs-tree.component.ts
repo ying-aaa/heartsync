@@ -1,9 +1,11 @@
-import {Component} from '@angular/core';
-import {ArrayDataSource} from '@angular/cdk/collections';
-import {FlatTreeControl, CdkTreeModule} from '@angular/cdk/tree';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
+import { AfterViewInit, Component, input, viewChild } from '@angular/core';
+import { ArrayDataSource } from '@angular/cdk/collections';
+import { FlatTreeControl, CdkTreeModule, CdkTree, CdkTreeNodeDef } from '@angular/cdk/tree';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { ICatalogStructure } from '../../models/system.model';
+import { BehaviorSubject } from 'rxjs';
+import Sortable from 'sortablejs';
 
 const TREE_DATA: ICatalogStructure[] = [
   {
@@ -63,6 +65,17 @@ const TREE_DATA: ICatalogStructure[] = [
   },
 ];
 
+// class CustomTreeDataSource implements  ArrayDataSource<ICatalogStructure> {
+//   data = BehaviorSubject
+//   connect(): Observable<readonly ICatalogStructure[]> {
+//     throw new Error('Method not implemented.');
+//   }
+//   disconnect(): void {
+//     throw new Error('Method not implemented.');
+//   }
+
+// }
+
 /** Flat node with expandable and level information */
 @Component({
   selector: 'hs-tree',
@@ -70,17 +83,33 @@ const TREE_DATA: ICatalogStructure[] = [
   templateUrl: './hs-tree.component.html',
   imports: [CdkTreeModule, MatButtonModule, MatIconModule],
 })
-export class HsTreeComponent {
+export class HsTreeComponent implements AfterViewInit {
   treeControl = new FlatTreeControl<ICatalogStructure>(
     node => node.level,
     node => node.expandable,
   );
 
-  dataSource = new ArrayDataSource(TREE_DATA);
+  treeData = new BehaviorSubject<ICatalogStructure[]>([]);
+
+  dataSource = new ArrayDataSource(this.treeData);
 
   hasChild = (_: number, node: ICatalogStructure) => node.expandable;
 
+  constructor() {
+    setTimeout(() => {
+      this.treeData.next(TREE_DATA);
+    }, 1000);
+  }
+  ngAfterViewInit(): void {
+    const hsTree: HTMLElement = document.querySelector('#hs-tree')!;
+    new Sortable(hsTree, {
+      ghostClass: 'blue-background-class',
+      animation: 150
+    });
+  }
+
   getParentNode(node: ICatalogStructure) {
+    const TREE_DATA = this.treeData.value;
     const nodeIndex = TREE_DATA.indexOf(node);
     for (let i = nodeIndex - 1; i >= 0; i--) {
       if (TREE_DATA[i].level === node.level - 1) {
