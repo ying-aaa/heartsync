@@ -1,5 +1,8 @@
 :host {
   font-size: 14px;
+  cdk-tree {
+    cursor: pointer;
+  }
   .example-tree-invisible {
     display: none;
   }
@@ -20,10 +23,11 @@
     align-items: center;
     height: 36px;
     border-radius: 8px;
-    cursor: pointer;
-    &:hover {
-      background: rgba(47, 143, 185, 0.1);
-    }
+  }
+
+  .node-hover:hover {
+    background: rgba(47, 143, 185, 0.1);
+    user-select: none; /* 禁止选择文本 */
   }
 
   .example-tree-node .example-tree-node {

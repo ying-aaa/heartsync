@@ -9,6 +9,6 @@ export enum IPrefixes {
 
 export interface ICatalogStructure {
   name: string;
-  key?: string;
+  id?: string;
   children?: ICatalogStructure[];
 }

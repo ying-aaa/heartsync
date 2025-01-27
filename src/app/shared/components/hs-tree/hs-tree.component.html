@@ -1,12 +1,17 @@
 <cdk-tree
   [dataSource]="dataSource"
   [treeControl]="treeControl"
+  #HsTree
 >
   <cdk-nested-tree-node
     *cdkTreeNodeDef="let node"
+    [attr.aria-key]="node.key"
     class="example-tree-node"
   >
-    <div class="first-tree-node">
+    <div
+      class="first-tree-node"
+      [class.node-hover]="!(dragCatalog?.isMove | async)"
+    >
       <button
         mat-icon-button
         disabled
@@ -19,10 +24,13 @@
   </cdk-nested-tree-node>
   <cdk-nested-tree-node
     *cdkTreeNodeDef="let node; when: hasChild"
+    [attr.aria-key]="node.key"
+    [attr.aria-folder]="true"
     class="example-tree-node"
   >
     <div
       class="first-tree-node"
+      [class.node-hover]="!(dragCatalog?.isMove | async)"
       cdkTreeNodeToggle
     >
       <button
