@@ -1,16 +1,14 @@
 
 
-import { AfterViewInit, Component, effect, ElementRef, Renderer2, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Renderer2, viewChild, OnDestroy } from '@angular/core';
 import { ArrayDataSource } from '@angular/cdk/collections';
-import { FlatTreeControl, CdkTreeModule, CdkTree, CdkTreeNodeDef, NestedTreeControl } from '@angular/cdk/tree';
+import { CdkTreeModule, NestedTreeControl } from '@angular/cdk/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ICatalogStructure } from '../../models/system.model';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { CdkDrag, CdkDragPreview } from '@angular/cdk/drag-drop';
-import { isSameObj } from '@src/app/core/utils';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-
+import { MatRippleModule } from '@angular/material/core';
 
 const TREE_DATA: ICatalogStructure[] = [
   {
@@ -41,36 +39,53 @@ class CustomDragCatalog {
 
   treeThis!: HsTreeComponent;
 
+  event: any = {};
   isMove = new BehaviorSubject(false);
+
+  subscribetions: Subscription[] = [];
 
   constructor(el: HTMLElement, treeThis: HsTreeComponent) {
     this.TreeEl = el;
     this.treeThis = treeThis;
     this.generataLine();
     this.init();
-
   }
 
   init() {
-    this.TreeEl.addEventListener("mousedown", this.downNodeLogic.bind(this));
-    this.TreeEl.addEventListener("mousemove", this.moveNodeLogic.bind(this));
-    this.TreeEl.addEventListener("mouseup", this.upNodeLogic.bind(this));
-    this.isMove.subscribe((value) => {
+    this.event = {
+      downNodeLogic: this.downNodeLogic.bind(this),
+      moveNodeLogic: this.moveNodeLogic.bind(this),
+      upNodeLogic: this.upNodeLogic.bind(this),
+    }
+    this.TreeEl.addEventListener("mousedown", this.event.downNodeLogic);
+    document.addEventListener("mousemove", this.event.moveNodeLogic);
+    document.addEventListener("mouseup", this.event.upNodeLogic);
+    const sub = this.isMove.subscribe((value) => {
       if (value) {
-        this.treeThis.renderer.setStyle(this.TreeEl, 'cursor', 'move')
+        this.treeThis.renderer.setStyle(this.TreeEl, 'cursor', 'move');
+        this.treeThis.renderer.setStyle(this.LineEl, 'display', 'block');
       };
       if (!value) {
-        this.treeThis.renderer.removeStyle(this.TreeEl, 'cursor')
+        this.treeThis.renderer.removeStyle(this.TreeEl, 'cursor');
+        this.treeThis.renderer.setStyle(this.LineEl, "display", "none");
       };
     })
+    this.subscribetions.push(sub);
   }
 
   generataLine() {
     this.LineEl = this.treeThis.renderer.createElement('div');
-    this.treeThis.renderer.appendChild(this.TreeEl, this.LineEl);
-    this.treeThis.renderer.setStyle(this.LineEl, 'width', '100%');
-    this.treeThis.renderer.setStyle(this.LineEl, 'height', '1px');
-    this.treeThis.renderer.setStyle(this.LineEl, 'backgroundColor', 'blue');
+    this.treeThis.renderer.appendChild(document.body, this.LineEl);
+    this.treeThis.renderer.setStyle(this.LineEl, 'width', 'fil-content');
+    this.treeThis.renderer.setStyle(this.LineEl, 'font-size', '16px');
+    this.treeThis.renderer.setStyle(this.LineEl, 'position', 'absolute');
+    this.treeThis.renderer.setStyle(this.LineEl, 'top', '0');
+    this.treeThis.renderer.setStyle(this.LineEl, 'left', '0');
+    this.treeThis.renderer.setStyle(this.LineEl, 'padding', '6px');
+    this.treeThis.renderer.setStyle(this.LineEl, 'background-color', '#8b8b8b');
+    this.treeThis.renderer.setStyle(this.LineEl, 'border-radius', '8px');
+    this.treeThis.renderer.setStyle(this.LineEl, 'opacity', '.8');
+    this.treeThis.renderer.setStyle(this.LineEl, "display", "none");
   }
 
   downNodeLogic(e: MouseEvent) {
@@ -80,6 +95,8 @@ class CustomDragCatalog {
     while (currentElement) {
       if (currentElement.tagName.toLowerCase() === 'cdk-nested-tree-node') {
         this.entityEl = currentElement;
+        const text = this.entityEl.querySelector("p")!;
+        this.treeThis.renderer.setProperty(this.LineEl, 'innerText', text.textContent);
         break;
       }
       currentElement = currentElement.parentElement as HTMLElement;
@@ -94,6 +111,12 @@ class CustomDragCatalog {
       if (entityFolderEl.getAttribute("aria-folder")) break;
       entityFolderEl = entityFolderEl!.parentElement as HTMLElement;
     }
+
+    // 拖拽跟随
+    this.treeThis.renderer.setStyle(
+      this.LineEl, 'transform',
+      `translateX(${e.clientX + 15}px) translateY(${e.clientY + 5}px)`
+    );
 
     // 做清除使用
     const parentEl = this.parentEl;
@@ -115,7 +138,8 @@ class CustomDragCatalog {
           return;
         };
         parentEl && this.treeThis.renderer.removeStyle(parentEl, "background-color");
-        this.treeThis.renderer.setStyle(this.parentEl, "background-color", "red");
+        this.treeThis.renderer.setStyle(this.parentEl, "background-color", "#8b8b8b4d");
+        this.treeThis.renderer.setStyle(this.parentEl, "border-radius", "8px");
         break;
       } else {
         this.parentEl = this.parentEl!.parentElement as HTMLElement;
@@ -131,7 +155,10 @@ class CustomDragCatalog {
   }
 
   destroy() {
-
+    this.subscribetions.forEach(sub => sub.unsubscribe());
+    this.TreeEl.removeEventListener("mousedown", this.event.downNodeLogic);
+    document.removeEventListener("mousemove", this.event.moveNodeLogic);
+    document.removeEventListener("mouseup", this.event.upNodeLogic);
   }
 }
 
@@ -139,9 +166,9 @@ class CustomDragCatalog {
   selector: 'hs-tree',
   styleUrl: './hs-tree.component.less',
   templateUrl: './hs-tree.component.html',
-  imports: [CommonModule, CdkTreeModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, CdkTreeModule, MatButtonModule, MatIconModule, MatRippleModule],
 })
-export class HsTreeComponent implements AfterViewInit {
+export class HsTreeComponent implements AfterViewInit, OnDestroy {
   HsTree = viewChild<ElementRef>("HsTree");
   dragCatalog: CustomDragCatalog | null = null;
   treeData = new BehaviorSubject<ICatalogStructure[]>(TREE_DATA.map(item => ({ key: Math.floor(Math.random() * 1e10), ...item })));
@@ -159,6 +186,10 @@ export class HsTreeComponent implements AfterViewInit {
     // @ts-ignore 
     const cdkTreeRef = this.HsTree()._elementRef.nativeElement;
     this.dragCatalog = new CustomDragCatalog(cdkTreeRef, this);
+  }
+
+  ngOnDestroy(): void {
+    this.dragCatalog?.destroy();
   }
 }
 
