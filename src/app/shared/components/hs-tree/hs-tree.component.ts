@@ -5,7 +5,7 @@ import { ArrayDataSource } from '@angular/cdk/collections';
 import { CdkTreeModule, NestedTreeControl } from '@angular/cdk/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ICatalogStructure } from '../../models/system.model';
+import { ICatalogStructure, IEventsType } from '../../models/system.model';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatRippleModule } from '@angular/material/core';
@@ -39,8 +39,17 @@ class CustomDragCatalog {
 
   treeThis!: HsTreeComponent;
 
-  event: any = {};
-  isMove = new BehaviorSubject(false);
+  event = new Map<HTMLElement, {
+    [key in IEventsType]?: Function;
+  }>();
+
+  isMove$ = new BehaviorSubject(false);
+  keyStatus$ = new BehaviorSubject({
+    ctrl: false,
+    a: false,
+    c: false,
+    v: false,
+  });
 
   subscribetions: Subscription[] = [];
 
@@ -52,17 +61,27 @@ class CustomDragCatalog {
   }
 
   init() {
-    this.event = {
-      downNodeLogic: this.downNodeLogic.bind(this),
-      moveNodeLogic: this.moveNodeLogic.bind(this),
-      upNodeLogic: this.upNodeLogic.bind(this),
+    this.event
+      .set(this.TreeEl, {
+        [IEventsType.MouseDown]: this.downNodeLogic.bind(this)
+      })
+      // @ts-ignore
+      .set(document, {
+        [IEventsType.MouseMove]: this.moveNodeLogic.bind(this),
+        [IEventsType.MouseUp]: this.upNodeLogic.bind(this),
+        [IEventsType.KeyDown]: this.keydownLogic.bind(this),
+      });
+
+    for (const [el, evnets] of this.event) {
+      for (const [eventName, eventFun] of Object.entries(evnets)) {
+        // @ts-ignore
+        el.addEventListener(eventName, eventFun);
+      }
     }
-    this.TreeEl.addEventListener("mousedown", this.event.downNodeLogic);
-    document.addEventListener("mousemove", this.event.moveNodeLogic);
-    document.addEventListener("mouseup", this.event.upNodeLogic);
-    const sub = this.isMove.subscribe((value) => {
+
+    const sub = this.isMove$.subscribe((value) => {
       if (value) {
-        this.treeThis.renderer.setStyle(this.TreeEl, 'cursor', 'move');
+        this.treeThis.renderer.setStyle(this.TreeEl, 'cursor', 'alias');
         this.treeThis.renderer.setStyle(this.LineEl, 'display', 'block');
       };
       if (!value) {
@@ -105,7 +124,7 @@ class CustomDragCatalog {
 
   moveNodeLogic(e: MouseEvent) {
     if (!this.entityEl) return;
-    !this.isMove.value && this.isMove.next(true);
+    !this.isMove$.value && this.isMove$.next(true);
     let entityFolderEl = this.entityEl;
     while (entityFolderEl) {
       if (entityFolderEl.getAttribute("aria-folder")) break;
@@ -150,15 +169,22 @@ class CustomDragCatalog {
   upNodeLogic(e: MouseEvent) {
     if (!this.entityEl) return;
     this.parentEl && this.treeThis.renderer.removeStyle(this.parentEl, "background-color");
-    this.isMove.next(false);
+    this.isMove$.next(false);
     this.entityEl = null;
+  }
+
+  keydownLogic(e: KeyboardEvent) {
+    console.log("%c Line:67 🥓", "color:#ea7e5c", e.ctrlKey, e.key);
   }
 
   destroy() {
     this.subscribetions.forEach(sub => sub.unsubscribe());
-    this.TreeEl.removeEventListener("mousedown", this.event.downNodeLogic);
-    document.removeEventListener("mousemove", this.event.moveNodeLogic);
-    document.removeEventListener("mouseup", this.event.upNodeLogic);
+    for (const [el, evnets] of this.event) {
+      for (const [eventName, eventFun] of Object.entries(evnets)) {
+        // @ts-ignore
+        el.removeEventListener(eventName, eventFun);
+      }
+    }
   }
 }
 

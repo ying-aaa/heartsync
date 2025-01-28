@@ -12,3 +12,10 @@ export interface ICatalogStructure {
   id?: string;
   children?: ICatalogStructure[];
 }
+export enum IEventsType {
+  MouseDown = "mousedown",
+  MouseMove = "mousemove",
+  MouseUp = "mouseup",
+  KeyDown = "keydown",
+  KeyUp = "keyup"
+}

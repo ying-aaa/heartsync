@@ -10,7 +10,7 @@
   >
     <div
       class="first-tree-node"
-      [class.node-hover]="!(dragCatalog?.isMove | async)"
+      [class.node-hover]="!(dragCatalog?.isMove$ | async)"
       matRipple
       matRippleColor="#ffffff20"
     >
@@ -32,7 +32,7 @@
   >
     <div
       class="first-tree-node"
-      [class.node-hover]="!(dragCatalog?.isMove | async)"
+      [class.node-hover]="!(dragCatalog?.isMove$ | async)"
       matRipple
       matRippleColor="#ffffff20"
       cdkTreeNodeToggle
