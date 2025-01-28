@@ -9,7 +9,7 @@ export enum IPrefixes {
 
 export interface ICatalogStructure {
   name: string;
-  id?: string;
+  key?: string | number;
   children?: ICatalogStructure[];
 }
 export enum IEventsType {
@@ -17,5 +17,6 @@ export enum IEventsType {
   MouseMove = "mousemove",
   MouseUp = "mouseup",
   KeyDown = "keydown",
-  KeyUp = "keyup"
+  KeyUp = "keyup",
+  Click = "click",
 }

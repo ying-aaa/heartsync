@@ -13,6 +13,8 @@
       [class.node-hover]="!(dragCatalog?.isMove$ | async)"
       matRipple
       matRippleColor="#ffffff20"
+      [class.active-el]="node.key === activeKey()"
+      (click)="checkNode($event)"
     >
       <button
         mat-icon-button
@@ -31,11 +33,13 @@
     class="example-tree-node"
   >
     <div
-      class="first-tree-node"
-      [class.node-hover]="!(dragCatalog?.isMove$ | async)"
       matRipple
       matRippleColor="#ffffff20"
+      (click)="checkNode($event)"
       cdkTreeNodeToggle
+      [class.node-hover]="!(dragCatalog?.isMove$ | async)"
+      [class.active-el]="node.key === activeKey()"
+      class="first-tree-node"
     >
       <button
         mat-icon-button

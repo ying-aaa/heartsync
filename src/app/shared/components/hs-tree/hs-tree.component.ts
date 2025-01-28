@@ -1,6 +1,6 @@
 
 
-import { AfterViewInit, Component, ElementRef, Renderer2, viewChild, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Renderer2, viewChild, OnDestroy, CUSTOM_ELEMENTS_SCHEMA, signal, computed } from '@angular/core';
 import { ArrayDataSource } from '@angular/cdk/collections';
 import { CdkTreeModule, NestedTreeControl } from '@angular/cdk/tree';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,18 +13,43 @@ import { MatRippleModule } from '@angular/material/core';
 const TREE_DATA: ICatalogStructure[] = [
   {
     name: 'Fruit',
-    children: [{ name: 'Apple' }, { name: 'Banana' }, { name: 'Fruit loops' }],
+    key: Math.floor(Math.random() * 1e10),
+    children: [{
+      name: 'Apple',
+      key: Math.floor(Math.random() * 1e10)
+    }, {
+      name: 'Banana',
+      key: Math.floor(Math.random() * 1e10)
+    }, {
+      name: 'Fruit loops',
+      key: Math.floor(Math.random() * 1e10)
+    }],
   },
   {
     name: 'Vegetables',
+    key: Math.floor(Math.random() * 1e10),
     children: [
       {
         name: 'Green',
-        children: [{ name: 'Broccoli' }, { name: 'Brussels sprouts' }],
+        key: Math.floor(Math.random() * 1e10),
+        children: [{
+          name: 'Broccoli',
+          key: Math.floor(Math.random() * 1e10)
+        }, {
+          name: 'Brussels sprouts',
+          key: Math.floor(Math.random() * 1e10)
+        }],
       },
       {
         name: 'Orange',
-        children: [{ name: 'Pumpkins' }, { name: 'Carrots' }],
+        key: Math.floor(Math.random() * 1e10),
+        children: [{
+          name: 'Pumpkins',
+          key: Math.floor(Math.random() * 1e10)
+        }, {
+          name: 'Carrots',
+          key: Math.floor(Math.random() * 1e10)
+        }],
       },
     ],
   },
@@ -63,7 +88,8 @@ class CustomDragCatalog {
   init() {
     this.event
       .set(this.TreeEl, {
-        [IEventsType.MouseDown]: this.downNodeLogic.bind(this)
+        // 鼠标按下事件
+        [IEventsType.MouseDown]: this.downNodeLogic.bind(this),
       })
       // @ts-ignore
       .set(document, {
@@ -150,7 +176,7 @@ class CustomDragCatalog {
          * */
         if (
           entityFolderEl === this.parentEl
-          || entityFolderEl.parentElement?.parentElement === this.parentEl
+          || entityFolderEl.parentElement === this.parentEl
           || entityFolderEl.contains(this.parentEl)
         ) {
           parentEl && this.treeThis.renderer.removeStyle(parentEl, "background-color");
@@ -174,7 +200,9 @@ class CustomDragCatalog {
   }
 
   keydownLogic(e: KeyboardEvent) {
-    console.log("%c Line:67 🥓", "color:#ea7e5c", e.ctrlKey, e.key);
+    if (e.ctrlKey && e.key === "a") {
+      e.preventDefault();
+    }
   }
 
   destroy() {
@@ -193,20 +221,33 @@ class CustomDragCatalog {
   styleUrl: './hs-tree.component.less',
   templateUrl: './hs-tree.component.html',
   imports: [CommonModule, CdkTreeModule, MatButtonModule, MatIconModule, MatRippleModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HsTreeComponent implements AfterViewInit, OnDestroy {
   HsTree = viewChild<ElementRef>("HsTree");
   dragCatalog: CustomDragCatalog | null = null;
-  treeData = new BehaviorSubject<ICatalogStructure[]>(TREE_DATA.map(item => ({ key: Math.floor(Math.random() * 1e10), ...item })));
+  treeData = new BehaviorSubject<ICatalogStructure[]>(TREE_DATA);
 
   treeControl = new NestedTreeControl<ICatalogStructure>(node => node.children);
   dataSource = new ArrayDataSource(this.treeData);
+
+  activeEl = signal<HTMLElement | null>(null);
+  activeKey = computed(() => +this.activeEl()?.getAttribute("aria-key")!);
 
   hasChild = (_: number, node: ICatalogStructure) => !!node.children && node.children.length > 0;
 
   constructor(
     public renderer: Renderer2
   ) { }
+
+  checkNode(e: Event) {
+    e.stopPropagation();
+    this.activeEl.set(e.target as HTMLElement);
+    while (!this.activeEl()?.getAttribute("aria-key")) {
+      this.activeEl.set(this.activeEl()!.parentElement);
+    }
+    console.log("%c Line:219 🥔", "color:#ed9ec7", this.activeEl());
+  }
 
   ngAfterViewInit(): void {
     // @ts-ignore 
