@@ -6,6 +6,7 @@
   <cdk-nested-tree-node
     *cdkTreeNodeDef="let node"
     [attr.aria-key]="node.key"
+    [class.active-el]="hasActive(node)"
     class="example-tree-node"
   >
     <div
@@ -13,8 +14,8 @@
       [class.node-hover]="!(dragCatalog?.isMove$ | async)"
       matRipple
       matRippleColor="#ffffff20"
-      [class.active-el]="node.key === activeKey()"
-      (click)="checkNode($event)"
+      [class.active-el]="node.key === activeKey() && !dragCatalog?.entityListEl?.length"
+      (click)="clickNode($event)"
     >
       <button
         mat-icon-button
@@ -30,15 +31,16 @@
     *cdkTreeNodeDef="let node; when: hasChild"
     [attr.aria-key]="node.key"
     [attr.aria-folder]="true"
+    [class.active-el]="hasActive(node)"
     class="example-tree-node"
   >
     <div
       matRipple
       matRippleColor="#ffffff20"
-      (click)="checkNode($event)"
+      (click)="clickNode($event)"
       cdkTreeNodeToggle
       [class.node-hover]="!(dragCatalog?.isMove$ | async)"
-      [class.active-el]="node.key === activeKey()"
+      [class.active-el]="node.key === activeKey() && !dragCatalog?.entityListEl?.length"
       class="first-tree-node"
     >
       <button

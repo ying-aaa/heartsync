@@ -60,6 +60,7 @@ class CustomDragCatalog {
   LineEl!: HTMLElement;
 
   entityEl!: HTMLElement | null;
+  entityListEl: HTMLElement[] = [];
   parentEl!: HTMLElement | null;
 
   treeThis!: HsTreeComponent;
@@ -69,12 +70,8 @@ class CustomDragCatalog {
   }>();
 
   isMove$ = new BehaviorSubject(false);
-  keyStatus$ = new BehaviorSubject({
-    ctrl: false,
-    a: false,
-    c: false,
-    v: false,
-  });
+
+  keyboardEvent: KeyboardEvent | undefined;
 
   subscribetions: Subscription[] = [];
 
@@ -86,6 +83,7 @@ class CustomDragCatalog {
   }
 
   init() {
+    // 事件总线
     this.event
       .set(this.TreeEl, {
         // 鼠标按下事件
@@ -96,6 +94,7 @@ class CustomDragCatalog {
         [IEventsType.MouseMove]: this.moveNodeLogic.bind(this),
         [IEventsType.MouseUp]: this.upNodeLogic.bind(this),
         [IEventsType.KeyDown]: this.keydownLogic.bind(this),
+        [IEventsType.KeyUp]: this.keyUpLogic.bind(this),
       });
 
     for (const [el, evnets] of this.event) {
@@ -105,6 +104,7 @@ class CustomDragCatalog {
       }
     }
 
+    // 观察者总线
     const sub = this.isMove$.subscribe((value) => {
       if (value) {
         this.treeThis.renderer.setStyle(this.TreeEl, 'cursor', 'alias');
@@ -150,6 +150,7 @@ class CustomDragCatalog {
 
   moveNodeLogic(e: MouseEvent) {
     if (!this.entityEl) return;
+    // 触发拖拽的鼠标样式
     !this.isMove$.value && this.isMove$.next(true);
     let entityFolderEl = this.entityEl;
     while (entityFolderEl) {
@@ -200,8 +201,28 @@ class CustomDragCatalog {
   }
 
   keydownLogic(e: KeyboardEvent) {
+    this.keyboardEvent = e;
+
     if (e.ctrlKey && e.key === "a") {
       e.preventDefault();
+      this.treeThis.renderer.setAttribute(this.treeThis.activeEl()!.parentElement, "class", "active-el");
+      // @ts-ignore
+      this.entityListEl = Array.from(this.treeThis.activeEl()!.parentElement?.children) as HTMLElement[];
+    }
+  }
+
+  keyUpLogic(e: KeyboardEvent) {
+    this.keyboardEvent = e;
+  }
+
+  clickNode(el: HTMLElement) {
+    console.log("%c Line:219 🥖 el", "color:#ed9ec7", el);
+
+    // 按住 Ctrl 键并点击节点, 进行多选和取消选择
+    if (this.entityListEl.includes(el)) {
+      this.entityListEl = this.entityListEl.filter(item => item !== el);
+    } else {
+      this.entityListEl.push(el);
     }
   }
 
@@ -233,6 +254,12 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
 
   activeEl = signal<HTMLElement | null>(null);
   activeKey = computed(() => +this.activeEl()?.getAttribute("aria-key")!);
+  hasActive = (node: ICatalogStructure) => {
+    console.log("%c Line:258 🥒 node", "color:#93c0a4", node);
+
+    console.log("%c Line:260 🥥", "color:#42b983", this.dragCatalog?.entityListEl);
+    return this.dragCatalog?.entityListEl?.some(item => item.getAttribute("aria-key") === node.key);
+  }
 
   hasChild = (_: number, node: ICatalogStructure) => !!node.children && node.children.length > 0;
 
@@ -240,13 +267,21 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
     public renderer: Renderer2
   ) { }
 
-  checkNode(e: Event) {
+  clickNode(e: Event) {
     e.stopPropagation();
-    this.activeEl.set(e.target as HTMLElement);
-    while (!this.activeEl()?.getAttribute("aria-key")) {
-      this.activeEl.set(this.activeEl()!.parentElement);
+    this.activeEl() && this.renderer.removeAttribute(this.activeEl()!.parentElement, "class");
+    let targetNode = e.target as HTMLElement;
+    while (!targetNode?.getAttribute("aria-key")) {
+      targetNode = targetNode!.parentElement as HTMLElement
+      // 多选
+      this.dragCatalog!.clickNode(targetNode);
+
+      // 普通点击
+      if (!this.dragCatalog?.keyboardEvent?.ctrlKey) {
+        this.dragCatalog!.entityListEl = [];
+        this.activeEl.set(targetNode);
+      }
     }
-    console.log("%c Line:219 🥔", "color:#ed9ec7", this.activeEl());
   }
 
   ngAfterViewInit(): void {
