@@ -1,14 +1,15 @@
 
 
-import { AfterViewInit, Component, ElementRef, Renderer2, viewChild, OnDestroy, CUSTOM_ELEMENTS_SCHEMA, signal, computed } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Renderer2, viewChild, OnDestroy, CUSTOM_ELEMENTS_SCHEMA, signal, computed, ChangeDetectorRef } from '@angular/core';
 import { ArrayDataSource } from '@angular/cdk/collections';
 import { CdkTreeModule, NestedTreeControl } from '@angular/cdk/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ICatalogStructure, IEventsType } from '../../models/system.model';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observer, Subject, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatRippleModule } from '@angular/material/core';
+import { deepClone, getRecursivePosition } from '@src/app/core/utils';
 
 const TREE_DATA: ICatalogStructure[] = [
   {
@@ -37,7 +38,19 @@ const TREE_DATA: ICatalogStructure[] = [
           key: Math.floor(Math.random() * 1e10)
         }, {
           name: 'Brussels sprouts',
-          key: Math.floor(Math.random() * 1e10)
+          key: Math.floor(Math.random() * 1e10),
+          children: [
+            {
+              name: 'Green',
+              key: Math.floor(Math.random() * 1e10),
+              children: [{
+                name: 'Broccoli',
+                key: Math.floor(Math.random() * 1e10)
+              }, {
+                name: 'Brussels sprouts',
+                key: Math.floor(Math.random() * 1e10)
+              }],
+            }]
         }],
       },
       {
@@ -70,10 +83,13 @@ class CustomDragCatalog {
   }>();
 
   isMove$ = new BehaviorSubject(false);
+  isCompile = false;
 
   keyboardEvent: KeyboardEvent | undefined;
 
   subscribetions: Subscription[] = [];
+
+  dragComplete$ = new Subject();
 
   constructor(el: HTMLElement, treeThis: HsTreeComponent) {
     this.TreeEl = el;
@@ -140,6 +156,7 @@ class CustomDragCatalog {
     while (currentElement) {
       if (currentElement.tagName.toLowerCase() === 'cdk-nested-tree-node') {
         this.entityEl = currentElement;
+        this.entityListEl.push(this.entityEl);
         const text = this.entityEl.querySelector("p")!;
         this.treeThis.renderer.setProperty(this.LineEl, 'innerText', text.textContent);
         break;
@@ -181,8 +198,10 @@ class CustomDragCatalog {
           || entityFolderEl.contains(this.parentEl)
         ) {
           parentEl && this.treeThis.renderer.removeStyle(parentEl, "background-color");
+          // not compile
           return;
         };
+        this.isCompile = true;
         parentEl && this.treeThis.renderer.removeStyle(parentEl, "background-color");
         this.treeThis.renderer.setStyle(this.parentEl, "background-color", "#8b8b8b4d");
         this.treeThis.renderer.setStyle(this.parentEl, "border-radius", "8px");
@@ -196,13 +215,20 @@ class CustomDragCatalog {
   upNodeLogic(e: MouseEvent) {
     if (!this.entityEl) return;
     this.parentEl && this.treeThis.renderer.removeStyle(this.parentEl, "background-color");
+
+    // 移入操作生成后释放空间，供下次评判
+    this.isCompile && this.dragComplete$.next({
+      entityList: this.entityListEl.map(el => el.getAttribute("aria-key")),
+      parent: this.parentEl?.getAttribute("aria-key")
+    })
+    this.isCompile = false;
+
     this.isMove$.next(false);
     this.entityEl = null;
   }
 
   keydownLogic(e: KeyboardEvent) {
     this.keyboardEvent = e;
-
     if (e.ctrlKey && e.key === "a") {
       e.preventDefault();
       this.treeThis.renderer.setAttribute(this.treeThis.activeEl()!.parentElement, "class", "active-el");
@@ -216,8 +242,6 @@ class CustomDragCatalog {
   }
 
   clickNode(el: HTMLElement) {
-    console.log("%c Line:219 🥖 el", "color:#ed9ec7", el);
-
     // 按住 Ctrl 键并点击节点, 进行多选和取消选择
     if (this.entityListEl.includes(el)) {
       this.entityListEl = this.entityListEl.filter(item => item !== el);
@@ -247,24 +271,22 @@ class CustomDragCatalog {
 export class HsTreeComponent implements AfterViewInit, OnDestroy {
   HsTree = viewChild<ElementRef>("HsTree");
   dragCatalog: CustomDragCatalog | null = null;
-  treeData = new BehaviorSubject<ICatalogStructure[]>(TREE_DATA);
+  treeData$ = new BehaviorSubject<ICatalogStructure[]>(TREE_DATA);
 
   treeControl = new NestedTreeControl<ICatalogStructure>(node => node.children);
-  dataSource = new ArrayDataSource(this.treeData);
+  dataSource = new ArrayDataSource(this.treeData$);
 
   activeEl = signal<HTMLElement | null>(null);
   activeKey = computed(() => +this.activeEl()?.getAttribute("aria-key")!);
   hasActive = (node: ICatalogStructure) => {
-    console.log("%c Line:258 🥒 node", "color:#93c0a4", node);
-
-    console.log("%c Line:260 🥥", "color:#42b983", this.dragCatalog?.entityListEl);
-    return this.dragCatalog?.entityListEl?.some(item => item.getAttribute("aria-key") === node.key);
+    return !!this.dragCatalog?.entityListEl?.some(item => item.getAttribute("aria-key") == node.key);
   }
 
   hasChild = (_: number, node: ICatalogStructure) => !!node.children && node.children.length > 0;
 
   constructor(
-    public renderer: Renderer2
+    public renderer: Renderer2,
+    private cdr: ChangeDetectorRef
   ) { }
 
   clickNode(e: Event) {
@@ -273,13 +295,17 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
     let targetNode = e.target as HTMLElement;
     while (!targetNode?.getAttribute("aria-key")) {
       targetNode = targetNode!.parentElement as HTMLElement
-      // 多选
-      this.dragCatalog!.clickNode(targetNode);
 
-      // 普通点击
-      if (!this.dragCatalog?.keyboardEvent?.ctrlKey) {
-        this.dragCatalog!.entityListEl = [];
-        this.activeEl.set(targetNode);
+      if (targetNode?.getAttribute("aria-key")) {
+        // 如果非按着ctrl键的点击
+        if (!this.dragCatalog?.keyboardEvent?.ctrlKey) {
+          this.dragCatalog!.entityListEl = [];
+          this.activeEl.set(targetNode);
+        } else {
+          // 多选
+          !this.dragCatalog.entityListEl.length && this.activeEl() && this.dragCatalog!.clickNode(this.activeEl() as HTMLElement);
+          this.dragCatalog!.clickNode(targetNode);
+        }
       }
     }
   }
@@ -288,6 +314,22 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
     // @ts-ignore 
     const cdkTreeRef = this.HsTree()._elementRef.nativeElement;
     this.dragCatalog = new CustomDragCatalog(cdkTreeRef, this);
+    this.dragCatalog.dragComplete$.subscribe((res: any) => {
+      const entityListValue = res.entityList
+        .map((key: number) => getRecursivePosition(this.treeData$.value, key)?.value)
+        .filter(Boolean);
+      const mainValue = getRecursivePosition(this.treeData$.value, res.parent)?.offset;
+      const treeData = deepClone(this.treeData$.value);
+
+      // 通过堆内存的数据引用能力进行查询和操作
+      const location = mainValue?.reduce((res, ori) => res + `[${ori}].children`, 'return treeData');
+      const resData = new Function("treeData", location as string)(treeData);
+      resData.push(...entityListValue);
+      console.log("%c Line:316 🌭 treeData", "color:#f5ce50", treeData);
+      this.treeData$.next(treeData);
+      console.log("%c Line:330 🎂 this.treeData$", "color:#3f7cff", this.treeData$.value);
+      this.cdr.detectChanges();
+    })
   }
 
   ngOnDestroy(): void {

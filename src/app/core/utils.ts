@@ -33,3 +33,61 @@ export function isSameObj(value1: any, value2: any): boolean {
   }
   return false;
 }
+
+// 返回最终匹配项
+export function getRecursivePosition(
+  origin: any,
+  value: any,
+  existingOffset: Array<number> = []
+): {
+  offset: number[];
+  value: any;
+} | null {
+  for (let i = 0; i < origin.length; i++) {
+    let offset: number[] = [...existingOffset, i];
+    if (origin[i].key == value) {
+      return { offset, value: origin[i] };
+    } else {
+      if (origin[i].children && origin[i].children.length) {
+        const res = getRecursivePosition(origin[i].children, value, offset);
+        if (res) return res;
+      }
+    }
+  }
+  return null;
+}
+
+export function deepClone<T>(obj: T, hash = new WeakMap()): T {
+  // 如果是原始类型，直接返回
+  if (obj === null) return null as any;
+  if (obj instanceof Date) return new Date(obj) as any;
+  if (obj instanceof RegExp) return new RegExp(obj) as any;
+  if (typeof obj !== 'object') return obj as any;
+
+  // 如果是数组
+  if (Array.isArray(obj)) {
+    const clone: any[] = [];
+    for (let item of obj) {
+      clone.push(deepClone(item, hash));
+    }
+    return clone as T;
+  }
+
+  // 如果是对象
+  if (obj instanceof Object) {
+    // 检查是否已经克隆过，防止循环引用
+    if (hash.has(obj)) return hash.get(obj) as T;
+
+    const clone: { [key: string]: any } = {};
+    hash.set(obj, clone);
+
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        clone[key] = deepClone((obj as any)[key], hash);
+      }
+    }
+    return clone as T;
+  }
+
+  throw new Error('Unable to copy obj! Its type isn\'t supported.');
+}

@@ -2,7 +2,10 @@
 .themeMixin({
   :host {
     font-size: 14px;
-
+    height: 100%;
+    display: block;
+    overflow: auto;
+    
     cdk-tree {
       cursor: pointer;
       display: block;
@@ -10,7 +13,7 @@
 
     .active-el {
       background: #b8d6e7 !important;
-      border-radius: 8px;
+      // border-radius: 8px;
     }
 
     .example-tree-invisible {
