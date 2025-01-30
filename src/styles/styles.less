@@ -1,5 +1,5 @@
 @import 'material-icons/iconfont/material-icons.css';
-
+@import 'mixin';
 html,
 body {
   height: 100%;
@@ -13,3 +13,25 @@ body {
 :host {
   display: block;
 }
+
+.themeMixin({
+  *::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+  }
+  *::-webkit-scrollbar-corner, /* Scroll bar corner */
+  *::-webkit-scrollbar-thumb,
+  *::-webkit-scrollbar-track {
+    border-radius: 5px;
+  }
+  *::-webkit-scrollbar-corner,
+  *::-webkit-scrollbar-track {
+    /* Scroll bar track */
+    background-color: rgba(180, 160, 120, 0.1);
+    // box-shadow: inset 0 0 1px rgba(180, 160, 120, 0.5);
+  }
+  *::-webkit-scrollbar-thumb {
+    /* Scroll bar handle */
+    background-color: @base-color-30;
+  }
+});
