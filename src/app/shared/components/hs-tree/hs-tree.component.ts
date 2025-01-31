@@ -325,9 +325,9 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
       const location = mainValue?.reduce((res, ori) => res + `[${ori}].children`, 'return treeData');
       const resData = new Function("treeData", location as string)(treeData);
       resData.push(...entityListValue);
-      console.log("%c Line:316 🌭 treeData", "color:#f5ce50", treeData);
       this.treeData$.next(treeData);
-      console.log("%c Line:330 🎂 this.treeData$", "color:#3f7cff", this.treeData$.value);
+
+      this.dragCatalog!.entityListEl = [];
       this.cdr.detectChanges();
     })
   }
