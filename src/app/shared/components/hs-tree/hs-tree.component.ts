@@ -182,7 +182,7 @@ class CustomDragCatalog {
     e.preventDefault();
     this.entityEl = getNodeEl(e.target as HTMLElement);
 
-    const text = this.isEntityEl() && this.entityListEl.length > 2
+    const text = this.isEntityEl() && this.entityListEl.length > 1
       ?
       this.entityListEl.length
       :
