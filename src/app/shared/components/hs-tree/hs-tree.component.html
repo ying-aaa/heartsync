@@ -6,16 +6,16 @@
   <cdk-nested-tree-node
     *cdkTreeNodeDef="let node"
     [attr.aria-key]="node.key"
-    [class.active-el]="hasActive(node)"
     class="example-tree-node"
   >
     <div
-      class="first-tree-node"
       [class.node-hover]="!(dragCatalog?.isMove$ | async)"
       matRipple
       matRippleColor="#ffffff20"
-      [class.active-el]="node.key === activeKey() && !dragCatalog?.entityListEl?.length"
+      [class.active-el]="node.key === activeKey() || hasActive(node)"
       (click)="clickNode($event)"
+      [style.paddingLeft]="getRecursivePosition(node) * 30 + 'px'"
+      class="first-tree-node"
     >
       <button
         mat-icon-button
@@ -31,16 +31,16 @@
     *cdkTreeNodeDef="let node; when: hasChild"
     [attr.aria-key]="node.key"
     [attr.aria-folder]="true"
-    [class.active-el]="hasActive(node)"
     class="example-tree-node"
   >
     <div
       matRipple
       matRippleColor="#ffffff20"
       (click)="clickNode($event)"
-      cdkTreeNodeToggle
       [class.node-hover]="!(dragCatalog?.isMove$ | async)"
-      [class.active-el]="node.key === activeKey() && !dragCatalog?.entityListEl?.length"
+      [class.active-el]="node.key === activeKey() || hasActive(node)"
+      [style.paddingLeft]="getRecursivePosition(node) * 30 + 'px'"
+      cdkTreeNodeToggle
       class="first-tree-node"
     >
       <button

@@ -9,7 +9,16 @@ import { ICatalogStructure, IEventsType } from '../../models/system.model';
 import { BehaviorSubject, Observer, Subject, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatRippleModule } from '@angular/material/core';
-import { deepClone, getRecursivePosition } from '@src/app/core/utils';
+import { deepClone, getRecursivePosition, handlerNgElStyle } from '@src/app/core/utils';
+
+function getNodeEl(el: HTMLElement, attr = "aria-key"): HTMLElement | null {
+  let node = el;
+  while (node) {
+    if (node.getAttribute(attr)) return node;
+    node = node.parentElement as HTMLElement;
+  }
+  return null;
+}
 
 const TREE_DATA: ICatalogStructure[] = [
   {
@@ -69,33 +78,47 @@ const TREE_DATA: ICatalogStructure[] = [
 ];
 
 class CustomDragCatalog {
+  // 事件委托
   TreeEl!: HTMLElement;
-  LineEl!: HTMLElement;
+  // 跟随元素
+  followEl!: HTMLElement;
 
+  // 实体
   entityEl!: HTMLElement | null;
+  // 实体列表
   entityListEl: HTMLElement[] = [];
-  parentEl!: HTMLElement | null;
+  // 最终移入的目录
+  finalEl!: HTMLElement | null;
 
   treeThis!: HsTreeComponent;
 
+  // 元素事件
   event = new Map<HTMLElement, {
     [key in IEventsType]?: Function;
   }>();
 
+  // 是否在拖动过程中
   isMove$ = new BehaviorSubject(false);
+  // 是否可以根据已拖动的进行操作
   isCompile = false;
 
+  // 当前键盘按下情况
   keyboardEvent: KeyboardEvent | undefined;
 
   subscribetions: Subscription[] = [];
 
+  // 通知进行拖动
   dragComplete$ = new Subject();
 
   constructor(el: HTMLElement, treeThis: HsTreeComponent) {
     this.TreeEl = el;
     this.treeThis = treeThis;
-    this.generataLine();
+    this.generataFollow();
     this.init();
+  }
+
+  isEntityEl() {
+    return this.entityListEl.some(el => el === this.entityEl || el.contains(this.entityEl));
   }
 
   init() {
@@ -124,102 +147,98 @@ class CustomDragCatalog {
     const sub = this.isMove$.subscribe((value) => {
       if (value) {
         this.treeThis.renderer.setStyle(this.TreeEl, 'cursor', 'alias');
-        this.treeThis.renderer.setStyle(this.LineEl, 'display', 'block');
+        this.treeThis.renderer.setStyle(this.followEl, 'display', 'block');
       };
       if (!value) {
         this.treeThis.renderer.removeStyle(this.TreeEl, 'cursor');
-        this.treeThis.renderer.setStyle(this.LineEl, "display", "none");
+        this.treeThis.renderer.setStyle(this.followEl, "display", "none");
       };
     })
     this.subscribetions.push(sub);
   }
 
-  generataLine() {
-    this.LineEl = this.treeThis.renderer.createElement('div');
-    this.treeThis.renderer.appendChild(document.body, this.LineEl);
-    this.treeThis.renderer.setStyle(this.LineEl, 'width', 'fil-content');
-    this.treeThis.renderer.setStyle(this.LineEl, 'font-size', '16px');
-    this.treeThis.renderer.setStyle(this.LineEl, 'position', 'absolute');
-    this.treeThis.renderer.setStyle(this.LineEl, 'top', '0');
-    this.treeThis.renderer.setStyle(this.LineEl, 'left', '0');
-    this.treeThis.renderer.setStyle(this.LineEl, 'padding', '6px');
-    this.treeThis.renderer.setStyle(this.LineEl, 'background-color', '#8b8b8b');
-    this.treeThis.renderer.setStyle(this.LineEl, 'border-radius', '8px');
-    this.treeThis.renderer.setStyle(this.LineEl, 'opacity', '.8');
-    this.treeThis.renderer.setStyle(this.LineEl, "display", "none");
+  generataFollow() {
+    this.followEl = this.treeThis.renderer.createElement('div');
+    this.treeThis.renderer.appendChild(document.body, this.followEl);
+    handlerNgElStyle(
+      this.treeThis.renderer,
+      this.followEl,
+      {
+        'width': 'fil-content',
+        'font-size': '16px',
+        'position': 'absolute',
+        'top': '0',
+        'left': '0',
+        'padding': '6px',
+        'background-color': '#8b8b8b',
+        'border-radius': '8px',
+        'opacity': '.8',
+        "display": "none"
+      }
+    );
   }
 
   downNodeLogic(e: MouseEvent) {
     e.preventDefault();
-    // @ts-ignore
-    let currentElement = e.target as HTMLElement;
-    while (currentElement) {
-      if (currentElement.tagName.toLowerCase() === 'cdk-nested-tree-node') {
-        this.entityEl = currentElement;
-        this.entityListEl.push(this.entityEl);
-        const text = this.entityEl.querySelector("p")!;
-        this.treeThis.renderer.setProperty(this.LineEl, 'innerText', text.textContent);
-        break;
-      }
-      currentElement = currentElement.parentElement as HTMLElement;
-    }
+    this.entityEl = getNodeEl(e.target as HTMLElement);
+
+
+    const text = this.isEntityEl() ? this.entityListEl.length : this.entityEl!.querySelector("p")!.textContent;
+    this.treeThis.renderer.setProperty(this.followEl, 'innerText', text);
   }
 
   moveNodeLogic(e: MouseEvent) {
     if (!this.entityEl) return;
     // 触发拖拽的鼠标样式
     !this.isMove$.value && this.isMove$.next(true);
-    let entityFolderEl = this.entityEl;
-    while (entityFolderEl) {
-      if (entityFolderEl.getAttribute("aria-folder")) break;
-      entityFolderEl = entityFolderEl!.parentElement as HTMLElement;
-    }
+
+    // 实体所在目录
+    let entityFolderEl = getNodeEl(this.entityEl, "aria-folder");
 
     // 拖拽跟随
     this.treeThis.renderer.setStyle(
-      this.LineEl, 'transform',
+      this.followEl, 'transform',
       `translateX(${e.clientX + 15}px) translateY(${e.clientY + 5}px)`
     );
 
     // 做清除使用
-    const parentEl = this.parentEl;
-    this.parentEl = e.target as HTMLElement;
-    while (this.parentEl) {
-      if (this.parentEl.getAttribute("aria-folder")) {
-        /**
-         * 三种不能移动的情况
-         * 1、不能向非目录移入
-         * 2、不能往当前已在父级目录重复移入
-         * 3、不能往子孙级目录移入
-         * */
-        if (
-          entityFolderEl === this.parentEl
-          || entityFolderEl.parentElement === this.parentEl
-          || entityFolderEl.contains(this.parentEl)
-        ) {
-          parentEl && this.treeThis.renderer.removeStyle(parentEl, "background-color");
-          // not compile
-          return;
-        };
-        this.isCompile = true;
-        parentEl && this.treeThis.renderer.removeStyle(parentEl, "background-color");
-        this.treeThis.renderer.setStyle(this.parentEl, "background-color", "#8b8b8b4d");
-        this.treeThis.renderer.setStyle(this.parentEl, "border-radius", "8px");
-        break;
-      } else {
-        this.parentEl = this.parentEl!.parentElement as HTMLElement;
+    const finalEl = this.finalEl;
+    this.finalEl = getNodeEl(e.target as HTMLElement, "aria-folder");
+    /**
+     * 三种不能移动的情况
+     * 1、不能向非目录移入 2、不能往当前已在父级目录重复移入 3、不能往子孙级目录移入
+     * */
+    if (
+      !this.finalEl
+      || entityFolderEl === this.finalEl
+      || entityFolderEl!.parentElement === this.finalEl
+      || entityFolderEl!.contains(this.finalEl)
+    ) {
+      finalEl && this.treeThis.renderer.removeStyle(finalEl, "background-color");
+      // not compile
+      return;
+    };
+    // can compile
+    this.isCompile = true;
+    finalEl && this.treeThis.renderer.removeStyle(finalEl, "background-color");
+    handlerNgElStyle(
+      this.treeThis.renderer,
+      this.finalEl,
+      {
+        "background-color": "#8b8b8b4d",
+        "border-radius": "8px"
       }
-    }
+    );
   }
 
   upNodeLogic(e: MouseEvent) {
     if (!this.entityEl) return;
-    this.parentEl && this.treeThis.renderer.removeStyle(this.parentEl, "background-color");
+    this.finalEl && this.treeThis.renderer.removeStyle(this.finalEl, "background-color");
 
     // 移入操作生成后释放空间，供下次评判
     this.isCompile && this.dragComplete$.next({
       entityList: this.entityListEl.map(el => el.getAttribute("aria-key")),
-      parent: this.parentEl?.getAttribute("aria-key")
+      parent: this.finalEl?.getAttribute("aria-key")
     })
     this.isCompile = false;
 
@@ -231,9 +250,8 @@ class CustomDragCatalog {
     this.keyboardEvent = e;
     if (e.ctrlKey && e.key === "a") {
       e.preventDefault();
-      this.treeThis.renderer.setAttribute(this.treeThis.activeEl()!.parentElement, "class", "active-el");
       // @ts-ignore
-      this.entityListEl = Array.from(this.treeThis.activeEl()!.parentElement?.children) as HTMLElement[];
+      this.setEntityListEl(this.treeThis.activeEl()!.parentElement?.querySelectorAll("cdk-nested-tree-node"));
     }
   }
 
@@ -248,6 +266,10 @@ class CustomDragCatalog {
     } else {
       this.entityListEl.push(el);
     }
+  }
+
+  setEntityListEl(listEl: any): void {
+    this.entityListEl = Array.from(listEl) as HTMLElement[];
   }
 
   destroy() {
@@ -278,6 +300,10 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
 
   activeEl = signal<HTMLElement | null>(null);
   activeKey = computed(() => +this.activeEl()?.getAttribute("aria-key")!);
+
+  getRecursivePosition(node: ICatalogStructure): number {
+    return getRecursivePosition<ICatalogStructure>(this.treeData$.value, node.key)?.offset.length! - 1
+  };
   hasActive = (node: ICatalogStructure) => {
     return !!this.dragCatalog?.entityListEl?.some(item => item.getAttribute("aria-key") == node.key);
   }
@@ -292,21 +318,14 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
   clickNode(e: Event) {
     e.stopPropagation();
     this.activeEl() && this.renderer.removeAttribute(this.activeEl()!.parentElement, "class");
-    let targetNode = e.target as HTMLElement;
-    while (!targetNode?.getAttribute("aria-key")) {
-      targetNode = targetNode!.parentElement as HTMLElement
+    let targetNode = getNodeEl(e.target as HTMLElement);
 
-      if (targetNode?.getAttribute("aria-key")) {
-        // 如果非按着ctrl键的点击
-        if (!this.dragCatalog?.keyboardEvent?.ctrlKey) {
-          this.dragCatalog!.entityListEl = [];
-          this.activeEl.set(targetNode);
-        } else {
-          // 多选
-          !this.dragCatalog.entityListEl.length && this.activeEl() && this.dragCatalog!.clickNode(this.activeEl() as HTMLElement);
-          this.dragCatalog!.clickNode(targetNode);
-        }
-      }
+    if (!this.dragCatalog?.keyboardEvent?.ctrlKey) {
+      this.activeEl.set(targetNode);
+      this.dragCatalog!.setEntityListEl([targetNode]);
+    } else {
+      this.activeEl() === targetNode && this.activeEl.set(null);
+      this.dragCatalog.clickNode(targetNode as HTMLElement);
     }
   }
 
@@ -316,16 +335,16 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
     this.dragCatalog = new CustomDragCatalog(cdkTreeRef, this);
     this.dragCatalog.dragComplete$.subscribe((res: any) => {
       const entityListValue = res.entityList
-        .map((key: number) => getRecursivePosition(this.treeData$.value, key)?.value)
+        .map((key: number) => getRecursivePosition<ICatalogStructure>(this.treeData$.value, key)?.value)
         .filter(Boolean);
-      const mainValue = getRecursivePosition(this.treeData$.value, res.parent)?.offset;
+      const mainValue = getRecursivePosition<ICatalogStructure>(this.treeData$.value, res.parent)?.offset;
       const treeData = deepClone(this.treeData$.value);
 
       // 通过堆内存的数据引用能力进行查询和操作
       const location = mainValue?.reduce((res, ori) => res + `[${ori}].children`, 'return treeData');
       const resData = new Function("treeData", location as string)(treeData);
       resData.push(...entityListValue);
-      this.treeData$.next(treeData);
+      // this.treeData$.next(treeData);
 
       this.dragCatalog!.entityListEl = [];
       this.cdr.detectChanges();
