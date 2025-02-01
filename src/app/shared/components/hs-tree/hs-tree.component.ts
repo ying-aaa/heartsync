@@ -182,8 +182,11 @@ class CustomDragCatalog {
     e.preventDefault();
     this.entityEl = getNodeEl(e.target as HTMLElement);
 
-
-    const text = this.isEntityEl() ? this.entityListEl.length : this.entityEl!.querySelector("p")!.textContent;
+    const text = this.isEntityEl() && this.entityListEl.length > 2
+      ?
+      this.entityListEl.length
+      :
+      this.entityEl!.querySelector("p")!.textContent;
     this.treeThis.renderer.setProperty(this.followEl, 'innerText', text);
   }
 
@@ -251,6 +254,7 @@ class CustomDragCatalog {
     if (e.ctrlKey && e.key === "a") {
       e.preventDefault();
       // @ts-ignore
+      // [aria-expanded='true']
       this.setEntityListEl(this.treeThis.activeEl()!.parentElement?.querySelectorAll("cdk-nested-tree-node"));
     }
   }

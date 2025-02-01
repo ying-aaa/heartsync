@@ -11,6 +11,17 @@
       display: block;
     }
 
+    ::ng-deep .cdk-tree-node {
+      border: none !important;
+      outline: none !important;
+    }
+    
+    ::ng-deep .cdk-tree-node::after,
+    ::ng-deep .cdk-tree-node::before {
+      border: none !important;
+      outline: none !important;
+    }
+
     .active-el {
       background: #b8d6e7 !important;
       // border-radius: 8px;
