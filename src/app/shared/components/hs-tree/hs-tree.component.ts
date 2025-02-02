@@ -240,7 +240,7 @@ class CustomDragCatalog {
 
     // 移入操作生成后释放空间，供下次评判
     this.isCompile && this.dragComplete$.next({
-      entityList: this.entityListEl.map(el => el.getAttribute("aria-key")),
+      entityList: this.isEntityEl() ? this.entityListEl.map(el => el.getAttribute("aria-key")) : [this.entityEl.getAttribute("aria-key")],
       parent: this.finalEl?.getAttribute("aria-key")
     })
     this.isCompile = false;
@@ -321,7 +321,11 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
 
   clickNode(e: Event) {
     e.stopPropagation();
-    this.activeEl() && this.renderer.removeAttribute(this.activeEl()!.parentElement, "class");
+    try {
+      this.activeEl() && this.renderer?.removeAttribute(this.activeEl()!.parentElement, "class");
+    } catch (error) {
+
+    }
     let targetNode = getNodeEl(e.target as HTMLElement);
 
     if (!this.dragCatalog?.keyboardEvent?.ctrlKey) {
@@ -341,16 +345,20 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
       const entityListValue = res.entityList
         .map((key: number) => getRecursivePosition<ICatalogStructure>(this.treeData$.value, key)?.value)
         .filter(Boolean);
+      console.log("%c Line:344 🧀", "color:#6ec1c2", entityListValue);
+      console.log("%c Line:344 🍯", "color:#42b983", this.treeData$.value, res.parent);
       const mainValue = getRecursivePosition<ICatalogStructure>(this.treeData$.value, res.parent)?.offset;
+      console.log("%c Line:345 🍩 mainValue", "color:#ea7e5c", mainValue);
       const treeData = deepClone(this.treeData$.value);
 
       // 通过堆内存的数据引用能力进行查询和操作
       const location = mainValue?.reduce((res, ori) => res + `[${ori}].children`, 'return treeData');
       const resData = new Function("treeData", location as string)(treeData);
-      resData.push(...entityListValue);
-      // this.treeData$.next(treeData);
+      resData.push(...entityListValue.map((item: ICatalogStructure) => ({ ...item, key: Math.floor(Math.random() * 1e10) })));
+      this.treeData$.next(treeData);
 
-      this.dragCatalog!.entityListEl = [];
+      this.dragCatalog!.setEntityListEl([]);
+      this.dragCatalog!.entityEl = null;
       this.cdr.detectChanges();
     })
   }
