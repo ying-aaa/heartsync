@@ -345,10 +345,7 @@ export class HsTreeComponent implements AfterViewInit, OnDestroy {
       const entityListValue = res.entityList
         .map((key: number) => getRecursivePosition<ICatalogStructure>(this.treeData$.value, key)?.value)
         .filter(Boolean);
-      console.log("%c Line:344 🧀", "color:#6ec1c2", entityListValue);
-      console.log("%c Line:344 🍯", "color:#42b983", this.treeData$.value, res.parent);
       const mainValue = getRecursivePosition<ICatalogStructure>(this.treeData$.value, res.parent)?.offset;
-      console.log("%c Line:345 🍩 mainValue", "color:#ea7e5c", mainValue);
       const treeData = deepClone(this.treeData$.value);
 
       // 通过堆内存的数据引用能力进行查询和操作

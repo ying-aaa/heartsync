@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
+import { HsTableComponent } from '@src/app/shared/components/hs-table/hs-table.component';
 
 @Component({
   selector: 'app-app-manage',
@@ -19,6 +20,7 @@ import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.comp
     FormsModule,
     MatButtonModule,
     MatIconModule,
+    HsTableComponent
   ]
 })
 export class AppManageComponent implements OnInit {
