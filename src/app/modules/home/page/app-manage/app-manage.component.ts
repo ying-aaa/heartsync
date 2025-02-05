@@ -20,15 +20,13 @@ import { HsTableComponent } from '@src/app/shared/components/hs-table/hs-table.c
     FormsModule,
     MatButtonModule,
     MatIconModule,
-    HsTableComponent
-  ]
+    HsTableComponent,
+  ],
 })
 export class AppManageComponent implements OnInit {
-  fileName = new FormControl("");
+  fileName = new FormControl('');
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
