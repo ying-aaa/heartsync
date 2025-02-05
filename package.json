@@ -32,7 +32,6 @@
     "express": "^4.18.2",
     "material-icons": "^1.13.13",
     "rxjs": "~7.8.0",
-    "sortablejs": "^1.15.6",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
