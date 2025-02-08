@@ -15,7 +15,9 @@
         src="/assets/manage/classfile.png"
       />
     </div>
-    <div class="font-roboto text-18px font-bold leading-24px tracking-0">分类目录</div>
+    <div class="font-roboto text-18px font-bold leading-24px tracking-0">
+      分类目录
+    </div>
   </div>
   <!-- 分割线 -->
   <mat-divider class="opacity-20 mt-10px! mb-20px!"></mat-divider>
@@ -40,15 +42,14 @@
   </mat-form-field>
   <!-- 目录 -->
   <main class="h-0 flex-1 mb-18px">
-    <hs-tree></hs-tree>
+    <!-- <hs-tree></hs-tree> -->
+    <hs-fancytree></hs-fancytree>
   </main>
   <!-- 新增 -->
   <footer
     class="w-100% h-36px border-1px border-dashed border border-#2f90b960 hover:border-#2f90b9 rounded-8px cursor-pointer flex-center"
   >
-    <mat-icon class="mat-icon-rtl-mirror">
-      add
-    </mat-icon>
+    <mat-icon class="mat-icon-rtl-mirror"> add </mat-icon>
     <div class="ml-12px leading-16px">新增</div>
   </footer>
 </div>

@@ -52,7 +52,12 @@
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles", "src/styles/themes"]
             },
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/jquery-ui/dist/jquery-ui.min.js",
+              "node_modules/jquery-ui-bundle/jquery-ui.min.js",
+              "node_modules/jquery.fancytree/dist/jquery.fancytree-all.js"
+            ]
           },
           "configurations": {
             "production": {

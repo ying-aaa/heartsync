@@ -2346,6 +2346,28 @@
   resolved "https://registry.npmmirror.com/@types/jasmine/-/jasmine-5.1.5.tgz"
   integrity sha512-SaCZ3kM5NjOiJqMRYwHpLbTfUC2Dyk1KS3QanNFsUYPGTk70CWVK/J9ueun6zNhw/UkgV7xl8V4ZLQZNRbfnNw==
 
+"@types/jquery.fancytree@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.npmmirror.com/@types/jquery.fancytree/-/jquery.fancytree-0.0.11.tgz#4283f109ecfce9aeb33297da27406c507c61bb34"
+  integrity sha512-ga0wwAa8SLSAxdg+kU6wH8PMY/XxWx+rOzzQz4z1t1GSj/9suYakgQhcAT2gVk6yBdzYHT8ltpkhfCxhEtk0Rg==
+  dependencies:
+    "@types/jquery" "*"
+    "@types/jqueryui" "*"
+
+"@types/jquery@*", "@types/jquery@^3.5.32":
+  version "3.5.32"
+  resolved "https://registry.npmmirror.com/@types/jquery/-/jquery-3.5.32.tgz#3eb0da20611b92c7c49ebed6163b52a4fdc57def"
+  integrity sha512-b9Xbf4CkMqS02YH8zACqN1xzdxc3cO735Qe5AbSUFmyOiaWAbcpqh9Wna+Uk0vgACvoQHpWDg2rGdHkYPLmCiQ==
+  dependencies:
+    "@types/sizzle" "*"
+
+"@types/jqueryui@*":
+  version "1.12.23"
+  resolved "https://registry.npmmirror.com/@types/jqueryui/-/jqueryui-1.12.23.tgz#06882d3fd91834f87c40320a0897b2d3fe17de35"
+  integrity sha512-pm1yVNVI29B9IGw41anCEzA5eR2r1pYc7flqD471ZT7B0yUXIY7YNe/zq7LGpihIGXNzWyG+Q4YQSzv2AF3fNA==
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/json-schema@*", "@types/json-schema@^7.0.15", "@types/json-schema@^7.0.8", "@types/json-schema@^7.0.9":
   version "7.0.15"
   resolved "https://registry.npmmirror.com/@types/json-schema/-/json-schema-7.0.15.tgz"
@@ -2408,6 +2430,11 @@
     "@types/http-errors" "*"
     "@types/node" "*"
     "@types/send" "*"
+
+"@types/sizzle@*":
+  version "2.3.9"
+  resolved "https://registry.npmmirror.com/@types/sizzle/-/sizzle-2.3.9.tgz#d4597dbd4618264c414d7429363e3f50acb66ea2"
+  integrity sha512-xzLEyKB50yqCUPUJkIsrVvoWNfFUbIZI+RspLWt8u+tIW/BetMBZtgV2LY/2o+tYH8dRvQ+eoPf3NdhQCcLE2w==
 
 "@types/sockjs@^0.3.36":
   version "0.3.36"
@@ -4997,6 +5024,28 @@ jiti@^2.4.1:
   version "2.4.2"
   resolved "https://registry.npmmirror.com/jiti/-/jiti-2.4.2.tgz"
   integrity sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==
+
+jquery-ui-bundle@^1.12.1-migrate:
+  version "1.12.1-migrate"
+  resolved "https://registry.npmmirror.com/jquery-ui-bundle/-/jquery-ui-bundle-1.12.1-migrate.tgz#b9343e2c310743527632cff8bedb0c5e9600b14c"
+  integrity sha512-ihyHzL6NYkCg1SNIRFrQAkgEeAJmet2G6rrecCRwq6RcWNApV6w2NSjqfuJUUoiKywkvlU+pqHJ5NAAEuTet4w==
+
+jquery-ui@^1.14.1:
+  version "1.14.1"
+  resolved "https://registry.npmmirror.com/jquery-ui/-/jquery-ui-1.14.1.tgz#ba342ea3ffff662b787595391f607d923313e040"
+  integrity sha512-DhzsYH8VeIvOaxwi+B/2BCsFFT5EGjShdzOcm5DssWjtcpGWIMsn66rJciDA6jBruzNiLf1q0KvwMoX1uGNvnQ==
+  dependencies:
+    jquery ">=1.12.0 <5.0.0"
+
+jquery.fancytree@^2.38.4:
+  version "2.38.4"
+  resolved "https://registry.npmmirror.com/jquery.fancytree/-/jquery.fancytree-2.38.4.tgz#377599e76e76047a1e50debe00be4658fa003396"
+  integrity sha512-f4Fv5jZiZ6pBml/9txcJRAQDZpqQGGoJ8BUbicZKcO4CpgGbqBX9W7eQFwEaKQS0bxdVBLbqWQ9RoUK05ON2kQ==
+
+"jquery@>=1.12.0 <5.0.0", jquery@^3.7.1:
+  version "3.7.1"
+  resolved "https://registry.npmmirror.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
+  integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
 
 js-tokens@^4.0.0:
   version "4.0.0"

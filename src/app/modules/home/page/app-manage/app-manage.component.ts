@@ -7,13 +7,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
 import { HsTableComponent } from '@src/app/shared/components/hs-table/hs-table.component';
+import { HsFancytreeComponent } from '../../../../shared/components/hs-fancytree/hs-fancytree.component';
 
 @Component({
   selector: 'app-app-manage',
   templateUrl: './app-manage.component.html',
   imports: [
     MatDividerModule,
-    HsTreeComponent,
+    // HsTreeComponent,
+    HsFancytreeComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -21,6 +23,7 @@ import { HsTableComponent } from '@src/app/shared/components/hs-table/hs-table.c
     MatButtonModule,
     MatIconModule,
     HsTableComponent,
+    HsFancytreeComponent,
   ],
 })
 export class AppManageComponent implements OnInit {

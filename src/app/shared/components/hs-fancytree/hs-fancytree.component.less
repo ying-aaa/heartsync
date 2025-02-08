@@ -1,0 +1,26 @@
+@import "mixin";
+
+.themeMixin( {
+    :host {
+      ::ng-deep {
+        ul.fancytree-container {
+          background-color: transparent;
+        }
+
+        ul.fancytree-container li {
+          padding: 0;
+        }
+
+        span.fancytree-node {
+          padding: 3px 0;
+        }
+
+        span.fancytree-title {
+          color: @base-text-color;
+        }
+      }
+
+    }
+  }
+
+);
