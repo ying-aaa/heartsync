@@ -5,6 +5,7 @@
       ::ng-deep {
         ul.fancytree-container {
           background-color: transparent;
+          border: none;
         }
 
         ul.fancytree-container li {
@@ -18,6 +19,12 @@
         span.fancytree-title {
           color: @base-text-color;
         }
+
+        // 选中颜色
+        span.fancytree-active span.fancytree-title, span.fancytree-selected span.fancytree-title {
+          background-color: @base-color-20;
+        }
+
       }
 
     }
