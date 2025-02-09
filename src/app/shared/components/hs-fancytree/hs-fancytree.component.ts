@@ -1,12 +1,17 @@
 // @ts-nocheck
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 declare var $: any;
 @Component({
   selector: 'hs-fancytree',
   templateUrl: './hs-fancytree.component.html',
   styleUrls: ['./hs-fancytree.component.less'],
+  imports: [CommonModule],
 })
 export class HsFancytreeComponent implements OnInit, AfterViewInit {
+  filterText = '';
+  filterCount = 0;
+
   constructor() {}
 
   ngOnInit() {}
@@ -16,8 +21,22 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
 
     $('#hs-fancytree')
       .fancytree({
-        extensions: ['dnd5', 'edit', 'multi', 'childcounter'],
+        extensions: ['dnd5', 'edit', 'multi', 'childcounter', 'filter'],
         checkbox: true,
+        quicksearch: true,
+        filter: {
+          autoApply: true, // Re-apply last filter if lazy data is loaded
+          autoExpand: false, // Expand all branches that contain matches while filtered
+          counter: true, // Show a badge with number of matching child nodes near parent icons
+          fuzzy: false, // Match single characters in order, e.g. 'fb' will match 'FooBar'
+          hideExpandedCounter: true, // Hide counter badge if parent is expanded
+          hideExpanders: false, // Hide expanders if all child nodes are hidden by filter
+          highlight: true, // Highlight matches by wrapping inside <mark> tags
+          leavesOnly: false, // Match end nodes only
+          nodata: true, // Display a 'no data' status node if result is empty
+          // dimm
+          mode: 'hide', // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
+        },
         source: [
           {
             title: 'Node 1',
@@ -72,20 +91,6 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
             data.node.info('dragEnd', data);
           },
           dragDrop: function (node, data) {
-            // This function MUST be defined to enable dropping of items on the tree.
-            //
-            // The source data is provided in several formats:
-            //   `data.otherNode` (null if it's not a FancytreeNode from the same page)
-            //   `data.otherNodeData` (Json object; null if it's not a FancytreeNode)
-            //   `data.dataTransfer.getData()`
-            //
-            // We may access some meta data to decide what to do:
-            //   `data.hitMode` ("before", "after", or "over").
-            //   `data.dropEffect`, `.effectAllowed`
-            //   `data.originalEvent.shiftKey`, ...
-            //
-            // Example:
-
             var sourceNodes = data.otherNodeList,
               copyMode = data.dropEffect !== 'move';
 
@@ -346,39 +351,39 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
       delegate: 'span.fancytree-node',
       menu: [
         {
-          title: 'Edit <kbd>[F2]</kbd>',
+          title: '编辑 <kbd>[F2]</kbd>',
           cmd: 'rename',
           uiIcon: 'ui-icon-pencil',
         },
         {
-          title: 'Delete <kbd>[Del]</kbd>',
+          title: '删除 <kbd>[Del]</kbd>',
           cmd: 'remove',
           uiIcon: 'ui-icon-trash',
         },
         { title: '----' },
         {
-          title: 'New sibling <kbd>[Ctrl+N]</kbd>',
+          title: '新文件 <kbd>[Ctrl+N]</kbd>',
           cmd: 'addSibling',
           uiIcon: 'ui-icon-plus',
         },
         {
-          title: 'New child <kbd>[Ctrl+Shift+N]</kbd>',
+          title: '新子文件 <kbd>[Ctrl+Shift+N]</kbd>',
           cmd: 'addChild',
           uiIcon: 'ui-icon-arrowreturn-1-e',
         },
         { title: '----' },
         {
-          title: 'Cut <kbd>Ctrl+X</kbd>',
+          title: '剪切 <kbd>Ctrl+X</kbd>',
           cmd: 'cut',
           uiIcon: 'ui-icon-scissors',
         },
         {
-          title: 'Copy <kbd>Ctrl-C</kbd>',
+          title: '复制 <kbd>Ctrl-C</kbd>',
           cmd: 'copy',
           uiIcon: 'ui-icon-copy',
         },
         {
-          title: 'Paste as child<kbd>Ctrl+V</kbd>',
+          title: '粘贴<kbd>Ctrl+V</kbd>',
           cmd: 'paste',
           uiIcon: 'ui-icon-clipboard',
           disabled: true,
@@ -398,5 +403,26 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
         }, 100);
       },
     });
+  }
+
+  applyFilter(e) {
+    const tree = $('#hs-fancytree').fancytree('getTree');
+    const match = e.target.value.trim();
+
+    if (match === '') {
+      // 如果输入框为空，重置过滤
+      tree.clearFilter();
+      this.filterCount = 0;
+      return;
+    }
+
+    // 执行过滤操作
+    const n = tree.filterBranches.call(tree, e.target.value, {
+      autoExpand: true, // 自动展开包含匹配节点的父节点
+      highlight: true, // 高亮显示匹配的文本
+    });
+
+    // 更新过滤数量
+    this.filterCount = n;
   }
 }

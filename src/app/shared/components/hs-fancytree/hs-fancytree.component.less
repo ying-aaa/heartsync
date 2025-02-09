@@ -19,11 +19,26 @@
           align-items: center;
         }
 
+        .fancytree-ext-filter-dimm span.fancytree-node.fancytree-match span.fancytree-title {
+          font-weight: bold;
+        }
+
         span.fancytree-title {
-          color: @base-text-color;
+          font-weight: 400;
+          color: @base-text-color  !important;
           width: 0;
           flex: 1;
+
           // margin-left: 5px;
+          mark {
+            background-color: #E09090;
+          }
+        }
+
+        span.fancytree-hide {
+          opacity: .5;
+
+          display: none;
         }
 
         // 选中颜色
