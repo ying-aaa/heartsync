@@ -2,6 +2,7 @@
    v2.0 | 20110126
    License: none (public domain)
 */
+@import "base.less";
 
 html,
 body,
@@ -84,7 +85,7 @@ time,
 mark,
 audio,
 video {
-  overflow: hidden;
+  // overflow: hidden;
   margin: 0;
   padding: 0;
   border: 0;
@@ -92,8 +93,10 @@ video {
   font: inherit;
   vertical-align: baseline;
   box-sizing: border-box;
-  color: inherit; /* 继承父元素的颜色，去除默认的蓝色 */
-  text-decoration: none; /* 去除下划线 */
+  color: inherit;
+  /* 继承父元素的颜色，去除默认的蓝色 */
+  text-decoration: none;
+  /* 去除下划线 */
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -140,4 +143,29 @@ table {
 
 img {
   vertical-align: middle;
+}
+
+// jquery 菜单
+.ui-menu-item-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ui-state-active {
+  font-weight: normal !important;
+  border: none;
+  color: #fff !important;
+  border-color: @base-primary-color  !important;
+  background: @base-primary-color  !important;
+}
+
+.ui-state-active .ui-icon {
+  filter: grayscale(100%) brightness(1000%);
+}
+
+ul.ui-widget-content {
+  border-radius: 6px;
+  font-size: 13px;
+  padding: 5px 0;
+  background: none;
 }

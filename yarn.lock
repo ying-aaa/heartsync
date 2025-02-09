@@ -5042,7 +5042,7 @@ jquery.fancytree@^2.38.4:
   resolved "https://registry.npmmirror.com/jquery.fancytree/-/jquery.fancytree-2.38.4.tgz#377599e76e76047a1e50debe00be4658fa003396"
   integrity sha512-f4Fv5jZiZ6pBml/9txcJRAQDZpqQGGoJ8BUbicZKcO4CpgGbqBX9W7eQFwEaKQS0bxdVBLbqWQ9RoUK05ON2kQ==
 
-"jquery@>=1.12.0 <5.0.0", jquery@^3.7.1:
+"jquery@>=1.12.0 <5.0.0", jquery@>=1.7, jquery@^3.7.1:
   version "3.7.1"
   resolved "https://registry.npmmirror.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
   integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
@@ -7349,6 +7349,13 @@ ufo@^1.5.4:
   version "1.5.4"
   resolved "https://registry.npmmirror.com/ufo/-/ufo-1.5.4.tgz"
   integrity sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==
+
+ui-contextmenu@^1.18.1:
+  version "1.18.1"
+  resolved "https://registry.npmmirror.com/ui-contextmenu/-/ui-contextmenu-1.18.1.tgz#87ac29a1845ca60429836f9fe2bbe4b83f7ff42d"
+  integrity sha512-VoFu/71cTgCkfTBO7Q1huIosW78eIO6TLHfGIjEG57nVi7OdkcTFAKEgjCKaiwMJw3jvlZniUoJfzLXL/i+eYQ==
+  dependencies:
+    jquery ">=1.7"
 
 unconfig@~0.6.0:
   version "0.6.1"

@@ -6,6 +6,7 @@
         ul.fancytree-container {
           background-color: transparent;
           border: none;
+          outline: none;
         }
 
         ul.fancytree-container li {
@@ -14,10 +15,15 @@
 
         span.fancytree-node {
           padding: 3px 0;
+          display: flex;
+          align-items: center;
         }
 
         span.fancytree-title {
           color: @base-text-color;
+          width: 0;
+          flex: 1;
+          // margin-left: 5px;
         }
 
         // 选中颜色
@@ -25,8 +31,16 @@
           background-color: @base-color-20;
         }
 
-      }
+        // 选中输入框
+        span.fancytree-checkbox {
+          display: none;
+        }
 
+        input.fancytree-edit-input {
+          background: none;
+          color: @base-text-color;
+        }
+      }
     }
   }
 

@@ -39,6 +39,7 @@
     "material-icons": "^1.13.13",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "ui-contextmenu": "^1.18.1",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

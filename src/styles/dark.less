@@ -1,6 +1,20 @@
 @import '@angular/material/prebuilt-themes/cyan-orange.css';
+@import 'jquery-ui/dist/themes/ui-darkness/jquery-ui.min.css';
+
+@base-text-color: #f5f9fff2;
+@base-bg-color: #292932;
+
+.text-bg-color {
+  color: @base-text-color;
+  background-color: @base-bg-color;
+}
+
 body {
-  color: #f5f9fff2;
-  background-color: #292932;
+  .text-bg-color();
   --mat-sys-corner-full: 8px;
+}
+
+
+ul.ui-widget-content {
+  .text-bg-color();
 }

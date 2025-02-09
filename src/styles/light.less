@@ -1,7 +1,20 @@
 @import '@angular/material/prebuilt-themes/azure-blue.css';
+@import 'jquery-ui/dist/themes/ui-lightness/jquery-ui.min.css';
+
+@base-text-color: #060607;
+@base-bg-color: #f3f5fa;
+
+.text-bg-color {
+  color: @base-text-color;
+  background-color: @base-bg-color;
+}
 
 body {
-  color: #060607;
-  background-color: #f3f5fa;
+  .text-bg-color();
   --mat-sys-corner-full: 8px;
+}
+
+
+ul.ui-widget-content {
+  .text-bg-color();
 }
