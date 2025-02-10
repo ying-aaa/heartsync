@@ -53,11 +53,31 @@
               "includePaths": ["src/styles", "src/styles/themes"]
             },
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/jquery-ui/dist/jquery-ui.min.js",
-              "node_modules/ui-contextmenu/jquery.ui-contextmenu.min.js",
-              "node_modules/jquery-ui-bundle/jquery-ui.min.js",
-              "node_modules/jquery.fancytree/dist/jquery.fancytree-all.js"
+              {
+                "input": "./node_modules/jquery/dist/jquery.min.js",
+                "bundleName": "jquery.min",
+                "inject": false
+              },
+              {
+                "input": "./node_modules/jquery-ui/dist/jquery-ui.min.js",
+                "bundleName": "jquery-ui.min",
+                "inject": false
+              },
+              {
+                "input": "./node_modules/ui-contextmenu/jquery.ui-contextmenu.min.js",
+                "bundleName": "jquery.ui-contextmenu.min",
+                "inject": false
+              },
+              {
+                "input": "./node_modules/jquery-ui-bundle/jquery-ui.min.js",
+                "bundleName": "jquery-ui-bundle.min",
+                "inject": false
+              },
+              {
+                "input": "./node_modules/jquery.fancytree/dist/jquery.fancytree-all.min.js",
+                "bundleName": "jquery.fancytree-all.min",
+                "inject": false
+              }
             ]
           },
           "configurations": {

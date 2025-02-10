@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
 declare var $: any;
 @Component({
   selector: 'hs-fancytree',
@@ -12,11 +13,27 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
   filterText = '';
   filterCount = 0;
 
-  constructor() {}
+  constructor(private scriptLoaderService: ScriptLoaderService) {}
 
   ngOnInit() {}
 
   ngAfterViewInit(): void {
+    this.scriptLoaderService
+      .loadScripts([
+        'jquery.min.js',
+        'jquery-ui.min.js',
+        'jquery.ui-contextmenu.min.js',
+        'jquery-ui-bundle.min.js',
+        'jquery.fancytree-all.min.js',
+      ])
+      .subscribe({
+        next: () => this.initFancytree(),
+        error: (error) => console.error('Error loading script:', error),
+        // complete: () => this.initFancytree(),
+      });
+  }
+
+  initFancytree() {
     let CLIPBOARD = null;
 
     $('#hs-fancytree')
@@ -335,18 +352,6 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
         }
       });
 
-    /*
-     * Tooltips
-     */
-    // $("#tree").tooltip({
-    //   content: function () {
-    //     return $(this).attr("title");
-    //   }
-    // });
-
-    /*
-     * Context menu (https://github.com/mar10/jquery-ui-contextmenu)
-     */
     $('#hs-fancytree').contextmenu({
       delegate: 'span.fancytree-node',
       menu: [

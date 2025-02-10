@@ -4,7 +4,7 @@ export enum IThemeType {
 }
 
 export enum IPrefixes {
-  COMMON = "HS-",
+  COMMON = 'HS-',
 }
 
 export interface ICatalogStructure {
@@ -13,10 +13,10 @@ export interface ICatalogStructure {
   children?: ICatalogStructure[];
 }
 export enum IEventsType {
-  MouseDown = "mousedown",
-  MouseMove = "mousemove",
-  MouseUp = "mouseup",
-  KeyDown = "keydown",
-  KeyUp = "keyup",
-  Click = "click",
+  MouseDown = 'mousedown',
+  MouseMove = 'mousemove',
+  MouseUp = 'mouseup',
+  KeyDown = 'keydown',
+  KeyUp = 'keyup',
+  Click = 'click',
 }
