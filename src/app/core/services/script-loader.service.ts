@@ -10,7 +10,6 @@ export class ScriptLoaderService {
     'jquery.min.js': false,
     'jquery-ui.min.js': false,
     'jquery.ui-contextmenu.min.js': false,
-    'jquery-ui-bundle.min.js': false,
     'jquery.fancytree-all.min.js': false,
   };
 

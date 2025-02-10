@@ -5025,11 +5025,6 @@ jiti@^2.4.1:
   resolved "https://registry.npmmirror.com/jiti/-/jiti-2.4.2.tgz"
   integrity sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==
 
-jquery-ui-bundle@^1.12.1-migrate:
-  version "1.12.1-migrate"
-  resolved "https://registry.npmmirror.com/jquery-ui-bundle/-/jquery-ui-bundle-1.12.1-migrate.tgz#b9343e2c310743527632cff8bedb0c5e9600b14c"
-  integrity sha512-ihyHzL6NYkCg1SNIRFrQAkgEeAJmet2G6rrecCRwq6RcWNApV6w2NSjqfuJUUoiKywkvlU+pqHJ5NAAEuTet4w==
-
 jquery-ui@^1.14.1:
   version "1.14.1"
   resolved "https://registry.npmmirror.com/jquery-ui/-/jquery-ui-1.14.1.tgz#ba342ea3ffff662b787595391f607d923313e040"

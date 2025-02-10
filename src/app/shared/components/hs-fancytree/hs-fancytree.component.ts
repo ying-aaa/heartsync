@@ -23,7 +23,6 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
         'jquery.min.js',
         'jquery-ui.min.js',
         'jquery.ui-contextmenu.min.js',
-        'jquery-ui-bundle.min.js',
         'jquery.fancytree-all.min.js',
       ])
       .subscribe({

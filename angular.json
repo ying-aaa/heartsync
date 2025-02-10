@@ -69,11 +69,6 @@
                 "inject": false
               },
               {
-                "input": "./node_modules/jquery-ui-bundle/jquery-ui.min.js",
-                "bundleName": "jquery-ui-bundle.min",
-                "inject": false
-              },
-              {
                 "input": "./node_modules/jquery.fancytree/dist/jquery.fancytree-all.min.js",
                 "bundleName": "jquery.fancytree-all.min",
                 "inject": false
