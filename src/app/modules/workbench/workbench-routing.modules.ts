@@ -8,7 +8,7 @@ export default [
     path: 'home',
     data: { preload: true, key: 'home' },
     loadComponent: () =>
-      import('./home.component').then((m) => m.HomeComponent),
+      import('./workbench.component').then((m) => m.WorkbenchComponent),
     children: homePageRoutes,
   },
 ] as Route[];

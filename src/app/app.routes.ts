@@ -6,7 +6,7 @@ export const routes: Routes = [
   {
     path: '',
     data: { preload: true },
-    loadChildren: () => import('./modules/home/home-routing.modules'),
+    loadChildren: () => import('./modules/workbench/workbench-routing.modules'),
   },
   { path: '**', component: PageNotFoundComponent },
 ];

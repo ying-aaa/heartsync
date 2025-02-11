@@ -7,10 +7,8 @@ import { environment } from '@src/environments/environment';
 import { HeaderComponent } from './components/header/header.component';
 
 @Component({
-  selector: 'hs-home',
-  templateUrl: './home.component.html',
+  selector: 'hs-workbench',
+  templateUrl: './workbench.component.html',
   imports: [RouterModule, CommonModule, MatExpansionModule, HeaderComponent],
 })
-export class HomeComponent {
-
-}
+export class WorkbenchComponent {}
