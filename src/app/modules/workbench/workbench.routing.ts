@@ -2,11 +2,11 @@ import { Route } from '@angular/router';
 import WorkbenchPageRoutes from './page/workbench-page.routing';
 
 export default [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: 'workbench', pathMatch: 'full' },
   {
-    title: '首页',
-    path: 'home',
-    data: { preload: true, key: 'home' },
+    title: '工作台',
+    path: 'workbench',
+    data: { preload: true, key: 'workbench' },
     loadComponent: () =>
       import('./workbench.component').then((m) => m.WorkbenchComponent),
     children: WorkbenchPageRoutes,

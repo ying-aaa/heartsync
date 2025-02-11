@@ -1,4 +1,4 @@
-import { Renderer2 } from "@angular/core";
+import { Renderer2 } from '@angular/core';
 
 /** 判断一个值是否为 Object
  * @param {any} value
@@ -51,11 +51,11 @@ export function isSameObj(value1: any, value2: any): boolean {
  * @param { any } value 对应查找项
  * @param { Array<number> } existingOffset 位置记录
  * @returns { offset: number[], value: any }  返回结果: 查找到的位置, 查找到的项
-*/
+ */
 export function getRecursivePosition<T>(
   origin: Array<any>,
   value: any,
-  existingOffset: Array<number> = []
+  existingOffset: Array<number> = [],
 ): {
   offset: number[];
   value: any;
@@ -111,7 +111,7 @@ export function deepClone<T>(obj: T, hash = new WeakMap()): T {
     return clone as T;
   }
 
-  throw new Error('Unable to copy obj! Its type isn\'t supported.');
+  throw new Error("Unable to copy obj! Its type isn't supported.");
 }
 
 /** 处理 ng Element 的 style
@@ -124,9 +124,9 @@ export function handlerNgElStyle(
   renderer: Renderer2,
   el: HTMLElement,
   style: {
-    [key: string]: string | number
+    [key: string]: string | number;
   },
-  mode: "set" | "remove" = "set"
+  mode: 'set' | 'remove' = 'set',
 ): void {
   for (const attr in style) {
     if (style.hasOwnProperty(attr)) {

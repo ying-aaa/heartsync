@@ -6,7 +6,12 @@ export const routes: Routes = [
   {
     path: '',
     data: { preload: true },
-    loadChildren: () => import('./modules/workbench/workbench-routing.modules'),
+    loadChildren: () => import('./modules/workbench/workbench.routing'),
+  },
+  {
+    path: 'lowcode',
+    data: { preload: true },
+    loadChildren: () => import('./modules/workbench/lowcode/lowcode.routing'),
   },
   { path: '**', component: PageNotFoundComponent },
 ];

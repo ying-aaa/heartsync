@@ -15,22 +15,26 @@ import { HsThemeService } from '@src/app/core/services/theme.service';
 import { IThemeType } from '@src/app/shared/models/system.model';
 import { MatRippleModule } from '@angular/material/core';
 import { VerseThemeComponent } from '@src/app/shared/components/ui-verse/verse-theme/verse-theme.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'hs-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.less'],
+  selector: 'hs-workbench-header',
+  templateUrl: './workbench-header.component.html',
+  styleUrls: ['./workbench-header.component.less'],
   imports: [
     MatButtonModule,
     RouterModule,
     MatSlideToggleModule,
     MatRippleModule,
     VerseThemeComponent,
+    MatIconModule,
   ],
 })
-export class HeaderComponent {
-  menuList: Route[] = [];
+export class WorkbenchHeaderComponent {
   outlet = input<RouterOutlet>();
+  logoSkip = input<string | null>();
+
+  menuList: Route[] = [];
   checked = true;
   constructor(
     private route: ActivatedRoute,
