@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import homePageRoutes from './page/home-page.routing';
+import WorkbenchPageRoutes from './page/workbench-page.routing';
 
 export default [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -9,6 +9,6 @@ export default [
     data: { preload: true, key: 'home' },
     loadComponent: () =>
       import('./workbench.component').then((m) => m.WorkbenchComponent),
-    children: homePageRoutes,
+    children: WorkbenchPageRoutes,
   },
 ] as Route[];
