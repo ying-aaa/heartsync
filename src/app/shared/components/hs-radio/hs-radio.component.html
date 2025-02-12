@@ -1,0 +1,14 @@
+<div
+  class="grid grid-cols-6 gap-10px"
+  [style]="styleComputer()"
+>
+  @for (item of configs(); track $index) {
+  <div
+    [class.active-style]="activeValue() === item.value"
+    (click)="activeValue.set(item.value)"
+    class="text-center h-36px line-height-36px cursor-pointer"
+  >
+    {{ item.label }}
+  </div>
+  }
+</div>

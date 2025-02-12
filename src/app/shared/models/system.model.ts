@@ -12,6 +12,12 @@ export interface ICatalogStructure {
   key?: string | number;
   children?: ICatalogStructure[];
 }
+
+export interface IRadioConfig {
+  label: string;
+  value: string;
+}
+
 export enum IEventsType {
   MouseDown = 'mousedown',
   MouseMove = 'mousemove',

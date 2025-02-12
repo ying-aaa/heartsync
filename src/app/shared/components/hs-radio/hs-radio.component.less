@@ -1,0 +1,19 @@
+@import "mixin";
+
+.themeMixin( {
+    :host {
+      display: block;
+      color: @base-text-color;
+      padding: 4px;
+      border: 1px solid rgba(47, 144, 185, 0.1);
+      border-radius: 8px;
+
+      .active-style {
+        background-color: rgba(47, 144, 185);
+        color: #fff;
+        border-radius: 8px;
+      }
+    }
+  }
+
+);

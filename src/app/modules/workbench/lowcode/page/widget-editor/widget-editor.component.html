@@ -1,3 +1,42 @@
-<p>
-  widget-editor works!
-</p>
+<div class="flex w-full h-full">
+  <aside class="w-284px pt-12px px-16px pb-24px">
+    <div class="w-full overflow-hidden">
+      <hs-radio
+        [configs]="configTypes"
+        [rows]="2"
+        [activeValue]="activeValue()"
+      ></hs-radio>
+    </div>
+
+    <div class="mt-21px">
+      <mat-form-field class="example-form-field w-full">
+        <mat-label>搜索你的文件</mat-label>
+        <input
+          matInput
+          type="text"
+          [formControl]="fileName"
+        />
+        @if (fileName.getRawValue()) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="fileName.setValue('')"
+        >
+          <mat-icon aria-hidden="false">close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="py-10px">
+      <hs-fancytree></hs-fancytree>
+    </div>
+  </aside>
+  <mat-divider
+    [vertical]="true"
+    class="opacity-20 h-full"
+  ></mat-divider>
+  <!-- 右侧 -->
+  <main class="flex-1 h-full"></main>
+</div>
