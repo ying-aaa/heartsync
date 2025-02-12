@@ -28,11 +28,10 @@ import { IRadioConfig } from '@src/app/shared/models/system.model';
 export class WidgetEditorComponent implements OnInit {
   activeValue = signal<string>('form');
 
-  selectedTypeValue = new FormControl('form'); // 初始化默认值
   fileName = new FormControl('');
 
   configTypes: IRadioConfig[] = [
-    { label: '自定义', value: 'custom' },
+    { label: '代码', value: 'code' },
     { label: '图表', value: 'chart' },
     { label: '地图', value: 'map' },
     { label: 'x6', value: 'x6' },

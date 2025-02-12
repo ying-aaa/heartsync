@@ -6,7 +6,7 @@
   <div
     [class.active-style]="activeValue() === item.value"
     (click)="activeValue.set(item.value)"
-    class="text-center h-36px line-height-36px cursor-pointer"
+    class="text-center h-36px line-height-36px cursor-pointer hover:bg-#2F90B930 rounded-8px"
   >
     {{ item.label }}
   </div>
