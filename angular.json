@@ -38,6 +38,7 @@
             "styles": [
               "src/styles/index.less",
               "src/styles/uno.css",
+              "src/styles/mat.scss",
               {
                 "input": "src/styles/light.less",
                 "bundleName": "light-theme",

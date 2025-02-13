@@ -2,15 +2,28 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
+import { MatInputModule } from '@angular/material/input';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { debounceTime } from 'rxjs';
+
 declare var $: any;
 @Component({
   selector: 'hs-fancytree',
   templateUrl: './hs-fancytree.component.html',
   styleUrls: ['./hs-fancytree.component.less'],
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+  ],
 })
 export class HsFancytreeComponent implements OnInit, AfterViewInit {
-  filterText = '';
+  fileName = new FormControl('');
+
   filterCount = 0;
 
   constructor(private scriptLoaderService: ScriptLoaderService) {}
@@ -30,10 +43,12 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
         error: (error) => console.error('Error loading script:', error),
         // complete: () => this.initFancytree(),
       });
+
+    this.initFancytreeFilter();
   }
 
   initFancytree() {
-    let CLIPBOARD = null;
+    let CLIPBOARD: { mode: any; data: any } | null = null;
 
     $('#hs-fancytree')
       .fancytree({
@@ -409,24 +424,28 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
     });
   }
 
-  applyFilter(e) {
-    const tree = $('#hs-fancytree').fancytree('getTree');
-    const match = e.target.value.trim();
+  initFancytreeFilter() {
+    this.fileName.valueChanges
+      .pipe(debounceTime(300)) // 设置节流时间为500ms
+      .subscribe((value: any) => {
+        const tree = $('#hs-fancytree').fancytree('getTree');
+        const match = value.trim();
 
-    if (match === '') {
-      // 如果输入框为空，重置过滤
-      tree.clearFilter();
-      this.filterCount = 0;
-      return;
-    }
+        if (match === '') {
+          // 如果输入框为空，重置过滤
+          tree.clearFilter();
+          this.filterCount = 0;
+          return;
+        }
 
-    // 执行过滤操作
-    const n = tree.filterBranches.call(tree, e.target.value, {
-      autoExpand: true, // 自动展开包含匹配节点的父节点
-      highlight: true, // 高亮显示匹配的文本
-    });
+        // 执行过滤操作
+        const n = tree.filterBranches.call(tree, match, {
+          autoExpand: true, // 自动展开包含匹配节点的父节点
+          highlight: true, // 高亮显示匹配的文本
+        });
 
-    // 更新过滤数量
-    this.filterCount = n;
+        // 更新过滤数量
+        this.filterCount = n;
+      });
   }
 }

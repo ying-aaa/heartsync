@@ -21,25 +21,6 @@
   </div>
   <!-- 分割线 -->
   <mat-divider class="opacity-20 mt-10px! mb-20px!"></mat-divider>
-  <!-- 搜索 -->
-  <mat-form-field class="example-form-field w-full">
-    <mat-label>搜索你的文件</mat-label>
-    <input
-      matInput
-      type="text"
-      [formControl]="fileName"
-    />
-    @if (fileName.getRawValue()) {
-    <button
-      matSuffix
-      mat-icon-button
-      aria-label="Clear"
-      (click)="fileName.setValue('')"
-    >
-      <mat-icon aria-hidden="false">close</mat-icon>
-    </button>
-    }
-  </mat-form-field>
   <!-- 目录 -->
   <main class="h-0 flex-1 mb-18px">
     <!-- <hs-tree></hs-tree> -->

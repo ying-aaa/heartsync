@@ -1,0 +1,18 @@
+@use '@angular/material' as mat;
+$base-radius: 8px;
+
+mat-form-field {
+  @include mat.theme((density: -5));
+  .mat-mdc-form-field-subscript-wrapper{
+    height: 8px;
+  }
+}
+
+.mdc-button{
+  @include mat.theme((
+    density: -1
+  ));
+  &.mat-mdc-unelevated-button, .mat-mdc-unelevated-button .mdc-button__ripple{
+    border-radius: $base-radius;
+  }
+}

@@ -8,28 +8,9 @@
       ></hs-radio>
     </div>
 
-    <div class="mt-21px">
-      <mat-form-field class="example-form-field w-full">
-        <mat-label>搜索你的文件</mat-label>
-        <input
-          matInput
-          type="text"
-          [formControl]="fileName"
-        />
-        @if (fileName.getRawValue()) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="fileName.setValue('')"
-        >
-          <mat-icon aria-hidden="false">close</mat-icon>
-        </button>
-        }
-      </mat-form-field>
-    </div>
+    <div class="mt-16px"></div>
 
-    <div class="py-10px">
+    <div class="pb-10px">
       <hs-fancytree></hs-fancytree>
     </div>
   </aside>

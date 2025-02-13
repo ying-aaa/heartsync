@@ -6,7 +6,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { HsFancytreeComponent } from '@src/app/shared/components/hs-fancytree/hs-fancytree.component';
-import { PresetComponentsComponent } from '../../../components/preset-components/preset-components.component';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
 import { IRadioConfig } from '@src/app/shared/models/system.model';
 
@@ -29,7 +28,11 @@ export class WidgetEditorComponent implements OnInit {
   activeValue = signal<string>('form');
 
   fileName = new FormControl('');
-
+  foods = [
+    { value: 'steak-0', viewValue: 'Steak' },
+    { value: 'pizza-1', viewValue: 'Pizza' },
+    { value: 'tacos-2', viewValue: 'Tacos' },
+  ];
   configTypes: IRadioConfig[] = [
     { label: '代码', value: 'code' },
     { label: '图表', value: 'chart' },

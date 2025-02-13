@@ -14,7 +14,7 @@
         }
 
         span.fancytree-node {
-          padding: 3px 0;
+          padding: 2px 0;
           display: flex;
           align-items: center;
         }
@@ -28,11 +28,18 @@
           color: @base-text-color  !important;
           width: 0;
           flex: 1;
+          padding: 4px 3px;
+          border-radius: 3px;
 
           // margin-left: 5px;
           mark {
             background-color: #E09090;
           }
+        }
+
+        span.fancytree-icon {
+          transform: scale(1.2);
+          padding: 0 7px;
         }
 
         span.fancytree-hide {
@@ -43,7 +50,12 @@
 
         // 选中颜色
         span.fancytree-active span.fancytree-title, span.fancytree-selected span.fancytree-title {
-          background-color: @base-color-20;
+          background-color: rgba(47, 144, 185, .3);
+          color: #fff;
+        }
+
+        span.fancytree-focused span.fancytree-title {
+          outline: 1px dotted rgba(47, 144, 185);
         }
 
         // 选中输入框
