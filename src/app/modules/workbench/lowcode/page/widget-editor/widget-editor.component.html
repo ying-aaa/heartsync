@@ -19,7 +19,51 @@
     class="opacity-20 h-full"
   ></mat-divider>
   <!-- 右侧 -->
-  <main class="flex-1 h-full"></main>
+  <main class="render-canvar flex-1 h-full">
+    <div class="container">
+      <!-- 拖拽源：预设组件 -->
+      <div class="source-box">
+        <h3>预设组件</h3>
+        <div
+          #todoList="cdkDropList"
+          cdkDropList
+          [cdkDropListConnectedTo]="[doneList]"
+          [cdkDropListData]="sourceItems"
+          class="source-list"
+        >
+          <div
+            *ngFor="let item of sourceItems"
+            cdkDrag
+            [cdkDragData]="item"
+            (cdkDragStarted)="onDragStart($event)"
+            class="drag-item"
+          >
+            {{ item.name }}
+          </div>
+        </div>
+      </div>
+
+      <!-- 目标容器：工作台 -->
+      <div class="target-box">
+        <h3>工作台</h3>
+        <div
+          cdkDropList
+          #doneList="cdkDropList"
+          [cdkDropListData]="targetItems"
+          [cdkDropListConnectedTo]="[todoList]"
+          (cdkDropListDropped)="onDrop($event)"
+          class="target-list"
+        >
+          <div
+            *ngFor="let item of targetItems"
+            class="dropped-item"
+          >
+            {{ item.name }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
   <mat-divider
     [vertical]="true"

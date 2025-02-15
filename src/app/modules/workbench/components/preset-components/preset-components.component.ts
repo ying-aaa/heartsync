@@ -5,12 +5,25 @@ import { presetResource } from './preset-resource';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
 import { MatRippleModule } from '@angular/material/core';
 import { HsThemeService } from '@src/app/core/services/theme.service';
-
+import {
+  CdkDragDrop,
+  CdkDrag,
+  CdkDropList,
+  CdkDropListGroup,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 @Component({
   selector: 'hs-preset-components',
   templateUrl: './preset-components.component.html',
   styleUrls: ['./preset-components.component.less'],
-  imports: [HsRadioComponent, MatIconModule, MatRippleModule],
+  imports: [
+    HsRadioComponent,
+    MatIconModule,
+    MatRippleModule,
+    CdkDropList,
+    CdkDrag,
+  ],
 })
 export class PresetComponentsComponent implements OnInit {
   activeValue = signal<string>('layout');
