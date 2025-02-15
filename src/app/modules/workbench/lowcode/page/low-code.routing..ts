@@ -25,7 +25,7 @@ export default [
       preload: true,
       key: 'widget',
       use: IRouterUse.MENU,
-      icon: 'settings',
+      icon: 'send_time_extension',
     },
     loadComponent: () =>
       import('./widget-editor/widget-editor.component').then(

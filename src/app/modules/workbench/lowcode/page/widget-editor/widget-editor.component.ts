@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { HsFancytreeComponent } from '@src/app/shared/components/hs-fancytree/hs-fancytree.component';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
 import { IRadioConfig } from '@src/app/shared/models/system.model';
+import { PresetComponentsComponent } from '../../../components/preset-components/preset-components.component';
 
 @Component({
   selector: 'hs-widget-editor',
@@ -22,17 +23,14 @@ import { IRadioConfig } from '@src/app/shared/models/system.model';
     MatButtonModule,
     HsFancytreeComponent,
     HsRadioComponent,
+    PresetComponentsComponent,
   ],
 })
 export class WidgetEditorComponent implements OnInit {
   activeValue = signal<string>('form');
 
   fileName = new FormControl('');
-  foods = [
-    { value: 'steak-0', viewValue: 'Steak' },
-    { value: 'pizza-1', viewValue: 'Pizza' },
-    { value: 'tacos-2', viewValue: 'Tacos' },
-  ];
+
   configTypes: IRadioConfig[] = [
     { label: '代码', value: 'code' },
     { label: '图表', value: 'chart' },

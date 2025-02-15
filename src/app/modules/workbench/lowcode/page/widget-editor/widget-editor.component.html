@@ -1,10 +1,10 @@
 <div class="flex w-full h-full">
-  <aside class="w-284px pt-12px px-16px pb-24px">
+  <aside class="h-full w-284px pt-12px px-16px pb-24px">
     <div class="w-full overflow-hidden">
       <hs-radio
         [configs]="configTypes"
         [rows]="2"
-        [activeValue]="activeValue()"
+        [(activeValue)]="activeValue"
       ></hs-radio>
     </div>
 
@@ -20,4 +20,13 @@
   ></mat-divider>
   <!-- 右侧 -->
   <main class="flex-1 h-full"></main>
+
+  <mat-divider
+    [vertical]="true"
+    class="opacity-20 h-full"
+  ></mat-divider>
+
+  <aside class="h-full w-284px py-8px px-12px">
+    <hs-preset-components> </hs-preset-components>
+  </aside>
 </div>
