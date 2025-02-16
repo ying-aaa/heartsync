@@ -12,6 +12,8 @@ import {
   CdkDropListGroup,
   moveItemInArray,
   transferArrayItem,
+  CdkDragStart,
+  CdkDragPlaceholder,
 } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'hs-preset-components',
@@ -26,6 +28,9 @@ import {
   ],
 })
 export class PresetComponentsComponent implements OnInit {
+  onDragStart($event: CdkDragStart<any>) {
+    console.log('%c Line:31 🍉 $event', 'color:#3f7cff', $event);
+  }
   activeValue = signal<string>('layout');
 
   configTypes: IRadioConfig[] = [
@@ -50,6 +55,8 @@ export class PresetComponentsComponent implements OnInit {
       )!.group;
     });
   }
+
+  isEnterPredicate = () => false;
 
   matRippleColor = () =>
     this.hsThemeService.getCurrentThemeConfig(['#00000010', '#ffffff10']);

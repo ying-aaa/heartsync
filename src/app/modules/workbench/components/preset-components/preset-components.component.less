@@ -1,5 +1,16 @@
-:host {
-  // color: #2f90b94d;
-  user-select: none;
-  /* 禁止选择文本 */
-}
+@import "mixin";
+
+.themeMixin ( {
+    :host {
+      // color: #2f90b94d;
+      user-select: none;
+
+
+
+      .preset-wrapper {
+        background-color: @base-bg-color;
+      }
+    }
+  }
+
+);

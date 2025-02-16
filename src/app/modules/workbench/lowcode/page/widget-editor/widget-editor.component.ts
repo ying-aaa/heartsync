@@ -13,8 +13,11 @@ import { CommonModule } from '@angular/common';
 import {
   CdkDrag,
   CdkDragDrop,
+  CdkDragMove,
+  CdkDragPlaceholder,
   CdkDragStart,
   CdkDropList,
+  CdkDropListGroup,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 
@@ -35,6 +38,8 @@ import {
     PresetComponentsComponent,
     CdkDropList,
     CdkDrag,
+    CdkDragPlaceholder,
+    CdkDropListGroup,
   ],
 })
 export class WidgetEditorComponent implements OnInit {
@@ -75,14 +80,39 @@ export class WidgetEditorComponent implements OnInit {
     };
   }
 
+  onDragMove(event: CdkDragMove) {
+    console.log('%c Line:80 🍿 event', 'color:#e41a6a', event);
+  }
+
   // 放置到目标容器时触发：生成新元素
-  onDrop(event: CdkDragDrop<any[]>) {
+  onDrop(event: any) {
+    console.log('%c Line:85 🌶', 'color:#e41a6a', event);
     if (event.previousContainer !== event.container) {
       this.targetItems.push(this.clonedItem);
     }
   }
 
-  constructor() {}
+  constructor() {
+    setTimeout(() => {
+      this.is.set(true);
+    }, 10000);
+  }
+  items: any = ['1', '2', '3', '4', '5'];
+  enterPredicate = (drag: CdkDrag, drop: CdkDropList) => {
+    console.log('%c Line:98 🥃 drag', 'color:#42b983', drag.data);
+    console.log('%c Line:98 🍷 drag', 'color:#e41a6a', drag.dropContainer);
 
+    console.log('%c Line:98 🥑 drop', 'color:#4fff4B', drop);
+    // 如果拖拽项属于当前子列表，则允许在子列表内拖拽
+    return drag.data % 2 === 0;
+  };
+
+  is = signal(false);
+
+  noReturnPredicate(a: any, b: any) {
+    console.log('%c Line:107 🍧 a', 'color:#ed9ec7', a);
+    console.log('%c Line:107 🍖 b', 'color:#ea7e5c', b);
+    return false;
+  }
   ngOnInit() {}
 }

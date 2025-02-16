@@ -1,4 +1,7 @@
-<div class="flex w-full h-full">
+<div
+  class="flex w-full h-full"
+  cdkDropListGroup
+>
   <aside class="h-full w-284px pt-12px px-16px pb-24px">
     <div class="w-full overflow-hidden">
       <hs-radio
@@ -19,50 +22,109 @@
     class="opacity-20 h-full"
   ></mat-divider>
   <!-- 右侧 -->
-  <main class="render-canvar flex-1 h-full">
-    <div class="container">
-      <!-- 拖拽源：预设组件 -->
-      <div class="source-box">
-        <h3>预设组件</h3>
+
+  <main
+    cdkDropListGroup
+    class="render-canvar flex flex-col flex-1 gap-8px p-12px"
+  >
+    <!-- @let items = ["1", "2", "3", "4", "5"]; -->
+    <div
+      cdkDropList
+      id="listOne"
+      [cdkDropListConnectedTo]="[
+        'listOne',
+        'group1',
+        'group2',
+        'group3',
+        'group4',
+        'group5'
+      ]"
+      class="flex flex-col gap-8px"
+      [cdkDropListEnterPredicate]="noReturnPredicate"
+    >
+      @for (item of items; track $index) {
+      <div
+        cdkDrag
+        [cdkDragData]="item"
+        class="w-full h-60px bg-#2F90B9"
+      >
         <div
-          #todoList="cdkDropList"
+          class="w-full h-60px border-2px border-dashed border-#333"
+          *cdkDragPlaceholder
+        ></div>
+        {{ item }}
+      </div>
+      }
+
+      <div
+        cdkDropListOrientation="horizontal"
+        cdkDropList
+        cdkDrag
+        class="flex gap-8px border-2px border-dashed p-5px border-red"
+      >
+        <!-- 展位符号 -->
+
+        @let arr = [1, 2, 3, 4, 5]; @for (item of arr; track $index) {
+        <div
           cdkDropList
-          [cdkDropListConnectedTo]="[doneList]"
-          [cdkDropListData]="sourceItems"
-          class="source-list"
+          cdkDrag
+          [cdkDragData]="item"
+          [id]="'group' + item"
+          [cdkDropListConnectedTo]="[
+            'group5',
+            'group1',
+            'group2',
+            'group3',
+            'group4',
+            'listOne'
+          ]"
+          class="flex-1 flex flex-col gap-10px p-5px border-2px border-dashed border-blue"
         >
           <div
-            *ngFor="let item of sourceItems"
+            class="flex-1 h-full border-2px border-dashed border-#333"
+            *cdkDragPlaceholder
+          ></div>
+          @let items1 = [1, 2, 3, 4, 5]; @for (item of items1; track $index) {
+          <div
             cdkDrag
             [cdkDragData]="item"
-            (cdkDragStarted)="onDragStart($event)"
-            class="drag-item"
+            [id]="'item' + item"
+            class="w-full h-60px bg-#2F90B9"
           >
-            {{ item.name }}
+            <div
+              class="w-full h-60px border-2px border-dashed border-#333"
+              *cdkDragPlaceholder
+            ></div>
+            {{ item }}
           </div>
+          }
         </div>
-      </div>
-
-      <!-- 目标容器：工作台 -->
-      <div class="target-box">
-        <h3>工作台</h3>
-        <div
-          cdkDropList
-          #doneList="cdkDropList"
-          [cdkDropListData]="targetItems"
-          [cdkDropListConnectedTo]="[todoList]"
-          (cdkDropListDropped)="onDrop($event)"
-          class="target-list"
-        >
-          <div
-            *ngFor="let item of targetItems"
-            class="dropped-item"
-          >
-            {{ item.name }}
-          </div>
-        </div>
+        }
       </div>
     </div>
+    <!-- <div
+      cdkDropList
+      cdkDrag
+      class="flex gap-8px h-60px"
+      cdkDropListOrientation="horizontal"
+    >
+      <div
+        class="w-full h-60px border-2px border-dashed border-#333"
+        *cdkDragPlaceholder
+      ></div>
+      @let items2 = [1, 2, 3, 4, 5]; @for (item of items2; track $index) {
+      <div
+        cdkDrag
+        class="w-full h-60px bg-#2F90B9"
+      >
+        <div
+          class="w-full h-60px border-2px border-dashed border-#333"
+          *cdkDragPlaceholder
+        ></div>
+        {{ item }}
+      </div>
+      }
+    </div> -->
   </main>
 
   <mat-divider
