@@ -4,5 +4,13 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class WidgetEditorService {
+  isEditMode = false;
+
+  listConnectedTo = [];
+
+  fields = [];
+  model = [];
+  options = [];
+
   constructor() {}
 }

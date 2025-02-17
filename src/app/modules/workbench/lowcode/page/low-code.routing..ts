@@ -1,6 +1,8 @@
 import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
 import { FormlyModule } from '@ngx-formly/core';
+import { FormFieldCol } from '@src/app/modules/formly/formly-field-col';
+import { FormFieldGroup } from '@src/app/modules/formly/formly-field-group';
 import { IRouterUse } from '@src/app/shared/models/route.model';
 
 export default [
@@ -34,6 +36,10 @@ export default [
         FormlyModule.forRoot({
           validationMessages: [
             { name: 'required', message: '这个字段是必填的！' },
+          ],
+          wrappers: [
+            { name: 'group', component: FormFieldGroup },
+            { name: 'col', component: FormFieldCol },
           ],
         }),
       ),

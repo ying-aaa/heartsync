@@ -37,10 +37,6 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
     HsFancytreeComponent,
     HsRadioComponent,
     PresetComponentsComponent,
-    CdkDropList,
-    CdkDrag,
-    CdkDragPlaceholder,
-    CdkDropListGroup,
     ReactiveFormsModule,
     FormlyMaterialModule,
     FormlyModule
@@ -51,27 +47,124 @@ export class WidgetEditorComponent implements OnInit {
   model = { email: 'email@gmail.com', email1: "" };
   fields: FormlyFieldConfig[] = [
     {
-      key: 'email',
-      type: 'input',
+      key: 'col21',
+      wrappers: ['col'], // 使用 col 包装器
       props: {
-        label: 'Email address',
-        placeholder: 'Enter email',
-        required: true,
-      }
-    },
-    {
-      key: 'email1',
-      type: 'input',
-      props: {
-        label: 'Email address', 
-        placeholder: 'Enter email',
-        required: true,
-      }
+        attributes: {
+          class: "cdk-col"
+        }
+      },
+      fieldGroup: [
+        {
+          key: 'group',
+          wrappers: ['group'], // 使用 group 包装器
+          props: {
+            label: '身份信息',
+            attributes: {
+              class: "cdk-group-list1"
+            }
+          },
+          fieldGroup: [
+            {
+              key: 'col1',
+              wrappers: ['col'], // 使用 col 包装器
+              fieldGroup: [
+                { key: 'input1', type: 'input', templateOptions: { label: 'Input 1' } },
+                { key: 'input2', type: 'input', templateOptions: { label: 'Input 2' } }
+              ],
+              props: {
+                attributes: {
+                  class: "cdk-col-list"
+                }
+              }
+            },
+            {
+              key: 'col2',
+              wrappers: ['col'], // 使用 col 包装器
+              fieldGroup: [
+                { key: 'input3', type: 'input', templateOptions: { label: 'Input 3' } },
+                { key: 'input4', type: 'input', templateOptions: { label: 'Input 4' } }
+              ],
+              props: {
+                attributes: {
+                  class: "cdk-col-list1"
+                }
+              }
+            },
+            {
+              key: 'col3',
+              wrappers: ['col'], // 使用 col 包装器
+              fieldGroup: [
+                { key: 'input5', type: 'input', templateOptions: { label: 'Input 5' } },
+                { key: 'input6', type: 'input', templateOptions: { label: 'Input 6' } }
+              ],
+              props: {
+                attributes: {
+                  class: "cdk-col-list2"
+                }
+              }
+            }
+          ]
+        },
+        {
+          key: 'group2',
+          wrappers: ['group'], // 使用 group 包装器
+          props: {
+            label: '身份信息',
+            attributes: {
+              class: "cdk-group-list2"
+            }
+          },
+          fieldGroup: [
+            {
+              key: 'col11',
+              wrappers: ['col'], // 使用 col 包装器
+              fieldGroup: [
+                { key: 'input11', type: 'input', templateOptions: { label: 'Input 1' } },
+                { key: 'input21', type: 'input', templateOptions: { label: 'Input 2' } }
+              ],
+              props: {
+                attributes: {
+                  class: "cdk-col-list3"
+                }
+              }
+            },
+            {
+              key: 'col21',
+              wrappers: ['col'], // 使用 col 包装器
+              fieldGroup: [
+                { key: 'input3', type: 'input', templateOptions: { label: 'Input 3' } },
+                { key: 'input4', type: 'input', templateOptions: { label: 'Input 4' } }
+              ],
+              props: {
+                attributes: {
+                  class: "cdk-col-list4"
+                }
+              }
+            },
+            {
+              key: 'col31',
+              wrappers: ['col'], // 使用 col 包装器
+              fieldGroup: [
+                { key: 'input51', type: 'input', templateOptions: { label: 'Input 5' } },
+                { key: 'input61', type: 'input', templateOptions: { label: 'Input 6' } }
+              ],
+              props: {
+                attributes: {
+                  class: "cdk-col-list5"
+                }
+              }
+            }
+          ]
+        }
+      ]
+
     }
+
   ];
 
   onSubmit(model: any) {
-    console.log(model);
+    console.log(model, this.form);
   }
 
   activeValue = signal<string>('form');
@@ -88,45 +181,7 @@ export class WidgetEditorComponent implements OnInit {
     { label: '详情', value: 'detail' },
   ];
 
-  // 拖拽源数据
-  // 拖拽源数据（预设组件中的元素）
-  sourceItems = [
-    { id: 1, name: '元素A' },
-    { id: 2, name: '元素B' },
-    { id: 3, name: '元素C' },
-  ];
-
-  // 目标容器数据（工作台中的元素）
-  targetItems: any[] = [];
-
-  // 临时保存复制的元素
-  clonedItem: any;
-
-  // 拖拽开始时触发：复制元素
-  onDragStart(event: CdkDragStart) {
-    const originalItem = event.source.data;
-    this.clonedItem = {
-      ...originalItem,
-      id: `${originalItem.id}-${Date.now()}`, // 生成唯一ID
-    };
-  }
-
-  onDragMove(event: CdkDragMove) {}
-
-  // 放置到目标容器时触发：生成新元素
-  onDrop(event: any) {
-    if (event.previousContainer !== event.container) {
-      this.targetItems.push(this.clonedItem);
-    }
-  }
-
   constructor() {}
-
-  items: any = ['1', '2', '3', '4', '5'];
-
-  noReturnPredicate(drag: CdkDrag, drop: CdkDropList) {
-    return true;
-  }
 
   ngOnInit() {}
 }
