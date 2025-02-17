@@ -25,13 +25,6 @@ $base-radius: 8px;
   @include mat.theme((density: 0));
 }
 
-
-mat-form-field {
-  .mat-mdc-form-field-subscript-wrapper{
-    height: 8px;
-  }
-}
-
 .mdc-button{
   @include mat.theme((
     density: -1

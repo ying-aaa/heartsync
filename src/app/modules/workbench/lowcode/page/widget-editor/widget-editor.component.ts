@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
@@ -20,7 +20,8 @@ import {
   CdkDropListGroup,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-
+import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -40,9 +41,39 @@ import {
     CdkDrag,
     CdkDragPlaceholder,
     CdkDropListGroup,
+    ReactiveFormsModule,
+    FormlyMaterialModule,
+    FormlyModule
   ],
 })
 export class WidgetEditorComponent implements OnInit {
+  form = new FormGroup({});
+  model = { email: 'email@gmail.com', email1: "" };
+  fields: FormlyFieldConfig[] = [
+    {
+      key: 'email',
+      type: 'input',
+      props: {
+        label: 'Email address',
+        placeholder: 'Enter email',
+        required: true,
+      }
+    },
+    {
+      key: 'email1',
+      type: 'input',
+      props: {
+        label: 'Email address', 
+        placeholder: 'Enter email',
+        required: true,
+      }
+    }
+  ];
+
+  onSubmit(model: any) {
+    console.log(model);
+  }
+
   activeValue = signal<string>('form');
 
   fileName = new FormControl('');
@@ -80,39 +111,22 @@ export class WidgetEditorComponent implements OnInit {
     };
   }
 
-  onDragMove(event: CdkDragMove) {
-    console.log('%c Line:80 🍿 event', 'color:#e41a6a', event);
-  }
+  onDragMove(event: CdkDragMove) {}
 
   // 放置到目标容器时触发：生成新元素
   onDrop(event: any) {
-    console.log('%c Line:85 🌶', 'color:#e41a6a', event);
     if (event.previousContainer !== event.container) {
       this.targetItems.push(this.clonedItem);
     }
   }
 
-  constructor() {
-    setTimeout(() => {
-      this.is.set(true);
-    }, 10000);
-  }
+  constructor() {}
+
   items: any = ['1', '2', '3', '4', '5'];
-  enterPredicate = (drag: CdkDrag, drop: CdkDropList) => {
-    console.log('%c Line:98 🥃 drag', 'color:#42b983', drag.data);
-    console.log('%c Line:98 🍷 drag', 'color:#e41a6a', drag.dropContainer);
 
-    console.log('%c Line:98 🥑 drop', 'color:#4fff4B', drop);
-    // 如果拖拽项属于当前子列表，则允许在子列表内拖拽
-    return drag.data % 2 === 0;
-  };
-
-  is = signal(false);
-
-  noReturnPredicate(a: any, b: any) {
-    console.log('%c Line:107 🍧 a', 'color:#ed9ec7', a);
-    console.log('%c Line:107 🍖 b', 'color:#ea7e5c', b);
-    return false;
+  noReturnPredicate(drag: CdkDrag, drop: CdkDropList) {
+    return true;
   }
+
   ngOnInit() {}
 }

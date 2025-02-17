@@ -1,4 +1,6 @@
+import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
+import { FormlyModule } from '@ngx-formly/core';
 import { IRouterUse } from '@src/app/shared/models/route.model';
 
 export default [
@@ -27,6 +29,15 @@ export default [
       use: IRouterUse.MENU,
       icon: 'send_time_extension',
     },
+    providers: [
+      importProvidersFrom(
+        FormlyModule.forRoot({
+          validationMessages: [
+            { name: 'required', message: '这个字段是必填的！' },
+          ],
+        }),
+      ),
+    ],
     loadComponent: () =>
       import('./widget-editor/widget-editor.component').then(
         (m) => m.WidgetEditorComponent,

@@ -79,7 +79,6 @@
 .gap-8px{gap:8px;}
 .overflow-hidden{overflow:hidden;}
 .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.b,
 .border,
 .border-1,
 .border-1px{border-width:1px;}
