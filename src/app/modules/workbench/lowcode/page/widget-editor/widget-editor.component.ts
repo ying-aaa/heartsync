@@ -22,6 +22,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
+import { WidgetEditorService } from './widget-editor.service';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -45,123 +46,7 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 export class WidgetEditorComponent implements OnInit {
   form = new FormGroup({});
   model = { email: 'email@gmail.com', email1: "" };
-  fields: FormlyFieldConfig[] = [
-    {
-      key: 'col21',
-      wrappers: ['col'], // 使用 col 包装器
-      props: {
-        attributes: {
-          class: "cdk-col"
-        }
-      },
-      fieldGroup: [
-        {
-          key: 'group',
-          wrappers: ['group'], // 使用 group 包装器
-          props: {
-            label: '身份信息',
-            attributes: {
-              class: "cdk-group-list1"
-            }
-          },
-          fieldGroup: [
-            {
-              key: 'col1',
-              wrappers: ['col'], // 使用 col 包装器
-              fieldGroup: [
-                { key: 'input1', type: 'input', templateOptions: { label: 'Input 1' } },
-                { key: 'input2', type: 'input', templateOptions: { label: 'Input 2' } }
-              ],
-              props: {
-                attributes: {
-                  class: "cdk-col-list"
-                }
-              }
-            },
-            {
-              key: 'col2',
-              wrappers: ['col'], // 使用 col 包装器
-              fieldGroup: [
-                { key: 'input3', type: 'input', templateOptions: { label: 'Input 3' } },
-                { key: 'input4', type: 'input', templateOptions: { label: 'Input 4' } }
-              ],
-              props: {
-                attributes: {
-                  class: "cdk-col-list1"
-                }
-              }
-            },
-            {
-              key: 'col3',
-              wrappers: ['col'], // 使用 col 包装器
-              fieldGroup: [
-                { key: 'input5', type: 'input', templateOptions: { label: 'Input 5' } },
-                { key: 'input6', type: 'input', templateOptions: { label: 'Input 6' } }
-              ],
-              props: {
-                attributes: {
-                  class: "cdk-col-list2"
-                }
-              }
-            }
-          ]
-        },
-        {
-          key: 'group2',
-          wrappers: ['group'], // 使用 group 包装器
-          props: {
-            label: '身份信息',
-            attributes: {
-              class: "cdk-group-list2"
-            }
-          },
-          fieldGroup: [
-            {
-              key: 'col11',
-              wrappers: ['col'], // 使用 col 包装器
-              fieldGroup: [
-                { key: 'input11', type: 'input', templateOptions: { label: 'Input 1' } },
-                { key: 'input21', type: 'input', templateOptions: { label: 'Input 2' } }
-              ],
-              props: {
-                attributes: {
-                  class: "cdk-col-list3"
-                }
-              }
-            },
-            {
-              key: 'col21',
-              wrappers: ['col'], // 使用 col 包装器
-              fieldGroup: [
-                { key: 'input3', type: 'input', templateOptions: { label: 'Input 3' } },
-                { key: 'input4', type: 'input', templateOptions: { label: 'Input 4' } }
-              ],
-              props: {
-                attributes: {
-                  class: "cdk-col-list4"
-                }
-              }
-            },
-            {
-              key: 'col31',
-              wrappers: ['col'], // 使用 col 包装器
-              fieldGroup: [
-                { key: 'input51', type: 'input', templateOptions: { label: 'Input 5' } },
-                { key: 'input61', type: 'input', templateOptions: { label: 'Input 6' } }
-              ],
-              props: {
-                attributes: {
-                  class: "cdk-col-list5"
-                }
-              }
-            }
-          ]
-        }
-      ]
 
-    }
-
-  ];
 
   onSubmit(model: any) {
     console.log(model, this.form);
@@ -181,7 +66,9 @@ export class WidgetEditorComponent implements OnInit {
     { label: '详情', value: 'detail' },
   ];
 
-  constructor() {}
+  constructor(
+    public widgetEditorService: WidgetEditorService
+  ) {}
 
   ngOnInit() {}
 }

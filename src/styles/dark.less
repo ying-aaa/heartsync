@@ -2,9 +2,8 @@
 @import 'jquery-ui/dist/themes/ui-darkness/jquery-ui.min.css';
 @import "./themes/dark.less";
 
-.text-bg-color {
-  color: @base-text-color;
-  background-color: @base-bg-color;
+.cdk-drag-placeholder {
+  border-color: @base-text-color;
 }
 
 body {
@@ -15,4 +14,10 @@ body {
 
 ul.ui-widget-content {
   .text-bg-color();
+}
+
+// 拖拽时的占位预览线
+.text-bg-color {
+  color: @base-text-color;
+  background-color: @base-bg-color;
 }

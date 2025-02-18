@@ -33,3 +33,7 @@ $base-radius: 8px;
     border-radius: $base-radius;
   }
 }
+
+formly-field formly-field{
+  transform: translate3D(0, 0, 0);  
+}

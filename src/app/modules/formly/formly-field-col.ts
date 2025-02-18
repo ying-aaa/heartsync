@@ -10,24 +10,22 @@ import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldWrapper, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
+import {
+  IEditorFormlyField,
+  IFieldType,
+} from '@src/app/shared/models/editor.model';
+import { WidgetEditorService } from '../workbench/lowcode/page/widget-editor/widget-editor.service';
 
 @Component({
   selector: 'formly-wrapper-col',
   template: `
     <div
       class="flex flex-col p-5px"
-      [id]="ids"
-      id="cdk-col-list"
+      [id]="field.fieldId || ''"
       cdkDropList
-      [cdkDropListConnectedTo]="[
-        'cdk-col-list',
-        'cdk-col-list1',
-        'cdk-col-list2',
-        'cdk-col-list3',
-        'cdk-col-list4',
-        'cdk-col-list5',
-        'cdk-col'
-      ]"
+      [cdkDropListConnectedTo]="
+        widgetEditorService.getConnectedTo(IFieldType.COL)
+      "
     >
       @for (f of field.fieldGroup; track $index) {
       <formly-field
@@ -35,7 +33,7 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
         [field]="f"
       >
         <div
-          class="w-full h-3px border-2px border-dashed border-#333"
+          class="position-preview w-full h-3px border-2px border-dashed"
           *cdkDragPlaceholder
         ></div>
       </formly-field>
@@ -44,8 +42,9 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
   `,
   imports: [CdkDropList, CdkDrag, FormlyModule, CdkDragPlaceholder],
 })
-export class FormFieldCol extends FieldWrapper {
-  get ids() {
-    return this.props.attributes?.['class'] as string;
+export class FormFieldCol extends FieldWrapper<IEditorFormlyField> {
+  IFieldType = IFieldType;
+  constructor(public widgetEditorService: WidgetEditorService) {
+    super();
   }
 }

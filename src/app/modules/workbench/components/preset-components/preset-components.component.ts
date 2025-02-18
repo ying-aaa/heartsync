@@ -15,6 +15,8 @@ import {
   CdkDragStart,
   CdkDragPlaceholder,
 } from '@angular/cdk/drag-drop';
+import { WidgetEditorService } from '../../lowcode/page/widget-editor/widget-editor.service';
+import { IFieldType } from '@src/app/shared/models/editor.model';
 @Component({
   selector: 'hs-preset-components',
   templateUrl: './preset-components.component.html',
@@ -25,12 +27,12 @@ import {
     MatRippleModule,
     CdkDropList,
     CdkDrag,
+    CdkDragPlaceholder,
   ],
 })
 export class PresetComponentsComponent implements OnInit {
-  onDragStart($event: CdkDragStart<any>) {
-    console.log('%c Line:31 🍉 $event', 'color:#3f7cff', $event);
-  }
+  IFieldType = IFieldType;
+  onDragStart($event: CdkDragStart<any>) {}
   activeValue = signal<string>('layout');
 
   configTypes: IRadioConfig[] = [
@@ -48,7 +50,10 @@ export class PresetComponentsComponent implements OnInit {
 
   activePresetResource: any = [];
 
-  constructor(private hsThemeService: HsThemeService) {
+  constructor(
+    private hsThemeService: HsThemeService,
+    public widgetEditorService: WidgetEditorService,
+  ) {
     effect(() => {
       this.activePresetResource = this.presetResource().find(
         (item) => item.value === this.activeValue(),

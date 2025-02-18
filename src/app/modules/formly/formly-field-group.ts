@@ -7,6 +7,11 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { FieldWrapper, FormlyModule } from '@ngx-formly/core';
+import {
+  IEditorFormlyField,
+  IFieldType,
+} from '@src/app/shared/models/editor.model';
+import { WidgetEditorService } from '../workbench/lowcode/page/widget-editor/widget-editor.service';
 
 @Component({
   selector: 'formly-wrapper-group',
@@ -20,8 +25,10 @@ import { FieldWrapper, FormlyModule } from '@ngx-formly/core';
         cdkDropListGroup
         cdkDropList
         [cdkDropListConnectedTo]="['cdk-group-list']"
-        [id]="ids"
-        [cdkDropListConnectedTo]="['cdk-group-list1', 'cdk-group-list2']"
+        [id]="field.fieldId || ''"
+        [cdkDropListConnectedTo]="
+          widgetEditorService.getConnectedTo(IFieldType.GROUP)
+        "
       >
         @for (f of field.fieldGroup; track $index) {
         <formly-field
@@ -29,7 +36,7 @@ import { FieldWrapper, FormlyModule } from '@ngx-formly/core';
           [field]="f"
         >
           <div
-            class="w-full h-full border-2px border-dashed border-#333"
+            class="position-preview w-full h-full border-2px border-dashed"
             *cdkDragPlaceholder
           ></div>
         </formly-field>
@@ -59,8 +66,9 @@ import { FieldWrapper, FormlyModule } from '@ngx-formly/core';
     `,
   ],
 })
-export class FormFieldGroup extends FieldWrapper {
-  get ids() {
-    return this.props.attributes?.['class'] as string;
+export class FormFieldGroup extends FieldWrapper<IEditorFormlyField> {
+  IFieldType = IFieldType;
+  constructor(public widgetEditorService: WidgetEditorService) {
+    super();
   }
 }

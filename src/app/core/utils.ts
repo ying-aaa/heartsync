@@ -134,3 +134,33 @@ export function handlerNgElStyle(
     }
   }
 }
+
+/**
+ * 生成自定义 UUID 的函数
+ *
+ * @param {number} [length=12] - UUID 的长度，默认为 12 位
+ * @param {boolean} [addLetters=false] - 是否在 UUID 前面添加 6 位随机字母，默认为 false
+ * @param {string} [prefix=''] - 自定义前缀，默认为空字符串
+ * @returns {string} 生成的 UUID 字符串
+ */
+export function generateUUID(
+  prefix: string = '',
+  addLetters: boolean = false,
+  length: number = 12,
+): string {
+  let lettersPart = '';
+  if (addLetters) {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    for (let i = 0; i < 6; i++) {
+      lettersPart += letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+  }
+
+  let digitsPart = '';
+  const digits = '0123456789';
+  for (let i = 0; i < length; i++) {
+    digitsPart += digits.charAt(Math.floor(Math.random() * digits.length));
+  }
+
+  return `${prefix}${lettersPart}${digitsPart}`;
+}
