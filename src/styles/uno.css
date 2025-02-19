@@ -8,6 +8,9 @@
 .absolute{position:absolute;}
 .fixed{position:fixed;}
 .static{position:static;}
+.-top-16px{top:-16px;}
+.right-3px{right:3px;}
+.z-10{z-index:10;}
 .grid{display:grid;}
 .cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}
 .grid-cols-6{grid-template-columns:repeat(6,minmax(0,1fr));}

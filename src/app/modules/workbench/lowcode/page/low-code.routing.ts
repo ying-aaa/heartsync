@@ -1,10 +1,28 @@
 import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
 import { FormlyModule } from '@ngx-formly/core';
+import { FormlyCompWrapperComponent } from '@src/app/modules/formly/formly-comp-wrapper/formly-comp-wrapper.component';
 import { FormFieldCol } from '@src/app/modules/formly/formly-field-col';
 import { FormFieldGroup } from '@src/app/modules/formly/formly-field-group';
+import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 import { IRouterUse } from '@src/app/shared/models/route.model';
+export function addonsExtension(field: IEditorFormlyField) {
+  if (field._design) {
+    return;
+  }
 
+  if (field.wrappers) {
+    if (
+      field.wrappers
+        .filter((v) => typeof v === 'string')
+        .every((v) => (v as string).indexOf('editor') === -1)
+    ) {
+      field.wrappers.unshift('editor');
+    }
+  } else {
+    field.wrappers = ['editor'];
+  }
+}
 export default [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
@@ -40,6 +58,13 @@ export default [
           wrappers: [
             { name: 'group', component: FormFieldGroup },
             { name: 'col', component: FormFieldCol },
+            { name: 'editor', component: FormlyCompWrapperComponent },
+          ],
+          extensions: [
+            {
+              name: 'formly-field-toolbar',
+              extension: { onPopulate: addonsExtension },
+            },
           ],
         }),
       ),

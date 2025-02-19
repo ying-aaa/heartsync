@@ -1,0 +1,32 @@
+@if (isActiveField) {
+<div class="flex absolute right-3px -top-16px z-10">
+  <button
+    mat-mini-fab
+    aria-label="Example icon button with a menu icon"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-divider
+    [vertical]="true"
+    class="opacity-20 h-full"
+  ></mat-divider>
+  <button
+    mat-mini-fab
+    aria-label="Example icon button with a menu icon"
+  >
+    <mat-icon>content_copy</mat-icon>
+  </button>
+  <mat-divider
+    [vertical]="true"
+    class="opacity-20 h-full"
+  ></mat-divider>
+  <button
+    mat-mini-fab
+    aria-label="Example icon button with a menu icon"
+  >
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
+}
+
+<ng-container #fieldComponent></ng-container>
