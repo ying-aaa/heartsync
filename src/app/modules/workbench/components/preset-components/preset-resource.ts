@@ -6,9 +6,19 @@ export const presetResource = [
       {
         name: '布局器：',
         groupChild: [
-          { name: '栅格', icon: 'apps', componentName: '' },
-          { name: '弹性', icon: 'view_column', componentName: '' },
-          { name: '画布', icon: 'select_all', componentName: '' },
+          { name: '栅格', comp: 'group', icon: 'apps', componentName: '' },
+          {
+            name: '弹性',
+            comp: 'group',
+            icon: 'view_column',
+            componentName: '',
+          },
+          {
+            name: '画布',
+            comp: 'group',
+            icon: 'select_all',
+            componentName: '',
+          },
         ],
       },
       {
@@ -34,11 +44,11 @@ export const presetResource = [
       {
         name: '输入：',
         groupChild: [
-          { name: '单行文本', icon: '', componentName: '' },
-          { name: '多行文本', icon: '', componentName: '' },
-          { name: '数字', icon: '', componentName: '' },
-          { name: '密码', icon: '', componentName: '' },
-          { name: '日期', icon: '', componentName: '' },
+          { name: '单行文本', comp: 'input', icon: '', componentName: '' },
+          { name: '多行文本', comp: 'textarea', icon: '', componentName: '' },
+          { name: '数字', comp: 'number', icon: '', componentName: '' },
+          { name: '密码', comp: 'password', icon: '', componentName: '' },
+          { name: '日期', comp: 'date', icon: '', componentName: '' },
           { name: '富文本', icon: '', componentName: '' },
           { name: '手绘', icon: '', componentName: '' },
         ],

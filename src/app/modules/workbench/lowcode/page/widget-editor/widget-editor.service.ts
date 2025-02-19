@@ -52,6 +52,48 @@ export class WidgetEditorService {
               props: {},
             },
             {
+              key: 'group',
+              fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
+
+              wrappers: ['group'], // 使用 group 包装器
+              props: {
+                label: '身份信息',
+              },
+              fieldGroup: [
+                {
+                  key: 'col1',
+                  fieldId: generateUUID(`${IFieldType.COL}_key_`),
+                  wrappers: ['col'], // 使用 col 包装器
+                  fieldGroup: [
+                    {
+                      key: 'input1',
+                      type: 'input',
+                      templateOptions: { label: 'Input 1' },
+                    },
+                  ],
+                  props: {},
+                },
+                {
+                  key: 'col2',
+                  fieldId: generateUUID(`${IFieldType.COL}_key_`),
+                  wrappers: ['col'], // 使用 col 包装器
+                  fieldGroup: [
+                    {
+                      key: 'input3',
+                      type: 'input',
+                      templateOptions: { label: 'Input 3' },
+                    },
+                    {
+                      key: 'input4',
+                      type: 'input',
+                      templateOptions: { label: 'Input 4' },
+                    },
+                  ],
+                  props: {},
+                },
+              ],
+            },
+            {
               key: 'col2',
               fieldId: generateUUID(`${IFieldType.COL}_key_`),
               wrappers: ['col'], // 使用 col 包装器
@@ -189,30 +231,26 @@ export class WidgetEditorService {
   getConnectedTo(type: IFieldType) {
     const options = {
       group: [],
-      col: [
-        // 'layout_preset_key_0',
-        // 'layout_preset_key_1',
-        // 'layout_preset_key_2',
-      ],
+      col: [],
       row: [],
     };
-    function as(
-      fields: IEditorFormlyField[],
-      options: { [key in IFieldType]: string[] },
-    ): { [key in IFieldType]: string[] } {
-      for (let i = 0; i < fields.length; i++) {
-        const type = fields[i].wrappers?.[0] as IFieldType;
-        if (type && options[type]) {
-          options[type].unshift(fields[i].fieldId as string);
-        }
-        if (fields[i].fieldGroup) {
-          options = as(fields[i].fieldGroup as IEditorFormlyField[], options);
-        }
-      }
-      return options;
-    }
 
     return as(this.fields, options)[type];
-    // return options[type];
   }
+}
+
+function as(
+  fields: IEditorFormlyField[],
+  options: { [key in IFieldType]: string[] },
+): { [key in IFieldType]: string[] } {
+  for (let i = 0; i < fields.length; i++) {
+    const type = fields[i].wrappers?.[0] as IFieldType;
+    if (type && options[type]) {
+      options[type].unshift(fields[i].fieldId as string);
+    }
+    if (fields[i].fieldGroup) {
+      options = as(fields[i].fieldGroup as IEditorFormlyField[], options);
+    }
+  }
+  return options;
 }

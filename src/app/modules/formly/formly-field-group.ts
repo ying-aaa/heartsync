@@ -33,6 +33,7 @@ import { WidgetEditorService } from '../workbench/lowcode/page/widget-editor/wid
         @for (f of field.fieldGroup; track $index) {
         <formly-field
           cdkDrag
+          [cdkDragData]="f"
           [field]="f"
         >
           <div

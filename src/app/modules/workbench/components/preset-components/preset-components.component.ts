@@ -14,6 +14,7 @@ import {
   transferArrayItem,
   CdkDragStart,
   CdkDragPlaceholder,
+  CdkDragEnd,
 } from '@angular/cdk/drag-drop';
 import { WidgetEditorService } from '../../lowcode/page/widget-editor/widget-editor.service';
 import { IFieldType } from '@src/app/shared/models/editor.model';
@@ -32,7 +33,6 @@ import { IFieldType } from '@src/app/shared/models/editor.model';
 })
 export class PresetComponentsComponent implements OnInit {
   IFieldType = IFieldType;
-  onDragStart($event: CdkDragStart<any>) {}
   activeValue = signal<string>('layout');
 
   configTypes: IRadioConfig[] = [
@@ -60,11 +60,51 @@ export class PresetComponentsComponent implements OnInit {
       )!.group;
     });
   }
-
-  isEnterPredicate = () => false;
-
   matRippleColor = () =>
     this.hsThemeService.getCurrentThemeConfig(['#00000010', '#ffffff10']);
+
+  onDragStart(preset: any, group: any, event: CdkDragStart<any>) {
+    const configIndex = this.presetResource().findIndex(
+      (item) => item.value === this.activeValue(),
+    );
+    const groupIndex = this.presetResource()[configIndex].group.findIndex(
+      (item) => item.name === group.name,
+    );
+    const groupChildIndex = this.presetResource()[configIndex].group[
+      groupIndex
+    ].groupChild.findIndex((item) => item.name === preset.name);
+
+    // 创建一个临时占位元素
+    const placeholder = { ...preset, isPlaceholder: true };
+
+    this.presetResource.update((value: any) => {
+      const newValue = [...value];
+      newValue[configIndex].group[groupIndex].groupChild.splice(
+        groupChildIndex,
+        0,
+        placeholder,
+      );
+      return newValue;
+    });
+  }
+
+  onDragEnd(event: CdkDragEnd<any>) {
+    const configIndex = this.presetResource().findIndex(
+      (item) => item.value === this.activeValue(),
+    );
+
+    this.presetResource.update((value: any) => {
+      const newValue = [...value];
+
+      newValue[configIndex].group.forEach((group: any) => {
+        group.groupChild = group.groupChild.filter(
+          (item: any) => !item.isPlaceholder,
+        );
+      });
+
+      return newValue;
+    });
+  }
 
   ngOnInit() {}
 }
