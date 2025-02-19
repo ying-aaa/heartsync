@@ -6,6 +6,7 @@ import {
   IFieldType,
 } from '@src/app/shared/models/editor.model';
 import { presetResource } from '../../../components/preset-components/preset-resource';
+import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,6 @@ export class WidgetEditorService {
         {
           key: 'group',
           fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-
           wrappers: ['group'], // 使用 group 包装器
           props: {
             label: '身份信息',
@@ -83,11 +83,6 @@ export class WidgetEditorService {
                       type: 'input',
                       templateOptions: { label: 'Input 3' },
                     },
-                    {
-                      key: 'input4',
-                      type: 'input',
-                      templateOptions: { label: 'Input 4' },
-                    },
                   ],
                   props: {},
                 },
@@ -108,109 +103,6 @@ export class WidgetEditorService {
                   type: 'input',
                   templateOptions: { label: 'Input 4' },
                 },
-                {
-                  key: 'input3',
-                  type: 'input',
-                  templateOptions: { label: 'Input 3' },
-                },
-                {
-                  key: 'input4',
-                  type: 'input',
-                  templateOptions: { label: 'Input 4' },
-                },
-              ],
-              props: {},
-            },
-            {
-              key: 'col3',
-              fieldId: generateUUID(`${IFieldType.COL}_key_`),
-              wrappers: ['col'], // 使用 col 包装器
-              fieldGroup: [
-                {
-                  key: 'input5',
-                  type: 'input',
-                  templateOptions: { label: 'Input 5' },
-                },
-                {
-                  key: 'input6',
-                  type: 'input',
-                  templateOptions: { label: 'Input 6' },
-                },
-              ],
-              props: {},
-            },
-          ],
-        },
-        {
-          key: 'group',
-          fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-
-          wrappers: ['group'], // 使用 group 包装器
-          props: {
-            label: '身份信息',
-          },
-          fieldGroup: [
-            {
-              key: 'col1',
-              fieldId: generateUUID(`${IFieldType.COL}_key_`),
-              wrappers: ['col'], // 使用 col 包装器
-              fieldGroup: [
-                {
-                  key: 'input1',
-                  type: 'input',
-                  templateOptions: { label: 'Input 1' },
-                },
-                {
-                  key: 'input2',
-                  type: 'input',
-                  templateOptions: { label: 'Input 2' },
-                },
-              ],
-              props: {},
-            },
-            {
-              key: 'col2',
-              fieldId: generateUUID(`${IFieldType.COL}_key_`),
-              wrappers: ['col'], // 使用 col 包装器
-              fieldGroup: [
-                {
-                  key: 'input3',
-                  type: 'input',
-                  templateOptions: { label: 'Input 3' },
-                },
-                {
-                  key: 'input4',
-                  type: 'input',
-                  templateOptions: { label: 'Input 4' },
-                },
-                {
-                  key: 'input3',
-                  type: 'input',
-                  templateOptions: { label: 'Input 3' },
-                },
-                {
-                  key: 'input4',
-                  type: 'input',
-                  templateOptions: { label: 'Input 4' },
-                },
-              ],
-              props: {},
-            },
-            {
-              key: 'col3',
-              fieldId: generateUUID(`${IFieldType.COL}_key_`),
-              wrappers: ['col'], // 使用 col 包装器
-              fieldGroup: [
-                {
-                  key: 'input5',
-                  type: 'input',
-                  templateOptions: { label: 'Input 5' },
-                },
-                {
-                  key: 'input6',
-                  type: 'input',
-                  templateOptions: { label: 'Input 6' },
-                },
               ],
               props: {},
             },
@@ -219,14 +111,11 @@ export class WidgetEditorService {
       ],
     },
   ];
+
   model = [];
   options = [];
 
-  constructor() {
-    setTimeout(() => {
-      this.getConnectedTo(IFieldType.COL);
-    }, 500);
-  }
+  constructor() {}
 
   getConnectedTo(type: IFieldType) {
     const options = {
@@ -235,11 +124,24 @@ export class WidgetEditorService {
       row: [],
     };
 
-    return as(this.fields, options)[type];
+    return findSameField(this.fields, options)[type];
+  }
+
+  moveField(siblings: any, fromIndex: number, toIndex: number) {
+    moveItemInArray(siblings, fromIndex, toIndex);
+  }
+
+  transferField(
+    currentParent: any,
+    targetParent: any,
+    formIndex: number,
+    toIndex: number,
+  ) {
+    transferArrayItem(currentParent, targetParent, formIndex, toIndex);
   }
 }
 
-function as(
+function findSameField(
   fields: IEditorFormlyField[],
   options: { [key in IFieldType]: string[] },
 ): { [key in IFieldType]: string[] } {
@@ -249,7 +151,10 @@ function as(
       options[type].unshift(fields[i].fieldId as string);
     }
     if (fields[i].fieldGroup) {
-      options = as(fields[i].fieldGroup as IEditorFormlyField[], options);
+      options = findSameField(
+        fields[i].fieldGroup as IEditorFormlyField[],
+        options,
+      );
     }
   }
   return options;

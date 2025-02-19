@@ -17,7 +17,11 @@ import {
   CdkDragEnd,
 } from '@angular/cdk/drag-drop';
 import { WidgetEditorService } from '../../lowcode/page/widget-editor/widget-editor.service';
-import { IFieldType } from '@src/app/shared/models/editor.model';
+import {
+  IEditorFormlyField,
+  IFieldType,
+} from '@src/app/shared/models/editor.model';
+import { generateUUID } from '@src/app/core/utils';
 @Component({
   selector: 'hs-preset-components',
   templateUrl: './preset-components.component.html',

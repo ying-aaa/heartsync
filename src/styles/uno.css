@@ -43,6 +43,8 @@
 .h-60px{height:60px;}
 .h-64px{height:64px;}
 .h-80\%{height:80%;}
+.min-h-48px{min-height:48px;}
+.min-w-48px{min-width:48px;}
 .w-0{width:0;}
 .w-100\%,
 .w-full{width:100%;}
@@ -87,6 +89,7 @@
 .border-\#2f90b94d{--un-border-opacity:0.3;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .border-\#2f90b960{--un-border-opacity:0.38;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .border-\#333{--un-border-opacity:1;border-color:rgb(51 51 51 / var(--un-border-opacity));}
+.border-\#ccc{--un-border-opacity:1;border-color:rgb(204 204 204 / var(--un-border-opacity));}
 .hover-border-\#2f90b9:hover{--un-border-opacity:1;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .hover\:border-\#2f90b9:hover{--un-border-opacity:1;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .rounded-16px{border-radius:16px;}
@@ -97,6 +100,7 @@
 .bg-\#19282d{--un-bg-opacity:1;background-color:rgb(25 40 45 / var(--un-bg-opacity)) /* #19282d */;}
 .bg-\#2F90B9{--un-bg-opacity:1;background-color:rgb(47 144 185 / var(--un-bg-opacity)) /* #2F90B9 */;}
 .bg-\#2f90b91a{--un-bg-opacity:0.1;background-color:rgb(47 144 185 / var(--un-bg-opacity)) /* #2f90b91a */;}
+.bg-\#f1f1f1{--un-bg-opacity:1;background-color:rgb(241 241 241 / var(--un-bg-opacity)) /* #f1f1f1 */;}
 .bg-\#ffffff20{--un-bg-opacity:0.13;background-color:rgb(255 255 255 / var(--un-bg-opacity)) /* #ffffff20 */;}
 .bg-red{--un-bg-opacity:1;background-color:rgb(248 113 113 / var(--un-bg-opacity)) /* #f87171 */;}
 .hover\:bg-\#2F90B930:hover{--un-bg-opacity:0.19;background-color:rgb(47 144 185 / var(--un-bg-opacity)) /* #2F90B930 */;}
@@ -124,6 +128,7 @@
 .text-24px{font-size:24px;}
 .text-32px{font-size:32px;}
 .text-36px{font-size:36px;}
+.text-\#a7b1bd{--un-text-opacity:1;color:rgb(167 177 189 / var(--un-text-opacity)) /* #a7b1bd */;}
 .color-\#f5f9fff2{--un-text-opacity:0.95;color:rgb(245 249 255 / var(--un-text-opacity)) /* #f5f9fff2 */;}
 .color-\#fff{--un-text-opacity:1;color:rgb(255 255 255 / var(--un-text-opacity)) /* #fff */;}
 .font-bold{font-weight:700;}
