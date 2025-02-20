@@ -19,8 +19,6 @@ import { WidgetEditorService } from '../workbench/lowcode/page/widget-editor/wid
   template: `
     <fieldset>
       <legend>{{ props.label }}</legend>
-      {{ widgetEditorService.getConnectedTo(IFieldType.GROUP) }}
-      <div>{{ field.fieldId }}</div>
       <div
         class="cdk-group-list grid"
         style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));"
