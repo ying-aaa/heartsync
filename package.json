@@ -1,5 +1,5 @@
 {
-  "name": "hs-basekit",
+  "name": "HeartSync",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -8,7 +8,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:hs-basekit": "node dist/hs-basekit/server/server.mjs",
+    "serve:ssr:HeartSync": "node dist/HeartSync/server/server.mjs",
     "uno": "unocss --watch",
     "build:css": "unocss"
   },

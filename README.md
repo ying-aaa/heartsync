@@ -84,6 +84,6 @@ We welcome contributions from developers interested in HeartSync. You can partic
 ## Contact Us  
 If you have any questions or suggestions, feel free to reach out to us via:  
 - **Email**: [775296271@qq.com](mailto:775296271@qq.com)
-- **GitHub**: [https://github.com/ying-aaa/hs-basekit](https://github.com/ying-aaa/hs-basekit)
+- **GitHub**: [https://github.com/ying-aaa/HeartSync](https://github.com/ying-aaa/HeartSync)
 
 Thank you for your interest in HeartSync. Together, let's build a more powerful low-code platform!
