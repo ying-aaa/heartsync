@@ -20,57 +20,43 @@
   ></mat-divider>
   <!-- 右侧 -->
 
-  <main class="render-canvar flex flex-col flex-1 gap-8px p-12px">
-    <form
-      [formGroup]="form"
-      (ngSubmit)="onSubmit(model)"
-    >
-      <formly-form
-        [form]="form"
-        [fields]="widgetEditorService.fields"
-        [model]="model"
-      >
-        <ng-template
-          formlyTemplate
-          let-field
+  <main class="flex flex-1">
+    <content class="flex flex-1 flex-col">
+      <header>
+        <hs-widget-toobar></hs-widget-toobar>
+      </header>
+
+      <mat-divider class="opacity-20 w-full"></mat-divider>
+
+      <div class="render-canvar flex-1 p-12px">
+        <form
+          [formGroup]="form"
+          (ngSubmit)="onSubmit(model)"
         >
-          @for (f of field.fieldGroup; track $index) {
-          <formly-field [field]="f"> </formly-field>
-          }
-        </ng-template>
-      </formly-form>
-    </form>
-    <!-- <div
-      cdkDropList
-      cdkDrag
-      class="flex gap-8px h-60px"
-      cdkDropListOrientation="horizontal"
-    >
-      <div
-        class="w-full h-60px border-2px border-dashed border-#333"
-        *cdkDragPlaceholder
-      ></div>
-      @let items2 = [1, 2, 3, 4, 5]; @for (item of items2; track $index) {
-      <div
-        cdkDrag
-        class="w-full h-60px bg-#2F90B9"
-      >
-        <div
-          class="w-full h-60px border-2px border-dashed border-#333"
-          *cdkDragPlaceholder
-        ></div>
-        {{ item }}
+          <formly-form
+            [form]="form"
+            [fields]="widgetEditorService.fields"
+            [model]="model"
+          >
+            <ng-template
+              formlyTemplate
+              let-field
+            >
+              @for (f of field.fieldGroup; track $index) {
+              <formly-field [field]="f"> </formly-field>
+              }
+            </ng-template>
+          </formly-form>
+        </form>
       </div>
-      }
-    </div> -->
+    </content>
+    <mat-divider
+      [vertical]="true"
+      class="opacity-20 h-full"
+    ></mat-divider>
+
+    <aside class="h-full w-284px py-8px px-12px">
+      <hs-preset-components> </hs-preset-components>
+    </aside>
   </main>
-
-  <mat-divider
-    [vertical]="true"
-    class="opacity-20 h-full"
-  ></mat-divider>
-
-  <aside class="h-full w-284px py-8px px-12px">
-    <hs-preset-components> </hs-preset-components>
-  </aside>
 </div>

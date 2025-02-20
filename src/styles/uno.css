@@ -44,7 +44,6 @@
 .h-48px{height:48px;}
 .h-50px{height:50px;}
 .h-52px{height:52px;}
-.h-60px{height:60px;}
 .h-64px{height:64px;}
 .h-80\%{height:80%;}
 .min-h-48px{min-height:48px;}
@@ -83,7 +82,6 @@
 .gap-24px{gap:24px;}
 .gap-3px{gap:3px;}
 .gap-5px{gap:5px;}
-.gap-8px{gap:8px;}
 .overflow-hidden{overflow:hidden;}
 .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .border,

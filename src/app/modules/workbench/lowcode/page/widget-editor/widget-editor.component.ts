@@ -10,19 +10,10 @@ import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.c
 import { IRadioConfig } from '@src/app/shared/models/system.model';
 import { PresetComponentsComponent } from '../../../components/preset-components/preset-components.component';
 import { CommonModule } from '@angular/common';
-import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDragMove,
-  CdkDragPlaceholder,
-  CdkDragStart,
-  CdkDropList,
-  CdkDropListGroup,
-  moveItemInArray,
-} from '@angular/cdk/drag-drop';
-import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
+import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { WidgetEditorService } from './widget-editor.service';
+import { WidgetToobarComponent } from './widget-toobar/widget-toobar.component';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -40,13 +31,13 @@ import { WidgetEditorService } from './widget-editor.service';
     PresetComponentsComponent,
     ReactiveFormsModule,
     FormlyMaterialModule,
-    FormlyModule
+    FormlyModule,
+    WidgetToobarComponent,
   ],
 })
 export class WidgetEditorComponent implements OnInit {
   form = new FormGroup({});
-  model = { email: 'email@gmail.com', email1: "" };
-
+  model = { email: 'email@gmail.com', email1: '' };
 
   onSubmit(model: any) {
     console.log(model, this.form);
@@ -66,9 +57,7 @@ export class WidgetEditorComponent implements OnInit {
     { label: '详情', value: 'detail' },
   ];
 
-  constructor(
-    public widgetEditorService: WidgetEditorService
-  ) {}
+  constructor(public widgetEditorService: WidgetEditorService) {}
 
   ngOnInit() {}
 }
