@@ -35,6 +35,8 @@ import { WidgetEditorService } from '../workbench/lowcode/page/widget-editor/wid
           cdkDrag
           [cdkDragData]="f"
           [field]="f"
+          (cdkDragStarted)="widgetEditorService.dragStart = true"
+          (cdkDragReleased)="widgetEditorService.dragStart = false"
         >
           <div
             class="position-preview w-full h-full border-2px border-dashed"

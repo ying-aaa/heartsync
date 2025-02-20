@@ -1,10 +1,40 @@
 :host {
   display: block;
   position: relative;
+  margin: 4px 2px;
+  padding: 3px;
+  border: 1px dashed #ccc;
+
+  &.edit-mode {
+    &>.hs-widget-toolbar {
+      display: none;
+    }
+  }
+
+  &.active {
+    border: 2px solid #197aff;
+
+    &>.hs-widget-toolbar {
+      display: flex;
+    }
+  }
+
+  &.hover {
+    border-color: #197aff;
+  }
+
+  .title-name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #197aff;
+    background-color: #ccc;
+    z-index: 10;
+  }
 
   button {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 3px;
     // box-shadow: none;
 
@@ -13,9 +43,5 @@
       width: 18px;
       height: 18px;
     }
-  }
-
-  &.active {
-    border: 1px solid #197aff;
   }
 }

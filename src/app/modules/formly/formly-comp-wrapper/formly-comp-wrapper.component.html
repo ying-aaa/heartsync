@@ -1,32 +1,24 @@
-@if (isActiveField) {
-<div class="flex absolute right-3px -top-16px z-10">
-  <button
-    mat-mini-fab
-    aria-label="Example icon button with a menu icon"
-  >
+@if(isHoverField) {
+<div class="title-name">{{ field.label }}</div>
+} @if (isEditMode) {
+<div class="flex absolute right-3px -top-16px z-10 hs-widget-toolbar">
+  <button mat-mini-fab>
     <mat-icon>menu</mat-icon>
   </button>
   <mat-divider
     [vertical]="true"
     class="opacity-20 h-full"
   ></mat-divider>
-  <button
-    mat-mini-fab
-    aria-label="Example icon button with a menu icon"
-  >
+  <button mat-mini-fab>
     <mat-icon>content_copy</mat-icon>
   </button>
   <mat-divider
     [vertical]="true"
     class="opacity-20 h-full"
   ></mat-divider>
-  <button
-    mat-mini-fab
-    aria-label="Example icon button with a menu icon"
-  >
+  <button mat-mini-fab>
     <mat-icon>delete</mat-icon>
   </button>
 </div>
 }
-
 <ng-container #fieldComponent></ng-container>

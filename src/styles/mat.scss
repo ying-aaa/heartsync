@@ -34,6 +34,6 @@ $base-radius: 8px;
   }
 }
 
-formly-field formly-field{
-  transform: translate3D(0, 0, 0);  
+.mat-mdc-form-field-subscript-wrapper {
+  height: 0;
 }

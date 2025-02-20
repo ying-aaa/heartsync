@@ -23,7 +23,7 @@ import { WidgetEditorService } from '../workbench/lowcode/page/widget-editor/wid
   selector: 'formly-wrapper-col',
   template: `
     <div
-      class="flex flex-col p-5px border-1px border-dashed border-#ccc min-h-48px "
+      class="flex flex-col p-5px min-h-48px "
       [id]="field.fieldId || ''"
       cdkDropList
       [cdkDropListData]="field.fieldGroup"
@@ -37,6 +37,8 @@ import { WidgetEditorService } from '../workbench/lowcode/page/widget-editor/wid
         cdkDrag
         [cdkDragData]="f"
         [field]="f"
+        (cdkDragStarted)="widgetEditorService.dragStart = true"
+        (cdkDragReleased)="widgetEditorService.dragStart = false"
       >
         <div
           class="position-preview w-full h-3px border-2px border-dashed"

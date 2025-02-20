@@ -7,7 +7,7 @@ import {
 } from '@src/app/shared/models/editor.model';
 import { presetResource } from '../../../components/preset-components/preset-resource';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,14 +15,18 @@ import { Observable, Subject } from 'rxjs';
 export class WidgetEditorService {
   HS_DEFAULT_ID = 'workspace';
 
-  isEditMode = false;
+  // 是否编辑模式
+  isEditMode = true;
 
+  // 当前是否在拖拽中
+  dragStart = false;
+
+  // 连接项
   connectedTo = [];
 
+  // 选中的 Field
   private activeField?: IEditorFormlyField;
-  private fieldsChange$ = new Subject<IEditorFormlyField[]>();
-  private _fieldSelected$ = new Subject<IEditorFormlyField>();
-
+  _fieldSelected$ = new Subject<IEditorFormlyField>();
   get fieldSelected$(): Observable<IEditorFormlyField> {
     return this._fieldSelected$.asObservable();
   }
@@ -31,6 +35,7 @@ export class WidgetEditorService {
     {
       key: 'col21',
       type: 'col',
+      label: '列',
       fieldId: generateUUID(`${IFieldType.COL}_key_`),
       wrappers: ['col'], // 使用 col 包装器
       props: {},
@@ -39,6 +44,7 @@ export class WidgetEditorService {
         {
           key: 'group',
           type: 'group',
+          label: '组',
           fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
           wrappers: ['group'], // 使用 group 包装器
           props: {
@@ -48,18 +54,24 @@ export class WidgetEditorService {
             {
               key: 'col1',
               type: 'col',
+              label: '列',
               fieldId: generateUUID(`${IFieldType.COL}_key_`),
               wrappers: ['col'], // 使用 col 包装器
               fieldGroup: [
                 {
                   key: 'input1',
                   type: 'input',
+                  label: '输入框',
                   fieldId: generateUUID(`input_key_`),
                   templateOptions: { label: 'Input 1' },
+                  props: {
+                    label: '请输入',
+                  },
                 },
                 {
                   key: 'input2',
                   type: 'input',
+                  label: '输入框',
                   fieldId: generateUUID(`input_key_`),
                   templateOptions: { label: 'Input 2' },
                 },
