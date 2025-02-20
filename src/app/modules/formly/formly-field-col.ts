@@ -63,16 +63,8 @@ export class FormFieldCol extends FieldWrapper<IEditorFormlyField> {
   }
 
   cdkDropListDropped(event: CdkDragDrop<IEditorFormlyField[]> | any) {
-    // const itemData: ItemDragData = evt.item.data;
-    // const field: IEditorFormlyField = itemData.field;
     const currentParent: IEditorFormlyField = event.previousContainer.data;
     const targetParent: IEditorFormlyField = event.container.data;
-
-    // if (itemData.action === DragAction.COPY) {
-    //   this.widgetEditorService.addField(field, evt.currentIndex, targetParent.fieldId);
-    //   return;
-    // }
-    // if (itemData.action === DragAction.MOVE) {
     if (event.previousContainer === event.container) {
       this.widgetEditorService.moveField(
         targetParent,
@@ -87,6 +79,5 @@ export class FormFieldCol extends FieldWrapper<IEditorFormlyField> {
         event.currentIndex,
       );
     }
-    // }
   }
 }
