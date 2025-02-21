@@ -36,10 +36,10 @@ export class WidgetEditorService {
   fields: IEditorFormlyField[] = [
     {
       key: 'col21',
-      type: 'col',
+      type: 'column',
       label: '列',
-      fieldId: generateUUID(`${IFieldType.COL}_key_`),
-      wrappers: ['col'], // 使用 col 包装器
+      fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
+      wrappers: ['column'], // 使用 column 包装器
       props: {},
       _design: true,
       fieldGroup: [
@@ -55,10 +55,10 @@ export class WidgetEditorService {
           fieldGroup: [
             {
               key: 'col1',
-              type: 'col',
+              type: 'column',
               label: '列',
-              fieldId: generateUUID(`${IFieldType.COL}_key_`),
-              wrappers: ['col'], // 使用 col 包装器
+              fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
+              wrappers: ['column'], // 使用 column 包装器
               fieldGroup: [
                 {
                   key: 'input1',
@@ -82,10 +82,10 @@ export class WidgetEditorService {
             },
             {
               key: 'col1',
-              type: 'col',
+              type: 'column',
               label: '列',
-              fieldId: generateUUID(`${IFieldType.COL}_key_`),
-              wrappers: ['col'], // 使用 col 包装器
+              fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
+              wrappers: ['column'], // 使用 column 包装器
               fieldGroup: [
                 {
                   key: 'fieldset',
@@ -98,9 +98,9 @@ export class WidgetEditorService {
                   fieldGroup: [
                     {
                       key: 'col1',
-                      type: 'col',
-                      fieldId: generateUUID(`${IFieldType.COL}_key_`),
-                      wrappers: ['col'], // 使用 col 包装器
+                      type: 'column',
+                      fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
+                      wrappers: ['column'], // 使用 column 包装器
                       fieldGroup: [
                         {
                           key: 'input1',
@@ -113,9 +113,9 @@ export class WidgetEditorService {
                     },
                     {
                       key: 'col2',
-                      type: 'col',
-                      fieldId: generateUUID(`${IFieldType.COL}_key_`),
-                      wrappers: ['col'], // 使用 col 包装器
+                      type: 'column',
+                      fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
+                      wrappers: ['column'], // 使用 column 包装器
                       fieldGroup: [
                         {
                           key: 'input3',
@@ -134,9 +134,9 @@ export class WidgetEditorService {
 
             {
               key: 'col2',
-              type: 'col',
-              fieldId: generateUUID(`${IFieldType.COL}_key_`),
-              wrappers: ['col'], // 使用 col 包装器
+              type: 'column',
+              fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
+              wrappers: ['column'], // 使用 column 包装器
               fieldGroup: [
                 {
                   key: 'input3',
@@ -167,7 +167,7 @@ export class WidgetEditorService {
   getConnectedTo(type: IFieldType) {
     const options = {
       group: [],
-      col: [],
+      column: [],
       row: [],
     };
 
@@ -200,7 +200,7 @@ export class WidgetEditorService {
 
 function findSameField(
   fields: IEditorFormlyField[],
-  options: { [key in IFieldType]: string[] },
+  options: { [key in IFieldType]?: string[] },
 ): { [key in IFieldType]: string[] } {
   for (let i = 0; i < fields.length; i++) {
     const type = fields[i].type as IFieldType;
@@ -214,5 +214,6 @@ function findSameField(
       );
     }
   }
+  // @ts-ignore
   return options;
 }

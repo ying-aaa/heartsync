@@ -2,8 +2,8 @@ import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
 import { FormlyModule } from '@ngx-formly/core';
 import { FolmlyFieldsetWrapperComponent } from '@src/app/modules/formly/folmly-field-fieldset/folmly-fieldset-wrapper.component';
-import { FormlyColWrapperComponent } from '@src/app/modules/formly/formly-col-wrapper/formly-col-wrapper.component';
-import { FormlyCompWrapperComponent } from '@src/app/modules/formly/formly-comp-wrapper/formly-comp-wrapper.component';
+import { FormlyColumnWrapperComponent } from '@src/app/modules/formly/formly-column-wrapper/formly-column-wrapper.component';
+import { FormlyContorlWrapperComponent } from '@src/app/modules/formly/formly-control-wrapper/formly-control-wrapper.component';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 import { IRouterUse } from '@src/app/shared/models/route.model';
 export function addonsExtension(field: IEditorFormlyField) {
@@ -15,12 +15,12 @@ export function addonsExtension(field: IEditorFormlyField) {
     if (
       field.wrappers
         .filter((v) => typeof v === 'string')
-        .every((v) => (v as string).indexOf('editor') === -1)
+        .every((v) => (v as string).indexOf('contorl') === -1)
     ) {
-      field.wrappers.unshift('editor');
+      field.wrappers.unshift('contorl');
     }
   } else {
-    field.wrappers = ['editor'];
+    field.wrappers = ['contorl'];
   }
 }
 export default [
@@ -52,14 +52,14 @@ export default [
     providers: [
       importProvidersFrom(
         FormlyModule.forRoot({
-          types: [{ name: 'col', component: FormlyColWrapperComponent }],
+          types: [{ name: 'col', component: FormlyColumnWrapperComponent }],
           validationMessages: [
             { name: 'required', message: '这个字段是必填的！' },
           ],
           wrappers: [
             { name: 'fieldset', component: FolmlyFieldsetWrapperComponent },
-            { name: 'col', component: FormlyColWrapperComponent },
-            { name: 'editor', component: FormlyCompWrapperComponent },
+            { name: 'column', component: FormlyColumnWrapperComponent },
+            { name: 'contorl', component: FormlyContorlWrapperComponent },
           ],
           extensions: [
             {

@@ -3,7 +3,8 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 export enum IFieldType {
   GROUP = 'group',
   ROW = 'row',
-  COL = 'col',
+  COLUMN = 'column',
+  FIELDSET = 'fielset',
 }
 
 export interface IEditorFormlyField extends FormlyFieldConfig {

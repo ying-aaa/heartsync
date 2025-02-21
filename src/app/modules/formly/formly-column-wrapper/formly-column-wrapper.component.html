@@ -3,7 +3,9 @@
   [id]="field.fieldId || ''"
   cdkDropList
   [cdkDropListData]="field.fieldGroup"
-  [cdkDropListConnectedTo]="widgetEditorService.getConnectedTo(IFieldType.COL)"
+  [cdkDropListConnectedTo]="
+    widgetEditorService.getConnectedTo(IFieldType.COLUMN)
+  "
   (cdkDropListDropped)="cdkDropListDropped($event)"
   [cdkDropListEnterPredicate]="canEnter"
 >

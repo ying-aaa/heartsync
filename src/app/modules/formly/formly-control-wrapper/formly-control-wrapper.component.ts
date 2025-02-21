@@ -15,13 +15,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 
 @Component({
-  selector: 'formly-comp-wrapper',
-  templateUrl: './formly-comp-wrapper.component.html',
-  styleUrls: ['./formly-comp-wrapper.component.less'],
+  selector: 'formly-control-wrapper',
+  templateUrl: './formly-control-wrapper.component.html',
+  styleUrls: ['./formly-control-wrapper.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatButtonModule, MatIconModule, MatDividerModule],
 })
-export class FormlyCompWrapperComponent
+export class FormlyContorlWrapperComponent
   extends FieldWrapper<IEditorFormlyField>
   implements OnInit, OnDestroy
 {

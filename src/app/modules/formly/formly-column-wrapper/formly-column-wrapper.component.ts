@@ -25,12 +25,12 @@ import {
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 
 @Component({
-  selector: 'app-formly-col-wrapper',
-  templateUrl: './formly-col-wrapper.component.html',
-  styleUrls: ['./formly-col-wrapper.component.less'],
+  selector: 'app-formly-column-wrapper',
+  templateUrl: './formly-column-wrapper.component.html',
+  styleUrls: ['./formly-column-wrapper.component.less'],
   imports: [CdkDropList, CdkDrag, FormlyModule, CdkDragPlaceholder],
 })
-export class FormlyColWrapperComponent extends FieldWrapper<IEditorFormlyField> {
+export class FormlyColumnWrapperComponent extends FieldWrapper<IEditorFormlyField> {
   @ViewChild(CdkDropList) dropList!: CdkDropList;
 
   IFieldType = IFieldType;
@@ -49,10 +49,10 @@ export class FormlyColWrapperComponent extends FieldWrapper<IEditorFormlyField> 
       drag.dropContainer.element.nativeElement,
     );
     const index = this.widgetEditorService
-      .getConnectedTo(this.IFieldType.COL)
+      .getConnectedTo(this.IFieldType.COLUMN)
       .indexOf(this.dropList.id);
     const dropContainerIndex = this.widgetEditorService
-      .getConnectedTo(this.IFieldType.COL)
+      .getConnectedTo(this.IFieldType.COLUMN)
       .indexOf(drag.dropContainer.id);
     return !(isInDropContainer && dropContainerIndex < index);
   };
