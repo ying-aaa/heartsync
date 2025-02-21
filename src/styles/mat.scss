@@ -26,12 +26,16 @@ $base-radius: 8px;
 }
 
 .mdc-button{
+  // --mat-sys-corner-full: 8px;
+
   @include mat.theme((
     density: -1
   ));
-  &.mat-mdc-unelevated-button, .mat-mdc-unelevated-button .mdc-button__ripple{
-    border-radius: $base-radius;
-  }
+}
+
+.mdc-button {
+  --mat-sys-corner-full: 8px;
+  --mat-filled-button-horizontal-padding: 16px;
 }
 
 .mat-mdc-form-field-subscript-wrapper {

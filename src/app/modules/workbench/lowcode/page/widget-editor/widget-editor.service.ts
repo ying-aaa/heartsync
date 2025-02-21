@@ -79,46 +79,57 @@ export class WidgetEditorService {
               props: {},
             },
             {
-              key: 'group',
-              type: 'group',
-              fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-              wrappers: ['group'], // 使用 group 包装器
-              props: {
-                label: '身份信息',
-              },
+              key: 'col1',
+              type: 'col',
+              label: '列',
+              fieldId: generateUUID(`${IFieldType.COL}_key_`),
+              wrappers: ['col'], // 使用 col 包装器
               fieldGroup: [
                 {
-                  key: 'col1',
-                  type: 'col',
-                  fieldId: generateUUID(`${IFieldType.COL}_key_`),
-                  wrappers: ['col'], // 使用 col 包装器
+                  key: 'group',
+                  type: 'group',
+                  fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
+                  wrappers: ['group'], // 使用 group 包装器
+                  props: {
+                    label: '身份信息',
+                  },
                   fieldGroup: [
                     {
-                      key: 'input1',
-                      type: 'input',
-                      fieldId: generateUUID(`input_key_`),
-                      templateOptions: { label: 'Input 1' },
+                      key: 'col1',
+                      type: 'col',
+                      fieldId: generateUUID(`${IFieldType.COL}_key_`),
+                      wrappers: ['col'], // 使用 col 包装器
+                      fieldGroup: [
+                        {
+                          key: 'input1',
+                          type: 'input',
+                          fieldId: generateUUID(`input_key_`),
+                          templateOptions: { label: 'Input 1' },
+                        },
+                      ],
+                      props: {},
                     },
-                  ],
-                  props: {},
-                },
-                {
-                  key: 'col2',
-                  type: 'col',
-                  fieldId: generateUUID(`${IFieldType.COL}_key_`),
-                  wrappers: ['col'], // 使用 col 包装器
-                  fieldGroup: [
                     {
-                      key: 'input3',
-                      type: 'input',
-                      fieldId: generateUUID(`input_key_`),
-                      templateOptions: { label: 'Input 3' },
+                      key: 'col2',
+                      type: 'col',
+                      fieldId: generateUUID(`${IFieldType.COL}_key_`),
+                      wrappers: ['col'], // 使用 col 包装器
+                      fieldGroup: [
+                        {
+                          key: 'input3',
+                          type: 'input',
+                          fieldId: generateUUID(`input_key_`),
+                          templateOptions: { label: 'Input 3' },
+                        },
+                      ],
+                      props: {},
                     },
                   ],
-                  props: {},
                 },
               ],
+              props: {},
             },
+
             {
               key: 'col2',
               type: 'col',

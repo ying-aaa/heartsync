@@ -19,44 +19,51 @@ import { WidgetEditorService } from '../workbench/lowcode/page/widget-editor/wid
   template: `
     <fieldset>
       <legend>{{ props.label }}</legend>
-      <div
-        class="cdk-group-list grid"
-        style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));"
+      <!-- 
         cdkDropListOrientation="horizontal"
         cdkDropListGroup
         cdkDropList
         [cdkDropListData]="field.fieldGroup"
         [cdkDropListConnectedTo]="['cdk-group-list']"
-        [id]="field.fieldId || ''"
         [cdkDropListConnectedTo]="
           widgetEditorService.getConnectedTo(IFieldType.GROUP)
         "
         (cdkDropListDropped)="cdkDropListDropped($event)"
+      -->
+      <div
+        class="cdk-group-list grid"
+        style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));"
+        [id]="field.fieldId || ''"
       >
-        @for (f of field.fieldGroup; track $index) {
-        <formly-field
+        <!-- 
           cdkDrag
           [cdkDragData]="f"
-          [field]="f"
           (cdkDragStarted)="widgetEditorService.dragStart = true"
           (cdkDragReleased)="widgetEditorService.dragStart = false"
-        >
+      -->
+        @for (f of field.fieldGroup; track $index) {
+        <formly-field [field]="f">
           <div
             class="position-preview w-full h-full border-2px border-dashed"
             *cdkDragPlaceholder
           ></div>
         </formly-field>
-        }@empty {
+        }
+        <!-- @empty {
         <div
           class="text-#a7b1bd border-1px border-solid text-14px border-#ccc min-h-48px flex-center min-w-48px bg-#f1f1f1"
         >
           拖拽组件到这里
         </div>
-        }
+        } -->
       </div>
     </fieldset>
   `,
-  imports: [CdkDropList, CdkDrag, FormlyModule, CdkDragPlaceholder],
+  imports: [
+    // CdkDropList, CdkDrag,
+    FormlyModule,
+    CdkDragPlaceholder,
+  ],
   styles: [
     `
       fieldset {
