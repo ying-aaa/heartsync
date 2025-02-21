@@ -16,7 +16,7 @@ import {
   CdkDragPlaceholder,
   CdkDragEnd,
 } from '@angular/cdk/drag-drop';
-import { WidgetEditorService } from '../../lowcode/page/widget-editor/widget-editor.service';
+import { WidgetEditorService } from '../../lowcode/page/widget/widget-editor.service';
 import {
   IEditorFormlyField,
   IFieldType,

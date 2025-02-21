@@ -9,10 +9,10 @@ import {
 } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
-import { WidgetEditorService } from '../../workbench/lowcode/page/widget-editor/widget-editor.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 
 @Component({
   selector: 'formly-comp-wrapper',

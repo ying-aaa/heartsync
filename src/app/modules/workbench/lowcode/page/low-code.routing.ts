@@ -1,9 +1,9 @@
 import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
 import { FormlyModule } from '@ngx-formly/core';
+import { FolmlyFieldsetWrapperComponent } from '@src/app/modules/formly/folmly-field-fieldset/folmly-fieldset-wrapper.component';
+import { FormlyColWrapperComponent } from '@src/app/modules/formly/formly-col-wrapper/formly-col-wrapper.component';
 import { FormlyCompWrapperComponent } from '@src/app/modules/formly/formly-comp-wrapper/formly-comp-wrapper.component';
-import { FormFieldCol } from '@src/app/modules/formly/formly-field-col';
-import { FormFieldGroup } from '@src/app/modules/formly/formly-field-group';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 import { IRouterUse } from '@src/app/shared/models/route.model';
 export function addonsExtension(field: IEditorFormlyField) {
@@ -36,7 +36,7 @@ export default [
       icon: 'lens_blur',
     },
     loadComponent: () =>
-      import('./dashboard-editor/dashboard-editor.component').then(
+      import('./dashboard/dashboard-editor.component').then(
         (m) => m.DashboardEditorComponent,
       ),
   },
@@ -52,12 +52,13 @@ export default [
     providers: [
       importProvidersFrom(
         FormlyModule.forRoot({
+          types: [{ name: 'col', component: FormlyColWrapperComponent }],
           validationMessages: [
             { name: 'required', message: '这个字段是必填的！' },
           ],
           wrappers: [
-            { name: 'group', component: FormFieldGroup },
-            { name: 'col', component: FormFieldCol },
+            { name: 'fieldset', component: FolmlyFieldsetWrapperComponent },
+            { name: 'col', component: FormlyColWrapperComponent },
             { name: 'editor', component: FormlyCompWrapperComponent },
           ],
           extensions: [
@@ -70,7 +71,7 @@ export default [
       ),
     ],
     loadComponent: () =>
-      import('./widget-editor/widget-editor.component').then(
+      import('./widget/widget-editor.component').then(
         (m) => m.WidgetEditorComponent,
       ),
   },

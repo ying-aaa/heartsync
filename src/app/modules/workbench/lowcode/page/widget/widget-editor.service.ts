@@ -42,11 +42,11 @@ export class WidgetEditorService {
       _design: true,
       fieldGroup: [
         {
-          key: 'group',
-          type: 'group',
+          key: 'fieldset',
+          type: 'fieldset',
           label: '组',
           fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-          wrappers: ['group'], // 使用 group 包装器
+          wrappers: ['fieldset'], // 使用 fieldset 包装器
           props: {
             label: '身份信息',
           },
@@ -86,10 +86,10 @@ export class WidgetEditorService {
               wrappers: ['col'], // 使用 col 包装器
               fieldGroup: [
                 {
-                  key: 'group',
-                  type: 'group',
+                  key: 'fieldset',
+                  type: 'fieldset',
                   fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-                  wrappers: ['group'], // 使用 group 包装器
+                  wrappers: ['fieldset'], // 使用 fieldset 包装器
                   props: {
                     label: '身份信息',
                   },

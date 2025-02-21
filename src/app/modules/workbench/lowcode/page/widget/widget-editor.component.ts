@@ -13,7 +13,9 @@ import { CommonModule } from '@angular/common';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { WidgetEditorService } from './widget-editor.service';
-import { WidgetToobarComponent } from './widget-toobar/widget-toobar.component';
+import { WorkspaceToobarComponent } from './workspace-viewport/workspace-toobar/workspace-toobar.component';
+import { WorkspaceContentComponent } from './workspace-viewport/workspace-content/workspace-content.component';
+import { WorkspaceViewportComponent } from './workspace-viewport/workspace-viewport.component';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -32,7 +34,7 @@ import { WidgetToobarComponent } from './widget-toobar/widget-toobar.component';
     ReactiveFormsModule,
     FormlyMaterialModule,
     FormlyModule,
-    WidgetToobarComponent,
+    WorkspaceViewportComponent,
   ],
 })
 export class WidgetEditorComponent implements OnInit {

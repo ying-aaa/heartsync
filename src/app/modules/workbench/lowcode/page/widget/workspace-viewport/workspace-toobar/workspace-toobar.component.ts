@@ -4,12 +4,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'hs-widget-toobar',
-  templateUrl: './widget-toobar.component.html',
-  styleUrls: ['./widget-toobar.component.css'],
+  selector: 'hs-workspace-toobar',
+  templateUrl: './workspace-toobar.component.html',
+  styleUrls: ['./workspace-toobar.component.css'],
   imports: [MatButtonModule, MatIconModule],
 })
-export class WidgetToobarComponent implements OnInit {
+export class WorkspaceToobarComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
