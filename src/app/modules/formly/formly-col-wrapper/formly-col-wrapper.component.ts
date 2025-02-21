@@ -31,10 +31,31 @@ import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/
   imports: [CdkDropList, CdkDrag, FormlyModule, CdkDragPlaceholder],
 })
 export class FormlyColWrapperComponent extends FieldWrapper<IEditorFormlyField> {
+  @ViewChild(CdkDropList) dropList!: CdkDropList;
+
   IFieldType = IFieldType;
   constructor(public widgetEditorService: WidgetEditorService) {
     super();
   }
+
+  @HostListener('mousemove', ['$event'])
+  onMouseMove(event: MouseEvent): void {
+    this.widgetEditorService.mousePosition.x = event.clientX;
+    this.widgetEditorService.mousePosition.y = event.clientY;
+  }
+
+  canEnter = (drag: CdkDrag) => {
+    const isInDropContainer = this._isMouseInElement(
+      drag.dropContainer.element.nativeElement,
+    );
+    const index = this.widgetEditorService
+      .getConnectedTo(this.IFieldType.COL)
+      .indexOf(this.dropList.id);
+    const dropContainerIndex = this.widgetEditorService
+      .getConnectedTo(this.IFieldType.COL)
+      .indexOf(drag.dropContainer.id);
+    return !(isInDropContainer && dropContainerIndex < index);
+  };
 
   cdkDropListDropped(event: CdkDragDrop<IEditorFormlyField[]> | any) {
     const currentParent: IEditorFormlyField = event.previousContainer.data;
@@ -53,5 +74,13 @@ export class FormlyColWrapperComponent extends FieldWrapper<IEditorFormlyField> 
         event.currentIndex,
       );
     }
+  }
+
+  private _isMouseInElement(droplistElement: HTMLElement): boolean {
+    const rect: DOMRect = droplistElement.getBoundingClientRect();
+    const { x, y } = this.widgetEditorService.mousePosition;
+    const isInWidth = x >= rect.left && x <= rect.right;
+    const isInHeight = y >= rect.top && y <= rect.bottom;
+    return isInWidth && isInHeight;
   }
 }

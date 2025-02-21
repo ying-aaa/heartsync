@@ -18,6 +18,8 @@ export class WidgetEditorService {
   // 是否编辑模式
   isEditMode = true;
 
+  mousePosition: { x: number; y: number } = { x: 0, y: 0 };
+
   // 当前是否在拖拽中
   dragStart = false;
 

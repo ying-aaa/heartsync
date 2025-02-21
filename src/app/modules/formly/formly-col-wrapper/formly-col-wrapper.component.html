@@ -5,6 +5,7 @@
   [cdkDropListData]="field.fieldGroup"
   [cdkDropListConnectedTo]="widgetEditorService.getConnectedTo(IFieldType.COL)"
   (cdkDropListDropped)="cdkDropListDropped($event)"
+  [cdkDropListEnterPredicate]="canEnter"
 >
   @for (f of field.fieldGroup; track $index) {
   <formly-field
