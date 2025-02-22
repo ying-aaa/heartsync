@@ -12,14 +12,13 @@
     <div class="line-height-32px font-bold">
       {{ group.props.label }}
     </div>
+    @let connectedTo = widgetEditorService.getConnectedTo(IFieldType.COLUMN);
     <div
       class="grid cols-3 gap-10px"
       cdkDropList
-      cdkDropListSortingDisabled
       [cdkDropListData]="group.fieldGroup"
-      [cdkDropListConnectedTo]="
-        widgetEditorService.getConnectedTo(IFieldType.COLUMN)
-      "
+      [cdkDropListConnectedTo]="connectedTo"
+      [cdkDropListDisabled]="!connectedTo.length"
       [id]="activeValue() + '_preset_key_' + $index"
     >
       @for (preset of group.fieldGroup; track $index) {

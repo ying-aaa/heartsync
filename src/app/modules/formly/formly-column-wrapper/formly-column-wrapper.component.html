@@ -1,11 +1,10 @@
+@let connectedTo = widgetEditorService.getConnectedTo(IFieldType.COLUMN);
 <div
   class="flex flex-col min-h-48px"
   [id]="field.fieldId || 'workspace'"
   cdkDropList
   [cdkDropListData]="field.fieldGroup"
-  [cdkDropListConnectedTo]="
-    widgetEditorService.getConnectedTo(IFieldType.COLUMN)
-  "
+  [cdkDropListConnectedTo]="connectedTo"
   (cdkDropListDropped)="cdkDropListDropped($event)"
   [cdkDropListEnterPredicate]="canEnter"
   [cdkDropListDisabled]="!widgetEditorService.isEditMode"
