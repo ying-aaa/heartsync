@@ -4,7 +4,9 @@
   <div>
     <button
       mat-button
-      (click)="widgetEditorService.isEditMode = !widgetEditorService.isEditMode"
+      (click)="
+        widgetEditorService.isEditMode.set(!widgetEditorService.isEditMode())
+      "
     >
       <mat-icon matChipAvatar>visibility</mat-icon> 预览
     </button>

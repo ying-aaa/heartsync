@@ -49,6 +49,7 @@ export class FormlyColumnWrapperComponent extends FieldType<IEditorFormlyField> 
   };
 
   cdkDropListDropped(event: CdkDragDrop<IEditorFormlyField[]> | any) {
+    if (!event.item.data) return;
     const { action, field } = event.item.data;
     const fromParent: IEditorFormlyField[] = event.previousContainer.data;
     const toParent: IEditorFormlyField[] = event.container.data;

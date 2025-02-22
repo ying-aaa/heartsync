@@ -15,16 +15,16 @@ import {
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 
 @Component({
-  selector: 'formly-fieldset-wrapper',
-  templateUrl: './formly-fieldset-wrapper.component.html',
-  styleUrls: ['./formly-fieldset-wrapper.component.less'],
+  selector: 'formly-grid-wrapper',
+  templateUrl: './formly-grid-wrapper.component.html',
+  styleUrls: ['./formly-grid-wrapper.component.less'],
   imports: [
     // CdkDragPlaceholder,
     // CdkDropList, CdkDrag,
     FormlyModule,
   ],
 })
-export class FormlyFieldsetWrapperComponent extends FieldType<IEditorFormlyField> {
+export class FormlyGridWrapperComponent extends FieldType<IEditorFormlyField> {
   IFieldType = IFieldType;
 
   constructor(public widgetEditorService: WidgetEditorService) {

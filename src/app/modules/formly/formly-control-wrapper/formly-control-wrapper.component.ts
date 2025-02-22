@@ -26,7 +26,7 @@ export class FormlyContorlWrapperComponent
   implements OnInit, OnDestroy
 {
   @HostBinding('class.edit-mode') get isEditMode() {
-    return this.widgetEditorService.isEditMode;
+    return this.widgetEditorService.isEditMode();
   }
   @HostBinding('class.active') get isActiveField(): boolean {
     return this.isEditMode && this._isActiveField;

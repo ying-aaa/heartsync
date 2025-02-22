@@ -1,0 +1,12 @@
+<div class="wh-full relative example-boundary">
+  @for (f of field.fieldGroup; track $index) {
+  <div
+    [style]="f.props!['style']"
+    cdkDragBoundary=".example-boundary"
+    cdkDrag
+  >
+    <formly-field [field]="f"> </formly-field>
+  </div>
+
+  }
+</div>

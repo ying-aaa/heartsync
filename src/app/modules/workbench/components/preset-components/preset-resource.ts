@@ -18,7 +18,7 @@ export const presetResource: IEditorFormlyField[] = [
         fieldGroup: [
           {
             key: 'grid',
-            type: 'fieldset',
+            type: 'grid',
             props: {
               label: '栅格',
               icon: 'apps',
@@ -27,6 +27,29 @@ export const presetResource: IEditorFormlyField[] = [
               { key: 'column', type: 'column', fieldGroup: [] },
               { key: 'column', type: 'column', fieldGroup: [] },
               { key: 'column', type: 'column', fieldGroup: [] },
+            ],
+          },
+          {
+            key: 'fieldset',
+            type: 'fieldset',
+            props: {
+              label: '群组',
+              icon: '',
+            },
+            fieldGroup: [
+              {
+                key: 'grid',
+                type: 'grid',
+                props: {
+                  label: '栅格',
+                  icon: 'apps',
+                },
+                fieldGroup: [
+                  { key: 'column', type: 'column', fieldGroup: [] },
+                  { key: 'column', type: 'column', fieldGroup: [] },
+                  { key: 'column', type: 'column', fieldGroup: [] },
+                ],
+              },
             ],
           },
           {
@@ -44,6 +67,53 @@ export const presetResource: IEditorFormlyField[] = [
               label: '画布',
               icon: 'select_all',
             },
+            fieldGroup: [
+              {
+                key: 'input',
+                type: 'input',
+                props: {
+                  label: '第一个文本',
+                  style: {
+                    position: 'absolute',
+                    left: '0',
+                    top: '0',
+                    width: '300px',
+                    height: '50px',
+                    transform: 'translateX(100px) translateY(50px)',
+                  },
+                },
+              },
+              {
+                key: 'input',
+                type: 'input',
+                props: {
+                  label: '第二个文本',
+                  style: {
+                    position: 'absolute',
+                    left: '0',
+                    top: '0',
+                    width: '150px',
+                    height: '50px',
+                    transform: 'translateX(300px) translateY(150px)',
+                  },
+                },
+              },
+              {
+                key: 'input',
+                type: 'input',
+                props: {
+                  label: '第三个文本',
+                  style: {
+                    position: 'absolute',
+                    left: '0',
+                    top: '0',
+                    width: '200px',
+                    height: '50px',
+                    transform: 'translateX(520px) translateY(200px)',
+                  },
+                },
+              },
+            ],
           },
         ],
       },
@@ -53,28 +123,178 @@ export const presetResource: IEditorFormlyField[] = [
         },
         fieldGroup: [
           {
-            key: 'tabs',
-            type: 'tabs',
+            key: 'mat-tabs',
+            type: 'mat-tabs',
             props: {
               label: '页签',
               icon: 'tab',
             },
+            fieldGroup: [
+              {
+                key: 'column',
+                type: 'column',
+                props: {
+                  label: '第一个',
+                },
+                fieldGroup: [
+                  {
+                    key: 'input',
+                    type: 'input',
+                    props: {
+                      label: '第一个文本',
+                    },
+                  },
+                ],
+              },
+              {
+                key: 'column',
+                type: 'column',
+                props: {
+                  label: '第二个',
+                },
+                fieldGroup: [
+                  {
+                    key: 'input',
+                    type: 'input',
+                    props: {
+                      label: '第二个文本',
+                    },
+                  },
+                ],
+              },
+              {
+                key: 'column',
+                type: 'column',
+                props: {
+                  label: '第三个',
+                },
+                fieldGroup: [
+                  {
+                    key: 'input',
+                    type: 'input',
+                    props: {
+                      label: '第三个文本',
+                    },
+                  },
+                ],
+              },
+            ],
           },
           {
-            key: 'accordion',
-            type: 'accordion',
+            key: 'mat-accordion',
+            type: 'mat-accordion',
             props: {
               label: '手风琴',
               icon: 'view_day',
             },
+            fieldGroup: [
+              {
+                key: 'column',
+                type: 'column',
+                props: {
+                  label: '第一个',
+                },
+                fieldGroup: [
+                  {
+                    key: 'input',
+                    type: 'input',
+                    props: {
+                      label: '第一个文本',
+                    },
+                  },
+                ],
+              },
+              {
+                key: 'column',
+                type: 'column',
+                props: {
+                  label: '第二个',
+                },
+                fieldGroup: [
+                  {
+                    key: 'input',
+                    type: 'input',
+                    props: {
+                      label: '第二个文本',
+                    },
+                  },
+                ],
+              },
+              {
+                key: 'column',
+                type: 'column',
+                props: {
+                  label: '第三个',
+                },
+                fieldGroup: [
+                  {
+                    key: 'input',
+                    type: 'input',
+                    props: {
+                      label: '第三个文本',
+                    },
+                  },
+                ],
+              },
+            ],
           },
           {
-            key: 'stepper',
-            type: 'stepper',
+            key: 'mat-stepper',
+            type: 'mat-stepper',
             props: {
               label: '步进器',
               icon: 'tab_unselected',
             },
+            fieldGroup: [
+              {
+                key: 'column',
+                type: 'column',
+                props: {
+                  label: '第一个',
+                },
+                fieldGroup: [
+                  {
+                    key: 'input',
+                    type: 'input',
+                    props: {
+                      label: '第一个文本',
+                    },
+                  },
+                ],
+              },
+              {
+                key: 'column',
+                type: 'column',
+                props: {
+                  label: '第二个',
+                },
+                fieldGroup: [
+                  {
+                    key: 'input',
+                    type: 'input',
+                    props: {
+                      label: '第二个文本',
+                    },
+                  },
+                ],
+              },
+              {
+                key: 'column',
+                type: 'column',
+                props: {
+                  label: '第三个',
+                },
+                fieldGroup: [
+                  {
+                    key: 'input',
+                    type: 'input',
+                    props: {
+                      label: '第三个文本',
+                    },
+                  },
+                ],
+              },
+            ],
           },
         ],
       },

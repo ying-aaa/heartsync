@@ -1,6 +1,6 @@
-<fieldset>
-  <legend>{{ props.label }}</legend>
-  <!-- 
+<!-- <fieldset>
+  <legend>{{ props.label }}</legend> -->
+<!-- 
     cdkDropListOrientation="horizontal"
     cdkDropListGroup
     cdkDropList
@@ -11,31 +11,31 @@
     "
     (cdkDropListDropped)="cdkDropListDropped($event)"
   -->
-  <div
-    class="cdk-group-list grid"
-    style="grid-template-columns: repeat(auto-fit, minmax(0, 1fr))"
-    [id]="field.fieldId || ''"
-  >
-    <!-- 
+<div
+  class="grid"
+  style="grid-template-columns: repeat(auto-fit, minmax(0, 1fr))"
+>
+  <!-- 
       cdkDrag
       [cdkDragData]="f"
       (cdkDragStarted)="widgetEditorService.dragStart = true"
       (cdkDragReleased)="widgetEditorService.dragStart = false"
   -->
-    @for (f of field.fieldGroup; track $index) {
-    <formly-field [field]="f">
-      <div
-        class="position-preview w-full border-2px border-dashed"
-        *cdkDragPlaceholder
-      ></div>
-    </formly-field>
-    }
-    <!-- @empty {
+  @for (f of field.fieldGroup; track $index) {
+  <formly-field [field]="f">
+    <div
+      class="position-preview w-full border-2px border-dashed"
+      *cdkDragPlaceholder
+    ></div>
+  </formly-field>
+  }
+  <!-- @empty {
     <div
       class="text-#a7b1bd border-1px border-solid text-14px border-#ccc min-h-48px flex-center min-w-48px bg-#f1f1f1"
     >
       拖拽组件到这里
     </div>
     } -->
-  </div>
-</fieldset>
+  <!-- </div>
+</fieldset> -->
+</div>

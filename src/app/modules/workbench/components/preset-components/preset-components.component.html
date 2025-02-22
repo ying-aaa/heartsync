@@ -16,6 +16,7 @@
     <div
       class="grid cols-3 gap-10px"
       cdkDropList
+      cdkDropListSortingDisabled
       [cdkDropListData]="group.fieldGroup"
       [cdkDropListConnectedTo]="connectedTo"
       [cdkDropListDisabled]="!connectedTo.length"

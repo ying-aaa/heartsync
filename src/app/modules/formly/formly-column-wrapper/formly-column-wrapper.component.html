@@ -7,7 +7,7 @@
   [cdkDropListConnectedTo]="connectedTo"
   (cdkDropListDropped)="cdkDropListDropped($event)"
   [cdkDropListEnterPredicate]="canEnter"
-  [cdkDropListDisabled]="!widgetEditorService.isEditMode"
+  [cdkDropListDisabled]="!widgetEditorService.isEditMode()"
 >
   @for (f of field.fieldGroup; track $index) {
   <formly-field

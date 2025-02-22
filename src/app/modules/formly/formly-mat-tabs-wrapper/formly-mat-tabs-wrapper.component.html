@@ -1,0 +1,15 @@
+<mat-tab-group
+  mat-stretch-tabs="false"
+  mat-align-tabs="start"
+>
+  @for (f of field.fieldGroup; track $index) {
+  <mat-tab [label]="f.props?.label!">
+    <formly-field [field]="f">
+      <div
+        class="position-preview w-full border-2px border-dashed"
+        *cdkDragPlaceholder
+      ></div>
+    </formly-field>
+  </mat-tab>
+  }
+</mat-tab-group>

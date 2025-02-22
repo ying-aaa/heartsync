@@ -19,7 +19,7 @@ export class WidgetEditorService {
   HS_DEFAULT_ID = 'workspace';
 
   // 是否编辑模式
-  isEditMode = true;
+  isEditMode = signal(true);
 
   mousePosition: { x: number; y: number } = { x: 0, y: 0 };
 
@@ -37,7 +37,6 @@ export class WidgetEditorService {
   }
 
   fields = signal<IEditorFormlyField[]>([]);
-
   formGroup = new FormGroup({});
   model = {};
   options = {};
@@ -52,7 +51,7 @@ export class WidgetEditorService {
     };
 
     // @ts-ignore
-    return this.isEditMode
+    return this.isEditMode()
       ? findSameField(this.fields(), options)[type]
       : options;
   }
@@ -81,7 +80,8 @@ export class WidgetEditorService {
     field.fieldId = generateUUID(`${field.type}_key_`);
     if (field.fieldGroup) {
       field.fieldGroup.forEach(
-        (field) => (field.fieldId = generateUUID(`${field.type}_key_`)),
+        // (field) => (field.fieldId = generateUUID(`${field.type}_key_`)),
+        addFieldId,
       );
     }
 
@@ -160,11 +160,11 @@ function flatField(field: IEditorFormlyField[]) {
   }, [] as IEditorFormlyField[]);
 }
 
-// function addFieldId(field: IEditorFormlyField) {
-//   if (!field.fieldId) {
-//     field.fieldId = generateUUID(`${field.type}_key_`);
-//   }
-//   if (field.fieldGroup) {
-//     field.fieldGroup.forEach(addFieldId);
-//   }
-// }
+function addFieldId(field: IEditorFormlyField) {
+  if (!field.fieldId) {
+    field.fieldId = generateUUID(`${field.type}_key_`);
+  }
+  if (field.fieldGroup) {
+    field.fieldGroup.forEach(addFieldId);
+  }
+}
