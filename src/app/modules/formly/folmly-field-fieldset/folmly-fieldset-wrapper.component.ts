@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 // panel-wrapper.component.ts
-import // CdkDrag,
-// CdkDragDrop,
-// CdkDragPlaceholder,
-// CdkDropList,
-// CdkDropListGroup,
-'@angular/cdk/drag-drop';
-import { FieldType, FieldWrapper, FormlyModule } from '@ngx-formly/core';
+// import {
+//   CdkDrag,
+//   CdkDragDrop,
+//   CdkDragPlaceholder,
+//   CdkDropList,
+//   CdkDropListGroup,
+// } from '@angular/cdk/drag-drop';
+import { FieldType, FormlyModule } from '@ngx-formly/core';
 import {
   IEditorFormlyField,
   IFieldType,
