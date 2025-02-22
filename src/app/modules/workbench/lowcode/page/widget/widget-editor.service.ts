@@ -73,7 +73,17 @@ export class WidgetEditorService {
     toParentFieldId: string,
     toIndex: number,
   ) {
-    field.fieldId = generateUUID(`${field.type}_key_`);
+    field = deepClone(field);
+
+    if (!field.fieldId) {
+      field.fieldId = generateUUID(`${field.type}_key_`);
+    }
+    if (field.fieldGroup) {
+      field.fieldGroup.forEach(
+        (field) => (field.fieldId = generateUUID(`${field.type}_key_`)),
+      );
+    }
+
     this.fields.update((fields) => {
       fields = deepClone(fields);
       const fieldLocationArr = getRecursivePosition<IEditorFormlyField>(
@@ -146,3 +156,12 @@ function flatField(field: IEditorFormlyField[]) {
     return acc;
   }, [] as IEditorFormlyField[]);
 }
+
+// function addFieldId(field: IEditorFormlyField) {
+//   if (!field.fieldId) {
+//     field.fieldId = generateUUID(`${field.type}_key_`);
+//   }
+//   if (field.fieldGroup) {
+//     field.fieldGroup.forEach(addFieldId);
+//   }
+// }

@@ -63,6 +63,7 @@ export function getRecursivePosition<T>(
   value: any;
 } | null {
   const [childrenName, diffName] = attributes;
+  console.log('%c Line:67 🍯', 'color:#6ec1c2', origin, value);
   for (let i = 0; i < origin.length; i++) {
     let offset: number[] = [...existingOffset, i];
     if (origin[i][diffName] == value) {

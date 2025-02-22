@@ -1,6 +1,7 @@
 import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
 import { FormlyModule } from '@ngx-formly/core';
+import { generateUUID } from '@src/app/core/utils';
 import { FolmlyFieldsetWrapperComponent } from '@src/app/modules/formly/folmly-field-fieldset/folmly-fieldset-wrapper.component';
 import { FormlyColumnWrapperComponent } from '@src/app/modules/formly/formly-column-wrapper/formly-column-wrapper.component';
 import { FormlyContorlWrapperComponent } from '@src/app/modules/formly/formly-control-wrapper/formly-control-wrapper.component';
@@ -14,10 +15,11 @@ export function addonsExtension(field: IEditorFormlyField) {
     field.type = IFieldType.COLUMN;
     return;
   }
+
   //  || field.type === IFieldType.COLUMN
-  if (field._design) {
-    return;
-  }
+  // if (field._design) {
+  //   return;
+  // }
 
   if (field.wrappers) {
     if (

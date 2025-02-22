@@ -18,11 +18,16 @@ export const presetResource: IEditorFormlyField[] = [
         fieldGroup: [
           {
             key: 'grid',
-            type: 'grid',
+            type: 'fieldset',
             props: {
               label: '栅格',
               icon: 'apps',
             },
+            fieldGroup: [
+              { key: 'column', type: 'column', fieldGroup: [] },
+              { key: 'column', type: 'column', fieldGroup: [] },
+              { key: 'column', type: 'column', fieldGroup: [] },
+            ],
           },
           {
             key: 'flex',
