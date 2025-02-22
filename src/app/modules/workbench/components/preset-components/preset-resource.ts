@@ -175,6 +175,12 @@ export const presetResource: IEditorFormlyField[] = [
             type: 'radio',
             props: {
               label: '单选',
+              options: [
+                { value: 1, label: 'Option 1' },
+                { value: 2, label: 'Option 2' },
+                { value: 3, label: 'Option 3' },
+                { value: 4, label: 'Option 4', disabled: true },
+              ],
             },
           },
           {
@@ -185,24 +191,36 @@ export const presetResource: IEditorFormlyField[] = [
             },
           },
           {
-            key: 'switch',
-            type: 'switch',
+            key: 'toggle',
+            type: 'toggle',
             props: {
               label: '开关',
             },
           },
           {
-            key: 'dropdown',
+            key: 'select',
             type: 'select',
             props: {
               label: '下拉单选',
+              options: [
+                { value: 1, label: 'Option 1' },
+                { value: 2, label: 'Option 2' },
+                { value: 3, label: 'Option 3' },
+                { value: 4, label: 'Option 4', disabled: true },
+              ],
             },
           },
           {
-            key: 'dropdownMulti',
-            type: 'multiselect',
+            key: 'select_multi',
+            type: 'select_multi',
             props: {
               label: '下拉多选',
+              options: [
+                { value: 1, label: 'Option 1' },
+                { value: 2, label: 'Option 2' },
+                { value: 3, label: 'Option 3' },
+                { value: 4, label: 'Option 4', disabled: true },
+              ],
             },
           },
           {
@@ -213,21 +231,21 @@ export const presetResource: IEditorFormlyField[] = [
             },
           },
           {
-            key: 'progress',
-            type: 'progress',
+            key: 'slider',
+            type: 'slider',
             props: {
-              label: '进度条',
+              label: '滑块',
             },
           },
           {
-            key: 'treeSelect',
+            key: 'tree-select',
             type: 'tree-select',
             props: {
               label: '下拉树形',
             },
           },
           {
-            key: 'popupSelect',
+            key: 'popup-select',
             type: 'popup-select',
             props: {
               label: '弹窗选择',
