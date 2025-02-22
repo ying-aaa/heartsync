@@ -4,7 +4,6 @@ export enum IFieldType {
   GROUP = 'group',
   ROW = 'row',
   COLUMN = 'column',
-  FIELDSET = 'fielset',
 }
 
 export enum ICdkDrapActionType {

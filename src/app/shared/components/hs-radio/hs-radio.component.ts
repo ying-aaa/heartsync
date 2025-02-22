@@ -9,7 +9,7 @@ import { MatRippleModule } from '@angular/material/core';
   imports: [MatRippleModule],
 })
 export class HsRadioComponent implements OnInit {
-  activeValue = model<string>();
+  ngModel = model<string>();
 
   configs = input.required<IRadioConfig[] | []>();
   rows = input<number>(1);

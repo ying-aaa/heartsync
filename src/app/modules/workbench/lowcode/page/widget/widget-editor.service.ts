@@ -19,7 +19,7 @@ export class WidgetEditorService {
   HS_DEFAULT_ID = 'workspace';
 
   // 是否编辑模式
-  isEditMode = true;
+  isEditMode = false;
 
   mousePosition: { x: number; y: number } = { x: 0, y: 0 };
 
@@ -45,13 +45,16 @@ export class WidgetEditorService {
   constructor() {}
 
   getConnectedTo(type: IFieldType) {
-    const options = {
+    const options: any = {
       group: [],
       column: [this.HS_DEFAULT_ID],
       row: [],
     };
 
-    return findSameField(this.fields(), options)[type];
+    // @ts-ignore
+    return this.isEditMode
+      ? findSameField(this.fields(), options)[type]
+      : options;
   }
 
   getSpecifyFields(fieldId: string) {
@@ -75,9 +78,7 @@ export class WidgetEditorService {
   ) {
     field = deepClone(field);
 
-    if (!field.fieldId) {
-      field.fieldId = generateUUID(`${field.type}_key_`);
-    }
+    field.fieldId = generateUUID(`${field.type}_key_`);
     if (field.fieldGroup) {
       field.fieldGroup.forEach(
         (field) => (field.fieldId = generateUUID(`${field.type}_key_`)),
@@ -107,6 +108,8 @@ export class WidgetEditorService {
       }
       return fields;
     });
+
+    this.selectField(field);
   }
 
   moveField(

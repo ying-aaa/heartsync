@@ -6,8 +6,8 @@
   <div
     matRipple
     matRippleColor="#ffffff30"
-    [class.active-style]="activeValue() === item.value"
-    (click)="activeValue.set(item.value)"
+    [class.active-style]="ngModel() === item.value"
+    (click)="ngModel.set(item.value)"
     class="text-center h-32px line-height-32px cursor-pointer hover:bg-#2F90B930 rounded-8px"
   >
     {{ item.label }}

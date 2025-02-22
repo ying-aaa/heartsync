@@ -29,10 +29,11 @@ export class FormlyContorlWrapperComponent
     return this.widgetEditorService.isEditMode;
   }
   @HostBinding('class.active') get isActiveField(): boolean {
-    return this._isActiveField;
+    return this.isEditMode && this._isActiveField;
   }
   @HostBinding('class.hover') get isHoverField(): boolean {
     return (
+      this.isEditMode &&
       this.isMouseInside &&
       !this._isActiveField &&
       !this.widgetEditorService.dragStart

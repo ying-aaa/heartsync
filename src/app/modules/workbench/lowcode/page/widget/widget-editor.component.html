@@ -1,18 +1,6 @@
 <div class="flex w-full h-full">
   <aside class="h-full w-284px pt-12px px-16px pb-24px">
-    <div class="w-full overflow-hidden">
-      <hs-radio
-        [configs]="configTypes"
-        [rows]="2"
-        [(activeValue)]="activeValue"
-      ></hs-radio>
-    </div>
-
-    <div class="mt-16px"></div>
-
-    <div class="pb-10px">
-      <hs-fancytree></hs-fancytree>
-    </div>
+    <hs-widget-folder></hs-widget-folder>
   </aside>
   <mat-divider
     [vertical]="true"
