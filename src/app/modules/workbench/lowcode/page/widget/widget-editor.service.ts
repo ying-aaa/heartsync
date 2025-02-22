@@ -19,7 +19,7 @@ export class WidgetEditorService {
   HS_DEFAULT_ID = 'workspace';
 
   // 是否编辑模式
-  isEditMode = false;
+  isEditMode = true;
 
   mousePosition: { x: number; y: number } = { x: 0, y: 0 };
 

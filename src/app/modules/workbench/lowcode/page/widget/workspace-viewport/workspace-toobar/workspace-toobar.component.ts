@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 
 @Component({
   selector: 'hs-workspace-toobar',
@@ -10,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatButtonModule, MatIconModule],
 })
 export class WorkspaceToobarComponent implements OnInit {
-  constructor() {}
+  constructor(public widgetEditorService: WidgetEditorService) {}
 
   ngOnInit() {}
 }

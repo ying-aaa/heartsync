@@ -2,7 +2,10 @@
   <div></div>
 
   <div>
-    <button mat-button>
+    <button
+      mat-button
+      (click)="widgetEditorService.isEditMode = !widgetEditorService.isEditMode"
+    >
       <mat-icon matChipAvatar>visibility</mat-icon> 预览
     </button>
     <button
