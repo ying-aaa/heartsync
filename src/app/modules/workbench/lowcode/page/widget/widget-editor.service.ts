@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
-import { FormlyFieldConfig } from '@ngx-formly/core';
-import { generateUUID } from '@src/app/core/utils';
+import { Injectable, signal } from '@angular/core';
+import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Observable, Subject } from 'rxjs';
+import { FormGroup } from '@angular/forms';
+import {
+  deepClone,
+  generateUUID,
+  getRecursivePosition,
+} from '@src/app/core/utils';
 import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/editor.model';
-import { presetResource } from '../../../components/preset-components/preset-resource';
-import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -33,91 +36,11 @@ export class WidgetEditorService {
     return this._fieldSelected$.asObservable();
   }
 
-  fields: IEditorFormlyField[] = [
-    {
-      key: 'fieldset',
-      type: 'fieldset',
-      label: '组',
-      fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-      // wrappers: ['fieldset'], // 使用 fieldset 包装器
-      props: {
-        label: '身份信息',
-      },
-      fieldGroup: [
-        {
-          key: 'col1',
-          type: 'column',
-          label: '列',
-          fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
-          fieldGroup: [
-            {
-              key: 'fieldset',
-              type: 'fieldset',
-              fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-              props: {
-                label: '身份信息',
-              },
-              fieldGroup: [
-                {
-                  key: 'col1',
-                  type: 'column',
-                  fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
-                  fieldGroup: [
-                    {
-                      key: 'input1',
-                      type: 'input',
-                      fieldId: generateUUID(`input_key_`),
-                      templateOptions: { label: 'Input 1' },
-                    },
-                  ],
-                  props: {},
-                },
-                {
-                  key: 'col2',
-                  type: 'column',
-                  fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
-                  fieldGroup: [
-                    {
-                      key: 'input3',
-                      type: 'input',
-                      fieldId: generateUUID(`input_key_`),
-                      templateOptions: { label: 'Input 3' },
-                    },
-                  ],
-                  props: {},
-                },
-              ],
-            },
-          ],
-          props: {},
-        },
+  fields = signal<IEditorFormlyField[]>([]);
 
-        {
-          key: 'col2',
-          type: 'column',
-          fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
-          fieldGroup: [
-            {
-              key: 'input3',
-              type: 'input',
-              templateOptions: { label: 'Input 3' },
-              fieldId: generateUUID(`input_key_`),
-            },
-            {
-              key: 'input4',
-              type: 'input',
-              templateOptions: { label: 'Input 4' },
-              fieldId: generateUUID(`input_key_`),
-            },
-          ],
-          props: {},
-        },
-      ],
-    },
-  ];
-
-  model = [];
-  options = [];
+  formGroup = new FormGroup({});
+  model = {};
+  options = {};
 
   constructor() {}
 
@@ -128,7 +51,11 @@ export class WidgetEditorService {
       row: [],
     };
 
-    return findSameField(this.fields, options)[type];
+    return findSameField(this.fields(), options)[type];
+  }
+
+  getSpecifyFields(fieldId: string) {
+    return flatField(this.fields()).find((item) => item.fieldId === fieldId);
   }
 
   isActiveField(fieldId: string) {
@@ -141,17 +68,52 @@ export class WidgetEditorService {
     this._fieldSelected$.next(field);
   }
 
-  moveField(siblings: any, fromIndex: number, toIndex: number) {
-    moveItemInArray(siblings, fromIndex, toIndex);
+  addField(
+    field: IEditorFormlyField,
+    toParentFieldId: string,
+    toIndex: number,
+  ) {
+    field.fieldId = generateUUID(`${field.type}_key_`);
+    this.fields.update((fields) => {
+      fields = deepClone(fields);
+      const fieldLocationArr = getRecursivePosition<IEditorFormlyField>(
+        this.fields(),
+        toParentFieldId,
+        ['fieldGroup', 'fieldId'],
+      )?.offset;
+      if (fieldLocationArr) {
+        // 通过堆内存的数据引用能力进行查询和操作
+        const fieldLocationStr: string = fieldLocationArr.reduce(
+          (res, ori) => res + `[${ori}].fieldGroup`,
+          'return fields',
+        );
+        const resData = new Function('fields', fieldLocationStr as string)(
+          fields,
+        );
+        resData.splice(toIndex, 0, field);
+        return fields;
+      } else {
+        fields.splice(toIndex, 0, field);
+      }
+      return fields;
+    });
+  }
+
+  moveField(
+    toParent: IEditorFormlyField[],
+    fromIndex: number,
+    toIndex: number,
+  ) {
+    moveItemInArray(toParent, fromIndex, toIndex);
   }
 
   transferField(
-    currentParent: any,
-    targetParent: any,
+    formParent: IEditorFormlyField[],
+    toParent: IEditorFormlyField[],
     formIndex: number,
     toIndex: number,
   ) {
-    transferArrayItem(currentParent, targetParent, formIndex, toIndex);
+    transferArrayItem(formParent, toParent, formIndex, toIndex);
   }
 }
 
@@ -173,4 +135,14 @@ function findSameField(
   }
   // @ts-ignore
   return options;
+}
+
+function flatField(field: IEditorFormlyField[]) {
+  return field.reduce((acc, field) => {
+    acc.push(field);
+    if (field.fieldGroup) {
+      acc.push(...flatField(field.fieldGroup));
+    }
+    return acc;
+  }, [] as IEditorFormlyField[]);
 }

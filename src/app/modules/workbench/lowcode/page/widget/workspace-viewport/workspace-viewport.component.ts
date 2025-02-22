@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { WorkspaceToobarComponent } from './workspace-toobar/workspace-toobar.component';
-import { WorkspaceContentComponent } from './workspace-content/workspace-content.component';
 import { MatDividerModule } from '@angular/material/divider';
-import { FormlyModule } from '@ngx-formly/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { ConfigOption, FORMLY_CONFIG, FormlyModule } from '@ngx-formly/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WidgetEditorService } from '../widget-editor.service';
 
 @Component({
   selector: 'hs-workspace-viewport',
@@ -19,12 +18,12 @@ import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
   ],
 })
 export class WorkspaceViewportComponent implements OnInit {
-  @Input() fields: Array<IEditorFormlyField> = [];
-  formGroup = new FormGroup({});
-  model = {};
-  options = {};
-
-  constructor() {}
+  constructor(
+    public widgetEditorService: WidgetEditorService,
+    @Optional() @Inject(FORMLY_CONFIG) configs: ConfigOption[] = [],
+  ) {
+    console.log(configs);
+  }
 
   ngOnInit() {}
 }

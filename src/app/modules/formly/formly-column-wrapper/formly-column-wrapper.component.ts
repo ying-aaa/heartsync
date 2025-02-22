@@ -4,21 +4,11 @@ import {
   CdkDragDrop,
   CdkDragPlaceholder,
   CdkDropList,
-  CdkDropListGroup,
-  moveItemInArray,
-  transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { CommonModule } from '@angular/common';
+import { Component, HostListener, ViewChild } from '@angular/core';
+import { FieldType, FormlyModule } from '@ngx-formly/core';
 import {
-  Component,
-  HostListener,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FieldType, FieldWrapper, FormlyModule } from '@ngx-formly/core';
-import { FormlyMaterialModule } from '@ngx-formly/material';
-import {
+  ICdkDrapActionType,
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/editor.model';
@@ -59,23 +49,37 @@ export class FormlyColumnWrapperComponent extends FieldType<IEditorFormlyField> 
   };
 
   cdkDropListDropped(event: CdkDragDrop<IEditorFormlyField[]> | any) {
-    const currentParent: IEditorFormlyField = event.previousContainer.data;
-    const targetParent: IEditorFormlyField = event.container.data;
-    if (event.previousContainer === event.container) {
-      this.widgetEditorService.moveField(
-        targetParent,
-        event.previousIndex,
-        event.currentIndex,
-      );
-    } else {
-      this.widgetEditorService.transferField(
-        currentParent,
-        targetParent,
-        event.previousIndex,
-        event.currentIndex,
-      );
+    const { action, field } = event.item.data;
+    const fromParent: IEditorFormlyField[] = event.previousContainer.data;
+    const toParent: IEditorFormlyField[] = event.container.data;
+    const toParentFieldId: string = event.container.id;
+    const { previousIndex: formIndex, currentIndex: toIndex } = event;
+
+    if (action === ICdkDrapActionType.COPY) {
+      this.widgetEditorService.addField(field, toParentFieldId, toIndex);
+    }
+    if (action === ICdkDrapActionType.MOVE) {
+      if (event.previousContainer === event.container) {
+        this.widgetEditorService.moveField(
+          toParent,
+          event.previousIndex,
+          event.currentIndex,
+        );
+      } else {
+        this.widgetEditorService.transferField(
+          fromParent,
+          toParent,
+          formIndex,
+          toIndex,
+        );
+      }
     }
   }
+
+  getDragFieldData = (field: IEditorFormlyField) => ({
+    action: ICdkDrapActionType.MOVE,
+    field,
+  });
 
   private _isMouseInElement(droplistElement: HTMLElement): boolean {
     const rect: DOMRect = droplistElement.getBoundingClientRect();

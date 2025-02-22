@@ -7,10 +7,10 @@
 
   <div class="render-canvar flex-1 p-12px">
     <formly-form
-      [form]="formGroup"
-      [fields]="fields"
-      [model]="model"
-      [options]="options"
+      [form]="widgetEditorService.formGroup"
+      [fields]="widgetEditorService.fields()"
+      [model]="widgetEditorService.model"
+      [options]="widgetEditorService.options"
     ></formly-form>
   </div>
 </content>

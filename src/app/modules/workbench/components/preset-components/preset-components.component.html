@@ -16,7 +16,7 @@
       class="grid cols-3 gap-10px"
       cdkDropList
       cdkDropListSortingDisabled
-      [cdkDropListData]="group"
+      [cdkDropListData]="group.fieldGroup"
       [cdkDropListConnectedTo]="
         widgetEditorService.getConnectedTo(IFieldType.COLUMN)
       "
@@ -25,10 +25,8 @@
       @for (preset of group.fieldGroup; track $index) {
       <div
         class="preset-wrapper border-solid border-1 cursor-pointer hover-border-#2f90b9 border-#2f90b94d items-center flex-1 p-10px flex flex-col gap-5px rounded-8px"
-        matRipple
-        [matRippleColor]="matRippleColor()"
         cdkDrag
-        [cdkDragData]="preset"
+        [cdkDragData]="getDragFieldData(preset)"
         cdkDragPreviewContainer="parent"
         (cdkDragStarted)="onDragStart(preset, group, $event)"
         (cdkDragEnded)="onDragEnd($event)"

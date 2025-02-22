@@ -49,24 +49,33 @@ export function isSameObj(value1: any, value2: any): boolean {
 /** 根据查找并返回最终匹配项
  * @param { Array<any> } origin 需要查找的数据源
  * @param { any } value 对应查找项
+ * @param { [string, string] } 查找的子项属性名称，对比的属性名称
  * @param { Array<number> } existingOffset 位置记录
  * @returns { offset: number[], value: any }  返回结果: 查找到的位置, 查找到的项
  */
 export function getRecursivePosition<T>(
-  origin: Array<any>,
+  origin: any[],
   value: any,
-  existingOffset: Array<number> = [],
+  attributes: [string, string],
+  existingOffset: number[] = [],
 ): {
   offset: number[];
   value: any;
 } | null {
+  const [childrenName, diffName] = attributes;
   for (let i = 0; i < origin.length; i++) {
     let offset: number[] = [...existingOffset, i];
-    if (origin[i].key == value) {
+    if (origin[i][diffName] == value) {
       return { offset, value: origin[i] };
     } else {
-      if (origin[i].children && origin[i].children.length) {
-        const res = getRecursivePosition(origin[i].children, value, offset);
+      const originChildren = origin[i][childrenName];
+      if (originChildren && originChildren.length) {
+        const res = getRecursivePosition(
+          originChildren,
+          value,
+          attributes,
+          offset,
+        );
         if (res) return res;
       }
     }

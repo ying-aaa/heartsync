@@ -7,6 +7,12 @@ export enum IFieldType {
   FIELDSET = 'fielset',
 }
 
+export enum ICdkDrapActionType {
+  COPY = 'copy',
+  MOVE = 'move',
+  DELETE = 'delete',
+}
+
 export interface IEditorFormlyField extends FormlyFieldConfig {
   /**
    * 组件的显示名称

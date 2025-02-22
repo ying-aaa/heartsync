@@ -6,22 +6,18 @@ import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.c
 import { MatRippleModule } from '@angular/material/core';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import {
-  CdkDragDrop,
   CdkDrag,
   CdkDropList,
-  CdkDropListGroup,
-  moveItemInArray,
-  transferArrayItem,
   CdkDragStart,
   CdkDragPlaceholder,
   CdkDragEnd,
 } from '@angular/cdk/drag-drop';
 import { WidgetEditorService } from '../../lowcode/page/widget/widget-editor.service';
 import {
+  ICdkDrapActionType,
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/editor.model';
-import { generateUUID } from '@src/app/core/utils';
 @Component({
   selector: 'hs-preset-components',
   templateUrl: './preset-components.component.html',
@@ -62,12 +58,15 @@ export class PresetComponentsComponent implements OnInit {
       this.activePresetResource = this.presetResource().find(
         (item: IEditorFormlyField) => item.key === this.activeValue(),
       )!.fieldGroup;
-
-      console.log('%c Line:66 🥃', 'color:#ffdd4d', this.activePresetResource);
     });
   }
   matRippleColor = () =>
     this.hsThemeService.getCurrentThemeConfig(['#00000010', '#ffffff10']);
+
+  getDragFieldData = (field: IEditorFormlyField) => ({
+    action: ICdkDrapActionType.COPY,
+    field,
+  });
 
   onDragStart(preset: any, group: any, event: CdkDragStart<any>) {
     const configIndex = this.presetResource().findIndex(

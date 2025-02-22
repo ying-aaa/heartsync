@@ -12,7 +12,7 @@
   @for (f of field.fieldGroup; track $index) {
   <formly-field
     cdkDrag
-    [cdkDragData]="f"
+    [cdkDragData]="getDragFieldData(f)"
     [field]="f"
     (cdkDragStarted)="widgetEditorService.dragStart = true"
     (cdkDragReleased)="widgetEditorService.dragStart = false"

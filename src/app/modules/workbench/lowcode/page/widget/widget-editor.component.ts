@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
@@ -10,13 +10,10 @@ import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.c
 import { IRadioConfig } from '@src/app/shared/models/system.model';
 import { PresetComponentsComponent } from '../../../components/preset-components/preset-components.component';
 import { CommonModule } from '@angular/common';
-import { FormlyConfig, FormlyModule } from '@ngx-formly/core';
+import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { WidgetEditorService } from './widget-editor.service';
-import { WorkspaceToobarComponent } from './workspace-viewport/workspace-toobar/workspace-toobar.component';
-import { WorkspaceContentComponent } from './workspace-viewport/workspace-content/workspace-content.component';
 import { WorkspaceViewportComponent } from './workspace-viewport/workspace-viewport.component';
-import { FormlyColumnWrapperComponent } from '@src/app/modules/formly/formly-column-wrapper/formly-column-wrapper.component';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -39,13 +36,6 @@ import { FormlyColumnWrapperComponent } from '@src/app/modules/formly/formly-col
   ],
 })
 export class WidgetEditorComponent implements OnInit {
-  form = new FormGroup({});
-  model = { email: 'email@gmail.com', email1: '' };
-
-  onSubmit(model: any) {
-    console.log(model, this.form);
-  }
-
   activeValue = signal<string>('form');
 
   fileName = new FormControl('');
@@ -60,10 +50,7 @@ export class WidgetEditorComponent implements OnInit {
     { label: '详情', value: 'detail' },
   ];
 
-  constructor(
-    public widgetEditorService: WidgetEditorService,
-    private formlyConfig: FormlyConfig,
-  ) {}
+  constructor(public widgetEditorService: WidgetEditorService) {}
 
   ngOnInit() {}
 }
