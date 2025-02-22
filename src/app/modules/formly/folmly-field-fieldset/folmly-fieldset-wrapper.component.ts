@@ -7,7 +7,7 @@ import {
   // CdkDropList,
   // CdkDropListGroup,
 } from '@angular/cdk/drag-drop';
-import { FieldWrapper, FormlyModule } from '@ngx-formly/core';
+import { FieldType, FieldWrapper, FormlyModule } from '@ngx-formly/core';
 import {
   IEditorFormlyField,
   IFieldType,
@@ -15,7 +15,7 @@ import {
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 
 @Component({
-  selector: 'hs-folmly-fieldset-wrapper',
+  selector: 'folmly-fieldset-wrapper',
   templateUrl: './folmly-fieldset-wrapper.component.html',
   styleUrls: ['./folmly-fieldset-wrapper.component.less'],
   imports: [
@@ -24,7 +24,7 @@ import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/
     CdkDragPlaceholder,
   ],
 })
-export class FolmlyFieldsetWrapperComponent extends FieldWrapper<IEditorFormlyField> {
+export class FolmlyFieldsetWrapperComponent extends FieldType<IEditorFormlyField> {
   IFieldType = IFieldType;
 
   constructor(public widgetEditorService: WidgetEditorService) {

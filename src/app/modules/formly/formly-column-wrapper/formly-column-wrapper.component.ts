@@ -16,7 +16,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FieldWrapper, FormlyModule } from '@ngx-formly/core';
+import { FieldType, FieldWrapper, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import {
   IEditorFormlyField,
@@ -25,12 +25,13 @@ import {
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 
 @Component({
-  selector: 'app-formly-column-wrapper',
+  selector: 'formly-column-wrapper',
   templateUrl: './formly-column-wrapper.component.html',
   styleUrls: ['./formly-column-wrapper.component.less'],
+  host: { '[class.formly-column-wrapper]': 'true' },
   imports: [CdkDropList, CdkDrag, FormlyModule, CdkDragPlaceholder],
 })
-export class FormlyColumnWrapperComponent extends FieldWrapper<IEditorFormlyField> {
+export class FormlyColumnWrapperComponent extends FieldType<IEditorFormlyField> {
   @ViewChild(CdkDropList) dropList!: CdkDropList;
 
   IFieldType = IFieldType;

@@ -35,125 +35,82 @@ export class WidgetEditorService {
 
   fields: IEditorFormlyField[] = [
     {
-      key: 'col21',
-      type: 'column',
-      label: '列',
-      fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
-      wrappers: ['column'], // 使用 column 包装器
-      props: {},
-      _design: true,
+      key: 'fieldset',
+      type: 'fieldset',
+      label: '组',
+      fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
+      // wrappers: ['fieldset'], // 使用 fieldset 包装器
+      props: {
+        label: '身份信息',
+      },
       fieldGroup: [
         {
-          key: 'fieldset',
-          type: 'fieldset',
-          label: '组',
-          fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-          wrappers: ['fieldset'], // 使用 fieldset 包装器
-          props: {
-            label: '身份信息',
-          },
+          key: 'col1',
+          type: 'column',
+          label: '列',
+          fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
           fieldGroup: [
             {
-              key: 'col1',
-              type: 'column',
-              label: '列',
-              fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
-              wrappers: ['column'], // 使用 column 包装器
+              key: 'fieldset',
+              type: 'fieldset',
+              fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
+              props: {
+                label: '身份信息',
+              },
               fieldGroup: [
                 {
-                  key: 'input1',
-                  type: 'input',
-                  label: '输入框',
-                  fieldId: generateUUID(`input_key_`),
-                  templateOptions: { label: 'Input 1' },
-                  props: {
-                    label: '请输入',
-                  },
-                },
-                {
-                  key: 'input2',
-                  type: 'input',
-                  label: '输入框',
-                  fieldId: generateUUID(`input_key_`),
-                  templateOptions: { label: 'Input 2' },
-                },
-              ],
-              props: {},
-            },
-            {
-              key: 'col1',
-              type: 'column',
-              label: '列',
-              fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
-              wrappers: ['column'], // 使用 column 包装器
-              fieldGroup: [
-                {
-                  key: 'fieldset',
-                  type: 'fieldset',
-                  fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-                  wrappers: ['fieldset'], // 使用 fieldset 包装器
-                  props: {
-                    label: '身份信息',
-                  },
+                  key: 'col1',
+                  type: 'column',
+                  fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
                   fieldGroup: [
                     {
-                      key: 'col1',
-                      type: 'column',
-                      fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
-                      wrappers: ['column'], // 使用 column 包装器
-                      fieldGroup: [
-                        {
-                          key: 'input1',
-                          type: 'input',
-                          fieldId: generateUUID(`input_key_`),
-                          templateOptions: { label: 'Input 1' },
-                        },
-                      ],
-                      props: {},
-                    },
-                    {
-                      key: 'col2',
-                      type: 'column',
-                      fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
-                      wrappers: ['column'], // 使用 column 包装器
-                      fieldGroup: [
-                        {
-                          key: 'input3',
-                          type: 'input',
-                          fieldId: generateUUID(`input_key_`),
-                          templateOptions: { label: 'Input 3' },
-                        },
-                      ],
-                      props: {},
+                      key: 'input1',
+                      type: 'input',
+                      fieldId: generateUUID(`input_key_`),
+                      templateOptions: { label: 'Input 1' },
                     },
                   ],
-                },
-              ],
-              props: {},
-            },
-
-            {
-              key: 'col2',
-              type: 'column',
-              fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
-              wrappers: ['column'], // 使用 column 包装器
-              fieldGroup: [
-                {
-                  key: 'input3',
-                  type: 'input',
-                  templateOptions: { label: 'Input 3' },
-                  fieldId: generateUUID(`input_key_`),
+                  props: {},
                 },
                 {
-                  key: 'input4',
-                  type: 'input',
-                  templateOptions: { label: 'Input 4' },
-                  fieldId: generateUUID(`input_key_`),
+                  key: 'col2',
+                  type: 'column',
+                  fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
+                  fieldGroup: [
+                    {
+                      key: 'input3',
+                      type: 'input',
+                      fieldId: generateUUID(`input_key_`),
+                      templateOptions: { label: 'Input 3' },
+                    },
+                  ],
+                  props: {},
                 },
               ],
-              props: {},
             },
           ],
+          props: {},
+        },
+
+        {
+          key: 'col2',
+          type: 'column',
+          fieldId: generateUUID(`${IFieldType.COLUMN}_key_`),
+          fieldGroup: [
+            {
+              key: 'input3',
+              type: 'input',
+              templateOptions: { label: 'Input 3' },
+              fieldId: generateUUID(`input_key_`),
+            },
+            {
+              key: 'input4',
+              type: 'input',
+              templateOptions: { label: 'Input 4' },
+              fieldId: generateUUID(`input_key_`),
+            },
+          ],
+          props: {},
         },
       ],
     },
@@ -167,7 +124,7 @@ export class WidgetEditorService {
   getConnectedTo(type: IFieldType) {
     const options = {
       group: [],
-      column: [],
+      column: [this.HS_DEFAULT_ID],
       row: [],
     };
 

@@ -4,9 +4,17 @@ import { FormlyModule } from '@ngx-formly/core';
 import { FolmlyFieldsetWrapperComponent } from '@src/app/modules/formly/folmly-field-fieldset/folmly-fieldset-wrapper.component';
 import { FormlyColumnWrapperComponent } from '@src/app/modules/formly/formly-column-wrapper/formly-column-wrapper.component';
 import { FormlyContorlWrapperComponent } from '@src/app/modules/formly/formly-control-wrapper/formly-control-wrapper.component';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import {
+  IEditorFormlyField,
+  IFieldType,
+} from '@src/app/shared/models/editor.model';
 import { IRouterUse } from '@src/app/shared/models/route.model';
 export function addonsExtension(field: IEditorFormlyField) {
+  if (field.type === 'formly-group') {
+    field.type = IFieldType.COLUMN;
+    return;
+  }
+  //  || field.type === IFieldType.COLUMN
   if (field._design) {
     return;
   }
@@ -52,13 +60,14 @@ export default [
     providers: [
       importProvidersFrom(
         FormlyModule.forRoot({
-          types: [{ name: 'col', component: FormlyColumnWrapperComponent }],
+          types: [
+            { name: 'column', component: FormlyColumnWrapperComponent },
+            { name: 'fieldset', component: FolmlyFieldsetWrapperComponent },
+          ],
           validationMessages: [
             { name: 'required', message: '这个字段是必填的！' },
           ],
           wrappers: [
-            { name: 'fieldset', component: FolmlyFieldsetWrapperComponent },
-            { name: 'column', component: FormlyColumnWrapperComponent },
             { name: 'contorl', component: FormlyContorlWrapperComponent },
           ],
           extensions: [

@@ -10,12 +10,13 @@ import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.c
 import { IRadioConfig } from '@src/app/shared/models/system.model';
 import { PresetComponentsComponent } from '../../../components/preset-components/preset-components.component';
 import { CommonModule } from '@angular/common';
-import { FormlyModule } from '@ngx-formly/core';
+import { FormlyConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { WidgetEditorService } from './widget-editor.service';
 import { WorkspaceToobarComponent } from './workspace-viewport/workspace-toobar/workspace-toobar.component';
 import { WorkspaceContentComponent } from './workspace-viewport/workspace-content/workspace-content.component';
 import { WorkspaceViewportComponent } from './workspace-viewport/workspace-viewport.component';
+import { FormlyColumnWrapperComponent } from '@src/app/modules/formly/formly-column-wrapper/formly-column-wrapper.component';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -59,7 +60,10 @@ export class WidgetEditorComponent implements OnInit {
     { label: '详情', value: 'detail' },
   ];
 
-  constructor(public widgetEditorService: WidgetEditorService) {}
+  constructor(
+    public widgetEditorService: WidgetEditorService,
+    private formlyConfig: FormlyConfig,
+  ) {}
 
   ngOnInit() {}
 }
