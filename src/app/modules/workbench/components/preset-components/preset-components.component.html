@@ -9,7 +9,9 @@
 <main class="flex flex-col gap-5px text-14px">
   @for (group of activePresetResource; track $index) {
   <div class="flex flex-col">
-    <div class="line-height-32px font-bold">{{ group.name }}</div>
+    <div class="line-height-32px font-bold">
+      {{ group.props.label }}
+    </div>
     <div
       class="grid cols-3 gap-10px"
       cdkDropList
@@ -20,7 +22,7 @@
       "
       [id]="activeValue() + '_preset_key_' + $index"
     >
-      @for (preset of group.groupChild; track $index) {
+      @for (preset of group.fieldGroup; track $index) {
       <div
         class="preset-wrapper border-solid border-1 cursor-pointer hover-border-#2f90b9 border-#2f90b94d items-center flex-1 p-10px flex flex-col gap-5px rounded-8px"
         matRipple
@@ -37,10 +39,10 @@
         ></div>
         <div class="w-52px h-52px p-10px rounded-8px bg-#2f90b91a">
           <mat-icon class="material-symbols-outlined wh-full! text-32px">
-            {{ preset.icon }}
+            {{ preset.props.icon }}
           </mat-icon>
         </div>
-        <div class="line-height-20px">{{ preset.name }}</div>
+        <div class="line-height-20px">{{ preset.props.label }}</div>
       </div>
       }
     </div>

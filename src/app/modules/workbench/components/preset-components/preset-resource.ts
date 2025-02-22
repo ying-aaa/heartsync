@@ -1,253 +1,406 @@
 import { generateUUID } from '@src/app/core/utils';
-import { IFieldType } from '@src/app/shared/models/editor.model';
-
-export const presetResource = [
+import {
+  IEditorFormlyField,
+  IFieldType,
+} from '@src/app/shared/models/editor.model';
+export const presetResource: IEditorFormlyField[] = [
   {
     key: 'layout',
-    fieldId: generateUUID(`preset_key_`),
-    wrappers: ['group'], // 使用 col 包装器
-    name: '布局',
-    value: 'layout',
-    group: [
+    type: 'group', // 使用 group 类型
+    props: {
+      label: '布局',
+    },
+    fieldGroup: [
       {
-        name: '布局器：',
-        key: 'layout',
-        fieldId: generateUUID(`preset_key_`),
-        wrappers: ['col'], // 使用 col 包装器
-        groupChild: [
+        props: {
+          label: '布局器：',
+        },
+        fieldGroup: [
           {
-            name: '栅格',
-            comp: 'group',
-            icon: 'apps',
-            componentName: '',
-            key: 'layout',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-            wrappers: ['group'], // 使用 col 包装器},
+            key: 'grid',
+            type: 'grid',
+            props: {
+              label: '栅格',
+              icon: 'apps',
+            },
           },
           {
-            name: '弹性',
-            comp: 'group',
-            icon: 'view_column',
-            componentName: '',
-            key: 'layout',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-            wrappers: ['group'], // 使用 col 包装器},
+            key: 'flex',
+            type: 'flex',
+            props: {
+              label: '弹性',
+              icon: 'view_column',
+            },
           },
           {
-            name: '画布',
-            comp: 'group',
-            icon: 'select_all',
-            componentName: '',
-            key: 'layout',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-            wrappers: ['group'], // 使用 col 包装器},
+            key: 'canvas',
+            type: 'canvas',
+            props: {
+              label: '画布',
+              icon: 'select_all',
+            },
           },
         ],
       },
       {
-        name: '控制器：',
-        groupChild: [
+        props: {
+          label: '控制器：',
+        },
+        fieldGroup: [
           {
-            name: '页签',
-            icon: 'tab',
-            componentName: '',
-            key: 'layout',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-            wrappers: ['group'],
+            key: 'tabs',
+            type: 'tabs',
+            props: {
+              label: '页签',
+              icon: 'tab',
+            },
           },
           {
-            name: '手风琴',
-            icon: 'view_day',
-            componentName: '',
-            key: 'layout',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-            wrappers: ['group'],
+            key: 'accordion',
+            type: 'accordion',
+            props: {
+              label: '手风琴',
+              icon: 'view_day',
+            },
           },
           {
-            name: '步进器',
-            icon: 'tab_unselected',
-            componentName: '',
-            key: 'layout',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-            wrappers: ['group'],
+            key: 'stepper',
+            type: 'stepper',
+            props: {
+              label: '步进器',
+              icon: 'tab_unselected',
+            },
           },
         ],
       },
       {
-        name: '嵌套器：',
-        groupChild: [
+        props: {
+          label: '嵌套器：',
+        },
+        fieldGroup: [
           {
-            name: '标题',
-            icon: 'density_medium',
-            componentName: '',
-            key: 'layout',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-            wrappers: ['group'],
+            key: 'title',
+            type: 'title',
+            props: {
+              label: '标题',
+              icon: 'density_medium',
+            },
           },
         ],
       },
     ],
   },
   {
-    name: '输入',
-    value: 'input',
-    group: [
+    key: 'input',
+    props: {
+      label: '输入',
+    },
+    fieldGroup: [
       {
-        name: '输入：',
-        groupChild: [
+        props: {
+          label: '输入：',
+        },
+        fieldGroup: [
           {
-            name: '单行文本',
-            comp: 'input',
-            icon: '',
-            componentName: '',
             key: 'input',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
             type: 'input',
+            props: {
+              label: '单行文本',
+            },
           },
           {
-            name: '多行文本',
-            comp: 'textarea',
-            icon: '',
-            componentName: '',
             key: 'textarea',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
             type: 'textarea',
+            props: {
+              label: '多行文本',
+            },
           },
           {
-            name: '数字',
-            comp: 'number',
-            icon: '',
-            componentName: '',
             key: 'number',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
             type: 'number',
+            props: {
+              label: '数字',
+            },
           },
           {
-            name: '密码',
-            comp: 'password',
-            icon: '',
-            componentName: '',
             key: 'password',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
             type: 'password',
+            props: {
+              label: '密码',
+            },
           },
           {
-            name: '日期',
-            comp: 'datepicker',
-            icon: '',
-            componentName: '',
-            key: 'layout',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
+            key: 'datepicker',
             type: 'datepicker',
+            props: {
+              label: '日期',
+            },
           },
           {
-            name: '富文本',
-            icon: '',
-            componentName: '',
-            key: 'layout',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-            type: '',
+            key: 'richText',
+            type: 'rich-text', // 假设你有富文本组件
+            props: {
+              label: '富文本',
+            },
           },
           {
-            name: '手绘',
-            icon: '',
-            componentName: '',
-            key: 'layout',
-            fieldId: generateUUID(`${IFieldType.GROUP}_key_`),
-            type: '',
+            key: 'draw',
+            type: 'draw', // 假设你有手绘组件
+            props: {
+              label: '手绘',
+            },
           },
         ],
       },
     ],
   },
   {
-    name: '选择',
-    value: 'select',
-    group: [
+    key: 'select',
+    props: {
+      label: '选择',
+    },
+    fieldGroup: [
       {
-        name: '选择：',
-        groupChild: [
-          { name: '单选', icon: '', componentName: '' },
-          { name: '多选', icon: '', componentName: '' },
-          { name: '开关', icon: '', componentName: '' },
-          { name: '下拉单选', icon: '', componentName: '' },
-          { name: '下拉多选', icon: '', componentName: '' },
-          { name: '评分', icon: '', componentName: '' },
-          { name: '进度条', icon: '', componentName: '' },
-          { name: '下拉树形', icon: '', componentName: '' },
-          { name: '弹窗选择', icon: '', componentName: '' },
+        props: {
+          label: '选择：',
+        },
+        fieldGroup: [
+          {
+            key: 'radio',
+            type: 'radio',
+            props: {
+              label: '单选',
+            },
+          },
+          {
+            key: 'checkbox',
+            type: 'checkbox',
+            props: {
+              label: '多选',
+            },
+          },
+          {
+            key: 'switch',
+            type: 'switch',
+            props: {
+              label: '开关',
+            },
+          },
+          {
+            key: 'dropdown',
+            type: 'select',
+            props: {
+              label: '下拉单选',
+            },
+          },
+          {
+            key: 'dropdownMulti',
+            type: 'multiselect',
+            props: {
+              label: '下拉多选',
+            },
+          },
+          {
+            key: 'rating',
+            type: 'rating',
+            props: {
+              label: '评分',
+            },
+          },
+          {
+            key: 'progress',
+            type: 'progress',
+            props: {
+              label: '进度条',
+            },
+          },
+          {
+            key: 'treeSelect',
+            type: 'tree-select',
+            props: {
+              label: '下拉树形',
+            },
+          },
+          {
+            key: 'popupSelect',
+            type: 'popup-select',
+            props: {
+              label: '弹窗选择',
+            },
+          },
         ],
       },
     ],
   },
   {
-    name: '上传',
-    value: 'upload',
-    group: [
+    key: 'upload',
+    props: {
+      label: '上传',
+    },
+    fieldGroup: [
       {
-        name: '上传：',
-        groupChild: [
-          { name: '照片', icon: '', componentName: '' },
-          { name: '文件', icon: '', componentName: '' },
+        props: {
+          label: '上传：',
+        },
+        fieldGroup: [
+          {
+            key: 'photo',
+            type: 'file-upload',
+            props: {
+              label: '照片',
+            },
+          },
+          {
+            key: 'file',
+            type: 'file-upload',
+            props: {
+              label: '文件',
+            },
+          },
         ],
       },
     ],
   },
   {
-    name: '系统',
-    value: 'system',
-    group: [
+    key: 'system',
+    props: {
+      label: '系统',
+    },
+    fieldGroup: [
       {
-        name: '系统：',
-        groupChild: [
-          { name: '用户', icon: '', componentName: '' },
-          { name: '组织', icon: '', componentName: '' },
-        ],
-      },
-    ],
-  },
-
-  {
-    name: '位置',
-    value: 'location',
-    group: [
-      {
-        name: '位置',
-        groupChild: [
-          { name: '地址输入', icon: '', componentName: '' },
-          { name: '地图展示', icon: '', componentName: '' },
-          { name: '位置选择', icon: '', componentName: '' },
-        ],
-      },
-    ],
-  },
-  {
-    name: '子表',
-    value: 'subtable',
-    group: [
-      {
-        name: '输入：',
-        groupChild: [{ name: '普通输入', icon: '', componentName: '' }],
-      },
-      {
-        name: '弹窗：',
-        groupChild: [
-          { name: '弹窗列表选择', icon: '', componentName: '' },
-          { name: '弹窗表单输入', icon: '', componentName: '' },
+        props: {
+          label: '系统：',
+        },
+        fieldGroup: [
+          {
+            key: 'user',
+            type: 'system-user',
+            props: {
+              label: '用户',
+            },
+          },
+          {
+            key: 'organization',
+            type: 'system-organization',
+            props: {
+              label: '组织',
+            },
+          },
         ],
       },
     ],
   },
   {
-    name: '展示',
-    value: 'display',
-    group: [
+    key: 'location',
+    props: {
+      label: '位置',
+    },
+    fieldGroup: [
       {
-        name: '展示：',
-        groupChild: [
-          { name: '文本', icon: '', componentName: '' },
-          { name: '图片', icon: '', componentName: '' },
-          { name: '矩形', icon: '', componentName: '' },
+        props: {
+          label: '位置',
+        },
+        fieldGroup: [
+          {
+            key: 'address',
+            type: 'address-input',
+            props: {
+              label: '地址输入',
+            },
+          },
+          {
+            key: 'map',
+            type: 'map-display',
+            props: {
+              label: '地图展示',
+            },
+          },
+          {
+            key: 'locationSelect',
+            type: 'location-select',
+            props: {
+              label: '位置选择',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'subtable',
+    props: {
+      label: '子表',
+    },
+    fieldGroup: [
+      {
+        props: {
+          label: '输入：',
+        },
+        fieldGroup: [
+          {
+            key: 'normalInput',
+            type: 'input',
+            props: {
+              label: '普通输入',
+            },
+          },
+        ],
+      },
+      {
+        props: {
+          label: '弹窗：',
+        },
+        fieldGroup: [
+          {
+            key: 'popupList',
+            type: 'popup-list',
+            props: {
+              label: '弹窗列表选择',
+            },
+          },
+          {
+            key: 'popupForm',
+            type: 'popup-form',
+            props: {
+              label: '弹窗表单输入',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'display',
+    props: {
+      label: '展示',
+    },
+    fieldGroup: [
+      {
+        props: {
+          label: '展示：',
+        },
+        fieldGroup: [
+          {
+            key: 'textDisplay',
+            type: 'display',
+            props: {
+              label: '文本',
+            },
+          },
+          {
+            key: 'imageDisplay',
+            type: 'display',
+            props: {
+              label: '图片',
+            },
+          },
+          {
+            key: 'rectangle',
+            type: 'display',
+            props: {
+              label: '矩形',
+            },
+          },
         ],
       },
     ],

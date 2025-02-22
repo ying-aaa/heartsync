@@ -50,7 +50,7 @@ export class PresetComponentsComponent implements OnInit {
     { label: '展示', value: 'display' },
   ];
 
-  presetResource = signal(presetResource);
+  presetResource = signal<IEditorFormlyField[]>(presetResource);
 
   activePresetResource: any = [];
 
@@ -60,8 +60,10 @@ export class PresetComponentsComponent implements OnInit {
   ) {
     effect(() => {
       this.activePresetResource = this.presetResource().find(
-        (item) => item.value === this.activeValue(),
-      )!.group;
+        (item: IEditorFormlyField) => item.key === this.activeValue(),
+      )!.fieldGroup;
+
+      console.log('%c Line:66 🥃', 'color:#ffdd4d', this.activePresetResource);
     });
   }
   matRippleColor = () =>
@@ -69,21 +71,23 @@ export class PresetComponentsComponent implements OnInit {
 
   onDragStart(preset: any, group: any, event: CdkDragStart<any>) {
     const configIndex = this.presetResource().findIndex(
-      (item) => item.value === this.activeValue(),
+      (item: IEditorFormlyField) => item.key === this.activeValue(),
     );
-    const groupIndex = this.presetResource()[configIndex].group.findIndex(
-      (item) => item.name === group.name,
+    const groupIndex = this.presetResource()[configIndex].fieldGroup!.findIndex(
+      (item: IEditorFormlyField) => item.props?.label === group.props?.label,
     );
-    const groupChildIndex = this.presetResource()[configIndex].group[
+    const groupChildIndex = this.presetResource()[configIndex].fieldGroup![
       groupIndex
-    ].groupChild.findIndex((item) => item.name === preset.name);
+    ].fieldGroup!.findIndex(
+      (item: IEditorFormlyField) => item.props?.label === preset.props?.label,
+    );
 
     // 创建一个临时占位元素
     const placeholder = { ...preset, isPlaceholder: true };
 
     this.presetResource.update((value: any) => {
       const newValue = [...value];
-      newValue[configIndex].group[groupIndex].groupChild.splice(
+      newValue[configIndex].fieldGroup[groupIndex].fieldGroup.splice(
         groupChildIndex,
         0,
         placeholder,
@@ -94,14 +98,14 @@ export class PresetComponentsComponent implements OnInit {
 
   onDragEnd(event: CdkDragEnd<any>) {
     const configIndex = this.presetResource().findIndex(
-      (item) => item.value === this.activeValue(),
+      (item) => item.key === this.activeValue(),
     );
 
     this.presetResource.update((value: any) => {
       const newValue = [...value];
 
-      newValue[configIndex].group.forEach((group: any) => {
-        group.groupChild = group.groupChild.filter(
+      newValue[configIndex].fieldGroup.forEach((group: any) => {
+        group.fieldGroup = group.fieldGroup.filter(
           (item: any) => !item.isPlaceholder,
         );
       });
