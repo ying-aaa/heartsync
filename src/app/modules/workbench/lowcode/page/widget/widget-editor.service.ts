@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import {
   deepClone,
@@ -27,11 +27,13 @@ export class WidgetEditorService {
   dragStart = false;
 
   // 选中的 Field
-  private activeField?: IEditorFormlyField;
+  private activeField = signal<IEditorFormlyField | null>(null);
   _fieldSelected$ = new Subject<IEditorFormlyField>();
   get fieldSelected$(): Observable<IEditorFormlyField> {
     return this._fieldSelected$.asObservable();
   }
+
+  flatField$ = new BehaviorSubject([]);
 
   fields = signal<IEditorFormlyField[]>([]);
   formGroup = new FormGroup({});
@@ -40,29 +42,24 @@ export class WidgetEditorService {
 
   constructor() {}
 
-  getConnectedTo(type: IFieldType) {
-    const options: any = {
-      group: [],
-      column: [this.HS_DEFAULT_ID],
-      row: [],
-    };
-
-    // @ts-ignore
-    return this.isEditMode()
-      ? findSameField(this.fields(), options)[type]
-      : options;
-  }
-
   getSpecifyFields(fieldId: string) {
-    return flatField(this.fields()).find((item) => item.fieldId === fieldId);
+    return this.getFlatField(this.fields()).find(
+      (item: any) => item.fieldId === fieldId,
+    );
   }
 
   isActiveField(fieldId: string) {
-    return this.activeField?.fieldId === fieldId;
+    return this.activeField()?.fieldId === fieldId;
+  }
+
+  updateFields(fields: IEditorFormlyField[]) {
+    this.fields.set(fields);
+    this.formGroup.patchValue(this.model);
+    this.flatField$.next(this.getFlatField());
   }
 
   selectField(field: IEditorFormlyField): void {
-    this.activeField = field;
+    this.activeField.set(field);
     this._fieldSelected$.next(field);
   }
 
@@ -80,6 +77,7 @@ export class WidgetEditorService {
       }
     }
     addFieldId(field);
+    // 还有一种通过记录扁平化的方式查找，性能会更好，待开发
     this.fields.update((fields) => {
       fields = deepClone(fields);
       const fieldLocationStr = this.getFieldLocationStr(toParentFieldId);
@@ -95,6 +93,7 @@ export class WidgetEditorService {
     });
 
     this.selectField(field);
+    this.flatField$.next(this.getFlatField(this.fields()));
   }
 
   removeField(toParentFieldId: string, toIndex: number) {
@@ -111,7 +110,8 @@ export class WidgetEditorService {
       }
       return fields;
     });
-    this.activeField = undefined;
+    this.activeField.set(null);
+    this.flatField$.next(this.getFlatField());
   }
 
   moveField(
@@ -120,6 +120,7 @@ export class WidgetEditorService {
     toIndex: number,
   ) {
     moveItemInArray(toParent, fromIndex, toIndex);
+    this.flatField$.next(this.getFlatField());
   }
 
   transferField(
@@ -129,6 +130,20 @@ export class WidgetEditorService {
     toIndex: number,
   ) {
     transferArrayItem(formParent, toParent, formIndex, toIndex);
+    this.flatField$.next(this.getFlatField());
+  }
+
+  getConnectedTo(type: IFieldType) {
+    const options: any = {
+      group: [],
+      column: [this.HS_DEFAULT_ID],
+      row: [],
+    };
+
+    // @ts-ignore
+    return this.isEditMode()
+      ? findSameField(this.fields(), options)[type]
+      : options;
   }
 
   getFieldLocationStr(toParentFieldId: string) {
@@ -146,6 +161,23 @@ export class WidgetEditorService {
       return fieldLocationStr;
     }
     return null;
+  }
+
+  getFlatField(field?: IEditorFormlyField[], level: number = 0) {
+    field = field || this.fields();
+    return field.reduce((acc, field) => {
+      acc.push({
+        // @ts-ignore
+        name: field.type + '_' + field.key,
+        level,
+        expandable: !!field.fieldGroup,
+        field,
+      });
+      if (field.fieldGroup) {
+        acc.push(...this.getFlatField(field.fieldGroup, level + 1));
+      }
+      return acc;
+    }, [] as any);
   }
 }
 
@@ -167,14 +199,4 @@ function findSameField(
   }
   // @ts-ignore
   return options;
-}
-
-function flatField(field: IEditorFormlyField[]) {
-  return field.reduce((acc, field) => {
-    acc.push(field);
-    if (field.fieldGroup) {
-      acc.push(...flatField(field.fieldGroup));
-    }
-    return acc;
-  }, [] as IEditorFormlyField[]);
 }

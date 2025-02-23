@@ -70,9 +70,7 @@ export class FormlyContorlWrapperComponent
 
   ngOnInit(): void {
     this._checkActiveField();
-    // .pipe(takeUntil(this._destroy$))
     this.widgetEditorService.fieldSelected$.subscribe(() => {
-      // this._checkIndexField();
       this._checkActiveField();
       this.cdr.markForCheck();
     });

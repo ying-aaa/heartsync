@@ -21,7 +21,7 @@ export const presetResource: IEditorFormlyField[] = [
             type: 'grid',
             props: {
               label: '栅格',
-              icon: 'apps',
+              icon: 'grid_on',
             },
             fieldGroup: [
               { key: 'column', type: 'column', fieldGroup: [] },
