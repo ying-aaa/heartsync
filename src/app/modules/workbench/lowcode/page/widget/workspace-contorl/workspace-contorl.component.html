@@ -1,0 +1,27 @@
+<mat-tab-group
+  animationDuration="0ms"
+  headerPosition="below"
+  class="hs-density--2"
+>
+  <mat-tab label="文件">
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">description</mat-icon>
+      文件
+    </ng-template>
+    <hs-widget-folder></hs-widget-folder>
+  </mat-tab>
+  <mat-tab label="预设">
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">widgets</mat-icon>
+      预设
+    </ng-template>
+    <hs-preset-components> </hs-preset-components>
+  </mat-tab>
+  <mat-tab label="大纲">
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">account_tree</mat-icon>
+      大纲
+    </ng-template>
+    <hs-widget-outline></hs-widget-outline>
+  </mat-tab>
+</mat-tab-group>

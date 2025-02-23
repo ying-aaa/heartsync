@@ -5,13 +5,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { PresetComponentsComponent } from '../../../components/preset-components/preset-components.component';
 import { CommonModule } from '@angular/common';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { WidgetEditorService } from './widget-editor.service';
 import { WorkspaceViewportComponent } from './workspace-viewport/workspace-viewport.component';
-import { WidgetFolderComponent } from './widget-folder/widget-folder.component';
+import { WorkspaceContorlComponent } from './workspace-contorl/workspace-contorl.component';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -24,12 +23,11 @@ import { WidgetFolderComponent } from './widget-folder/widget-folder.component';
     MatIconModule,
     MatDividerModule,
     MatButtonModule,
-    PresetComponentsComponent,
     ReactiveFormsModule,
     FormlyMaterialModule,
     FormlyModule,
     WorkspaceViewportComponent,
-    WidgetFolderComponent,
+    WorkspaceContorlComponent,
   ],
 })
 export class WidgetEditorComponent implements OnInit {

@@ -26,9 +26,6 @@ export class WidgetEditorService {
   // 当前是否在拖拽中
   dragStart = false;
 
-  // 连接项
-  connectedTo = [];
-
   // 选中的 Field
   private activeField?: IEditorFormlyField;
   _fieldSelected$ = new Subject<IEditorFormlyField>();

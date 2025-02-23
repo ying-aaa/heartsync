@@ -34,7 +34,7 @@ export const presetResource: IEditorFormlyField[] = [
             type: 'fieldset',
             props: {
               label: '群组',
-              icon: '',
+              icon: 'subheader',
             },
             fieldGroup: [
               {
