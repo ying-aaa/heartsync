@@ -19,7 +19,8 @@ export interface IEditorFormlyField extends FormlyFieldConfig {
   label?: string;
   fieldGroup?: IEditorFormlyField[];
   fieldId?: string;
-  parentFieldId?: string;
+  parent?: IEditorFormlyField;
+  index?: number;
   canHaveChildren?: boolean;
   childrenPath?: string; // Lodash path
   _design?: boolean;

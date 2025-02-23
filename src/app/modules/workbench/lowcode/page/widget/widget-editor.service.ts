@@ -65,7 +65,6 @@ export class WidgetEditorService {
   }
 
   selectField(field: IEditorFormlyField): void {
-    // const field = this.fieldMap.get(fieldId)!;
     this.activeField = field;
     this._fieldSelected$.next(field);
   }
@@ -76,33 +75,22 @@ export class WidgetEditorService {
     toIndex: number,
   ) {
     field = deepClone(field);
-
-    field.fieldId = generateUUID(`${field.type}_key_`);
-    if (field.fieldGroup) {
-      field.fieldGroup.forEach(
-        // (field) => (field.fieldId = generateUUID(`${field.type}_key_`)),
-        addFieldId,
-      );
+    function addFieldId(field: IEditorFormlyField) {
+      field.key = generateUUID();
+      field.fieldId = `${field.type}_key_${field.key}`;
+      if (field.fieldGroup) {
+        field.fieldGroup.forEach(addFieldId);
+      }
     }
-
+    addFieldId(field);
     this.fields.update((fields) => {
       fields = deepClone(fields);
-      const fieldLocationArr = getRecursivePosition<IEditorFormlyField>(
-        this.fields(),
-        toParentFieldId,
-        ['fieldGroup', 'fieldId'],
-      )?.offset;
-      if (fieldLocationArr) {
-        // 通过堆内存的数据引用能力进行查询和操作
-        const fieldLocationStr: string = fieldLocationArr.reduce(
-          (res, ori) => res + `[${ori}].fieldGroup`,
-          'return fields',
-        );
+      const fieldLocationStr = this.getFieldLocationStr(toParentFieldId);
+      if (fieldLocationStr) {
         const resData = new Function('fields', fieldLocationStr as string)(
           fields,
         );
         resData.splice(toIndex, 0, field);
-        return fields;
       } else {
         fields.splice(toIndex, 0, field);
       }
@@ -110,6 +98,23 @@ export class WidgetEditorService {
     });
 
     this.selectField(field);
+  }
+
+  removeField(toParentFieldId: string, toIndex: number) {
+    this.fields.update((fields) => {
+      fields = deepClone(fields);
+      const fieldLocationStr = this.getFieldLocationStr(toParentFieldId);
+      if (fieldLocationStr) {
+        const resData = new Function('fields', fieldLocationStr as string)(
+          fields,
+        );
+        resData.splice(toIndex, 1);
+      } else {
+        fields.splice(toIndex, 1);
+      }
+      return fields;
+    });
+    this.activeField = undefined;
   }
 
   moveField(
@@ -127,6 +132,23 @@ export class WidgetEditorService {
     toIndex: number,
   ) {
     transferArrayItem(formParent, toParent, formIndex, toIndex);
+  }
+
+  getFieldLocationStr(toParentFieldId: string) {
+    const fieldLocationArr = getRecursivePosition<IEditorFormlyField>(
+      this.fields(),
+      toParentFieldId,
+      ['fieldGroup', 'fieldId'],
+    )?.offset;
+    if (fieldLocationArr) {
+      // 通过堆内存的数据引用能力进行查询和操作
+      const fieldLocationStr: string = fieldLocationArr.reduce(
+        (res, ori) => res + `[${ori}].fieldGroup`,
+        'return fields',
+      );
+      return fieldLocationStr;
+    }
+    return null;
   }
 }
 
@@ -158,13 +180,4 @@ function flatField(field: IEditorFormlyField[]) {
     }
     return acc;
   }, [] as IEditorFormlyField[]);
-}
-
-function addFieldId(field: IEditorFormlyField) {
-  if (!field.fieldId) {
-    field.fieldId = generateUUID(`${field.type}_key_`);
-  }
-  if (field.fieldGroup) {
-    field.fieldGroup.forEach(addFieldId);
-  }
 }
