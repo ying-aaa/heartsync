@@ -66,7 +66,7 @@ export class WidgetEditorService {
 
   addField(
     field: IEditorFormlyField,
-    toParentFieldId: string,
+    toParentField: IEditorFormlyField[],
     toIndex: number,
   ) {
     field = deepClone(field);
@@ -78,38 +78,15 @@ export class WidgetEditorService {
       }
     }
     addFieldId(field);
-    // 还有一种通过记录扁平化的方式查找，性能会更好，待开发
-    this.fields.update((fields) => {
-      const fieldLocationStr = this.getFieldLocationStr(toParentFieldId);
-      if (fieldLocationStr) {
-        const resData = new Function('fields', fieldLocationStr as string)(
-          fields,
-        );
-        resData.splice(toIndex, 0, field);
-      } else {
-        fields.splice(toIndex, 0, field);
-      }
-      return fields;
-    });
+    toParentField.splice(toIndex, 0, field);
     this.formGroup = new FormGroup({});
     this.options = {};
     this.selectField(field);
     this.flatField$.next(this.getFlatField(this.fields()));
   }
 
-  removeField(toParentFieldId: string, toIndex: number) {
-    this.fields.update((fields) => {
-      const fieldLocationStr = this.getFieldLocationStr(toParentFieldId);
-      if (fieldLocationStr) {
-        const resData = new Function('fields', fieldLocationStr as string)(
-          fields,
-        );
-        resData.splice(toIndex, 1);
-      } else {
-        fields.splice(toIndex, 1);
-      }
-      return fields;
-    });
+  removeField(toParentField: IEditorFormlyField[], toIndex: number) {
+    toParentField.splice(toIndex, 1);
     this.formGroup = new FormGroup({});
     this.options = {};
     this.activeField.set(null);
@@ -146,23 +123,6 @@ export class WidgetEditorService {
     return this.isEditMode()
       ? findSameField(this.fields(), options)[type]
       : options;
-  }
-
-  getFieldLocationStr(toParentFieldId: string) {
-    const fieldLocationArr = getRecursivePosition<IEditorFormlyField>(
-      this.fields(),
-      toParentFieldId,
-      ['fieldGroup', 'fieldId'],
-    )?.offset;
-    if (fieldLocationArr) {
-      // 通过堆内存的数据引用能力进行查询和操作
-      const fieldLocationStr: string = fieldLocationArr.reduce(
-        (res, ori) => res + `[${ori}].fieldGroup`,
-        'return fields',
-      );
-      return fieldLocationStr;
-    }
-    return null;
   }
 
   getFlatField(field?: IEditorFormlyField[], level: number = 0) {

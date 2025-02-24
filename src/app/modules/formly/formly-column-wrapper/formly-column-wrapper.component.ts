@@ -57,7 +57,7 @@ export class FormlyColumnWrapperComponent extends FieldType<IEditorFormlyField> 
     const { previousIndex: formIndex, currentIndex: toIndex } = event;
 
     if (action === ICdkDrapActionType.COPY) {
-      this.widgetEditorService.addField(field, toParentFieldId, toIndex);
+      this.widgetEditorService.addField(field, toParent, toIndex);
     }
     if (action === ICdkDrapActionType.MOVE) {
       if (event.previousContainer === event.container) {

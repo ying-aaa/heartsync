@@ -12,7 +12,11 @@
   <button
     mat-mini-fab
     (click)="
-      widgetEditorService.addField(field, field.parent?.fieldId!, field.index!)
+      widgetEditorService.addField(
+        field,
+        field.parent!.fieldGroup!,
+        field.index! + 1
+      )
     "
   >
     <mat-icon>content_copy</mat-icon>
@@ -24,7 +28,7 @@
   <button
     mat-mini-fab
     (click)="
-      widgetEditorService.removeField(field.parent?.fieldId!, field.index!)
+      widgetEditorService.removeField(field.parent!.fieldGroup!, field.index!)
     "
   >
     <mat-icon>delete</mat-icon>
