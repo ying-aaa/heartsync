@@ -53,6 +53,7 @@ export class FormlyContorlWrapperComponent
 
   @HostListener('click', ['$event'])
   onClick(event: MouseEvent): void {
+    if (!this.isEditMode) return;
     this.widgetEditorService.selectField(this.field);
     event.stopPropagation();
   }
