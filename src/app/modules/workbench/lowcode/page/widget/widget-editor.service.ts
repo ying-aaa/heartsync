@@ -28,9 +28,9 @@ export class WidgetEditorService {
   dragStart = false;
 
   // 选中的 Field
-  private activeField = signal<IEditorFormlyField | null>(null);
-  _fieldSelected$ = new Subject<IEditorFormlyField>();
-  get fieldSelected$(): Observable<IEditorFormlyField> {
+  public activeField = signal<IEditorFormlyField | null>(null);
+  _fieldSelected$ = new Subject<IEditorFormlyField | null>();
+  get fieldSelected$(): Observable<IEditorFormlyField | null> {
     return this._fieldSelected$.asObservable();
   }
 
@@ -59,7 +59,7 @@ export class WidgetEditorService {
     this.flatField$.next(this.getFlatField());
   }
 
-  selectField(field: IEditorFormlyField): void {
+  selectField(field: IEditorFormlyField | null): void {
     this.activeField.set(field);
     this._fieldSelected$.next(field);
   }
@@ -82,14 +82,14 @@ export class WidgetEditorService {
     this.formGroup = new FormGroup({});
     this.options = {};
     this.selectField(field);
-    this.flatField$.next(this.getFlatField(this.fields()));
+    this.flatField$.next(this.getFlatField());
   }
 
   removeField(toParentField: IEditorFormlyField[], toIndex: number) {
     toParentField.splice(toIndex, 1);
     this.formGroup = new FormGroup({});
     this.options = {};
-    this.activeField.set(null);
+    this.selectField(null);
     this.flatField$.next(this.getFlatField());
   }
 

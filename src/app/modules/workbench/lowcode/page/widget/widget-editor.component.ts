@@ -1,4 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -11,10 +16,12 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 import { WidgetEditorService } from './widget-editor.service';
 import { WorkspaceViewportComponent } from './workspace-viewport/workspace-viewport.component';
 import { WorkspaceContorlComponent } from './workspace-contorl/workspace-contorl.component';
+import { WorkspaceConfigComponent } from './workspace-config/workspace-config.component';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
   styleUrls: ['./widget-editor.component.less'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
     MatButtonToggleModule,
@@ -28,6 +35,7 @@ import { WorkspaceContorlComponent } from './workspace-contorl/workspace-contorl
     FormlyModule,
     WorkspaceViewportComponent,
     WorkspaceContorlComponent,
+    WorkspaceConfigComponent,
   ],
 })
 export class WidgetEditorComponent implements OnInit {

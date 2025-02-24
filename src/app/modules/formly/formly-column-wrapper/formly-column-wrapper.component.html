@@ -14,6 +14,7 @@
     cdkDrag
     [cdkDragData]="getDragFieldData(f)"
     [field]="f"
+    [cdkDragDisabled]="!f._design"
     (cdkDragStarted)="widgetEditorService.dragStart = true"
     (cdkDragReleased)="widgetEditorService.dragStart = false"
   >

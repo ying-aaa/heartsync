@@ -13,10 +13,10 @@ export function addonsExtension(field: IEditorFormlyField) {
     field.type = IFieldType.COLUMN;
     return;
   }
-
-  // if (field.type === IFieldType.COLUMN) {
-  //   return;
-  // }
+  // field.type === IFieldType.COLUMN
+  if (!field._design) {
+    return;
+  }
 
   if (field.wrappers) {
     if (

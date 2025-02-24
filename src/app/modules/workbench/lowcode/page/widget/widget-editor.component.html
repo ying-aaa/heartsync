@@ -13,5 +13,9 @@
     [vertical]="true"
     class="opacity-20 h-full"
   ></mat-divider>
-  <aside class="h-full w-284px py-8px px-12px"></aside>
+  <aside class="h-full w-284px py-8px px-12px">
+    <hs-workspace-config
+      [selectedField]="widgetEditorService.activeField()"
+    ></hs-workspace-config>
+  </aside>
 </div>

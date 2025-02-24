@@ -33,7 +33,6 @@
 .mr-8px{margin-right:8px;}
 .mt-10px\!{margin-top:10px !important;}
 .mt-12px\!{margin-top:12px !important;}
-.mt-16px{margin-top:16px;}
 .block{display:block;}
 .hidden{display:none;}
 .h-0{height:0;}
@@ -166,5 +165,6 @@
 .tracking-0{letter-spacing:0;}
 .tab{-moz-tab-size:4;-o-tab-size:4;tab-size:4;}
 .opacity-20{opacity:0.2;}
+.outline{outline-style:solid;}
 .blur{--un-blur:blur(8px);filter:var(--un-blur) var(--un-brightness) var(--un-contrast) var(--un-drop-shadow) var(--un-grayscale) var(--un-hue-rotate) var(--un-invert) var(--un-saturate) var(--un-sepia);}
 .filter{filter:var(--un-blur) var(--un-brightness) var(--un-contrast) var(--un-drop-shadow) var(--un-grayscale) var(--un-hue-rotate) var(--un-invert) var(--un-saturate) var(--un-sepia);}
