@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
+
 import {
   deepClone,
   generateUUID,
@@ -79,7 +80,6 @@ export class WidgetEditorService {
     addFieldId(field);
     // 还有一种通过记录扁平化的方式查找，性能会更好，待开发
     this.fields.update((fields) => {
-      fields = deepClone(fields);
       const fieldLocationStr = this.getFieldLocationStr(toParentFieldId);
       if (fieldLocationStr) {
         const resData = new Function('fields', fieldLocationStr as string)(
@@ -91,14 +91,14 @@ export class WidgetEditorService {
       }
       return fields;
     });
-
+    this.formGroup = new FormGroup({});
+    this.options = {};
     this.selectField(field);
     this.flatField$.next(this.getFlatField(this.fields()));
   }
 
   removeField(toParentFieldId: string, toIndex: number) {
     this.fields.update((fields) => {
-      fields = deepClone(fields);
       const fieldLocationStr = this.getFieldLocationStr(toParentFieldId);
       if (fieldLocationStr) {
         const resData = new Function('fields', fieldLocationStr as string)(
@@ -110,6 +110,8 @@ export class WidgetEditorService {
       }
       return fields;
     });
+    this.formGroup = new FormGroup({});
+    this.options = {};
     this.activeField.set(null);
     this.flatField$.next(this.getFlatField());
   }
