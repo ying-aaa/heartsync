@@ -1,6 +1,6 @@
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 
-export const INPUT_CONFIT_RESOURCE: IEditorFormlyField[] = [
+export const widget_input_config: IEditorFormlyField[] = [
   {
     _design: false,
     key: 'props.label',
@@ -9,7 +9,7 @@ export const INPUT_CONFIT_RESOURCE: IEditorFormlyField[] = [
       label: '标题',
       appearance: 'outline',
     },
-    className: 'hs-density--4',
+    className: 'hs-density--5',
   },
   {
     _design: false,

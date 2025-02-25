@@ -13,6 +13,8 @@ import {
   IFieldType,
 } from '@src/app/shared/models/editor.model';
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
+import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'formly-grid-wrapper',
@@ -22,6 +24,8 @@ import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/
     // CdkDragPlaceholder,
     // CdkDropList, CdkDrag,
     FormlyModule,
+    ConcatUnitsPipe,
+    CommonModule,
   ],
 })
 export class FormlyGridWrapperComponent extends FieldType<IEditorFormlyField> {
@@ -29,5 +33,12 @@ export class FormlyGridWrapperComponent extends FieldType<IEditorFormlyField> {
 
   constructor(public widgetEditorService: WidgetEditorService) {
     super();
+  }
+
+  getGridTemplateColumns(fieldGroup: IEditorFormlyField[]) {
+    return fieldGroup.reduce(
+      (acc, ori) => acc + ` minmax(0px, ${ori.props?.['row']}fr)`,
+      '',
+    );
   }
 }

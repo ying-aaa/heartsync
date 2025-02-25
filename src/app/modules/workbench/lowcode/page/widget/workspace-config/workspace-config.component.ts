@@ -1,7 +1,7 @@
 import { Component, effect, input, OnInit } from '@angular/core';
 import { FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
-import { CONFIT_RESOURCE } from './config-resource.ts/public-api';
+import { CONFIT_RESOURCE } from './field-config.ts/public-api';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -20,6 +20,7 @@ export class WorkspaceConfigComponent implements OnInit {
       this.configFields = this.getFieldConfig(
         this.selectedField()?.type as string,
       );
+      console.log('%c Line:23 🍌', 'color:#4fff4B', this.selectedField());
       this.configForm = new FormGroup({});
     });
   }

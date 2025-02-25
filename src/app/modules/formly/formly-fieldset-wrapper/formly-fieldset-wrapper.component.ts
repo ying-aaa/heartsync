@@ -6,7 +6,7 @@ import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
   selector: 'formly-fieldset-wrapper',
   template: `
     <fieldset
-      class="p-0 p-x-4 p-b-2 mb-2.5 border border-groove border-[#2c7eac] rounded-md"
+      class="min-w-inherit p-0 px-6px p-b-2px mb-2.5px border border-groove border-[#2c7eac] rounded-8px"
     >
       <legend
         class="block max-w-full mb-2 p-0 text-inherit text-xl leading-inherit whitespace-normal"

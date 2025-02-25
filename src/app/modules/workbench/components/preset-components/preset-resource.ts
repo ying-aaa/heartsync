@@ -25,11 +25,39 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               label: '栅格',
               icon: 'grid_on',
+              styles: {
+                gap: '10',
+                gapUnits: 'px',
+              },
             },
             fieldGroup: [
-              { key: 'column', type: 'column', fieldGroup: [] },
-              { key: 'column', type: 'column', fieldGroup: [] },
-              { key: 'column', type: 'column', fieldGroup: [] },
+              {
+                _design: true,
+                key: 'column',
+                type: 'column',
+                fieldGroup: [],
+                props: {
+                  row: 8,
+                },
+              },
+              {
+                _design: true,
+                key: 'column',
+                type: 'column',
+                fieldGroup: [],
+                props: {
+                  row: 8,
+                },
+              },
+              {
+                _design: true,
+                key: 'column',
+                type: 'column',
+                fieldGroup: [],
+                props: {
+                  row: 8,
+                },
+              },
             ],
           },
           {
@@ -50,9 +78,24 @@ export const presetResource: IEditorFormlyField[] = [
                   icon: 'apps',
                 },
                 fieldGroup: [
-                  { key: 'column', type: 'column', fieldGroup: [] },
-                  { key: 'column', type: 'column', fieldGroup: [] },
-                  { key: 'column', type: 'column', fieldGroup: [] },
+                  {
+                    _design: true,
+                    key: 'column',
+                    type: 'column',
+                    fieldGroup: [],
+                  },
+                  {
+                    _design: true,
+                    key: 'column',
+                    type: 'column',
+                    fieldGroup: [],
+                  },
+                  {
+                    _design: true,
+                    key: 'column',
+                    type: 'column',
+                    fieldGroup: [],
+                  },
                 ],
               },
             ],

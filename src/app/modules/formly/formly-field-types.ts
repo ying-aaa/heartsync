@@ -5,6 +5,7 @@ import { FormlyGridWrapperComponent } from './formly-grid-wrapper/formly-grid-wr
 import { FormlyMatTabsWrapperComponent } from './formly-mat-tabs-wrapper/formly-mat-tabs-wrapper.component';
 import { FormlyMatStepperWrapperComponent } from './formly-mat-stepper-wrapper/formly-mat-stepper-wrapper.component';
 import { FormlyCanvasWrapperComponent } from './formly-canvas-wrapper/formly-canvas-wrapper.component';
+import { FormlyArrayWrapperComponent } from './formly-array-wrapper/formly-array-wrapper.component';
 
 export const formlyLayoutTypes = [
   { name: 'column', component: FormlyColumnWrapperComponent },
@@ -14,4 +15,5 @@ export const formlyLayoutTypes = [
   { name: 'mat-accordion', component: FormlyMatAccordionWrapperComponent },
   { name: 'mat-stepper', component: FormlyMatStepperWrapperComponent },
   { name: 'canvas', component: FormlyCanvasWrapperComponent },
+  { name: 'array', component: FormlyArrayWrapperComponent },
 ];
