@@ -7,9 +7,8 @@ import {
 } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatInput } from '@angular/material/input';
 import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 
@@ -24,6 +23,7 @@ import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
     FormlyModule,
     CommonModule,
     MatIcon,
+    MatButtonModule,
   ],
 })
 export class FormlyArrayWrapperComponent

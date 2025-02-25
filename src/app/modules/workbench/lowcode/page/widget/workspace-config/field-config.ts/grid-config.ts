@@ -14,8 +14,12 @@ export const widget_grid_config: IEditorFormlyField[] = [
   {
     type: 'fieldset',
     props: {
-      label: '群组',
+      label: '列配置',
       icon: 'subheader',
+      styles: {
+        fontSize: 14,
+        fontSizeUnits: 'px',
+      },
     },
     fieldGroup: [
       {
