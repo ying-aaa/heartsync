@@ -103,7 +103,6 @@
 .border-\#2f90b9{--un-border-opacity:1;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .border-\#2f90b94d{--un-border-opacity:0.3;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .border-\#2f90b960{--un-border-opacity:0.38;border-color:rgb(47 144 185 / var(--un-border-opacity));}
-.border-\#333{--un-border-opacity:1;border-color:rgb(51 51 51 / var(--un-border-opacity));}
 .border-\#ccc{--un-border-opacity:1;border-color:rgb(204 204 204 / var(--un-border-opacity));}
 .hover-border-\#2f90b9:hover{--un-border-opacity:1;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .hover\:border-\#2f90b9:hover{--un-border-opacity:1;border-color:rgb(47 144 185 / var(--un-border-opacity));}
