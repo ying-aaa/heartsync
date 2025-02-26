@@ -2,7 +2,6 @@ import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 
 export const widget_grid_config: IEditorFormlyField[] = [
   {
-    _design: false,
     key: 'props.styles.gap',
     type: 'number',
     props: {

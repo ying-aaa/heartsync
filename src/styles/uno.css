@@ -22,7 +22,6 @@
 .-mt-2px{margin-top:-2px;}
 .mb-12px{margin-bottom:12px;}
 .mb-18px{margin-bottom:18px;}
-.mb-2\.5px{margin-bottom:2.5px;}
 .mb-20px\!{margin-bottom:20px !important;}
 .mb-5px{margin-bottom:5px;}
 .mb-7px\!{margin-bottom:7px !important;}
@@ -99,7 +98,9 @@
 .border-1,
 .border-1px{border-width:1px;}
 .border-2px{border-width:2px;}
+.border-3px{border-width:3px;}
 .border-\[\#2c7eac\]{--un-border-opacity:1;border-color:rgb(44 126 172 / var(--un-border-opacity));}
+.border-\#2f90b9{--un-border-opacity:1;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .border-\#2f90b94d{--un-border-opacity:0.3;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .border-\#2f90b960{--un-border-opacity:0.38;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .border-\#333{--un-border-opacity:1;border-color:rgb(51 51 51 / var(--un-border-opacity));}
@@ -135,13 +136,14 @@
 .px-8px{padding-left:8px;padding-right:8px;}
 .py-12px{padding-top:12px;padding-bottom:12px;}
 .py-8px{padding-top:8px;padding-bottom:8px;}
-.p-b-2px{padding-bottom:2px;}
 .pb-10px{padding-bottom:10px;}
 .pb-24px{padding-bottom:24px;}
 .pb-6px{padding-bottom:6px;}
+.pb-8px{padding-bottom:8px;}
 .pt-12px{padding-top:12px;}
 .pt-48px{padding-top:48px;}
 .pt-6px{padding-top:6px;}
+.pt-8px{padding-top:8px;}
 .text-center{text-align:center;}
 .indent{text-indent:1.5rem;}
 .text-12px{font-size:12px;}

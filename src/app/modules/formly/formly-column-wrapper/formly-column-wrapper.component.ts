@@ -13,13 +13,22 @@ import {
   IFieldType,
 } from '@src/app/shared/models/editor.model';
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
+import { CommonModule } from '@angular/common';
+import { ConcatUnitsPipe } from '../../../shared/pipes/units.pipe';
 
 @Component({
   selector: 'formly-column-wrapper',
   templateUrl: './formly-column-wrapper.component.html',
   styleUrls: ['./formly-column-wrapper.component.less'],
   host: { '[class.formly-column-wrapper]': 'true' },
-  imports: [CdkDropList, CdkDrag, FormlyModule, CdkDragPlaceholder],
+  imports: [
+    CdkDropList,
+    CdkDrag,
+    FormlyModule,
+    CdkDragPlaceholder,
+    CommonModule,
+    ConcatUnitsPipe,
+  ],
 })
 export class FormlyColumnWrapperComponent extends FieldType<IEditorFormlyField> {
   @ViewChild(CdkDropList) dropList!: CdkDropList;

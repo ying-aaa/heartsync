@@ -20,7 +20,6 @@ export class WorkspaceConfigComponent implements OnInit {
       this.configFields = this.getFieldConfig(
         this.selectedField()?.type as string,
       );
-      console.log('%c Line:23 🍌', 'color:#4fff4B', this.selectedField());
       this.configForm = new FormGroup({});
     });
   }

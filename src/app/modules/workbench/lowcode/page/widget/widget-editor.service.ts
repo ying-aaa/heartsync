@@ -116,6 +116,7 @@ export class WidgetEditorService {
     const options: any = {
       group: [],
       column: [this.HS_DEFAULT_ID],
+      flex: [],
       row: [],
     };
 
@@ -149,8 +150,9 @@ function findSameField(
 ): { [key in IFieldType]: string[] } {
   for (let i = 0; i < fields.length; i++) {
     const type = fields[i].type as IFieldType;
-    if (type && options[type]) {
-      options[type].unshift(fields[i].fieldId as string);
+    if ((type === 'column' || type === 'flex') && options[type]) {
+      // 暂时都用column进行连接
+      options['column']!.unshift(fields[i].fieldId as string);
     }
     if (fields[i].fieldGroup) {
       options = findSameField(

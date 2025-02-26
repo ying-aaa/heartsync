@@ -10,6 +10,7 @@ import { FormlyArrayWrapperComponent } from './formly-array-wrapper/formly-array
 export const formlyLayoutTypes = [
   { name: 'column', component: FormlyColumnWrapperComponent },
   { name: 'grid', component: FormlyGridWrapperComponent },
+  { name: 'flex', component: FormlyColumnWrapperComponent },
   { name: 'fieldset', component: FormlyFieldsetWrapperComponent },
   { name: 'mat-tabs', component: FormlyMatTabsWrapperComponent },
   { name: 'mat-accordion', component: FormlyMatAccordionWrapperComponent },
