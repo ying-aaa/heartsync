@@ -5,12 +5,14 @@ export enum IFieldType {
   ROW = 'row',
   COLUMN = 'column',
   FLEX = 'flex',
+  MATTABS = 'mat-tabs',
 }
 
 export enum ICdkDrapActionType {
   COPY = 'copy',
   MOVE = 'move',
   DELETE = 'delete',
+  TRANSFER = 'transfer',
 }
 
 export interface IEditorFormlyField extends FormlyFieldConfig {

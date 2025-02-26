@@ -114,10 +114,11 @@ export class WidgetEditorService {
 
   getConnectedTo(type: IFieldType) {
     const options: any = {
-      group: [],
-      column: [this.HS_DEFAULT_ID],
-      flex: [],
-      row: [],
+      [IFieldType.GROUP]: [],
+      [IFieldType.COLUMN]: [this.HS_DEFAULT_ID],
+      [IFieldType.FLEX]: [],
+      [IFieldType.ROW]: [],
+      [IFieldType.MATTABS]: [],
     };
 
     // @ts-ignore
@@ -151,9 +152,12 @@ function findSameField(
   for (let i = 0; i < fields.length; i++) {
     const type = fields[i].type as IFieldType;
     if ((type === 'column' || type === 'flex') && options[type]) {
-      // 暂时都用column进行连接
+      // 暂时都用column进行连接，后面可改为 new Map 来存储 ！
       options['column']!.unshift(fields[i].fieldId as string);
+    } else if (type && options[type]) {
+      options[type].unshift(fields[i].fieldId as string);
     }
+
     if (fields[i].fieldGroup) {
       options = findSameField(
         fields[i].fieldGroup as IEditorFormlyField[],
