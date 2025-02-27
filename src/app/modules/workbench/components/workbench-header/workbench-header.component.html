@@ -1,5 +1,5 @@
 <div
-  class="color-#f5f9fff2 bg-#19282d h-64px flex items-center overflow-hidden"
+  class="color-#f5f9fff2 bg-#19282d h-64px flex items-center justify-between overflow-hidden"
 >
   <div
     class="w-180px h-full flex-center"
@@ -16,7 +16,7 @@
     />
     HeartSync
   </div>
-  <div class="flex-1 flex">
+  <div class="router-link flex-1 flex">
     @for (item of menuList; track $index) { @let isActiveRoute = item.path ===
     outlet()!.activatedRoute.routeConfig?.path;
     <div
@@ -42,7 +42,7 @@
     </div>
     }
   </div>
-  <div class="w-auto flex gap-16px items-center px-20px">
+  <div class="header-toobar w-auto flex gap-16px items-center px-20px">
     <verse-theme></verse-theme>
     @let systemConfig = [ { iconUrl: '/assets/workbench/settings.png', size: 20
     }, { iconUrl: '/assets/workbench/message.png', size: 24 }, ]; @for (item of

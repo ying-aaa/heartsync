@@ -1,7 +1,24 @@
 @import 'mixin';
+@import "media";
 
 .themeMixin( {
-    :host {}
+    :host {
+      .mat-sm-mixin( {
+          .router-link > * {
+            display: none;
+          }
+        }
+
+      );
+
+      .mat-xs-mixin( {
+          .router-link, .header-toobar {
+            display: none;
+          }
+        }
+
+      );
+    }
   }
 
 );
