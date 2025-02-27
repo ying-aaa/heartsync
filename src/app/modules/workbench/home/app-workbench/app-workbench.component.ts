@@ -46,8 +46,4 @@ export class AppWorkbenchComponent {
       error: (err) => console.error('err ->', err),
     });
   }
-
-  onScrollbarUpdate(scrollbarRef: NgScrollbarExt, duration: number = 0): void {
-    scrollbarRef.scrollTo({ bottom: 0, duration });
-  }
 }
