@@ -7,6 +7,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { debounceTime } from 'rxjs';
+import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
 
 declare var $: any;
 @Component({
@@ -19,6 +20,7 @@ declare var $: any;
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    NgScrollbarModule,
   ],
 })
 export class HsFancytreeComponent implements OnInit, AfterViewInit {
@@ -45,6 +47,9 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
       });
 
     this.initFancytreeFilter();
+  }
+  onScrollbarUpdate(scrollbarRef: NgScrollbarExt, duration: number = 0): void {
+    scrollbarRef.scrollTo({ bottom: 0, duration });
   }
 
   initFancytree() {

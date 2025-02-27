@@ -1,19 +1,17 @@
-import {
-  ChangeDetectionStrategy,
-  Component
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
 import { HttpClient } from '@angular/common/http';
 import { debounceTime } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
 @Component({
   selector: 'hs-app-workbench',
-  styleUrl: "./app-workbench.component.less",
+  styleUrl: './app-workbench.component.less',
   templateUrl: './app-workbench.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
@@ -24,11 +22,12 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     ReactiveFormsModule,
     MatDividerModule,
-    CommonModule
+    CommonModule,
+    NgScrollbarModule,
   ],
 })
 export class AppWorkbenchComponent {
-  appValue = new FormControl("");
+  appValue = new FormControl('');
   appList: any = [];
 
   constructor(private http: HttpClient) {
@@ -38,13 +37,17 @@ export class AppWorkbenchComponent {
         this.getAppList(value);
       });
   }
-  
-  getAppList(value: string | null): void{
+
+  getAppList(value: string | null): void {
     this.http.get(`/api/app?appValue=${value}`).subscribe({
       next: (data) => {
         this.appList = data;
       },
-      error: (err) => console.error("err ->", err),
+      error: (err) => console.error('err ->', err),
     });
+  }
+
+  onScrollbarUpdate(scrollbarRef: NgScrollbarExt, duration: number = 0): void {
+    scrollbarRef.scrollTo({ bottom: 0, duration });
   }
 }

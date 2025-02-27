@@ -4,15 +4,21 @@
   height: 100%;
 
   ::ng-deep {
-    .wh-full {
-      width: 100%;
-      height: 100%;
+    .render-canvar {
       display: block;
+      height: 100%;
+      padding: 8px 20px;
     }
 
     .render-canvar>formly-form>formly-field>formly-column-wrapper>div>* {
       display: block;
       margin: 8px 0;
+    }
+
+    .wh-full {
+      width: 100%;
+      height: auto;
+      display: block;
     }
 
     formly-form {
@@ -26,9 +32,8 @@
 
           &>#workspace {
             // .wh-full();
-            height: 100%;
-            display: flex;
-            // overflow-y: auto;
+            min-height: calc(100vh - 64px - 48px - 1px - 16px);
+            .wh-full();
           }
         }
       }

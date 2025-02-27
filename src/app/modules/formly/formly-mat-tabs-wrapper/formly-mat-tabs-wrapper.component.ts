@@ -42,7 +42,6 @@ export class FormlyMatTabsWrapperComponent
     }
     if (action === ICdkDrapActionType.MOVE) {
       if (event.previousContainer === event.container) {
-        console.log('%c Line:42 🍤', 'color:#fca650');
         this.widgetEditorService.moveField(
           toParent,
           event.previousIndex,

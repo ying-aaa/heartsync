@@ -5,12 +5,23 @@
 
   <mat-divider class="opacity-20 w-full"></mat-divider>
 
-  <div class="render-canvar flex-1 p-12px h-0">
-    <formly-form
-      [form]="widgetEditorService.formGroup"
-      [fields]="widgetEditorService.fields()"
-      [model]="widgetEditorService.model"
-      [options]="widgetEditorService.options"
-    ></formly-form>
-  </div>
+  <ng-scrollbar
+    class="flex-1 h-0"
+    #scrollbarRef="ngScrollbar"
+    externalViewport
+    visibility="hover"
+    appearance="compact"
+    orientation="auto"
+  >
+    <div scrollViewport>
+      <div class="render-canvar">
+        <formly-form
+          [form]="widgetEditorService.formGroup"
+          [fields]="widgetEditorService.fields()"
+          [model]="widgetEditorService.model"
+          [options]="widgetEditorService.options"
+        ></formly-form>
+      </div>
+    </div>
+  </ng-scrollbar>
 </content>

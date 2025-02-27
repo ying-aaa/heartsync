@@ -8,15 +8,14 @@ import {
 } from '@src/app/shared/models/editor.model';
 import { IRouterUse } from '@src/app/shared/models/route.model';
 import { formlyLayoutTypes } from '@src/app/modules/formly/formly-field-types';
+import { FormlyScrollWrapperComponent } from '@src/app/modules/formly/formly-scroll-wrapper/formly-scroll-wrapper.component';
 export function addonsExtension(field: IEditorFormlyField) {
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
     return;
   }
   // field.type === IFieldType.COLUMN
-  if (!field._design) {
-    return;
-  }
+  if (!field._design) return;
 
   if (field.wrappers) {
     if (
@@ -39,7 +38,6 @@ export default [
       preload: true,
       key: 'dashboard',
       use: IRouterUse.MENU,
-      // settings_applications
       icon: 'lens_blur',
     },
     loadComponent: () =>
@@ -65,6 +63,7 @@ export default [
           ],
           wrappers: [
             { name: 'contorl', component: FormlyContorlWrapperComponent },
+            { name: 'scroll', component: FormlyScrollWrapperComponent },
           ],
           extensions: [
             {
