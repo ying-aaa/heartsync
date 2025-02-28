@@ -48,9 +48,6 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
 
     this.initFancytreeFilter();
   }
-  onScrollbarUpdate(scrollbarRef: NgScrollbarExt, duration: number = 0): void {
-    scrollbarRef.scrollTo({ bottom: 0, duration });
-  }
 
   initFancytree() {
     let CLIPBOARD: { mode: any; data: any } | null = null;
