@@ -20,7 +20,7 @@ import { ConcatUnitsPipe } from '../../../../shared/pipes/units.pipe';
   selector: 'formly-field-wrapper',
   templateUrl: './formly-field-wrapper.component.html',
   styleUrls: ['./formly-field-wrapper.component.less'],
-  host: { '[class.formly-column-wrapper]': 'true' },
+  host: { '[class.formly-field-wrapper]': 'true' },
   imports: [
     CdkDropList,
     CdkDrag,
