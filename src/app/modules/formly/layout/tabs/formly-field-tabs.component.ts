@@ -15,12 +15,12 @@ import {
 import { WidgetEditorService } from '../../../workbench/lowcode/page/widget/widget-editor.service';
 
 @Component({
-  selector: 'formly-field-mat-tabs',
-  templateUrl: './formly-field-mat-tabs.component.html',
-  styleUrls: ['./formly-field-mat-tabs.component.less'],
+  selector: 'formly-field-tabs',
+  templateUrl: './formly-field-tabs.component.html',
+  styleUrls: ['./formly-field-tabs.component.less'],
   imports: [CdkDrag, CdkDropList, MatTabsModule, FormlyModule],
 })
-export class FormlyFieldMatTabsComponent
+export class FormlyFieldTabsComponent
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {

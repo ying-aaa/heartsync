@@ -4,18 +4,21 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+
 import { FieldType, FormlyModule } from '@ngx-formly/core';
+
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+
 import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
-  selector: 'formly-field-mat-accordion',
-  templateUrl: './formly-field-mat-accordion.component.html',
-  styleUrls: ['./formly-field-mat-accordion.component.less'],
+  selector: 'formly-field-accordion',
+  templateUrl: './formly-field-accordion.component.html',
+  styleUrls: ['./formly-field-accordion.component.less'],
   imports: [MatExpansionModule, FormlyModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormlyFieldMatAccordionComponent
+export class FormlyFieldAccordionComponent
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {

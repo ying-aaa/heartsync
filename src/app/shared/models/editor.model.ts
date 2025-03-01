@@ -5,7 +5,7 @@ export enum IFieldType {
   ROW = 'row',
   COLUMN = 'column',
   FLEX = 'flex',
-  MATTABS = 'mat-tabs',
+  MATTABS = 'tabs',
 }
 
 export enum ICdkDrapActionType {

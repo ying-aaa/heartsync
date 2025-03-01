@@ -256,8 +256,8 @@ export const presetResource: IEditorFormlyField[] = [
         },
         fieldGroup: [
           {
-            key: 'mat-tabs',
-            type: 'mat-tabs',
+            key: 'tabs',
+            type: 'tabs',
             _design: true,
             props: {
               label: '页签',
@@ -321,8 +321,8 @@ export const presetResource: IEditorFormlyField[] = [
             ],
           },
           {
-            key: 'mat-accordion',
-            type: 'mat-accordion',
+            key: 'accordion',
+            type: 'accordion',
             _design: true,
             props: {
               label: '手风琴',
@@ -386,8 +386,8 @@ export const presetResource: IEditorFormlyField[] = [
             ],
           },
           {
-            key: 'mat-stepper',
-            type: 'mat-stepper',
+            key: 'stepper',
+            type: 'stepper',
             _design: true,
             props: {
               label: '步进器',
