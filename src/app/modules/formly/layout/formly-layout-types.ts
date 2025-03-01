@@ -14,7 +14,7 @@ export const formlyLayoutTypes = [
   { name: 'fieldset', component: FormlyFieldFieldsetComponent },
   { name: 'tabs', component: FormlyFieldTabsComponent },
   { name: 'accordion', component: FormlyFieldAccordionComponent },
-  { name: 'stepper', component: FormlyFieldStepperComponent },
+  { name: 'mat-stepper', component: FormlyFieldStepperComponent },
   { name: 'canvas', component: FormlyFieldCanvasComponent },
   { name: 'array', component: FormlyFieldArrayComponent },
 ];

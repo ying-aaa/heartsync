@@ -17,6 +17,11 @@ import { WidgetEditorService } from './widget-editor.service';
 import { WorkspaceViewportComponent } from './workspace-viewport/workspace-viewport.component';
 import { WorkspaceContorlComponent } from './workspace-contorl/workspace-contorl.component';
 import { WorkspaceConfigComponent } from './workspace-config/workspace-config.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
+import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
+import { FormlyMatSliderModule } from '@ngx-formly/material/slider';
+
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -26,16 +31,20 @@ import { WorkspaceConfigComponent } from './workspace-config/workspace-config.co
     CommonModule,
     MatButtonToggleModule,
     ReactiveFormsModule,
-    MatInputModule,
     MatIconModule,
     MatDividerModule,
     MatButtonModule,
-    ReactiveFormsModule,
-    FormlyMaterialModule,
-    FormlyModule,
     WorkspaceViewportComponent,
     WorkspaceContorlComponent,
     WorkspaceConfigComponent,
+    ReactiveFormsModule,
+    FormlyMaterialModule,
+    MatInputModule,
+    MatNativeDateModule,
+    FormlyMatDatepickerModule,
+    FormlyModule,
+    // FormlyMatSliderModule,
+    // FormlyMatToggleModule,
   ],
 })
 export class WidgetEditorComponent implements OnInit {

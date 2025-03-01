@@ -34,7 +34,7 @@ export const widget_grid_config: IEditorFormlyField[] = [
             {
               key: 'props.row',
               type: 'input',
-              templateOptions: {
+              props: {
                 type: 'number',
                 label: '列宽',
                 min: 1,

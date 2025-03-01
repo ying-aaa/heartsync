@@ -33,11 +33,20 @@ $base-radius: 8px;
   ));
 }
 
+.mat-mdc-option{
+  min-height: 32px !important;
+}
+
 .mdc-button {
   --mat-sys-corner-full: 8px;
   --mat-filled-button-horizontal-padding: 16px;
 }
 
+.mat-mdc-select{
+  --mat-select-trigger-text-size: 14px;
+}
+
 .mat-mdc-form-field-subscript-wrapper {
   height: 0;
 }
+

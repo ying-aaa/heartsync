@@ -6,6 +6,7 @@ export const widget_input_config: IEditorFormlyField[] = [
     key: 'props.label',
     type: 'input',
     props: {
+      type: 'text',
       label: '标题',
       appearance: 'outline',
     },

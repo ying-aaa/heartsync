@@ -386,8 +386,8 @@ export const presetResource: IEditorFormlyField[] = [
             ],
           },
           {
-            key: 'stepper',
-            type: 'stepper',
+            key: 'mat-stepper',
+            type: 'mat-stepper',
             _design: true,
             props: {
               label: '步进器',
@@ -485,20 +485,12 @@ export const presetResource: IEditorFormlyField[] = [
         },
         fieldGroup: [
           {
-            key: 'input',
+            key: 'text',
             type: 'input',
             _design: true,
             props: {
+              type: 'text',
               label: '单行文本',
-              appearance: 'outline',
-              density: 5, // 初始值
-            },
-            className: 'hs-density--5',
-            expressions: {
-              className: (field: IEditorFormlyField) => {
-                // 根据 props.density 的值动态计算 className
-                return `hs-density--${field.props?.['density']}`;
-              },
             },
           },
           {
@@ -511,18 +503,29 @@ export const presetResource: IEditorFormlyField[] = [
           },
           {
             key: 'number',
-            type: 'number',
+            type: 'input',
             _design: true,
             props: {
+              type: 'number',
               label: '数字',
             },
           },
           {
             key: 'password',
-            type: 'password',
+            type: 'input',
             _design: true,
             props: {
+              type: 'password',
               label: '密码',
+            },
+          },
+          {
+            key: 'color',
+            type: 'input',
+            _design: true,
+            props: {
+              type: 'color',
+              label: '颜色',
             },
           },
           {
@@ -572,12 +575,6 @@ export const presetResource: IEditorFormlyField[] = [
             _design: true,
             props: {
               label: '单选',
-              options: [
-                { value: 1, label: 'Option 1' },
-                { value: 2, label: 'Option 2' },
-                { value: 3, label: 'Option 3' },
-                { value: 4, label: 'Option 4', disabled: true },
-              ],
             },
           },
           {
@@ -602,34 +599,14 @@ export const presetResource: IEditorFormlyField[] = [
             _design: true,
             props: {
               label: '下拉单选',
-              options: [
-                { value: 1, label: 'Option 1' },
-                { value: 2, label: 'Option 2' },
-                { value: 3, label: 'Option 3' },
-                { value: 4, label: 'Option 4', disabled: true },
-              ],
             },
           },
           {
             key: 'select_multi',
-            type: 'select_multi',
+            type: 'select',
             _design: true,
             props: {
               label: '下拉多选',
-              options: [
-                { value: 1, label: 'Option 1' },
-                { value: 2, label: 'Option 2' },
-                { value: 3, label: 'Option 3' },
-                { value: 4, label: 'Option 4', disabled: true },
-              ],
-            },
-          },
-          {
-            key: 'rating',
-            type: 'rating',
-            _design: true,
-            props: {
-              label: '评分',
             },
           },
           {
@@ -638,6 +615,14 @@ export const presetResource: IEditorFormlyField[] = [
             _design: true,
             props: {
               label: '滑块',
+            },
+          },
+          {
+            key: 'rating',
+            type: 'rating',
+            _design: true,
+            props: {
+              label: '评分',
             },
           },
           {

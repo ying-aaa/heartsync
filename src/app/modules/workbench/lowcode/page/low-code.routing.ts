@@ -9,13 +9,15 @@ import {
 import { IRouterUse } from '@src/app/shared/models/route.model';
 import { FormlyFieldScrollComponent } from '@src/app/modules/formly/layout/scroll/formly-field-scroll.component';
 import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout-types';
+import { formlyFormTypes } from '@src/app/modules/formly/form/formly-form-types';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 export function addonsExtension(field: IEditorFormlyField) {
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
     return;
   }
   // field.type === IFieldType.COLUMN
-  if (!field._design) return;
+  if (!field._design || field.type === IFieldType.COLUMN) return;
 
   if (field.wrappers) {
     if (
@@ -29,6 +31,7 @@ export function addonsExtension(field: IEditorFormlyField) {
     field.wrappers = ['contorl'];
   }
 }
+
 export default [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
@@ -57,7 +60,7 @@ export default [
     providers: [
       importProvidersFrom(
         FormlyModule.forRoot({
-          types: formlyLayoutTypes,
+          types: [...formlyLayoutTypes, ...formlyFormTypes],
           validationMessages: [
             { name: 'required', message: '这个字段是必填的！' },
           ],
@@ -73,6 +76,7 @@ export default [
           ],
         }),
       ),
+      { provide: MAT_DATE_LOCALE, useValue: 'zh-CN' },
     ],
     loadComponent: () =>
       import('./widget/widget-editor.component').then(
