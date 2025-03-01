@@ -17,9 +17,9 @@ import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'formly-grid-wrapper',
-  templateUrl: './formly-grid-wrapper.component.html',
-  styleUrls: ['./formly-grid-wrapper.component.less'],
+  selector: 'formly-field-grid',
+  templateUrl: './formly-field-grid.component.html',
+  styleUrls: ['./formly-field-grid.component.less'],
   imports: [
     // CdkDragPlaceholder,
     // CdkDropList, CdkDrag,
@@ -28,7 +28,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
   ],
 })
-export class FormlyGridWrapperComponent extends FieldType<IEditorFormlyField> {
+export class FormlyFieldGridComponent extends FieldType<IEditorFormlyField> {
   IFieldType = IFieldType;
 
   constructor(public widgetEditorService: WidgetEditorService) {

@@ -4,12 +4,12 @@ import { FieldType, FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 
 @Component({
-  selector: 'formly-canvas-wrapper',
-  templateUrl: './formly-canvas-wrapper.component.html',
-  styleUrls: ['./formly-canvas-wrapper.component.less'],
+  selector: 'formly-field-canvas',
+  templateUrl: './formly-field-canvas.component.html',
+  styleUrls: ['./formly-field-canvas.component.less'],
   imports: [FormlyModule, CdkDrag],
 })
-export class FormlyCanvasWrapperComponent
+export class FormlyFieldCanvasComponent
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {

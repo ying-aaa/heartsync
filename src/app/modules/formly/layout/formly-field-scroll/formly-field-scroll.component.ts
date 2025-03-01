@@ -4,7 +4,7 @@ import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
 
 @Component({
-  selector: 'formly-scroll-wrapper',
+  selector: 'formly-field-scroll',
   template: ` <ng-scrollbar
     class="wh-full min-h-30px"
     #scrollbarRef="ngScrollbar"
@@ -21,7 +21,7 @@ import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
   </ng-scrollbar>`,
   imports: [NgScrollbarModule, FormlyModule],
 })
-export class FormlyScrollWrapperComponent extends FieldWrapper<IEditorFormlyField> {
+export class FormlyFieldScrollComponent extends FieldWrapper<IEditorFormlyField> {
   constructor() {
     super();
   }

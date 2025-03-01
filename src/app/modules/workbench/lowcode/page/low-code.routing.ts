@@ -1,14 +1,14 @@
 import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
 import { FormlyModule } from '@ngx-formly/core';
-import { FormlyContorlWrapperComponent } from '@src/app/modules/formly/formly-control-wrapper/formly-control-wrapper.component';
+import { FormlyContorlWrapperComponent } from '@src/app/modules/formly/layout/formly-control-wrapper/formly-control-wrapper.component';
 import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/editor.model';
 import { IRouterUse } from '@src/app/shared/models/route.model';
-import { formlyLayoutTypes } from '@src/app/modules/formly/formly-field-types';
-import { FormlyScrollWrapperComponent } from '@src/app/modules/formly/formly-scroll-wrapper/formly-scroll-wrapper.component';
+import { FormlyFieldScrollComponent } from '@src/app/modules/formly/layout/formly-field-scroll/formly-field-scroll.component';
+import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout-types';
 export function addonsExtension(field: IEditorFormlyField) {
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
@@ -63,7 +63,7 @@ export default [
           ],
           wrappers: [
             { name: 'contorl', component: FormlyContorlWrapperComponent },
-            { name: 'scroll', component: FormlyScrollWrapperComponent },
+            { name: 'scroll', component: FormlyFieldScrollComponent },
           ],
           extensions: [
             {

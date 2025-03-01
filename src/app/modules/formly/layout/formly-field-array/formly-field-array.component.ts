@@ -13,9 +13,9 @@ import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 
 @Component({
-  selector: 'app-formly-array-wrapper',
-  templateUrl: './formly-array-wrapper.component.html',
-  styleUrls: ['./formly-array-wrapper.component.less'],
+  selector: 'formly-field-array',
+  templateUrl: './formly-field-array.component.html',
+  styleUrls: ['./formly-field-array.component.less'],
   imports: [
     CdkDropList,
     CdkDrag,
@@ -26,7 +26,7 @@ import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
     MatButtonModule,
   ],
 })
-export class FormlyArrayWrapperComponent
+export class FormlyFieldArrayComponent
   extends FieldArrayType<IEditorFormlyField>
   implements OnInit
 {

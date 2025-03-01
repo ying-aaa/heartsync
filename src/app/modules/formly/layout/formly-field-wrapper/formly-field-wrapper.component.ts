@@ -14,12 +14,12 @@ import {
 } from '@src/app/shared/models/editor.model';
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 import { CommonModule } from '@angular/common';
-import { ConcatUnitsPipe } from '../../../shared/pipes/units.pipe';
+import { ConcatUnitsPipe } from '../../../../shared/pipes/units.pipe';
 
 @Component({
-  selector: 'formly-column-wrapper',
-  templateUrl: './formly-column-wrapper.component.html',
-  styleUrls: ['./formly-column-wrapper.component.less'],
+  selector: 'formly-field-wrapper',
+  templateUrl: './formly-field-wrapper.component.html',
+  styleUrls: ['./formly-field-wrapper.component.less'],
   host: { '[class.formly-column-wrapper]': 'true' },
   imports: [
     CdkDropList,
@@ -30,7 +30,7 @@ import { ConcatUnitsPipe } from '../../../shared/pipes/units.pipe';
     ConcatUnitsPipe,
   ],
 })
-export class FormlyColumnWrapperComponent extends FieldType<IEditorFormlyField> {
+export class FormlyFieldWrapperComponent extends FieldType<IEditorFormlyField> {
   @ViewChild(CdkDropList) dropList!: CdkDropList;
 
   IFieldType = IFieldType;

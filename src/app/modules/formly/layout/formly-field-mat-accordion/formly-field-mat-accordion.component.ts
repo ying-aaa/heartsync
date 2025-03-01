@@ -9,13 +9,13 @@ import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
-  selector: 'formly-mat-accordion-wrapper',
-  templateUrl: './formly-mat-accordion-wrapper.component.html',
-  styleUrls: ['./formly-mat-accordion-wrapper.component.less'],
+  selector: 'formly-field-mat-accordion',
+  templateUrl: './formly-field-mat-accordion.component.html',
+  styleUrls: ['./formly-field-mat-accordion.component.less'],
   imports: [MatExpansionModule, FormlyModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormlyMatAccordionWrapperComponent
+export class FormlyFieldMatAccordionComponent
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {
