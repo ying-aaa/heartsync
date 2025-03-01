@@ -1,11 +1,11 @@
-import { FormlyFieldMatAccordionComponent } from './formly-field-mat-accordion/formly-field-mat-accordion.component';
-import { FormlyFieldWrapperComponent } from './formly-field-wrapper/formly-field-wrapper.component';
-import { FormlyFieldFieldsetComponent } from './formly-field-fieldset/formly-field-fieldset.component';
-import { FormlyFieldGridComponent } from './formly-field-grid/formly-field-grid.component';
-import { FormlyFieldMatTabsComponent } from './formly-field-mat-tabs/formly-field-mat-tabs.component';
-import { FormlyFieldMatStepperComponent } from './formly-field-mat-stepper/formly-field-mat-stepper.component';
-import { FormlyFieldCanvasComponent } from './formly-field-canvas/formly-field-canvas.component';
-import { FormlyFieldArrayComponent } from './formly-field-array/formly-field-array.component';
+import { FormlyFieldMatAccordionComponent } from './mat-accordion/formly-field-mat-accordion.component';
+import { FormlyFieldWrapperComponent } from './wrapper/formly-field-wrapper.component';
+import { FormlyFieldFieldsetComponent } from './fieldset/formly-field-fieldset.component';
+import { FormlyFieldGridComponent } from './grid/formly-field-grid.component';
+import { FormlyFieldMatTabsComponent } from './mat-tabs/formly-field-mat-tabs.component';
+import { FormlyFieldMatStepperComponent } from './mat-stepper/formly-field-mat-stepper.component';
+import { FormlyFieldCanvasComponent } from './canvas/formly-field-canvas.component';
+import { FormlyFieldArrayComponent } from './array/formly-field-array.component';
 
 export const formlyLayoutTypes = [
   { name: 'column', component: FormlyFieldWrapperComponent },

@@ -1,13 +1,13 @@
 import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
 import { FormlyModule } from '@ngx-formly/core';
-import { FormlyContorlWrapperComponent } from '@src/app/modules/formly/layout/formly-control-wrapper/formly-control-wrapper.component';
+import { FormlyContorlWrapperComponent } from '@src/app/modules/formly/layout/control/formly-control-wrapper.component';
 import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/editor.model';
 import { IRouterUse } from '@src/app/shared/models/route.model';
-import { FormlyFieldScrollComponent } from '@src/app/modules/formly/layout/formly-field-scroll/formly-field-scroll.component';
+import { FormlyFieldScrollComponent } from '@src/app/modules/formly/layout/scroll/formly-field-scroll.component';
 import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout-types';
 export function addonsExtension(field: IEditorFormlyField) {
   if (field.type === 'formly-group') {
