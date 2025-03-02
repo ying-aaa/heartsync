@@ -25,7 +25,12 @@ export function addonsExtension(field: IEditorFormlyField) {
     return;
   }
   // field.type === IFieldType.COLUMN
-  if (!field._design || field.type === IFieldType.COLUMN) return;
+  if (
+    !field._design ||
+    field.type === IFieldType.COLUMN ||
+    (field.type === 'grid' && field.parent?.type === 'fieldset')
+  )
+    return;
 
   if (field.wrappers) {
     if (

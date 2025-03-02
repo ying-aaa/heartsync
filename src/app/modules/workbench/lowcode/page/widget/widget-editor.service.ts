@@ -68,6 +68,7 @@ export class WidgetEditorService {
     field: IEditorFormlyField,
     toParentField: IEditorFormlyField[],
     toIndex: number,
+    selected = true,
   ) {
     field = deepClone(field);
     function addFieldId(field: IEditorFormlyField) {
@@ -81,15 +82,19 @@ export class WidgetEditorService {
     toParentField.splice(toIndex, 0, field);
     this.formGroup = new FormGroup({});
     this.options = {};
-    this.selectField(field);
+    selected && this.selectField(field);
     this.flatField$.next(this.getFlatField());
   }
 
-  removeField(toParentField: IEditorFormlyField[], toIndex: number) {
+  removeField(
+    toParentField: IEditorFormlyField[],
+    toIndex: number,
+    clearSelected = true,
+  ) {
     toParentField.splice(toIndex, 1);
     this.formGroup = new FormGroup({});
     this.options = {};
-    this.selectField(null);
+    clearSelected && this.selectField(null);
     this.flatField$.next(this.getFlatField());
   }
 
@@ -99,6 +104,8 @@ export class WidgetEditorService {
     toIndex: number,
   ) {
     moveItemInArray(toParent, fromIndex, toIndex);
+    this.formGroup = new FormGroup({});
+    this.options = {};
     this.flatField$.next(this.getFlatField());
   }
 
@@ -109,6 +116,8 @@ export class WidgetEditorService {
     toIndex: number,
   ) {
     transferArrayItem(formParent, toParent, formIndex, toIndex);
+    this.formGroup = new FormGroup({});
+    this.options = {};
     this.flatField$.next(this.getFlatField());
   }
 

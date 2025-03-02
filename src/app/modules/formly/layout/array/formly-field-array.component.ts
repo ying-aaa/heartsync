@@ -3,13 +3,12 @@ import {
   CdkDragDrop,
   CdkDragHandle,
   CdkDropList,
-  moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
+import { WidgetEditorService } from '@src/app/modules/workbench/lowcode/page/widget/widget-editor.service';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 
 @Component({
@@ -21,7 +20,6 @@ import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
     CdkDrag,
     CdkDragHandle,
     FormlyModule,
-    CommonModule,
     MatIcon,
     MatButtonModule,
   ],
@@ -30,20 +28,32 @@ export class FormlyFieldArrayComponent
   extends FieldArrayType<IEditorFormlyField>
   implements OnInit
 {
-  constructor() {
+  constructor(private widgetEditorService: WidgetEditorService) {
     super();
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(
-      this.field.fieldGroup!,
+  cdkDropListDropped(event: CdkDragDrop<string[]>) {
+    this.widgetEditorService.moveField(
+      this.model,
       event.previousIndex,
       event.currentIndex,
     );
+    this.options.build!();
   }
 
-  removeField(toParentField: IEditorFormlyField[], toIndex: number) {
-    toParentField.splice(toIndex, 1);
+  addField(toIndex: number) {
+    this.widgetEditorService.addField(
+      this.model.at(-1),
+      this.model,
+      toIndex,
+      false,
+    );
+    this.options.build!();
+  }
+
+  removeField(toIndex: number) {
+    this.widgetEditorService.removeField(this.model, toIndex, false);
+    this.options.build!();
   }
 
   ngOnInit() {}

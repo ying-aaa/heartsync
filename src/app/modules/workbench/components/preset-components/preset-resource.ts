@@ -37,7 +37,7 @@ export const presetResource: IEditorFormlyField[] = [
                 type: 'column',
                 fieldGroup: [],
                 props: {
-                  row: 8,
+                  row: 1,
                 },
               },
               {
@@ -46,7 +46,7 @@ export const presetResource: IEditorFormlyField[] = [
                 type: 'column',
                 fieldGroup: [],
                 props: {
-                  row: 8,
+                  row: 2,
                 },
               },
               {
@@ -55,7 +55,7 @@ export const presetResource: IEditorFormlyField[] = [
                 type: 'column',
                 fieldGroup: [],
                 props: {
-                  row: 8,
+                  row: 3,
                 },
               },
             ],

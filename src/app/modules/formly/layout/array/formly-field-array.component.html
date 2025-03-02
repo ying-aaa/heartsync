@@ -1,6 +1,6 @@
 <div
   cdkDropList
-  (cdkDropListDropped)="drop($event)"
+  (cdkDropListDropped)="cdkDropListDropped($event)"
 >
   @for (f of field.fieldGroup; track $index) {
   <div
@@ -19,7 +19,7 @@
       }
     </div>
     <mat-icon
-      (click)="removeField(field.fieldGroup!, $index)"
+      (click)="removeField($index)"
       class="cursor-pointer text-20px w-20px! h-20px!"
       >delete</mat-icon
     >
@@ -29,6 +29,7 @@
     class="w-full mb-5px bg-transparent"
     mat-button
     mat-raised-button
+    (click)="addField(field.fieldGroup!.length)"
   >
     <mat-icon matChipAvatar>add</mat-icon> 新增
   </button>
