@@ -1,27 +1,29 @@
-<content class="flex flex-1 flex-col h-full">
+<content class="flex flex-1 flex-col h-full relative">
   <header>
     <hs-workspace-toobar></hs-workspace-toobar>
   </header>
 
   <mat-divider class="opacity-20 w-full"></mat-divider>
 
-  <ng-scrollbar
-    class="flex-1 h-0"
-    #scrollbarRef="ngScrollbar"
-    externalViewport
-    visibility="hover"
-    appearance="compact"
-    orientation="auto"
-  >
-    <div scrollViewport>
-      <div class="render-canvar">
-        <formly-form
-          [form]="widgetEditorService.formGroup"
-          [fields]="widgetEditorService.fields()"
-          [model]="widgetEditorService.model"
-          [options]="widgetEditorService.options"
-        ></formly-form>
+  <div class="flex-1 h-0">
+    <ng-scrollbar
+      class="wh-full!"
+      #scrollbarRef="ngScrollbar"
+      externalViewport
+      visibility="hover"
+      appearance="compact"
+      orientation="auto"
+    >
+      <div scrollViewport>
+        <div class="render-canvar">
+          <formly-form
+            [form]="widgetEditorService.formGroup"
+            [fields]="widgetEditorService.fields()"
+            [model]="widgetEditorService.model"
+            [options]="widgetEditorService.options"
+          ></formly-form>
+        </div>
       </div>
-    </div>
-  </ng-scrollbar>
+    </ng-scrollbar>
+  </div>
 </content>

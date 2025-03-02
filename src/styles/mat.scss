@@ -46,6 +46,10 @@ $base-radius: 8px;
   --mat-select-trigger-text-size: 14px;
 }
 
+.mdc-dialog{
+  --mdc-dialog-container-shape: 12px
+}
+
 .mat-mdc-form-field-subscript-wrapper {
   height: 0;
 }

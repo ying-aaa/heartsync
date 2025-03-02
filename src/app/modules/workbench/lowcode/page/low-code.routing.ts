@@ -16,6 +16,8 @@ import {
   NgxMonacoEditorConfig,
 } from 'ngx-monaco-editor-v2';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
+import { HIGHLIGHT_OPTIONS, provideHighlightOptions } from 'ngx-highlightjs';
 
 export function addonsExtension(field: IEditorFormlyField) {
   if (field.type === 'formly-group') {

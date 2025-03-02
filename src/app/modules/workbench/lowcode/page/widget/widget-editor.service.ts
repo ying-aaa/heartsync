@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
@@ -125,6 +125,10 @@ export class WidgetEditorService {
     return this.isEditMode()
       ? findSameField(this.fields(), options)[type]
       : options;
+  }
+
+  getJsonField() {
+    return JSON.stringify(this.fields(), null, 2);
   }
 
   getFlatField(field?: IEditorFormlyField[], level: number = 0) {

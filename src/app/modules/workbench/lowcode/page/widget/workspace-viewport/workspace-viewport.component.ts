@@ -1,10 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
+  inject,
   Inject,
   OnInit,
   Optional,
+  Signal,
 } from '@angular/core';
 import { WorkspaceToobarComponent } from './workspace-toobar/workspace-toobar.component';
 import { MatDividerModule } from '@angular/material/divider';
@@ -12,6 +15,8 @@ import { ConfigOption, FORMLY_CONFIG, FormlyModule } from '@ngx-formly/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WidgetEditorService } from '../widget-editor.service';
 import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
+import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
+import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 
 @Component({
   selector: 'hs-workspace-viewport',
@@ -32,6 +37,10 @@ export class WorkspaceViewportComponent implements OnInit {
     public widgetEditorService: WidgetEditorService,
     @Optional() @Inject(FORMLY_CONFIG) configs: ConfigOption[] = [],
   ) {}
+
+  get getJsonField() {
+    return this.widgetEditorService.getJsonField();
+  }
 
   ngOnInit() {}
 }

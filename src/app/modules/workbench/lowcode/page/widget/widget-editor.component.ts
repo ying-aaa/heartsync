@@ -26,7 +26,9 @@ import {
   MonacoEditorModule,
   NgxMonacoEditorConfig,
 } from 'ngx-monaco-editor-v2';
-
+import { HighlightAuto, HighlightModule } from 'ngx-highlightjs';
+import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
+import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -57,7 +59,4 @@ export class WidgetEditorComponent implements OnInit {
   constructor(public widgetEditorService: WidgetEditorService) {}
 
   ngOnInit() {}
-
-  editorOptions = { theme: 'vs-dark', language: 'javascript' };
-  code: string = 'function x() {\nconsole.log("Hello world!");\n}';
 }

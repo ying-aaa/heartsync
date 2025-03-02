@@ -4622,6 +4622,11 @@ hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
+highlight.js@^11.11.1:
+  version "11.11.1"
+  resolved "https://registry.npmmirror.com/highlight.js/-/highlight.js-11.11.1.tgz#fca06fa0e5aeecf6c4d437239135fabc15213585"
+  integrity sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==
+
 hosted-git-info@^8.0.0:
   version "8.0.2"
   resolved "https://registry.npmmirror.com/hosted-git-info/-/hosted-git-info-8.0.2.tgz"
@@ -5822,6 +5827,14 @@ neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.npmmirror.com/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
+
+ngx-highlightjs@^14.0.0:
+  version "14.0.0"
+  resolved "https://registry.npmmirror.com/ngx-highlightjs/-/ngx-highlightjs-14.0.0.tgz#7eab4c26e7af242ac57997061a515f859bacf65b"
+  integrity sha512-G0dezuYyHhp/oixm22wvj38PukFcgk5MooFTIx1shpZTFfq+KnqER0ZMNbMSNEQZh1OPtX9zpyZvYDoKZV2Avg==
+  dependencies:
+    highlight.js "^11.11.1"
+    tslib "^2.3.0"
 
 ngx-monaco-editor-v2@^19.0.2:
   version "19.0.2"
