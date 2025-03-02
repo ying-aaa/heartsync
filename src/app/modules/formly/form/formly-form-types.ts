@@ -40,6 +40,7 @@ export const formlyFormTypes = [
     defaultOptions: {
       props: {
         label: '多行文本',
+        rows: 4,
         maxLength: undefined,
         ...baseProps,
       },
