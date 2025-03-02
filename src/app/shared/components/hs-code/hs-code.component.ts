@@ -4,14 +4,17 @@ import {
   InputSignal,
   ChangeDetectionStrategy,
   Inject,
+  inject,
+  effect,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { HighlightModule } from 'ngx-highlightjs';
+import { HighlightLoader, HighlightModule } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { HsThemeService } from '@src/app/core/services/theme.service';
 
 @Component({
   selector: 'hs-code',
@@ -52,7 +55,16 @@ export class HsCodeComponent {
     string | undefined
   >();
 
+  private readonly hljsLoader: HighlightLoader = inject(HighlightLoader);
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { code: any; minHeight: string },
-  ) {}
+    private HsThemeService: HsThemeService,
+  ) {
+    effect(() => {
+      this.hljsLoader.setTheme(
+        `atom-one-${this.HsThemeService.currentTheme()}.css`,
+      );
+    });
+  }
 }

@@ -40,7 +40,16 @@
               "src/styles/index.less",
               "src/styles/uno.css",
               "src/styles/mat.scss",
-              "node_modules/highlight.js/styles/atom-one-dark.css",
+              {
+                "input": "node_modules/highlight.js/styles/atom-one-dark.css",
+                "bundleName": "atom-one-dark",
+                "inject": false
+              },
+              {
+                "input": "node_modules/highlight.js/styles/atom-one-light.css",
+                "bundleName": "atom-one-light",
+                "inject": false
+              },
               {
                 "input": "src/styles/light.less",
                 "bundleName": "light-theme",

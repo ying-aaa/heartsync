@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { IThemeType } from '@src/app/shared/models/system.model';
 import { LocalStorageService } from './local-storage.service';
 import { isObject } from '../utils';
@@ -7,11 +7,11 @@ import { isObject } from '../utils';
   providedIn: 'root',
 })
 export class HsThemeService {
-  public currentTheme!: IThemeType;
+  public currentTheme = signal<IThemeType | undefined>(undefined);
   public loadingState: boolean = false;
 
   public get isDark() {
-    return this.currentTheme === IThemeType.DARK;
+    return this.currentTheme() === IThemeType.DARK;
   }
 
   constructor(private localStorageService: LocalStorageService) {
@@ -22,16 +22,17 @@ export class HsThemeService {
   }
 
   public toggleDarkTheme(theme: IThemeType, isFirst: boolean = false) {
-    if (this.currentTheme === theme) return;
-    const previousTheme = this.currentTheme;
-    this.currentTheme = theme;
+    console.log('%c Line:25 🍆 theme', 'color:#93c0a4', theme);
+    if (this.currentTheme() === theme) return;
+    const previousTheme = this.currentTheme() as IThemeType;
+    this.currentTheme.set(theme);
     document.documentElement.classList.add(concatSuffix(theme));
     this.loadCss(`${concatSuffix(theme)}.css`, theme).then(
       (e) => {
         this.loadingState = false;
         if (!isFirst) {
           this.removeUnusedTheme(previousTheme);
-          this.localStorageService.setItem('theme', this.currentTheme);
+          this.localStorageService.setItem('theme', this.currentTheme());
         }
       },
       (e) => {},
@@ -74,7 +75,7 @@ export class HsThemeService {
         themeConfigMap.set(key as IThemeType, value);
       });
     }
-    return themeConfigMap.get(this.currentTheme);
+    return themeConfigMap.get(this.currentTheme()!);
   }
 }
 

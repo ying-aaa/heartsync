@@ -7,7 +7,7 @@ import {
 } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
-import { HIGHLIGHT_OPTIONS, provideHighlightOptions } from 'ngx-highlightjs';
+import { provideHighlightOptions } from 'ngx-highlightjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,7 +26,6 @@ export const appConfig: ApplicationConfig = {
         xml: () => import('highlight.js/lib/languages/xml'),
         cs: () => import('highlight.js/lib/languages/csharp'),
       },
-      themePath: 'assets/styles/androidstudio.css',
     }),
   ],
 };
