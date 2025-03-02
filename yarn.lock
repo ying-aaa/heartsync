@@ -5726,6 +5726,11 @@ mlly@^1.7.3, mlly@^1.7.4:
     pkg-types "^1.3.0"
     ufo "^1.5.4"
 
+monaco-editor@^0.52.2:
+  version "0.52.2"
+  resolved "https://registry.npmmirror.com/monaco-editor/-/monaco-editor-0.52.2.tgz#53c75a6fcc6802684e99fd1b2700299857002205"
+  integrity sha512-GEQWEZmfkOGLdd3XK8ryrfWz3AIP8YymVXiPHEdewrUq7mh0qrKrfHLNCXcbB6sTnMLnOZ3ztSiKcciFUkIJwQ==
+
 mrmime@2.0.0, mrmime@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmmirror.com/mrmime/-/mrmime-2.0.0.tgz"
@@ -5817,6 +5822,13 @@ neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.npmmirror.com/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
+
+ngx-monaco-editor-v2@^19.0.2:
+  version "19.0.2"
+  resolved "https://registry.npmmirror.com/ngx-monaco-editor-v2/-/ngx-monaco-editor-v2-19.0.2.tgz#02fba22ea4d8a05053d2ee1eaf6a0c391b6d2a85"
+  integrity sha512-hkPiCnLU0vdIF2DW7Ko/EHoGCtLxuN85eygKuk3fXL2GRbEIl5VcbUXmRX9ItfLOI1F5QcH80HhavY5r0gNfEw==
+  dependencies:
+    tslib "^2.1.0"
 
 ngx-scrollbar@^18.0.0:
   version "18.0.0"

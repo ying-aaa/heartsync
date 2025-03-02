@@ -11,6 +11,12 @@ import { FormlyFieldScrollComponent } from '@src/app/modules/formly/layout/scrol
 import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout-types';
 import { formlyFormTypes } from '@src/app/modules/formly/form/formly-form-types';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  MonacoEditorModule,
+  NgxMonacoEditorConfig,
+} from 'ngx-monaco-editor-v2';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 export function addonsExtension(field: IEditorFormlyField) {
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
@@ -31,7 +37,13 @@ export function addonsExtension(field: IEditorFormlyField) {
     field.wrappers = ['contorl'];
   }
 }
-
+// const monacoConfig: NgxMonacoEditorConfig = {
+//   baseUrl: window.location.origin + '/assets/monaco/min/vs',
+//   defaultOptions: { scrollBeyondLastLine: false }, // 默认编辑器选项
+//   onMonacoLoad: () => {
+//     console.log((window as any).monaco);
+//   }, // Monaco 加载完成后的回调
+// };
 export default [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
@@ -75,6 +87,7 @@ export default [
             },
           ],
         }),
+        // MonacoEditorModule.forRoot(monacoConfig), // use forRoot() in main app module only.
       ),
       { provide: MAT_DATE_LOCALE, useValue: 'zh-CN' },
     ],

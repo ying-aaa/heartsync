@@ -1,4 +1,5 @@
 <div class="flex w-full h-full">
+  <!-- 目录 -->
   <aside class="h-full w-284px pt-6px px-12px pb-6px">
     <hs-workspace-contorl></hs-workspace-contorl>
   </aside>
@@ -6,16 +7,30 @@
     [vertical]="true"
     class="opacity-20 h-full"
   ></mat-divider>
-  <main class="flex flex-1">
-    <hs-workspace-viewport></hs-workspace-viewport>
-  </main>
-  <mat-divider
-    [vertical]="true"
-    class="opacity-20 h-full"
-  ></mat-divider>
-  <aside class="h-full w-284px py-8px px-12px">
-    <hs-workspace-config
-      [selectedField]="widgetEditorService.activeField()"
-    ></hs-workspace-config>
-  </aside>
+  <!-- 右侧 -->
+  <div class="flex flex-1 relative">
+    <main class="flex flex-1">
+      <hs-workspace-viewport></hs-workspace-viewport>
+    </main>
+    <mat-divider
+      [vertical]="true"
+      class="opacity-20 h-full"
+    ></mat-divider>
+    <aside class="h-full w-284px py-8px px-12px">
+      <hs-workspace-config
+        [selectedField]="widgetEditorService.activeField()"
+      ></hs-workspace-config>
+    </aside>
+    <!-- 编辑器 -->
+    <!-- <div
+      id="container"
+      class="wh-full absolute bg-#333 top-0 left-0 z-999"
+    > -->
+    <!-- <ngx-monaco-editor
+        class="wh-full!"
+        [options]="editorOptions"
+        [(ngModel)]="code"
+      ></ngx-monaco-editor> -->
+    <!-- </div> -->
+  </div>
 </div>

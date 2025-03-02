@@ -4,7 +4,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
@@ -21,6 +21,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 import { FormlyMatSliderModule } from '@ngx-formly/material/slider';
+import * as monaco from 'monaco-editor';
+import {
+  MonacoEditorModule,
+  NgxMonacoEditorConfig,
+} from 'ngx-monaco-editor-v2';
 
 @Component({
   selector: 'hs-widget-editor',
@@ -37,12 +42,13 @@ import { FormlyMatSliderModule } from '@ngx-formly/material/slider';
     WorkspaceViewportComponent,
     WorkspaceContorlComponent,
     WorkspaceConfigComponent,
-    ReactiveFormsModule,
     FormlyMaterialModule,
     MatInputModule,
     MatNativeDateModule,
     FormlyMatDatepickerModule,
     FormlyModule,
+    FormsModule,
+    // MonacoEditorModule,
     // FormlyMatSliderModule,
     // FormlyMatToggleModule,
   ],
@@ -51,4 +57,7 @@ export class WidgetEditorComponent implements OnInit {
   constructor(public widgetEditorService: WidgetEditorService) {}
 
   ngOnInit() {}
+
+  editorOptions = { theme: 'vs-dark', language: 'javascript' };
+  code: string = 'function x() {\nconsole.log("Hello world!");\n}';
 }
