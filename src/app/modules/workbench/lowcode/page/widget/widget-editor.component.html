@@ -9,8 +9,19 @@
   ></mat-divider>
   <!-- 右侧 -->
   <div class="flex flex-1 relative">
-    <main class="flex flex-1">
+    <main class="relative flex flex-1">
       <hs-workspace-viewport></hs-workspace-viewport>
+      @if (!widgetEditorService.fields().length) {
+      <div
+        class="absolute wh-full flex-col flex-center pb-80px -z-999 opacity-60"
+      >
+        <img
+          class="w-500px h-500px"
+          src="assets/workbench/widget-workbench-tips.png"
+        />
+        <div class="mt-30px text-20px">拖拽组件到这里来吧！</div>
+      </div>
+      }
     </main>
     <mat-divider
       [vertical]="true"
