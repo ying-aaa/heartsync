@@ -4,6 +4,7 @@ import { widget_grid_config } from './grid.config';
 import { widget_flex_config } from './flex.config';
 import { widget_fieldset_config } from './group.config';
 import { widget_textarea_config } from './textarea.config';
+import { widget_tabs_config } from './tabs.config';
 
 export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   input: widget_input_config,
@@ -11,4 +12,5 @@ export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   grid: widget_grid_config,
   flex: widget_flex_config,
   fieldset: widget_fieldset_config,
+  tabs: widget_tabs_config,
 };

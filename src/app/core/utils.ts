@@ -173,3 +173,82 @@ export function generateUUID(
 
   return `${prefix}${lettersPart}${digitsPart}`;
 }
+
+/**
+ * 提取配置的类型定义。
+ *
+ * @description
+ * - 每个属性可以是一个布尔值（表示是否保留该属性），
+ * - 或者是一个嵌套的 PickConfig 对象（用于处理嵌套对象）。
+ */
+export type PickConfig = {
+  [key: string]: boolean | PickConfig;
+};
+
+/**
+ * 提取嵌套对象或数组的指定属性。
+ *
+ * @param obj - 目标对象或数组，可以是任意嵌套结构。
+ * @param pickConfig - 提取配置对象，指定需要保留的属性。
+ * @param childName - 嵌套属性的名称，默认为 'children'。
+ * @returns 返回一个新对象或数组，只包含 pickConfig 中指定的属性。
+ */
+export function extractProperties<T extends Record<string, any> | any[]>(
+  obj: T,
+  pickConfig: PickConfig,
+  childName: string = 'children',
+): T {
+  /**
+   * 辅助函数：根据 pickConfig 提取对象的指定属性。
+   *
+   * @param o - 当前处理的对象。
+   * @param config - 当前层级的提取配置。
+   * @returns 返回提取后的对象。
+   */
+  function pick(
+    o: Record<string, any>,
+    config: PickConfig,
+  ): Record<string, any> {
+    if (typeof o !== 'object' || o === null) {
+      // 如果当前值不是对象或为 null，直接返回
+      return o;
+    }
+    const result: Record<string, any> = {};
+    for (const key in config) {
+      const value = o[key];
+      if (value === undefined || value === null) {
+        // 如果目标对象中没有该属性，跳过
+        continue;
+      }
+      if (typeof config[key] === 'object' && config[key] !== null) {
+        // 如果配置中该属性是对象，递归提取
+        result[key] = pick(value, config[key]);
+      } else {
+        // 否则直接提取该属性
+        result[key] = value;
+      }
+    }
+    return result;
+  }
+
+  if (Array.isArray(obj)) {
+    // 如果目标是数组，递归处理每个元素
+    return obj.map((item) =>
+      extractProperties(item, pickConfig, childName),
+    ) as T;
+  } else if (typeof obj === 'object' && obj !== null) {
+    // 提取当前对象的指定属性
+    const currentPick: Record<string, any> = pick(obj, pickConfig);
+    // 如果配置中包含嵌套属性，递归处理
+    if (pickConfig[childName] && Array.isArray(obj[childName])) {
+      currentPick[childName] = obj[childName].map(
+        (child: Record<string, any>) =>
+          extractProperties(child, pickConfig, childName),
+      );
+    }
+    return currentPick as T;
+  } else {
+    // 如果目标不是对象或数组，直接返回
+    return obj;
+  }
+}

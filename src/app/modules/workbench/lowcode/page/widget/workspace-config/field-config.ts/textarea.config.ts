@@ -19,7 +19,7 @@ export const widget_textarea_config: IEditorFormlyField[] = [
     props: {
       label: '密度',
       appearance: 'outline',
-      min: 1,
+      min: 0,
       max: 5,
     },
     className: 'hs-density--5',

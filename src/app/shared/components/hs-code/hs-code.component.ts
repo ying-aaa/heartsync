@@ -15,6 +15,12 @@ import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { HsThemeService } from '@src/app/core/services/theme.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'hs-code',
@@ -23,8 +29,9 @@ import { HsThemeService } from '@src/app/core/services/theme.service';
       mat-mini-fab
       color="primary"
       aria-label="Example icon button with a menu icon"
-      class="right-12px top-12px absolute! w-28px! h-28px! z-999"
+      class="right-16px top-16px absolute! w-32px! h-32px! z-999"
       [cdkCopyToClipboard]="code() || data.code()"
+      (click)="sendCopyTips()"
     >
       <mat-icon class="text-18px! w-18px! h-18px!">content_copy</mat-icon>
     </button>
@@ -46,6 +53,7 @@ import { HsThemeService } from '@src/app/core/services/theme.service';
     MatButtonModule,
     MatIconModule,
     ClipboardModule,
+    MatFormFieldModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -60,11 +68,20 @@ export class HsCodeComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { code: any; minHeight: string },
     private HsThemeService: HsThemeService,
+    private _snackBar: MatSnackBar,
   ) {
     effect(() => {
       this.hljsLoader.setTheme(
         `atom-one-${this.HsThemeService.currentTheme()}.css`,
       );
+    });
+  }
+
+  sendCopyTips() {
+    this._snackBar.open('复制成功!!!', '确定', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 3 * 1000,
     });
   }
 }

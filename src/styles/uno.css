@@ -11,9 +11,9 @@
 .relative{position:relative;}
 .static{position:static;}
 .-top-16px{top:-16px;}
-.right-12px{right:12px;}
+.right-16px{right:16px;}
 .right-3px{right:3px;}
-.top-12px{top:12px;}
+.top-16px{top:16px;}
 .z-10{z-index:10;}
 .z-999{z-index:999;}
 .grid{display:grid;}
@@ -46,8 +46,8 @@
 .h-20px\!{height:20px !important;}
 .h-22px\!{height:22px !important;}
 .h-24px{height:24px;}
-.h-28px\!{height:28px !important;}
 .h-32px{height:32px;}
+.h-32px\!{height:32px !important;}
 .h-36px{height:36px;}
 .h-36px\!{height:36px !important;}
 .h-3px{height:3px;}
@@ -72,8 +72,8 @@
 .w-240px{width:240px;}
 .w-24px{width:24px;}
 .w-284px{width:284px;}
-.w-28px\!{width:28px !important;}
 .w-32px{width:32px;}
+.w-32px\!{width:32px !important;}
 .w-36px\!{width:36px !important;}
 .w-40px{width:40px;}
 .w-52px{width:52px;}

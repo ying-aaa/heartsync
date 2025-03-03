@@ -32,6 +32,7 @@ export function addonsExtension(field: IEditorFormlyField) {
   )
     return;
 
+  console.log('%c Line:35 🍫', 'color:#b03734', field);
   if (field.wrappers) {
     if (
       field.wrappers

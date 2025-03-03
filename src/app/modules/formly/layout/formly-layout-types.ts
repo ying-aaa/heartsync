@@ -11,8 +11,10 @@ const density = 1;
 
 const densityExpressions = {
   className: (field: IEditorFormlyField) => {
-    // 根据 props.density 的值动态计算 className
-    return `hs-density--${field.props?.['density']}`;
+    const densityClassName = `hs-density--${field.props?.['density']} `;
+    return field.className
+      ? field.className.replace(/hs-density.*?\s/, densityClassName)
+      : densityClassName;
   },
 };
 

@@ -56,6 +56,7 @@ export class FormlyFieldTabsComponent
         );
       }
     }
+    this.options.build!();
   }
 
   getDragFieldData = (field: IEditorFormlyField) => ({

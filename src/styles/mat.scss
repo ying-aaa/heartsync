@@ -1,39 +1,37 @@
-@use '@angular/material' as mat;
+@use '@angular/material'as mat;
 $base-radius: 8px;
 
-.hs-density--5{
+.hs-density--5 {
   @include mat.theme((density: -5));
 }
 
-.hs-density--4{
+.hs-density--4 {
   @include mat.theme((density: -4));
 }
 
-.hs-density--3{
+.hs-density--3 {
   @include mat.theme((density: -3));
 }
 
-.hs-density--2{
+.hs-density--2 {
   @include mat.theme((density: -2));
 }
 
-.hs-density--1{
+.hs-density--1 {
   @include mat.theme((density: -1));
 }
 
-.hs-density-0{
+.hs-density--0 {
   @include mat.theme((density: 0));
 }
 
-.mdc-button{
+.mdc-button {
   // --mat-sys-corner-full: 8px;
 
-  @include mat.theme((
-    density: -1
-  ));
+  @include mat.theme((density: -1));
 }
 
-.mat-mdc-option{
+.mat-mdc-option {
   min-height: 32px !important;
 }
 
@@ -42,11 +40,11 @@ $base-radius: 8px;
   --mat-filled-button-horizontal-padding: 16px;
 }
 
-.mat-mdc-select{
+.mat-mdc-select {
   --mat-select-trigger-text-size: 14px;
 }
 
-.mdc-dialog{
+.mdc-dialog {
   --mdc-dialog-container-shape: 12px
 }
 
@@ -54,3 +52,30 @@ $base-radius: 8px;
   height: 0;
 }
 
+.mat-tab-item3-full {
+  &.mat-mdc-tab-group {
+    width: 100%;
+  }
+
+  mat-tab-header {
+    width: 100%;
+
+    .mat-mdc-tab-label-container {
+      width: 100%;
+
+      .mat-mdc-tab-list {
+        width: 100%;
+
+        .mat-mdc-tab-labels {
+          width: 100%;
+
+          .mat-mdc-tab {
+            min-width: calc(100% / 3);
+            max-width: calc(100% / 3);
+            padding: 0 16px;
+          }
+        }
+      }
+    }
+  }
+}

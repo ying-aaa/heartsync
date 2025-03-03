@@ -5,8 +5,10 @@ import { FormGroup } from '@angular/forms';
 
 import {
   deepClone,
+  extractProperties,
   generateUUID,
   getRecursivePosition,
+  PickConfig,
 } from '@src/app/core/utils';
 import {
   IEditorFormlyField,
@@ -137,7 +139,25 @@ export class WidgetEditorService {
   }
 
   getJsonField() {
-    return JSON.stringify(this.fields(), null, 2);
+    // 提取配置
+    const pickConfig: PickConfig = {
+      // key: true,
+      type: true,
+      // fieldId: true,
+      props: true,
+      className: true,
+      fieldGroup: true,
+    };
+
+    return JSON.stringify(
+      extractProperties<IEditorFormlyField[]>(
+        this.fields(),
+        pickConfig,
+        'fieldGroup',
+      ),
+      null,
+      2,
+    );
   }
 
   getFlatField(field?: IEditorFormlyField[], level: number = 0) {
