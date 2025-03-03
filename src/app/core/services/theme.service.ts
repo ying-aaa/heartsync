@@ -22,7 +22,6 @@ export class HsThemeService {
   }
 
   public toggleDarkTheme(theme: IThemeType, isFirst: boolean = false) {
-    console.log('%c Line:25 🍆 theme', 'color:#93c0a4', theme);
     if (this.currentTheme() === theme) return;
     const previousTheme = this.currentTheme() as IThemeType;
     this.currentTheme.set(theme);
