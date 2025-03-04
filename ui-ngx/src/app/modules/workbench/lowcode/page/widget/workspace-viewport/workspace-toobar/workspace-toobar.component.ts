@@ -21,6 +21,10 @@ export class WorkspaceToobarComponent implements OnInit {
 
   ngOnInit() {}
 
+  updateFields() {
+    this.widgetEditorService.updateFields();
+  }
+
   openFieldCode() {
     const dialogRef = this.dialog.open(HsCodeComponent, {
       data: {

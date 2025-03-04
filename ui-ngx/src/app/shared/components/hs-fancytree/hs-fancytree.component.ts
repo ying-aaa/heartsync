@@ -1,6 +1,5 @@
-// @ts-nocheck
+import { AfterViewInit, Component, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
 import { MatInputModule } from '@angular/material/input';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -8,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { debounceTime } from 'rxjs';
 import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
+import { IFancyTreeConfig } from '../../models/public-api';
 
 declare var $: any;
 @Component({
@@ -24,6 +24,10 @@ declare var $: any;
   ],
 })
 export class HsFancytreeComponent implements OnInit, AfterViewInit {
+  config = input.required<IFancyTreeConfig>();
+
+  treeInstance: any;
+
   fileName = new FormControl('');
 
   filterCount = 0;
@@ -32,7 +36,15 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {}
 
-  ngAfterViewInit(): void {
+  async loadTreeData() {
+    try {
+      const treeData = await this.config().loadTreeData();
+      this.treeInstance.options.source = treeData;
+      this.treeInstance.reload();
+    } catch (error) {}
+  }
+
+  async ngAfterViewInit() {
     this.scriptLoaderService
       .loadScripts([
         'jquery.min.js',
@@ -41,7 +53,10 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
         'jquery.fancytree-all.min.js',
       ])
       .subscribe({
-        next: () => this.initFancytree(),
+        next: () => {
+          this.initFancytree();
+          this.loadTreeData();
+        },
         error: (error) => console.error('Error loading script:', error),
         // complete: () => this.initFancytree(),
       });
@@ -50,8 +65,8 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
   }
 
   initFancytree() {
-    let CLIPBOARD: { mode: any; data: any } | null = null;
-
+    let CLIPBOARD: { mode: any; data: any } | any = null;
+    const that = this;
     $('#hs-fancytree')
       .fancytree({
         extensions: ['dnd5', 'edit', 'multi', 'childcounter', 'filter'],
@@ -70,18 +85,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           // dimm
           mode: 'hide', // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
         },
-        source: [
-          {
-            title: 'Node 1',
-            key: '1',
-            folder: true,
-            children: [
-              { title: 'Node 1.1', key: '1.1' },
-              { title: 'Node 1.2', key: '1.2' },
-            ],
-          },
-          { title: 'Node 2', key: '2' },
-        ],
+        source: [],
         childcounter: {
           deep: true,
           hideZeros: true,
@@ -98,32 +102,32 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           multiSource: true, // drag all selected nodes (plus current node)
           // focusOnClick: true,
           // refreshPositions: true,
-          dragStart: function (node, data) {
+          dragStart: function (node: any, data: any) {
             // allow dragging `node`:
             data.effectAllowed = 'all';
             data.dropEffect = data.dropEffectSuggested; //"link";
             // data.dropEffect = "move";
             return true;
           },
-          // dragDrag: function(node, data) {
-          //   data.node.info("dragDrag", data);
+          // dragDrag: function(node, data: any) {
+          //   data.node.info("dragDrag", data: any);
           //   data.dropEffect = "copy";
           //   return true;
           // },
-          dragEnter: function (node, data) {
+          dragEnter: function (node: any, data: any) {
             data.node.info('dragEnter', data);
             // data.dropEffect = "link";
             return true;
           },
-          dragOver: function (node, data) {
-            // data.node.info("dragOver", data);
+          dragOver: function (node: any, data: any) {
+            // data.node.info("dragOver", data: any);
             data.dropEffect = data.dropEffectSuggested; //"link";
             return true;
           },
-          dragEnd: function (node, data) {
+          dragEnd: function (node: any, data: any) {
             data.node.info('dragEnd', data);
           },
-          dragDrop: function (node, data) {
+          dragDrop: function (node: any, data: any) {
             var sourceNodes = data.otherNodeList,
               copyMode = data.dropEffect !== 'move';
 
@@ -133,16 +137,16 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
               sourceNodes.reverse();
             }
             if (copyMode) {
-              $.each(sourceNodes, function (i, o) {
+              $.each(sourceNodes, function (i: any, o: any) {
                 o.info('copy to ' + node + ': ' + data.hitMode);
-                o.copyTo(node, data.hitMode, function (n) {
+                o.copyTo(node, data.hitMode, function (n: any) {
                   delete n.key;
                   n.selected = false;
                   n.title = 'Copy of ' + n.title;
                 });
               });
             } else {
-              $.each(sourceNodes, function (i, o) {
+              $.each(sourceNodes, function (i: any, o: any) {
                 o.info('move to ' + node + ': ' + data.hitMode);
                 o.moveTo(node, data.hitMode);
               });
@@ -151,7 +155,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
             node.setExpanded();
           },
         },
-        click: (event, data) => {
+        click: (event: any, data: any) => {
           const { ctrlKey, shiftKey, altKey } = event;
           const node = data.node;
           if (node.isEditing() && !ctrlKey && !shiftKey && !altKey) return true;
@@ -172,10 +176,10 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           },
           edit: function (event: any, data: any) {
             // Editor was opened (available as data.input)
+            console.log('edit...', this, data);
           },
           beforeClose: function (event: any, data: any) {
             // Return false to prevent cancel/save (data.input is available)
-            console.log(event.type, event, data);
             if (data.originalEvent.type === 'mousedown') {
               // We could prevent the mouse click from generating a blur event
               // (which would then again close the editor) and return `false` to keep
@@ -188,16 +192,22 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           },
           save: function (event: any, data: any) {
             // Save data.input.val() or return false to keep editor open
-            console.log('save...', this, data);
+            console.log('save...', this, data.node);
             // Simulate to start a slow ajax request...
-            setTimeout(function () {
+
+            setTimeout(() => {
+              that.config().addNodeEvent?.(data);
               $(data.node.span).removeClass('pending');
               // Let's pretend the server returned a slightly modified
               // title:
-              data.node.setTitle(data.node.title + '!');
-            }, 2000);
+              // data.node.setTitle(data.node.title + '!');
+            }, 100);
             // We return true, so ext-edit will set the current user input
             // as title
+            return true;
+          },
+          remove: function (event: any, data: any) {
+            console.log('%c Line:215 🥥', 'color:#33a5ff');
             return true;
           },
           close: function (event: any, data: any) {
@@ -208,13 +218,16 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
             }
           },
         },
+        select: function (event: any, data: any) {
+          that.config().selectNodeEvent?.(data);
+        },
         lazyLoad: (event: any, data: any) => {
           data.result = {
             title: 'Lazy Loaded Node',
             key: '3',
           };
         },
-        createNode: function (event, data) {
+        createNode: function (event: any, data: any) {
           var node = data.node,
             $tdList = $(node.tr).find('>td');
 
@@ -225,7 +238,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
             $tdList.eq(2).prop('colspan', 6).nextAll().remove();
           }
         },
-        renderColumns: function (event, data) {
+        renderColumns: function (event: any, data: any) {
           var node = data.node,
             $tdList = $(node.tr).find('>td');
 
@@ -241,7 +254,10 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           // $tdList.eq(3).html("<input type='input' value='"  "" + "'>");
           // ...
         },
-        modifyChild: function (event, data) {
+        modifyChild: function (event: any, data: any) {
+          if (data.operation === 'remove') {
+            that.config().deleteNodeEvent?.(data.childNode.data.id);
+          }
           data.tree.info(event.type, data);
         },
         contextMenu: {
@@ -252,7 +268,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
               addChild: { name: '添加子节点', icon: 'add' },
             },
           },
-          actions: (node, action) => {
+          actions: (node: any, action: any) => {
             switch (action) {
               case 'rename':
                 node.editStart();
@@ -267,11 +283,12 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           },
         },
       })
-      .on('nodeCommand', function (event, data) {
+      .on('nodeCommand', function (event: any, data: any) {
         // Custom event handler that is triggered by keydown-handler and
         // context menu:
         var refNode,
           moveMode,
+          // @ts-ignore
           tree = $.ui.fancytree.getTree(this),
           node = tree.getActiveNode();
 
@@ -292,7 +309,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           case 'copy':
             CLIPBOARD = {
               mode: data.cmd,
-              data: node.toDict(true, function (dict, node) {
+              data: node.toDict(true, function (dict: any, node: any) {
                 delete dict.key;
               }),
             };
@@ -314,7 +331,8 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
             return;
         }
       })
-      .on('keydown', function (e) {
+      // @ts-ignore
+      .on('keydown', function (e: any) {
         var cmd = null;
 
         // console.log(e.type, $.ui.fancytree.eventToString(e));
@@ -322,6 +340,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           case 'ctrl+shift+n':
           case 'meta+shift+n': // mac: cmd+shift+n
             cmd = 'addChild';
+            return;
             break;
           case 'ctrl+c':
           case 'meta+c': // mac
@@ -363,6 +382,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
             cmd = 'outdent';
         }
         if (cmd) {
+          // @ts-ignore
           $(this).trigger('nodeCommand', { cmd: cmd });
           return false;
         }
@@ -391,6 +411,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           title: '新子文件 <kbd>[Ctrl+Shift+N]</kbd>',
           cmd: 'addChild',
           uiIcon: 'ui-icon-arrowreturn-1-e',
+          disabled: true,
         },
         { title: '----' },
         {
@@ -410,41 +431,43 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           disabled: true,
         },
       ],
-      beforeOpen: function (event, ui) {
+      beforeOpen: function (event: any, ui: any) {
         var node = $.ui.fancytree.getNode(ui.target);
         $('#tree').contextmenu('enableEntry', 'paste', !!CLIPBOARD);
         node.setActive();
       },
-      select: function (event, ui) {
-        var that = this;
-        // delay the event, so the menu can close and the click event does
-        // not interfere with the edit control
-        setTimeout(function () {
-          $(that).trigger('nodeCommand', { cmd: ui.cmd });
+      select: (event: any, ui: any) => {
+        setTimeout(() => {
+          $('#hs-fancytree').trigger('nodeCommand', { cmd: ui.cmd });
         }, 100);
       },
     });
+
+    this.treeInstance = $('#hs-fancytree').fancytree('getTree');
   }
 
   initFancytreeFilter() {
     this.fileName.valueChanges
       .pipe(debounceTime(300)) // 设置节流时间为500ms
       .subscribe((value: any) => {
-        const tree = $('#hs-fancytree').fancytree('getTree');
         const match = value.trim();
 
         if (match === '') {
           // 如果输入框为空，重置过滤
-          tree.clearFilter();
+          this.treeInstance.clearFilter();
           this.filterCount = 0;
           return;
         }
 
         // 执行过滤操作
-        const n = tree.filterBranches.call(tree, match, {
-          autoExpand: true, // 自动展开包含匹配节点的父节点
-          highlight: true, // 高亮显示匹配的文本
-        });
+        const n = this.treeInstance.filterBranches.call(
+          this.treeInstance,
+          match,
+          {
+            autoExpand: true, // 自动展开包含匹配节点的父节点
+            highlight: true, // 高亮显示匹配的文本
+          },
+        );
 
         // 更新过滤数量
         this.filterCount = n;

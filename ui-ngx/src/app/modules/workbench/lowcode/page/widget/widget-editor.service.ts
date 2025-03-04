@@ -14,12 +14,16 @@ import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/editor.model';
+import { Widget, WidgetService } from '@src/app/core/http/widget.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WidgetEditorService {
   HS_DEFAULT_ID = 'workspace';
+
+  widgetConfig = {};
 
   // 是否编辑模式
   isEditMode = signal(true);
@@ -38,12 +42,33 @@ export class WidgetEditorService {
 
   flatField$ = new BehaviorSubject([]);
 
+  fieldsId = signal<number | undefined>(undefined);
   fields = signal<IEditorFormlyField[]>([]);
   formGroup = new FormGroup({});
   model = {};
   options = {};
 
-  constructor() {}
+  constructor(
+    private widgetService: WidgetService,
+    private _snackBar: MatSnackBar,
+  ) {
+    effect(
+      () => {
+        if (this.fieldsId()) {
+          this.widgetService.getWidgetById(this.fieldsId()!).subscribe({
+            next: (widget: Widget) => {
+              this.widgetConfig = widget;
+              this.fields.set(JSON.parse(widget.config));
+              this.formGroup = new FormGroup({});
+              this.options = {};
+            },
+            error: (err: any) => console.error('Get widget error:', err),
+          });
+        }
+      },
+      { allowSignalWrites: true },
+    );
+  }
 
   getSpecifyFields(fieldId: string) {
     return this.getFlatField(this.fields()).find(
@@ -55,8 +80,22 @@ export class WidgetEditorService {
     return this.activeField()?.fieldId === fieldId;
   }
 
-  updateFields(fields: IEditorFormlyField[]) {
-    this.fields.set(fields);
+  updateFields() {
+    this.widgetService
+      .updateWidget({
+        ...this.widgetConfig,
+        config: JSON.stringify(this.fields()),
+      })
+      .subscribe({
+        next: () => {
+          this._snackBar.open('更新部件成功!!!', '确定', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 3 * 1000,
+          });
+        },
+        error: (err: any) => console.error('Update widget error:', err),
+      });
     this.formGroup.patchValue(this.model);
     this.flatField$.next(this.getFlatField());
   }

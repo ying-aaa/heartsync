@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +15,7 @@ import { HsFancytreeComponent } from '../../../../shared/components/hs-fancytree
   imports: [
     MatDividerModule,
     // HsTreeComponent,
-    HsFancytreeComponent,
+    // HsFancytreeComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -23,10 +23,10 @@ import { HsFancytreeComponent } from '../../../../shared/components/hs-fancytree
     MatButtonModule,
     MatIconModule,
     HsTableComponent,
-    HsFancytreeComponent,
   ],
 })
 export class AppManageComponent implements OnInit {
+  treeConfig = signal({});
   fileName = new FormControl('');
 
   constructor() {}

@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const forwardUrl = 'wjy.apihub.net';
-const wsForwardUrl = 'https://wjy.apihub.net';
+// const forwardUrl = 'wjy.apihub.net';
+// const wsForwardUrl = 'https://wjy.apihub.net';
+const forwardUrl = 'http://localhost:3000/';
+const wsForwardUrl = 'http://localhost:3000/';
 const ruleNodeUiforwardUrl = forwardUrl;
 
 const PROXY_CONFIG = {
