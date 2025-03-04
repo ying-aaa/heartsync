@@ -1,3 +1,9 @@
 {
-  "angular.enable-strict-mode-prompt": false
+  "angular.enable-strict-mode-prompt": false,
+  "files.exclude": {
+    "ui-ngx/**": true
+  },
+  "search.exclude": {
+    "ui-ngx/**": true
+  }
 }
