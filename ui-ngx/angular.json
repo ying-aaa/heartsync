@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "HeartSync": {
+    "heartsync": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/HeartSync",
+            "outputPath": "dist/heartsync",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -121,10 +121,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "HeartSync:build:production"
+              "buildTarget": "heartsync:build:production"
             },
             "development": {
-              "buildTarget": "HeartSync:build:development"
+              "buildTarget": "heartsync:build:development"
             }
           },
           "defaultConfiguration": "development"
