@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { WorkbenchHeaderComponent } from '../components/workbench-header/workbench-header.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'hs-lowcode',
@@ -8,7 +8,18 @@ import { RouterModule } from '@angular/router';
   imports: [WorkbenchHeaderComponent, RouterModule],
 })
 export class LowcodeComponent implements OnInit {
-  constructor() {}
+  @ViewChild('outlet', { static: true }) outlet!: RouterOutlet;
+  hiddenMenu = false;
 
-  ngOnInit() {}
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    setTimeout(() => {
+      this.onActivate();
+    }, 50);
+  }
+  onActivate() {
+    const routeConfig = this.outlet.activatedRoute.routeConfig;
+    this.hiddenMenu = routeConfig?.data?.['hiddenMenu'];
+  }
 }

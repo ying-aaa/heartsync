@@ -11,9 +11,7 @@
   <div>
     <button
       mat-button
-      (click)="
-        widgetEditorService.isEditMode.set(!widgetEditorService.isEditMode())
-      "
+      (click)="previewWidget()"
     >
       <mat-icon matChipAvatar>visibility</mat-icon> 预览
     </button>

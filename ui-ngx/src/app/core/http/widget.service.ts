@@ -28,7 +28,7 @@ export class WidgetService {
   }
 
   // 根据ID获取部件
-  getWidgetById(id: number): Observable<Widget> {
+  getWidgetById(id: number | string): Observable<Widget> {
     const url = `${this.apiUrl}/widgets/${id}`;
     return this.http.get<Widget>(url).pipe(catchError(this.handleError));
   }

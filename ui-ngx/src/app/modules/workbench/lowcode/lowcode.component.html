@@ -6,11 +6,16 @@
     flex-direction: column;
   }
 </style>
+@if (!hiddenMenu) {
+  <hs-workbench-header
+    [outlet]="outlet"
+    [logoSkip]="'/workbench/manage'"
+  ></hs-workbench-header>
+}
 
-<hs-workbench-header
-  [outlet]="outlet"
-  [logoSkip]="'/workbench/manage'"
-></hs-workbench-header>
 <div class="h-0 flex-1">
-  <router-outlet #outlet="outlet"></router-outlet>
+  <router-outlet
+    #outlet="outlet"
+    (activate)="onActivate()"
+  ></router-outlet>
 </div>

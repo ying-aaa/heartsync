@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hs-workspace-toobar',
@@ -16,6 +17,7 @@ import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.comp
 export class WorkspaceToobarComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
+    private router: Router,
     public widgetEditorService: WidgetEditorService,
   ) {}
 
@@ -23,6 +25,15 @@ export class WorkspaceToobarComponent implements OnInit {
 
   updateFields() {
     this.widgetEditorService.updateFields();
+  }
+
+  previewWidget() {
+    // window.open(`/lowcode/preview/${this.widgetEditorService.fieldsId()}`);
+
+    this.router.navigate([
+      '/lowcode/preview',
+      this.widgetEditorService.fieldsId(),
+    ]);
   }
 
   openFieldCode() {

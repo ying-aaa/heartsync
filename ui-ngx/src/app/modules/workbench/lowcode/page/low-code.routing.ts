@@ -19,7 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HIGHLIGHT_OPTIONS, provideHighlightOptions } from 'ngx-highlightjs';
 
-export function addonsExtension(field: IEditorFormlyField) {
+export function editorExtension(field: IEditorFormlyField) {
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
     return;
@@ -42,6 +42,17 @@ export function addonsExtension(field: IEditorFormlyField) {
     }
   } else {
     field.wrappers = ['contorl'];
+  }
+}
+
+export function previewExtension(field: IEditorFormlyField) {
+  if (field.type === 'formly-group') {
+    field.type = IFieldType.COLUMN;
+    return;
+  }
+
+  if (field.wrappers) {
+    field.wrappers = field.wrappers.filter((wrapper) => wrapper !== 'contorl');
   }
 }
 // const monacoConfig: NgxMonacoEditorConfig = {
@@ -90,7 +101,7 @@ export default [
           extensions: [
             {
               name: 'formly-field-toolbar',
-              extension: { onPopulate: addonsExtension },
+              extension: { onPopulate: editorExtension },
             },
           ],
         }),
@@ -101,6 +112,35 @@ export default [
     loadComponent: () =>
       import('./widget/widget-editor.component').then(
         (m) => m.WidgetEditorComponent,
+      ),
+  },
+  {
+    title: '部件',
+    path: 'preview/:widgetId',
+    data: {
+      hiddenMenu: true,
+    },
+    providers: [
+      importProvidersFrom(
+        FormlyModule.forRoot({
+          types: [...formlyLayoutTypes, ...formlyFormTypes],
+          validationMessages: [
+            { name: 'required', message: '这个字段是必填的！' },
+          ],
+          wrappers: [{ name: 'scroll', component: FormlyFieldScrollComponent }],
+          extensions: [
+            {
+              name: 'formly-field-toolbar',
+              extension: { onPopulate: previewExtension },
+            },
+          ],
+        }),
+      ),
+      { provide: MAT_DATE_LOCALE, useValue: 'zh-CN' },
+    ],
+    loadComponent: () =>
+      import('./widget/widget-preview/widget-preview.component').then(
+        (m) => m.WidgetPreviewComponent,
       ),
   },
 ] as Routes;
