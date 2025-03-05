@@ -1,4 +1,5 @@
 export interface IFancyTreeConfig {
+  isDefaultFirst?: boolean;
   showSearch?: boolean;
   addChild?: boolean;
   loadTreeData: () => {};

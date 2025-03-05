@@ -55,7 +55,6 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: () => {
           this.initFancytree();
-          this.loadTreeData();
         },
         error: (error) => console.error('Error loading script:', error),
         // complete: () => this.initFancytree(),
@@ -67,6 +66,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
   initFancytree() {
     let CLIPBOARD: { mode: any; data: any } | any = null;
     const that = this;
+
     $('#hs-fancytree')
       .fancytree({
         extensions: ['dnd5', 'edit', 'multi', 'childcounter', 'filter'],
@@ -85,7 +85,22 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           // dimm
           mode: 'hide', // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
         },
-        source: [],
+        source: this.config().loadTreeData(),
+        strings: {
+          noData: '暂无数据',
+          loading: '加载中...',
+          loadError: '加载失败，请稍后再试',
+          warning: '警告：操作可能不安全',
+          appendCheckbox: '添加复选框',
+          selectMode: '单选模式',
+        },
+        init: function (event: any, data: any) {
+          var tree = data.tree;
+          var firstNode = tree.getRootNode().children[0]; // 获取根节点的第一个子节点
+          if (firstNode && that.config().isDefaultFirst) {
+            firstNode.setSelected(true); // 设置选中状态
+          }
+        },
         childcounter: {
           deep: true,
           hideZeros: true,

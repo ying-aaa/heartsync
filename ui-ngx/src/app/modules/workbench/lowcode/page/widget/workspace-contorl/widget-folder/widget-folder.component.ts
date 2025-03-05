@@ -21,6 +21,7 @@ export class WidgetFolderComponent implements OnInit {
   activeValue = signal<string>('form');
 
   treeConfig = signal<IFancyTreeConfig>({
+    isDefaultFirst: true,
     loadTreeData: () => {
       return this.widgetService.getAllWidgets().toPromise();
     },
