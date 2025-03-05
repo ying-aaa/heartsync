@@ -6,7 +6,7 @@
   [cdkDropListConnectedTo]="connectedTo"
   (cdkDropListDropped)="cdkDropListDropped($event)"
   [cdkDropListEnterPredicate]="canEnter"
-  [cdkDropListDisabled]="!widgetEditorService.isEditMode() || !field._design"
+  [cdkDropListDisabled]="!widgetEditorService.isEditMode()"
   [style]="field.props?.['styles'] | concatUnits"
   class="flex flex-col min-h-48px"
 >

@@ -46,6 +46,8 @@ export function editorExtension(field: IEditorFormlyField) {
 }
 
 export function previewExtension(field: IEditorFormlyField) {
+  field._design = false;
+
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
     return;
