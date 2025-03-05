@@ -145,6 +145,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第一个文本',
                   style: {
+                    type: 'text',
                     position: 'absolute',
                     left: '0',
                     top: '0',
@@ -161,6 +162,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第二个文本',
                   style: {
+                    type: 'text',
                     position: 'absolute',
                     left: '0',
                     top: '0',
@@ -177,6 +179,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第三个文本',
                   style: {
+                    type: 'text',
                     position: 'absolute',
                     left: '0',
                     top: '0',
@@ -202,6 +205,7 @@ export const presetResource: IEditorFormlyField[] = [
                 type: 'input',
                 _design: true,
                 props: {
+                  type: 'text',
                   label: '第一个文本',
                   style: {
                     position: 'absolute',
@@ -220,6 +224,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第二个文本',
                   style: {
+                    type: 'text',
                     position: 'absolute',
                     left: '0',
                     top: '0',
@@ -234,6 +239,7 @@ export const presetResource: IEditorFormlyField[] = [
                 type: 'input',
                 _design: true,
                 props: {
+                  type: 'text',
                   label: '第三个文本',
                   style: {
                     position: 'absolute',
@@ -277,6 +283,7 @@ export const presetResource: IEditorFormlyField[] = [
                     type: 'input',
                     _design: true,
                     props: {
+                      type: 'text',
                       label: '第一个文本',
                     },
                   },
@@ -295,6 +302,7 @@ export const presetResource: IEditorFormlyField[] = [
                     type: 'input',
                     _design: true,
                     props: {
+                      type: 'text',
                       label: '第二个文本',
                     },
                   },
@@ -313,6 +321,7 @@ export const presetResource: IEditorFormlyField[] = [
                     type: 'input',
                     _design: true,
                     props: {
+                      type: 'text',
                       label: '第三个文本',
                     },
                   },
@@ -342,6 +351,7 @@ export const presetResource: IEditorFormlyField[] = [
                     type: 'input',
                     _design: true,
                     props: {
+                      type: 'text',
                       label: '第一个文本',
                     },
                   },
@@ -360,6 +370,7 @@ export const presetResource: IEditorFormlyField[] = [
                     type: 'input',
                     _design: true,
                     props: {
+                      type: 'text',
                       label: '第二个文本',
                     },
                   },
@@ -378,6 +389,7 @@ export const presetResource: IEditorFormlyField[] = [
                     type: 'input',
                     _design: true,
                     props: {
+                      type: 'text',
                       label: '第三个文本',
                     },
                   },
@@ -407,6 +419,7 @@ export const presetResource: IEditorFormlyField[] = [
                     type: 'input',
                     _design: true,
                     props: {
+                      type: 'text',
                       label: '第一个文本',
                     },
                   },
@@ -425,6 +438,7 @@ export const presetResource: IEditorFormlyField[] = [
                     type: 'input',
                     _design: true,
                     props: {
+                      type: 'text',
                       label: '第二个文本',
                     },
                   },
@@ -443,6 +457,7 @@ export const presetResource: IEditorFormlyField[] = [
                     type: 'input',
                     _design: true,
                     props: {
+                      type: 'text',
                       label: '第三个文本',
                     },
                   },
@@ -452,23 +467,23 @@ export const presetResource: IEditorFormlyField[] = [
           },
         ],
       },
-      {
-        _design: true,
-        props: {
-          label: '嵌套器：',
-        },
-        fieldGroup: [
-          {
-            key: 'title',
-            type: 'title',
-            _design: true,
-            props: {
-              label: '标题',
-              icon: 'density_medium',
-            },
-          },
-        ],
-      },
+      // {
+      //   _design: true,
+      //   props: {
+      //     label: '嵌套器：',
+      //   },
+      //   fieldGroup: [
+      //     {
+      //       key: 'title',
+      //       type: 'title',
+      //       _design: true,
+      //       props: {
+      //         label: '标题',
+      //         icon: 'density_medium',
+      //       },
+      //     },
+      //   ],
+      // },
     ],
   },
   {
