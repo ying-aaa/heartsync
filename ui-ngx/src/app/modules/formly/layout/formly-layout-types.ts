@@ -23,9 +23,20 @@ export const formlyLayoutTypes = [
     name: 'column',
     component: FormlyFieldWrapperComponent,
     defaultOptions: {
-      props: { density },
+      props: {
+        density,
+        styles: {
+          rowGap: 8,
+          rowGapUnits: 'px',
+        },
+      },
       expressions: {
         ...densityExpressions,
+        rowGap: (field: IEditorFormlyField) => {
+          field.parent!.fieldGroup?.forEach((item) => {
+            item.props!['styles'] = field.props!['styles'];
+          });
+        },
       },
     },
   },
@@ -36,8 +47,8 @@ export const formlyLayoutTypes = [
       props: {
         density,
         styles: {
-          gap: '10',
-          gapUnits: 'px',
+          columnGap: 8,
+          columnGapUnits: 'px',
         },
       },
       expressions: {
@@ -49,7 +60,29 @@ export const formlyLayoutTypes = [
     name: 'flex',
     component: FormlyFieldWrapperComponent,
     defaultOptions: {
-      props: { density },
+      props: {
+        density,
+        orientation: 'mixed',
+        styles: {
+          display: 'flex',
+          flexDirection: 'column',
+          flexWrap: 'wrap',
+          rowGap: 8,
+          rowGapUnits: 'px',
+          columnGap: 8,
+          columnGapUnits: 'px',
+          justifycontent: 'center',
+          alignitems: 'center',
+          paddingLeft: 8,
+          paddingLeftUnits: 'px',
+          paddingTop: 8,
+          paddingTopUnits: 'px',
+          paddingRight: 8,
+          paddingRightUnits: 'px',
+          paddingBottom: 8,
+          paddingBottomUnits: 'px',
+        },
+      },
       expressions: {
         ...densityExpressions,
       },

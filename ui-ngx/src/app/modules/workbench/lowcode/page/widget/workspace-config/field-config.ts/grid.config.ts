@@ -2,14 +2,66 @@ import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 
 export const widget_grid_config: IEditorFormlyField[] = [
   {
-    key: 'props.styles.gap',
-    type: 'number',
+    type: 'fieldset',
     props: {
       label: '间距',
-      appearance: 'outline',
+      icon: 'subheader',
+      styles: {
+        fontSize: 14,
+        fontSizeUnits: 'px',
+      },
     },
-    className: 'hs-density--5',
+    fieldGroup: [
+      {
+        type: 'grid',
+        props: {
+          label: '栅格',
+          icon: 'apps',
+          styles: {
+            gap: '10',
+            gapUnits: 'px',
+          },
+        },
+        fieldGroup: [
+          {
+            type: 'column',
+            props: {
+              row: 12,
+            },
+            fieldGroup: [
+              {
+                key: 'props.styles.columnGap',
+                type: 'number',
+                props: {
+                  label: '水平间距',
+                  appearance: 'outline',
+                },
+                className: 'hs-density--5',
+              },
+            ],
+          },
+          {
+            type: 'column',
+            props: {
+              row: 12,
+            },
+            fieldGroup: [
+              {
+                key: 'fieldGroup[0].props.styles.rowGap',
+                type: 'number',
+                props: {
+                  label: '垂直间距',
+                  appearance: 'outline',
+                },
+                className: 'hs-density--5',
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
+
   {
     type: 'fieldset',
     props: {

@@ -25,10 +25,6 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               label: '栅格',
               icon: 'grid_on',
-              styles: {
-                gap: '10',
-                gapUnits: 'px',
-              },
             },
             fieldGroup: [
               {
@@ -82,27 +78,21 @@ export const presetResource: IEditorFormlyField[] = [
                     _design: true,
                     key: 'column',
                     type: 'column',
-                    props: {
-                      row: 8,
-                    },
+                    props: {},
                     fieldGroup: [],
                   },
                   {
                     _design: true,
                     key: 'column',
                     type: 'column',
-                    props: {
-                      row: 8,
-                    },
+                    props: {},
                     fieldGroup: [],
                   },
                   {
                     _design: true,
                     key: 'column',
                     type: 'column',
-                    props: {
-                      row: 8,
-                    },
+                    props: {},
                     fieldGroup: [],
                   },
                 ],
@@ -116,26 +106,6 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               label: '弹性',
               icon: 'view_column',
-              orientation: 'mixed',
-              styles: {
-                display: 'flex',
-                flexDirection: 'column',
-                flexWrap: 'wrap',
-                rowGap: 10,
-                rowGapUnits: 'px',
-                columnGap: 10,
-                columnGapUnits: 'px',
-                justifycontent: 'center',
-                alignitems: 'center',
-                paddingLeft: 8,
-                paddingLeftUnits: 'px',
-                paddingTop: 8,
-                paddingTopUnits: 'px',
-                paddingRight: 8,
-                paddingRightUnits: 'px',
-                paddingBottom: 8,
-                paddingBottomUnits: 'px',
-              },
             },
             fieldGroup: [
               {
