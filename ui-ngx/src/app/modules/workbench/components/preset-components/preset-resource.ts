@@ -71,29 +71,35 @@ export const presetResource: IEditorFormlyField[] = [
                 _design: true,
                 props: {
                   label: '栅格',
-                  icon: 'apps',
+                  icon: 'grid_on',
                 },
                 fieldGroup: [
                   {
                     _design: true,
                     key: 'column',
                     type: 'column',
-                    props: {},
                     fieldGroup: [],
+                    props: {
+                      row: 1,
+                    },
                   },
                   {
                     _design: true,
                     key: 'column',
                     type: 'column',
-                    props: {},
                     fieldGroup: [],
+                    props: {
+                      row: 2,
+                    },
                   },
                   {
                     _design: true,
                     key: 'column',
                     type: 'column',
-                    props: {},
                     fieldGroup: [],
+                    props: {
+                      row: 3,
+                    },
                   },
                 ],
               },

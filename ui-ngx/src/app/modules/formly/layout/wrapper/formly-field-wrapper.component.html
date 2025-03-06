@@ -24,13 +24,12 @@
         *cdkDragPlaceholder
       ></div>
     </formly-field>
-  } @empty {
-    @if (field._design) {
-      <div
-        class="text-#a7b1bd border-1px border-solid text-14px border-#ccc min-h-48px flex-center min-w-48px bg-#f1f1f1"
-      >
-        拖拽组件到这里
-      </div>
-    }
   }
 </div>
+@if (!field.fieldGroup?.length && field._design) {
+  <div
+    class="-z-888 absolute wh-full flex-center top-0 text-#a7b1bd border-1px border-solid text-14px border-#ccc min-h-48px bg-#f1f1f1"
+  >
+    拖拽组件到这里
+  </div>
+}

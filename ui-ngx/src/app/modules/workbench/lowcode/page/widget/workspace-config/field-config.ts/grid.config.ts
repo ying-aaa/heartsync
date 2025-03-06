@@ -61,7 +61,6 @@ export const widget_grid_config: IEditorFormlyField[] = [
       },
     ],
   },
-
   {
     type: 'fieldset',
     props: {
