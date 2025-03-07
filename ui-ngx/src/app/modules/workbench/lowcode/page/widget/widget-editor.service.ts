@@ -23,7 +23,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class WidgetEditorService {
   HS_DEFAULT_ID = 'workspace';
 
-  widgetConfig = {};
+  widgetConfig = signal({});
 
   // 是否编辑模式
   isEditMode = signal(true);
@@ -57,7 +57,7 @@ export class WidgetEditorService {
         if (this.fieldsId()) {
           this.widgetService.getWidgetById(this.fieldsId()!).subscribe({
             next: (widget: Widget) => {
-              this.widgetConfig = widget;
+              this.widgetConfig.set(widget);
               this.fields.set(JSON.parse(widget.config));
               this.formGroup = new FormGroup({});
               this.options = {};
@@ -83,7 +83,7 @@ export class WidgetEditorService {
   updateFields() {
     this.widgetService
       .updateWidget({
-        ...this.widgetConfig,
+        ...this.widgetConfig(),
         config: JSON.stringify(this.fields()),
       })
       .subscribe({

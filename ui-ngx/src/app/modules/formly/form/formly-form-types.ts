@@ -143,6 +143,7 @@ export const formlyFormTypes = [
   },
   {
     name: 'select',
+    type: 'select',
     defaultOptions: {
       props: {
         ...baseProps,
@@ -159,24 +160,25 @@ export const formlyFormTypes = [
       },
     },
   },
-  {
-    name: 'select',
-    defaultOptions: {
-      props: {
-        ...baseProps,
-        label: '下拉多选',
-        multiple: true,
-        selectAllOption: '选择全部',
-        options: [
-          { value: 1, label: '选项 1' },
-          { value: 2, label: '选项 2' },
-          { value: 3, label: '选项 3' },
-          { value: 4, label: '选项 4', disabled: true },
-        ],
-      },
-      expressions: {
-        ...densityExpressions,
-      },
-    },
-  },
+  // {
+  //   name: 'select',
+  //   type: 'select_multi',
+  //   defaultOptions: {
+  //     props: {
+  //       ...baseProps,
+  //       label: '下拉多选',
+  //       multiple: true,
+  //       selectAllOption: '选择全部',
+  //       options: [
+  //         { value: 1, label: '选项 1' },
+  //         { value: 2, label: '选项 2' },
+  //         { value: 3, label: '选项 3' },
+  //         { value: 4, label: '选项 4', disabled: true },
+  //       ],
+  //     },
+  //     expressions: {
+  //       ...densityExpressions,
+  //     },
+  //   },
+  // },
 ];
