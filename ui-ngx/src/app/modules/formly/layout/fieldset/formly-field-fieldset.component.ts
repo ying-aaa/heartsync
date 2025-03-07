@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   selector: 'formly-field-fieldset',
   template: `
     <fieldset
-      class="min-w-inherit p-0 px-6px pt-8px pb-8px border border-groove border-[#2c7eac] rounded-8px"
+      class="min-w-inherit"
       [style]="field.props?.['styles'] | concatUnits"
     >
       <legend
@@ -17,16 +17,16 @@ import { CommonModule } from '@angular/common';
         {{ props.label }}
       </legend>
       @for (f of field.fieldGroup; track $index) {
-      <formly-field [field]="f">
-        <div
-          class="position-preview w-full border-2px border-dashed"
-          *cdkDragPlaceholder
-        ></div>
-      </formly-field>
+        <formly-field [field]="f">
+          <div
+            class="position-preview w-full border-2px border-dashed"
+            *cdkDragPlaceholder
+          ></div>
+        </formly-field>
       }
     </fieldset>
   `,
-  imports: [FormlyModule, ConcatUnitsPipe, CommonModule],
+  imports: [FormlyModule, ConcatUnitsPipe],
 })
 export class FormlyFieldFieldsetComponent
   extends FieldType<IEditorFormlyField>

@@ -29,6 +29,7 @@ import {
 import { HighlightAuto, HighlightModule } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -42,17 +43,19 @@ import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.comp
     WorkspaceViewportComponent,
     WorkspaceContorlComponent,
     WorkspaceConfigComponent,
+    // MatFormFieldControl,
+    MatInputModule,
+    MatFormFieldModule,
     MatIconModule,
     MatButtonModule,
     FormlyMaterialModule,
-    MatInputModule,
     MatNativeDateModule,
     FormlyMatDatepickerModule,
+    FormlyMatToggleModule,
+    FormlyMatSliderModule,
     FormlyModule,
     FormsModule,
     // MonacoEditorModule,
-    // FormlyMatSliderModule,
-    // FormlyMatToggleModule,
   ],
 })
 export class WidgetEditorComponent implements OnInit {

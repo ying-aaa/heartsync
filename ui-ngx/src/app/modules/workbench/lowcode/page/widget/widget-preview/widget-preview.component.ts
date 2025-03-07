@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
+import { FormlyMatSliderModule } from '@ngx-formly/material/slider';
+import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 import { Widget, WidgetService } from '@src/app/core/http/widget.service';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 import { NgScrollbarModule } from 'ngx-scrollbar';
@@ -28,6 +30,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     FormsModule,
     NgScrollbarModule,
     MatDividerModule,
+    FormlyMatToggleModule,
+    FormlyMatSliderModule,
   ],
 })
 export class WidgetPreviewComponent implements OnInit {

@@ -58,7 +58,7 @@ export const formlyFormTypes = [
       props: {
         ...baseProps,
         label: '数字',
-        min: undefined,
+        min: 0,
         max: undefined,
       },
       expressions: {
