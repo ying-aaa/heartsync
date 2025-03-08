@@ -17,17 +17,6 @@ import {
   CdkDropList,
 } from '@angular/cdk/drag-drop';
 import { WidgetEditorService } from '@src/app/modules/workbench/lowcode/page/widget/widget-editor.service';
-import { FormlyContorlWrapperComponent } from '../control/formly-control-wrapper.component';
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-];
 
 @Component({
   selector: 'formly-field-subtable',
@@ -50,10 +39,20 @@ export class FormlyFieldSubTableComponent
 {
   IFieldType = IFieldType;
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
   constructor(public widgetEditorService: WidgetEditorService) {
     super();
+  }
+
+  getSubTableItemWidth(
+    fieldGroup: IEditorFormlyField[],
+    itemField: IEditorFormlyField,
+  ): string {
+    const itemRow = itemField.props?.['row'] ?? 0;
+    const totalRow = fieldGroup.reduce(
+      (acc, ori) => acc + (ori.props?.['row'] ?? 0),
+      0,
+    );
+    return (itemRow / totalRow) * 100 + '%';
   }
 
   cdkDropListDropped(event: CdkDragDrop<IEditorFormlyField[]> | any) {

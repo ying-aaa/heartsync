@@ -1,4 +1,5 @@
 @let connectedTo = widgetEditorService.getConnectedTo(IFieldType.SUBTABLE);
+<div class="py-8px">{{ props.label }}</div>
 <div
   class="flex"
   [id]="field.fieldId || 'subtable'"
@@ -14,6 +15,7 @@
   @for (f of field.fieldGroup; track $index) {
     <formly-field
       [field]="f"
+      [style.width]="getSubTableItemWidth(field.fieldGroup!, f)"
       cdkDrag
       [cdkDragData]="getDragFieldData(f)"
       (cdkDragStarted)="widgetEditorService.dragStart = true"

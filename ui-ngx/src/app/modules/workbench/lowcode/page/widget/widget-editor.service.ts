@@ -7,7 +7,6 @@ import {
   deepClone,
   extractProperties,
   generateUUID,
-  getRecursivePosition,
   PickConfig,
 } from '@src/app/core/utils';
 import {
@@ -120,6 +119,12 @@ export class WidgetEditorService {
       }
     }
     addFieldId(field);
+    // 子表的默认列数
+    if (toParentField[0]?.parent?.type === IFieldType.SUBTABLE) {
+      if (field.props) {
+        field.props['row'] = 1;
+      }
+    }
     toParentField.splice(toIndex, 0, field);
     this.formGroup = new FormGroup({});
     this.options = {};
@@ -156,6 +161,12 @@ export class WidgetEditorService {
     formIndex: number,
     toIndex: number,
   ) {
+    // 子表的默认列数
+    if (toParent[0]?.parent?.type === IFieldType.SUBTABLE) {
+      if (formParent[formIndex].props) {
+        formParent[formIndex].props['row'] = 1;
+      }
+    }
     transferArrayItem(formParent, toParent, formIndex, toIndex);
     this.formGroup = new FormGroup({});
     this.options = {};
