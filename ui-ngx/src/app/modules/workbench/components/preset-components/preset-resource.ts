@@ -515,6 +515,7 @@ export const presetResource: IEditorFormlyField[] = [
   {
     key: 'input',
     _design: true,
+    _form: true,
     props: {
       label: '输入',
       typeName: '输入', // 新增属性
@@ -610,6 +611,7 @@ export const presetResource: IEditorFormlyField[] = [
   {
     key: 'select',
     _design: true,
+    _form: true,
     props: {
       label: '选择',
       typeName: '选择', // 新增属性
@@ -718,6 +720,7 @@ export const presetResource: IEditorFormlyField[] = [
   {
     key: 'upload',
     _design: true,
+    _form: true,
     props: {
       label: '上传',
       typeName: '上传', // 新增属性
@@ -754,6 +757,7 @@ export const presetResource: IEditorFormlyField[] = [
   },
   {
     key: 'system',
+    _form: true,
     _design: true,
     props: {
       label: '系统',
@@ -792,6 +796,7 @@ export const presetResource: IEditorFormlyField[] = [
   {
     key: 'location',
     _design: true,
+    _form: true,
     props: {
       label: '位置',
       typeName: '位置', // 新增属性
@@ -852,12 +857,50 @@ export const presetResource: IEditorFormlyField[] = [
         fieldGroup: [
           {
             key: 'normalInput',
-            type: 'input',
+            type: 'subtable',
             _design: true,
             props: {
               label: '普通输入',
-              typeName: '普通输入', // 新增属性
+              typeName: '普通输入子表', // 新增属性
             },
+            fieldGroup: [
+              {
+                key: 'input',
+                type: 'textarea',
+                _design: true,
+                props: {
+                  row: 1,
+                  appearance: 'fill',
+                  label: '多行文本',
+                  typeName: '多行文本', // 新增属性
+                },
+              },
+              {
+                key: 'input',
+                type: 'input',
+                _design: true,
+                props: {
+                  row: 1,
+                  appearance: 'fill',
+                  type: 'text',
+                  label: '单行文本',
+                  typeName: '单行文本', // 新增属性
+                },
+              },
+              {
+                key: 'input',
+                type: 'input',
+                _design: true,
+                props: {
+                  row: 1,
+                  appearance: 'fill',
+
+                  type: 'number',
+                  label: '数字',
+                  typeName: '数字', // 新增属性
+                },
+              },
+            ],
           },
         ],
       },

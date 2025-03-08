@@ -7,6 +7,8 @@ import { FormlyFieldStepperComponent } from './stepper/formly-field-stepper.comp
 import { FormlyFieldCanvasComponent } from './canvas/formly-field-canvas.component';
 import { FormlyFieldArrayComponent } from './array/formly-field-array.component';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { FormlyFieldSubTableComponent } from './subtable/formly-field-subtable.component';
+
 const density = 1;
 
 const densityExpressions = {
@@ -169,6 +171,19 @@ export const formlyLayoutTypes = [
     component: FormlyFieldArrayComponent,
     defaultOptions: {
       props: { typeName: '数组', density },
+      expressions: {
+        ...densityExpressions,
+      },
+    },
+  },
+  {
+    name: 'subtable',
+    component: FormlyFieldSubTableComponent,
+    defaultOptions: {
+      props: {
+        typeName: '普通输入子表',
+        label: '普通输入子表',
+      },
       expressions: {
         ...densityExpressions,
       },

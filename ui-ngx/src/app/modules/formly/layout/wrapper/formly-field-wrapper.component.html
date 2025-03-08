@@ -1,4 +1,5 @@
 @let connectedTo = widgetEditorService.getConnectedTo(IFieldType.COLUMN);
+@let flexDirection = field.props?.['styles']?.flexDirection === 'row';
 <div
   [id]="field.fieldId || 'workspace'"
   cdkDropList
@@ -8,6 +9,7 @@
   [cdkDropListEnterPredicate]="canEnter"
   [cdkDropListDisabled]="!widgetEditorService.isEditMode()"
   [style]="field.props?.['styles'] | concatUnits"
+  [cdkDropListOrientation]="flexDirection ? 'horizontal' : 'vertical'"
   class="flex flex-col min-h-36px"
 >
   @for (f of field.fieldGroup; track $index) {
@@ -20,7 +22,8 @@
       (cdkDragReleased)="widgetEditorService.dragStart = false"
     >
       <div
-        class="position-preview w-full h-3px border-3px border-solid border-#2f90b9"
+        class="position-preview border-3px border-solid border-#2f90b9"
+        [class]="flexDirection ? 'w-0 h-inherit' : 'w-full h-3px'"
         *cdkDragPlaceholder
       ></div>
     </formly-field>

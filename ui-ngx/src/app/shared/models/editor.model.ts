@@ -6,6 +6,7 @@ export enum IFieldType {
   COLUMN = 'column',
   FLEX = 'flex',
   MATTABS = 'tabs',
+  SUBTABLE = 'subtable',
 }
 
 export enum ICdkDrapActionType {
@@ -27,4 +28,5 @@ export interface IEditorFormlyField extends FormlyFieldConfig {
   canHaveChildren?: boolean;
   childrenPath?: string; // Lodash path
   _design?: boolean;
+  _form?: true;
 }

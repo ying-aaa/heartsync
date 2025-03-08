@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
-import { ConcatUnitsPipe } from '../../../../shared/pipes/units.pipe';
-import { CommonModule } from '@angular/common';
+import { ConcatUnitsPipe } from '@shared/pipes/units.pipe';
 
 @Component({
   selector: 'formly-field-fieldset',

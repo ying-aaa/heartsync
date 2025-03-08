@@ -1,4 +1,5 @@
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { FormlyFieldSubTableComponent } from './subtable/formly-field-subtable.component';
 
 const appearance = 'outline';
 const density = 5;
@@ -174,6 +175,20 @@ export const formlyFormTypes = [
           { value: 3, label: '选项 3' },
           { value: 4, label: '选项 4', disabled: true },
         ],
+      },
+      expressions: {
+        ...densityExpressions,
+      },
+    },
+  },
+  {
+    name: 'subtable',
+    component: FormlyFieldSubTableComponent,
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        typeName: '普通输入子表',
+        label: '普通输入子表',
       },
       expressions: {
         ...densityExpressions,

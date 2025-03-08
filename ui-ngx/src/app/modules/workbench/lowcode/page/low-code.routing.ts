@@ -19,30 +19,35 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HIGHLIGHT_OPTIONS, provideHighlightOptions } from 'ngx-highlightjs';
 import { formlyDisplayTypes } from '@src/app/modules/formly/advanced/formly-display-types';
+import { FormlyFieldSubTableItemComponent } from '@src/app/modules/formly/layout/subtable-item/formly-field-subtable-item.component';
 
 export function editorExtension(field: IEditorFormlyField) {
+  // 最外层列
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
     return;
   }
-  // field.type === IFieldType.COLUMN
+
   if (
     !field._design ||
+    // 列配置
     field.type === IFieldType.COLUMN ||
+    // 群组套山歌配置
     (field.type === 'grid' && field.parent?.type === 'fieldset')
   )
     return;
 
-  if (field.wrappers) {
-    if (
-      field.wrappers
-        .filter((v) => typeof v === 'string')
-        .every((v) => (v as string).indexOf('contorl') === -1)
-    ) {
-      field.wrappers.unshift('contorl');
+  if (!field.wrappers) field.wrappers = [];
+
+  // 子表添加 tableitem
+  if (field.parent?.type === IFieldType.SUBTABLE) {
+    if (!field.wrappers.includes('subtableitem')) {
+      field.wrappers.unshift('subtableitem');
     }
-  } else {
-    field.wrappers = ['contorl'];
+  }
+
+  if (!field.wrappers.includes('contorl')) {
+    field.wrappers.unshift('contorl');
   }
 }
 
@@ -94,8 +99,8 @@ export default [
       importProvidersFrom(
         FormlyModule.forRoot({
           types: [
-            ...formlyLayoutTypes,
             ...formlyFormTypes,
+            ...formlyLayoutTypes,
             ...formlyDisplayTypes,
           ],
           validationMessages: [
@@ -104,6 +109,10 @@ export default [
           wrappers: [
             { name: 'contorl', component: FormlyContorlWrapperComponent },
             { name: 'scroll', component: FormlyFieldScrollComponent },
+            {
+              name: 'subtableitem',
+              component: FormlyFieldSubTableItemComponent,
+            },
           ],
           extensions: [
             {

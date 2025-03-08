@@ -169,6 +169,7 @@ export class WidgetEditorService {
       [IFieldType.FLEX]: [],
       [IFieldType.ROW]: [],
       [IFieldType.MATTABS]: [],
+      [IFieldType.SUBTABLE]: [],
     };
 
     // @ts-ignore
@@ -223,7 +224,10 @@ function findSameField(
 ): { [key in IFieldType]: string[] } {
   for (let i = 0; i < fields.length; i++) {
     const type = fields[i].type as IFieldType;
-    if ((type === 'column' || type === 'flex') && options[type]) {
+    if (
+      (type === 'column' || type === 'flex' || type === 'subtable') &&
+      options[type]
+    ) {
       // 暂时都用column进行连接，后面可改为 new Map 来存储 ！
       options['column']!.unshift(fields[i].fieldId as string);
     } else if (type && options[type]) {

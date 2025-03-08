@@ -57,9 +57,19 @@ export class PresetComponentsComponent implements OnInit {
     effect(() => {
       this.activePresetResource = this.presetResource().find(
         (item: IEditorFormlyField) => item.key === this.activeValue(),
-      )!.fieldGroup;
+      );
     });
   }
+
+  getConnectedTo(group: any) {
+    const connectedTo = this.widgetEditorService.getConnectedTo(
+      IFieldType.COLUMN,
+    );
+    return group._form
+      ? connectedTo
+      : connectedTo.filter((id: string) => !id.startsWith(IFieldType.SUBTABLE));
+  }
+
   matRippleColor = () =>
     this.hsThemeService.getCurrentThemeConfig(['#00000010', '#ffffff10']);
 
