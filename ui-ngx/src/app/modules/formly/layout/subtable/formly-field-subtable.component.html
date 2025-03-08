@@ -1,7 +1,7 @@
 @let connectedTo = widgetEditorService.getConnectedTo(IFieldType.SUBTABLE);
 <div class="py-8px">{{ props.label }}</div>
 <div
-  class="flex"
+  class="row-wrapper flex"
   [id]="field.fieldId || 'subtable'"
   [style]="field.props?.['styles'] | concatUnits"
   [style.grid-template-columns]="getGridTemplateColumns(field.fieldGroup || [])"

@@ -10,6 +10,7 @@
   [cdkDropListDisabled]="!widgetEditorService.isEditMode()"
   [style]="field.props?.['styles'] | concatUnits"
   [cdkDropListOrientation]="flexDirection ? 'horizontal' : 'vertical'"
+  [class]="flexDirection ? 'row-wrapper' : 'column-wrapper'"
   class="flex flex-col min-h-36px"
 >
   @for (f of field.fieldGroup; track $index) {
@@ -23,7 +24,6 @@
     >
       <div
         class="position-preview border-3px border-solid border-#2f90b9"
-        [class]="flexDirection ? 'w-0 h-inherit' : 'w-full h-3px'"
         *cdkDragPlaceholder
       ></div>
     </formly-field>
