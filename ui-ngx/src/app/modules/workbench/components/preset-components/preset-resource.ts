@@ -814,6 +814,14 @@ export const presetResource: IEditorFormlyField[] = [
         },
         fieldGroup: [
           {
+            key: 'button',
+            type: 'button',
+            _design: true,
+            props: {
+              label: '按钮',
+            },
+          },
+          {
             key: 'textDisplay',
             type: 'display',
             _design: true,

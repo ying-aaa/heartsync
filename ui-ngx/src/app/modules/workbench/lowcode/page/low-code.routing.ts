@@ -18,6 +18,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HIGHLIGHT_OPTIONS, provideHighlightOptions } from 'ngx-highlightjs';
+import { formlyDisplayTypes } from '@src/app/modules/formly/advanced/formly-display-types';
 
 export function editorExtension(field: IEditorFormlyField) {
   if (field.type === 'formly-group') {
@@ -92,7 +93,11 @@ export default [
     providers: [
       importProvidersFrom(
         FormlyModule.forRoot({
-          types: [...formlyLayoutTypes, ...formlyFormTypes],
+          types: [
+            ...formlyLayoutTypes,
+            ...formlyFormTypes,
+            ...formlyDisplayTypes,
+          ],
           validationMessages: [
             { name: 'required', message: '这个字段是必填的！' },
           ],
@@ -106,6 +111,9 @@ export default [
               extension: { onPopulate: editorExtension },
             },
           ],
+          extras: {
+            resetFieldOnHide: false,
+          },
         }),
         // MonacoEditorModule.forRoot(monacoConfig), // use forRoot() in main app module only.
       ),
@@ -125,7 +133,11 @@ export default [
     providers: [
       importProvidersFrom(
         FormlyModule.forRoot({
-          types: [...formlyLayoutTypes, ...formlyFormTypes],
+          types: [
+            ...formlyLayoutTypes,
+            ...formlyFormTypes,
+            ...formlyDisplayTypes,
+          ],
           validationMessages: [
             { name: 'required', message: '这个字段是必填的！' },
           ],
@@ -136,6 +148,9 @@ export default [
               extension: { onPopulate: previewExtension },
             },
           ],
+          extras: {
+            resetFieldOnHide: false,
+          },
         }),
       ),
       { provide: MAT_DATE_LOCALE, useValue: 'zh-CN' },
