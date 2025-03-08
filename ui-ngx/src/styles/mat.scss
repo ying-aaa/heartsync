@@ -38,6 +38,7 @@ $base-radius: 8px;
 .mdc-button {
   --mat-sys-corner-full: 8px;
   --mat-filled-button-horizontal-padding: 16px;
+  --mdc-protected-button-container-color: none;
 }
 
 .mat-mdc-select {
@@ -50,6 +51,15 @@ $base-radius: 8px;
 
 .mat-mdc-form-field-subscript-wrapper {
   height: 0;
+}
+
+.mat-stepper-vertical,
+.mat-stepper-horizontal {
+  --mat-stepper-container-color: none;
+}
+
+.mat-expansion-panel {
+  --mat-expansion-container-background-color: none;
 }
 
 .mat-tab-item3-full {

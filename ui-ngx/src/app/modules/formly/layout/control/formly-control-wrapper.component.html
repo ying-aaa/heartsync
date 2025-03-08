@@ -1,38 +1,39 @@
-@if (isEditMode) { @if(isHoverField) {
-<div class="title-name">{{ field.props?.label }}</div>
-}
-<div class="flex absolute right-3px -top-16px z-10 hs-widget-toolbar">
-  <button mat-mini-fab>
-    <mat-icon>menu</mat-icon>
-  </button>
-  <mat-divider
-    [vertical]="true"
-    class="opacity-20 h-full"
-  ></mat-divider>
-  <button
-    mat-mini-fab
-    (click)="
-      widgetEditorService.addField(
-        field,
-        field.parent!.fieldGroup!,
-        field.index! + 1
-      )
-    "
-  >
-    <mat-icon>content_copy</mat-icon>
-  </button>
-  <mat-divider
-    [vertical]="true"
-    class="opacity-20 h-full"
-  ></mat-divider>
-  <button
-    mat-mini-fab
-    (click)="
-      widgetEditorService.removeField(field.parent!.fieldGroup!, field.index!)
-    "
-  >
-    <mat-icon>delete</mat-icon>
-  </button>
-</div>
+@if (isEditMode) {
+  @if (isHoverField) {
+    <div class="title-name">{{ field.props?.['typeName'] }}</div>
+  }
+  <div class="flex absolute right-3px -top-16px z-10 hs-widget-toolbar">
+    <button mat-mini-fab>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-divider
+      [vertical]="true"
+      class="opacity-20 h-full"
+    ></mat-divider>
+    <button
+      mat-mini-fab
+      (click)="
+        widgetEditorService.addField(
+          field,
+          field.parent!.fieldGroup!,
+          field.index! + 1
+        )
+      "
+    >
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <mat-divider
+      [vertical]="true"
+      class="opacity-20 h-full"
+    ></mat-divider>
+    <button
+      mat-mini-fab
+      (click)="
+        widgetEditorService.removeField(field.parent!.fieldGroup!, field.index!)
+      "
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
 }
 <ng-container #fieldComponent></ng-container>

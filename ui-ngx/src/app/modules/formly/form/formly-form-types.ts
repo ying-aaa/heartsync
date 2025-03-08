@@ -41,6 +41,7 @@ export const formlyFormTypes = [
     name: 'textarea',
     defaultOptions: {
       props: {
+        typeName: '多行文本',
         label: '多行文本',
         rows: 4,
         maxLength: undefined,
@@ -57,6 +58,7 @@ export const formlyFormTypes = [
     defaultOptions: {
       props: {
         ...baseProps,
+        typeName: '数字',
         label: '数字',
         min: 0,
         max: undefined,
@@ -72,7 +74,7 @@ export const formlyFormTypes = [
     defaultOptions: {
       props: {
         ...baseProps,
-        type: 'password',
+        typeName: '密码',
         label: '密码',
       },
       expressions: {
@@ -84,7 +86,8 @@ export const formlyFormTypes = [
     name: 'datepicker',
     defaultOptions: {
       props: {
-        label: '日期选择',
+        typeName: '日期',
+        label: '日期',
         ...baseProps,
         dateFormat: 'yyyy-MM-dd', // 设置日期格式
       },
@@ -98,6 +101,7 @@ export const formlyFormTypes = [
     defaultOptions: {
       props: {
         ...baseProps,
+        typeName: '单选',
         label: '单选',
         options: [
           { value: 1, label: '选项 1' },
@@ -116,6 +120,7 @@ export const formlyFormTypes = [
     defaultOptions: {
       props: {
         ...baseProps,
+        typeName: '多选',
         label: '多选',
         options: [
           { value: 1, label: '选项 1' },
@@ -134,6 +139,7 @@ export const formlyFormTypes = [
     defaultOptions: {
       props: {
         ...baseProps,
+        typeName: '开关',
         label: '开关',
       },
       expressions: {
@@ -146,7 +152,8 @@ export const formlyFormTypes = [
     defaultOptions: {
       props: {
         ...baseProps,
-        label: '开关',
+        typeName: '滑块',
+        label: '滑块',
       },
       expressions: {
         ...densityExpressions,
@@ -159,7 +166,8 @@ export const formlyFormTypes = [
     defaultOptions: {
       props: {
         ...baseProps,
-        label: '下拉单选',
+        typeName: '下拉',
+        label: '下拉选择',
         options: [
           { value: 1, label: '选项 1' },
           { value: 2, label: '选项 2' },

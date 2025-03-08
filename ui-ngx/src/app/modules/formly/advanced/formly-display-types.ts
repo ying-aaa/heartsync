@@ -30,8 +30,9 @@ export const formlyDisplayTypes = [
     defaultOptions: {
       props: {
         ...baseProps,
-        type: 'basic',
+        typeName: '按钮',
         label: '按钮',
+        type: 'basic',
         icon: 'visibility',
         styles: {
           width: '',

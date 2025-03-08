@@ -25,6 +25,7 @@ export const formlyLayoutTypes = [
     defaultOptions: {
       props: {
         density,
+        typeName: '列',
         styles: {
           rowGap: 8,
           rowGapUnits: 'px',
@@ -61,6 +62,7 @@ export const formlyLayoutTypes = [
     component: FormlyFieldWrapperComponent,
     defaultOptions: {
       props: {
+        typeName: '弹性',
         density,
         orientation: 'mixed',
         styles: {
@@ -93,6 +95,7 @@ export const formlyLayoutTypes = [
     component: FormlyFieldFieldsetComponent,
     defaultOptions: {
       props: {
+        typeName: '群组',
         density,
         showBorder: true,
         styles: {
@@ -125,7 +128,7 @@ export const formlyLayoutTypes = [
     name: 'tabs',
     component: FormlyFieldTabsComponent,
     defaultOptions: {
-      props: { density },
+      props: { typeName: '页签', density },
       expressions: {
         ...densityExpressions,
       },
@@ -135,7 +138,7 @@ export const formlyLayoutTypes = [
     name: 'accordion',
     component: FormlyFieldAccordionComponent,
     defaultOptions: {
-      props: { density },
+      props: { typeName: '手风琴', density },
       expressions: {
         ...densityExpressions,
       },
@@ -145,7 +148,7 @@ export const formlyLayoutTypes = [
     name: 'mat-stepper',
     component: FormlyFieldStepperComponent,
     defaultOptions: {
-      props: { density },
+      props: { typeName: '步进器', density },
       expressions: {
         ...densityExpressions,
       },
@@ -155,7 +158,7 @@ export const formlyLayoutTypes = [
     name: 'canvas',
     component: FormlyFieldCanvasComponent,
     defaultOptions: {
-      props: { density },
+      props: { typeName: '画布', density },
       expressions: {
         ...densityExpressions,
       },
@@ -165,7 +168,7 @@ export const formlyLayoutTypes = [
     name: 'array',
     component: FormlyFieldArrayComponent,
     defaultOptions: {
-      props: { density },
+      props: { typeName: '数组', density },
       expressions: {
         ...densityExpressions,
       },
