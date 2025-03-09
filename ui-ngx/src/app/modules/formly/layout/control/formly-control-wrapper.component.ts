@@ -34,7 +34,9 @@ export class FormlyContorlWrapperComponent
   }
 
   @HostBinding('class.show-border') get isShowBorder() {
-    return this.field.type === IFieldType.GRID;
+    return (
+      this.field.type === IFieldType.GRID || this.field.type === IFieldType.FLEX
+    );
   }
 
   @HostBinding('class.active')
