@@ -11,9 +11,13 @@ import {
 } from '@src/app/core/utils';
 import {
   IEditorFormlyField,
+  IEditSizeType,
   IFieldType,
-} from '@src/app/shared/models/editor.model';
-import { Widget, WidgetService } from '@src/app/core/http/widget.service';
+  IFormSubTypes,
+  IWidgetType,
+  WidgetConfig,
+} from '@src/app/shared/models/widget.model';
+import { WidgetService } from '@src/app/core/http/widget.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
@@ -22,7 +26,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class WidgetEditorService {
   HS_DEFAULT_ID = 'workspace';
 
-  widgetConfig = signal({});
+  widgetConfig = signal<WidgetConfig>({});
 
   // 是否编辑模式
   isEditMode = signal(true);
@@ -55,9 +59,16 @@ export class WidgetEditorService {
       () => {
         if (this.fieldsId()) {
           this.widgetService.getWidgetById(this.fieldsId()!).subscribe({
-            next: (widget: Widget) => {
+            next: (widget: WidgetConfig) => {
               this.widgetConfig.set(widget);
-              this.fields.set(JSON.parse(widget.config));
+              const fieldConfig = JSON.parse(widget.fieldConfig as string);
+              if (
+                fieldConfig.type === IWidgetType.FORM &&
+                fieldConfig.subType === IFormSubTypes.GRID
+              ) {
+                this.fields.set(JSON.parse(fieldConfig.formConfig));
+              }
+              // this.fields.set(JSON.parse(widget.config));
               this.formGroup = new FormGroup({});
               this.options = {};
             },
@@ -83,7 +94,7 @@ export class WidgetEditorService {
     this.widgetService
       .updateWidget({
         ...this.widgetConfig(),
-        config: JSON.stringify(this.fields()),
+        // config: JSON.stringify(this.fields()),
       })
       .subscribe({
         next: () => {

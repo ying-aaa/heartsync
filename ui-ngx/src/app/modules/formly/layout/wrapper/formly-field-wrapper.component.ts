@@ -11,7 +11,7 @@ import {
   ICdkDrapActionType,
   IEditorFormlyField,
   IFieldType,
-} from '@src/app/shared/models/editor.model';
+} from '@src/app/shared/models/widget.model';
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 import { CommonModule } from '@angular/common';
 import { ConcatUnitsPipe } from '../../../../shared/pipes/units.pipe';

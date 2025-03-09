@@ -5,7 +5,7 @@ import { FormlyContorlWrapperComponent } from '@src/app/modules/formly/layout/co
 import {
   IEditorFormlyField,
   IFieldType,
-} from '@src/app/shared/models/editor.model';
+} from '@src/app/shared/models/widget.model';
 import { IRouterUse } from '@src/app/shared/models/route.model';
 import { FormlyFieldScrollComponent } from '@src/app/modules/formly/layout/scroll/formly-field-scroll.component';
 import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout-types';

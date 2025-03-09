@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FieldType } from '@ngx-formly/core';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { MatTableModule } from '@angular/material/table';
 export interface PeriodicElement {
   name: string;

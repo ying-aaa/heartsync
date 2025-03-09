@@ -2,10 +2,15 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { Component, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Widget, WidgetService } from '@src/app/core/http/widget.service';
+import { WidgetService } from '@src/app/core/http/widget.service';
 import { HsFancytreeComponent } from '@src/app/shared/components/hs-fancytree/hs-fancytree.component';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
-import { IFancyTreeConfig } from '@src/app/shared/models/public-api';
+import {
+  IEditSizeType,
+  IFancyTreeConfig,
+  IFormSubTypes,
+  IWidgetType,
+} from '@src/app/shared/models/public-api';
 import { IRadioConfig } from '@src/app/shared/models/system.model';
 import { WidgetEditorService } from '../../widget-editor.service';
 import { generateUUID } from '@src/app/core/utils';
@@ -31,7 +36,18 @@ export class WidgetFolderComponent implements OnInit {
           title: data.node.title,
           key: generateUUID(),
           type: this.activeValue(),
-          config: '[]', // 部件配置项
+          workSizeConfig: {
+            type: IEditSizeType.PC,
+            size: {
+              width: 1920,
+              height: 1080,
+            },
+          },
+          fieldConfig: {
+            type: IWidgetType.FORM, // 部件类型
+            subType: IFormSubTypes.GRID, // 部件子类型
+            formConfig: [],
+          }, // 部件配置项
         })
         .subscribe({
           next: (res) => {

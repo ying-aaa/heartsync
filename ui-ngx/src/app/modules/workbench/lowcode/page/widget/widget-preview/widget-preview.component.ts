@@ -11,8 +11,13 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { FormlyMatSliderModule } from '@ngx-formly/material/slider';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
-import { Widget, WidgetService } from '@src/app/core/http/widget.service';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { WidgetService } from '@src/app/core/http/widget.service';
+import {
+  IEditorFormlyField,
+  IFormSubTypes,
+  IWidgetType,
+  WidgetConfig,
+} from '@src/app/shared/models/widget.model';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
 @Component({
@@ -55,8 +60,15 @@ export class WidgetPreviewComponent implements OnInit {
     const widgetId = this.route.snapshot.paramMap.get('widgetId'); // 获取 ID 参数
 
     this.widgetService.getWidgetById(widgetId!).subscribe({
-      next: (widget: Widget) => {
-        this.fields.set(JSON.parse(widget.config));
+      next: (widget: WidgetConfig) => {
+        // this.fields.set(JSON.parse(widget.config));
+        const fieldConfig = JSON.parse(widget.fieldConfig as string);
+        if (
+          fieldConfig.type === IWidgetType.FORM &&
+          fieldConfig.subType === IFormSubTypes.GRID
+        ) {
+          this.fields.set(JSON.parse(fieldConfig.formConfig));
+        }
         this.widgetName = widget.title!;
         this.formGroup = new FormGroup({});
         this.options = {};

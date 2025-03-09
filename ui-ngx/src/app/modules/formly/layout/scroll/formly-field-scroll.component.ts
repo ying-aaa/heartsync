@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FieldWrapper, FormlyModule } from '@ngx-formly/core';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
 
 @Component({

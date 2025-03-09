@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 @Component({
   selector: 'formly-field-stepper',
   templateUrl: './formly-field-stepper.component.html',

@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
 import { WidgetEditorService } from '@src/app/modules/workbench/lowcode/page/widget/widget-editor.service';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 
 @Component({
   selector: 'formly-field-array',

@@ -2,7 +2,7 @@ import { generateUUID } from '@src/app/core/utils';
 import {
   IEditorFormlyField,
   IFieldType,
-} from '@src/app/shared/models/editor.model';
+} from '@src/app/shared/models/widget.model';
 
 export const presetResource: IEditorFormlyField[] = [
   {

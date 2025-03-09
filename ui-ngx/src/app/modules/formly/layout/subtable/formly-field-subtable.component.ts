@@ -7,7 +7,7 @@ import {
   ICdkDrapActionType,
   IEditorFormlyField,
   IFieldType,
-} from '@src/app/shared/models/editor.model';
+} from '@src/app/shared/models/widget.model';
 import { ConcatUnitsPipe } from '@shared/pipes/units.pipe';
 import { MatTableModule } from '@angular/material/table';
 import {

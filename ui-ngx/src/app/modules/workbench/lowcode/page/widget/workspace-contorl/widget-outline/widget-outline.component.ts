@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER } from '@angular/cdk/a11y';
 import { MatTreeModule } from '@angular/material/tree';
 import { WidgetEditorService } from '../../widget-editor.service';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 

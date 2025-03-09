@@ -1,4 +1,4 @@
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { FormlyFieldButtonComponent } from './button/formly-field-button.component';
 
 const appearance = 'outline';

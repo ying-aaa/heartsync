@@ -1,4 +1,4 @@
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { widget_input_config } from './input.config';
 import { widget_grid_config } from './grid.config';
 import { widget_flex_config } from './flex.config';

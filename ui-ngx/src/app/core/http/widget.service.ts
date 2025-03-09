@@ -3,14 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
-export interface Widget {
-  id?: number;
-  title?: string;
-  key?: string;
-  type?: string; // 部件类型（表单、列表、详情、图表等）
-  config?: any; // 部件配置项
-}
+import { WidgetConfig } from '@src/app/shared/models/widget.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,30 +14,30 @@ export class WidgetService {
   constructor(private http: HttpClient) {}
 
   // 获取所有部件
-  getAllWidgets(): Observable<Widget[]> {
+  getAllWidgets(): Observable<WidgetConfig[]> {
     return this.http
-      .get<Widget[]>(`${this.apiUrl}/widgets`)
+      .get<WidgetConfig[]>(`${this.apiUrl}/widgets`)
       .pipe(catchError(this.handleError));
   }
 
   // 根据ID获取部件
-  getWidgetById(id: number | string): Observable<Widget> {
+  getWidgetById(id: number | string): Observable<WidgetConfig> {
     const url = `${this.apiUrl}/widgets/${id}`;
-    return this.http.get<Widget>(url).pipe(catchError(this.handleError));
+    return this.http.get<WidgetConfig>(url).pipe(catchError(this.handleError));
   }
 
   // 创建新部件
-  createWidget(widget: Widget): Observable<Widget> {
+  createWidget(widget: WidgetConfig): Observable<WidgetConfig> {
     return this.http
-      .post<Widget>(`${this.apiUrl}/widgets`, widget)
+      .post<WidgetConfig>(`${this.apiUrl}/widgets`, widget)
       .pipe(catchError(this.handleError));
   }
 
   // 更新部件
-  updateWidget(widget: Widget): Observable<Widget> {
+  updateWidget(widget: WidgetConfig): Observable<WidgetConfig> {
     const url = `${this.apiUrl}/widgets/${widget.id}`;
     return this.http
-      .put<Widget>(url, widget)
+      .put<WidgetConfig>(url, widget)
       .pipe(catchError(this.handleError));
   }
 

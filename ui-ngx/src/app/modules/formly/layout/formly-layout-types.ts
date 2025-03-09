@@ -6,7 +6,7 @@ import { FormlyFieldTabsComponent } from './tabs/formly-field-tabs.component';
 import { FormlyFieldStepperComponent } from './stepper/formly-field-stepper.component';
 import { FormlyFieldCanvasComponent } from './canvas/formly-field-canvas.component';
 import { FormlyFieldArrayComponent } from './array/formly-field-array.component';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { FormlyFieldSubTableComponent } from './subtable/formly-field-subtable.component';
 
 const density = 1;

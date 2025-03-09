@@ -11,7 +11,7 @@ import { FieldWrapper } from '@ngx-formly/core';
 import {
   IEditorFormlyField,
   IFieldType,
-} from '@src/app/shared/models/editor.model';
+} from '@src/app/shared/models/widget.model';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';

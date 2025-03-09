@@ -11,7 +11,7 @@ import { FieldType, FormlyModule } from '@ngx-formly/core';
 import {
   IEditorFormlyField,
   IFieldType,
-} from '@src/app/shared/models/editor.model';
+} from '@src/app/shared/models/widget.model';
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';

@@ -16,7 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WidgetEditorService } from '../widget-editor.service';
 import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 
 @Component({
   selector: 'hs-workspace-viewport',

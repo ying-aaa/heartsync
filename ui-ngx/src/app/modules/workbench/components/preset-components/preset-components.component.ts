@@ -17,7 +17,7 @@ import {
   ICdkDrapActionType,
   IEditorFormlyField,
   IFieldType,
-} from '@src/app/shared/models/editor.model';
+} from '@src/app/shared/models/widget.model';
 @Component({
   selector: 'hs-preset-components',
   templateUrl: './preset-components.component.html',

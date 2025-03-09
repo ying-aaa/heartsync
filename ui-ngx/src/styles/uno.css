@@ -100,6 +100,7 @@
 .flex-row{flex-direction:row;}
 .flex-col{flex-direction:column;}
 .flex-wrap{flex-wrap:wrap;}
+.table{display:table;}
 .transform{transform:translateX(var(--un-translate-x)) translateY(var(--un-translate-y)) translateZ(var(--un-translate-z)) rotate(var(--un-rotate)) rotateX(var(--un-rotate-x)) rotateY(var(--un-rotate-y)) rotateZ(var(--un-rotate-z)) skewX(var(--un-skew-x)) skewY(var(--un-skew-y)) scaleX(var(--un-scale-x)) scaleY(var(--un-scale-y)) scaleZ(var(--un-scale-z));}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .keyframes-spin{animation:spin;}
@@ -166,6 +167,7 @@
 .pt-12px{padding-top:12px;}
 .pt-48px{padding-top:48px;}
 .pt-6px{padding-top:6px;}
+.pie{padding-inline-end:1rem;}
 .text-center{text-align:center;}
 .indent{text-indent:1.5rem;}
 .text-12px{font-size:12px;}

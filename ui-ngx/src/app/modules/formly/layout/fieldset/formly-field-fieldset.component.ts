@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { ConcatUnitsPipe } from '@shared/pipes/units.pipe';
 
 @Component({

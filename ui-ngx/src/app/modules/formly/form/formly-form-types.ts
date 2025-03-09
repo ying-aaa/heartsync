@@ -1,4 +1,4 @@
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { FormlyFieldSubTableComponent } from './subtable/formly-field-subtable.component';
 
 const appearance = 'outline';

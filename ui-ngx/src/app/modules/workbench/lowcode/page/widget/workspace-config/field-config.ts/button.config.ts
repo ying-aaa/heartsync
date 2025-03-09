@@ -1,4 +1,4 @@
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 
 export const widget_button_config: IEditorFormlyField[] = [
   {

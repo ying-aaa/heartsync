@@ -11,7 +11,7 @@ import {
   ICdkDrapActionType,
   IEditorFormlyField,
   IFieldType,
-} from '@src/app/shared/models/editor.model';
+} from '@src/app/shared/models/widget.model';
 import { WidgetEditorService } from '../../../workbench/lowcode/page/widget/widget-editor.service';
 
 @Component({
