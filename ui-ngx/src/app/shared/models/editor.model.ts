@@ -1,7 +1,8 @@
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
 export enum IFieldType {
-  GROUP = 'group',
+  FIELDSET = 'fieldset',
+  GRID = 'grid',
   ROW = 'row',
   COLUMN = 'column',
   FLEX = 'flex',

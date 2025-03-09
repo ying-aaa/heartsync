@@ -846,6 +846,9 @@ export const presetResource: IEditorFormlyField[] = [
     props: {
       label: '子表',
       typeName: '子表', // 新增属性
+      wrapperAttr: {
+        backgroundColor: '#f1f4fc',
+      },
     },
     fieldGroup: [
       {

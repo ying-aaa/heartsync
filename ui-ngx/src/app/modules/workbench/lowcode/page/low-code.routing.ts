@@ -25,13 +25,21 @@ export function editorExtension(field: IEditorFormlyField) {
   // 最外层列
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
+
     return;
+  }
+
+  if (field.type === IFieldType.COLUMN) {
+    if (!field.parent && field.props?.['styles']) {
+      field.props!['styles']!.rowGap = 12;
+    }
   }
 
   if (
     !field._design ||
     // 列配置
     field.type === IFieldType.COLUMN ||
+    // (field.parent?.type === IFieldType.COLUMN && field.parent?.parent) ||
     // 群组套山歌配置
     (field.type === 'grid' && field.parent?.type === 'fieldset')
   )

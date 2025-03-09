@@ -8,7 +8,10 @@ import {
   OnInit,
 } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
-import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
+import {
+  IEditorFormlyField,
+  IFieldType,
+} from '@src/app/shared/models/editor.model';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -25,12 +28,20 @@ export class FormlyContorlWrapperComponent
   extends FieldWrapper<IEditorFormlyField>
   implements OnInit, OnDestroy
 {
-  @HostBinding('class.edit-mode') get isEditMode() {
-    return this.widgetEditorService.isEditMode();
+  @HostBinding('class.edit-mode')
+  get isEditMode() {
+    return !!this.widgetEditorService.isEditMode();
   }
-  @HostBinding('class.active') get isActiveField(): boolean {
+
+  @HostBinding('class.show-border') get isShowBorder() {
+    return this.field.type === IFieldType.GRID;
+  }
+
+  @HostBinding('class.active')
+  get isActiveField(): boolean {
     return this.isEditMode && this._isActiveField;
   }
+
   @HostBinding('class.hover') get isHoverField(): boolean {
     return (
       this.isEditMode &&

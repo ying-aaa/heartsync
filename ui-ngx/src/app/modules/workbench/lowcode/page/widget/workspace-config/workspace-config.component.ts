@@ -3,12 +3,13 @@ import { FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/editor.model';
 import { CONFIT_RESOURCE } from './field-config.ts/public-api';
 import { FormGroup } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'hs-workspace-config',
   templateUrl: './workspace-config.component.html',
   styleUrls: ['./workspace-config.component.less'],
-  imports: [FormlyModule],
+  imports: [FormlyModule, MatDividerModule],
 })
 export class WorkspaceConfigComponent implements OnInit {
   selectedField = input<any>();

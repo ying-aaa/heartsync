@@ -175,7 +175,7 @@ export class WidgetEditorService {
 
   getConnectedTo(type: IFieldType) {
     const options: any = {
-      [IFieldType.GROUP]: [],
+      [IFieldType.FIELDSET]: [],
       [IFieldType.COLUMN]: [this.HS_DEFAULT_ID],
       [IFieldType.FLEX]: [],
       [IFieldType.ROW]: [],
