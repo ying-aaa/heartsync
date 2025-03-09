@@ -8,8 +8,8 @@
     class="opacity-20 h-full"
   ></mat-divider>
   <!-- 右侧 -->
-  <div class="flex flex-1 relative">
-    <main class="relative flex flex-1">
+  <div class="flex flex-1 w-0 relative">
+    <main class="relative w-full">
       <hs-workspace-viewport></hs-workspace-viewport>
       @if (!widgetEditorService.fields().length) {
         <div
@@ -23,24 +23,24 @@
         </div>
       }
     </main>
-    <mat-divider
-      [vertical]="true"
-      class="opacity-20 h-full"
-    ></mat-divider>
-    <aside class="flex flex-col h-full w-284px py-8px px-12px relative">
-      <!-- 表单配置 -->
-      <!-- <div class="py-8px">表单设置</div> -->
-      <!-- <hs-workspace-config
-        class="h-0 flex-1"
-        [selectedField]="widgetEditorService.widgetConfig()"
-      ></hs-workspace-config> -->
-
-      <!-- field配置 -->
-      <div class="absolute wh-full top-0 left-0 py-12px px-12px">
-        <hs-workspace-config
-          [selectedField]="widgetEditorService.activeField()"
-        ></hs-workspace-config>
-      </div>
-    </aside>
   </div>
+  <mat-divider
+    [vertical]="true"
+    class="opacity-20 h-full"
+  ></mat-divider>
+  <aside class="flex flex-col h-full w-284px py-8px px-12px relative">
+    <!-- 表单配置 -->
+    <!-- <div class="py-8px">表单设置</div> -->
+    <!-- <hs-workspace-config
+    class="h-0 flex-1"
+    [selectedField]="widgetEditorService.widgetConfig()"
+  ></hs-workspace-config> -->
+
+    <!-- field配置 -->
+    <div class="absolute wh-full top-0 left-0 py-12px px-12px">
+      <hs-workspace-config
+        [selectedField]="widgetEditorService.activeField()"
+      ></hs-workspace-config>
+    </div>
+  </aside>
 </div>
