@@ -6,4 +6,5 @@ export interface IFancyTreeConfig {
   addNodeEvent?: (param: any) => void;
   deleteNodeEvent?: (id: number) => void;
   selectNodeEvent?: (id: number) => void;
+  renderTitle?: (event: Event, data: any) => string;
 }

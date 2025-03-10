@@ -11,7 +11,6 @@ import {
 } from '@src/app/core/utils';
 import {
   IEditorFormlyField,
-  IEditSizeType,
   IFieldType,
   IWidgetType,
 } from '@src/app/shared/models/widget.model';
@@ -35,7 +34,7 @@ export class WidgetEditorService {
     formName: '',
     isUseFlow: false,
     workspaceName: '',
-    flatTypeField: {},
+    flatTypeField: [],
   });
 
   // 是否编辑模式
@@ -71,14 +70,13 @@ export class WidgetEditorService {
           this.formWidgetService.getFormWidgetById(this.fieldsId()!).subscribe({
             next: (widget: IFormWidgetConfig) => {
               this.widgetConfig.set(widget);
-              // const fieldConfig = JSON.parse(widget.fieldConfig as string);
-              // if (
-              //   fieldConfig.type === IWidgetType.FORM &&
-              //   fieldConfig.subType === IFormSubTypes.FLAT
-              // ) {
-              //   this.fields.set(JSON.parse(fieldConfig.formConfig));
-              // }
-              // this.fields.set(JSON.parse(widget.config));
+              const fieldConfig = widget.flatTypeField as IEditorFormlyField[];
+              if (
+                widget.type === IWidgetType.FORM &&
+                widget.subType === IFormSubTypes.FLAT
+              ) {
+                this.fields.set(fieldConfig);
+              }
               this.formGroup = new FormGroup({});
               this.options = {};
             },
@@ -104,7 +102,7 @@ export class WidgetEditorService {
     this.formWidgetService
       .updateFormWidget({
         ...this.widgetConfig(),
-        // config: JSON.stringify(this.fields()),
+        flatTypeField: this.fields(),
       })
       .subscribe({
         next: () => {

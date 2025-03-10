@@ -28,6 +28,9 @@ export class WidgetFolderComponent implements OnInit {
     loadTreeData: () => {
       return this.fornWidgetService.getAllFormWidgets().toPromise();
     },
+    renderTitle: (event, data) => {
+      return `<span class="fancytree-title">${data?.node?.data?.workspaceName}</span>`;
+    },
     addNodeEvent: (data) => {
       this.fornWidgetService
         .createFormWidget({
@@ -35,7 +38,6 @@ export class WidgetFolderComponent implements OnInit {
           type: IWidgetType.FORM,
           subType: IFormSubTypes.FLAT,
           workspaceName: data.node.title,
-          isUseFlow: false,
         })
         .subscribe({
           next: (res) => {

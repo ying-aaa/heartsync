@@ -86,6 +86,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           mode: 'hide', // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
         },
         source: this.config().loadTreeData(),
+        renderTitle: this.config().renderTitle,
         strings: {
           noData: '暂无数据',
           loading: '加载中...',
