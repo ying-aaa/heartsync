@@ -47,14 +47,14 @@ export class HsFormWidget extends HsBaseWidgetEntity {
   @Column({ type: 'simple-json', nullable: true })
   formStyle?: IFormStyle;
 
-  @Column({ type: 'simple-json', nullable: true })
-  flatTypeField?: IEditorFormlyField;
+  @Column({ type: 'simple-json', nullable: true, default: [] })
+  flatTypeField: IEditorFormlyField;
 
   @Column({ type: 'simple-json', nullable: true })
   canvasTypeField?: IEditorFormlyField;
 
-  @Column({ type: 'boolean', nullable: false })
-  isUseFlow: boolean;
+  @Column({ type: 'boolean', nullable: false, default: false })
+  isUseFlow?: boolean;
 
   @Column({ type: 'simple-json', nullable: true })
   flowConfig?: IFormFlowConfig;
