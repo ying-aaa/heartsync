@@ -2,18 +2,16 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { Component, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { WidgetService } from '@src/app/core/http/widget.service';
+import { FormWidgetService } from '@src/app/core/http/widget.service';
 import { HsFancytreeComponent } from '@src/app/shared/components/hs-fancytree/hs-fancytree.component';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
 import {
-  IEditSizeType,
   IFancyTreeConfig,
-  IFormSubTypes,
   IWidgetType,
 } from '@src/app/shared/models/public-api';
 import { IRadioConfig } from '@src/app/shared/models/system.model';
 import { WidgetEditorService } from '../../widget-editor.service';
-import { generateUUID } from '@src/app/core/utils';
+import { IFormSubTypes } from '@src/app/shared/models/form-widget.model';
 @Component({
   selector: 'hs-widget-folder',
   templateUrl: './widget-folder.component.html',
@@ -28,26 +26,16 @@ export class WidgetFolderComponent implements OnInit {
   treeConfig = signal<IFancyTreeConfig>({
     isDefaultFirst: true,
     loadTreeData: () => {
-      return this.widgetService.getAllWidgets().toPromise();
+      return this.fornWidgetService.getAllFormWidgets().toPromise();
     },
     addNodeEvent: (data) => {
-      this.widgetService
-        .createWidget({
-          title: data.node.title,
-          key: generateUUID(),
-          type: this.activeValue(),
-          workSizeConfig: {
-            type: IEditSizeType.PC,
-            size: {
-              width: 1920,
-              height: 1080,
-            },
-          },
-          fieldConfig: {
-            type: IWidgetType.FORM, // 部件类型
-            subType: IFormSubTypes.GRID, // 部件子类型
-            formConfig: [],
-          }, // 部件配置项
+      this.fornWidgetService
+        .createFormWidget({
+          formName: data.node.title,
+          type: IWidgetType.FORM,
+          subType: IFormSubTypes.FLAT,
+          workspaceName: data.node.title,
+          isUseFlow: false,
         })
         .subscribe({
           next: (res) => {
@@ -57,12 +45,12 @@ export class WidgetFolderComponent implements OnInit {
               duration: 3 * 1000,
             });
             data.node.data.id = res.id;
-            data.node.data.key = res.key;
+            data.node.data.key = res.id;
           },
         });
     },
     deleteNodeEvent: (id: number) => {
-      this.widgetService.deleteWidget(id).subscribe({
+      this.fornWidgetService.deleteFormWidget(id).subscribe({
         next: () => {
           this._snackBar.open('删除部件成功!!!', '确定', {
             horizontalPosition: 'center',
@@ -90,7 +78,7 @@ export class WidgetFolderComponent implements OnInit {
   ];
 
   constructor(
-    private widgetService: WidgetService,
+    private fornWidgetService: FormWidgetService,
     private widgetEditorService: WidgetEditorService,
     private _snackBar: MatSnackBar,
   ) {}

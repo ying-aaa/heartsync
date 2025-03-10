@@ -1,49 +1,55 @@
-// src/app/services/widget.service.ts
+// src/app/services/form-widget.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { WidgetConfig } from '@src/app/shared/models/widget.model';
+import { IFormWidgetConfig } from '@shared/models/form-widget.model'; // 确保引入正确的类型
 
 @Injectable({
   providedIn: 'root',
 })
-export class WidgetService {
-  private apiUrl = '/api'; // 对应后端的接口路径
+export class FormWidgetService {
+  private apiUrl = '/api/widget/form'; // 对应后端的接口路径
 
   constructor(private http: HttpClient) {}
 
-  // 获取所有部件
-  getAllWidgets(): Observable<WidgetConfig[]> {
+  // 获取所有表单部件
+  getAllFormWidgets(): Observable<IFormWidgetConfig[]> {
     return this.http
-      .get<WidgetConfig[]>(`${this.apiUrl}/widgets`)
+      .get<IFormWidgetConfig[]>(`${this.apiUrl}`)
       .pipe(catchError(this.handleError));
   }
 
-  // 根据ID获取部件
-  getWidgetById(id: number | string): Observable<WidgetConfig> {
-    const url = `${this.apiUrl}/widgets/${id}`;
-    return this.http.get<WidgetConfig>(url).pipe(catchError(this.handleError));
-  }
-
-  // 创建新部件
-  createWidget(widget: WidgetConfig): Observable<WidgetConfig> {
+  // 根据ID获取表单部件
+  getFormWidgetById(id: number | string): Observable<IFormWidgetConfig> {
+    const url = `${this.apiUrl}/${id}`;
     return this.http
-      .post<WidgetConfig>(`${this.apiUrl}/widgets`, widget)
+      .get<IFormWidgetConfig>(url)
       .pipe(catchError(this.handleError));
   }
 
-  // 更新部件
-  updateWidget(widget: WidgetConfig): Observable<WidgetConfig> {
-    const url = `${this.apiUrl}/widgets/${widget.id}`;
+  // 创建新表单部件
+  createFormWidget(
+    formWidget: IFormWidgetConfig,
+  ): Observable<IFormWidgetConfig> {
     return this.http
-      .put<WidgetConfig>(url, widget)
+      .post<IFormWidgetConfig>(`${this.apiUrl}`, formWidget)
       .pipe(catchError(this.handleError));
   }
 
-  // 删除部件
-  deleteWidget(id: number): Observable<any> {
-    const url = `${this.apiUrl}/widgets/${id}`;
+  // 更新表单部件
+  updateFormWidget(
+    formWidget: IFormWidgetConfig,
+  ): Observable<IFormWidgetConfig> {
+    const url = `${this.apiUrl}/${formWidget.id}`;
+    return this.http
+      .put<IFormWidgetConfig>(url, formWidget)
+      .pipe(catchError(this.handleError));
+  }
+
+  // 删除表单部件
+  deleteFormWidget(id: number): Observable<any> {
+    const url = `${this.apiUrl}/${id}`;
     return this.http.delete(url).pipe(catchError(this.handleError));
   }
 

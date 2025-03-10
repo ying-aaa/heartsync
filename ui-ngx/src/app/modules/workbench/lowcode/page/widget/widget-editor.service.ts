@@ -13,12 +13,14 @@ import {
   IEditorFormlyField,
   IEditSizeType,
   IFieldType,
-  IFormSubTypes,
   IWidgetType,
-  WidgetConfig,
 } from '@src/app/shared/models/widget.model';
-import { WidgetService } from '@src/app/core/http/widget.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  IFormSubTypes,
+  IFormWidgetConfig,
+} from '@src/app/shared/models/form-widget.model';
+import { FormWidgetService } from '@src/app/core/http/widget.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +28,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class WidgetEditorService {
   HS_DEFAULT_ID = 'workspace';
 
-  widgetConfig = signal<WidgetConfig>({});
+  widgetConfig = signal<IFormWidgetConfig>({
+    id: 1,
+    type: IWidgetType.FORM,
+    subType: IFormSubTypes.FLAT,
+    formName: '',
+    isUseFlow: false,
+    workspaceName: '',
+    flatTypeField: {},
+  });
 
   // 是否编辑模式
   isEditMode = signal(true);
@@ -52,22 +62,22 @@ export class WidgetEditorService {
   options = {};
 
   constructor(
-    private widgetService: WidgetService,
+    private formWidgetService: FormWidgetService,
     private _snackBar: MatSnackBar,
   ) {
     effect(
       () => {
         if (this.fieldsId()) {
-          this.widgetService.getWidgetById(this.fieldsId()!).subscribe({
-            next: (widget: WidgetConfig) => {
+          this.formWidgetService.getFormWidgetById(this.fieldsId()!).subscribe({
+            next: (widget: IFormWidgetConfig) => {
               this.widgetConfig.set(widget);
-              const fieldConfig = JSON.parse(widget.fieldConfig as string);
-              if (
-                fieldConfig.type === IWidgetType.FORM &&
-                fieldConfig.subType === IFormSubTypes.GRID
-              ) {
-                this.fields.set(JSON.parse(fieldConfig.formConfig));
-              }
+              // const fieldConfig = JSON.parse(widget.fieldConfig as string);
+              // if (
+              //   fieldConfig.type === IWidgetType.FORM &&
+              //   fieldConfig.subType === IFormSubTypes.FLAT
+              // ) {
+              //   this.fields.set(JSON.parse(fieldConfig.formConfig));
+              // }
               // this.fields.set(JSON.parse(widget.config));
               this.formGroup = new FormGroup({});
               this.options = {};
@@ -91,8 +101,8 @@ export class WidgetEditorService {
   }
 
   updateFields() {
-    this.widgetService
-      .updateWidget({
+    this.formWidgetService
+      .updateFormWidget({
         ...this.widgetConfig(),
         // config: JSON.stringify(this.fields()),
       })
