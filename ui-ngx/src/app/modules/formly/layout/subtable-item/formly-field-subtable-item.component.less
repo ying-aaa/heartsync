@@ -1,7 +1,13 @@
-:host {
-  display: block;
+@import "mixin";
 
-  .subtable-title {
-    background-color: rgba(47, 144, 185, 0.1);
+.themeMixin ( {
+    :host {
+      display: block;
+
+      .subtable-title {
+        background-color: @base-placeholder-bg-color;
+      }
+    }
   }
-}
+
+);

@@ -2,20 +2,25 @@
 @import 'jquery-ui/dist/themes/ui-darkness/jquery-ui.min.css';
 @import "./themes/dark.less";
 
+.text-bg-color {
+  color: @base-text-color;
+  background-color: @base-bg-color;
+}
 
 body {
   .text-bg-color();
   --mat-sys-corner-full: 8px;
 }
 
+html.dark-theme {
+  // 输入框边框
+  --mdc-outlined-text-field-outline-color: @base-line-color;
+  --mdc-outlined-text-field-hover-outline-color: @base-hover-line-color;
+  --mat-divider-color: @base-divider-color;
+}
 
 ul.ui-widget-content {
   .text-bg-color();
-}
-
-.text-bg-color {
-  color: @base-text-color;
-  background-color: @base-bg-color;
 }
 
 // 滚动条全局样式

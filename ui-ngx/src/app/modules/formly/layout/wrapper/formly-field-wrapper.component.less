@@ -1,22 +1,37 @@
-:host {
-  position: relative;
-  display: block;
+@import "mixin";
 
-  .row-wrapper {
-    ::ng-deep {
-      &>.position-preview {
-        width: 0;
-        height: inherit;
+.themeMixin ( {
+    :host {
+      position: relative;
+      display: block;
+
+      .row-wrapper {
+        ::ng-deep {
+          &>.position-preview {
+            width: 0;
+            height: inherit;
+          }
+        }
       }
-    }
-  }
 
-  .column-wrapper {
-    ::ng-deep {
-      &>.position-preview {
+      .column-wrapper {
+        ::ng-deep {
+          &>.position-preview {
+            width: 100%;
+            height: 3px;
+          }
+        }
+      }
+
+      .placeholder-tips {
         width: 100%;
-        height: 3px;
+        height: 100%;
+        border-radius: @base-radius-small;
+        color: @base-placeholder-text-color;
+        background-color: @base-placeholder-bg-color;
       }
     }
+
   }
-}
+
+);

@@ -25,6 +25,35 @@ $base-radius: 8px;
   @include mat.theme((density: 0));
 }
 
+html {
+  // 输入框聚焦边框宽度
+  --mdc-outlined-text-field-focus-outline-width: 1px;
+  // 文字大小
+  --mat-form-field-container-text-size: 0.9rem;
+
+  // 按钮
+  .mdc-button {
+    --mat-sys-corner-full: 8px;
+    --mat-filled-button-horizontal-padding: 16px;
+    --mdc-protected-button-container-color: none;
+  }
+
+  // 选择框文字大小
+  --mat-select-trigger-text-size: 14px;
+
+  // 弹窗
+  --mdc-dialog-container-shape: 12px;
+
+  // 步进器背景
+  --mat-stepper-container-color: none;
+
+  // 手风琴背景
+  --mat-expansion-container-background-color: none;
+
+  // 表格背景
+  --mat-table-background-color: none
+}
+
 .mdc-button {
   // --mat-sys-corner-full: 8px;
 
@@ -35,42 +64,9 @@ $base-radius: 8px;
   min-height: 32px !important;
 }
 
-// 按钮
-.mdc-button {
-  --mat-sys-corner-full: 8px;
-  --mat-filled-button-horizontal-padding: 16px;
-  --mdc-protected-button-container-color: none;
-}
-
-// 选择框文字大小
-.mat-mdc-select {
-  --mat-select-trigger-text-size: 14px;
-}
-
-// 弹窗
-.mdc-dialog {
-  --mdc-dialog-container-shape: 12px
-}
-
 // 输入框底部校验提示
 .mat-mdc-form-field-subscript-wrapper {
   height: 0;
-}
-
-// 步进器背景
-.mat-stepper-vertical,
-.mat-stepper-horizontal {
-  --mat-stepper-container-color: none;
-}
-
-// 手风琴背景
-.mat-expansion-panel {
-  --mat-expansion-container-background-color: none;
-}
-
-// 表格背景
-.mat-mdc-table {
-  --mat-table-background-color: none
 }
 
 // tab 选项宽度

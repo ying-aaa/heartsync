@@ -1,15 +1,30 @@
-:host {
-  // border-collapse: collapse;
-// border-spacing: 0;
+@import "mixin";
 
-  ::ng-deep {
-    .row-wrapper {
+.themeMixin ( {
+    :host {
+      position: relative;
+      display: block;
+
       ::ng-deep {
-        &>.position-preview {
-          width: 0;
-          height: inherit;
+        .row-wrapper {
+          ::ng-deep {
+            &>.position-preview {
+              width: 0;
+              height: inherit;
+            }
+          }
         }
       }
+
+      .placeholder-tips {
+        width: 100%;
+        height: 100%;
+        border-radius: @base-radius-small;
+        color: @base-placeholder-text-color;
+        background-color: @base-placeholder-bg-color;
+      }
     }
+
   }
-}
+
+);

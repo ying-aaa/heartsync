@@ -18,20 +18,19 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HIGHLIGHT_OPTIONS, provideHighlightOptions } from 'ngx-highlightjs';
-import { formlyDisplayTypes } from '@src/app/modules/formly/advanced/formly-display-types';
+import { formlyDisplayTypes } from '@src/app/modules/formly/display/formly-display-types';
 import { FormlyFieldSubTableItemComponent } from '@src/app/modules/formly/layout/subtable-item/formly-field-subtable-item.component';
 
 export function editorExtension(field: IEditorFormlyField) {
   // 最外层列
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
-
     return;
   }
 
   if (field.type === IFieldType.COLUMN) {
     if (!field.parent && field.props?.['styles']) {
-      field.props!['styles']!.rowGap = 12;
+      field.props!['styles']!.rowGap = 8;
     }
   }
 

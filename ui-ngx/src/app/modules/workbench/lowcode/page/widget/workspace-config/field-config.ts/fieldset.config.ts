@@ -66,7 +66,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
           disabled: false,
           density: 1,
           styles: {
-            rowGap: 8,
+            rowGap: 12,
             rowGapUnits: 'px',
           },
         },
@@ -96,7 +96,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
                 paddingBottomUnits: 'px',
                 borderRadius: 8,
                 borderRadiusUnits: 'px',
-                borderColor: '#ccc',
+                borderColor: 'var(--mdc-outlined-text-field-outline-color)',
                 borderWidth: 1,
                 borderWidthUnits: 'px',
                 borderStyle: 'groove',
@@ -128,7 +128,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
                       disabled: false,
                       density: 1,
                       styles: {
-                        rowGap: 8,
+                        rowGap: 12,
                         rowGapUnits: 'px',
                       },
                     },
@@ -158,7 +158,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
                               disabled: false,
                               density: 1,
                               styles: {
-                                rowGap: 8,
+                                rowGap: 12,
                                 rowGapUnits: 'px',
                               },
                             },
@@ -182,20 +182,14 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
                                 },
                                 expressions: {
                                   'model.props.styles.borderWidth': (model) =>
-                                    model.model.props.showBorder
-                                      ? model.model.props.styles.borderWidth ||
-                                        1
-                                      : 0,
+                                    model.model.props.showBorder ? 1 : 0,
                                   'model.props.styles.borderRadius': (model) =>
-                                    model.model.props.showBorder
-                                      ? model.model.props.styles.borderRadius ||
-                                        8
-                                      : 0,
-                                  'model.props.styles.borderColor': (model) =>
-                                    model.model.props.showBorder
-                                      ? model.model.props.styles.borderColor ||
-                                        '#ccc'
-                                      : 'transparent',
+                                    model.model.props.showBorder ? 8 : 0,
+                                  'model.props.styles.borderColor': (model) => {
+                                    return model.model.props.showBorder
+                                      ? 'var(--mdc-outlined-text-field-outline-color)'
+                                      : '';
+                                  },
                                 },
 
                                 className: 'hs-density--5 ',
@@ -231,7 +225,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
                               disabled: false,
                               density: 1,
                               styles: {
-                                rowGap: 8,
+                                rowGap: 12,
                                 rowGapUnits: 'px',
                               },
                             },
@@ -264,7 +258,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
                               disabled: false,
                               density: 1,
                               styles: {
-                                rowGap: 8,
+                                rowGap: 12,
                                 rowGapUnits: 'px',
                               },
                             },
@@ -331,7 +325,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
                       disabled: false,
                       density: 1,
                       styles: {
-                        rowGap: 8,
+                        rowGap: 12,
                         rowGapUnits: 'px',
                       },
                     },
@@ -380,7 +374,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
                       disabled: false,
                       density: 1,
                       styles: {
-                        rowGap: 8,
+                        rowGap: 12,
                         rowGapUnits: 'px',
                       },
                     },
@@ -459,7 +453,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
                       disabled: false,
                       density: 1,
                       styles: {
-                        rowGap: 8,
+                        rowGap: 12,
                         rowGapUnits: 'px',
                       },
                     },
@@ -492,7 +486,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
                       disabled: false,
                       density: 1,
                       styles: {
-                        rowGap: 8,
+                        rowGap: 12,
                         rowGapUnits: 'px',
                       },
                     },
@@ -530,7 +524,7 @@ export const widget_fieldset_config: IEditorFormlyField[] = [
           disabled: false,
           density: 1,
           styles: {
-            rowGap: 8,
+            rowGap: 12,
             rowGapUnits: 'px',
           },
         },

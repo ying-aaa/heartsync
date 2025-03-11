@@ -5,7 +5,7 @@
   </aside>
   <mat-divider
     [vertical]="true"
-    class="opacity-20 h-full"
+    class="h-full"
   ></mat-divider>
   <!-- 右侧 -->
   <div class="flex flex-1 w-0 relative">
@@ -13,20 +13,20 @@
       <hs-workspace-viewport></hs-workspace-viewport>
       @if (!widgetEditorService.fields().length) {
         <div
-          class="absolute wh-full flex-col flex-center pb-80px -z-999 opacity-60"
+          class="absolute wh-full flex-col flex-center pb-80px -z-999 opacity-80 top-0"
         >
           <img
-            class="w-300px h-300px"
+            class="w-180px h-180px"
             src="assets/workbench/widget-workbench-tips.png"
           />
-          <div class="mt-30px text-20px">拖拽组件到这里来吧！</div>
+          <div class="mt-30px text-18px">拖拽组件到这里来吧！</div>
         </div>
       }
     </main>
   </div>
   <mat-divider
     [vertical]="true"
-    class="opacity-20 h-full"
+    class="h-full"
   ></mat-divider>
   <aside class="flex flex-col h-full w-284px py-8px px-12px relative">
     <!-- 表单配置 -->

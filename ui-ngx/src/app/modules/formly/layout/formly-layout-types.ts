@@ -29,7 +29,7 @@ export const formlyLayoutTypes = [
         density,
         typeName: '列',
         styles: {
-          rowGap: 8,
+          rowGap: 12,
           rowGapUnits: 'px',
         },
       },
@@ -115,7 +115,7 @@ export const formlyLayoutTypes = [
           paddingBottomUnits: 'px',
           borderRadius: 8,
           borderRadiusUnits: 'px',
-          borderColor: '#ccc',
+          borderColor: 'var(--mdc-outlined-text-field-outline-color)',
           borderWidth: 1,
           borderWidthUnits: 'px',
           borderStyle: 'groove',

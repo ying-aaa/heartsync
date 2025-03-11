@@ -11,7 +11,7 @@
   [style]="field.props?.['styles'] | concatUnits"
   [cdkDropListOrientation]="flexDirection ? 'horizontal' : 'vertical'"
   [class]="flexDirection ? 'row-wrapper' : 'column-wrapper'"
-  class="flex flex-col min-h-36px"
+  class="flex flex-col min-h-48px"
 >
   @for (f of field.fieldGroup; track $index) {
     <formly-field
@@ -30,9 +30,11 @@
   }
 </div>
 @if (!field.fieldGroup?.length && field._design) {
-  <div
-    class="-z-1 absolute wh-full flex-center top-0 text-#a7b1bd border-1px border-solid text-14px border-#ccc min-h-36px bg-#f1f1f1"
-  >
-    拖拽组件到这里
+  <div class="absolute -z-1 wh-full min-h-48px py-6px top-0">
+    <div
+      class="placeholder-tips truncate text-14px text-center line-height-36px font-normal"
+    >
+      拖拽组件到这里
+    </div>
   </div>
 }
