@@ -1,7 +1,7 @@
 import { Component, effect, input, OnInit } from '@angular/core';
 import { FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
-import { CONFIT_RESOURCE } from './field-config.ts/public-api';
+import { CONFIT_RESOURCE } from './config/public-api';
 import { FormGroup } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 

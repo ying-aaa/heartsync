@@ -40,6 +40,8 @@ export class WidgetEditorService {
   // 是否编辑模式
   isEditMode = signal(true);
 
+  isShowConfigPanel = signal(false);
+
   mousePosition: { x: number; y: number } = { x: 0, y: 0 };
 
   // 当前是否在拖拽中
@@ -77,6 +79,9 @@ export class WidgetEditorService {
               ) {
                 this.fields.set(fieldConfig);
               }
+              this.isShowConfigPanel.set(false);
+              this.selectField(null);
+
               this.formGroup = new FormGroup({});
               this.options = {};
             },
@@ -120,6 +125,7 @@ export class WidgetEditorService {
 
   selectField(field: IEditorFormlyField | null): void {
     this.activeField.set(field);
+    field && this.isShowConfigPanel.set(true);
     this._fieldSelected$.next(field);
   }
 

@@ -62,4 +62,9 @@ export class WidgetEditorComponent implements OnInit {
   constructor(public widgetEditorService: WidgetEditorService) {}
 
   ngOnInit() {}
+
+  hideFieldConfig() {
+    this.widgetEditorService.isShowConfigPanel.set(false);
+    this.widgetEditorService.selectField(null);
+  }
 }
