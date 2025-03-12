@@ -5,25 +5,32 @@
 
   <mat-divider class="w-full"></mat-divider>
 
-  <div class="flex-1 h-0">
-    <ng-scrollbar
-      class="wh-full!"
-      #scrollbarRef="ngScrollbar"
-      externalViewport
-      visibility="hover"
-      appearance="compact"
-      orientation="auto"
+  <div class="flex-1 h-0 flex-center">
+    @let type = widgetEditorService.widgetConfig().workSizeConfig?.['type']!;
+    @let viewportSize = viewportConfig[type];
+    <div
+      [style]="viewportSize"
+      [class.viewport-border]="type !== 'fill' && viewportSize"
     >
-      <div scrollViewport>
-        <div class="render-canvar">
-          <formly-form
-            [form]="widgetEditorService.formGroup"
-            [fields]="widgetEditorService.fields()"
-            [model]="widgetEditorService.model"
-            [options]="widgetEditorService.options"
-          ></formly-form>
+      <ng-scrollbar
+        class="wh-full!"
+        #scrollbarRef="ngScrollbar"
+        externalViewport
+        visibility="hover"
+        appearance="compact"
+        orientation="auto"
+      >
+        <div scrollViewport>
+          <div class="render-canvar">
+            <formly-form
+              [form]="widgetEditorService.formGroup"
+              [fields]="widgetEditorService.fields()"
+              [model]="widgetEditorService.model"
+              [options]="widgetEditorService.options"
+            ></formly-form>
+          </div>
         </div>
-      </div>
-    </ng-scrollbar>
+      </ng-scrollbar>
+    </div>
   </div>
 </content>

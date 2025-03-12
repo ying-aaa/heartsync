@@ -34,8 +34,9 @@ export enum ICdkDrapActionType {
 
 // 设备类型枚举
 export enum IEditSizeType {
+  FILL = 'fill', // 撑满
   MOBILE = 'mobile', // 移动端
-  TABLET = 'ipad', // 平板
+  IPAD = 'ipad', // 平板
   PC = 'pc', // 电脑端
   CUSTOM = 'custom', // 自定义
 }

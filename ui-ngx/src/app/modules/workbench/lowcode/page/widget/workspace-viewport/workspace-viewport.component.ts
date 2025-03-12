@@ -1,22 +1,34 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  Inject,
-  OnInit,
-  Optional,
-  Signal,
-} from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { WorkspaceToobarComponent } from './workspace-toobar/workspace-toobar.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { ConfigOption, FORMLY_CONFIG, FormlyModule } from '@ngx-formly/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WidgetEditorService } from '../widget-editor.service';
-import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
-import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
-import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { IEditSizeType } from '@src/app/shared/models/public-api';
+
+const viewportConfig = {
+  [IEditSizeType.FILL]: {
+    width: '100%',
+    height: '100%',
+  },
+  [IEditSizeType.MOBILE]: {
+    width: '375px',
+    height: '667px',
+  },
+  [IEditSizeType.IPAD]: {
+    width: '1024px',
+    height: '768px',
+  },
+  [IEditSizeType.PC]: {
+    width: '1980px',
+    height: '1020px',
+  },
+  [IEditSizeType.CUSTOM]: {
+    width: '800px',
+    height: '600px',
+  },
+};
 
 @Component({
   selector: 'hs-workspace-viewport',
@@ -33,6 +45,8 @@ import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
   ],
 })
 export class WorkspaceViewportComponent implements OnInit {
+  viewportConfig = viewportConfig;
+
   constructor(
     public widgetEditorService: WidgetEditorService,
     @Optional() @Inject(FORMLY_CONFIG) configs: ConfigOption[] = [],

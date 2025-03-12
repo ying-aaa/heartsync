@@ -10,6 +10,7 @@ import { FieldType, FormlyModule } from '@ngx-formly/core';
 import {
   ICdkDrapActionType,
   IEditorFormlyField,
+  IEditSizeType,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
 import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
@@ -42,6 +43,23 @@ export class FormlyFieldWrapperComponent extends FieldType<IEditorFormlyField> {
   onMouseMove(event: MouseEvent): void {
     this.widgetEditorService.mousePosition.x = event.clientX;
     this.widgetEditorService.mousePosition.y = event.clientY;
+  }
+
+  get computedViewportHeight() {
+    if (!this.field.parent) {
+      const type = this.widgetEditorService.widgetConfig().workSizeConfig?.type;
+      if (type) {
+        if (type === IEditSizeType.FILL) {
+          return `calc(100vh - 64px - 48px - 1px - 16px)`;
+        } else {
+          const height =
+            this.widgetEditorService.widgetConfig().workSizeConfig?.size.height;
+          return `${height}px`;
+        }
+      }
+    }
+
+    return `calc(100vh - 64px - 48px - 1px - 16px)`;
   }
 
   canEnter = (drag: CdkDrag) => {
