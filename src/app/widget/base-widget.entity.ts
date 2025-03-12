@@ -18,8 +18,9 @@ export enum IWidgetType {
 }
 
 export enum IEditSizeType {
+  FILL = 'fill', // 撑满
   MOBILE = 'mobile', // 移动端
-  TABLET = 'ipad', // 平板
+  IPAD = 'ipad', // 平板
   PC = 'pc', // 电脑端
   CUSTOM = 'custom', // 自定义
 }
@@ -58,7 +59,13 @@ export class HsBaseWidgetEntity {
   @Column({ type: 'varchar', nullable: true })
   type?: IWidgetType; // 组件类型（表单、列表、详情、图表等）
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column({
+    type: 'simple-json',
+    default: {
+      type: IEditSizeType.FILL,
+      size: { width: 100, height: 100 },
+    },
+  })
   workSizeConfig?: IEditSizeConfig; // 工作区尺寸配置
 
   @Column({ type: 'simple-json', nullable: true })
