@@ -10,8 +10,9 @@ import {
   IWidgetType,
 } from '@src/app/shared/models/public-api';
 import { IRadioConfig } from '@src/app/shared/models/system.model';
-import { WidgetEditorService } from '../../widget-editor.service';
+import { FormEditorService } from '../../form-editor.service';
 import { IFormSubTypes } from '@src/app/shared/models/form-widget.model';
+import { MatDividerModule } from '@angular/material/divider';
 @Component({
   selector: 'hs-widget-folder',
   templateUrl: './widget-folder.component.html',
@@ -65,7 +66,7 @@ export class WidgetFolderComponent implements OnInit {
     selectNodeEvent: (data: any) => {
       const selectedNode = data.node;
       // const selectedNodes = data.tree.getSelectedNodes();
-      this.widgetEditorService.fieldsId.set(selectedNode.data.id);
+      this.formEditorService.fieldsId.set(selectedNode.data.id);
     },
   });
 
@@ -81,7 +82,7 @@ export class WidgetFolderComponent implements OnInit {
 
   constructor(
     private fornWidgetService: FormWidgetService,
-    private widgetEditorService: WidgetEditorService,
+    private formEditorService: FormEditorService,
     private _snackBar: MatSnackBar,
   ) {}
 

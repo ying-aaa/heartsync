@@ -12,7 +12,7 @@ import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { WidgetEditorService } from '../../../workbench/lowcode/page/widget/widget-editor.service';
+import { FormEditorService } from '../../../workbench/lowcode/page/widget/form-editor.service';
 
 @Component({
   selector: 'formly-field-tabs',
@@ -26,7 +26,7 @@ export class FormlyFieldTabsComponent
 {
   IFieldType = IFieldType;
 
-  constructor(public widgetEditorService: WidgetEditorService) {
+  constructor(public formEditorService: FormEditorService) {
     super();
   }
   cdkDropListDropped(event: CdkDragDrop<IEditorFormlyField[]> | any) {
@@ -38,17 +38,17 @@ export class FormlyFieldTabsComponent
     const { previousIndex: formIndex, currentIndex: toIndex } = event;
 
     if (action === ICdkDrapActionType.COPY) {
-      this.widgetEditorService.addField(field, toParent, toIndex);
+      this.formEditorService.addField(field, toParent, toIndex);
     }
     if (action === ICdkDrapActionType.MOVE) {
       if (event.previousContainer === event.container) {
-        this.widgetEditorService.moveField(
+        this.formEditorService.moveField(
           toParent,
           event.previousIndex,
           event.currentIndex,
         );
       } else {
-        this.widgetEditorService.transferField(
+        this.formEditorService.transferField(
           fromParent,
           toParent,
           formIndex,

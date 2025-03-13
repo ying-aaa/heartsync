@@ -1,4 +1,4 @@
-@let connectedTo = widgetEditorService.getConnectedTo(IFieldType.SUBTABLE);
+@let connectedTo = formEditorService.getConnectedTo(IFieldType.SUBTABLE);
 <div class="py-8px">{{ props.label }}</div>
 <div
   class="row-wrapper flex min-h-48px"
@@ -18,8 +18,8 @@
       [style.width]="getSubTableItemWidth(field.fieldGroup!, f)"
       cdkDrag
       [cdkDragData]="getDragFieldData(f)"
-      (cdkDragStarted)="widgetEditorService.dragStart = true"
-      (cdkDragReleased)="widgetEditorService.dragStart = false"
+      (cdkDragStarted)="formEditorService.dragStart = true"
+      (cdkDragReleased)="formEditorService.dragStart = false"
       style="border: 1px solid #8e8e8e4a"
     >
       <div

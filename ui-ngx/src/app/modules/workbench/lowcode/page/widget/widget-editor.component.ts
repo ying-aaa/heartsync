@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { WidgetEditorService } from './widget-editor.service';
+import { FormEditorService } from './form-editor.service';
 import { WorkspaceViewportComponent } from './workspace-viewport/workspace-viewport.component';
 import { WorkspaceContorlComponent } from './workspace-contorl/workspace-contorl.component';
 import { WorkspaceConfigComponent } from './workspace-config/workspace-config.component';
@@ -59,12 +59,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   ],
 })
 export class WidgetEditorComponent implements OnInit {
-  constructor(public widgetEditorService: WidgetEditorService) {}
+  constructor(public formEditorService: FormEditorService) {}
 
   ngOnInit() {}
 
   hideFieldConfig() {
-    this.widgetEditorService.isShowConfigPanel.set(false);
-    this.widgetEditorService.selectField(null);
+    this.formEditorService.isShowConfigPanel.set(false);
+    this.formEditorService.selectField(null);
   }
 }

@@ -15,7 +15,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
+import { FormEditorService } from '@app/modules/workbench/lowcode/page/widget/form-editor.service';
 
 @Component({
   selector: 'formly-control-wrapper',
@@ -30,7 +30,7 @@ export class FormlyContorlWrapperComponent
 {
   @HostBinding('class.edit-mode')
   get isEditMode() {
-    return !!this.widgetEditorService.isEditMode();
+    return !!this.formEditorService.isEditMode();
   }
 
   @HostBinding('class.show-border') get isShowBorder() {
@@ -49,7 +49,7 @@ export class FormlyContorlWrapperComponent
       this.isEditMode &&
       this.isMouseInside &&
       !this._isActiveField &&
-      !this.widgetEditorService.dragStart
+      !this.formEditorService.dragStart
     );
   }
 
@@ -58,7 +58,7 @@ export class FormlyContorlWrapperComponent
   isMouseInside = false;
 
   constructor(
-    public widgetEditorService: WidgetEditorService,
+    public formEditorService: FormEditorService,
     private cdr: ChangeDetectorRef,
   ) {
     super();
@@ -67,7 +67,7 @@ export class FormlyContorlWrapperComponent
   @HostListener('click', ['$event'])
   onClick(event: MouseEvent): void {
     if (!this.isEditMode) return;
-    this.widgetEditorService.selectField(this.field);
+    this.formEditorService.selectField(this.field);
     event.stopPropagation();
   }
 
@@ -84,14 +84,14 @@ export class FormlyContorlWrapperComponent
 
   ngOnInit(): void {
     this._checkActiveField();
-    this.widgetEditorService.fieldSelected$.subscribe(() => {
+    this.formEditorService.fieldSelected$.subscribe(() => {
       this._checkActiveField();
       this.cdr.markForCheck();
     });
   }
 
   private _checkActiveField(): void {
-    this._isActiveField = this.widgetEditorService.isActiveField(
+    this._isActiveField = this.formEditorService.isActiveField(
       this.field.fieldId!,
     );
   }

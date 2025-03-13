@@ -12,7 +12,7 @@ import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
+import { FormEditorService } from '@app/modules/workbench/lowcode/page/widget/form-editor.service';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';
 
@@ -31,7 +31,7 @@ import { CommonModule } from '@angular/common';
 export class FormlyFieldGridComponent extends FieldType<IEditorFormlyField> {
   IFieldType = IFieldType;
 
-  constructor(public widgetEditorService: WidgetEditorService) {
+  constructor(public formEditorService: FormEditorService) {
     super();
   }
 

@@ -3,7 +3,7 @@ import { WorkspaceToobarComponent } from './workspace-toobar/workspace-toobar.co
 import { MatDividerModule } from '@angular/material/divider';
 import { ConfigOption, FORMLY_CONFIG, FormlyModule } from '@ngx-formly/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { WidgetEditorService } from '../widget-editor.service';
+import { FormEditorService } from '../form-editor.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { IEditSizeType } from '@src/app/shared/models/public-api';
 
@@ -48,12 +48,12 @@ export class WorkspaceViewportComponent implements OnInit {
   viewportConfig = viewportConfig;
 
   constructor(
-    public widgetEditorService: WidgetEditorService,
+    public formEditorService: FormEditorService,
     @Optional() @Inject(FORMLY_CONFIG) configs: ConfigOption[] = [],
   ) {}
 
   get getJsonField() {
-    return this.widgetEditorService.getJsonField();
+    return this.formEditorService.getJsonField();
   }
 
   ngOnInit() {}

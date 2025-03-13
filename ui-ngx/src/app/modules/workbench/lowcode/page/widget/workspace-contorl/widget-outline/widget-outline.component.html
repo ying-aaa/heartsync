@@ -1,39 +1,40 @@
-@let isShowData = (dataSource$ | async)?.length; @if(isShowData){
-<mat-tree
-  [dataSource]="dataSource$"
-  [treeControl]="treeControl"
->
-  <mat-tree-node
-    *matTreeNodeDef="let node"
-    matTreeNodePadding
-    [matTreeNodePaddingIndent]="8"
-    tabindex="0"
-    [class.active]="widgetEditorService.isActiveField(node.field.fieldId)"
-    (click)="widgetEditorService.selectField(node.field)"
-    class="example-tree-node"
+@let isShowData = (dataSource$ | async)?.length;
+@if (isShowData) {
+  <mat-tree
+    [dataSource]="dataSource$"
+    [treeControl]="treeControl"
   >
-    <mat-icon class="mat-icon-rtl-mirror">
-      {{ node.field.props?.icon || 'report_problem' }}
-    </mat-icon>
-    <span class="flex: 1">{{ node.name }}</span>
-  </mat-tree-node>
-  <mat-tree-node
-    *matTreeNodeDef="let node; when: hasChild"
-    matTreeNodePadding
-    [matTreeNodePaddingIndent]="8"
-    isExpandable
-    [isExpanded]="true"
-    tabindex="0"
-    [class.active]="widgetEditorService.isActiveField(node.field.fieldId)"
-    (click)="widgetEditorService.selectField(node.field)"
-    class="example-tree-node"
-  >
-    <mat-icon class="mat-icon-rtl-mirror">
-      {{ node.field.props?.icon || 'report_problem' }}
-    </mat-icon>
-    <span class="flex: 1">{{ node.name }}</span>
-  </mat-tree-node>
-</mat-tree>
-}@else{
-<div class="wh-full flex-center font-bold text-22px">暂无大纲内容</div>
+    <mat-tree-node
+      *matTreeNodeDef="let node"
+      matTreeNodePadding
+      [matTreeNodePaddingIndent]="8"
+      tabindex="0"
+      [class.active]="formEditorService.isActiveField(node.field.fieldId)"
+      (click)="formEditorService.selectField(node.field)"
+      class="example-tree-node"
+    >
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{ node.field.props?.icon || 'report_problem' }}
+      </mat-icon>
+      <span class="flex: 1">{{ node.name }}</span>
+    </mat-tree-node>
+    <mat-tree-node
+      *matTreeNodeDef="let node; when: hasChild"
+      matTreeNodePadding
+      [matTreeNodePaddingIndent]="8"
+      isExpandable
+      [isExpanded]="true"
+      tabindex="0"
+      [class.active]="formEditorService.isActiveField(node.field.fieldId)"
+      (click)="formEditorService.selectField(node.field)"
+      class="example-tree-node"
+    >
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{ node.field.props?.icon || 'report_problem' }}
+      </mat-icon>
+      <span class="flex: 1">{{ node.name }}</span>
+    </mat-tree-node>
+  </mat-tree>
+} @else {
+  <div class="wh-full flex-center font-bold text-22px">暂无大纲内容</div>
 }

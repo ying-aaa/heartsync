@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER } from '@angular/cdk/a11y';
 import { MatTreeModule } from '@angular/material/tree';
-import { WidgetEditorService } from '../../widget-editor.service';
+import { FormEditorService } from '../../form-editor.service';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -26,7 +26,7 @@ interface ExampleFlatNode {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetOutlineComponent implements OnInit {
-  dataSource$ = this.widgetEditorService.flatField$ as Observable<
+  dataSource$ = this.formEditorService.flatField$ as Observable<
     ExampleFlatNode[]
   >;
 
@@ -35,7 +35,7 @@ export class WidgetOutlineComponent implements OnInit {
     (node) => node.expandable,
   );
 
-  constructor(public widgetEditorService: WidgetEditorService) {}
+  constructor(public formEditorService: FormEditorService) {}
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 

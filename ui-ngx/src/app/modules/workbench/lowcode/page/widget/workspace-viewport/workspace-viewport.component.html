@@ -6,7 +6,7 @@
   <mat-divider class="w-full"></mat-divider>
 
   <div class="flex-1 h-0 flex-center">
-    @let type = widgetEditorService.widgetConfig().workSizeConfig?.['type']!;
+    @let type = formEditorService.widgetConfig().workSizeConfig?.['type']!;
     @let viewportSize = viewportConfig[type];
     <div
       [style]="viewportSize"
@@ -23,10 +23,10 @@
         <div scrollViewport>
           <div class="render-canvar">
             <formly-form
-              [form]="widgetEditorService.formGroup"
-              [fields]="widgetEditorService.fields()"
-              [model]="widgetEditorService.model"
-              [options]="widgetEditorService.options"
+              [form]="formEditorService.formGroup"
+              [fields]="formEditorService.fields()"
+              [model]="formEditorService.model"
+              [options]="formEditorService.options"
             ></formly-form>
           </div>
         </div>

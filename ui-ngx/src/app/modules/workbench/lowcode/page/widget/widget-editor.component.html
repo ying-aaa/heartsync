@@ -1,6 +1,6 @@
 <div class="flex w-full h-full">
   <!-- 目录 -->
-  <aside class="h-full w-284px pt-6px px-12px pb-6px">
+  <aside class="h-full w-284px pt-12px px-12px pb-6px">
     <hs-workspace-contorl></hs-workspace-contorl>
   </aside>
   <mat-divider
@@ -11,7 +11,7 @@
   <div class="flex flex-1 w-0 relative">
     <main class="relative w-full">
       <hs-workspace-viewport></hs-workspace-viewport>
-      @if (!widgetEditorService.fields().length) {
+      @if (!formEditorService.fields().length) {
         <div
           class="absolute wh-full flex-col flex-center pb-80px -z-999 opacity-80 top-0"
         >
@@ -30,24 +30,24 @@
   ></mat-divider>
   <aside class="flex flex-col h-full w-284px py-12px px-12px relative">
     @let tips = '表单设置';
-    @let isShowConfigPanel = widgetEditorService.isShowConfigPanel();
+    @let isShowConfigPanel = formEditorService.isShowConfigPanel();
     @let activeFieldTypeName =
-      widgetEditorService.activeField()?.props?.['typeName'];
+      formEditorService.activeField()?.props?.['typeName'];
 
     @if (!isShowConfigPanel) {
       <hs-workspace-config
         class="h-0 flex-1"
-        [selectedField]="widgetEditorService.widgetConfig()"
+        [selectedField]="formEditorService.widgetConfig()"
       >
-        <div class="mb-12px text-20px font-bold">
+        <div class="mb-12px text-20px font-bold py-2px">
           {{ tips }}
         </div>
-        <mat-divider class="w-full mb-10px!"></mat-divider
-      ></hs-workspace-config>
+        <mat-divider class="w-full mb-10px!"></mat-divider>
+      </hs-workspace-config>
     } @else {
       <hs-workspace-config
         class="h-0 flex-1"
-        [selectedField]="widgetEditorService.activeField()"
+        [selectedField]="formEditorService.activeField()"
       >
         <div class="mb-12px flex justify-between items-center">
           {{ activeFieldTypeName }}

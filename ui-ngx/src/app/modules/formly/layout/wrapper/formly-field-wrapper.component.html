@@ -1,4 +1,4 @@
-@let connectedTo = widgetEditorService.getConnectedTo(IFieldType.COLUMN);
+@let connectedTo = formEditorService.getConnectedTo(IFieldType.COLUMN);
 @let flexDirection = field.props?.['styles']?.flexDirection === 'row';
 <div
   [id]="field.fieldId || 'workspace'"
@@ -7,7 +7,7 @@
   [cdkDropListConnectedTo]="connectedTo"
   (cdkDropListDropped)="cdkDropListDropped($event)"
   [cdkDropListEnterPredicate]="canEnter"
-  [cdkDropListDisabled]="!widgetEditorService.isEditMode()"
+  [cdkDropListDisabled]="!formEditorService.isEditMode()"
   [style]="field.props?.['styles'] | concatUnits"
   [cdkDropListOrientation]="flexDirection ? 'horizontal' : 'vertical'"
   [class]="flexDirection ? 'row-wrapper' : 'column-wrapper'"
@@ -20,8 +20,8 @@
       [cdkDragData]="getDragFieldData(f)"
       [field]="f"
       [cdkDragDisabled]="!f._design"
-      (cdkDragStarted)="widgetEditorService.dragStart = true"
-      (cdkDragReleased)="widgetEditorService.dragStart = false"
+      (cdkDragStarted)="formEditorService.dragStart = true"
+      (cdkDragReleased)="formEditorService.dragStart = false"
     >
       <div
         class="position-preview border-3px border-solid border-#2f90b9"

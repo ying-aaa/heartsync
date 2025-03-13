@@ -4,6 +4,7 @@ import { WidgetFolderComponent } from './widget-folder/widget-folder.component';
 import { PresetComponentsComponent } from '@src/app/modules/workbench/components/preset-components/preset-components.component';
 import { WidgetOutlineComponent } from './widget-outline/widget-outline.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'hs-workspace-contorl',
@@ -15,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
     WidgetFolderComponent,
     PresetComponentsComponent,
     WidgetOutlineComponent,
+    MatDividerModule,
   ],
 })
 export class WorkspaceContorlComponent implements OnInit {

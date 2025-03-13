@@ -13,7 +13,7 @@
     <button
       mat-mini-fab
       (click)="
-        widgetEditorService.addField(
+        formEditorService.addField(
           field,
           field.parent!.fieldGroup!,
           field.index! + 1
@@ -29,7 +29,7 @@
     <button
       mat-mini-fab
       (click)="
-        widgetEditorService.removeField(field.parent!.fieldGroup!, field.index!)
+        formEditorService.removeField(field.parent!.fieldGroup!, field.index!)
       "
     >
       <mat-icon>delete</mat-icon>

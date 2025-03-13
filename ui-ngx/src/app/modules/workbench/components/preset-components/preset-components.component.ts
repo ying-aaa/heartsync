@@ -12,7 +12,7 @@ import {
   CdkDragPlaceholder,
   CdkDragEnd,
 } from '@angular/cdk/drag-drop';
-import { WidgetEditorService } from '../../lowcode/page/widget/widget-editor.service';
+import { FormEditorService } from '../../lowcode/page/widget/form-editor.service';
 import {
   ICdkDrapActionType,
   IEditorFormlyField,
@@ -52,7 +52,7 @@ export class PresetComponentsComponent implements OnInit {
 
   constructor(
     private hsThemeService: HsThemeService,
-    public widgetEditorService: WidgetEditorService,
+    public formEditorService: FormEditorService,
   ) {
     effect(() => {
       this.activePresetResource = this.presetResource().find(
@@ -62,7 +62,7 @@ export class PresetComponentsComponent implements OnInit {
   }
 
   getConnectedTo(group: any) {
-    const connectedTo = this.widgetEditorService.getConnectedTo(
+    const connectedTo = this.formEditorService.getConnectedTo(
       IFieldType.COLUMN,
     );
     return group._form

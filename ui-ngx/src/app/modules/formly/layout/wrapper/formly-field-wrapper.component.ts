@@ -13,7 +13,7 @@ import {
   IEditSizeType,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { WidgetEditorService } from '@app/modules/workbench/lowcode/page/widget/widget-editor.service';
+import { FormEditorService } from '@app/modules/workbench/lowcode/page/widget/form-editor.service';
 import { CommonModule } from '@angular/common';
 import { ConcatUnitsPipe } from '../../../../shared/pipes/units.pipe';
 
@@ -35,25 +35,25 @@ export class FormlyFieldWrapperComponent extends FieldType<IEditorFormlyField> {
   @ViewChild(CdkDropList) dropList!: CdkDropList;
 
   IFieldType = IFieldType;
-  constructor(public widgetEditorService: WidgetEditorService) {
+  constructor(public formEditorService: FormEditorService) {
     super();
   }
 
   @HostListener('mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {
-    this.widgetEditorService.mousePosition.x = event.clientX;
-    this.widgetEditorService.mousePosition.y = event.clientY;
+    this.formEditorService.mousePosition.x = event.clientX;
+    this.formEditorService.mousePosition.y = event.clientY;
   }
 
   get computedViewportHeight() {
     if (!this.field.parent) {
-      const type = this.widgetEditorService.widgetConfig().workSizeConfig?.type;
+      const type = this.formEditorService.widgetConfig().workSizeConfig?.type;
       if (type) {
         if (type === IEditSizeType.FILL) {
           return `calc(100vh - 64px - 48px - 1px - 16px)`;
         } else {
           const height =
-            this.widgetEditorService.widgetConfig().workSizeConfig?.size.height;
+            this.formEditorService.widgetConfig().workSizeConfig?.size.height;
           return `${height}px`;
         }
       }
@@ -66,10 +66,10 @@ export class FormlyFieldWrapperComponent extends FieldType<IEditorFormlyField> {
     const isInDropContainer = this._isMouseInElement(
       drag.dropContainer.element.nativeElement,
     );
-    const index = this.widgetEditorService
+    const index = this.formEditorService
       .getConnectedTo(this.IFieldType.COLUMN)
       .indexOf(this.dropList.id);
-    const dropContainerIndex = this.widgetEditorService
+    const dropContainerIndex = this.formEditorService
       .getConnectedTo(this.IFieldType.COLUMN)
       .indexOf(drag.dropContainer.id);
     return !(isInDropContainer && dropContainerIndex < index);
@@ -84,17 +84,17 @@ export class FormlyFieldWrapperComponent extends FieldType<IEditorFormlyField> {
     const { previousIndex: formIndex, currentIndex: toIndex } = event;
 
     if (action === ICdkDrapActionType.COPY) {
-      this.widgetEditorService.addField(field, toParent, toIndex);
+      this.formEditorService.addField(field, toParent, toIndex);
     }
     if (action === ICdkDrapActionType.MOVE) {
       if (event.previousContainer === event.container) {
-        this.widgetEditorService.moveField(
+        this.formEditorService.moveField(
           toParent,
           event.previousIndex,
           event.currentIndex,
         );
       } else {
-        this.widgetEditorService.transferField(
+        this.formEditorService.transferField(
           fromParent,
           toParent,
           formIndex,
@@ -111,7 +111,7 @@ export class FormlyFieldWrapperComponent extends FieldType<IEditorFormlyField> {
 
   private _isMouseInElement(droplistElement: HTMLElement): boolean {
     const rect: DOMRect = droplistElement.getBoundingClientRect();
-    const { x, y } = this.widgetEditorService.mousePosition;
+    const { x, y } = this.formEditorService.mousePosition;
     const isInWidth = x >= rect.left && x <= rect.right;
     const isInHeight = y >= rect.top && y <= rect.bottom;
     return isInWidth && isInHeight;
