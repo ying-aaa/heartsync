@@ -1,5 +1,5 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormWidgetService } from '@src/app/core/http/widget.service';
@@ -9,10 +9,13 @@ import {
   IFancyTreeConfig,
   IWidgetType,
 } from '@src/app/shared/models/public-api';
-import { IRadioConfig } from '@src/app/shared/models/system.model';
 import { FormEditorService } from '../../form-editor.service';
 import { IFormSubTypes } from '@src/app/shared/models/form-widget.model';
-import { MatDividerModule } from '@angular/material/divider';
+import {
+  WidgetEditorService,
+  widgetTypesList,
+} from '../../widget-editor.service';
+
 @Component({
   selector: 'hs-widget-folder',
   templateUrl: './widget-folder.component.html',
@@ -20,20 +23,16 @@ import { MatDividerModule } from '@angular/material/divider';
   imports: [HsFancytreeComponent, HsRadioComponent, ClipboardModule],
 })
 export class WidgetFolderComponent implements OnInit {
-  fileName = new FormControl('');
-
-  activeValue = signal<string>('form');
-
   treeConfig = signal<IFancyTreeConfig>({
     isDefaultFirst: true,
     loadTreeData: () => {
-      return this.fornWidgetService.getAllFormWidgets().toPromise();
+      return this.formWidgetService.getAllFormWidgets().toPromise();
     },
     renderTitle: (event, data) => {
       return `<span class="fancytree-title">${data?.node?.data?.workspaceName}</span>`;
     },
     addNodeEvent: (data) => {
-      this.fornWidgetService
+      this.formWidgetService
         .createFormWidget({
           formName: data.node.title,
           type: IWidgetType.FORM,
@@ -53,7 +52,7 @@ export class WidgetFolderComponent implements OnInit {
         });
     },
     deleteNodeEvent: (id: number) => {
-      this.fornWidgetService.deleteFormWidget(id).subscribe({
+      this.formWidgetService.deleteFormWidget(id).subscribe({
         next: () => {
           this._snackBar.open('删除部件成功!!!', '确定', {
             horizontalPosition: 'center',
@@ -63,26 +62,23 @@ export class WidgetFolderComponent implements OnInit {
         },
       });
     },
-    selectNodeEvent: (data: any) => {
+    defaultSelectNodeEvent: (data: any) => {
       const selectedNode = data.node;
-      // const selectedNodes = data.tree.getSelectedNodes();
-      this.formEditorService.fieldsId.set(selectedNode.data.id);
+      const { workspaceName: widgetName, id } = selectedNode.data;
+      this.widgetEditorService.activeWidget.set({
+        widgetName,
+        id,
+      });
+      this.formEditorService.fieldsId.set(id);
     },
   });
 
-  configTypes: IRadioConfig[] = [
-    { label: '代码', value: 'code' },
-    { label: '图表', value: 'chart' },
-    { label: '地图', value: 'map' },
-    { label: 'x6', value: 'x6' },
-    { label: '表单', value: 'form' },
-    { label: '列表', value: 'list' },
-    { label: '详情', value: 'detail' },
-  ];
+  widgetTypesList = widgetTypesList;
 
   constructor(
-    private fornWidgetService: FormWidgetService,
+    private formWidgetService: FormWidgetService,
     private formEditorService: FormEditorService,
+    public widgetEditorService: WidgetEditorService,
     private _snackBar: MatSnackBar,
   ) {}
 

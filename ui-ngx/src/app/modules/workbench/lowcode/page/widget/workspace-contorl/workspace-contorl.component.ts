@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { WidgetFolderComponent } from './widget-folder/widget-folder.component';
 import { PresetComponentsComponent } from '@src/app/modules/workbench/components/preset-components/preset-components.component';
 import { WidgetOutlineComponent } from './widget-outline/widget-outline.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import {
+  flatWidgetTypesList,
+  WidgetEditorService,
+} from '../widget-editor.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'hs-workspace-contorl',
@@ -17,10 +22,16 @@ import { MatDividerModule } from '@angular/material/divider';
     PresetComponentsComponent,
     WidgetOutlineComponent,
     MatDividerModule,
+    MatButtonModule,
+    MatIconModule,
   ],
 })
 export class WorkspaceContorlComponent implements OnInit {
-  constructor() {}
+  constructor(public widgetEditorService: WidgetEditorService) {}
 
   ngOnInit() {}
+
+  activeModeName = computed(() =>
+    flatWidgetTypesList.get(this.widgetEditorService.activeMode()),
+  );
 }

@@ -1,8 +1,8 @@
 <div class="w-full overflow-hidden mb-12px">
   <hs-radio
-    [configs]="configTypes"
+    [configs]="widgetTypesList"
     [rows]="2"
-    [(ngModel)]="activeValue"
+    [(ngModel)]="widgetEditorService.activeMode"
   ></hs-radio>
 </div>
 

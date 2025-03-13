@@ -1,4 +1,19 @@
-<div class="mb-12px text-20px font-bold py-2px">xxx</div>
+@let widgetName = widgetEditorService.activeWidget().widgetName;
+<div class="mb-12px relative">
+  <div>
+    <span class="text-20px font-bold mr-8px">{{ activeModeName() }} :</span>
+    <span class="text-18px">{{ widgetName }}</span>
+  </div>
+
+  <button
+    matSuffix
+    mat-icon-button
+    aria-label="Clear"
+    class="absolute! top-50% right-0 -translate-y-50%"
+  >
+    <mat-icon aria-hidden="false">more_vert</mat-icon>
+  </button>
+</div>
 <mat-divider class="w-full mb-10px!"></mat-divider>
 
 <mat-tab-group

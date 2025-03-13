@@ -96,6 +96,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           selectMode: '单选模式',
         },
         init: function (event: any, data: any) {
+          if (that.config().init) return that.config().init!(data);
           var tree = data.tree;
           var firstNode = tree.getRootNode().children[0]; // 获取根节点的第一个子节点
           if (firstNode && that.config().isDefaultFirst) {
@@ -235,7 +236,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           },
         },
         select: function (event: any, data: any) {
-          that.config().selectNodeEvent?.(data);
+          that.config().defaultSelectNodeEvent?.(data);
         },
         lazyLoad: (event: any, data: any) => {
           data.result = {

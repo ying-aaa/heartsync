@@ -49,14 +49,16 @@
         class="h-0 flex-1"
         [selectedField]="formEditorService.activeField()"
       >
-        <div class="mb-12px flex justify-between items-center">
+        <div
+          class="relative mb-12px flex justify-between items-center line-height-24px"
+        >
           {{ activeFieldTypeName }}
           <button
             matSuffix
             mat-icon-button
             aria-label="Clear"
             (click)="hideFieldConfig()"
-            class="mr-5px hs-density--5"
+            class="absolute! top-50% right-0 -translate-y-50%"
           >
             <mat-icon aria-hidden="false">close</mat-icon>
           </button>
