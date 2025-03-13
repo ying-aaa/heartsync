@@ -1,7 +1,8 @@
 @let connectedTo = formEditorService.getConnectedTo(IFieldType.COLUMN);
 @let flexDirection = field.props?.['styles']?.flexDirection === 'row';
+@let id = field.fieldId || options.formState.fieldsId;
 <div
-  [id]="field.fieldId || 'workspace'"
+  [id]="id"
   cdkDropList
   [cdkDropListData]="field.fieldGroup"
   [cdkDropListConnectedTo]="connectedTo"

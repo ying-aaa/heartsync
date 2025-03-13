@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /build
-/ui-ngx
+# /ui-ngx
 
 # Logs
 logs
