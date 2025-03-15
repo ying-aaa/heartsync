@@ -956,6 +956,7 @@ export const presetResource: IEditorFormlyField[] = [
             type: 'button',
             _design: true,
             props: {
+              type: 'basic',
               label: '按钮',
               typeName: '按钮', // 新增属性
             },
