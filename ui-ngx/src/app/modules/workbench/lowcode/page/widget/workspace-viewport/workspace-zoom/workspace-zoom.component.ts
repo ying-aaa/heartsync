@@ -28,6 +28,9 @@ export class WorkspaceZoomComponent implements OnInit {
   activeType = signal('mouse');
   isMovable = computed(() => this.activeType() === 'front_hand');
 
+  scale = signal(1);
+  transformScale = computed(() => `scale(${this.scale()}) !important`);
+
   types: IRadioConfig[] = [
     { value: 'mouse', icon: 'mouse' },
     { value: 'front_hand', icon: 'front_hand' },
@@ -43,6 +46,17 @@ export class WorkspaceZoomComponent implements OnInit {
   onSpaceKeyUp(event: KeyboardEvent) {
     this.activeType.set('mouse');
     this.setMouseCursor('default');
+  }
+
+  @HostListener('window:wheel', ['$event'])
+  onSpaceWheel(event: WheelEvent) {
+    if (!event.ctrlKey) return;
+    event.preventDefault();
+    this.scale.update((scale) => {
+      scale += event.deltaY < 0 ? 0.1 : -0.1;
+      scale = +Math.max(0.1, Math.min(5, scale)).toFixed(1); // 限制缩放范围
+      return scale;
+    });
   }
 
   setMouseCursor(cursor: string) {

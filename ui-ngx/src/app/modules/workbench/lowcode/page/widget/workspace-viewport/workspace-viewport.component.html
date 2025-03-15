@@ -13,14 +13,16 @@
 
   <!-- 视图 -->
   <div
-    class="flex-1 h-0 flex-center relative overflow-auto"
     [class.viewport-wrapper-bg]="!isEditMode"
+    class="flex-1 h-0 flex-center relative overflow-auto pt-85px"
   >
     <!-- widget容器 -->
+    <!-- {{ ZoomControl()?.transformScale() }} -->
     <div
       cdkDrag
       [cdkDragDisabled]="!ZoomControl()?.isMovable()"
       [style]="viewportSize"
+      [style.transform]="ZoomControl()?.transformScale()"
       [class.viewport-border]="type !== 'fill' && viewportSize"
       class="widget-viewport-wrapper"
     >
@@ -77,13 +79,13 @@
         </div>
       }
     </div>
-
-    <!-- 缩放控制器 -->
-    @if (!isEditMode) {
-      <hs-workspace-zoom
-        #ZoomControl
-        class="absolute left-50% -translate-50% top-30px"
-      ></hs-workspace-zoom>
-    }
   </div>
+
+  <!-- 缩放控制器 -->
+  @if (!isEditMode) {
+    <hs-workspace-zoom
+      #ZoomControl
+      class="absolute left-50% -translate-50% top-90px"
+    ></hs-workspace-zoom>
+  }
 </content>
