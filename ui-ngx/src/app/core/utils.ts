@@ -252,3 +252,7 @@ export function extractProperties<T extends Record<string, any> | any[]>(
     return obj;
   }
 }
+
+export function isBoolean(value: any) {
+  return typeof value === 'boolean';
+}

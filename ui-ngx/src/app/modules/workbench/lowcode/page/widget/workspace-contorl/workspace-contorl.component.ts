@@ -1,6 +1,6 @@
 import { Component, computed, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { WidgetFolderComponent } from './widget-folder/widget-folder.component';
+import { WidgetFolderComponent } from '../widget-folder/widget-folder.component';
 import { PresetComponentsComponent } from '@src/app/modules/workbench/components/preset-components/preset-components.component';
 import { WidgetOutlineComponent } from './widget-outline/widget-outline.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +10,7 @@ import {
   WidgetEditorService,
 } from '../widget-editor.service';
 import { MatButtonModule } from '@angular/material/button';
+import { FormEditorService } from '../form-editor.service';
 
 @Component({
   selector: 'hs-workspace-contorl',
@@ -18,7 +19,6 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     MatTabsModule,
     MatIconModule,
-    WidgetFolderComponent,
     PresetComponentsComponent,
     WidgetOutlineComponent,
     MatDividerModule,
@@ -27,7 +27,10 @@ import { MatButtonModule } from '@angular/material/button';
   ],
 })
 export class WorkspaceContorlComponent implements OnInit {
-  constructor(public widgetEditorService: WidgetEditorService) {}
+  constructor(
+    public widgetEditorService: WidgetEditorService,
+    public formEditorService: FormEditorService,
+  ) {}
 
   ngOnInit() {}
 

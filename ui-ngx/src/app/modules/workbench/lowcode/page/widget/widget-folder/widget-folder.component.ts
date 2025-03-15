@@ -9,12 +9,9 @@ import {
   IFancyTreeConfig,
   IWidgetType,
 } from '@src/app/shared/models/public-api';
-import { FormEditorService } from '../../form-editor.service';
+import { FormEditorService } from '../form-editor.service';
 import { IFormSubTypes } from '@src/app/shared/models/form-widget.model';
-import {
-  WidgetEditorService,
-  widgetTypesList,
-} from '../../widget-editor.service';
+import { WidgetEditorService, widgetTypesList } from '../widget-editor.service';
 
 @Component({
   selector: 'hs-widget-folder',

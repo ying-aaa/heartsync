@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormEditorService } from '../form-editor.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { IEditSizeType } from '@src/app/shared/models/public-api';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 const viewportConfig = {
   [IEditSizeType.FILL]: {
@@ -42,6 +44,8 @@ const viewportConfig = {
     FormsModule,
     ReactiveFormsModule,
     NgScrollbarModule,
+    MatButtonModule,
+    MatIconModule,
   ],
 })
 export class WorkspaceViewportComponent implements OnInit {

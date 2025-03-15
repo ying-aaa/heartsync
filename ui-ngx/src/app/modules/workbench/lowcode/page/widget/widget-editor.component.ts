@@ -30,6 +30,7 @@ import { HighlightAuto, HighlightModule } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { WidgetFolderComponent } from './widget-folder/widget-folder.component';
 @Component({
   selector: 'hs-widget-editor',
   templateUrl: './widget-editor.component.html',
@@ -55,7 +56,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     FormlyMatSliderModule,
     FormlyModule,
     FormsModule,
-    // MonacoEditorModule,
+    WidgetFolderComponent,
   ],
 })
 export class WidgetEditorComponent implements OnInit {

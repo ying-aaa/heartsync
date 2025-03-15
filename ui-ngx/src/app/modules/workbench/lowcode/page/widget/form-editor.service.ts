@@ -7,6 +7,7 @@ import {
   deepClone,
   extractProperties,
   generateUUID,
+  isBoolean,
   PickConfig,
 } from '@src/app/core/utils';
 import {
@@ -39,7 +40,7 @@ export class FormEditorService {
   });
 
   // 是否编辑模式
-  isEditMode = signal(true);
+  isEditMode = signal(false);
 
   isShowConfigPanel = signal(false);
 
@@ -132,6 +133,11 @@ export class FormEditorService {
     this.activeField.set(field);
     field && this.isShowConfigPanel.set(true);
     this._fieldSelected$.next(field);
+  }
+
+  checkEditModeState(is?: boolean): void {
+    if (isBoolean(is)) return this.isEditMode.set(is);
+    this.isEditMode.set(!this.isEditMode());
   }
 
   addField(

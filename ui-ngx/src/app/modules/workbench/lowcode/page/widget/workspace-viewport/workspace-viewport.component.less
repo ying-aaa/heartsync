@@ -1,47 +1,87 @@
-:host {
-  display: block;
-  width: 100%;
-  height: 100%;
+@import "mixin";
 
-  .viewport-border {
-    border: 1px solid var(--mdc-outlined-text-field-outline-color);
-    border-radius: 8px;
-    padding: 8px;
-  }
-
-  ::ng-deep {
-    .ng-scroll-content {
-      width: 100% !important;
-    }
-
-    .render-canvar {
+.themeMixin( {
+    :host {
       display: block;
-      height: 100%;
-      padding: 8px 20px;
-    }
-
-    .wh-full-auto {
       width: 100%;
-      height: auto;
-    }
+      height: 100%;
 
-    formly-form {
-      .wh-full-auto();
 
-      &>formly-field {
-        .wh-full-auto();
+      .viewport-border {
+        border: 1px solid var(--mdc-outlined-text-field-outline-color);
+        border-radius: 8px;
+        padding: 8px;
+      }
 
-        &>formly-field-wrapper {
+      .viewport-wrapper-bg {
+        background-color: @editor-bg-color;
+      }
+
+      .viewport-overlay-layer {
+        position: absolute;
+        cursor: pointer;
+        z-index: 999;
+
+        button {
+          display: none;
+        }
+
+        &:hover {
+          background-color: rgba(47, 144, 185, 0.1);
+          border: 2px dashed rgb(47, 144, 185);
+          border-radius: 8px;
+
+          &+.viewport-content {
+            opacity: 0.5;
+          }
+
+          button {
+            display: inline-flex;
+          }
+
+        }
+      }
+
+      .viewport-content {
+        background-color: @base-bg-color;
+      }
+
+      ::ng-deep {
+        .ng-scroll-content {
+          width: 100% !important;
+        }
+
+        .render-canvar {
+          display: block;
+          height: 100%;
+          padding: 8px 20px;
+        }
+
+        .wh-full-auto {
+          width: 100%;
+          height: auto;
+        }
+
+        formly-form {
           .wh-full-auto();
 
-          &>#workspace {
-            // .wh-full();
-            min-height: calc(100vh - 64px - 48px - 1px - 16px);
+          &>formly-field {
             .wh-full-auto();
+
+            &>formly-field-wrapper {
+              .wh-full-auto();
+
+              &>#workspace {
+                // .wh-full();
+                min-height: calc(100vh - 64px - 48px - 1px - 16px);
+                .wh-full-auto();
+              }
+            }
           }
         }
       }
+
     }
   }
 
-}
+);

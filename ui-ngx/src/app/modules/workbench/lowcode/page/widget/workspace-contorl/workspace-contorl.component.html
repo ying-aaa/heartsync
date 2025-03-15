@@ -1,33 +1,32 @@
-@let widgetName = widgetEditorService.activeWidget().widgetName;
-<div class="mb-12px relative">
-  <div>
-    <span class="text-20px font-bold mr-8px">{{ activeModeName() }} :</span>
-    <span class="text-18px">{{ widgetName }}</span>
-  </div>
-
+@let activeWidgetName = widgetEditorService.activeWidget().widgetName;
+<div class="line-height-24px h-24px mb-12px relative">
   <button
     matSuffix
     mat-icon-button
     aria-label="Clear"
-    class="absolute! top-50% right-0 -translate-y-50%"
+    (click)="formEditorService.checkEditModeState(false)"
+    class="absolute! top-50% left-3px -translate-y-50%"
   >
-    <mat-icon aria-hidden="false">more_vert</mat-icon>
+    <mat-icon
+      class="material-icons-round"
+      matChipAvatar
+      >arrow_back
+    </mat-icon>
   </button>
+
+  <div class="pl-50px">
+    <span class="text-20px font-bold mr-8px">{{ activeModeName() }} :</span>
+    <span class="text-18px">{{ activeWidgetName }}</span>
+  </div>
 </div>
 <mat-divider class="w-full mb-10px!"></mat-divider>
 
+<!-- class - mat-tab-item3-full -->
 <mat-tab-group
   animationDuration="0ms"
   headerPosition="below"
-  class="h-0 flex-1 hs-density--2 mat-tab-item3-full"
+  class="h-0 flex-1 hs-density--2"
 >
-  <mat-tab label="文件">
-    <ng-template mat-tab-label>
-      <mat-icon class="example-tab-icon">description</mat-icon>
-      文件
-    </ng-template>
-    <hs-widget-folder></hs-widget-folder>
-  </mat-tab>
   <mat-tab label="预设">
     <ng-template mat-tab-label>
       <mat-icon class="example-tab-icon">widgets</mat-icon>

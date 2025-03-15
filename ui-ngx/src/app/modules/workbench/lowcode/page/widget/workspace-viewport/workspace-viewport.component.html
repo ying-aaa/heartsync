@@ -1,3 +1,7 @@
+@let type = formEditorService.widgetConfig().workSizeConfig?.['type']!;
+@let viewportSize = viewportConfig[type || 'fill'];
+@let isEditMode = formEditorService.isEditMode();
+
 <content class="flex flex-1 flex-col h-full relative">
   <header>
     <hs-workspace-toobar></hs-workspace-toobar>
@@ -5,12 +9,29 @@
 
   <mat-divider class="w-full"></mat-divider>
 
-  <div class="flex-1 h-0 flex-center">
-    @let type = formEditorService.widgetConfig().workSizeConfig?.['type']!;
-    @let viewportSize = viewportConfig[type];
+  <div
+    class="flex-1 h-0 flex-center relative"
+    [class.viewport-wrapper-bg]="!isEditMode"
+  >
+    @if (!isEditMode) {
+      <div
+        [style]="viewportSize"
+        class="viewport-overlay-layer flex-center"
+      >
+        <button
+          mat-flat-button
+          (click)="formEditorService.checkEditModeState(true)"
+          class="px-16px! mx-8px"
+        >
+          <mat-icon matChipAvatar>design_services</mat-icon> 去设计
+        </button>
+      </div>
+    }
+
     <div
       [style]="viewportSize"
       [class.viewport-border]="type !== 'fill' && viewportSize"
+      class="viewport-content"
     >
       <ng-scrollbar
         class="wh-full!"
