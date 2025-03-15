@@ -4,72 +4,86 @@
 @let isFieldsEmpty = formEditorService.fields().length;
 
 <content class="flex flex-1 flex-col h-full relative">
+  <!-- 预览保存 -->
   <header>
     <hs-workspace-toobar></hs-workspace-toobar>
   </header>
 
   <mat-divider class="w-full"></mat-divider>
 
+  <!-- 视图 -->
   <div
-    class="flex-1 h-0 flex-center relative"
+    class="flex-1 h-0 flex-center relative overflow-auto"
     [class.viewport-wrapper-bg]="!isEditMode"
   >
-    <!-- 遮罩层 -->
-    @if (!isEditMode) {
-      <div
-        [style]="viewportSize"
-        class="viewport-overlay-layer flex-center"
-      >
-        <button
-          mat-flat-button
-          (click)="formEditorService.checkEditModeState(true)"
-          class="px-16px! mx-8px"
-        >
-          <mat-icon matChipAvatar>design_services</mat-icon> 去设计
-        </button>
-      </div>
-    }
-
-    <!-- 内容 -->
+    <!-- widget容器 -->
     <div
+      cdkDrag
+      [cdkDragDisabled]="!ZoomControl()?.isMovable()"
       [style]="viewportSize"
       [class.viewport-border]="type !== 'fill' && viewportSize"
-      [class.viewport-content-bg]="isFieldsEmpty"
-      class="viewport-content"
+      class="widget-viewport-wrapper"
     >
-      <ng-scrollbar
-        class="wh-full!"
-        #scrollbarRef="ngScrollbar"
-        externalViewport
-        visibility="hover"
-        appearance="compact"
-        orientation="auto"
-      >
-        <div scrollViewport>
-          <div class="render-canvar">
-            <formly-form
-              [form]="formEditorService.formGroup"
-              [fields]="formEditorService.fields()"
-              [model]="formEditorService.model"
-              [options]="formEditorService.options"
-            ></formly-form>
-          </div>
+      <!-- 遮罩层 -->
+      @if (!isEditMode) {
+        <!-- (dblclick)="formEditorService.checkEditModeState(true)" -->
+        <div class="viewport-overlay-layer flex-center">
+          <button
+            mat-flat-button
+            (click)="formEditorService.checkEditModeState(true)"
+            class="px-16px! mx-8px"
+          >
+            <mat-icon matChipAvatar>design_services</mat-icon> 去设计
+          </button>
         </div>
-      </ng-scrollbar>
+      }
+
+      <!-- 内容 -->
+      <div
+        [class.viewport-content-bg]="isFieldsEmpty"
+        class="wh-full"
+      >
+        <ng-scrollbar
+          class="wh-full!"
+          #scrollbarRef="ngScrollbar"
+          externalViewport
+          visibility="hover"
+          appearance="compact"
+          orientation="auto"
+        >
+          <div scrollViewport>
+            <div class="render-canvar">
+              <formly-form
+                [form]="formEditorService.formGroup"
+                [fields]="formEditorService.fields()"
+                [model]="formEditorService.model"
+                [options]="formEditorService.options"
+              ></formly-form>
+            </div>
+          </div>
+        </ng-scrollbar>
+      </div>
+
+      <!-- 无配置时提示 -->
+      @if (!isFieldsEmpty) {
+        <div
+          class="absolute top-0 left-0 wh-full flex-col flex-center pb-80px -z-999 opacity-80"
+        >
+          <img
+            class="w-180px h-180px"
+            src="assets/workbench/widget-workbench-tips.png"
+          />
+          <div class="mt-30px text-18px">暂无内容，拖拽组件进来吧！</div>
+        </div>
+      }
     </div>
 
-    <!-- 无配置时提示 -->
-    @if (!isFieldsEmpty) {
-      <div
-        [style]="viewportSize"
-        class="widget-workbench-tips absolute wh-full flex-col flex-center pb-80px -z-999 opacity-80"
-      >
-        <img
-          class="w-180px h-180px"
-          src="assets/workbench/widget-workbench-tips.png"
-        />
-        <div class="mt-30px text-18px">暂无内容，拖拽组件进来吧！</div>
-      </div>
+    <!-- 缩放控制器 -->
+    @if (!isEditMode) {
+      <hs-workspace-zoom
+        #ZoomControl
+        class="absolute left-50% -translate-50% top-30px"
+      ></hs-workspace-zoom>
     }
   </div>
 </content>

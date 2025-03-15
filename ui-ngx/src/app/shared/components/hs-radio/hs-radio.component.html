@@ -3,14 +3,17 @@
   [style]="styleComputer()"
 >
   @for (item of configs(); track $index) {
-  <div
-    matRipple
-    matRippleColor="#ffffff30"
-    [class.active-style]="ngModel() === item.value"
-    (click)="ngModel.set(item.value)"
-    class="text-center h-32px line-height-32px cursor-pointer hover:bg-#2F90B930 rounded-8px"
-  >
-    {{ item.label }}
-  </div>
+    <div
+      matRipple
+      matRippleColor="#ffffff30"
+      [class.active-style]="ngModel() === item.value"
+      (click)="ngModel.set(item.value)"
+      class="text-center flex-center gap-3px h-32px line-height-32px cursor-pointer hover:bg-#2F90B930 rounded-8px"
+    >
+      @if (item.icon) {
+        <mat-icon> {{ item.icon }}</mat-icon>
+      }
+      {{ item.label }}
+    </div>
   }
 </div>

@@ -14,8 +14,9 @@ export interface ICatalogStructure {
 }
 
 export interface IRadioConfig {
-  label: string;
+  label?: string;
   value: string;
+  icon?: string;
 }
 
 export enum IEventsType {

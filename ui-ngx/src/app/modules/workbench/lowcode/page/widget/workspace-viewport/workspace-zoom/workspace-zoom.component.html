@@ -1,0 +1,22 @@
+<div class="zoom-control-wrapper flex-center">
+  <hs-radio
+    [configs]="types"
+    [rows]="1"
+    [(ngModel)]="activeType"
+    class="w-80px border-none!"
+  ></hs-radio>
+  <div class="ml-8px pr-3px">
+    <mat-form-field
+      appearance="outline"
+      class="hs-density--5 w-126px"
+    >
+      <mat-select>
+        <mat-option value="option1">自适应</mat-option>
+        <mat-option value="option3">缩放：30%</mat-option>
+        <mat-option value="option3">缩放：50%</mat-option>
+        <mat-option value="option3">缩放：100%</mat-option>
+        <mat-option value="option3">当前：76%</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

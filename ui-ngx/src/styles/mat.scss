@@ -41,7 +41,7 @@ html {
   }
 
   // 选择框文字大小
-  --mat-select-trigger-text-size: 14px;
+  --mat-select-trigger-text-size: 0.9rem;--mat-option-label-text-size: 0.9rem;
 
   // 弹窗
   --mdc-dialog-container-shape: 12px;
@@ -64,6 +64,13 @@ html {
 
 .mat-mdc-option {
   min-height: 32px !important;
+  font-size: 14px;
+}
+
+.mat-mdc-option-active {
+  .mat-pseudo-checkbox {
+    display: none;
+  }
 }
 
 // 输入框底部校验提示

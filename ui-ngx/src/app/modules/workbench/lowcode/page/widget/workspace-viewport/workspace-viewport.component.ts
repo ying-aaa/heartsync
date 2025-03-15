@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional, viewChild } from '@angular/core';
 import { WorkspaceToobarComponent } from './workspace-toobar/workspace-toobar.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { ConfigOption, FORMLY_CONFIG, FormlyModule } from '@ngx-formly/core';
@@ -8,6 +8,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { IEditSizeType } from '@src/app/shared/models/public-api';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { WorkspaceZoomComponent } from './workspace-zoom/workspace-zoom.component';
+import { CdkDrag } from '@angular/cdk/drag-drop';
 
 const viewportConfig = {
   [IEditSizeType.FILL]: {
@@ -38,6 +40,7 @@ const viewportConfig = {
   styleUrls: ['./workspace-viewport.component.less'],
   // changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    CdkDrag,
     WorkspaceToobarComponent,
     MatDividerModule,
     FormlyModule,
@@ -46,10 +49,12 @@ const viewportConfig = {
     NgScrollbarModule,
     MatButtonModule,
     MatIconModule,
+    WorkspaceZoomComponent,
   ],
 })
 export class WorkspaceViewportComponent implements OnInit {
   viewportConfig = viewportConfig;
+  ZoomControl = viewChild<WorkspaceZoomComponent | undefined>('ZoomControl');
 
   constructor(
     public formEditorService: FormEditorService,

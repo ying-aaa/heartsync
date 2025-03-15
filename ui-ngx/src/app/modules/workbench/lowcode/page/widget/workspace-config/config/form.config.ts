@@ -19,8 +19,16 @@ export const widget_form_config: IEditorFormlyField[] = [
       readonly: false,
       options: [
         {
+          value: IEditSizeType.FILL,
+          label: '撑满',
+        },
+        {
           value: IEditSizeType.MOBILE,
           label: '手机',
+        },
+        {
+          value: IEditSizeType.IPAD,
+          label: '平板',
         },
         {
           value: IEditSizeType.PC,
