@@ -866,44 +866,46 @@ export const presetResource: IEditorFormlyField[] = [
               label: '普通输入',
               typeName: '普通输入子表', // 新增属性
             },
-            fieldGroup: [
-              {
-                key: 'input',
-                type: 'textarea',
-                _design: true,
-                props: {
-                  row: 1,
-                  appearance: 'fill',
-                  label: '多行文本',
-                  typeName: '多行文本', // 新增属性
+            fieldArray: {
+              fieldGroup: [
+                {
+                  key: 'input',
+                  type: 'textarea',
+                  _design: true,
+                  props: {
+                    row: 1,
+                    appearance: 'fill',
+                    label: '多行文本',
+                    typeName: '多行文本', // 新增属性
+                  },
                 },
-              },
-              {
-                key: 'input',
-                type: 'input',
-                _design: true,
-                props: {
-                  row: 1,
-                  appearance: 'fill',
-                  type: 'text',
-                  label: '单行文本',
-                  typeName: '单行文本', // 新增属性
+                {
+                  key: 'input',
+                  type: 'input',
+                  _design: true,
+                  props: {
+                    row: 1,
+                    appearance: 'fill',
+                    type: 'text',
+                    label: '单行文本',
+                    typeName: '单行文本', // 新增属性
+                  },
                 },
-              },
-              {
-                key: 'input',
-                type: 'input',
-                _design: true,
-                props: {
-                  row: 1,
-                  appearance: 'fill',
+                {
+                  key: 'input',
+                  type: 'input',
+                  _design: true,
+                  props: {
+                    row: 1,
+                    appearance: 'fill',
 
-                  type: 'number',
-                  label: '数字',
-                  typeName: '数字', // 新增属性
+                    type: 'number',
+                    label: '数字',
+                    typeName: '数字', // 新增属性
+                  },
                 },
-              },
-            ],
+              ],
+            },
           },
         ],
       },

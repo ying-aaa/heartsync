@@ -45,7 +45,15 @@ export class WidgetPreviewComponent implements OnInit {
   widgetName = '';
   fields = signal<IEditorFormlyField[]>([]);
   formGroup = new FormGroup({});
-  model = {};
+  model = {
+    5758231678674854: [
+      {
+        '5107960635885452': '111',
+        '9449838446880347': 222,
+        '8392897339114017': '333',
+      },
+    ],
+  };
   options = {};
 
   constructor(
@@ -69,7 +77,7 @@ export class WidgetPreviewComponent implements OnInit {
         ) {
           this.fields.set(fieldConfig);
         }
-        this.formGroup = new FormGroup({});
+        // this.formGroup = new FormGroup({});
         this.options = {};
       },
       error: (err: any) => console.error('Get widget error:', err),

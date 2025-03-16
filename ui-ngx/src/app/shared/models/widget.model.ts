@@ -5,6 +5,7 @@ export interface IEditorFormlyField extends FormlyFieldConfig {
    * 组件的显示名称
    */
   label?: string;
+  fieldArray?: any;
   fieldGroup?: IEditorFormlyField[];
   fieldId?: string;
   parent?: IEditorFormlyField;

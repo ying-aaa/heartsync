@@ -1,21 +1,22 @@
 @let connectedTo = formEditorService.getConnectedTo(IFieldType.SUBTABLE);
+@let fieldGroup = field.fieldArray.fieldGroup;
 <div class="py-8px">{{ props.label }}</div>
 <div
   class="row-wrapper flex min-h-48px"
   [id]="field.fieldId || 'subtable'"
   [style]="field.props?.['styles'] | concatUnits"
-  [style.grid-template-columns]="getGridTemplateColumns(field.fieldGroup || [])"
+  [style.grid-template-columns]="getGridTemplateColumns(fieldGroup || [])"
   cdkDropList
   cdkDropListGroup
   cdkDropListOrientation="horizontal"
   [cdkDropListConnectedTo]="connectedTo"
-  [cdkDropListData]="field.fieldGroup"
+  [cdkDropListData]="fieldGroup"
   (cdkDropListDropped)="cdkDropListDropped($event)"
 >
-  @for (f of field.fieldGroup; track $index) {
+  @for (f of fieldGroup; track $index) {
     <formly-field
       [field]="f"
-      [style.width]="getSubTableItemWidth(field.fieldGroup!, f)"
+      [style.width]="getSubTableItemWidth(fieldGroup, f)"
       cdkDrag
       [cdkDragData]="getDragFieldData(f)"
       (cdkDragStarted)="formEditorService.dragStart = true"
@@ -42,7 +43,7 @@
   </button>
 </div>
 
-@if (!field.fieldGroup?.length && field._design) {
+@if (!fieldGroup?.length && field._design) {
   <div class="absolute -z-1 wh-full h-48px py-6px top-0 top-32px">
     <div
       class="placeholder-tips truncate text-14px text-center line-height-36px font-normal"

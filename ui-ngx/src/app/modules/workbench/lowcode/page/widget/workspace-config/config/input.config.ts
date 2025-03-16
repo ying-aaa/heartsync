@@ -81,7 +81,6 @@ export const widget_input_config: IEditorFormlyField[] = [
         ],
       },
       {
-        key: '092453673136',
         type: 'column',
         props: {
           label: '数据',
@@ -92,13 +91,13 @@ export const widget_input_config: IEditorFormlyField[] = [
         className: 'hs-density--1',
         fieldGroup: [
           {
-            key: '398921920411',
+            key: 'key',
             type: 'input',
             props: {
               type: 'text',
               label: '组件ID',
               placeholder: '',
-              disabled: false,
+              disabled: true,
               appearance: 'outline',
               density: 5,
               description: '',

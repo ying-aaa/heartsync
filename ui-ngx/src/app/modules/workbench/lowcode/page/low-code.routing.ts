@@ -63,11 +63,13 @@ export function previewExtension(field: IEditorFormlyField) {
 
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
-    return;
   }
 
   if (field.wrappers) {
-    field.wrappers = field.wrappers.filter((wrapper) => wrapper !== 'contorl');
+    field.wrappers = [];
+    field.wrappers = field.wrappers.filter(
+      (wrapper) => wrapper !== 'contorl' && wrapper !== 'subtableitem',
+    );
   }
 }
 // const monacoConfig: NgxMonacoEditorConfig = {
@@ -141,7 +143,7 @@ export default [
       ),
   },
   {
-    title: '部件',
+    title: '预览',
     path: 'preview/:widgetId',
     data: {
       hiddenMenu: true,

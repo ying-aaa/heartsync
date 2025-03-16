@@ -1,75 +1,68 @@
-<table
-  mat-table
-  [dataSource]="dataSource"
-  class="mat-elevation-z8"
->
-  <ng-container matColumnDef="position">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-    >
-      No.
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let element"
-    >
-      {{ element.position }}
-    </td>
-  </ng-container>
+<table class="subtable-table">
+  <thead>
+    <tr class="subtable-header-row">
+      @for (column of columns; track $index) {
+        <th class="subtable-header-cell">{{ column.th }}</th>
+      }
+    </tr>
+  </thead>
 
-  <ng-container matColumnDef="name">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-    >
-      Name
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let element"
-    >
-      {{ element.name }}
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="weight">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-    >
-      Weight
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let element"
-    >
-      {{ element.weight }}
-    </td>
-  </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-    >
-      Symbol
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let element"
-    >
-      {{ element.symbol }}
-    </td>
-  </ng-container>
-
-  <tr
-    mat-header-row
-    *matHeaderRowDef="displayedColumns"
-  ></tr>
-  <tr
-    mat-row
-    *matRowDef="let row; columns: displayedColumns"
-  ></tr>
+  <tbody>
+    @for (field of field.fieldGroup; track $index) {
+      <tr class="subtable-body-row">
+        @for (field of field.fieldGroup; track $index) {
+          <td class="subtable-body-cell">
+            <formly-field
+              class="col"
+              [field]="field"
+            ></formly-field>
+          </td>
+        }
+      </tr>
+    }
+  </tbody>
 </table>
+
+<div class="flex-center py-8px">
+  <button
+    mat-raised-button
+    color="secondary"
+    type="button"
+    (click)="add()"
+    class="w-full"
+  >
+    新增
+  </button>
+</div>
+
+<!-- <div
+  *ngFor="let field of field.fieldGroup; let i = index"
+  class="row"
+>
+  @for (f of field.fieldGroup; track $index) {
+    <formly-field
+      class="col"
+      [field]="f"
+    ></formly-field>
+  }
+
+  <div class="col-sm-2 d-flex align-items-center">
+    <button
+      class="btn btn-danger"
+      type="button"
+      (click)="remove(i)"
+    >
+      Remove
+    </button>
+  </div>
+</div>
+<div style="margin: 30px 0">
+  <button
+    mat-raised-button
+    color="secondary"
+    type="button"
+    (click)="add()"
+  >
+    111
+  </button>
+</div> -->

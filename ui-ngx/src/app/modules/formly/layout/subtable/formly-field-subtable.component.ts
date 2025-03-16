@@ -95,5 +95,23 @@ export class FormlyFieldSubTableComponent
       '',
     );
   }
-  ngOnInit() {}
+  ngOnInit() {
+    if (!this.field.fieldArray) {
+      this.field.fieldArray = {
+        fieldGroup: [],
+      } as any;
+    }
+    console.log('%c Line:52 🍕', 'color:#93c0a4', this.field);
+  }
+
+  fieldGroup(): any {
+    console.log('%c Line:110 🥖', 'color:#6ec1c2', this.field.fieldArray);
+    console.log(
+      '%c Line:111 🍫',
+      'color:#2eafb0',
+      this.field.fieldArray?.fieldGroup,
+    );
+    // @ts-ignore
+    return this.field.fieldArray?.fieldGroup || [];
+  }
 }

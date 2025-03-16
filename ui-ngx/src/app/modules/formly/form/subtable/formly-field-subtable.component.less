@@ -1,19 +1,89 @@
-:host {
-  .mat-mdc-table {
-    border-bottom: 2px solid #ccc;
-    border-top: 2px solid #ccc;
+@import "themeMixin";
+
+.themeMixin( {
+    :host {
+      display: block;
+      padding: 4px;
+      border: 1px solid @base-line-color;
+      border-radius: 8px;
+
+      .subtable-table {
+        min-width: 100%;
+        border: 0;
+        border-spacing: 0;
+        table-layout: auto;
+        white-space: normal;
+        background-color: var(--mat-table-background-color, var(--mat-sys-surface));
+
+        .subtable-header-row {
+          -moz-osx-font-smoothing: grayscale;
+          -webkit-font-smoothing: antialiased;
+          height: var(--mat-table-header-container-height, 56px);
+          color: var(--mat-table-header-headline-color, var(--mat-sys-on-surface, rgba(0, 0, 0, 0.87))); font-family: var(--mat-table-header-headline-font, var(--mat-sys-title-small-font, Roboto, sans-serif));
+          line-height: var(--mat-table-header-headline-line-height, var(--mat-sys-title-small-line-height));
+          font-size: var(--mat-table-header-headline-size, var(--mat-sys-title-small-size, 14px));
+          font-weight: var(--mat-table-header-headline-weight, var(--mat-sys-title-small-weight, 500));
+
+          .subtable-header-cell {
+            background-color: @base-placeholder-bg-color;
+            letter-spacing: var(--mat-table-header-headline-tracking, var(--mat-sys-title-small-tracking));
+            font-weight: inherit;
+            line-height: inherit;
+            box-sizing: border-box;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            outline: none;
+            text-align: left;
+            padding: 0 16px;
+
+            &:first-child {
+              border-radius: 5px 0 0 5px;
+            }
+
+            &:last-child {
+              border-radius: 0px 5px 5px 0px;
+            }
+          }
+        }
+
+        .subtable-body-row {
+          height: var(--mat-table-header-container-height, 56px);
+
+        }
+
+        .subtable-body-cell {
+          text-align: left;
+          padding: 0 16px;
+        }
+
+      }
+
+
+      .mat-mdc-table {
+
+        .mat-mdc-header-cell {
+          background-color: @base-placeholder-bg-color;
+
+          &:first-child {
+            border-radius: 5px 0 0 5px;
+          }
+
+          &:last-child {
+            border-radius: 0px 5px 5px 0px;
+          }
+        }
+
+        .mat-mdc-header-cell,
+        .mat-mdc-row .mat-mdc-cell {
+          cursor: pointer;
+          border: none;
+        }
+      }
+
+
+
+
+    }
   }
 
-  .mat-mdc-header-cell,
-  .mat-mdc-row .mat-mdc-cell {
-    border-bottom: 1px solid transparent;
-    border-top: 1px solid transparent;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    cursor: pointer;
-  }
-
-  .mat-mdc-header-cell {
-    background-color: rgba(47, 144, 185, 0.1);
-  }
-}
+);

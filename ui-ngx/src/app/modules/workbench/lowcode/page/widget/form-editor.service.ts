@@ -230,10 +230,11 @@ export class FormEditorService {
     const pickConfig: PickConfig = {
       // key: true,
       type: true,
-      // fieldId: true,
+      fieldId: true,
       props: true,
       className: true,
       fieldGroup: true,
+      fieldArray: true,
     };
 
     return JSON.stringify(
