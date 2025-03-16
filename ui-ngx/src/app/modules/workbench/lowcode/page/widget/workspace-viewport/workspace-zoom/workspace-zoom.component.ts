@@ -50,13 +50,19 @@ export class WorkspaceZoomComponent implements OnInit {
 
   @HostListener('window:wheel', ['$event'])
   onSpaceWheel(event: WheelEvent) {
+    const targetElement = event.target as HTMLElement;
     if (!event.ctrlKey) return;
-    event.preventDefault();
-    this.scale.update((scale) => {
-      scale += event.deltaY < 0 ? 0.1 : -0.1;
-      scale = +Math.max(0.1, Math.min(5, scale)).toFixed(1); // 限制缩放范围
-      return scale;
-    });
+    if (
+      targetElement.classList.contains('viewport-wrapper') ||
+      targetElement.classList.contains('viewport-overlay-layer')
+    ) {
+      event.preventDefault();
+      this.scale.update((scale) => {
+        scale += event.deltaY < 0 ? 0.1 : -0.1;
+        scale = +Math.max(0.1, Math.min(5, scale)).toFixed(1); // 限制缩放范围
+        return scale;
+      });
+    }
   }
 
   setMouseCursor(cursor: string) {
