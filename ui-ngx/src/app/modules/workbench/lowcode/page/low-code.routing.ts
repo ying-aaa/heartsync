@@ -66,7 +66,6 @@ export function previewExtension(field: IEditorFormlyField) {
   }
 
   if (field.wrappers) {
-    field.wrappers = [];
     field.wrappers = field.wrappers.filter(
       (wrapper) => wrapper !== 'contorl' && wrapper !== 'subtableitem',
     );
