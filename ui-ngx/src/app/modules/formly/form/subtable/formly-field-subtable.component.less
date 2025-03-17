@@ -11,9 +11,9 @@
         min-width: 100%;
         border: 0;
         border-spacing: 0;
-        table-layout: auto;
         white-space: normal;
         background-color: var(--mat-table-background-color, var(--mat-sys-surface));
+        table-layout: fixed;
 
         .subtable-header-row {
           -moz-osx-font-smoothing: grayscale;
@@ -35,6 +35,7 @@
             outline: none;
             text-align: left;
             padding: 0 16px;
+            overflow-wrap: break-word;
 
             &:first-child {
               border-radius: 5px 0 0 5px;
@@ -49,40 +50,18 @@
         .subtable-body-row {
           height: var(--mat-table-header-container-height, 56px);
 
+          &:nth-child(even) {
+            background-color: fadeout(@base-placeholder-bg-color, 20%);
+          }
         }
 
         .subtable-body-cell {
           text-align: left;
-          padding: 0 16px;
+          overflow-wrap: break-word;
+          padding: 8px 16px;
         }
 
       }
-
-
-      .mat-mdc-table {
-
-        .mat-mdc-header-cell {
-          background-color: @base-placeholder-bg-color;
-
-          &:first-child {
-            border-radius: 5px 0 0 5px;
-          }
-
-          &:last-child {
-            border-radius: 0px 5px 5px 0px;
-          }
-        }
-
-        .mat-mdc-header-cell,
-        .mat-mdc-row .mat-mdc-cell {
-          cursor: pointer;
-          border: none;
-        }
-      }
-
-
-
-
     }
   }
 
