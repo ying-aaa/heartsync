@@ -11,7 +11,7 @@ export interface PeriodicElement {}
   selector: 'formly-field-subtable',
   templateUrl: './formly-field-subtable.component.html',
   styleUrls: ['./formly-field-subtable.component.less'],
-  imports: [MatButtonModule, MatTableModule, FormlyModule, CommonModule],
+  imports: [MatButtonModule, MatTableModule, FormlyModule, MatIconModule],
 })
 export class FormlyFieldSubTableComponent
   extends FieldArrayType<IEditorFormlyField>

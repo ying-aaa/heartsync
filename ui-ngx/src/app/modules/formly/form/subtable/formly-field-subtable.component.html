@@ -4,6 +4,7 @@
       @for (column of columns; track $index) {
         <th class="subtable-header-cell">{{ column.th }}</th>
       }
+      <th class="subtable-header-cell">操作</th>
     </tr>
   </thead>
 
@@ -18,6 +19,15 @@
             ></formly-field>
           </td>
         }
+        <td class="subtable-body-cell">
+          <button
+            mat-button
+            color="warn"
+            (click)="remove($index)"
+          >
+            删除
+          </button>
+        </td>
       </tr>
     }
   </tbody>
