@@ -1,5 +1,5 @@
 @let connectedTo = formEditorService.getConnectedTo(IFieldType.SUBTABLE);
-@let fieldGroup = field.fieldArray.fieldGroup;
+@let fieldGroup = field.fieldGroup;
 <div class="py-8px">{{ props.label }}</div>
 <div
   class="row-wrapper flex min-h-48px"
@@ -13,10 +13,10 @@
   [cdkDropListData]="fieldGroup"
   (cdkDropListDropped)="cdkDropListDropped($event)"
 >
-  @for (f of fieldGroup; track $index) {
+  @for (f of field.fieldGroup; track $index) {
     <formly-field
       [field]="f"
-      [style.width]="getSubTableItemWidth(fieldGroup, f)"
+      [style.width]="getSubTableItemWidth(fieldGroup!, f)"
       cdkDrag
       [cdkDragData]="getDragFieldData(f)"
       (cdkDragStarted)="formEditorService.dragStart = true"

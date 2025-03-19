@@ -83,7 +83,12 @@ export class FormEditorService {
                 widget.type === IWidgetType.FORM &&
                 widget.subType === IFormSubTypes.FLAT
               ) {
-                this.fields.set(fieldConfig);
+                // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置
+                const fields = updateField(fieldConfig, (field) => {
+                  field.fieldGroup = field.fieldArray.fieldGroup;
+                  Reflect.deleteProperty(field, 'fieldArray');
+                });
+                this.fields.set(fields);
               }
               this.isShowConfigPanel.set(false);
               this.selectField(null);
@@ -110,10 +115,18 @@ export class FormEditorService {
   }
 
   updateFields() {
+    // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置
+    const fields = updateField(deepClone(this.fields()), (field) => {
+      field.fieldArray = {
+        fieldGroup: field.fieldGroup,
+      };
+      Reflect.deleteProperty(field, 'fieldGroup');
+    });
+
     this.formWidgetService
       .updateFormWidget({
         ...this.widgetConfig(),
-        flatTypeField: this.fields(),
+        flatTypeField: fields,
       })
       .subscribe({
         next: () => {
@@ -291,4 +304,19 @@ function findSameField(
   }
   // @ts-ignore
   return options;
+}
+
+function updateField(
+  fields: IEditorFormlyField[],
+  converCallback: (field: IEditorFormlyField) => void,
+) {
+  fields.forEach((field) => {
+    if (field.fieldGroup) {
+      updateField(field.fieldGroup, converCallback);
+    }
+    if (field.type === IFieldType.SUBTABLE) {
+      converCallback(field);
+    }
+  });
+  return fields;
 }

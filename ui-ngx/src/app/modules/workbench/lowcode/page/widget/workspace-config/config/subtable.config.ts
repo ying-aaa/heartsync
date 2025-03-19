@@ -12,7 +12,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
     className: 'hs-density--5',
   },
   {
-    key: 'fieldArray.fieldGroup',
+    key: 'fieldGroup',
     type: 'fieldset',
     props: {
       label: '列配置',
