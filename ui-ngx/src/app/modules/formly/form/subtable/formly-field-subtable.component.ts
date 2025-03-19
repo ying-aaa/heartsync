@@ -24,10 +24,29 @@ export class FormlyFieldSubTableComponent
   extends FieldArrayType<IEditorFormlyField>
   implements OnInit
 {
+  columns: any = [];
+
   constructor() {
     super();
   }
-  columns: any = [];
+
+  getSubTableItemWidth(
+    fieldGroup: IEditorFormlyField[],
+    itemField: IEditorFormlyField,
+  ): string {
+    const itemRow = itemField.props?.['row'] ?? 0;
+    const totalRow = fieldGroup.reduce(
+      (acc, ori) => acc + (ori.props?.['row'] ?? 0),
+      0,
+    );
+    return (itemRow / totalRow) * 90 + '%';
+  }
+
+  removalLabel(field: IEditorFormlyField) {
+    field.props!.label = '';
+    field.props!['appearance'] = 'outline';
+    return field;
+  }
 
   ngOnInit() {
     this.columns = this.field.fieldArray.fieldGroup!.map((item: any) => {
@@ -36,11 +55,5 @@ export class FormlyFieldSubTableComponent
         td: item.key,
       };
     });
-  }
-
-  removalLabel(field: IEditorFormlyField) {
-    field.props!.label = '';
-    field.props!['appearance'] = 'outline';
-    return field;
   }
 }

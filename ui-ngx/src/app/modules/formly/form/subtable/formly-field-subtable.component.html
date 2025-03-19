@@ -1,8 +1,20 @@
+@let fieldGroup = field.fieldArray.fieldGroup;
 <table class="subtable-table hs-density--5">
+  <colgroup>
+    @for (column of field.fieldArray.fieldGroup; track $index) {
+      <col [style.width]="getSubTableItemWidth(fieldGroup!, column)" />
+    }
+    <col style="width: 10%" />
+  </colgroup>
   <thead>
     <tr class="subtable-header-row">
       @for (column of columns; track $index) {
-        <th class="subtable-header-cell">{{ column.th }}</th>
+        <th
+          class="subtable-header-cell"
+          [style.width]="getSubTableItemWidth(fieldGroup!, fieldGroup[$index])"
+        >
+          {{ column.th }}
+        </th>
       }
       <th class="subtable-header-cell">操作</th>
     </tr>
