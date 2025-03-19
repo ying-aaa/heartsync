@@ -5,13 +5,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { FieldArrayType, FieldType, FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { MatTableModule } from '@angular/material/table';
+import { MatDividerModule } from '@angular/material/divider';
 export interface PeriodicElement {}
 
 @Component({
   selector: 'formly-field-subtable',
   templateUrl: './formly-field-subtable.component.html',
   styleUrls: ['./formly-field-subtable.component.less'],
-  imports: [MatButtonModule, MatTableModule, FormlyModule, MatIconModule],
+  imports: [
+    MatButtonModule,
+    MatTableModule,
+    FormlyModule,
+    MatIconModule,
+    MatDividerModule,
+  ],
 })
 export class FormlyFieldSubTableComponent
   extends FieldArrayType<IEditorFormlyField>
