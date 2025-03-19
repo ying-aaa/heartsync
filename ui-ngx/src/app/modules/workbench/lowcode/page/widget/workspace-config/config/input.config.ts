@@ -95,6 +95,22 @@ export const widget_input_config: IEditorFormlyField[] = [
             type: 'input',
             props: {
               type: 'text',
+              label: '组件绑定数据key',
+              placeholder: '',
+              disabled: false,
+              appearance: 'outline',
+              density: 5,
+              description: '',
+              required: false,
+              readonly: false,
+            },
+            className: 'hs-density--5',
+          },
+          {
+            key: 'fieldId',
+            type: 'input',
+            props: {
+              type: 'text',
               label: '组件ID',
               placeholder: '',
               disabled: true,
