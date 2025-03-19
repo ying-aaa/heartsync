@@ -1,4 +1,4 @@
-<table class="subtable-table">
+<table class="subtable-table hs-density--5">
   <thead>
     <tr class="subtable-header-row">
       @for (column of columns; track $index) {
@@ -15,7 +15,7 @@
           <td class="subtable-body-cell">
             <formly-field
               class="col"
-              [field]="field"
+              [field]="removalLabel(field)"
             ></formly-field>
           </td>
         }

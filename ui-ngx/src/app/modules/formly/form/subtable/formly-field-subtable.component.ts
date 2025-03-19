@@ -37,4 +37,10 @@ export class FormlyFieldSubTableComponent
       };
     });
   }
+
+  removalLabel(field: IEditorFormlyField) {
+    field.props!.label = '';
+    field.props!['appearance'] = 'outline';
+    return field;
+  }
 }
