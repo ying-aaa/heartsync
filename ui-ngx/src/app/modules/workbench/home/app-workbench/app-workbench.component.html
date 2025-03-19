@@ -15,14 +15,14 @@
           [formControl]="appValue"
         />
         @if (appValue.getRawValue()) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="appValue.setValue('')"
-        >
-          <mat-icon aria-hidden="false">close</mat-icon>
-        </button>
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="appValue.setValue('')"
+          >
+            <mat-icon aria-hidden="false">close</mat-icon>
+          </button>
         }
       </mat-form-field>
     </div>
@@ -37,50 +37,54 @@
     >
       <div scrollViewport>
         <div class="flex flex-wrap w-full pt-48px pb-24px gap-24px">
-          @let list = [1,2,3,4,5,6,7,8,9,10,11,12]; @for (item of list; track
-          $index) {
-          <div class="workbench-app-card">
-            <div class="w-120px h-120px rounded-16px">
-              <img
-                class="wh-full"
-                src="/assets/workbench/photo.jpg"
-              />
-            </div>
-            <div class="flex flex-col flex-1 text-14px">
-              <div class="text-18px line-height-36px">宇宙奥妙</div>
-              <div class="flex line-height-24px">
-                <div class="w-84px">当前版本：</div>
-                <div>12</div>
+          @let list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+          @for (item of list; track $index) {
+            <div class="workbench-app-card">
+              <div class="w-120px h-120px rounded-16px">
+                <img
+                  class="wh-full"
+                  src="/assets/workbench/photo.jpg"
+                />
               </div>
-              <div class="flex line-height-24px text-12px">
-                <!-- <span class="w-84px truncate"></span> -->
-                <span class="truncate">2025-01-04 12:59</span>
-              </div>
-              <mat-divider
-                class="w-100% opacity-20 mt-12px! mb-7px! my-auto!"
-              ></mat-divider>
-              <div
-                class="flex line-height-24px h-0 flex-1 items-center justify-around"
-              >
-                @let actionaConfig = [ { iconUrl: '/assets/workbench/edit.png',
-                size: 16 }, { iconUrl: '/assets/workbench/preview.png', size: 20
-                }, ]; @for (item of actionaConfig; track $index) {
-                <span>
-                  <img
-                    [width]="item.size"
-                    [height]="item.size"
-                    [src]="item.iconUrl"
-                  />
-                </span>
-                @if ($index < actionaConfig.length - 1) {
+              <div class="flex flex-col flex-1 text-14px">
+                <div class="text-18px line-height-36px">宇宙奥妙</div>
+                <div class="flex line-height-24px">
+                  <div class="w-84px">当前版本：</div>
+                  <div>12</div>
+                </div>
+                <div class="flex line-height-24px text-12px">
+                  <!-- <span class="w-84px truncate"></span> -->
+                  <span class="truncate">2025-01-04 12:59</span>
+                </div>
                 <mat-divider
-                  [vertical]="true"
-                  class="h-80% opacity-20"
+                  class="w-100% mt-12px! mb-7px! my-auto!"
                 ></mat-divider>
-                } }
+                <div
+                  class="flex line-height-24px h-0 flex-1 items-center justify-around"
+                >
+                  @let actionaConfig =
+                    [
+                      { iconUrl: '/assets/workbench/edit.png', size: 16 },
+                      { iconUrl: '/assets/workbench/preview.png', size: 20 },
+                    ];
+                  @for (item of actionaConfig; track $index) {
+                    <span>
+                      <img
+                        [width]="item.size"
+                        [height]="item.size"
+                        [src]="item.iconUrl"
+                      />
+                    </span>
+                    @if ($index < actionaConfig.length - 1) {
+                      <mat-divider
+                        [vertical]="true"
+                        class="h-80%"
+                      ></mat-divider>
+                    }
+                  }
+                </div>
               </div>
             </div>
-          </div>
           }
         </div>
       </div>
