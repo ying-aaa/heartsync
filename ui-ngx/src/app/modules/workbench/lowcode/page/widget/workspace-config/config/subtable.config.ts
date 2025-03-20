@@ -48,6 +48,22 @@ export const widget_subtable_config: IEditorFormlyField[] = [
     ],
   },
   {
+    key: 'key',
+    type: 'input',
+    props: {
+      type: 'text',
+      label: '组件绑定数据key',
+      placeholder: '',
+      disabled: false,
+      appearance: 'outline',
+      density: 5,
+      description: '',
+      required: false,
+      readonly: false,
+    },
+    className: 'hs-density--5',
+  },
+  {
     type: 'tabs',
     props: {
       label: '页签',
