@@ -195,4 +195,18 @@ export const formlyFormTypes = [
       },
     },
   },
+  {
+    name: 'run-subtable',
+    component: FormlyFieldSubTableComponent,
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        typeName: '普通输入子表',
+        label: '普通输入子表',
+      },
+      expressions: {
+        ...densityExpressions,
+      },
+    },
+  },
 ];

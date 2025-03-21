@@ -124,9 +124,8 @@ export const widget_select_config: IEditorFormlyField[] = [
           },
           {
             key: 'props.options',
-            type: 'subtable',
+            type: 'run-subtable',
             props: {
-              label: '普通输入',
               typeName: '普通输入子表',
               placeholder: '',
               disabled: false,
