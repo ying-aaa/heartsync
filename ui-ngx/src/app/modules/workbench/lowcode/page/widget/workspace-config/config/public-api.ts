@@ -8,6 +8,7 @@ import { widget_button_config } from './button.config';
 import { widget_fieldset_config } from './fieldset.config';
 import { widget_subtable_config } from './subtable.config';
 import { widget_form_config } from './form.config';
+import { widget_select_config } from './select.config';
 
 export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   input: widget_input_config,
@@ -19,4 +20,5 @@ export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   tabs: widget_tabs_config,
   subtable: widget_subtable_config,
   form: widget_form_config,
+  select: widget_select_config,
 };
