@@ -40,7 +40,7 @@ export class FormEditorService {
   });
 
   // 是否编辑模式
-  isEditMode = signal(false);
+  isEditMode = signal(true);
 
   isShowConfigPanel = signal(false);
 

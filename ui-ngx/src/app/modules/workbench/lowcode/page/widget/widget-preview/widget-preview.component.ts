@@ -21,6 +21,7 @@ import {
 } from '@src/app/shared/models/widget.model';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { FormWidgetService } from '@src/app/core/http/widget.service';
+import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
 
 @Component({
   selector: 'hs-widget-preview',
@@ -33,7 +34,7 @@ import { FormWidgetService } from '@src/app/core/http/widget.service';
     MatInputModule,
     MatNativeDateModule,
     FormlyMatDatepickerModule,
-    FormlyModule,
+    FormlyRunModule,
     FormsModule,
     NgScrollbarModule,
     MatDividerModule,

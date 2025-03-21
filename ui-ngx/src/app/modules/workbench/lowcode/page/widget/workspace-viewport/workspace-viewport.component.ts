@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { WorkspaceZoomComponent } from './workspace-zoom/workspace-zoom.component';
 import { CdkDrag } from '@angular/cdk/drag-drop';
+import { FormlyEditorModule } from '@src/app/modules/formly/formly-editor.module';
 
 const viewportConfig = {
   [IEditSizeType.FILL]: {
@@ -43,7 +44,7 @@ const viewportConfig = {
     CdkDrag,
     WorkspaceToobarComponent,
     MatDividerModule,
-    FormlyModule,
+    FormlyEditorModule,
     FormsModule,
     ReactiveFormsModule,
     NgScrollbarModule,
