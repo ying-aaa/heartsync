@@ -2,6 +2,7 @@ import {
   CdkDrag,
   CdkDragDrop,
   CdkDragHandle,
+  CdkDragPlaceholder,
   CdkDropList,
 } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
@@ -16,9 +17,10 @@ import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
   templateUrl: './formly-field-array.component.html',
   styleUrls: ['./formly-field-array.component.less'],
   imports: [
-    CdkDropList,
     CdkDrag,
+    CdkDropList,
     CdkDragHandle,
+    CdkDragPlaceholder,
     FormlyModule,
     MatIcon,
     MatButtonModule,

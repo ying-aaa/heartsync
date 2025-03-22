@@ -1,26 +1,36 @@
 <div
   cdkDropList
   (cdkDropListDropped)="cdkDropListDropped($event)"
+  class="content-list"
 >
   @for (f of field.fieldGroup; track $index) {
     <div
-      class="flex-center mb-8px"
+      class="flex-center mb-8px content-box"
       [style]="f.props!['style']"
       cdkDrag
     >
+      <div
+        *cdkDragPlaceholder
+        class="content-custom-placeholder"
+      ></div>
       <mat-icon
-        class="cursor-move text-20px w-20px! h-20px!"
+        class="cursor-move text-20px w-20px! h-20px! pr-5px"
         cdkDragHandle
         >drag_indicator</mat-icon
       >
-      <div class="flex-1 w-0 mx-5px">
+      @let fieldGroupLength = f.fieldGroup?.length || 1;
+      <div class="flex-1 w-0 flex gap-5px">
         @for (fc of f.fieldGroup; track $index) {
-          <formly-field [field]="fc"></formly-field>
+          <formly-field
+            [style.width]="100 / fieldGroupLength + '%'"
+            [field]="fc"
+          >
+          </formly-field>
         }
       </div>
       <mat-icon
         (click)="removeField($index)"
-        class="cursor-pointer text-20px w-20px! h-20px!"
+        class="cursor-pointer text-20px w-20px! h-20px! pl-5px ml-5px"
         >delete</mat-icon
       >
     </div>
