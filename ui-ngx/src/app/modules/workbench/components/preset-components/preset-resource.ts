@@ -869,13 +869,13 @@ export const presetResource: IEditorFormlyField[] = [
             fieldGroup: [
               {
                 key: 'input',
-                type: 'textarea',
+                type: 'input',
                 _design: true,
                 props: {
                   row: 1,
                   appearance: 'fill',
-                  label: '多行文本',
-                  typeName: '多行文本', // 新增属性
+                  label: '单行文本',
+                  typeName: '单行文本', // 新增属性
                 },
               },
             ],
