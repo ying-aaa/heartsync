@@ -14,6 +14,7 @@ export interface IEditorFormlyField extends FormlyFieldConfig {
   childrenPath?: string; // Lodash path
   _design?: boolean;
   _form?: true;
+  _bindKey?: true;
 }
 
 export enum IFieldType {

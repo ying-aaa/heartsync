@@ -161,8 +161,12 @@ export class FormEditorService {
   ) {
     field = deepClone(field);
     function addFieldId(field: IEditorFormlyField) {
-      field.key = generateUUID();
-      field.fieldId = `${field.type}_key_${field.key}`;
+      const key = generateUUID();
+
+      // 有一些外层容器不需要绑定key
+      field.key = field._bindKey ? key : '';
+
+      field.fieldId = `${field.type}_key_${key}`;
       if (field.fieldGroup) {
         field.fieldGroup.forEach(addFieldId);
       }

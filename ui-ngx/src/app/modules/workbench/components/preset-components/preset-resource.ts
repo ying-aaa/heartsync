@@ -137,6 +137,7 @@ export const presetResource: IEditorFormlyField[] = [
                 key: 'input',
                 type: 'input',
                 _design: true,
+                _bindKey: true,
                 props: {
                   label: '第一个文本',
                   typeName: '第一个文本', // 新增属性
@@ -155,6 +156,7 @@ export const presetResource: IEditorFormlyField[] = [
                 key: 'input',
                 type: 'input',
                 _design: true,
+                _bindKey: true,
                 props: {
                   label: '第二个文本',
                   typeName: '第二个文本', // 新增属性
@@ -173,6 +175,7 @@ export const presetResource: IEditorFormlyField[] = [
                 key: 'input',
                 type: 'input',
                 _design: true,
+                _bindKey: true,
                 props: {
                   label: '第三个文本',
                   typeName: '第三个文本', // 新增属性
@@ -203,6 +206,7 @@ export const presetResource: IEditorFormlyField[] = [
                 key: 'input',
                 type: 'input',
                 _design: true,
+                _bindKey: true,
                 props: {
                   type: 'text',
                   label: '第一个文本',
@@ -221,6 +225,7 @@ export const presetResource: IEditorFormlyField[] = [
                 key: 'input',
                 type: 'input',
                 _design: true,
+                _bindKey: true,
                 props: {
                   label: '第二个文本',
                   typeName: '第二个文本', // 新增属性
@@ -239,6 +244,7 @@ export const presetResource: IEditorFormlyField[] = [
                 key: 'input',
                 type: 'input',
                 _design: true,
+                _bindKey: true,
                 props: {
                   type: 'text',
                   label: '第三个文本',
@@ -287,6 +293,7 @@ export const presetResource: IEditorFormlyField[] = [
                     key: 'input',
                     type: 'input',
                     _design: true,
+                    _bindKey: true,
                     props: {
                       type: 'text',
                       label: '第一个文本',
@@ -308,6 +315,7 @@ export const presetResource: IEditorFormlyField[] = [
                     key: 'input',
                     type: 'input',
                     _design: true,
+                    _bindKey: true,
                     props: {
                       type: 'text',
                       label: '第二个文本',
@@ -329,6 +337,7 @@ export const presetResource: IEditorFormlyField[] = [
                     key: 'input',
                     type: 'input',
                     _design: true,
+                    _bindKey: true,
                     props: {
                       type: 'text',
                       label: '第三个文本',
@@ -362,6 +371,7 @@ export const presetResource: IEditorFormlyField[] = [
                     key: 'input',
                     type: 'input',
                     _design: true,
+                    _bindKey: true,
                     props: {
                       type: 'text',
                       label: '第一个文本',
@@ -374,6 +384,7 @@ export const presetResource: IEditorFormlyField[] = [
                 key: 'column',
                 type: 'column',
                 _design: true,
+                _bindKey: true,
                 props: {
                   label: '第二个',
                   typeName: '第二个', // 新增属性
@@ -383,6 +394,7 @@ export const presetResource: IEditorFormlyField[] = [
                     key: 'input',
                     type: 'input',
                     _design: true,
+                    _bindKey: true,
                     props: {
                       type: 'text',
                       label: '第二个文本',
@@ -404,6 +416,7 @@ export const presetResource: IEditorFormlyField[] = [
                     key: 'input',
                     type: 'input',
                     _design: true,
+                    _bindKey: true,
                     props: {
                       type: 'text',
                       label: '第三个文本',
@@ -437,6 +450,7 @@ export const presetResource: IEditorFormlyField[] = [
                     key: 'input',
                     type: 'input',
                     _design: true,
+                    _bindKey: true,
                     props: {
                       type: 'text',
                       label: '第一个文本',
@@ -458,6 +472,7 @@ export const presetResource: IEditorFormlyField[] = [
                     key: 'input',
                     type: 'input',
                     _design: true,
+                    _bindKey: true,
                     props: {
                       type: 'text',
                       label: '第二个文本',
@@ -481,6 +496,7 @@ export const presetResource: IEditorFormlyField[] = [
                     _design: true,
                     props: {
                       type: 'text',
+                      _bindKey: true,
                       label: '第三个文本',
                       typeName: '第三个文本', // 新增属性
                     },
@@ -532,6 +548,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'text',
             type: 'input',
             _design: true,
+            _bindKey: true,
             props: {
               type: 'text',
               label: '单行文本',
@@ -542,6 +559,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'textarea',
             type: 'textarea',
             _design: true,
+            _bindKey: true,
             props: {
               label: '多行文本',
               typeName: '多行文本', // 新增属性
@@ -551,6 +569,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'number',
             type: 'input',
             _design: true,
+            _bindKey: true,
             props: {
               type: 'number',
               label: '数字',
@@ -561,6 +580,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'password',
             type: 'input',
             _design: true,
+            _bindKey: true,
             props: {
               type: 'password',
               label: '密码',
@@ -571,6 +591,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'color',
             type: 'input',
             _design: true,
+            _bindKey: true,
             props: {
               type: 'color',
               label: '颜色',
@@ -581,6 +602,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'datepicker',
             type: 'datepicker',
             _design: true,
+            _bindKey: true,
             props: {
               label: '日期',
               typeName: '日期', // 新增属性
@@ -590,6 +612,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'richText',
             type: 'rich-text', // 假设你有富文本组件
             _design: true,
+            _bindKey: true,
             props: {
               label: '富文本',
               typeName: '富文本', // 新增属性
@@ -599,6 +622,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'draw',
             type: 'draw', // 假设你有手绘组件
             _design: true,
+            _bindKey: true,
             props: {
               label: '手绘',
               typeName: '手绘', // 新增属性
@@ -628,6 +652,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'radio',
             type: 'radio',
             _design: true,
+            _bindKey: true,
             props: {
               label: '单选',
               typeName: '单选', // 新增属性
@@ -637,6 +662,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'checkbox',
             type: 'checkbox',
             _design: true,
+            _bindKey: true,
             props: {
               label: '多选',
               typeName: '多选', // 新增属性
@@ -646,6 +672,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'toggle',
             type: 'toggle',
             _design: true,
+            _bindKey: true,
             props: {
               label: '开关',
               typeName: '开关', // 新增属性
@@ -655,6 +682,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'select',
             type: 'select',
             _design: true,
+            _bindKey: true,
             props: {
               label: '下拉单选',
               typeName: '下拉单选', // 新增属性
@@ -664,6 +692,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'select_multi',
             type: 'select',
             _design: true,
+            _bindKey: true,
             props: {
               label: '下拉多选',
               typeName: '下拉多选', // 新增属性
@@ -681,6 +710,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'slider',
             type: 'slider',
             _design: true,
+            _bindKey: true,
             props: {
               label: '滑块',
               typeName: '滑块', // 新增属性
@@ -690,6 +720,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'rating',
             type: 'rating',
             _design: true,
+            _bindKey: true,
             props: {
               label: '评分',
               typeName: '评分', // 新增属性
@@ -699,6 +730,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'tree-select',
             type: 'tree-select',
             _design: true,
+            _bindKey: true,
             props: {
               label: '下拉树形',
               typeName: '下拉树形', // 新增属性
@@ -708,6 +740,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'popup-select',
             type: 'popup-select',
             _design: true,
+            _bindKey: true,
             props: {
               label: '弹窗选择',
               typeName: '弹窗选择', // 新增属性
@@ -737,6 +770,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'photo',
             type: 'file-upload',
             _design: true,
+            _bindKey: true,
             props: {
               label: '照片',
               typeName: '照片', // 新增属性
@@ -746,6 +780,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'file',
             type: 'file-upload',
             _design: true,
+            _bindKey: true,
             props: {
               label: '文件',
               typeName: '文件', // 新增属性
@@ -757,8 +792,8 @@ export const presetResource: IEditorFormlyField[] = [
   },
   {
     key: 'system',
+    _bindKey: true,
     _form: true,
-    _design: true,
     props: {
       label: '系统',
       typeName: '系统', // 新增属性
@@ -775,6 +810,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'user',
             type: 'system-user',
             _design: true,
+            _bindKey: true,
             props: {
               label: '用户',
               typeName: '用户', // 新增属性
@@ -784,6 +820,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'organization',
             type: 'system-organization',
             _design: true,
+            _bindKey: true,
             props: {
               label: '组织',
               typeName: '组织', // 新增属性
@@ -813,6 +850,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'address',
             type: 'address-input',
             _design: true,
+            _bindKey: true,
             props: {
               label: '地址输入',
               typeName: '地址输入', // 新增属性
@@ -822,6 +860,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'map',
             type: 'map-display',
             _design: true,
+            _bindKey: true,
             props: {
               label: '地图展示',
               typeName: '地图展示', // 新增属性
@@ -831,6 +870,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'locationSelect',
             type: 'location-select',
             _design: true,
+            _bindKey: true,
             props: {
               label: '位置选择',
               typeName: '位置选择', // 新增属性
@@ -862,6 +902,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'normalInput',
             type: 'subtable',
             _design: true,
+            _bindKey: true,
             props: {
               label: '普通输入',
               typeName: '普通输入子表', // 新增属性
@@ -871,6 +912,7 @@ export const presetResource: IEditorFormlyField[] = [
                 key: 'input',
                 type: 'input',
                 _design: true,
+                _bindKey: true,
                 props: {
                   row: 1,
                   appearance: 'fill',
@@ -893,6 +935,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'popupList',
             type: 'popup-list',
             _design: true,
+            _bindKey: true,
             props: {
               label: '弹窗列表选择',
               typeName: '弹窗列表选择', // 新增属性
@@ -902,6 +945,7 @@ export const presetResource: IEditorFormlyField[] = [
             key: 'popupForm',
             type: 'popup-form',
             _design: true,
+            _bindKey: true,
             props: {
               label: '弹窗表单输入',
               typeName: '弹窗表单输入', // 新增属性
