@@ -11,6 +11,7 @@ import {
 } from '../widget-editor.service';
 import { MatButtonModule } from '@angular/material/button';
 import { FormEditorService } from '../form-editor.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'hs-workspace-contorl',
@@ -24,6 +25,7 @@ import { FormEditorService } from '../form-editor.service';
     MatDividerModule,
     MatButtonModule,
     MatIconModule,
+    MatTooltipModule,
   ],
 })
 export class WorkspaceContorlComponent implements OnInit {

@@ -54,6 +54,7 @@
 .mr-8px{margin-right:8px;}
 .mt-10px\!{margin-top:10px !important;}
 .mt-12px\!{margin-top:12px !important;}
+.mt-1px{margin-top:1px;}
 .mt-30px{margin-top:30px;}
 .block{display:block;}
 .hidden{display:none;}
@@ -189,6 +190,7 @@
 .indent{text-indent:1.5rem;}
 .text-12px{font-size:12px;}
 .text-14px{font-size:14px;}
+.text-16px{font-size:16px;}
 .text-18px{font-size:18px;}
 .text-18px\!{font-size:18px !important;}
 .text-20px{font-size:20px;}

@@ -14,9 +14,14 @@
     </mat-icon>
   </button>
 
-  <div class="pl-50px">
+  <div class="pl-50px flex">
     <span class="text-20px font-bold mr-8px">{{ activeModeName() }} :</span>
-    <span class="text-18px">{{ activeWidgetName }}</span>
+    <div
+      [matTooltip]="activeWidgetName"
+      class="text-16px truncate flex-1 w-0 mt-1px"
+    >
+      {{ activeWidgetName }}
+    </div>
   </div>
 </div>
 <mat-divider class="w-full mb-10px!"></mat-divider>
