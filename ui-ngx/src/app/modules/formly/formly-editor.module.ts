@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormlyModule, FormlyConfig } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { formlyDisplayTypes } from '@src/app/modules/formly/display/formly-display-types';
@@ -12,9 +12,17 @@ import {
 } from '@src/app/shared/models/public-api';
 import { FormlyContorlWrapperComponent } from './layout/control/formly-control-wrapper.component';
 import { FormlyFieldSubTableItemComponent } from './layout/subtable-item/formly-field-subtable-item.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
+import { FormlyMatSliderModule } from '@ngx-formly/material/slider';
+import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 
 export function editorExtension(field: IEditorFormlyField) {
-  console.log('%c Line:17 🍑', 'color:#e41a6a', field);
   // 最外层列
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
@@ -53,8 +61,18 @@ export function editorExtension(field: IEditorFormlyField) {
 
 @NgModule({
   imports: [
+    MatNativeDateModule,
+    FormlyMatDatepickerModule,
+    FormlyMatToggleModule,
+    FormlyMatSliderModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatDividerModule,
     ReactiveFormsModule,
-    FormlyModule.forChild({
+    FormsModule,
+    FormlyModule.forRoot({
       types: [...formlyFormTypes, ...formlyLayoutTypes, ...formlyDisplayTypes],
       validationMessages: [{ name: 'required', message: '这个字段是必填的！' }],
       wrappers: [

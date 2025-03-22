@@ -39,7 +39,6 @@ const viewportConfig = {
   selector: 'hs-workspace-viewport',
   templateUrl: './workspace-viewport.component.html',
   styleUrls: ['./workspace-viewport.component.less'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CdkDrag,
     WorkspaceToobarComponent,

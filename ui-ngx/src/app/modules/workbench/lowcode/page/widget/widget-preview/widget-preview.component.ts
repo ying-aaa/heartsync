@@ -27,20 +27,7 @@ import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
   selector: 'hs-widget-preview',
   templateUrl: './widget-preview.component.html',
   styleUrls: ['./widget-preview.component.less'],
-  imports: [
-    MatIconModule,
-    MatButtonModule,
-    FormlyMaterialModule,
-    MatInputModule,
-    MatNativeDateModule,
-    FormlyMatDatepickerModule,
-    FormlyRunModule,
-    FormsModule,
-    NgScrollbarModule,
-    MatDividerModule,
-    FormlyMatToggleModule,
-    FormlyMatSliderModule,
-  ],
+  imports: [MatIconModule, MatButtonModule, FormlyRunModule, MatDividerModule],
 })
 export class WidgetPreviewComponent implements OnInit {
   widgetName = '';
