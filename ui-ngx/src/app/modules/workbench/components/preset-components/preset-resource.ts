@@ -384,7 +384,6 @@ export const presetResource: IEditorFormlyField[] = [
                 key: 'column',
                 type: 'column',
                 _design: true,
-                _bindKey: true,
                 props: {
                   label: '第二个',
                   typeName: '第二个', // 新增属性
