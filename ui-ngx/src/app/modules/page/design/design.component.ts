@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { WorkbenchHeaderComponent } from '../components/workbench-header/workbench-header.component';
+import { WorkbenchHeaderComponent } from '../workbench/components/workbench-header/workbench-header.component';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'hs-lowcode',
-  templateUrl: './lowcode.component.html',
+  selector: 'hs-design',
+  templateUrl: './design.component.html',
   imports: [WorkbenchHeaderComponent, RouterModule],
 })
-export class LowcodeComponent implements OnInit {
+export class DesignComponent implements OnInit {
   @ViewChild('outlet', { static: true }) outlet!: RouterOutlet;
   hiddenMenu = false;
 

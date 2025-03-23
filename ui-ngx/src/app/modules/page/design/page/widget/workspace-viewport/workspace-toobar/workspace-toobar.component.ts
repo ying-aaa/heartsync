@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
-import { FormEditorService } from '@app/modules/workbench/lowcode/page/widget/form-editor.service';
+import { FormEditorService } from '@src/app/modules/page/design/page/widget/form-editor.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
 import { Router } from '@angular/router';
@@ -28,10 +28,8 @@ export class WorkspaceToobarComponent implements OnInit {
   }
 
   previewWidget() {
-    // window.open(`/lowcode/preview/${this.formEditorService.fieldsId()}`);
-
     this.router.navigate([
-      '/lowcode/preview',
+      '/design/preview',
       this.formEditorService.fieldsId(),
     ]);
   }

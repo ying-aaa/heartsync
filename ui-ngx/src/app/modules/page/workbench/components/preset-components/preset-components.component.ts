@@ -12,7 +12,7 @@ import {
   CdkDragPlaceholder,
   CdkDragEnd,
 } from '@angular/cdk/drag-drop';
-import { FormEditorService } from '../../lowcode/page/widget/form-editor.service';
+import { FormEditorService } from '../../../design/page/widget/form-editor.service';
 import {
   ICdkDrapActionType,
   IEditorFormlyField,

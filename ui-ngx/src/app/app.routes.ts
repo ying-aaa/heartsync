@@ -1,17 +1,17 @@
 import { Routes } from '@angular/router';
-import { PageNotFoundComponent } from './modules/common/page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from './modules/page/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   //   { path: "self", redirectTo: "/login/login-form", pathMatch: "full" },
   {
     path: '',
     data: { preload: true },
-    loadChildren: () => import('./modules/workbench/workbench.routing'),
+    loadChildren: () => import('./modules/page/workbench/workbench.routing'),
   },
   {
-    path: 'lowcode',
+    path: 'design',
     data: { preload: true },
-    loadChildren: () => import('./modules/workbench/lowcode/lowcode.routing'),
+    loadChildren: () => import('./modules/page/design/design.routing'),
   },
   { path: '**', component: PageNotFoundComponent },
 ];

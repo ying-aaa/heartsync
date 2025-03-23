@@ -12,7 +12,7 @@ import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { FormEditorService } from '../../../workbench/lowcode/page/widget/form-editor.service';
+import { FormEditorService } from '../../../page/design/page/widget/form-editor.service';
 
 @Component({
   selector: 'formly-field-tabs',

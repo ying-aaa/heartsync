@@ -53,7 +53,7 @@ export class WidgetPreviewComponent implements OnInit {
   ) {}
 
   backWorkSpace() {
-    this.router.navigate(['/lowcode/widget']);
+    this.router.navigate(['/design/widget']);
   }
 
   openFormModelDialog() {

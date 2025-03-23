@@ -15,7 +15,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { FormEditorService } from '@app/modules/workbench/lowcode/page/widget/form-editor.service';
+import { FormEditorService } from '@src/app/modules/page/design/page/widget/form-editor.service';
 
 @Component({
   selector: 'formly-control-wrapper',

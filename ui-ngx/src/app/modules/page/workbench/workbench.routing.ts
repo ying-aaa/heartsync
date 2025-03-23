@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import WorkbenchPageRoutes from './home/workbench-page.routing';
+import WorkbenchPageRoutes from './page/workbench-page.routing';
 
 export default [
   { path: '', redirectTo: 'workbench', pathMatch: 'full' },

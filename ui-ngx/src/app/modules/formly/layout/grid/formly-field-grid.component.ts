@@ -12,7 +12,7 @@ import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { FormEditorService } from '@app/modules/workbench/lowcode/page/widget/form-editor.service';
+import { FormEditorService } from '@src/app/modules/page/design/page/widget/form-editor.service';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';
 

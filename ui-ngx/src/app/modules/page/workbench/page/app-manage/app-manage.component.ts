@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
 import { HsTableComponent } from '@src/app/shared/components/hs-table/hs-table.component';
-import { HsFancytreeComponent } from '../../../../shared/components/hs-fancytree/hs-fancytree.component';
+import { HsFancytreeComponent } from '../../../../../shared/components/hs-fancytree/hs-fancytree.component';
 
 @Component({
   selector: 'app-app-manage',
