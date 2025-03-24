@@ -9,6 +9,7 @@ import { FormEditorService } from '../../form-editor.service';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 interface ExampleFlatNode {
   expandable: boolean;
@@ -21,9 +22,15 @@ interface ExampleFlatNode {
   selector: 'hs-widget-outline',
   templateUrl: './widget-outline.component.html',
   styleUrls: ['./widget-outline.component.less'],
-  imports: [CommonModule, MatTreeModule, MatButtonModule, MatIconModule],
   providers: [NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    MatTreeModule,
+    MatButtonModule,
+    MatIconModule,
+    NgScrollbarModule,
+  ],
 })
 export class WidgetOutlineComponent implements OnInit {
   dataSource$ = this.formEditorService.flatField$ as Observable<

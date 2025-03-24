@@ -92,8 +92,8 @@ export class FormEditorService {
               }
               this.isShowConfigPanel.set(false);
               this.selectField(null);
-
               this.formGroup = new FormGroup({});
+              this.flatField$.next(this.getFlatField());
               this.options.build && this.options.build();
             },
             error: (err: any) => console.error('Get widget error:', err),
@@ -270,7 +270,7 @@ export class FormEditorService {
     return field.reduce((acc, field) => {
       acc.push({
         // @ts-ignore
-        name: field.type + '_' + field.key,
+        name: field.fieldId?.replace('_key', ''),
         level,
         expandable: !!field.fieldGroup,
         field,

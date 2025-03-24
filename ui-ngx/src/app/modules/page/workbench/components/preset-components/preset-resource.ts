@@ -40,6 +40,7 @@ export const presetResource: IEditorFormlyField[] = [
                   row: 1,
                   label: '列',
                   typeName: '列', // 新增属性
+                  icon: 'dehaze',
                 },
               },
               {
@@ -51,6 +52,7 @@ export const presetResource: IEditorFormlyField[] = [
                   row: 2,
                   label: '列',
                   typeName: '列', // 新增属性
+                  icon: 'dehaze',
                 },
               },
               {
@@ -62,6 +64,7 @@ export const presetResource: IEditorFormlyField[] = [
                   row: 3,
                   label: '列',
                   typeName: '列', // 新增属性
+                  icon: 'dehaze',
                 },
               },
             ],
@@ -95,6 +98,7 @@ export const presetResource: IEditorFormlyField[] = [
                       row: 1,
                       label: '列',
                       typeName: '列', // 新增属性
+                      icon: 'dehaze',
                     },
                   },
                   {
@@ -106,6 +110,7 @@ export const presetResource: IEditorFormlyField[] = [
                       row: 2,
                       label: '列',
                       typeName: '列', // 新增属性
+                      icon: 'dehaze',
                     },
                   },
                   {
@@ -117,6 +122,7 @@ export const presetResource: IEditorFormlyField[] = [
                       row: 3,
                       label: '列',
                       typeName: '列', // 新增属性
+                      icon: 'dehaze',
                     },
                   },
                 ],
@@ -287,6 +293,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第一个',
                   typeName: '第一个', // 新增属性
+                  icon: 'dehaze',
                 },
                 fieldGroup: [
                   {
@@ -309,6 +316,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第二个',
                   typeName: '第二个', // 新增属性
+                  icon: 'dehaze',
                 },
                 fieldGroup: [
                   {
@@ -331,6 +339,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第三个',
                   typeName: '第三个', // 新增属性
+                  icon: 'dehaze',
                 },
                 fieldGroup: [
                   {
@@ -365,6 +374,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第一个',
                   typeName: '第一个', // 新增属性
+                  icon: 'dehaze',
                 },
                 fieldGroup: [
                   {
@@ -387,6 +397,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第二个',
                   typeName: '第二个', // 新增属性
+                  icon: 'dehaze',
                 },
                 fieldGroup: [
                   {
@@ -409,6 +420,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第三个',
                   typeName: '第三个', // 新增属性
+                  icon: 'dehaze',
                 },
                 fieldGroup: [
                   {
@@ -443,6 +455,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第一个',
                   typeName: '第一个', // 新增属性
+                  icon: 'dehaze',
                 },
                 fieldGroup: [
                   {
@@ -465,6 +478,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第二个',
                   typeName: '第二个', // 新增属性
+                  icon: 'dehaze',
                 },
                 fieldGroup: [
                   {
@@ -487,6 +501,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '第三个',
                   typeName: '第三个', // 新增属性
+                  icon: 'dehaze',
                 },
                 fieldGroup: [
                   {
