@@ -1,0 +1,63 @@
+<content class="wh-full">
+  <div
+    cdkDrag
+    [cdkDragDisabled]="!zoomControl().isMovable()"
+    [style.transform]="zoomControl().transformScale()"
+    class="widget-content-wrapper w-375px h-768px bg-red"
+  >
+    <!-- 遮罩层 -->
+    <!-- (dblclick)="formEditorService.checkEditModeState(true)" -->
+    <div class="viewport-overlay-layer flex-center">
+      <button
+        mat-flat-button
+        class="px-16px! mx-8px"
+      >
+        <mat-icon matChipAvatar>design_services</mat-icon> 去设计
+      </button>
+    </div>
+
+    <!-- 内容 -->
+    <!-- <div
+      [class.viewport-content-bg]="isFieldsEmpty"
+      class="wh-full"
+    >
+      <ng-scrollbar
+        class="wh-full!"
+        #scrollbarRef="ngScrollbar"
+        externalViewport
+        visibility="hover"
+        appearance="compact"
+        orientation="auto"
+      >
+        <div scrollViewport>
+          <div class="render-canvar">
+            <formly-form
+              [form]="formEditorService.formGroup"
+              [fields]="formEditorService.fields()"
+              [model]="formEditorService.model"
+              [options]="formEditorService.options"
+            ></formly-form>
+          </div>
+        </div>
+      </ng-scrollbar>
+    </div> -->
+
+    <!-- 无配置时提示 -->
+    <!-- @if (!isFieldsEmpty) {
+      <div
+        class="absolute top-0 left-0 wh-full flex-col flex-center pb-80px -z-999 opacity-80"
+      >
+        <img
+          class="w-180px h-180px"
+          src="assets/workbench/widget-workbench-tips.png"
+        />
+        <div class="mt-30px text-18px">暂无内容，拖拽组件进来吧！</div>
+      </div>
+    } -->
+  </div>
+
+  <hs-widget-zoom
+    #ZoomControl
+    class="absolute left-50% -translate-x-50% top-20px"
+  ></hs-widget-zoom>
+</content>

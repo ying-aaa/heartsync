@@ -4,11 +4,24 @@ import { ChangeDetectorRef, Component, signal, ViewChild } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { environment } from '@src/environments/environment';
-import { WorkbenchHeaderComponent } from './components/workbench-header/workbench-header.component';
+import { WorkbenchHeaderComponent } from '../common/workbench-header/workbench-header.component';
 
 @Component({
   selector: 'hs-workbench',
-  templateUrl: './workbench.component.html',
+  template: `
+    <hs-workbench-header [outlet]="outlet"></hs-workbench-header>
+    <div class="h-0 flex-1">
+      <router-outlet #outlet="outlet"></router-outlet>
+    </div>
+  `,
+  styles: `
+    :host {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+  `,
   imports: [
     RouterModule,
     CommonModule,

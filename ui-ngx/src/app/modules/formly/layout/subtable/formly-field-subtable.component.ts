@@ -16,7 +16,7 @@ import {
   CdkDragPlaceholder,
   CdkDropList,
 } from '@angular/cdk/drag-drop';
-import { FormEditorService } from '@src/app/modules/page/design/page/widget/form-editor.service';
+import { FormEditorService } from '@src/app/core/services/form-editor.service';
 
 @Component({
   selector: 'formly-field-subtable',

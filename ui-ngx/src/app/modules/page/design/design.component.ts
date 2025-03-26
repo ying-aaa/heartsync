@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { WorkbenchHeaderComponent } from '../workbench/components/workbench-header/workbench-header.component';
+import { WorkbenchHeaderComponent } from '../common/workbench-header/workbench-header.component';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({

@@ -13,7 +13,7 @@ import {
   IEditSizeType,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { FormEditorService } from '@src/app/modules/page/design/page/widget/form-editor.service';
+import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { CommonModule } from '@angular/common';
 import { ConcatUnitsPipe } from '../../../../shared/pipes/units.pipe';
 

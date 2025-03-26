@@ -17,7 +17,7 @@ import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { FormEditorService } from '../../page/design/widget/form-editor.service';
+import { FormEditorService } from '../../../../core/services/form-editor.service';
 @Component({
   selector: 'hs-preset-components',
   templateUrl: './preset-components.component.html',
