@@ -1,6 +1,3 @@
-@let type = formEditorService.widgetConfig().workSizeConfig?.['type']!;
-@let viewportSize = viewportConfig[type || 'fill'];
-
 <content class="wh-full">
   <div class="widget-wrapper">
     <!-- 遮罩层 -->
@@ -8,6 +5,7 @@
     <div
       cdkDrag
       [cdkDragDisabled]="!zoomControl().isMovable()"
+      [style]="workSizeConfig.size | concatUnits"
       [style.transform]="zoomControl().transformScale()"
       class="widget-viewport-container"
     >

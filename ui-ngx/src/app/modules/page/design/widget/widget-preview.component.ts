@@ -5,6 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
+import { IEditSizeConfig } from '@src/app/shared/models/public-api';
+import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'hs-widget-preview',
   templateUrl: './widget-preview.component.html',
@@ -15,6 +18,8 @@ import { WidgetEditorService } from '@src/app/core/services/widget-editor.servic
     MatButtonModule,
     MatIconModule,
     NgScrollbarModule,
+    ConcatUnitsPipe,
+    CommonModule,
   ],
 })
 export class WidgetPreviewComponent {
@@ -22,7 +27,7 @@ export class WidgetPreviewComponent {
 
   constructor(public widgetEditorService: WidgetEditorService) {}
 
-  get workSizeType(): string {
-    return this.widgetEditorService.widgetConfig().workSizeConfig?.['type']!;
+  get workSizeConfig(): IEditSizeConfig {
+    return this.widgetEditorService.currentWidgetConfig().workSizeConfig!;
   }
 }

@@ -58,8 +58,10 @@ export enum IWidgetType {
 export interface IEditSizeConfig {
   type: IEditSizeType; // 设备类型
   size: {
-    width: number; // 宽度
-    height: number; // 高度
+    width: number;
+    widthUnits: string;
+    height: number;
+    heightUnits: string;
   };
 }
 
