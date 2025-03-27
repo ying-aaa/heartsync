@@ -1,46 +1,48 @@
+@let type = formEditorService.widgetConfig().workSizeConfig?.['type']!;
+@let viewportSize = viewportConfig[type || 'fill'];
+
 <content class="wh-full">
-  <div
-    cdkDrag
-    [cdkDragDisabled]="!zoomControl().isMovable()"
-    [style.transform]="zoomControl().transformScale()"
-    class="widget-content-wrapper w-375px h-768px bg-red"
-  >
+  <div class="widget-wrapper">
     <!-- 遮罩层 -->
     <!-- (dblclick)="formEditorService.checkEditModeState(true)" -->
-    <div class="viewport-overlay-layer flex-center">
-      <button
-        mat-flat-button
-        class="px-16px! mx-8px"
-      >
-        <mat-icon matChipAvatar>design_services</mat-icon> 去设计
-      </button>
-    </div>
-
-    <!-- 内容 -->
-    <!-- <div
-      [class.viewport-content-bg]="isFieldsEmpty"
-      class="wh-full"
+    <div
+      cdkDrag
+      [cdkDragDisabled]="!zoomControl().isMovable()"
+      [style.transform]="zoomControl().transformScale()"
+      class="widget-viewport-container"
     >
-      <ng-scrollbar
-        class="wh-full!"
-        #scrollbarRef="ngScrollbar"
-        externalViewport
-        visibility="hover"
-        appearance="compact"
-        orientation="auto"
-      >
-        <div scrollViewport>
-          <div class="render-canvar">
-            <formly-form
-              [form]="formEditorService.formGroup"
-              [fields]="formEditorService.fields()"
-              [model]="formEditorService.model"
-              [options]="formEditorService.options"
-            ></formly-form>
+      <div class="viewport-overlay-layer flex-center">
+        <button
+          mat-flat-button
+          class="px-16px! mx-8px"
+        >
+          <mat-icon matChipAvatar>design_services</mat-icon> 去设计
+        </button>
+      </div>
+
+      <!-- 内容 -->
+      <div class="wh-full">
+        <ng-scrollbar
+          class="wh-full!"
+          #scrollbarRef="ngScrollbar"
+          externalViewport
+          visibility="hover"
+          appearance="compact"
+          orientation="auto"
+        >
+          <div scrollViewport>
+            <div class="render-canvar">
+              <!-- <formly-form
+                [form]="formEditorService.formGroup"
+                [fields]="formEditorService.fields()"
+                [model]="formEditorService.model"
+                [options]="formEditorService.options"
+              ></formly-form> -->
+            </div>
           </div>
-        </div>
-      </ng-scrollbar>
-    </div> -->
+        </ng-scrollbar>
+      </div>
+    </div>
 
     <!-- 无配置时提示 -->
     <!-- @if (!isFieldsEmpty) {

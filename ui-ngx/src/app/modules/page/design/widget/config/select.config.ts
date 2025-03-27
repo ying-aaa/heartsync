@@ -1,6 +1,6 @@
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 
-export const widget_select_config: IEditorFormlyField[] = [
+export const select_config: IEditorFormlyField[] = [
   {
     type: 'tabs',
     props: {

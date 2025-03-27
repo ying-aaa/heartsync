@@ -1,28 +1,27 @@
 import { Component, effect, input, OnInit } from '@angular/core';
 import { FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
-import { CONFIT_RESOURCE } from './config/public-api';
+import { CONFIT_RESOURCE } from '../../page/design/widget/config/public-api';
 import { FormGroup } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { FormlyEditorModule } from '@src/app/modules/formly/formly-editor.module';
-
 @Component({
-  selector: 'hs-workspace-config',
-  templateUrl: './workspace-config.component.html',
-  styleUrls: ['./workspace-config.component.less'],
+  selector: 'hs-formly-config',
+  templateUrl: './formly-config.component.html',
+  styleUrls: ['./formly-config.component.less'],
   imports: [FormlyEditorModule, MatDividerModule],
 })
-export class WorkspaceConfigComponent implements OnInit {
-  selectedField = input<any>();
-  configForm = new FormGroup({});
-  configFields: IEditorFormlyField[] = [];
+export class FormlyConfigComponent implements OnInit {
+  type = input();
+  model = input<any>();
+  formGroup = new FormGroup({});
+  fields: IEditorFormlyField[] = [];
 
   constructor() {
     effect(() => {
-      this.configFields = this.getFieldConfig(
-        this.selectedField()?.type as string,
-      );
-      this.configForm = new FormGroup({});
+      const type: string = this.type() || this.model()?.type;
+      this.fields = this.getFieldConfig(type);
+      this.formGroup = new FormGroup({});
     });
   }
 

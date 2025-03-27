@@ -1,6 +1,6 @@
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 
-export const widget_flex_config: IEditorFormlyField[] = [
+export const flex_config: IEditorFormlyField[] = [
   {
     key: 'props.styles.flexDirection',
     type: 'radio',

@@ -53,8 +53,8 @@ export class WidgetZoomComponent implements OnInit {
     const targetElement = event.target as HTMLElement;
     if (!event.ctrlKey) return;
     if (
-      targetElement.classList.contains('widget-content-wrapper') ||
-      targetElement.classList.contains('viewport-overlay-layer')
+      targetElement.classList.contains('widget-wrapper') ||
+      targetElement.classList.contains('widget-viewport-container')
     ) {
       event.preventDefault();
       this.scale.update((scale) => {

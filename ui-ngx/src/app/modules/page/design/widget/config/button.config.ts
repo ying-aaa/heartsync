@@ -1,6 +1,6 @@
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 
-export const widget_button_config: IEditorFormlyField[] = [
+export const button_config: IEditorFormlyField[] = [
   {
     key: 'props.label',
     type: 'input',

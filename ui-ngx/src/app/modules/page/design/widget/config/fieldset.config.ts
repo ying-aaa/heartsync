@@ -1,6 +1,6 @@
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 
-export const widget_subtable_config: IEditorFormlyField[] = [
+export const fieldset_config: IEditorFormlyField[] = [
   {
     key: 'props.label',
     type: 'input',
@@ -12,7 +12,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
     className: 'hs-density--5',
   },
   {
-    key: 'fieldGroup',
+    key: 'fieldGroup[0].fieldGroup',
     type: 'fieldset',
     props: {
       label: '列配置',
@@ -48,22 +48,6 @@ export const widget_subtable_config: IEditorFormlyField[] = [
     ],
   },
   {
-    key: 'key',
-    type: 'input',
-    props: {
-      type: 'text',
-      label: '组件绑定数据key',
-      placeholder: '',
-      disabled: false,
-      appearance: 'outline',
-      density: 5,
-      description: '',
-      required: false,
-      readonly: false,
-    },
-    className: 'hs-density--5',
-  },
-  {
     type: 'tabs',
     props: {
       label: '页签',
@@ -82,7 +66,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
           disabled: false,
           density: 1,
           styles: {
-            rowGap: 8,
+            rowGap: 12,
             rowGapUnits: 'px',
           },
         },
@@ -112,7 +96,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
                 paddingBottomUnits: 'px',
                 borderRadius: 8,
                 borderRadiusUnits: 'px',
-                borderColor: '#ccc',
+                borderColor: 'var(--mdc-outlined-text-field-outline-color)',
                 borderWidth: 1,
                 borderWidthUnits: 'px',
                 borderStyle: 'groove',
@@ -144,7 +128,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
                       disabled: false,
                       density: 1,
                       styles: {
-                        rowGap: 8,
+                        rowGap: 12,
                         rowGapUnits: 'px',
                       },
                     },
@@ -174,7 +158,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
                               disabled: false,
                               density: 1,
                               styles: {
-                                rowGap: 8,
+                                rowGap: 12,
                                 rowGapUnits: 'px',
                               },
                             },
@@ -198,20 +182,14 @@ export const widget_subtable_config: IEditorFormlyField[] = [
                                 },
                                 expressions: {
                                   'model.props.styles.borderWidth': (model) =>
-                                    model.model.props.showBorder
-                                      ? model.model.props.styles.borderWidth ||
-                                        1
-                                      : 0,
+                                    model.model.props.showBorder ? 1 : 0,
                                   'model.props.styles.borderRadius': (model) =>
-                                    model.model.props.showBorder
-                                      ? model.model.props.styles.borderRadius ||
-                                        8
-                                      : 0,
-                                  'model.props.styles.borderColor': (model) =>
-                                    model.model.props.showBorder
-                                      ? model.model.props.styles.borderColor ||
-                                        '#ccc'
-                                      : 'transparent',
+                                    model.model.props.showBorder ? 8 : 0,
+                                  'model.props.styles.borderColor': (model) => {
+                                    return model.model.props.showBorder
+                                      ? 'var(--mdc-outlined-text-field-outline-color)'
+                                      : '';
+                                  },
                                 },
 
                                 className: 'hs-density--5 ',
@@ -247,7 +225,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
                               disabled: false,
                               density: 1,
                               styles: {
-                                rowGap: 8,
+                                rowGap: 12,
                                 rowGapUnits: 'px',
                               },
                             },
@@ -280,7 +258,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
                               disabled: false,
                               density: 1,
                               styles: {
-                                rowGap: 8,
+                                rowGap: 12,
                                 rowGapUnits: 'px',
                               },
                             },
@@ -347,7 +325,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
                       disabled: false,
                       density: 1,
                       styles: {
-                        rowGap: 8,
+                        rowGap: 12,
                         rowGapUnits: 'px',
                       },
                     },
@@ -396,7 +374,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
                       disabled: false,
                       density: 1,
                       styles: {
-                        rowGap: 8,
+                        rowGap: 12,
                         rowGapUnits: 'px',
                       },
                     },
@@ -475,7 +453,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
                       disabled: false,
                       density: 1,
                       styles: {
-                        rowGap: 8,
+                        rowGap: 12,
                         rowGapUnits: 'px',
                       },
                     },
@@ -508,7 +486,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
                       disabled: false,
                       density: 1,
                       styles: {
-                        rowGap: 8,
+                        rowGap: 12,
                         rowGapUnits: 'px',
                       },
                     },
@@ -546,7 +524,7 @@ export const widget_subtable_config: IEditorFormlyField[] = [
           disabled: false,
           density: 1,
           styles: {
-            rowGap: 8,
+            rowGap: 12,
             rowGapUnits: 'px',
           },
         },

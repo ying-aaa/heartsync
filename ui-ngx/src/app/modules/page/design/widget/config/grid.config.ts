@@ -1,6 +1,6 @@
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 
-export const widget_grid_config: IEditorFormlyField[] = [
+export const grid_config: IEditorFormlyField[] = [
   {
     type: 'fieldset',
     props: {

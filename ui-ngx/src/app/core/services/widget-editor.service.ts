@@ -1,5 +1,9 @@
-import { Injectable, signal } from '@angular/core';
+import { effect, Injectable, signal, untracked } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IRadioConfig } from '@src/app/shared/models/public-api';
+import { Location } from '@angular/common';
+import { FormWidgetService } from '@app/core/http/widget.service';
+import { IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 
 export interface IWidgetSelected {
   widgetName?: string;
@@ -24,9 +28,44 @@ export const flatWidgetTypesList = new Map(
   providedIn: 'root',
 })
 export class WidgetEditorService {
+  public currentWidgetId = signal<number | undefined>(undefined);
+
+  public currentWidgetConfig = signal<IFormWidgetConfig>(
+    {} as IFormWidgetConfig,
+  );
+
   public activeMode = signal<string>('form');
 
-  public activeWidget = signal<IWidgetSelected>({});
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location,
+    private formWidgetService: FormWidgetService,
+  ) {
+    this.currentWidgetId.set(this.route.snapshot.queryParams['widgetId']);
 
-  constructor() {}
+    effect(() => {
+      const { id } = this.currentWidgetConfig()!;
+      id && this.updateProductId(id);
+    });
+
+    effect(() => {
+      const widgetId = this.currentWidgetId();
+      widgetId && this.getWidgetConfig(widgetId);
+    });
+  }
+
+  updateProductId(widgetId: number) {
+    const currentPath = this.location.path().split('?')[0];
+    const newUrl = `${currentPath}?widgetId=${widgetId}`;
+    this.location.go(newUrl);
+  }
+
+  getWidgetConfig(widgetId: number) {
+    this.formWidgetService.getFormWidgetById(widgetId).subscribe({
+      next: (widgetConfig: IFormWidgetConfig) => {
+        this.currentWidgetConfig.set(widgetConfig);
+      },
+      error: (err: any) => console.error('Get widget error:', err),
+    });
+  }
 }

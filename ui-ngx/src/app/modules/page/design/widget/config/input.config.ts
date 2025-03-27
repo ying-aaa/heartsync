@@ -1,50 +1,6 @@
-import {
-  IEditorFormlyField,
-  IEditSizeType,
-} from '@src/app/shared/models/widget.model';
+import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 
-export const widget_form_config: IEditorFormlyField[] = [
-  {
-    key: 'workSizeConfig.type',
-    type: 'radio',
-    props: {
-      label: '预览设备尺寸',
-      typeName: '单选',
-      placeholder: '',
-      disabled: false,
-      appearance: 'outline',
-      density: 5,
-      description: '',
-      required: false,
-      readonly: false,
-      options: [
-        {
-          value: IEditSizeType.FILL,
-          label: '撑满',
-        },
-        {
-          value: IEditSizeType.MOBILE,
-          label: '手机',
-        },
-        {
-          value: IEditSizeType.IPAD,
-          label: '平板',
-        },
-        {
-          value: IEditSizeType.PC,
-          label: '电脑',
-        },
-        {
-          value: IEditSizeType.CUSTOM,
-          label: '自定义',
-        },
-      ],
-      hideFieldUnderline: true,
-      floatLabel: 'always',
-      tabindex: -1,
-    },
-    className: 'hs-density--5 ',
-  },
+export const input_config: IEditorFormlyField[] = [
   {
     type: 'tabs',
     props: {
@@ -66,6 +22,22 @@ export const widget_form_config: IEditorFormlyField[] = [
         },
         className: 'hs-density--1',
         fieldGroup: [
+          {
+            key: 'props.label',
+            type: 'input',
+            props: {
+              type: 'text',
+              label: '标题',
+              placeholder: '',
+              disabled: false,
+              appearance: 'outline',
+              density: 5,
+              description: '',
+              required: false,
+              readonly: false,
+            },
+            className: 'hs-density--5',
+          },
           {
             key: 'props.density',
             type: 'number',
@@ -90,26 +62,14 @@ export const widget_form_config: IEditorFormlyField[] = [
             },
             className: 'hs-density--5',
           },
-        ],
-      },
-      {
-        type: 'column',
-        props: {
-          label: '数据',
-          placeholder: '',
-          disabled: false,
-          density: 1,
-        },
-        className: 'hs-density--1',
-        fieldGroup: [
           {
-            key: 'id',
+            key: 'props.placeholder',
             type: 'input',
             props: {
               type: 'text',
-              label: '表单id',
+              label: '提示',
               placeholder: '',
-              disabled: true,
+              disabled: false,
               appearance: 'outline',
               density: 5,
               description: '',
@@ -123,6 +83,87 @@ export const widget_form_config: IEditorFormlyField[] = [
       {
         type: 'column',
         props: {
+          label: '数据',
+          placeholder: '',
+          disabled: false,
+          density: 1,
+        },
+        className: 'hs-density--1',
+        fieldGroup: [
+          {
+            key: 'key',
+            type: 'input',
+            props: {
+              type: 'text',
+              label: '组件绑定数据key',
+              placeholder: '',
+              disabled: false,
+              appearance: 'outline',
+              density: 5,
+              description: '',
+              required: false,
+              readonly: false,
+            },
+            className: 'hs-density--5',
+          },
+          {
+            key: 'fieldId',
+            type: 'input',
+            props: {
+              type: 'text',
+              label: '组件ID',
+              placeholder: '',
+              disabled: true,
+              appearance: 'outline',
+              density: 5,
+              description: '',
+              required: false,
+              readonly: false,
+            },
+            className: 'hs-density--5',
+          },
+          {
+            key: '504225693017',
+            type: 'select',
+            props: {
+              label: '下拉单选',
+              placeholder: '',
+              disabled: false,
+              appearance: 'outline',
+              density: 5,
+              description: '',
+              required: false,
+              readonly: false,
+              multiple: true,
+              selectAllOption: '选择全部',
+              options: [
+                {
+                  value: 1,
+                  label: '选项 1',
+                },
+                {
+                  value: 2,
+                  label: '选项 2',
+                },
+                {
+                  value: 3,
+                  label: '选项 3',
+                },
+                {
+                  value: 4,
+                  label: '选项 4',
+                  disabled: true,
+                },
+              ],
+            },
+            className: 'hs-density--5',
+          },
+        ],
+      },
+      {
+        key: '949865101136',
+        type: 'column',
+        props: {
           label: '交互',
           placeholder: '',
           disabled: false,
@@ -131,6 +172,7 @@ export const widget_form_config: IEditorFormlyField[] = [
         className: 'hs-density--1',
         fieldGroup: [
           {
+            key: '356800710424',
             type: 'input',
             props: {
               label: '第三个文本',
@@ -146,6 +188,7 @@ export const widget_form_config: IEditorFormlyField[] = [
             className: 'hs-density--5',
           },
           {
+            key: '798540614610',
             type: 'checkbox',
             props: {
               label: '多选',
