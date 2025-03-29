@@ -1,18 +1,58 @@
-:host {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
+@import "themeMixin";
 
-  .widget-wrapper {
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
-    background-image: radial-gradient(#000000 1px, #e5e5f7 1px);
-    background-size: 30px 30px;
+.themeMixin( {
+    :host {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
 
-    .widget-viewport-container {
-      background-color: #fff;
+      .widget-wrapper {
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        background-image: radial-gradient(#000000 1px, #e5e5f7 1px);
+        background-size: 30px 30px;
+        overflow: auto;
+        position: relative;
+
+
+        .widget-viewport-container {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          background-color: @base-bg-color;
+
+          .viewport-overlay-layer {
+            position: absolute;
+            z-index: 999;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+
+            button {
+              display: none;
+            }
+
+            &:hover {
+              background-color: rgba(47, 144, 185, 0.1);
+              border: 2px dashed rgb(47, 144, 185);
+              border-radius: 8px;
+
+              &+.viewport-content {
+                opacity: 0.5;
+              }
+
+              button {
+                display: inline-flex;
+              }
+
+            }
+          }
+        }
+      }
     }
   }
-}
+
+);

@@ -63,13 +63,9 @@ export class WidgetFolderComponent implements OnInit {
       });
     },
     defaultSelectNodeEvent: (data: any) => {
-      // const selectedNode = data.node;
-      // const { workspaceName: widgetName, id } = selectedNode.data;
-      // this.widgetEditorService.currentWidgetConfig.set({
-      //   widgetName,
-      //   id,
-      // });
-      // this.formEditorService.fieldsId.set(id);
+      const selectedNode = data.node;
+      const { workspaceName: widgetName, id } = selectedNode.data;
+      this.widgetEditorService.setWidgetId(id);
     },
   });
 

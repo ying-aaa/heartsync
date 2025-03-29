@@ -1,4 +1,4 @@
-import { Component, viewChild } from '@angular/core';
+import { Component, computed, viewChild } from '@angular/core';
 import { WidgetZoomComponent } from './widget-zoom.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,7 +27,7 @@ export class WidgetPreviewComponent {
 
   constructor(public widgetEditorService: WidgetEditorService) {}
 
-  get workSizeConfig(): IEditSizeConfig {
-    return this.widgetEditorService.currentWidgetConfig().workSizeConfig!;
-  }
+  workSizeConfig = computed(
+    () => this.widgetEditorService.currentWidgetConfig().workSizeConfig,
+  );
 }

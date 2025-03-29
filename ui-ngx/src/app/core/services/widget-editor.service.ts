@@ -28,7 +28,7 @@ export const flatWidgetTypesList = new Map(
   providedIn: 'root',
 })
 export class WidgetEditorService {
-  public currentWidgetId = signal<number | undefined>(undefined);
+  public currentWidgetId = signal<string | undefined>(undefined);
 
   public currentWidgetConfig = signal<IFormWidgetConfig>(
     {} as IFormWidgetConfig,
@@ -40,27 +40,26 @@ export class WidgetEditorService {
     private route: ActivatedRoute,
     private location: Location,
     private formWidgetService: FormWidgetService,
-  ) {
-    this.currentWidgetId.set(this.route.snapshot.queryParams['widgetId']);
+  ) {}
 
-    effect(() => {
-      const { id } = this.currentWidgetConfig()!;
-      id && this.updateProductId(id);
-    });
-
-    effect(() => {
-      const widgetId = this.currentWidgetId();
-      widgetId && this.getWidgetConfig(widgetId);
-    });
+  setWidgetId(widgetId: string) {
+    this.currentWidgetId.set(widgetId);
+    this.updateProductId(widgetId);
+    this.getWidgetConfig(widgetId);
   }
 
-  updateProductId(widgetId: number) {
+  initRouteWidget() {
+    const widgetId = this.route.snapshot.queryParams['widgetId'];
+    this.setWidgetId(widgetId);
+  }
+
+  updateProductId(widgetId: string) {
     const currentPath = this.location.path().split('?')[0];
     const newUrl = `${currentPath}?widgetId=${widgetId}`;
     this.location.go(newUrl);
   }
 
-  getWidgetConfig(widgetId: number) {
+  getWidgetConfig(widgetId: string) {
     this.formWidgetService.getFormWidgetById(widgetId).subscribe({
       next: (widgetConfig: IFormWidgetConfig) => {
         this.currentWidgetConfig.set(widgetConfig);

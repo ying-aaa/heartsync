@@ -1,15 +1,17 @@
-<content class="wh-full">
-  <div class="widget-wrapper">
-    <!-- 遮罩层 -->
-    <!-- (dblclick)="formEditorService.checkEditModeState(true)" -->
+@let workSizeConfigStyle = workSizeConfig()?.size!;
+<content
+  #ContainerElement
+  class="wh-full"
+>
+  <div class="widget-wrapper flex-center">
     <div
       cdkDrag
       [cdkDragDisabled]="!zoomControl().isMovable()"
-      [style]="workSizeConfig.size | concatUnits"
+      [style]="workSizeConfigStyle | concatUnits"
       [style.transform]="zoomControl().transformScale()"
       class="widget-viewport-container"
     >
-      <div class="viewport-overlay-layer flex-center">
+      <div class="viewport-overlay-layer flex-center wh-full absolute">
         <button
           mat-flat-button
           class="px-16px! mx-8px"
@@ -40,10 +42,9 @@
           </div>
         </ng-scrollbar>
       </div>
-    </div>
 
-    <!-- 无配置时提示 -->
-    <!-- @if (!isFieldsEmpty) {
+      <!-- 无配置时提示 -->
+
       <div
         class="absolute top-0 left-0 wh-full flex-col flex-center pb-80px -z-999 opacity-80"
       >
@@ -53,11 +54,13 @@
         />
         <div class="mt-30px text-18px">暂无内容，拖拽组件进来吧！</div>
       </div>
-    } -->
+    </div>
   </div>
 
   <hs-widget-zoom
     #ZoomControl
+    [containerElement]="ContainerElement"
+    [workSizeConfigStyle]="workSizeConfigStyle"
     class="absolute left-50% -translate-x-50% top-20px"
   ></hs-widget-zoom>
 </content>
