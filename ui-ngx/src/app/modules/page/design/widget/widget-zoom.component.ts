@@ -52,11 +52,11 @@ export class WidgetZoomComponent implements OnInit, AfterViewInit {
   ];
 
   scaleOptions = [
-    { value: 'custom', label: '自适应' },
     { value: 30, label: '缩放：30%' },
     { value: 50, label: '缩放：50%' },
     { value: 80, label: '缩放：80%' },
     { value: 100, label: '缩放：100%' },
+    { value: 'custom', label: '自适应' },
   ];
 
   constructor() {

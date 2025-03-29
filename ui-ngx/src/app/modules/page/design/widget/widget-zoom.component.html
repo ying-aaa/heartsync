@@ -15,10 +15,10 @@
         [(ngModel)]="scaleSelectValue"
         (selectionChange)="onSelectionChange($event)"
       >
+        <mat-option [disabled]="true">{{ currentScaleStr() }}</mat-option>
         @for (item of scaleOptions; track $index) {
           <mat-option [value]="item.value">{{ item.label }}</mat-option>
         }
-        <mat-option [disabled]="true">{{ currentScaleStr() }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
