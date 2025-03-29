@@ -10,12 +10,15 @@
       appearance="outline"
       class="hs-density--5 w-126px"
     >
-      <mat-select>
-        <mat-option value="option1">自适应</mat-option>
-        <mat-option value="option3">缩放：30%</mat-option>
-        <mat-option value="option3">缩放：50%</mat-option>
-        <mat-option value="option3">缩放：100%</mat-option>
-        <mat-option value="option3">当前：76%</mat-option>
+      <mat-select
+        ngDefaultControl
+        [(ngModel)]="scaleSelectValue"
+        (selectionChange)="onSelectionChange($event)"
+      >
+        @for (item of scaleOptions; track $index) {
+          <mat-option [value]="item.value">{{ item.label }}</mat-option>
+        }
+        <mat-option [disabled]="true">{{ currentScaleStr() }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>

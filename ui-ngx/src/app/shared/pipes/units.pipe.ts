@@ -5,7 +5,9 @@ import { Pipe, PipeTransform } from '@angular/core';
   pure: false,
 })
 export class ConcatUnitsPipe implements PipeTransform {
-  transform(value: { [key: string]: any }): { [key: string]: string } {
+  transform(value: { [key: string]: any } | undefined): {
+    [key: string]: string;
+  } {
     if (!value) return {};
 
     const result: { [key: string]: string } = {};

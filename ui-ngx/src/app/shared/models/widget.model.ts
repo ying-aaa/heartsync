@@ -34,15 +34,6 @@ export enum ICdkDrapActionType {
   TRANSFER = 'transfer',
 }
 
-// 设备类型枚举
-export enum IEditSizeType {
-  FILL = 'fill', // 撑满
-  MOBILE = 'mobile', // 移动端
-  IPAD = 'ipad', // 平板
-  PC = 'pc', // 电脑端
-  CUSTOM = 'custom', // 自定义
-}
-
 // 组件类型枚举
 export enum IWidgetType {
   CODE = 'code', // 代码组件
@@ -54,15 +45,26 @@ export enum IWidgetType {
   DETAIL = 'detail', // 详情组件
 }
 
+// 设备类型枚举
+export enum IEditSizeType {
+  FILL = 'fill', // 撑满
+  MOBILE = 'mobile', // 移动端
+  IPAD = 'ipad', // 平板
+  PC = 'pc', // 电脑端
+  CUSTOM = 'custom', // 自定义
+}
+
+export interface IWidgetSizeStyle {
+  width: number;
+  widthUnits: string;
+  height: number;
+  heightUnits: string;
+}
+
 // 编辑尺寸配置接口
 export interface IEditSizeConfig {
   type: IEditSizeType; // 设备类型
-  size: {
-    width: number;
-    widthUnits: string;
-    height: number;
-    heightUnits: string;
-  };
+  size: IWidgetSizeStyle;
 }
 
 // 组件样式配置接口
