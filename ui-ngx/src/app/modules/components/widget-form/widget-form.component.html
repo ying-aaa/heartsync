@@ -1,0 +1,28 @@
+@if (loadingState()) {
+  <div
+    class="wh-full flex-center"
+    [style]="sizeStyle()"
+  >
+    <mat-spinner></mat-spinner>
+  </div>
+} @else {
+  <formly-form
+    [form]="formGroup"
+    [fields]="fields()"
+    [model]="model"
+    [options]="options"
+  ></formly-form>
+}
+
+@if (!loadingState() && !fields().length) {
+  <div
+    [style]="sizeStyle()"
+    class="absolute top-0 left-0 wh-full flex-col flex-center pb-80px -z-999 opacity-80"
+  >
+    <img
+      class="w-180px h-180px"
+      src="assets/workbench/widget-workbench-tips.png"
+    />
+    <div class="mt-30px text-18px">暂无内容，拖拽组件进来吧！</div>
+  </div>
+}

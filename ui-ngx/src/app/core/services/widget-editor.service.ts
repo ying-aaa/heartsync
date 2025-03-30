@@ -1,4 +1,4 @@
-import { effect, Injectable, signal, untracked } from '@angular/core';
+import { computed, effect, Injectable, signal, untracked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IRadioConfig } from '@src/app/shared/models/public-api';
 import { Location } from '@angular/common';
@@ -28,7 +28,7 @@ export const flatWidgetTypesList = new Map(
   providedIn: 'root',
 })
 export class WidgetEditorService {
-  public currentWidgetId = signal<string | undefined>(undefined);
+  public currentWidgetId = signal<string>('');
 
   public currentWidgetConfig = signal<IFormWidgetConfig>(
     {} as IFormWidgetConfig,
@@ -40,17 +40,19 @@ export class WidgetEditorService {
     private route: ActivatedRoute,
     private location: Location,
     private formWidgetService: FormWidgetService,
-  ) {}
+  ) {
+    this.initRouteWidget();
+  }
+
+  private initRouteWidget() {
+    const widgetId = this.route.snapshot.queryParams['widgetId'];
+    this.setWidgetId(widgetId);
+  }
 
   setWidgetId(widgetId: string) {
     this.currentWidgetId.set(widgetId);
     this.updateProductId(widgetId);
     this.getWidgetConfig(widgetId);
-  }
-
-  initRouteWidget() {
-    const widgetId = this.route.snapshot.queryParams['widgetId'];
-    this.setWidgetId(widgetId);
   }
 
   updateProductId(widgetId: string) {
@@ -60,6 +62,8 @@ export class WidgetEditorService {
   }
 
   getWidgetConfig(widgetId: string) {
+    widgetId = widgetId || this.currentWidgetId();
+    if (!widgetId) return;
     this.formWidgetService.getFormWidgetById(widgetId).subscribe({
       next: (widgetConfig: IFormWidgetConfig) => {
         this.currentWidgetConfig.set(widgetConfig);

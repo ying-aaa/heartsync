@@ -8,6 +8,7 @@ import { WidgetEditorService } from '@src/app/core/services/widget-editor.servic
 import { IEditSizeConfig } from '@src/app/shared/models/public-api';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';
+import { WidgetContainerComponent } from './widget-container.component';
 @Component({
   selector: 'hs-widget-preview',
   templateUrl: './widget-preview.component.html',
@@ -20,6 +21,7 @@ import { CommonModule } from '@angular/common';
     NgScrollbarModule,
     ConcatUnitsPipe,
     CommonModule,
+    WidgetContainerComponent,
   ],
 })
 export class WidgetPreviewComponent {
@@ -30,4 +32,19 @@ export class WidgetPreviewComponent {
   workSizeConfig = computed(
     () => this.widgetEditorService.currentWidgetConfig().workSizeConfig,
   );
+
+  // 边距处理
+  getWdigetSize() {
+    const size = this.workSizeConfig()?.size || {
+      width: 100,
+      height: 100,
+      widthUnits: '%',
+    };
+    let { width, height, widthUnits } = size;
+    if (widthUnits === 'px') {
+      width = width - 40;
+      height = height - 40;
+    }
+    return { ...size, width, height };
+  }
 }

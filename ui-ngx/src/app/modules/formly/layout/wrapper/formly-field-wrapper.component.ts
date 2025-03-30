@@ -45,23 +45,6 @@ export class FormlyFieldWrapperComponent extends FieldType<IEditorFormlyField> {
     this.formEditorService.mousePosition.y = event.clientY;
   }
 
-  get computedViewportHeight() {
-    if (!this.field.parent) {
-      const type = this.formEditorService.widgetConfig().workSizeConfig?.type;
-      if (type) {
-        if (type === IEditSizeType.FILL) {
-          return `calc(100vh - 64px - 48px - 1px - 16px)`;
-        } else {
-          const height =
-            this.formEditorService.widgetConfig().workSizeConfig?.size.height;
-          return `${height}px`;
-        }
-      }
-    }
-
-    return `calc(100vh - 64px - 48px - 1px - 16px)`;
-  }
-
   canEnter = (drag: CdkDrag) => {
     const isInDropContainer = this._isMouseInElement(
       drag.dropContainer.element.nativeElement,

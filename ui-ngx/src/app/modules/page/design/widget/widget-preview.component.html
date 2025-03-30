@@ -1,4 +1,4 @@
-@let workSizeConfigStyle = workSizeConfig()?.size!;
+@let workSizeConfigStyle = workSizeConfig()?.size! || {};
 <content
   #ContainerElement
   class="wh-full"
@@ -11,15 +11,6 @@
       [style.transform]="zoomControl().transformScale()"
       class="widget-viewport-container"
     >
-      <div class="viewport-overlay-layer flex-center wh-full absolute">
-        <button
-          mat-flat-button
-          class="px-16px! mx-8px"
-        >
-          <mat-icon matChipAvatar>design_services</mat-icon> 去设计
-        </button>
-      </div>
-
       <!-- 内容 -->
       <div class="wh-full">
         <ng-scrollbar
@@ -31,28 +22,25 @@
           orientation="auto"
         >
           <div scrollViewport>
-            <div class="render-canvar">
-              <!-- <formly-form
-                [form]="formEditorService.formGroup"
-                [fields]="formEditorService.fields()"
-                [model]="formEditorService.model"
-                [options]="formEditorService.options"
-              ></formly-form> -->
+            <div class="p-20px">
+              <!-- 移入遮罩层 -->
+              <div class="viewport-overlay-layer wh-full absolute"></div>
+
+              <hs-widget-container
+                class="widget-container"
+                [workSizeConfigStyle]="getWdigetSize() | concatUnits"
+              ></hs-widget-container>
             </div>
           </div>
         </ng-scrollbar>
       </div>
 
-      <!-- 无配置时提示 -->
-
       <div
-        class="absolute top-0 left-0 wh-full flex-col flex-center pb-80px -z-999 opacity-80"
+        class="viewport-overlay-layer-btn px-16px! mx-8px absolute top-50% left-50% -translate-x-50% -translate-y-50%"
       >
-        <img
-          class="w-180px h-180px"
-          src="assets/workbench/widget-workbench-tips.png"
-        />
-        <div class="mt-30px text-18px">暂无内容，拖拽组件进来吧！</div>
+        <button mat-flat-button>
+          <mat-icon matChipAvatar>design_services</mat-icon> 去设计
+        </button>
       </div>
     </div>
   </div>
@@ -61,6 +49,6 @@
     #ZoomControl
     [containerElement]="ContainerElement"
     [workSizeConfigStyle]="workSizeConfigStyle"
-    class="absolute left-50% -translate-x-50% top-20px"
+    class="absolute left-50% -translate-x-50% bottom-50px"
   ></hs-widget-zoom>
 </content>

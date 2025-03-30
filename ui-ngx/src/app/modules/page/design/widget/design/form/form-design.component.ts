@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormEditorService } from '@src/app/core/services/form-editor.service';
 
 @Component({
   selector: 'hs-form-design',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./form-design.component.less'],
 })
 export class FormDesignComponent implements OnInit {
-  constructor() {}
+  constructor(private formEditorService: FormEditorService) {}
 
   ngOnInit() {}
 }

@@ -30,26 +30,27 @@
             height: 100%;
             top: 0;
             left: 0;
-
-            button {
-              display: none;
-            }
-
-            &:hover {
-              background-color: rgba(47, 144, 185, 0.1);
-              border: 2px dashed rgb(47, 144, 185);
-              border-radius: 8px;
-
-              &+.viewport-content {
-                opacity: 0.5;
-              }
-
-              button {
-                display: inline-flex;
-              }
-
-            }
           }
+
+          &:hover .viewport-overlay-layer {
+            background-color: rgba(47, 144, 185, 0.1);
+            border: 2px dashed rgb(47, 144, 185);
+            border-radius: 8px;
+          }
+
+          &:hover .widget-container {
+            opacity: 0.5;
+          }
+
+          &:hover .viewport-overlay-layer-btn {
+            display: block
+          }
+
+          .viewport-overlay-layer-btn {
+            display: none
+          }
+
+
         }
       }
     }
