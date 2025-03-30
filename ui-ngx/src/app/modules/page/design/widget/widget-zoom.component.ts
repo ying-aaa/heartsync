@@ -119,7 +119,7 @@ export class WidgetZoomComponent implements OnInit, AfterViewInit {
     if (width && widthUnits !== '%') {
       if (width > this.containerWidth) {
         this.scale.update((scale) => {
-          scale = +((this.containerWidth - 32) / width);
+          scale = +((this.containerWidth - 24) / width);
           return scale;
         });
       }
