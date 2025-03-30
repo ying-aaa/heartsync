@@ -98,6 +98,7 @@ export class WidgetZoomComponent implements OnInit, AfterViewInit {
   @HostListener('window:resize')
   onResize() {
     this.updateContainerWidth();
+    this.customContainerWidth();
   }
 
   setMouseCursor(cursor: string) {
@@ -116,12 +117,14 @@ export class WidgetZoomComponent implements OnInit, AfterViewInit {
     // 切换设备时恢复默认自适应
     this.scaleSelectValue = 'custom';
 
-    if (width && widthUnits !== '%') {
+    if (width && widthUnits === 'px') {
       if (width > this.containerWidth) {
         this.scale.update((scale) => {
           scale = +((this.containerWidth - 24) / width);
           return scale;
         });
+      } else {
+        this.scale.set(1);
       }
     }
   }
