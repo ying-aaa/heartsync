@@ -14,8 +14,8 @@ import { FormlyEditorModule } from '@src/app/modules/formly/formly-editor.module
 export class FormlyConfigComponent implements OnInit {
   type = input();
   model = input<any>();
-  formGroup = new FormGroup({});
   fields: IEditorFormlyField[] = [];
+  formGroup = new FormGroup({});
 
   constructor() {
     effect(() => {

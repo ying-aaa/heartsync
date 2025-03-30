@@ -1,10 +1,9 @@
-@let activeWidgetName = widgetEditorService.activeWidget().widgetName;
 <div class="line-height-24px h-24px mb-12px relative">
   <button
     matSuffix
     mat-icon-button
     aria-label="Clear"
-    (click)="formEditorService.checkEditModeState(false)"
+    (click)="toWidgetManage()"
     class="absolute! top-50% left-3px -translate-y-50%"
   >
     <mat-icon
@@ -17,10 +16,10 @@
   <div class="pl-50px flex">
     <span class="text-20px font-bold mr-8px">{{ activeModeName() }} :</span>
     <div
-      [matTooltip]="activeWidgetName"
+      [matTooltip]="activeWidgetName()"
       class="text-16px truncate flex-1 w-0 mt-1px"
     >
-      {{ activeWidgetName }}
+      {{ activeWidgetName() }}
     </div>
   </div>
 </div>

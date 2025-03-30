@@ -1,0 +1,48 @@
+@import "themeMixin";
+
+.themeMixin( {
+    :host {
+      display: block;
+      width: 100%;
+      height: 100%;
+
+
+      ::ng-deep {
+        .ng-scroll-content {
+          width: 100% !important;
+        }
+
+        .render-canvar {
+          display: block;
+          height: 100%;
+          padding: 8px 20px;
+        }
+
+        .wh-full-auto {
+          width: 100%;
+          height: auto;
+        }
+
+        formly-form {
+          .wh-full-auto();
+
+          &>formly-field {
+            .wh-full-auto();
+
+            &>formly-field-wrapper {
+              .wh-full-auto();
+
+              &>#workspace {
+                // .wh-full();
+                min-height: calc(100vh - 64px - 48px - 1px - 16px);
+                .wh-full-auto();
+              }
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+);

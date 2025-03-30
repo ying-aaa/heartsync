@@ -1,0 +1,31 @@
+<content class="flex flex-1 flex-col h-full relative">
+  <!-- 预览保存 -->
+  <header>
+    <hs-workspace-toobar></hs-workspace-toobar>
+  </header>
+
+  <mat-divider class="w-full"></mat-divider>
+
+  <!-- 视图 -->
+  <div class="viewport-wrapper flex-1 h-0 flex-center relative overflow-auto">
+    <ng-scrollbar
+      class="wh-full!"
+      #scrollbarRef="ngScrollbar"
+      externalViewport
+      visibility="hover"
+      appearance="compact"
+      orientation="auto"
+    >
+      <div scrollViewport>
+        <div class="render-canvar">
+          <formly-form
+            [form]="formEditorService.formGroup"
+            [fields]="formEditorService.fields()"
+            [model]="formEditorService.model"
+            [options]="formEditorService.options"
+          ></formly-form>
+        </div>
+      </div>
+    </ng-scrollbar>
+  </div>
+</content>

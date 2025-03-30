@@ -7,10 +7,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import {
   flatWidgetTypesList,
   WidgetEditorService,
-} from '../../../../../core/services/widget-editor.service';
+} from '@app/core/services/widget-editor.service';
 import { MatButtonModule } from '@angular/material/button';
-import { FormEditorService } from '../../../../../core/services/form-editor.service';
+import { FormEditorService } from '@app/core/services/form-editor.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hs-workspace-contorl',
@@ -31,6 +32,7 @@ export class WorkspaceContorlComponent implements OnInit {
   constructor(
     public widgetEditorService: WidgetEditorService,
     public formEditorService: FormEditorService,
+    private router: Router,
   ) {}
 
   ngOnInit() {}
@@ -38,4 +40,12 @@ export class WorkspaceContorlComponent implements OnInit {
   activeModeName = computed(() =>
     flatWidgetTypesList.get(this.widgetEditorService.activeMode()),
   );
+
+  activeWidgetName = computed(() => {
+    return this.widgetEditorService.currentWidgetConfig().workspaceName;
+  });
+
+  toWidgetManage() {
+    this.router.navigate(['/design/widget/resource']);
+  }
 }

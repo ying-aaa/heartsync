@@ -9,6 +9,7 @@ import { IEditSizeConfig } from '@src/app/shared/models/public-api';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';
 import { WidgetContainerComponent } from './widget-container.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'hs-widget-preview',
   templateUrl: './widget-preview.component.html',
@@ -27,11 +28,20 @@ import { WidgetContainerComponent } from './widget-container.component';
 export class WidgetPreviewComponent {
   zoomControl = viewChild.required<WidgetZoomComponent>('ZoomControl');
 
-  constructor(public widgetEditorService: WidgetEditorService) {}
+  constructor(
+    private widgetEditorService: WidgetEditorService,
+    private router: Router,
+  ) {}
 
   workSizeConfig = computed(
     () => this.widgetEditorService.currentWidgetConfig().workSizeConfig,
   );
+
+  toWidgetDesign() {
+    this.router.navigate(['/design/widget/form'], {
+      queryParams: { widgetId: this.widgetEditorService.currentWidgetId() },
+    });
+  }
 
   // 边距处理
   getWdigetSize() {

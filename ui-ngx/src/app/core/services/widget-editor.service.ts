@@ -56,6 +56,7 @@ export class WidgetEditorService {
   }
 
   updateProductId(widgetId: string) {
+    if (!widgetId) return;
     const currentPath = this.location.path().split('?')[0];
     const newUrl = `${currentPath}?widgetId=${widgetId}`;
     this.location.go(newUrl);
