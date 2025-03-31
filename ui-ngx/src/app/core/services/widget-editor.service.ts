@@ -1,6 +1,6 @@
 import { computed, effect, Injectable, signal, untracked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IRadioConfig } from '@src/app/shared/models/public-api';
+import { IRadioConfig, IWidgetType } from '@src/app/shared/models/public-api';
 import { Location } from '@angular/common';
 import { FormWidgetService } from '@app/core/http/widget.service';
 import { IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
@@ -34,7 +34,7 @@ export class WidgetEditorService {
     {} as IFormWidgetConfig,
   );
 
-  public activeMode = signal<string>('form');
+  public currentWidgetType = signal<IWidgetType>(IWidgetType.FORM);
 
   constructor(
     private route: ActivatedRoute,

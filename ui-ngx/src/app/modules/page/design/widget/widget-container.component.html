@@ -1,5 +1,30 @@
-<hs-widget-form
-  [widgetId]="widgetId()"
-  [sizeStyle]="workSizeConfigStyle()"
->
-</hs-widget-form>
+@switch (widgetType) {
+  @case (widgetTypes.CODE) {
+    <hs-widget-code> </hs-widget-code>
+  }
+  @case (widgetTypes.CHART) {
+    <hs-widget-chart></hs-widget-chart>
+  }
+  @case (widgetTypes.CESIUM) {
+    <hs-widget-cesium></hs-widget-cesium>
+  }
+  @case (widgetTypes.X6) {
+    x6
+  }
+  @case (widgetTypes.FORM) {
+    <hs-widget-form
+      [widgetId]="widgetId()"
+      [sizeStyle]="workSizeConfigStyle()"
+    >
+    </hs-widget-form>
+  }
+  @case (widgetTypes.LIST) {
+    <hs-widget-list></hs-widget-list>
+  }
+  @case (widgetTypes.DETAIL) {
+    <hs-widget-detail></hs-widget-detail>
+  }
+  @default {
+    暂未支持的类型！
+  }
+}

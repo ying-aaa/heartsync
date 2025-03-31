@@ -5,11 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
-import { IEditSizeConfig } from '@src/app/shared/models/public-api';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';
 import { WidgetContainerComponent } from './widget-container.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'hs-widget-preview',
   templateUrl: './widget-preview.component.html',
@@ -31,6 +30,7 @@ export class WidgetPreviewComponent {
   constructor(
     private widgetEditorService: WidgetEditorService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   workSizeConfig = computed(
@@ -38,7 +38,8 @@ export class WidgetPreviewComponent {
   );
 
   toWidgetDesign() {
-    this.router.navigate(['/design/widget/form'], {
+    const widgetType = this.widgetEditorService.currentWidgetType();
+    this.router.navigate([`/design/widget/${widgetType}`], {
       queryParams: { widgetId: this.widgetEditorService.currentWidgetId() },
     });
   }
