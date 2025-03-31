@@ -6,6 +6,7 @@ import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
 import { Router } from '@angular/router';
+import { IWidgetType } from '@src/app/shared/models/widget.model';
 
 @Component({
   selector: 'hs-workspace-toobar',
@@ -28,10 +29,10 @@ export class WorkspaceToobarComponent implements OnInit {
   }
 
   previewWidget() {
-    this.router.navigate([
-      '/design/preview',
-      this.formEditorService.fieldsId(),
-    ]);
+    const widgetId = this.formEditorService.fieldsId();
+    this.router.navigate([`/design/widget/preview`], {
+      queryParams: { widgetId },
+    });
   }
 
   openFieldCode() {

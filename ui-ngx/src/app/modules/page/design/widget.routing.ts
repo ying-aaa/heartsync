@@ -11,6 +11,14 @@ export default [
       ),
   },
   {
+    title: '部件预览',
+    path: 'preview',
+    loadComponent: () =>
+      import('./widget/widget-preview.component').then(
+        (m) => m.WidgetPreviewComponent,
+      ),
+  },
+  {
     title: '表单',
     path: 'form',
     data: { widgetType: true },

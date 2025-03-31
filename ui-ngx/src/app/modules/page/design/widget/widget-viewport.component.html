@@ -1,0 +1,57 @@
+@let workSizeConfigStyle = workSizeConfig()?.size! || {};
+<content
+  #ContainerElement
+  class="wh-full"
+>
+  <div class="widget-wrapper flex-center">
+    <div
+      cdkDrag
+      [cdkDragDisabled]="!zoomControl().isMovable()"
+      [style]="workSizeConfigStyle | concatUnits"
+      [style.transform]="zoomControl().transformScale()"
+      class="widget-viewport-container"
+    >
+      <!-- 内容 -->
+      <div class="wh-full">
+        <ng-scrollbar
+          class="wh-full!"
+          #scrollbarRef="ngScrollbar"
+          externalViewport
+          visibility="hover"
+          appearance="compact"
+          orientation="auto"
+        >
+          <div scrollViewport>
+            <div class="p-20px">
+              <!-- 移入遮罩层 -->
+              <div class="viewport-overlay-layer wh-full absolute"></div>
+
+              <hs-widget-container
+                class="widget-container"
+                [workSizeConfigStyle]="getWdigetSize() | concatUnits"
+              ></hs-widget-container>
+            </div>
+          </div>
+        </ng-scrollbar>
+      </div>
+
+      <div
+        class="viewport-overlay-layer-btn px-16px! mx-8px absolute top-50% left-50% -translate-x-50% -translate-y-50%"
+      >
+        <button
+          mat-flat-button
+          (click)="toWidgetDesign()"
+        >
+          <mat-icon matChipAvatar>design_services</mat-icon> 去设计
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <hs-widget-zoom
+    #ZoomControl
+    [containerElement]="ContainerElement"
+    [workSizeConfigStyle]="workSizeConfigStyle"
+    class="absolute left-50% -translate-x-50% bottom-50px"
+  ></hs-widget-zoom>
+</content>
