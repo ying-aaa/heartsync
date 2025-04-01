@@ -21,7 +21,7 @@
       [cdkDragData]="getDragFieldData(f)"
       (cdkDragStarted)="formEditorService.dragStart = true"
       (cdkDragReleased)="formEditorService.dragStart = false"
-      style="border: 1px solid #8e8e8e4a"
+      class="subtable-border"
     >
       <div
         class="position-preview w-full h-3px border-3px border-solid border-#2f90b9"
@@ -30,12 +30,9 @@
     </formly-field>
   }
 </div>
-<div
-  class="w-full p-12px"
-  style="border: 1px solid #8e8e8e4a"
->
+<div class="w-full p-12px subtable-border">
   <button
-    mat-flat-button
+    mat-raised-button
     class="w-full my-8px"
   >
     <mat-icon>add</mat-icon>

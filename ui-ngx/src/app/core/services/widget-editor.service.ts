@@ -13,7 +13,7 @@ export interface IWidgetSelected {
 export const widgetTypesList: IRadioConfig[] = [
   { label: '代码', value: 'code' },
   { label: '图表', value: 'chart' },
-  { label: '地图', value: 'map' },
+  { label: 'cesium', value: 'cesium' },
   { label: 'x6', value: 'x6' },
   { label: '表单', value: 'form' },
   { label: '列表', value: 'list' },

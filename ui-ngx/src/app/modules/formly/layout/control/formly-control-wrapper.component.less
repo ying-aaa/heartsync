@@ -1,60 +1,67 @@
-:host {
-  display: block;
-  position: relative;
-  box-sizing: border-box;
-  height: 100%;
-  border: 1px solid transparent;
-  border-radius: 6px;
+@import "themeMixin";
+
+.themeMixin( {
+    :host {
+      display: block;
+      position: relative;
+      box-sizing: border-box;
+      height: 100%;
+      border: 1px dashed transparent;
+      border-radius: 6px;
 
 
-  &.edit-mode {
-    padding: 6px;
+      &.edit-mode {
+        padding: 6px;
 
-    &>.hs-widget-toolbar {
-      display: none;
+        &>.hs-widget-toolbar {
+          display: none;
+        }
+      }
+
+      &.show-border {
+        border: 1px dashed #8e8e8e4a;
+        // margin: 4px 2px;
+      }
+
+      &.active {
+        // background-color: rgba(47, 144, 185, 0.05);
+        border: 1px dashed #2f90b9;
+
+        &>.hs-widget-toolbar {
+          display: flex;
+        }
+      }
+
+      &.hover {
+        border-color: rgba(47, 143, 185, 0.5);
+      }
+
+      .title-name {
+        position: absolute;
+        top: 0;
+        left: 0;
+        box-shadow: 0px 5px 5px @base-color-10;
+        border: 1px solid @base-color-30;
+        background-color: @base-bg-color;
+        z-index: 10;
+        padding: 3px;
+        border-radius: 3px;
+        font-size: 14px;
+      }
+
+      button {
+        width: 24px;
+        height: 24px;
+        border-radius: 3px;
+        // box-shadow: none;
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+      }
     }
   }
 
-  &.show-border {
-    border: 1px dashed #8e8e8e4a;
-    // margin: 4px 2px;
-  }
-
-  &.active {
-    // background-color: rgba(47, 144, 185, 0.05);
-    border: 1px solid #2f90b9;
-
-    &>.hs-widget-toolbar {
-      display: flex;
-    }
-  }
-
-  &.hover {
-    border-color: rgba(47, 143, 185, 0.5);
-  }
-
-  .title-name {
-    position: absolute;
-    top: 0;
-    left: 0;
-    color: #197aff;
-    background-color: #ccc;
-    z-index: 10;
-    padding: 3px;
-    border-radius: 3px;
-    font-size: 14px;
-  }
-
-  button {
-    width: 24px;
-    height: 24px;
-    border-radius: 3px;
-    // box-shadow: none;
-
-    mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-  }
-}
+);
