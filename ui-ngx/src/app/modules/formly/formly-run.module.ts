@@ -27,6 +27,15 @@ export function runExtension(field: IEditorFormlyField) {
     field.type = IFieldType.COLUMN;
   }
 
+  if (field.type === IFieldType.COLUMN) {
+    if (!field.parent) {
+      field.props!['styles'] = {
+        rowGap: 8,
+        rowGapUnits: 'px',
+      };
+    }
+  }
+
   if (field.wrappers) {
     field.wrappers = field.wrappers.filter(
       (wrapper) => wrapper !== 'contorl' && wrapper !== 'subtableitem',
