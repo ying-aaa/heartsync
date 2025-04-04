@@ -9,6 +9,7 @@ import { fieldset_config } from './fieldset.config';
 import { subtable_config } from './subtable.config';
 import { select_config } from './select.config';
 import { widget_config } from './widget.config';
+import { radio_config } from './radio.config';
 
 export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   input: input_config,
@@ -20,5 +21,6 @@ export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   tabs: tabs_config,
   subtable: subtable_config,
   select: select_config,
+  radio: radio_config,
   widget: widget_config,
 };

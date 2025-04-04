@@ -107,8 +107,6 @@ export const formlyFormTypes = [
         options: [
           { value: 1, label: '选项 1' },
           { value: 2, label: '选项 2' },
-          { value: 3, label: '选项 3' },
-          { value: 4, label: '选项 4', disabled: true },
         ],
       },
       expressions: {
@@ -173,7 +171,7 @@ export const formlyFormTypes = [
           { value: 1, label: '选项 1' },
           { value: 2, label: '选项 2' },
           { value: 3, label: '选项 3' },
-          { value: 4, label: '选项 4', disabled: true },
+          { value: 4, label: '选项 4' },
         ],
       },
       expressions: {
