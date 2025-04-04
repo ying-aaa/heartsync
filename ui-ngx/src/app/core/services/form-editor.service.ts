@@ -115,6 +115,51 @@ export class FormEditorService {
   }
 
   updateFields() {
+    // const pickConfig = {
+    //   key: true,
+    //   type: true,
+    //   fieldId: true,
+    //   props: {
+    //     appearance: true,
+    //     dateFormat: true,
+    //     datepickerOptions: true,
+    //     density: true,
+    //     description: true,
+    //     disabled: true,
+    //     icon: true,
+    //     label: true,
+    //     max: true,
+    //     maxLength: true,
+    //     min: true,
+    //     minLength: true,
+    //     pattern: true,
+    //     placeholder: true,
+    //     prefix: true,
+    //     readonly: true,
+    //     required: true,
+    //     textPrefix: true,
+    //     textSuffix: true,
+    //     styles: true,
+    //   },
+    //   className: true,
+    //   fieldGroup: true,
+    //   fieldArray: true,
+    // };
+    // // 数据清洗，仅仅保存自己需要的
+    // let fields = extractProperties<IEditorFormlyField[]>(
+    //   this.fields(),
+    //   pickConfig,
+    //   'fieldGroup',
+    // );
+
+    // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置
+    // fields = updateField(deepClone(fields), (field) => {
+    //   field.fieldArray = {
+    //     fieldGroup: field.fieldGroup,
+    //   };
+    //   Reflect.deleteProperty(field, 'fieldGroup');
+    // });
+
     // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置
     const fields = updateField(deepClone(this.fields()), (field) => {
       field.fieldArray = {
