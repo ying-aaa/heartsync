@@ -29,6 +29,51 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "mode-typescript.js",
+                "input": "./node_modules/ace-builds/src-noconflict/",
+                "output": "/"
+              },
+              {
+                "glob": "typescript.js",
+                "input": "./node_modules/ace-builds/src-noconflict/snippets/",
+                "output": "/snippets"
+              },
+              {
+                "glob": "javascript.js",
+                "input": "./node_modules/ace-builds/src-noconflict/snippets/",
+                "output": "/snippets"
+              },
+              {
+                "glob": "worker-html.js",
+                "input": "./node_modules/ace-builds/src-noconflict/",
+                "output": "/"
+              },
+              {
+                "glob": "worker-xml.js",
+                "input": "./node_modules/ace-builds/src-noconflict/",
+                "output": "/"
+              },
+              {
+                "glob": "worker-css.js",
+                "input": "./node_modules/ace-builds/src-noconflict/",
+                "output": "/"
+              },
+              {
+                "glob": "worker-json.js",
+                "input": "./node_modules/ace-builds/src-noconflict/",
+                "output": "/"
+              },
+              {
+                "glob": "worker-javascript.js",
+                "input": "./node_modules/ace-builds/src-noconflict/",
+                "output": "/"
+              },
+              {
+                "glob": "worker-typescript.js",
+                "input": "./node_modules/ace-builds/src-noconflict/",
+                "output": "/"
               }
             ],
             "styles": [

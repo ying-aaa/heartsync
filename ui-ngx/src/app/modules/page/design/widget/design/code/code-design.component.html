@@ -1,1 +1,7 @@
-<div>代码自定义页面</div>
+<hs-ace-editor
+  [type]="'typescript'"
+  [theme]="'cloud_editor_dark'"
+  [formControl]="code"
+></hs-ace-editor>
+
+{{ code.value | json }}

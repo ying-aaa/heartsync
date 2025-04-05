@@ -1,16 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AceEditorComponent } from '@src/app/shared/components/ace-editor/ace-editor.component';
-
-@Component({
-  selector: 'hs-code-design',
-  templateUrl: './code-design.component.html',
-  styleUrls: ['./code-design.component.less'],
-  imports: [AceEditorComponent, FormsModule, ReactiveFormsModule, CommonModule],
-})
-export class CodeDesignComponent implements OnInit {
-  code = new FormControl(`import {
+import {
   Component,
   ElementRef,
   EventEmitter,
@@ -27,8 +15,8 @@ import 'ace-builds/src-noconflict/mode-css';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/mode-json';
 import 'ace-builds/src-noconflict/ext-language_tools';
-import 'ace-builds/src-noconflict/theme-monokai';
-// import 'ace-builds/src-noconflict/theme-chrome';
+import 'ace-builds/src-noconflict/theme-cloud_editor_dark';
+import 'ace-builds/src-noconflict/theme-chrome';
 
 @Component({
   selector: 'hs-ace-editor',
@@ -81,6 +69,7 @@ export class AceEditorComponent
 
   initEditor(): void {
     this.editor = ace.edit(this.el.nativeElement.querySelector('.editor'));
+    this.editor.getSession().setMode(`ace/mode/${this.type}`);
     this.editor.setOptions(this.options);
     this.editor.setShowPrintMargin(false);
     this.loadTheme();
@@ -97,14 +86,14 @@ export class AceEditorComponent
 
   loadTheme(): void {
     switch (this.theme) {
-      case 'monokai':
-        this.editor.setTheme('ace/theme/monokai');
+      case 'cloud_editor_dark':
+        this.editor.setTheme('ace/theme/cloud_editor_dark');
         break;
       case 'chrome':
         this.editor.setTheme('ace/theme/chrome');
         break;
       default:
-        this.editor.setTheme('ace/theme/monokai');
+        this.editor.setTheme('ace/theme/cloud_editor_dark');
     }
   }
 
@@ -148,20 +137,7 @@ export class AceEditorComponent
     this.editor.commands.addCommand({
       name: 'compressCode',
       bindKey: { win: 'Ctrl-Shift-M', mac: 'Command-Shift-M' },
-      exec: () => {
-        // Implement code compression logic here
-        console.log('%c Line:134 🍺 here', 'color:#b03734');
-      },
+      exec: () => {},
     });
   }
-}
-  `);
-
-  constructor() {
-    setTimeout(() => {
-      // this.code.setValue(`import { Component, OnInit } from '@angular/core';`);
-    }, 1000);
-  }
-
-  ngOnInit() {}
 }
