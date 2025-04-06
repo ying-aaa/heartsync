@@ -31,48 +31,44 @@
                 "input": "public"
               },
               {
-                "glob": "mode-typescript.js",
-                "input": "./node_modules/ace-builds/src-noconflict/",
+                "glob": "mode-html.js",
+                "input": "./node_modules/ace-builds/src-min-noconflict/",
                 "output": "/"
               },
               {
-                "glob": "typescript.js",
-                "input": "./node_modules/ace-builds/src-noconflict/snippets/",
-                "output": "/snippets"
+                "glob": "mode-css.js",
+                "input": "./node_modules/ace-builds/src-min-noconflict/",
+                "output": "/"
               },
               {
-                "glob": "javascript.js",
-                "input": "./node_modules/ace-builds/src-noconflict/snippets/",
-                "output": "/snippets"
+                "glob": "mode-json.js",
+                "input": "./node_modules/ace-builds/src-min-noconflict/",
+                "output": "/"
+              },
+              {
+                "glob": "mode-javascript.js",
+                "input": "./node_modules/ace-builds/src-min-noconflict/",
+                "output": "/"
               },
               {
                 "glob": "worker-html.js",
-                "input": "./node_modules/ace-builds/src-noconflict/",
+                "input": "./node_modules/ace-builds/src-min-noconflict/",
                 "output": "/"
               },
-              {
-                "glob": "worker-xml.js",
-                "input": "./node_modules/ace-builds/src-noconflict/",
-                "output": "/"
-              },
+
               {
                 "glob": "worker-css.js",
-                "input": "./node_modules/ace-builds/src-noconflict/",
+                "input": "./node_modules/ace-builds/src-min-noconflict/",
                 "output": "/"
               },
               {
                 "glob": "worker-json.js",
-                "input": "./node_modules/ace-builds/src-noconflict/",
+                "input": "./node_modules/ace-builds/src-min-noconflict/",
                 "output": "/"
               },
               {
                 "glob": "worker-javascript.js",
-                "input": "./node_modules/ace-builds/src-noconflict/",
-                "output": "/"
-              },
-              {
-                "glob": "worker-typescript.js",
-                "input": "./node_modules/ace-builds/src-noconflict/",
+                "input": "./node_modules/ace-builds/src-min-noconflict/",
                 "output": "/"
               }
             ],

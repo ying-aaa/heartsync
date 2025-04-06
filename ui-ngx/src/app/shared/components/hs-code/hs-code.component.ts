@@ -16,11 +16,7 @@ import { NgScrollbar } from 'ngx-scrollbar';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'hs-code',

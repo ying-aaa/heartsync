@@ -7,13 +7,11 @@ import {
   AfterViewInit,
   Output,
   forwardRef,
+  effect,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { HsThemeService } from '@src/app/core/services/theme.service';
 import * as ace from 'ace-builds';
-import 'ace-builds/src-noconflict/mode-html';
-import 'ace-builds/src-noconflict/mode-css';
-import 'ace-builds/src-noconflict/mode-javascript';
-import 'ace-builds/src-noconflict/mode-json';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/theme-cloud_editor_dark';
 import 'ace-builds/src-noconflict/theme-chrome';
@@ -21,7 +19,7 @@ import 'ace-builds/src-noconflict/theme-chrome';
 @Component({
   selector: 'hs-ace-editor',
   templateUrl: './ace-editor.component.html',
-  styleUrls: ['./ace-editor.component.css'],
+  styleUrls: ['./ace-editor.component.less'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -57,8 +55,14 @@ export class AceEditorComponent
   private propagateChange = (value: string) => {};
   private contentValue: string = '';
 
-  constructor(el: ElementRef) {
+  constructor(
+    el: ElementRef,
+    private HsThemeService: HsThemeService,
+  ) {
     this.el = el;
+    effect(() => {
+      this.loadTheme();
+    });
   }
 
   ngOnInit(): void {}
@@ -74,9 +78,9 @@ export class AceEditorComponent
     this.editor.setShowPrintMargin(false);
     this.loadTheme();
     this.editor.setFontSize(16);
-    this.editor.setValue(this.contentValue);
+    this.editor.setValue(this.contentValue, -1);
     this.editor.getSession().setTabSize(2);
-    this.editor.getSession().setUseTab(true);
+    // this.editor.getSession().setUseTab(true);
     this.editor.on('change', () => {
       this.contentValue = this.editor.getValue();
       this.onChange.emit(this.contentValue);
@@ -85,16 +89,12 @@ export class AceEditorComponent
   }
 
   loadTheme(): void {
-    switch (this.theme) {
-      case 'cloud_editor_dark':
-        this.editor.setTheme('ace/theme/cloud_editor_dark');
-        break;
-      case 'chrome':
-        this.editor.setTheme('ace/theme/chrome');
-        break;
-      default:
-        this.editor.setTheme('ace/theme/cloud_editor_dark');
-    }
+    const theme =
+      this.HsThemeService.currentTheme() === 'dark'
+        ? 'cloud_editor_dark'
+        : 'chrome';
+    if (!this.editor) return;
+    this.editor.setTheme(`ace/theme/${theme}`);
   }
 
   writeValue(value: string): void {
@@ -109,7 +109,7 @@ export class AceEditorComponent
   }
 
   registerOnTouched(fn: () => void): void {
-    this.editor.on('blur', fn);
+    this.editor?.on('blur', fn);
   }
 
   setDisabledState?(isDisabled: boolean): void {
