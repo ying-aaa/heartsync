@@ -24,6 +24,7 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "less",
+            "allowedCommonJsDependencies": ["ace-builds"],
             "assets": [
               "src/assets",
               {
