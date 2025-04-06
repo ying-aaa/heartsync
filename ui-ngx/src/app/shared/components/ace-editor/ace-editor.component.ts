@@ -15,6 +15,8 @@ import * as ace from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/theme-cloud_editor_dark';
 import 'ace-builds/src-noconflict/theme-chrome';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'hs-ace-editor',
@@ -27,15 +29,15 @@ import 'ace-builds/src-noconflict/theme-chrome';
       multi: true,
     },
   ],
+  imports: [MatButtonModule, MatIconModule],
 })
 export class AceEditorComponent
   implements OnInit, AfterViewInit, ControlValueAccessor
 {
+  @Input() toolbar: boolean = true;
+  @Input() title: string = '编辑器';
   @Input() type: string = 'html';
-  @Input() editorStyle: any = {
-    width: '100%',
-    height: '100%',
-  };
+  @Input() editorStyle: any = {};
   @Input() options: any = {
     enableBasicAutocompletion: true,
     enableSnippets: true,

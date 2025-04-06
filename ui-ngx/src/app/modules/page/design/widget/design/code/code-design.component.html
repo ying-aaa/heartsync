@@ -1,37 +1,51 @@
-<div
-  class="split-example ex1"
-  style="height: 600px"
->
-  <as-split
-    [gutterSize]="8"
-    (dragEnd)="log('dragEnd', $event)"
-  >
-    @if (action.isPresentA) {
+<content class="h-full flex flex-col">
+  <header>
+    <hs-code-toolbar></hs-code-toolbar>
+  </header>
+
+  <main class="split-wrapper ex1 h-0 flex-1">
+    <as-split
+      [gutterSize]="12"
+      (dragEnd)="log('dragEnd', $event)"
+      direction="vertical"
+    >
       <as-split-area [visible]="action.isVisibleA">
-        <!-- <div>HTML</div> -->
-        <hs-ace-editor
-          [type]="'javascript'"
-          [formControl]="code"
-        ></hs-ace-editor>
+        <as-split
+          [gutterSize]="12"
+          (dragEnd)="log('dragEnd', $event)"
+        >
+          @if (action.isPresentA) {
+            <as-split-area [visible]="action.isVisibleA">
+              <hs-ace-editor
+                title="html"
+                [type]="'javascript'"
+                [formControl]="code"
+              ></hs-ace-editor>
+            </as-split-area>
+          }
+          @if (action.isPresentB) {
+            <as-split-area [visible]="action.isVisibleB">
+              <hs-ace-editor
+                title="css"
+                [type]="'javascript'"
+                [formControl]="code"
+              ></hs-ace-editor>
+            </as-split-area>
+          }
+          @if (action.isPresentC) {
+            <as-split-area [visible]="action.isVisibleC">
+              <hs-ace-editor
+                title="javascript"
+                [type]="'javascript'"
+                [formControl]="code"
+              ></hs-ace-editor>
+            </as-split-area>
+          }
+        </as-split>
       </as-split-area>
-    }
-    @if (action.isPresentB) {
-      <as-split-area [visible]="action.isVisibleB">
-        <!-- <div>CSS</div> -->
-        <hs-ace-editor
-          [type]="'javascript'"
-          [formControl]="code"
-        ></hs-ace-editor>
+      <as-split-area [visible]="action.isVisibleA">
+        <div class="wh-full flex-center font-700 text-24px">内容渲染区域</div>
       </as-split-area>
-    }
-    @if (action.isPresentC) {
-      <as-split-area [visible]="action.isVisibleC">
-        <!-- <div>javascript</div> -->
-        <hs-ace-editor
-          [type]="'javascript'"
-          [formControl]="code"
-        ></hs-ace-editor>
-      </as-split-area>
-    }
-  </as-split>
-</div>
+    </as-split>
+  </main>
+</content>

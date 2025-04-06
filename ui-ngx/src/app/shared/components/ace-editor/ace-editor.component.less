@@ -6,14 +6,22 @@
       width: 100%;
       height: 100%;
 
+      .toolbar-wrapper {
+        height: 40px;
+        line-height: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
       .editor-wrapper {
+        height: calc(100% - 40px);
         border: 1px solid @base-line-color;
         border-radius: 3px;
         overflow: hidden;
       }
 
       ::ng-deep {
-
         .ace_scrollbar.ace_scrollbar-h {
           height: 8px !important;
         }

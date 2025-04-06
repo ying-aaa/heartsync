@@ -8,6 +8,7 @@ import {
   SplitComponent,
   SplitDirection,
 } from 'angular-split';
+import { CodeToolbarComponent } from './code-toolbar/code-toolbar.component';
 
 @Component({
   selector: 'hs-code-design',
@@ -20,6 +21,7 @@ import {
     CommonModule,
     SplitAreaComponent,
     SplitComponent,
+    CodeToolbarComponent,
   ],
 })
 export class CodeDesignComponent implements OnInit {

@@ -1,0 +1,22 @@
+@import "themeMixin";
+
+.themeMixin( {
+    :host {
+      content {
+        background-color: @code-toolbar-bg-color;
+      }
+
+      ::ng-deep {
+        .btn-save, .btn-run :not(:disabled) {
+          color: @base-text-color;
+        }
+
+        .btn-save {
+          background-color: @base-bg-color;
+        }
+
+      }
+    }
+  }
+
+);

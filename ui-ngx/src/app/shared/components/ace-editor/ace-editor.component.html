@@ -1,6 +1,39 @@
+<!-- <div class="ace-editor"> -->
+@if (toolbar) {
+  <div class="toolbar-wrapper">
+    @if (title) {
+      <div class="ml-5px">{{ title }}</div>
+
+      <div class="flex-center gap-5px">
+        <button
+          mat-raised-button
+          class="min-w-40px! w-40px! h-24px! p-5px! rounded-3px!"
+        >
+          整洁
+        </button>
+
+        <button
+          mat-raised-button
+          class="min-w-40px! w-40px! h-24px! p-5px! rounded-3px!"
+        >
+          压缩
+        </button>
+
+        <button
+          mat-icon-button
+          aria-label="Example icon button with a vertical three dot icon"
+        >
+          <mat-icon>fullscreen</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+}
+
 <div
   class="editor-wrapper"
   [style]="editorStyle"
 >
   <div class="editor wh-full"></div>
 </div>
+<!-- </div> -->
