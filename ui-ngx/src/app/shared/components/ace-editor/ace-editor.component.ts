@@ -32,7 +32,10 @@ export class AceEditorComponent
   implements OnInit, AfterViewInit, ControlValueAccessor
 {
   @Input() type: string = 'html';
-  @Input() theme: string = 'monokai';
+  @Input() editorStyle: any = {
+    width: '100%',
+    height: '100%',
+  };
   @Input() options: any = {
     enableBasicAutocompletion: true,
     enableSnippets: true,

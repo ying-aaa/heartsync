@@ -1,8 +1,37 @@
-<hs-ace-editor
-  [type]="'javascript'"
-  [theme]="'chrome'"
-  [formControl]="code"
-  class="m-20px"
-></hs-ace-editor>
-
-{{ code.value | json }}
+<div
+  class="split-example ex1"
+  style="height: 600px"
+>
+  <as-split
+    [gutterSize]="8"
+    (dragEnd)="log('dragEnd', $event)"
+  >
+    @if (action.isPresentA) {
+      <as-split-area [visible]="action.isVisibleA">
+        <!-- <div>HTML</div> -->
+        <hs-ace-editor
+          [type]="'javascript'"
+          [formControl]="code"
+        ></hs-ace-editor>
+      </as-split-area>
+    }
+    @if (action.isPresentB) {
+      <as-split-area [visible]="action.isVisibleB">
+        <!-- <div>CSS</div> -->
+        <hs-ace-editor
+          [type]="'javascript'"
+          [formControl]="code"
+        ></hs-ace-editor>
+      </as-split-area>
+    }
+    @if (action.isPresentC) {
+      <as-split-area [visible]="action.isVisibleC">
+        <!-- <div>javascript</div> -->
+        <hs-ace-editor
+          [type]="'javascript'"
+          [formControl]="code"
+        ></hs-ace-editor>
+      </as-split-area>
+    }
+  </as-split>
+</div>

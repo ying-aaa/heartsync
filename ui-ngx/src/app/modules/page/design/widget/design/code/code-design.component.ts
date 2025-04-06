@@ -1,13 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AceEditorComponent } from '@src/app/shared/components/ace-editor/ace-editor.component';
+import {
+  SplitAreaComponent,
+  SplitAreaSize,
+  SplitComponent,
+  SplitDirection,
+} from 'angular-split';
 
 @Component({
   selector: 'hs-code-design',
   templateUrl: './code-design.component.html',
   styleUrls: ['./code-design.component.less'],
-  imports: [AceEditorComponent, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    AceEditorComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    SplitAreaComponent,
+    SplitComponent,
+  ],
 })
 export class CodeDesignComponent implements OnInit {
   code = new FormControl(`import {
@@ -157,10 +170,20 @@ export class AceEditorComponent
 }
   `);
 
-  constructor() {
-    setTimeout(() => {
-      // this.code.setValue(`import { Component, OnInit } from '@angular/core';`);
-    }, 1000);
+  @HostBinding('class') class = 'split-example-page';
+
+  action = {
+    isVisibleA: true,
+    isVisibleB: true,
+    isVisibleC: true,
+    isPresentA: true,
+    isPresentB: true,
+    isPresentC: true,
+    logs: '',
+  };
+
+  log(eventName: any, e: any) {
+    this.action.logs = `${new Date()}: ${eventName} > ${e}\n${this.action.logs}`;
   }
 
   ngOnInit() {}
