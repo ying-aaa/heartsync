@@ -7,11 +7,13 @@
       }
 
       ::ng-deep {
-        .btn-save, .btn-run :not(:disabled) {
-          color: @base-text-color;
+        .btn-save, .btn-run {
+          &:not(:disabled) {
+            color: @base-text-color;
+          }
         }
 
-        .btn-save {
+        .btn-save:not(:disabled) {
           background-color: @base-bg-color;
         }
 

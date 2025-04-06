@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { AceEditorComponent } from '@src/app/shared/components/ace-editor/ace-editor.component';
 import {
   SplitAreaComponent,
@@ -9,6 +14,7 @@ import {
   SplitDirection,
 } from 'angular-split';
 import { CodeToolbarComponent } from './code-toolbar/code-toolbar.component';
+import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
 
 @Component({
   selector: 'hs-code-design',
@@ -22,9 +28,117 @@ import { CodeToolbarComponent } from './code-toolbar/code-toolbar.component';
     SplitAreaComponent,
     SplitComponent,
     CodeToolbarComponent,
+    FormlyRunModule,
   ],
 })
 export class CodeDesignComponent implements OnInit {
+  @HostBinding('class') class = 'split-example-page';
+
+  model = {};
+  fields = [
+    {
+      key: '1543537294238944',
+      type: 'subtable',
+      _design: true,
+      _bindKey: true,
+      props: {
+        label: '外部资源地址配置',
+        typeName: '普通输入子表',
+        icon: 'subtitles',
+        placeholder: '',
+        disabled: false,
+        styles: {
+          borderWidth: 0,
+          borderRadius: 0,
+          borderColor: 'transparent',
+        },
+        showBorder: false,
+      },
+      isPlaceholder: true,
+      fieldId: 'subtable_key_1543537294238944',
+      id: 'formly_280_subtable_1543537294238944_0',
+      hooks: {},
+      modelOptions: {},
+      validation: {
+        messages: {},
+      },
+      expressions: {},
+      wrappers: ['contorl'],
+      expressionProperties: {},
+      className: 'hs-density--undefined ',
+      fieldArray: {
+        fieldGroup: [
+          {
+            key: '5844141637878851',
+            type: 'input',
+            _design: true,
+            _bindKey: true,
+            props: {
+              row: 3,
+              appearance: 'outline',
+              label: '路径',
+              typeName: '单行文本',
+              placeholder: 'JavaScript/CSS URL',
+              disabled: false,
+              density: 5,
+              description: '',
+              required: false,
+              readonly: false,
+            },
+            fieldId: 'input_key_5844141637878851',
+            id: 'formly_281_input_5844141637878851_0',
+            hooks: {},
+            modelOptions: {},
+            validation: {
+              messages: {},
+            },
+            expressions: {},
+            wrappers: ['contorl', 'subtableitem', 'form-field'],
+            expressionProperties: {},
+            className: 'hs-density--5 ',
+            focus: false,
+          },
+          {
+            key: '8565278179065152',
+            type: 'toggle',
+            _design: true,
+            _bindKey: true,
+            props: {
+              label: '是否模块',
+              typeName: '开关',
+              icon: 'toggle_on',
+              row: 1,
+              placeholder: '',
+              disabled: false,
+              appearance: 'outline',
+              density: 5,
+              description: '',
+              required: false,
+              readonly: false,
+              hideFieldUnderline: true,
+              floatLabel: 'always',
+              hideLabel: true,
+            },
+            isPlaceholder: true,
+            fieldId: 'toggle_key_8565278179065152',
+            id: 'formly_763_toggle_8565278179065152_1',
+            hooks: {},
+            modelOptions: {},
+            validation: {
+              messages: {},
+            },
+            expressions: {},
+            wrappers: ['contorl', 'subtableitem', 'form-field'],
+            expressionProperties: {},
+            className: 'hs-density--5 ',
+            focus: false,
+          },
+        ],
+      },
+    },
+  ];
+  formGroup = new FormGroup({});
+
   code = new FormControl(`import {
   Component,
   ElementRef,
@@ -171,8 +285,6 @@ export class AceEditorComponent
   }
 }
   `);
-
-  @HostBinding('class') class = 'split-example-page';
 
   action = {
     isVisibleA: true,

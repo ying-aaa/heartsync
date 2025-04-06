@@ -44,7 +44,26 @@
         </as-split>
       </as-split-area>
       <as-split-area [visible]="action.isVisibleA">
-        <div class="wh-full flex-center font-700 text-24px">内容渲染区域</div>
+        <as-split
+          [gutterSize]="12"
+          (dragEnd)="log('dragEnd', $event)"
+        >
+          <as-split-area size="33">
+            <div class="p-8px">
+              <formly-form
+                [form]="formGroup"
+                [fields]="fields"
+                [model]="model"
+              >
+              </formly-form>
+            </div>
+          </as-split-area>
+          <as-split-area [visible]="action.isVisibleB">
+            <div class="wh-full flex-center font-700 text-24px">
+              内容渲染区域
+            </div>
+          </as-split-area>
+        </as-split>
       </as-split-area>
     </as-split>
   </main>
