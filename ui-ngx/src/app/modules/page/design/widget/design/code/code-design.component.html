@@ -1,6 +1,8 @@
 <content class="h-full flex flex-col">
   <header>
-    <hs-code-toolbar></hs-code-toolbar>
+    <hs-code-toolbar
+      [loadCustomComponent]="loadCustomComponent.bind(this)"
+    ></hs-code-toolbar>
   </header>
 
   <main class="split-wrapper ex1 h-0 flex-1">
@@ -19,7 +21,7 @@
               <hs-ace-editor
                 title="html"
                 [type]="'html'"
-                [formControl]="code"
+                [formControl]="htmlCode"
               ></hs-ace-editor>
             </as-split-area>
           }
@@ -28,7 +30,7 @@
               <hs-ace-editor
                 title="css"
                 [type]="'css'"
-                [formControl]="code"
+                [formControl]="cssCode"
                 [inline]="true"
               ></hs-ace-editor>
             </as-split-area>
@@ -38,7 +40,7 @@
               <hs-ace-editor
                 title="javascript"
                 [type]="'javascript'"
-                [formControl]="code"
+                [formControl]="javascriptCode"
               ></hs-ace-editor>
             </as-split-area>
           }
@@ -49,7 +51,7 @@
           [gutterSize]="12"
           (dragEnd)="log('dragEnd', $event)"
         >
-          <as-split-area size="33">
+          <as-split-area size="33.1">
             <div class="p-8px">
               <formly-form
                 [form]="formGroup"
@@ -60,9 +62,13 @@
             </div>
           </as-split-area>
           <as-split-area [visible]="action.isVisibleB">
-            <div class="wh-full flex-center font-700 text-24px">
-              内容渲染区域
-            </div>
+            <!-- <hs-widget-code></hs-widget-code> -->
+            @if (hsCustomComponent) {
+              <ng-template
+                #portalOutlet
+                [cdkPortalOutlet]="hsCustomComponent"
+              ></ng-template>
+            }
           </as-split-area>
         </as-split>
       </as-split-area>

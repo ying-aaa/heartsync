@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { WidgetEditorService } from '@src/app/core/services/widget-editor.servic
   imports: [MatIconModule, MatButtonModule],
 })
 export class CodeToolbarComponent implements OnInit {
+  @Input() loadCustomComponent = () => {};
   constructor(
     public widgetEditorService: WidgetEditorService,
     private router: Router,
