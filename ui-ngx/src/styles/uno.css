@@ -15,6 +15,7 @@
 .left-0{left:0;}
 .left-3px{left:3px;}
 .left-50\%{left:50%;}
+.right-12px{right:12px;}
 .right-16px{right:16px;}
 .right-3px{right:3px;}
 .top-0{top:0;}
@@ -53,6 +54,7 @@
 .mt-12px\!{margin-top:12px !important;}
 .mt-1px{margin-top:1px;}
 .mt-30px{margin-top:30px;}
+.inline{display:inline;}
 .block{display:block;}
 .hidden{display:none;}
 .h-0{height:0;}
@@ -71,6 +73,7 @@
 .h-36px\!{height:36px !important;}
 .h-3px{height:3px;}
 .h-40px{height:40px;}
+.h-40px\!{height:40px !important;}
 .h-48px{height:48px;}
 .h-50px{height:50px;}
 .h-52px{height:52px;}

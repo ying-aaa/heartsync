@@ -42,6 +42,46 @@ body {
       /* Scroll bar handle */
       background-color: @base-color-30;
     }
+
+    // ace 编辑器滚动条
+    .ace_scrollbar.ace_scrollbar-h {
+      height: 8px !important;
+    }
+
+    /* 自定义滚动条样式示例 */
+    .editor ::-webkit-scrollbar {
+      width: 8px;
+      /* 滚动条的宽度 */
+    }
+
+    .editor ::-webkit-scrollbar-track {
+      background: transparent;
+      /* 滚动条轨道的背景色 */
+    }
+
+    .editor ::-webkit-scrollbar-thumb {
+      background: @base-color-20;
+      /* 滚动条的背景色 */
+      border-radius: 0px;
+      /* 滚动条的圆角 */
+    }
+
+    .editor ::-webkit-scrollbar-thumb:hover {
+      background: @base-color-30;
+      /* 滚动条悬停时的背景色 */
+    }
+
+    // 分割线背景色
+    .as-split-gutter {
+      background-color: @editor-bg-color  !important;
+    }
+
+    // fullscreen 时的背景色
+    .hs-fullscreen-parent {
+      height: 100%;
+      background: @base-bg-color;
+      z-index: 0;
+    }
   }
 
 );
@@ -61,4 +101,8 @@ body {
 
 ul.ui-widget-content {
   z-index: 999;
+}
+
+.hs-fullscreen-parent {
+  height: 100%;
 }
