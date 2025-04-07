@@ -21,7 +21,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'hs-widget-form',
   templateUrl: './widget-form.component.html',
-  styleUrls: ['./widget-form.component.less'],
   imports: [FormlyRunModule, MatProgressSpinnerModule],
   host: {
     class: 'relative block w-100% min-h-300px',
