@@ -19,19 +19,18 @@
           @if (action.isPresentA) {
             <as-split-area [visible]="action.isVisibleA">
               <hs-ace-editor
-                title="html"
-                [type]="'html'"
-                [formControl]="htmlCode"
+                title="css"
+                [type]="'css'"
+                [formControl]="cssCode"
               ></hs-ace-editor>
             </as-split-area>
           }
           @if (action.isPresentB) {
             <as-split-area [visible]="action.isVisibleB">
               <hs-ace-editor
-                title="css"
-                [type]="'css'"
-                [formControl]="cssCode"
-                [inline]="true"
+                title="html"
+                [type]="'html'"
+                [formControl]="htmlCode"
               ></hs-ace-editor>
             </as-split-area>
           }

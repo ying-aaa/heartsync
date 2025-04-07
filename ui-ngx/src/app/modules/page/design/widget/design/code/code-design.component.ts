@@ -139,8 +139,7 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
 }
 `);
 
-  cssCode = new FormControl(`
-.header{
+  cssCode = new FormControl(`.header{
   background-color: green;
   cursor: pointer;
 }`);
