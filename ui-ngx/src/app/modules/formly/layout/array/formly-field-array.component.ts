@@ -43,19 +43,16 @@ export class FormlyFieldArrayComponent
     this.options.build!();
   }
 
-  addField(toIndex: number) {
-    this.formEditorService.addField(
-      this.model.at(-1),
-      this.model,
-      toIndex,
-      false,
+  getColumnItemWidth(
+    fieldGroup: IEditorFormlyField[],
+    itemField: IEditorFormlyField,
+  ): string {
+    const itemRow = itemField.props?.['row'] ?? 0;
+    const totalRow = fieldGroup.reduce(
+      (acc, ori) => acc + (ori.props?.['row'] ?? 0),
+      0,
     );
-    this.options.build!();
-  }
-
-  removeField(toIndex: number) {
-    this.formEditorService.removeField(this.model, toIndex, false);
-    this.options.build!();
+    return `calc(100% * ${itemRow / totalRow}) `;
   }
 
   ngOnInit() {}

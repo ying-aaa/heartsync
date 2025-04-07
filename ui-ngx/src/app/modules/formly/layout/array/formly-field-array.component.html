@@ -18,19 +18,19 @@
         cdkDragHandle
         >drag_indicator</mat-icon
       >
-      @let fieldGroupLength = f.fieldGroup?.length || 1;
-      <div class="flex-1 w-0 flex gap-5px">
+      <!-- @let fieldGroupLength = f.fieldGroup?.length || 1; -->
+      <div class="flex-1 w-0 flex gap-5px items-center">
         @for (fc of f.fieldGroup; track $index) {
           <formly-field
-            [style.width]="100 / fieldGroupLength + '%'"
+            [style.width]="getColumnItemWidth(field.fieldArray.fieldGroup!, fc)"
             [field]="fc"
           >
           </formly-field>
         }
       </div>
       <mat-icon
-        (click)="removeField($index)"
-        class="cursor-pointer text-20px w-20px! h-20px! pl-5px ml-5px"
+        (click)="remove($index)"
+        class="cursor-pointer text-20px w-20px! h-20px! pl-5px ml-5px color-red-5"
         >delete</mat-icon
       >
     </div>
@@ -39,7 +39,7 @@
     class="w-full mb-5px bg-transparent"
     mat-button
     mat-raised-button
-    (click)="addField(field.fieldGroup!.length)"
+    (click)="add()"
   >
     <mat-icon matChipAvatar>add</mat-icon> 新增
   </button>
