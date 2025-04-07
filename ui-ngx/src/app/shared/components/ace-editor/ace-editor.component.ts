@@ -17,11 +17,12 @@ import 'ace-builds/src-noconflict/theme-cloud_editor_dark';
 import 'ace-builds/src-noconflict/theme-chrome';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { FullscreenDirective } from '../../directive/fullscreen.directive';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'hs-ace-editor',
   templateUrl: './ace-editor.component.html',
-  styleUrls: ['./ace-editor.component.less'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -29,12 +30,18 @@ import { MatIconModule } from '@angular/material/icon';
       multi: true,
     },
   ],
-  imports: [MatButtonModule, MatIconModule],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    FullscreenDirective,
+    MatDividerModule,
+  ],
 })
 export class AceEditorComponent
   implements OnInit, AfterViewInit, ControlValueAccessor
 {
   @Input() toolbar: boolean = true;
+  @Input() inline: boolean = false;
   @Input() title: string = '编辑器';
   @Input() type: string = 'html';
   @Input() editorStyle: any = {};
@@ -55,7 +62,11 @@ export class AceEditorComponent
     tasSize: 2,
   };
   @Output() onChange = new EventEmitter<string>();
+
   editor: any;
+
+  fullscreen = false;
+
   private el: ElementRef;
   private propagateChange = (value: string) => {};
   private contentValue: string = '';
