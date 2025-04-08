@@ -21,7 +21,7 @@
               <hs-ace-editor
                 title="css"
                 [type]="'css'"
-                [formControl]="cssCode"
+                [(ngModel)]="widgetInfo.templateCss"
               ></hs-ace-editor>
             </as-split-area>
           }
@@ -30,7 +30,7 @@
               <hs-ace-editor
                 title="html"
                 [type]="'html'"
-                [formControl]="htmlCode"
+                [(ngModel)]="widgetInfo.templateHtml"
               ></hs-ace-editor>
             </as-split-area>
           }
@@ -39,7 +39,7 @@
               <hs-ace-editor
                 title="javascript"
                 [type]="'javascript'"
-                [formControl]="javascriptCode"
+                [(ngModel)]="widgetInfo.templateJs"
               ></hs-ace-editor>
             </as-split-area>
           }
@@ -61,13 +61,7 @@
             </div>
           </as-split-area>
           <as-split-area [visible]="action.isVisibleB">
-            <!-- <hs-widget-code></hs-widget-code> -->
-            @if (hsCustomComponent) {
-              <ng-template
-                #portalOutlet
-                [cdkPortalOutlet]="hsCustomComponent"
-              ></ng-template>
-            }
+            <hs-widget-code #WidgetCode [widgetInfo]="widgetInfo"></hs-widget-code>
           </as-split-area>
         </as-split>
       </as-split-area>

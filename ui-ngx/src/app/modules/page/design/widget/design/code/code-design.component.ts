@@ -5,9 +5,9 @@ import {
   HostBinding,
   OnInit,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import {
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -20,9 +20,7 @@ import { WidgetCodeComponent } from '@src/app/modules/components/widget-code/wid
 import {
   ComponentPortal,
   PortalModule,
-  PortalOutlet,
 } from '@angular/cdk/portal';
-import '@angular/compiler';
 
 @Component({
   selector: 'hs-code-design',
@@ -38,14 +36,38 @@ import '@angular/compiler';
     CodeToolbarComponent,
     FormlyRunModule,
     PortalModule,
-    // WidgetCodeComponent,
+    WidgetCodeComponent,
   ],
 })
 export class CodeDesignComponent implements OnInit, AfterViewInit {
+  @ViewChild("WidgetCode") WidgetCode: WidgetCodeComponent;
+
   @HostBinding('class') class = 'split-example-page';
   hsCustomComponent: ComponentPortal<any> | undefined;
 
   model = {};
+
+  widgetInfo = {
+    templateHtml: `自定义动态组件 
+<div (click)='addCount()' class='header'>111{{count}}</div>
+@if(count >= 5) {
+  <div>当前count 为 {{count}}</div>
+}
+`,
+    templateCss: `.header{
+  background-color: green;
+  cursor: pointer;
+}`,
+    templateJs: `return class extends DynamicWidgetComponent  {
+  count = 0;
+  addCount() {
+    this.count++;
+    console.log(this.ctx);
+  }
+}
+`,
+  }
+
   fields = [
     {
       type: 'fieldset',
@@ -130,27 +152,8 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
       ],
     },
   ];
+  
   formGroup = new FormGroup({});
-
-  htmlCode = new FormControl(`自定义动态组件 
-<div (click)='addCount()' class='header'>111{{count}}</div>
-@if(count >= 5) {
-  <div>当前count 为 {{count}}</div>
-}
-`);
-
-  cssCode = new FormControl(`.header{
-  background-color: green;
-  cursor: pointer;
-}`);
-
-  javascriptCode = new FormControl(`class customComponent {
-  count = 0;
-  addCount() {
-    this.count++;
-  }
-}
-`);
 
   action = {
     isVisibleA: true,
@@ -168,20 +171,9 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {}
 
-  ngAfterViewInit() {
-    // this.loadCustomComponent();
-  }
+  ngAfterViewInit() {}
 
   loadCustomComponent() {
-    this.hsCustomComponent = undefined;
-    const classCode = new Function(
-      (this.javascriptCode.value as string) + `return customComponent`,
-    );
-
-    const dynamicComponent = Component({
-      template: this.htmlCode.value as string,
-      styles: [this.cssCode.value as string],
-    })(classCode());
-    this.hsCustomComponent = new ComponentPortal(dynamicComponent);
+    this.WidgetCode.loadDynamicComponent();
   }
 }
