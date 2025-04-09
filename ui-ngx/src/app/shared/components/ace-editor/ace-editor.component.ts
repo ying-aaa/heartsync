@@ -116,7 +116,7 @@ export class AceEditorComponent
   writeValue(value: string): void {
     this.contentValue = value;
     if (this.editor) {
-      this.editor.setValue(value);
+      this.editor.setValue(value, -1);
     }
   }
 
