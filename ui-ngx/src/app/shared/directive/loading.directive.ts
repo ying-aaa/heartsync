@@ -11,7 +11,7 @@ import {
 })
 export class LoadingDirective {
   @Input() isLoading: boolean = false; // 控制加载动画的显示与隐藏
-  @Input() message: string = 'Loading...'; // 加载时的提示信息
+  // @Input() message: string = 'Loading...'; // 加载时的提示信息
 
   private overlay: HTMLElement | null = null;
 

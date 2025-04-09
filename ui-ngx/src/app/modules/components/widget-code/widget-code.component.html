@@ -1,1 +1,7 @@
-<ng-container #dynamicComponentContainer></ng-container>
+<div
+  class="wh-full"
+  ngLoading
+  [isLoading]="scriptLoadingStatus"
+>
+  <ng-container #dynamicComponentContainer></ng-container>
+</div>

@@ -5,20 +5,13 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AceEditorComponent } from '@src/app/shared/components/ace-editor/ace-editor.component';
 import { SplitAreaComponent, SplitComponent } from 'angular-split';
 import { CodeToolbarComponent } from './code-toolbar/code-toolbar.component';
 import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
 import { WidgetCodeComponent } from '@src/app/modules/components/widget-code/widget-code.component';
-import {
-  ComponentPortal,
-  PortalModule,
-} from '@angular/cdk/portal';
+import { ComponentPortal, PortalModule } from '@angular/cdk/portal';
 
 @Component({
   selector: 'hs-code-design',
@@ -37,7 +30,7 @@ import {
   ],
 })
 export class CodeDesignComponent implements OnInit, AfterViewInit {
-  @ViewChild("WidgetCode") WidgetCode: WidgetCodeComponent;
+  @ViewChild('WidgetCode') WidgetCode: WidgetCodeComponent;
 
   @HostBinding('class') class = 'split-example-page';
   hsCustomComponent: ComponentPortal<any> | undefined;
@@ -116,10 +109,13 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
 }
 `,
     resourceScript: [
-      {resourceUrl: "https://cdn.bootcdn.net/ajax/libs/echarts/5.6.0/echarts.js"},
-      {resourceUrl: "jquery.min.js"},
-    ]
-  }
+      {
+        resourceUrl:
+          'https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js',
+      },
+      { resourceUrl: 'jquery.min.js' },
+    ],
+  };
 
   fields = [
     {
@@ -205,7 +201,7 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
       ],
     },
   ];
-  
+
   formGroup = new FormGroup({});
 
   action = {
