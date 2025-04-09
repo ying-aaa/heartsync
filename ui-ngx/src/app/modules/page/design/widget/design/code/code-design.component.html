@@ -2,6 +2,7 @@
   <header>
     <hs-code-toolbar
       [loadCustomComponent]="loadCustomComponent.bind(this)"
+      [saveWidgetInfo]="saveWidgetInfo.bind(this)"
     ></hs-code-toolbar>
   </header>
 
@@ -21,7 +22,7 @@
               <hs-ace-editor
                 title="css"
                 [type]="'css'"
-                [(ngModel)]="widgetInfo.templateCss"
+                [(ngModel)]="widgetInfo().templateCss"
               ></hs-ace-editor>
             </as-split-area>
           }
@@ -30,7 +31,7 @@
               <hs-ace-editor
                 title="html"
                 [type]="'html'"
-                [(ngModel)]="widgetInfo.templateHtml"
+                [(ngModel)]="widgetInfo().templateHtml"
               ></hs-ace-editor>
             </as-split-area>
           }
@@ -39,7 +40,7 @@
               <hs-ace-editor
                 title="javascript"
                 [type]="'javascript'"
-                [(ngModel)]="widgetInfo.templateJs"
+                [(ngModel)]="widgetInfo().templateJs"
               ></hs-ace-editor>
             </as-split-area>
           }
@@ -55,13 +56,16 @@
               <formly-form
                 [form]="formGroup"
                 [fields]="fields"
-                [model]="widgetInfo"
+                [model]="widgetInfo()"
               >
               </formly-form>
             </div>
           </as-split-area>
           <as-split-area [visible]="action.isVisibleB">
-            <hs-widget-code #WidgetCode [widgetInfo]="widgetInfo"></hs-widget-code>
+            <hs-widget-code
+              #WidgetCode
+              [widgetInfo]="widgetInfo()"
+            ></hs-widget-code>
           </as-split-area>
         </as-split>
       </as-split-area>

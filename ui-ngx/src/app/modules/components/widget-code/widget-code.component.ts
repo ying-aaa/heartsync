@@ -1,6 +1,8 @@
 import {
   Component,
   ComponentRef,
+  effect,
+  input,
   Input,
   OnInit,
   ViewChild,
@@ -21,23 +23,36 @@ export class WidgetCodeComponent implements OnInit {
 
   @Input() widgetId: any;
 
-  @Input() widgetInfo: any;
+  widgetInfo = input<any>();
 
   compRef: ComponentRef<any> | null = null;
 
   constructor(
     private DynamicComponentFactoryService: DynamicComponentFactoryService,
     private scriptLoaderService: ScriptLoaderService,
-  ) {}
+  ) {
+    effect(() => {
+      if (this.widgetInfo().id) {
+        this.loadResourceScript();
+      }
+    });
+  }
 
   get scriptLoadingStatus() {
     return this.scriptLoaderService.getLoadingStatus();
   }
 
+  public loadResourceScript() {
+    const { resourceScript } = this.widgetInfo();
+    const resourceUrls = resourceScript.map((item: any) => item.resourceUrl);
+    this.scriptLoaderService.loadScripts(resourceUrls).subscribe((res) => {
+      this.loadDynamicComponent();
+    });
+  }
+
   public loadDynamicComponent() {
     this.destroyDynamicComponent();
-
-    const { templateHtml, templateCss, templateJs } = this.widgetInfo;
+    const { templateHtml, templateCss, templateJs } = this.widgetInfo();
     const func = new Function('DynamicWidgetComponent', templateJs);
     const imports: any = [];
     const preserveWhitespaces = false;
@@ -53,14 +68,6 @@ export class WidgetCodeComponent implements OnInit {
     });
   }
 
-  public loadResourceScript() {
-    const { resourceScript } = this.widgetInfo;
-    const resourceUrls = resourceScript.map((item: any) => item.resourceUrl);
-    this.scriptLoaderService.loadScripts(resourceUrls).subscribe((res) => {
-      this.loadDynamicComponent();
-    });
-  }
-
   destroyDynamicComponent() {
     if (this.compRef) {
       this.compRef.destroy();
@@ -68,7 +75,5 @@ export class WidgetCodeComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.loadResourceScript();
-  }
+  ngOnInit() {}
 }

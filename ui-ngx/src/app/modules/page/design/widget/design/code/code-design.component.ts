@@ -3,6 +3,7 @@ import {
   Component,
   HostBinding,
   OnInit,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +13,10 @@ import { CodeToolbarComponent } from './code-toolbar/code-toolbar.component';
 import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
 import { WidgetCodeComponent } from '@src/app/modules/components/widget-code/widget-code.component';
 import { ComponentPortal, PortalModule } from '@angular/cdk/portal';
+import { ICodeWidgetConfig } from '@src/app/shared/models/code-widget.model';
+import { CodeWidgetService } from '@src/app/core/http/code-widget.service';
+import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'hs-code-design',
@@ -33,89 +38,22 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
   @ViewChild('WidgetCode') WidgetCode: WidgetCodeComponent;
 
   @HostBinding('class') class = 'split-example-page';
-  hsCustomComponent: ComponentPortal<any> | undefined;
+
+  constructor(
+    private codeWidgetService: CodeWidgetService,
+    private route: ActivatedRoute,
+    private _snackBar: MatSnackBar,
+  ) {}
 
   model = {};
 
-  widgetInfo = {
-    templateHtml: `自定义动态组件 
-<div (click)='addCount()' class='header'>111{{count}}</div>
-@if(count >= 5) {
-  <div>当前count 为 {{count}}</div>
-}
-
-<div id="chart-container"></div>
-`,
-    templateCss: `.header{
-  background-color: green;
-  cursor: pointer;
-}
-
-#chart-container{
-  width: 400px;
-  height: 300px;
-  margin-left: 50px;
-}`,
-    templateJs: `return class extends DynamicWidgetComponent  {
-  count = 0;
-  addCount() {
-    this.count++;
-    console.log("$", $);
-    console.log("echarts", echarts);
-  }
-  
-  initEcharts() {
-    console.log(1,2,3);
-    var chart = echarts.init(document.getElementById('chart-container'));
-  
-    // 指定图表的配置项和数据
-    var option = {
-        title: {
-            text: '月度销售额统计'
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        xAxis: {
-            type: 'category',
-            data: ['1月', '2月', '3月', '4月', '5月', '6月']
-        },
-        yAxis: {
-            type: 'value',
-            name: '销售额（万元）'
-        },
-        series: [{
-            name: '销售额',
-            type: 'bar',
-            data: [120, 200, 150, 80, 70, 110],
-            itemStyle: {
-                color: '#5470c6'
-            }
-        }]
-    };
-  
-    // 使用刚指定的配置项和数据显示图表
-    chart.setOption(option);
-  
-    // 响应式调整图表大小
-    window.addEventListener('resize', function() {
-        chart.resize();
-    });
-  }
-  
-  ngOnInit() {
-    this.initEcharts();
-  }
-}
-`,
-    resourceScript: [
-      {
-        resourceUrl:
-          'https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js',
-      },
-      { resourceUrl: 'jquery.min.js' },
-    ],
-  };
+  widgetInfo = signal<ICodeWidgetConfig>({
+    id: '1',
+    templateHtml: ``,
+    templateCss: ``,
+    templateJs: ``,
+    resourceScript: [],
+  });
 
   fields = [
     {
@@ -220,9 +158,29 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {}
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    const widgetId = this.route.snapshot.queryParams['widgetId'];
+    this.codeWidgetService
+      .getCodeWidgetById(widgetId)
+      .subscribe((widgetInfo) => {
+        this.widgetInfo.set(widgetInfo);
+      });
+  }
 
   loadCustomComponent() {
     this.WidgetCode.loadResourceScript();
+  }
+
+  saveWidgetInfo() {
+    this.codeWidgetService.updateCodeWidget(this.widgetInfo()).subscribe({
+      next: () => {
+        this._snackBar.open('更新部件成功!!!', '确定', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 3 * 1000,
+        });
+      },
+      error: (err: any) => console.error('Update widget error:', err),
+    });
   }
 }
