@@ -1,6 +1,7 @@
 import { Component, ComponentFactoryResolver, ComponentRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { DynamicComponentFactoryService } from '@core/services/dynamic-component-factory.service';
 import { DynamicWidgetComponent } from './dynamic-widget.component';
+import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
 @Component({
   selector: 'hs-widget-code',
   templateUrl: './widget-code.component.html',
@@ -16,6 +17,7 @@ export class WidgetCodeComponent implements OnInit {
 
   constructor(
     private DynamicComponentFactoryService: DynamicComponentFactoryService,
+    private scriptLoaderService: ScriptLoaderService
   ) {}
 
   public loadDynamicComponent() {
@@ -33,6 +35,14 @@ export class WidgetCodeComponent implements OnInit {
       });
   }
 
+  public loadResourceScript() {
+    const { resourceScript } = this.widgetInfo;
+    const resourceUrls = resourceScript.map((item: any) => item.resourceUrl)
+    this.scriptLoaderService.loadScripts(resourceUrls).subscribe(res => {
+      this.loadDynamicComponent();
+    })
+  }
+
   destroyDynamicComponent() {
     if (this.compRef) {
       this.compRef.destroy();
@@ -41,6 +51,6 @@ export class WidgetCodeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadDynamicComponent();
+    this.loadResourceScript();
   }
 }

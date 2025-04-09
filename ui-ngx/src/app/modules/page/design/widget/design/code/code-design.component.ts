@@ -1,11 +1,9 @@
-import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
   HostBinding,
   OnInit,
   ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
 import {
   FormGroup,
@@ -30,7 +28,6 @@ import {
     AceEditorComponent,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule,
     SplitAreaComponent,
     SplitComponent,
     CodeToolbarComponent,
@@ -53,19 +50,75 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
 @if(count >= 5) {
   <div>当前count 为 {{count}}</div>
 }
+
+<div id="chart-container"></div>
 `,
     templateCss: `.header{
   background-color: green;
   cursor: pointer;
+}
+
+#chart-container{
+  width: 400px;
+  height: 300px;
+  margin-left: 50px;
 }`,
     templateJs: `return class extends DynamicWidgetComponent  {
   count = 0;
   addCount() {
     this.count++;
-    console.log(this.ctx);
+    console.log("$", $);
+    console.log("echarts", echarts);
+  }
+  
+  initEcharts() {
+    console.log(1,2,3);
+    var chart = echarts.init(document.getElementById('chart-container'));
+  
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '月度销售额统计'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        xAxis: {
+            type: 'category',
+            data: ['1月', '2月', '3月', '4月', '5月', '6月']
+        },
+        yAxis: {
+            type: 'value',
+            name: '销售额（万元）'
+        },
+        series: [{
+            name: '销售额',
+            type: 'bar',
+            data: [120, 200, 150, 80, 70, 110],
+            itemStyle: {
+                color: '#5470c6'
+            }
+        }]
+    };
+  
+    // 使用刚指定的配置项和数据显示图表
+    chart.setOption(option);
+  
+    // 响应式调整图表大小
+    window.addEventListener('resize', function() {
+        chart.resize();
+    });
+  }
+  
+  ngOnInit() {
+    this.initEcharts();
   }
 }
 `,
+    resourceScript: [
+      {resourceUrl: "https://cdn.bootcdn.net/ajax/libs/echarts/5.6.0/echarts.js"},
+      {resourceUrl: "jquery.min.js"},
+    ]
   }
 
   fields = [
@@ -83,7 +136,7 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
       },
       fieldGroup: [
         {
-          key: 'props.options',
+          key: 'resourceScript',
           type: 'array',
           props: {
             typeName: '普通输入子表',
@@ -108,7 +161,7 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
           fieldArray: {
             fieldGroup: [
               {
-                key: '5844141637878851',
+                key: 'resourceUrl',
                 type: 'input',
                 props: {
                   type: 'text',
@@ -127,7 +180,7 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
                 className: 'hs-density--5 ',
               },
               {
-                key: '8565278179065152',
+                key: 'isModule',
                 type: 'checkbox',
                 defaultValue: false,
                 props: {
@@ -174,6 +227,6 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {}
 
   loadCustomComponent() {
-    this.WidgetCode.loadDynamicComponent();
+    this.WidgetCode.loadResourceScript();
   }
 }

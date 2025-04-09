@@ -6,12 +6,13 @@ import { concatMap, catchError, delay, last } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ScriptLoaderService {
-  private scripts: { [key: string]: boolean } = {
-    'jquery.min.js': false,
-    'jquery-ui.min.js': false,
-    'jquery.ui-contextmenu.min.js': false,
-    'jquery.fancytree-all.min.js': false,
-  };
+  /** 
+   * 'jquery.min.js': false,
+   *  'jquery-ui.min.js': false,
+   *  'jquery.ui-contextmenu.min.js': false,
+   *  'jquery.fancytree-all.min.js': false,
+   * */ 
+  private scripts: { [key: string]: boolean } = {};
 
   constructor() {}
 
