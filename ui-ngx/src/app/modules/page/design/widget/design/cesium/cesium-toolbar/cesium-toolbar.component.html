@@ -1,0 +1,25 @@
+<content class="relative h-52px px-16px flex-center">
+  <div class="flex-center gap-8px absolute left-16px">
+    <button
+      matSuffix
+      mat-icon-button
+      (click)="toWidgetManage()"
+    >
+      <mat-icon class="material-icons-round">arrow_back </mat-icon>
+    </button>
+
+    <span class="w-180px">XXX部件</span>
+  </div>
+
+  <hs-radio
+    [configs]="toolbarConfigs"
+    class="w-800px"
+  ></hs-radio>
+
+  <div class="absolute right-16px">
+    <button mat-button>
+      <mat-icon class="material-icons-round">file_download </mat-icon>
+      <span>导出</span>
+    </button>
+  </div>
+</content>

@@ -96,6 +96,11 @@
                 "input": "src/styles/dark.less",
                 "bundleName": "dark-theme",
                 "inject": false
+              },
+              {
+                "input": "node_modules/cesium/Build/Cesium/Widgets/widgets.css",
+                "bundleName": "cesium-widgets",
+                "inject": false
               }
             ],
             "stylePreprocessorOptions": {
@@ -120,6 +125,11 @@
               {
                 "input": "./node_modules/jquery.fancytree/dist/jquery.fancytree-all.min.js",
                 "bundleName": "jquery.fancytree-all.min",
+                "inject": false
+              },
+              {
+                "input": "./node_modules/cesium/Build/Cesium/Cesium.js",
+                "bundleName": "Cesium",
                 "inject": false
               }
             ]

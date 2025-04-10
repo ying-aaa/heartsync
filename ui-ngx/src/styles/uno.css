@@ -13,12 +13,14 @@
 .-top-16px{top:-16px;}
 .bottom-50px{bottom:50px;}
 .left-0{left:0;}
+.left-16px{left:16px;}
 .left-3px{left:3px;}
 .left-50\%{left:50%;}
 .right-12px{right:12px;}
 .right-16px{right:16px;}
 .right-3px{right:3px;}
 .top-0{top:0;}
+.top-12px{top:12px;}
 .top-16px{top:16px;}
 .top-32px{top:32px;}
 .top-50\%{top:50%;}
@@ -108,6 +110,7 @@
 .w-52px{width:52px;}
 .w-72px\!{width:72px !important;}
 .w-80\%{width:80%;}
+.w-800px{width:800px;}
 .w-80px{width:80px;}
 .w-84px{width:84px;}
 .w-auto{width:auto;}

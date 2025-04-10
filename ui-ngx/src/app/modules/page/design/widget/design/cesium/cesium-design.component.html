@@ -1,1 +1,13 @@
-<div>cesium设计页面</div>
+<content class="wh-full flex flex-col">
+  <header>
+    <hs-cesium-toolbar></hs-cesium-toolbar>
+  </header>
+
+  <mat-divider class="w-full"></mat-divider>
+
+  <main class="flex-1 h-0">
+    <hs-widget-cesium
+      [styles]="{ width: '100%', height: '100%' }"
+    ></hs-widget-cesium>
+  </main>
+</content>
