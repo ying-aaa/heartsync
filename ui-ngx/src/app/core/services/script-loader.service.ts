@@ -6,12 +6,6 @@ import { concatMap, catchError, delay, last, tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ScriptLoaderService {
-  /**
-   * 'jquery.min.js': false,
-   *  'jquery-ui.min.js': false,
-   *  'jquery.ui-contextmenu.min.js': false,
-   *  'jquery.fancytree-all.min.js': false,
-   */
   private scripts: { [key: string]: boolean } = {};
   private loadingStatus: boolean = false;
 
@@ -38,26 +32,64 @@ export class ScriptLoaderService {
   }
 
   private insertScriptElement(script: string): Observable<any> {
-    if (this.scripts[script]) {
+    // 判断是否是标签字符
+    if (script.startsWith('<script') || script.startsWith('<link')) {
       return new Observable((subscriber) => {
-        subscriber.next();
-        subscriber.complete();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(script, 'text/html');
+        const scriptElement = doc.head.firstChild;
+        if (scriptElement) {
+          document.head.appendChild(scriptElement);
+          subscriber.next();
+          subscriber.complete();
+        } else {
+          subscriber.error(new Error('Invalid script tag'));
+        }
       });
     }
 
-    return new Observable((subscriber) => {
-      const scriptElement = document.createElement('script');
-      scriptElement.type = 'text/javascript';
-      scriptElement.src = script;
-      scriptElement.onload = () => {
-        this.scripts[script] = true;
-        subscriber.next();
-        subscriber.complete();
-      };
-      scriptElement.onerror = (error) => {
-        subscriber.error(error);
-      };
-      document.body.appendChild(scriptElement);
-    });
+    // 判断是否是资源路径字符
+    const scriptUrl = script.trim();
+    if (!scriptUrl.endsWith('.js') && !scriptUrl.endsWith('.css')) {
+      return throwError(() => new Error('Unsupported file type'));
+    }
+
+    if (this.scripts[scriptUrl]) {
+      return of(null);
+    }
+
+    if (scriptUrl.endsWith('.js')) {
+      return new Observable((subscriber) => {
+        const scriptElement = document.createElement('script');
+        scriptElement.type = 'text/javascript';
+        scriptElement.src = scriptUrl;
+        scriptElement.onload = () => {
+          this.scripts[scriptUrl] = true;
+          subscriber.next();
+          subscriber.complete();
+        };
+        scriptElement.onerror = (error) => {
+          subscriber.error(error);
+        };
+        document.body.appendChild(scriptElement);
+      });
+    } else if (scriptUrl.endsWith('.css')) {
+      return new Observable((subscriber) => {
+        const linkElement = document.createElement('link');
+        linkElement.rel = 'stylesheet';
+        linkElement.href = scriptUrl;
+        linkElement.onload = () => {
+          this.scripts[scriptUrl] = true;
+          subscriber.next();
+          subscriber.complete();
+        };
+        linkElement.onerror = (error) => {
+          subscriber.error(error);
+        };
+        document.head.appendChild(linkElement);
+      });
+    } else {
+      return throwError(() => new Error('Unsupported file type'));
+    }
   }
 }
