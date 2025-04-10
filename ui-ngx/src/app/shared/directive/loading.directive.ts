@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[ngLoading]',
+  selector: '[ng-loading]',
 })
 export class LoadingDirective {
   @Input() isLoading: boolean = false; // 控制加载动画的显示与隐藏
