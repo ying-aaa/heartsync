@@ -12,14 +12,27 @@ import { DynamicComponentFactoryService } from '@core/services/dynamic-component
 import { DynamicWidgetComponent } from './dynamic-widget.component';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
 import { LoadingDirective } from '@src/app/shared/directive/loading.directive';
+import { FormlyRunModule } from '@app/modules/formly/formly-run.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormlyModule } from '@ngx-formly/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { FullscreenDirective } from '@src/app/shared/directive/fullscreen.directive';
 @Component({
   selector: 'hs-widget-code',
   templateUrl: './widget-code.component.html',
-  imports: [LoadingDirective],
+  imports: [
+    LoadingDirective,
+    FullscreenDirective,
+    MatIconModule,
+    MatButtonModule,
+  ],
 })
 export class WidgetCodeComponent implements OnInit {
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef })
   dynamicComponentContainer: ViewContainerRef;
+
+  fullscreen = false;
 
   @Input() widgetId: any;
 
@@ -54,8 +67,13 @@ export class WidgetCodeComponent implements OnInit {
     this.destroyDynamicComponent();
     const { templateHtml, templateCss, templateJs } = this.widgetInfo();
     const func = new Function('DynamicWidgetComponent', templateJs);
-    const imports: any = [];
-    const preserveWhitespaces = false;
+    const imports: any = [
+      FormsModule,
+      ReactiveFormsModule,
+      FormlyRunModule,
+      FormlyModule,
+    ];
+    const preserveWhitespaces = true;
 
     this.DynamicComponentFactoryService.createDynamicComponent(
       func(DynamicWidgetComponent),

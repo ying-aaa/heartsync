@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   HostBinding,
+  HostListener,
   OnInit,
   signal,
   ViewChild,
@@ -39,13 +40,26 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
 
   @HostBinding('class') class = 'split-example-page';
 
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    // 检查是否按下 Ctrl + R
+    if (event.ctrlKey && event.key.toLowerCase() === 'r') {
+      event.preventDefault();
+      this.loadCustomComponent();
+    }
+
+    if (event.ctrlKey && event.key.toLowerCase() === 's') {
+      event.preventDefault();
+      event.preventDefault();
+      this.saveWidgetInfo();
+    }
+  }
+
   constructor(
     private codeWidgetService: CodeWidgetService,
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
   ) {}
-
-  model = {};
 
   widgetInfo = signal<ICodeWidgetConfig>({
     id: '1',
@@ -174,6 +188,7 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
   saveWidgetInfo() {
     this.codeWidgetService.updateCodeWidget(this.widgetInfo()).subscribe({
       next: () => {
+        this.WidgetCode.loadResourceScript();
         this._snackBar.open('更新部件成功!!!', '确定', {
           horizontalPosition: 'center',
           verticalPosition: 'top',

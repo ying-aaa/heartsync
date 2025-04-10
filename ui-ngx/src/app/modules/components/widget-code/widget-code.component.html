@@ -1,7 +1,17 @@
 <div
-  class="wh-full"
-  ngLoading
+  class="wh-full relative"
+  ng-loading
   [isLoading]="scriptLoadingStatus"
+  hs-fullscreen
+  [fullscreen]="fullscreen"
 >
+  <button
+    mat-icon-button
+    (click)="fullscreen = !fullscreen"
+    class="absolute! right-12px top-12px"
+  >
+    @let fullscreenIcon = fullscreen ? 'fullscreen_exit' : 'fullscreen';
+    <mat-icon class="material-icons">{{ fullscreenIcon }}</mat-icon>
+  </button>
   <ng-container #dynamicComponentContainer></ng-container>
 </div>
