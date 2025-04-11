@@ -1,6 +1,6 @@
 @switch (widgetType) {
   @case (widgetTypes.CODE) {
-    <hs-widget-code> </hs-widget-code>
+    <hs-widget-code [widgetId]="widgetId()"> </hs-widget-code>
   }
   @case (widgetTypes.CHART) {
     <hs-widget-chart></hs-widget-chart>

@@ -3,8 +3,8 @@ import {
   ComponentRef,
   effect,
   input,
-  Input,
   OnInit,
+  signal,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -18,6 +18,9 @@ import { FormlyModule } from '@ngx-formly/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FullscreenDirective } from '@src/app/shared/directive/fullscreen.directive';
+import { ICodeWidgetConfig } from '@src/app/shared/models/code-widget.model';
+import { ActivatedRoute } from '@angular/router';
+import { CodeWidgetService } from '@src/app/core/http/code-widget.service';
 @Component({
   selector: 'hs-widget-code',
   templateUrl: './widget-code.component.html',
@@ -34,20 +37,20 @@ export class WidgetCodeComponent implements OnInit {
 
   fullscreen = false;
 
-  @Input() widgetId: any;
+  widgetId = input<string>();
 
-  widgetInfo = input<any>();
+  widgetInfo = signal<ICodeWidgetConfig>({} as ICodeWidgetConfig);
 
   compRef: ComponentRef<any> | null = null;
 
   constructor(
     private DynamicComponentFactoryService: DynamicComponentFactoryService,
     private scriptLoaderService: ScriptLoaderService,
+    private codeWidgetService: CodeWidgetService,
+    private route: ActivatedRoute,
   ) {
     effect(() => {
-      if (this.widgetInfo().id) {
-        this.loadResourceScript();
-      }
+      this.widgetId() && this.loadWidgetInfo();
     });
   }
 
@@ -84,6 +87,20 @@ export class WidgetCodeComponent implements OnInit {
     ).subscribe((component) => {
       this.compRef = this.dynamicComponentContainer.createComponent(component);
     });
+  }
+
+  loadWidgetInfo() {
+    this.codeWidgetService
+      .getCodeWidgetById(this.widgetId() as string)
+      .subscribe((widgetInfo) => {
+        this.widgetInfo.set(widgetInfo);
+        this.loadResourceScript();
+      });
+  }
+
+  setWidgetInfo(widgetInfo: ICodeWidgetConfig) {
+    this.widgetInfo.set(widgetInfo);
+    this.loadResourceScript();
   }
 
   destroyDynamicComponent() {

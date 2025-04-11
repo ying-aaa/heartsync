@@ -27,7 +27,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   },
 })
 export class WidgetFormComponent implements OnInit {
-  widgetId = input.required<string | undefined>();
+  widgetId = input.required<string>();
   sizeStyle = input<IWidgetSizeStyle | undefined>();
 
   widgetConfig = signal<IFormWidgetConfig>({} as IFormWidgetConfig);

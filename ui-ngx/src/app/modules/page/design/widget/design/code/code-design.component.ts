@@ -173,16 +173,21 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   ngAfterViewInit() {
+    this.loadWidgetInfo();
+  }
+
+  loadCustomComponent() {
+    this.WidgetCode.loadResourceScript();
+  }
+
+  loadWidgetInfo() {
     const widgetId = this.route.snapshot.queryParams['widgetId'];
     this.codeWidgetService
       .getCodeWidgetById(widgetId)
       .subscribe((widgetInfo) => {
         this.widgetInfo.set(widgetInfo);
+        this.WidgetCode.setWidgetInfo(widgetInfo);
       });
-  }
-
-  loadCustomComponent() {
-    this.WidgetCode.loadResourceScript();
   }
 
   saveWidgetInfo() {
