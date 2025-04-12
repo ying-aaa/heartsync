@@ -8,7 +8,6 @@ import { WidgetViewportComponent } from './widget-viewport.component';
 @Component({
   selector: 'hs-widget-manage',
   templateUrl: './widget-manage.component.html',
-  styleUrls: ['./widget-manage.component.less'],
   imports: [
     WidgetFolderComponent,
     MatDividerModule,

@@ -1,22 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { FormlyConfigComponent } from '@src/app/modules/components/formly-config/formly-config.component';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
 import { WidgetFolderComponent } from '../widget/widget-folder.component';
 import { DashboardViewportComponent } from './dashboard-viewport.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
   selector: 'hs-dashboard-manage',
   templateUrl: './dashboard-manage.component.html',
   styleUrls: ['./dashboard-manage.component.less'],
   imports: [
+    MatSidenavModule,
     WidgetFolderComponent,
     MatDividerModule,
     DashboardViewportComponent,
-    FormlyConfigComponent,
+    MatButtonModule,
   ],
 })
 export class DashboardManageComponent implements OnInit {
+  shouldRun = /(^|.)(stackblitz|webcontainer).(io|com)$/.test(
+    window.location.host,
+  );
+
   constructor(private widgetEditorService: WidgetEditorService) {}
 
   get widgetConfig() {

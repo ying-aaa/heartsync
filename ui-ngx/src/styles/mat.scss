@@ -26,12 +26,6 @@ $base-radius: 8px;
 }
 
 html {
-  // 输入框聚焦边框宽度
-  --mdc-outlined-text-field-focus-outline-width: 1px;
-  // 文字大小
-  --mat-form-field-container-text-size: 0.9rem;
-
-  --mat-form-field-outlined-label-text-populated-size: 1rem;
 
   // 按钮
   .mdc-button {
@@ -40,23 +34,27 @@ html {
     --mdc-protected-button-container-color: none;
   }
 
+  // 输入框聚焦边框宽度
+  --mdc-outlined-text-field-focus-outline-width: 1px;
+  // 文字大小
+  --mat-form-field-container-text-size: 0.9rem;
+  --mat-form-field-outlined-label-text-populated-size: 1rem;
   // 选择框文字大小
   --mat-select-trigger-text-size: 0.9rem;
   --mat-option-label-text-size: 0.9rem;
-
   // 弹窗
   --mdc-dialog-container-shape: 12px;
-
   // 步进器背景
   --mat-stepper-container-color: none;
-
   // 手风琴背景
   --mat-expansion-container-background-color: none;
-
   // 表格背景
   --mat-table-background-color: none;
   // 树背景
-  --mat-tree-container-background-color: none
+  --mat-tree-container-background-color: none;
+  // 抽屉背景
+  --mat-sidenav-content-background-color: none;
+  --mat-sidenav-container-background-color: none
 }
 
 .mdc-button {

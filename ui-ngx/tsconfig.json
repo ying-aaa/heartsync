@@ -21,6 +21,7 @@
     "module": "ES2022",
     "useDefineForClassFields": false,
     "strictPropertyInitialization": false,
+    "skipLibCheck": false,
     "lib": [
       "ES2022",
       "dom"

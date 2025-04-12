@@ -1,4 +1,4 @@
-<div class="flex h-full">
+<!-- <div class="flex h-full">
   <aside class="w-284px h-full p-8px">
     <hs-widget-folder></hs-widget-folder>
   </aside>
@@ -22,4 +22,36 @@
       [model]="widgetConfig"
     ></hs-formly-config>
   </aside>
-</div>
+</div> -->
+<content class="block wh-full">
+  <mat-sidenav-container class="wh-full">
+    <mat-sidenav
+      #sidenav
+      mode="side"
+      opened
+      disableClose="true"
+      [fixedInViewport]="false"
+    >
+      <aside class="flex wh-full">
+        <hs-widget-folder class="flex-1 p-8px"></hs-widget-folder>
+        <mat-divider
+          [vertical]="true"
+          class="h-full"
+        ></mat-divider>
+      </aside>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <hs-dashboard-viewport></hs-dashboard-viewport>
+
+      <!-- <p>
+        <button
+          matButton
+          (click)="sidenav.toggle()"
+        >
+          Toggle
+        </button>
+      </p> -->
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</content>

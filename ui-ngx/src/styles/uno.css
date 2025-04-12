@@ -29,6 +29,7 @@
 .z-10{z-index:10;}
 .z-999{z-index:999;}
 .grid{display:grid;}
+.cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}
 .cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}
 .grid-cols-6{grid-template-columns:repeat(6,minmax(0,1fr));}
 .mx-12px{margin-left:12px;margin-right:12px;}

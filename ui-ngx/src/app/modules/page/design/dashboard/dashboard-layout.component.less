@@ -1,0 +1,25 @@
+@import "themeMixin";
+
+.themeMixin ( {
+    :host {
+      display: block;
+      width: 100%;
+      height: 100%;
+
+      content {
+        background-color: @gridster-bg-color;
+
+        gridster {
+          padding: 0px;
+          background-color: transparent;
+
+          gridster-item {
+            background-color: @gridster-item-bg-color;
+          }
+        }
+      }
+
+    }
+  }
+
+);
