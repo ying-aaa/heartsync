@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'hs-dashboard-editor',
-  templateUrl: './dashboard-editor.component.html',
-  styleUrls: ['./dashboard-editor.component.less'],
+  template: ` <router-outlet></router-outlet> `,
+  imports: [RouterModule],
 })
-export class DashboardEditorComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
-}
+export class DashboardEditorComponent {}

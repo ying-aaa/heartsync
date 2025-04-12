@@ -1,0 +1,25 @@
+<div class="flex h-full">
+  <aside class="w-284px h-full p-8px">
+    <hs-widget-folder></hs-widget-folder>
+  </aside>
+
+  <mat-divider
+    [vertical]="true"
+    class="h-full"
+  ></mat-divider>
+
+  <main class="w-0 flex-1 h-full">
+    <hs-dashboard-viewport></hs-dashboard-viewport>
+  </main>
+
+  <mat-divider
+    [vertical]="true"
+    class="h-full"
+  ></mat-divider>
+  <aside class="w-282px h-full p-8px">
+    <hs-formly-config
+      type="widget"
+      [model]="widgetConfig"
+    ></hs-formly-config>
+  </aside>
+</div>

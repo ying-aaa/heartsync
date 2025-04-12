@@ -13,7 +13,6 @@ import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.comp
 @Component({
   selector: 'hs-widget-preview',
   templateUrl: './widget-preview.component.html',
-  styleUrls: ['./widget-preview.component.less'],
   imports: [
     MatButtonModule,
     MatIconModule,

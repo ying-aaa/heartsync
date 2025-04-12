@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { IRouterUse } from '@src/app/shared/models/route.model';
 import widgetRoutes from './widget.routing';
+import dashboardRoutes from './dashboard.routing';
 
 const designPageRoutes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -17,6 +18,7 @@ const designPageRoutes = [
       import('./dashboard/dashboard-editor.component').then(
         (m) => m.DashboardEditorComponent,
       ),
+    children: dashboardRoutes,
   },
   {
     title: '部件',
