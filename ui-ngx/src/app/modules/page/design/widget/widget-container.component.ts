@@ -14,7 +14,6 @@ import {
 @Component({
   selector: 'hs-widget-container',
   templateUrl: './widget-container.component.html',
-  styleUrls: ['./widget-container.component.less'],
   imports: [
     WidgetCodeComponent,
     WidgetChartComponent,

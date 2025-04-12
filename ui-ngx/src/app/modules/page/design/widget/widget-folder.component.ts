@@ -13,13 +13,12 @@ import { IFormSubTypes } from '@src/app/shared/models/form-widget.model';
 import {
   WidgetEditorService,
   widgetTypesList,
-} from '../../../../core/services/widget-editor.service';
-import { FormEditorService } from '../../../../core/services/form-editor.service';
+} from '@app/core/services/widget-editor.service';
+import { FormEditorService } from '@app/core/services/form-editor.service';
 
 @Component({
   selector: 'hs-widget-folder',
   templateUrl: './widget-folder.component.html',
-  styleUrls: ['./widget-folder.component.less'],
   imports: [HsFancytreeComponent, HsRadioComponent, ClipboardModule],
 })
 export class WidgetFolderComponent implements OnInit {
