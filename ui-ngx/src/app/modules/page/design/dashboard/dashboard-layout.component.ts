@@ -1,7 +1,9 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   OnInit,
+  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +12,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
 
 import {
   CompactType,
@@ -45,9 +48,13 @@ interface Safe extends GridsterConfig {
     GridsterItemComponent,
   ],
 })
-export class DashboardLayoutComponent implements OnInit {
+export class DashboardLayoutComponent implements OnInit, AfterViewInit {
+  @ViewChild(GridsterComponent) gridster: GridsterComponent;
+
   options: Safe;
   dashboard: Array<GridsterItem>;
+
+  constructor(private dashboardEditorService: DashboardEditorService) {}
 
   ngOnInit(): void {
     this.options = {
@@ -107,12 +114,7 @@ export class DashboardLayoutComponent implements OnInit {
     };
 
     this.dashboard = [
-      { cols: 2, rows: 1, y: 0, x: 0 },
       { cols: 2, rows: 2, y: 0, x: 2, hasContent: true },
-      { cols: 1, rows: 1, y: 0, x: 4 },
-      { cols: 1, rows: 1, y: 2, x: 5 },
-      { cols: 1, rows: 1, y: 1, x: 0 },
-      { cols: 1, rows: 1, y: 1, x: 0 },
       {
         cols: 2,
         rows: 2,
@@ -151,6 +153,14 @@ export class DashboardLayoutComponent implements OnInit {
       },
       { cols: 1, rows: 1, y: 2, x: 6 },
     ];
+  }
+
+  ngAfterViewInit(): void {
+    this.dashboardEditorService.setGridsterInstall(this.gridster);
+  }
+
+  public triggerResize() {
+    this.gridster.onResize();
   }
 
   changedOptions(): void {

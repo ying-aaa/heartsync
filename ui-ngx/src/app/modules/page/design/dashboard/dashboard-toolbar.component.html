@@ -1,0 +1,40 @@
+<content
+  class="px-8px flex items-center justify-between h-40px line-height-40px bg-##a7c1de"
+>
+  <div class="flex-center gap-8px">
+    @let isSidenavStartOpen = sidenavStart().opened;
+    <button
+      matSuffix
+      mat-icon-button
+      (click)="toggleSidenav(sidenavStart())"
+      [matTooltip]="isSidenavStartOpen ? '隐藏资源目录' : '显示资源目录'"
+      class="p-4px!"
+    >
+      <mat-icon class="material-icons-round text-32px w-32px! h-32px!"
+        >{{ isSidenavStartOpen ? 'arrow_left' : 'arrow_right' }}
+      </mat-icon>
+    </button>
+
+    <span
+      [matTooltip]="'xxx'"
+      class="w-180px truncate"
+    >
+      XXXXXXXXXXXXXXXXXXXXXXXX仪表版
+    </span>
+  </div>
+
+  <div class="flex-center gap-8px">
+    @let isSidenavEndOpen = sidenavEnd().opened;
+    <button
+      matSuffix
+      mat-icon-button
+      (click)="toggleSidenav(sidenavEnd())"
+      [matTooltip]="isSidenavStartOpen ? '隐藏部件预设' : '显示部件预设'"
+      class="p-4px!"
+    >
+      <mat-icon class="material-icons-round text-32px w-32px! h-32px!"
+        >{{ isSidenavEndOpen ? 'arrow_right' : 'arrow_left' }}
+      </mat-icon>
+    </button>
+  </div>
+</content>

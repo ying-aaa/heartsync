@@ -5,6 +5,8 @@ import { WidgetFolderComponent } from '../widget/widget-folder.component';
 import { DashboardViewportComponent } from './dashboard-viewport.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { DashboardToolbarComponent } from './dashboard-toolbar.component';
 
 @Component({
   selector: 'hs-dashboard-manage',
@@ -16,6 +18,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatDividerModule,
     DashboardViewportComponent,
     MatButtonModule,
+    MatIconModule,
+    DashboardToolbarComponent,
   ],
 })
 export class DashboardManageComponent implements OnInit {

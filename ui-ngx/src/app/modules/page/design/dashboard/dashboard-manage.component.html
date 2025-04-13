@@ -1,57 +1,56 @@
-<!-- <div class="flex h-full">
-  <aside class="w-284px h-full p-8px">
-    <hs-widget-folder></hs-widget-folder>
-  </aside>
-
-  <mat-divider
-    [vertical]="true"
-    class="h-full"
-  ></mat-divider>
-
-  <main class="w-0 flex-1 h-full">
-    <hs-dashboard-viewport></hs-dashboard-viewport>
-  </main>
-
-  <mat-divider
-    [vertical]="true"
-    class="h-full"
-  ></mat-divider>
-  <aside class="w-282px h-full p-8px">
+<!-- <aside class="w-282px h-full p-8px">
     <hs-formly-config
       type="widget"
       [model]="widgetConfig"
     ></hs-formly-config>
-  </aside>
-</div> -->
-<content class="block wh-full">
-  <mat-sidenav-container class="wh-full">
-    <mat-sidenav
-      #sidenav
-      mode="side"
-      opened
-      disableClose="true"
-      [fixedInViewport]="false"
-    >
-      <aside class="flex wh-full">
-        <hs-widget-folder class="flex-1 p-8px"></hs-widget-folder>
-        <mat-divider
-          [vertical]="true"
-          class="h-full"
-        ></mat-divider>
-      </aside>
-    </mat-sidenav>
+  </aside> -->
 
-    <mat-sidenav-content>
-      <hs-dashboard-viewport></hs-dashboard-viewport>
+<content class="block wh-full flex flex-col">
+  <header>
+    <hs-dashboard-toolbar
+      [sidenavStart]="sidenavStart"
+      [sidenavEnd]="sidenavEnd"
+    ></hs-dashboard-toolbar>
+  </header>
+  <mat-divider class="w-full"></mat-divider>
+  <main class="flex-1 h-0">
+    <mat-sidenav-container class="wh-full">
+      <mat-sidenav
+        #sidenavStart
+        mode="side"
+        opened
+        disableClose="true"
+        [fixedInViewport]="false"
+      >
+        <aside class="flex wh-full">
+          <hs-widget-folder class="flex-1 p-8px"></hs-widget-folder>
+          <mat-divider
+            [vertical]="true"
+            class="h-full"
+          ></mat-divider>
+        </aside>
+      </mat-sidenav>
 
-      <!-- <p>
-        <button
-          matButton
-          (click)="sidenav.toggle()"
-        >
-          Toggle
-        </button>
-      </p> -->
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+      <mat-sidenav-content>
+        <hs-dashboard-viewport></hs-dashboard-viewport>
+      </mat-sidenav-content>
+
+      <mat-sidenav
+        #sidenavEnd
+        mode="side"
+        opened
+        disableClose="true"
+        position="end"
+        [fixedInViewport]="false"
+      >
+        <aside class="flex wh-full">
+          <mat-divider
+            [vertical]="true"
+            class="h-full"
+          ></mat-divider>
+          <hs-widget-folder class="flex-1 p-8px"></hs-widget-folder>
+        </aside>
+      </mat-sidenav>
+    </mat-sidenav-container>
+  </main>
 </content>
