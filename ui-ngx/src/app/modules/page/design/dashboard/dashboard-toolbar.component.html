@@ -24,12 +24,13 @@
   </div>
 
   <div class="flex-center gap-8px">
+    <span>部件资源</span>
     @let isSidenavEndOpen = sidenavEnd().opened;
     <button
       matSuffix
       mat-icon-button
       (click)="toggleSidenav(sidenavEnd())"
-      [matTooltip]="isSidenavStartOpen ? '隐藏部件预设' : '显示部件预设'"
+      [matTooltip]="isSidenavStartOpen ? '隐藏部件资源' : '显示部件资源'"
       class="p-4px!"
     >
       <mat-icon class="material-icons-round text-32px w-32px! h-32px!"
