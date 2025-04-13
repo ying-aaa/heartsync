@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
@@ -9,7 +10,7 @@ import { WidgetEditorService } from '@src/app/core/services/widget-editor.servic
   selector: 'hs-code-toolbar',
   templateUrl: './code-toolbar.component.html',
   styleUrls: ['./code-toolbar.component.less'],
-  imports: [MatIconModule, MatButtonModule],
+  imports: [MatIconModule, MatButtonModule, MatTooltipModule],
 })
 export class CodeToolbarComponent implements OnInit {
   @Input() loadCustomComponent = () => {};

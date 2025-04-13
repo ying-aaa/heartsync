@@ -6,11 +6,17 @@
       matSuffix
       mat-icon-button
       (click)="toWidgetManage()"
+      [matTooltip]="'返回部件管理'"
     >
       <mat-icon class="material-icons-round">arrow_back </mat-icon>
     </button>
 
-    <span class="w-180px">XXX部件</span>
+    <span
+      class="w-180px truncate"
+      [matTooltip]="'XXX部件'"
+    >
+      XXX部件
+    </span>
   </div>
 
   <div class="flex-center gap-8px">
