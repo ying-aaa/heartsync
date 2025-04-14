@@ -1,54 +1,91 @@
 <div mat-dialog-title>新增记录</div>
 <mat-divider></mat-divider>
-<mat-dialog-content>
-  <content class="wh-full flex hs-density--5">
-    <main class="w-65% h-full pr-8px">
-      <div class="w-full h-70%">
-        <mat-form-field class="wh-full" appearance='outline'>
-          <textarea matInput placeholder="记录生活事" style="resize: none"></textarea>
+<mat-dialog-content class="h-0 flex-1 max-h-none!">
+  <content
+    class="wh-full flex hs-density--5"
+    [formGroup]="recordForm"
+  >
+    <main class="w-65% h-full gap-12px pr-8px flex flex-col">
+      <div class="w-full flex-1 min-h-200px">
+        <mat-form-field
+          class="wh-full min-h-200px"
+          appearance="outline"
+        >
+          <textarea
+            matInput
+            placeholder="记录生活事"
+            style="resize: none"
+            formControlName="content"
+          ></textarea>
         </mat-form-field>
       </div>
-      <div class="w-full h-30% py-12px">
-        <div class="aspect-square h-full bg-blue-1">+</div>
+      <div
+        class="w-100px h-100px min-w-100px min-h-100px mb-12px h-full flex-center rounded-5px file-upldate"
+      >
+        <mat-icon>add</mat-icon>
       </div>
     </main>
-    <mat-divider class="h-full" vertical="true"></mat-divider>
-    <aside class="w-35% pl-8px"> 
-      <mat-form-field class="w-full" appearance='outline'>
+    <!-- <mat-divider
+      style="height: calc(100% - 20px)"
+      vertical="true"
+    ></mat-divider> -->
+    <aside class="w-35% pl-8px">
+      <mat-form-field
+        class="w-full mb-4px"
+        appearance="outline"
+      >
         <mat-label>标题</mat-label>
-        <input matInput style="resize: none">
+        <input
+          matInput
+          style="resize: none"
+          formControlName="title"
+        />
       </mat-form-field>
       <mat-list>
-        <mat-list-item>
-          <span matListItemTitle class="-mb-21px">所在位置</span>
+        <mat-list-item
+          class="h-64px!"
+          matRipple
+          [matRippleColor]="matRippleColor()"
+        >
+          <mat-icon
+            matListItemIcon
+            class="mt-22px!"
+            >my_location</mat-icon
+          >
+          <span matListItemTitle>所在位置</span>
           <span>福建省福州市仓山区</span>
         </mat-list-item>
-        <mat-divider class="mt-8px!"></mat-divider>
-        <mat-list-item>
-          <span matListItemTitle>查看范围</span>
-          <span>Second line</span>
-        </mat-list-item>
-        <mat-divider class="mt-8px!"></mat-divider>
-        <mat-list-item>
-          <span matListItemTitle>Title</span>
-          <span>Second line</span>
-        </mat-list-item>
-      </mat-list>
-      <!-- <ul class="mt-12px">
-        <li class="h-36px flex items-center px-8px">
-          <mat-icon class="mr-8px"> my_location </mat-icon>
-          <span>位置</span>
-        </li>
         <mat-divider></mat-divider>
-        <li class="h-36px flex items-center px-8px">
-          <mat-icon class="mr-8px"> my_location </mat-icon>
-          <span>位置</span>
-      </ul> -->
+        <mat-list-item
+          class="h-64px!"
+          matRipple
+          [matRippleColor]="matRippleColor()"
+        >
+          <mat-icon
+            matListItemIcon
+            class="mt-22px!"
+            >remove_red_eye</mat-icon
+          >
+          <span matListItemTitle>查看范围</span>
+          <span>所有人</span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-list>
     </aside>
   </content>
 </mat-dialog-content>
 <mat-divider>location</mat-divider>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>取消</button>
-  <button mat-flat-button [mat-dialog-close]="true" cdkFocusInitial>确定</button>
+  <button
+    mat-button
+    mat-dialog-close
+  >
+    取消
+  </button>
+  <button
+    mat-flat-button
+    (click)="submit()"
+  >
+    确定
+  </button>
 </mat-dialog-actions>

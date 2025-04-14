@@ -1,0 +1,44 @@
+@import "themeMixin";
+
+.themeMixin( {
+    :host {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      content {
+        @media screen and (max-width: 736px) {
+          flex-direction: column;
+
+          &>main {
+            width: 100%;
+            min-height: 410px;
+          }
+
+          &>aside {
+            width: 100%;
+            padding-left: 0;
+          }
+
+          mat-list {
+            margin-bottom: 80px;
+          }
+        }
+      }
+
+      .file-upldate {
+        cursor: pointer;
+        background-color: @base-bg-color;
+        border: 1px solid @base-color-10;
+
+        &:hover {
+          border: 1px solid @base-color-30;
+        }
+
+
+      }
+    }
+  }
+
+);

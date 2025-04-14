@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// const forwardUrl = 'wjy.apihub.net';
+const forwardUrl = 'http://localhost:3000/';
+const wsForwardUrl = 'http://localhost:3000/';
+// const forwardUrl = 'https://wjy.apihub.net';
 // const wsForwardUrl = 'https://wjy.apihub.net';
-const forwardUrl = 'https://wjy.apihub.net';
-const wsForwardUrl = 'https://wjy.apihub.net';
 const ruleNodeUiforwardUrl = forwardUrl;
 
 const PROXY_CONFIG = {
   '/api': {
     target: forwardUrl,
-    secure: true, // 表示后端服务使用了有效的 SSL 证书
+    // secure: false, // 表示后端服务使用了有效的 SSL 证书
     changeOrigin: true, // 支持跨域
   },
   '/api/ws': {

@@ -256,3 +256,10 @@ export function extractProperties<T extends Record<string, any> | any[]>(
 export function isBoolean(value: any) {
   return typeof value === 'boolean';
 }
+
+export function isMobile() {
+  // 使用正则表达式匹配常见的移动设备浏览器的用户代理字符串
+  const regex =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+  return regex.test(navigator.userAgent);
+}

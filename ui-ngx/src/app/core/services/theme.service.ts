@@ -61,7 +61,7 @@ export class HsThemeService {
 
   public getCurrentThemeConfig(
     themeConfig: any[] | { [key in IThemeType]: any },
-  ) {
+  ): string {
     const themeConfigMap = new Map<IThemeType, any>();
     if (Array.isArray(themeConfig)) {
       const IThemeTypeArr = Object.values(IThemeType);

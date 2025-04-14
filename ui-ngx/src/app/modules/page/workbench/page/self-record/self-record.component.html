@@ -1,5 +1,26 @@
-<div>记录</div>
+<content class="relative h-full py-0px px-12px">
+  <button
+    mat-flat-button
+    class="absolute! top-12px right-12px"
+    (click)="addRecord()"
+  >
+    新增记录
+  </button>
 
-<button mat-button (click)="addRecord()">
-  新增记录
-</button>
+  <mat-list class="pt-30px!">
+    @for (item of recordData; track $index) {
+      <mat-list-item>
+        <span
+          matListItemTitle
+          class="text-18px!"
+          >{{ item.title }}</span
+        >
+        <span matListItemLine>{{ item.content }}</span>
+        <span class="opacity-80 text-12px">{{
+          item.createdAt | date: 'yyyy-MM-dd HH:mm:ss'
+        }}</span>
+      </mat-list-item>
+      <mat-divider>location</mat-divider>
+    }
+  </mat-list>
+</content>
