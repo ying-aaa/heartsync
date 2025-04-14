@@ -3,10 +3,12 @@ import { WidgetsModule } from './app/widget/widgets.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SelfModule } from './app/self/self.module';
 
 @Module({
   imports: [
     WidgetsModule,
+    SelfModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
