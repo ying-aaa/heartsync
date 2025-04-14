@@ -54,7 +54,11 @@ html {
   --mat-tree-container-background-color: none;
   // 抽屉背景
   --mat-sidenav-content-background-color: none;
-  --mat-sidenav-container-background-color: none
+  --mat-sidenav-container-background-color: none;
+
+  --mdc-dialog-subhead-size: 1.1rem;
+  --mat-dialog-actions-padding: 6px 24px;
+  --mat-dialog-headline-padding: 6px 24px;
 }
 
 .mdc-button {
@@ -106,4 +110,8 @@ html {
       }
     }
   }
+}
+
+div.mat-mdc-dialog-title::before {
+  height: 28px;
 }

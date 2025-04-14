@@ -1,0 +1,54 @@
+<div mat-dialog-title>新增记录</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <content class="wh-full flex hs-density--5">
+    <main class="w-65% h-full pr-8px">
+      <div class="w-full h-70%">
+        <mat-form-field class="wh-full" appearance='outline'>
+          <textarea matInput placeholder="记录生活事" style="resize: none"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="w-full h-30% py-12px">
+        <div class="aspect-square h-full bg-blue-1">+</div>
+      </div>
+    </main>
+    <mat-divider class="h-full" vertical="true"></mat-divider>
+    <aside class="w-35% pl-8px"> 
+      <mat-form-field class="w-full" appearance='outline'>
+        <mat-label>标题</mat-label>
+        <input matInput style="resize: none">
+      </mat-form-field>
+      <mat-list>
+        <mat-list-item>
+          <span matListItemTitle class="-mb-21px">所在位置</span>
+          <span>福建省福州市仓山区</span>
+        </mat-list-item>
+        <mat-divider class="mt-8px!"></mat-divider>
+        <mat-list-item>
+          <span matListItemTitle>查看范围</span>
+          <span>Second line</span>
+        </mat-list-item>
+        <mat-divider class="mt-8px!"></mat-divider>
+        <mat-list-item>
+          <span matListItemTitle>Title</span>
+          <span>Second line</span>
+        </mat-list-item>
+      </mat-list>
+      <!-- <ul class="mt-12px">
+        <li class="h-36px flex items-center px-8px">
+          <mat-icon class="mr-8px"> my_location </mat-icon>
+          <span>位置</span>
+        </li>
+        <mat-divider></mat-divider>
+        <li class="h-36px flex items-center px-8px">
+          <mat-icon class="mr-8px"> my_location </mat-icon>
+          <span>位置</span>
+      </ul> -->
+    </aside>
+  </content>
+</mat-dialog-content>
+<mat-divider>location</mat-divider>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>取消</button>
+  <button mat-flat-button [mat-dialog-close]="true" cdkFocusInitial>确定</button>
+</mat-dialog-actions>

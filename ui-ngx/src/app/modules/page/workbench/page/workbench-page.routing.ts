@@ -21,4 +21,13 @@ export default [
         (m) => m.AppManageComponent,
       ),
   },
+  {
+    title: '记录',
+    path: 'record',
+    data: { preload: true, key: 'record', use: IRouterUse.MENU },
+    loadComponent: () =>
+      import('./self-record/self-record.component').then(
+        (m) => m.SelfRecordComponent,
+      ),
+  },
 ] as Routes;
