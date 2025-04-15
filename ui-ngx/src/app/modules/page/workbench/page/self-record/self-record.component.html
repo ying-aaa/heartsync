@@ -9,13 +9,13 @@
 
   <mat-list class="pt-30px!">
     @for (item of recordData; track $index) {
-      <mat-list-item>
+      <mat-list-item class="h-auto! mb-6px!">
         <span
           matListItemTitle
-          class="text-18px!"
+          class="text-18px! font-700!"
           >{{ item.title }}</span
         >
-        <span matListItemLine>{{ item.content }}</span>
+        <div matListItemLine class="whitespace-normal!">{{ item.content }}</div>
         <span class="opacity-80 text-12px">{{
           item.createdAt | date: 'yyyy-MM-dd HH:mm:ss'
         }}</span>
