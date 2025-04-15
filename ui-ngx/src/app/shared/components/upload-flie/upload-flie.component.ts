@@ -1,6 +1,24 @@
-import { ConnectionPositionPair, OverlayModule, OverlayPositionBuilder } from '@angular/cdk/overlay';
+import {
+  ConnectionPositionPair,
+  Overlay,
+  OverlayModule,
+  OverlayPositionBuilder,
+} from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, inject, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  SimpleChange,
+  ViewChild,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 // import { formatSmdUrl } from '@app/modules/workbench/widget/smd-module/components/smd-form-render/core/utils';
 // import { NzMessageService } from 'ng-zorro-antd/message';
@@ -12,15 +30,25 @@ import { isMobile } from '@src/app/core/utils';
 import { IFileShowType } from '@shared/models/common-component';
 import { MatDividerModule } from '@angular/material/divider';
 import { PortalModule } from '@angular/cdk/portal';
+import { MatButtonModule } from '@angular/material/button';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 @Component({
   selector: 'hs-upload-flie',
   templateUrl: './upload-flie.component.html',
   styleUrls: ['./upload-flie.component.less'],
-  imports: [CommonModule, MatIconModule, OverlayModule, MatDividerModule, PortalModule]
+  imports: [
+    CommonModule,
+    MatIconModule,
+    OverlayModule,
+    MatDividerModule,
+    PortalModule,
+    MatButtonModule,
+    NgScrollbarModule,
+  ],
 })
 export class HsUploadFlieComponent implements OnInit, AfterViewInit {
-  @ViewChild("PreviewFile") previewFile: any;
+  @ViewChild('PreviewFile') previewFile: any;
   // 源数据
   @Input() rdata: any;
   // key
@@ -43,15 +71,40 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   elementRef = inject(ElementRef);
 
   IFileShowType = IFileShowType;
-  
+
   inUploadInfo = {};
-  data = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
-  mayPreview = ["img", "docx", "doc", "pdf"];
+  data = [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+  ];
+  mayPreview = ['img', 'docx', 'doc', 'pdf'];
   isMobileTerminal: boolean = isMobile();
   isOpen = false;
   // trigger: any;
 
-  fileOverlayWidth = "";
+  fileOverlayWidth = '';
 
   overlayPositions: ConnectionPositionPair[] = [
     {
@@ -59,61 +112,68 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
       originY: 'center', // 指定触发元素的垂直参考点
       overlayX: 'center', // 指定浮层的水平参考点
       overlayY: 'center', // 指定浮层的垂直参考点
-      offsetY: 6 // 垂直偏移量
-    }
+      panelClass: this.isMobileTerminal ? 'left-8px!' : '',
+    },
   ];
+
+  positionStrategy = this.overlay.position().global().left('0').top('0'); // 设置浮层左上角对齐屏幕左上角
 
   constructor(
     private _snackBar: MatSnackBar,
-    // public elementRef: ElementRef,
+    private overlay: Overlay,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   deletFile(fileData: any, index: number) {
     this.change.emit({
-      file: { ...fileData, status: "removed", index },
+      file: { ...fileData, status: 'removed', index },
       fileList: [],
-      type: "indexRemoved",
+      type: 'indexRemoved',
     }); // 发送数据到父组件
   }
 
   onlineView(file: any, type: 'download' | 'view'): any {
-    if (type === "view") {
+    if (type === 'view') {
       let url = file.previewUrl || file.url;
-      if (!url) return this._snackBar.open("文件预览地址丢失，无法查看，请尝试下载！", '确定', {
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        duration: 3 * 1000,
-      });
+      if (!url)
+        return this._snackBar.open(
+          '文件预览地址丢失，无法查看，请尝试下载！',
+          '确定',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 3 * 1000,
+          },
+        );
       // let previewUrl = url.startsWith("/gapi/smdx/storage_area/public") ? url : `/gapi/smdx/storage_area/public${url}`;
       let previewUrl = this.autoPrefix({ url });
       window.open(previewUrl);
       return;
     }
-    if (!file.url) return this._snackBar.open("文件下载地址丢失，无法下载！", '确定', {
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      duration: 3 * 1000,
-    });
+    if (!file.url)
+      return this._snackBar.open('文件下载地址丢失，无法下载！', '确定', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 3 * 1000,
+      });
     let downLoadUrl = file.url;
     // downLoadUrl = downLoadUrl.startsWith("/gapi/smdx/storage_area/public") ? downLoadUrl : `/gapi/smdx/storage_area/public${downLoadUrl}`;
     downLoadUrl = this.autoPrefix({ url: downLoadUrl });
     // if (file.suffix === "unknown") {
-    // } else 
-    if (file.suffix === "img") {
+    // } else
+    if (file.suffix === 'img') {
       this.fileDownload(downLoadUrl, file.name);
     } else {
       fetch(downLoadUrl)
-        .then(response => response.blob())
-        .then(blob => {
+        .then((response) => response.blob())
+        .then((blob) => {
           var url = URL.createObjectURL(blob);
           this.fileDownload(url, file.name);
           URL.revokeObjectURL(url);
         })
-        .catch(e => console.error(e));
+        .catch((e) => console.error(e));
     }
   }
 
@@ -140,8 +200,6 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
     //   return this.suffixHandle(file)
     // })
 
-
-
     // this.modal.create({
     //   nzTitle: '文件查看',
     //   nzContent: this.previewFile,
@@ -164,20 +222,22 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   }
 
   suffixHandle(file: any) {
-    if (!file.name) return { ...file, suffix: "img" };
+    if (!file.name) return { ...file, suffix: 'img' };
     let lastDotIndex = file.name.lastIndexOf('.');
     if (lastDotIndex === -1 || lastDotIndex === 0) {
       return file;
     }
     let suffix = file.name.substring(lastDotIndex + 1);
-    const img = ["png", "jpg", "jpeg", "gif", "webp"];
-    const rest = ["docx", "doc", "pdf", "xls", "xlsx"];
+    const img = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
+    const rest = ['docx', 'doc', 'pdf', 'xls', 'xlsx'];
     if ([...img, ...rest].includes(suffix)) {
-      suffix = ["png", "jpg", "jpeg", "gif", "webp"].includes(suffix) ? "img" : suffix;
-      if (suffix === 'doc') suffix = "docx";
-      if (suffix === 'xls') suffix = "xlsx";
+      suffix = ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(suffix)
+        ? 'img'
+        : suffix;
+      if (suffix === 'doc') suffix = 'docx';
+      if (suffix === 'xls') suffix = 'xlsx';
     } else {
-      suffix = "unknown";
+      suffix = 'unknown';
     }
     return { ...file, suffix };
   }
@@ -199,12 +259,14 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.fileOverlayWidth = this.elementRef.nativeElement.offsetWidth + 'px';
+    this.fileOverlayWidth = this.isMobileTerminal
+      ? 'calc(100vw - 16px)'
+      : this.elementRef.nativeElement.offsetWidth + 'px';
   }
 
   ngOnChanges(changes: { [column: string]: SimpleChange }) {
     if (changes['rdata']) {
-      let objData
+      let objData;
       if (this.isDetail) {
         objData = this.rdata || [];
       } else {
