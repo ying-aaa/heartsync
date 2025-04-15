@@ -1,0 +1,124 @@
+@import "themeMixin";
+
+.themeMixin( {
+    :host {
+      width: 100%;
+
+      content {
+        background-color: @base-bg-color;
+      }
+    }
+  }
+
+);
+
+
+.once-preview-img {
+  margin: 0;
+  border: 1px solid #e3e3e3;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+.upload-badge {
+  .preview-img {
+    margin: 0;
+    margin-right: 4px;
+    border: 1px solid #e3e3e3;
+    object-fit: contain;
+    border-radius: 5px;
+  }
+}
+
+.upload-file-wrapper {
+  border: 1px solid #e3e3e3;
+  padding: 5px;
+  border-radius: 8px;
+
+  .file-item {
+    &:hover {
+      background-color: #e9e9e9;
+      border-radius: 8px;
+    }
+  }
+}
+
+.once-file {
+  position: relative;
+
+  .progress-wrapper {
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    width: 100%;
+    // height: 100%;
+    // background-color: rgba(0, 0, 0, .85);
+    // border-radius: 8px;
+  }
+
+  .progress {
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    width: 100%;
+    // padding: 8px;
+    // transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+.upload-once-file {
+  .text-content {
+    color: #5182e4;
+    margin: 0;
+    margin-left: 8px;
+    flex: 1;
+  }
+
+  .preview-img {
+    margin: 0;
+    margin-right: 4px;
+    border: 1px solid #e3e3e3;
+    object-fit: contain;
+    border-radius: 5px;
+  }
+
+  // .handle {
+  //   display: none;
+  // }
+  &:hover {
+    .text-content {
+      width: calc(100% - 65px);
+    }
+
+    .handle {
+      display: block;
+    }
+  }
+}
+
+.upload-once-photo {
+  position: relative;
+
+  .handle {
+    // display: none;
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // background: #000000db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 2px;
+    border-radius: 8px;
+    z-index: 999;
+  }
+
+  // &:hover {
+  //   .handle {
+  //     display: flex;
+  //     padding: 2px;
+  //   }
+  // }
+}

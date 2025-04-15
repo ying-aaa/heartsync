@@ -1,0 +1,190 @@
+<!-- {{fileUploadInfo?.event?.percent}} -->
+<!-- 多附件 -->
+<div
+  *ngIf="data.length > 1"
+  class="flex items-center relative cursor upload-badge"
+  [class]="isForm ? 'w-full' : 'upload-fit-content'"
+>
+  <!-- 详情 -->
+  <ng-container *ngIf="isDetail">
+    <ng-container *ngIf="!isForm">
+      <img
+        *ngFor="let item of filterImg(data)"
+        nz-image
+        width="40px"
+        height="40px"
+        [src]="autoPrefix(item)"
+        class="preview-img mr-4px"
+      />
+    </ng-container>
+  </ng-container>
+  <!-- 表单 -->
+  <ng-container *ngIf="isForm">
+    <div class="flex flex-col upload-file-wrapper" [class]="isFile ? 'w-0 flex-1' : ''" [style]="{backgroundColor: isDisabled ? '#f5f5f5' : ''}">
+      <!-- 公共列表 -->
+      <ng-template #FileList let-dataParam="dataParam">
+        <ng-container *ngFor="let item of dataParam; let index=index">
+          <div class="py-5px file-item">
+            <ng-container 
+              *ngTemplateOutlet="
+              OnceFile;
+              context: {
+                dataParam: item,
+                index
+              }">
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-template>
+      <!-- 前三个 -->
+      <ng-container 
+          *ngTemplateOutlet="
+            FileList;
+            context: { dataParam: data.slice(0, 3) }
+          ">
+      </ng-container>
+      <!-- 其他操作符 -->
+       @if(data.length > 3) {
+          <div class="flex-center" 
+              #trigger="cdkOverlayOrigin"
+              cdkOverlayOrigin 
+              (click)="isOpen = !isOpen"
+            >
+            <!--  [nzPopoverContent]="PopoverFileList" 
+            [nzPopoverOverlayStyle]	="{width: '250px'}"  -->
+            <div class="relative">
+              <img
+                nz-image
+                width="24px"
+                height="24px"
+                nzSrc="/gridvo-ui/assets/gridvo/file-type/annex.png"
+                nzDisablePreview
+                *ngIf="(!filterImg(data).length || !isDetail) && !isForm"
+              />
+              <span style="color: #5182e4" [ngStyle]="!filterImg(data).length || !isDetail ? {} : {fontWeight: 'bold', fontSize: '16px', marginLeft: '8px'}">
+                {{(!filterImg(data).length || !isDetail) && !isForm ? "多附件" : "···"}}
+              </span>
+              <!-- <div *ngIf="isFile" class="ml-8" [ngStyle]="{fontWeight: 'bold', fontSize: '16px', color: '#5182e4'}">
+                ···
+              </div> -->
+              <span class="absolute w-16px h-16px top-0 file-count" style="width: 16px !important">{{
+                data.length
+              }}</span>
+            </div>
+          </div>
+          <!-- 扩展其他数据 -->
+          <ng-template 
+            cdkConnectedOverlay
+            centerHorizontally
+            [cdkConnectedOverlayOrigin]="trigger!"
+            [cdkConnectedOverlayOpen]="isOpen"
+            >
+            <div
+              *ngIf="data.length > 1"
+              class="flex items-center relative cursor-pointer min-w-250px upload-badge"
+              [class]="isForm ? 'w-full' : 'upload-fit-content'"
+            >
+              <div class="upload-file-wrapper"
+                [class]="isFile ? 'w-0 flex-1' : 'flex flex-row flex-wrap'"
+                [style]="{backgroundColor: isDisabled ? '#f5f5f5' : ''}"
+              >
+                <ng-container 
+                  *ngTemplateOutlet="
+                    FileList;
+                    context: { dataParam: data.slice(3) }
+                  ">
+                </ng-container>
+              </div>
+            </div>
+          </ng-template>
+       }
+    </div>
+
+  </ng-container>
+  <!-- 更多信息 -->
+  <div class="flex-center" *ngIf="!isForm" (click)="more(data)">
+    <img
+      nz-image
+      width="24px"
+      height="24px"
+      nzSrc="/gridvo-ui/assets/gridvo/file-type/annex.png"
+      nzDisablePreview
+      *ngIf="!filterImg(data).length || !isDetail"
+    />
+    <div class="ml-8" style="color: #5182e4" [ngStyle]="!filterImg(data).length || !isDetail ? {} : {fontWeight: 'bold', fontSize: '16px'}">
+      {{(!filterImg(data).length || !isDetail) ? "多附件" : "···"}}
+    </div>
+    <span class="absolute w-16px h-16px top-0 file-count" style="width: 16px !important">{{
+      data.length
+    }}</span>
+  </div>
+</div>
+
+<!-- 单 -->
+<div *ngIf="data.length === 1" [class]="isForm ? 'upload-file-wrapper' : ''" [style]="{backgroundColor: isDisabled ? '#f5f5f5' : ''}">
+  <ng-container *ngTemplateOutlet="
+    OnceFile;
+    context: {
+      dataParam: data[0] || {},
+      index: 0
+    }"
+  >
+  </ng-container>
+</div>
+
+<ng-template #OnceFile let-dataParam="dataParam" let-index="index">
+  <div 
+    class="once-file flex items-center flex-fill" 
+    [class]="isFile !== false ? 'upload-once-file' : 'upload-once-photo'"
+    [style]="dataParam.status === 'error' ? {background: '#ffcdcd', borderRadius: '8px'} : ''"
+  >
+    <!-- 列表 -->
+    <ng-container *ngIf="!isDetail || dataParam.suffix !== 'img'">
+      <img
+        nz-image
+        [src]="
+          '/gridvo-ui/assets/gridvo/file-type/' +
+          dataParam.suffix +
+          '.png'
+        "
+        class="cursor"
+        [class]="isForm ? (!isFile ? 'w-68px h-68px' : 'w-40px h-40px') : 'w-18px w-21px'"
+        nzDisablePreview
+        (click)="preview(dataParam)"
+      />
+    </ng-container>
+    <!-- 详情 -->
+    <ng-container *ngIf="isDetail &&  dataParam.suffix === 'img'">
+      <img
+        nz-image
+        [src]="autoPrefix(dataParam)"
+        class="cursor"
+        nzDisablePreview
+        class="once-preview-img"
+        [class]="isForm ? (!isFile ? 'w-68px h-68px' : 'w-40px h-40px') : 'w-40px h-40px'"
+        (click)="preview(dataParam)"
+      />
+    </ng-container>
+    <!-- 上传相关 -->
+    <span
+      class="ml-8 ellipsis cursor text-content flex-fill"
+      (click)="preview(dataParam)"
+      *ngIf="isFile !== false"
+    >{{ dataParam.name }}</span>
+    <!-- 操作 -->
+    <ng-container 
+      *ngTemplateOutlet="
+        FileHandle;
+        context: { dataParam, index }
+      ">
+    </ng-container>
+  </div>
+  <!-- {{dataParam.status}} -->
+  <!-- <div class="progress-wrapper" *ngIf="findUpload(dataParam)">
+    <nz-progress [nzShowInfo]="false" [nzPercent]="this.inUploadInfo[dataParam.uid]?.event?.percent" class="progress"></nz-progress>
+  </div> -->
+</ng-template>
+
+
+<!-- 无 -->
+<div *ngIf="!data.length">{{ isForm ? "" : "无" }}</div>
