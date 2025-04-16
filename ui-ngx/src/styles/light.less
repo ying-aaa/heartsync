@@ -1,38 +1,3 @@
 @import '@angular/material/prebuilt-themes/azure-blue.css';
 @import 'jquery-ui/dist/themes/ui-lightness/jquery-ui.min.css';
 @import "./themes/light.less";
-
-.text-bg-color {
-  color: @base-text-color;
-  background-color: @base-bg-color;
-}
-
-body {
-  .text-bg-color();
-  --mat-sys-corner-full: 8px;
-}
-
-html.light-theme {
-  --mdc-outlined-text-field-outline-color: @base-line-color;
-  --mdc-outlined-text-field-hover-outline-color: @base-hover-line-color;
-  --mat-divider-color: @base-divider-color;
-  --base-bg-color: @base-bg-color;
-  --base-text-color: @base-text-color;
-
-  .mat-mdc-form-field {
-    background-color: @base-bg-color;
-  }
-}
-
-ul.ui-widget-content {
-  .text-bg-color();
-}
-
-// 滚动条全局样式
-ng-scrollbar {
-  --scrollbar-thickness: 7;
-  --scrollbar-hover-thickness: 7;
-  --scrollbar-thumb-color: rgb(0 0 0 / 20%);
-  --scrollbar-thumb-hover-color: rgb(0 0 0 / 30%);
-  --scrollbar-border-radius: 7px;
-}

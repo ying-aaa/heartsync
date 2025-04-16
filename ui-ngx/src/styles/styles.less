@@ -19,6 +19,46 @@ body {
 
 // 滚动条
 .themeMixin( {
+    --base-color-10: @base-color-10;
+    --base-color-20: @base-color-20;
+    --base-color-30: @base-color-30;
+    --base-color-50: @base-color-50;
+    --base-color-80: @base-color-80;
+    --base-color-100: @base-color-100;
+
+    --base-text-color: @base-text-color;
+
+    --bg-color: @bg-color;
+    --base-bg-color: @base-bg-color;
+    --editor-bg-color: @editor-bg-color;
+    --gridster-item-bg-color: @gridster-item-bg-color;
+    --gridster-bg-color: @gridster-bg-color;
+
+
+    --editor-round-color: @editor-round-color;
+    --code-toolbar-bg-color: @code-toolbar-bg-color;
+
+    --base-line-color: @base-line-color;
+    --base-hover-line-color: @base-hover-line-color;
+    --base-divider-color: @base-divider-color;
+    --base-placeholder-text-color: @base-placeholder-text-color;
+    --base-placeholder-bg-color: @base-placeholder-bg-color;
+    --gridster-line-color: @gridster-line-color;
+
+    // 指定组件
+    --mdc-outlined-text-field-outline-color: @base-line-color;
+    --mdc-outlined-text-field-hover-outline-color: @base-hover-line-color;
+    --mat-divider-color: @base-divider-color;
+
+    // 滚动组件样式
+    ng-scrollbar {
+      --scrollbar-thickness: 7;
+      --scrollbar-hover-thickness: 7;
+      --scrollbar-thumb-color: @base-color-20;
+      --scrollbar-thumb-hover-color: @base-color-30;
+      --scrollbar-border-radius: 7px;
+    }
+
     *::-webkit-scrollbar {
       width: 8px;
       background: transparent;
@@ -81,6 +121,25 @@ body {
       height: 100%;
       background: @base-bg-color;
       z-index: 0;
+    }
+
+    // 输入框的背景颜色
+    .mat-mdc-form-field {
+      background-color: @base-bg-color;
+    }
+
+    .text-bg-color {
+      color: @base-text-color;
+      background-color: @base-bg-color;
+    }
+
+    body {
+      .text-bg-color();
+      --mat-sys-corner-full: 8px;
+    }
+
+    ul.ui-widget-content {
+      .text-bg-color();
     }
   }
 
