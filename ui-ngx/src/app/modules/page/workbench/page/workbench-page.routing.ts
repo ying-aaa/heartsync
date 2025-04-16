@@ -30,4 +30,13 @@ export default [
         (m) => m.SelfRecordComponent,
       ),
   },
+  {
+    title: '测试',
+    path: 'upload',
+    data: { preload: true, key: 'upload', use: IRouterUse.MENU },
+    loadComponent: () =>
+      import('./upload-test/upload-test.component').then(
+        (m) => m.UploadTestComponent,
+      ),
+  },
 ] as Routes;
