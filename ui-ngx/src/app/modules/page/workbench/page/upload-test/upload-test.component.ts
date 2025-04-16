@@ -1,53 +1,79 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FileSelectDirective, FileDropDirective, FileUploader, FileUploadModule } from 'ng2-file-upload';
+import { FileSizePipe } from '@src/app/shared/pipes/file-size.pipe';
+import {
+  FileSelectDirective,
+  FileDropDirective,
+  FileUploader,
+  FileUploadModule,
+  FileItem,
+} from 'ng2-file-upload';
 
 // const URL = '/api/';
-const URLs = 'http://localhost:3000/api/';
- 
+const uploadUrl = 'http://localhost:3000/api/';
+interface UploadedFile {
+  name: string;
+  size: number;
+  url: string;
+  uploadDate: Date;
+}
 @Component({
   selector: 'upload-test',
   templateUrl: './upload-test.component.html',
   styleUrls: ['./upload-test.component.less'],
-  imports: [FileUploadModule, CommonModule]
+  imports: [FileUploadModule, CommonModule, FileSizePipe],
 })
 export class UploadTestComponent {
- 
-  uploader:FileUploader;
-  hasBaseDropZoneOver:boolean;
-  hasAnotherDropZoneOver:boolean;
-  response:string;
- 
-  constructor (){
+  public uploader: FileUploader;
+  public uploadedFiles: UploadedFile[] = [];
+
+  constructor() {
+    this.initializeUploader();
+  }
+
+  private initializeUploader(): void {
     this.uploader = new FileUploader({
-      url: URLs,
-      disableMultipart: true, // 'DisableMultipart' must be 'true' for formatDataFunction to be called.
-      formatDataFunctionIsAsync: true,
-      formatDataFunction: async (item: any) => {
-        return new Promise( (resolve, reject) => {
-          resolve({
-            name: item._file.name,
-            length: item._file.size,
-            contentType: item._file.type,
-            date: new Date()
-          });
-        });
-      }
+      url: uploadUrl,
+      isHTML5: true,
+      removeAfterUpload: true,
+      autoUpload: false,
+      maxFileSize: 10 * 1024 * 1024, // 10MB
     });
- 
-    this.hasBaseDropZoneOver = false;
-    this.hasAnotherDropZoneOver = false;
- 
-    this.response = '';
- 
-    this.uploader.response.subscribe( res => this.response = res );
+
+    this.setupUploaderEvents();
   }
- 
-  public fileOverBase(e:any):void {
-    this.hasBaseDropZoneOver = e;
+
+  private getAuthToken(): string {
+    // 实现你的认证逻辑
+    return localStorage.getItem('auth_token') || '';
   }
- 
-  public fileOverAnother(e:any):void {
-    this.hasAnotherDropZoneOver = e;
+
+  private setupUploaderEvents(): void {
+    this.uploader.onSuccessItem = (item: FileItem, response: string) => {
+      const serverResponse = JSON.parse(response);
+      this.uploadedFiles.push({
+        name: item.file.name as any,
+        size: item.file.size,
+        url: serverResponse.downloadUrl, // 假设服务器返回下载URL
+        uploadDate: new Date(),
+      });
+    };
+
+    this.uploader.onErrorItem = (item: FileItem) => {
+      console.error(`文件 ${item.file.name} 上传失败`);
+      // 可以添加重试逻辑
+    };
+
+    this.uploader.onProgressItem = (item: FileItem, progress: number) => {
+      console.log(`文件 ${item.file.name} 上传进度: ${progress}%`);
+    };
+  }
+
+  public getStatus(item: FileItem): string {
+    if (item.isSuccess) return '上传成功';
+    if (item.isCancel) return '已取消';
+    if (item.isError) return '上传失败';
+    if (item.isUploading) return '上传中...';
+    return '等待上传';
   }
 }
