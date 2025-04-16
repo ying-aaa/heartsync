@@ -8,20 +8,17 @@
         background-color: @base-bg-color;
       }
     }
-
-    .file-item {
-      background-color: red
-    }
   }
 
 );
 
-.cdk-overlay-pane {
-  left: 0;
+.qy-upload-file-border {
+  border-radius: 5px;
+  border: 1px solid var(--base-line-color);
 }
 
-
-.upload-file-border {
-  border-radius: 5px;
-  border: 1px solid #e3e3e3;
+.qy-file-item {
+  &:hover {
+    background-color: var(--base-color-10);
+  }
 }

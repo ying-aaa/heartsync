@@ -1,318 +1,204 @@
-@if (data.length > 1) {
-  <content
-    class="flex items-center relative cursor-pointer w-full p-5px upload-file-border"
-  >
-    @switch (fileShowType) {
-      @case (IFileShowType.FORM) {
-        <div
-          class="flex w-0"
-          [class]="isFile ? 'flex-col flex-1' : ''"
+@let isList = fileShowType === IFileShowType.LIST;
+@let isForm = fileShowType === IFileShowType.FORM;
+<content
+  class="flex items-center relative cursor-pointer w-full"
+  [class]="isForm ? 'qy-upload-file-border p-5px' : ''"
+>
+  @switch (fileShowType) {
+    @case (IFileShowType.FORM) {
+      <div
+        class="flex w-0"
+        [class]="isFile ? 'flex-col flex-1' : ''"
+      >
+        <!-- 公共列表 -->
+        <ng-template  
+          #FileList
+          let-fileData="fileData"
         >
-          <!-- 公共列表 -->
-          <ng-template
-            #FileList
-            let-fileData="fileData"
-          >
-            @for (item of fileData; track $index) {
-              <ng-container
-                *ngTemplateOutlet="
-                  FileItem;
-                  context: {
-                    fileData: item,
-                    $index,
-                  }
-                "
-              >
-              </ng-container>
-            }
-          </ng-template>
-          <!-- 前三个 -->
-          <ng-container
-            *ngTemplateOutlet="
-              FileList;
-              context: { fileData: data.slice(0, 3) }
-            "
-          >
-          </ng-container>
-          <!-- 扩展 -->
-          @if (data.length > 3) {
-            <!-- 扩展按钮 -->
-            <div
-              class="flex-center"
-              cdkOverlayOrigin
-              #trigger="cdkOverlayOrigin"
-              (click)="isOpen = !isOpen"
+          @for (item of fileData; track $index) {
+            <ng-container
+              *ngTemplateOutlet="
+                FileItem;
+                context: {
+                  fileData: item,
+                  index: $index,
+                  length: fileData.length
+                }
+              "
             >
-              <div class="relative">
-                <img
-                  nz-image
-                  width="24px"
-                  height="24px"
-                  nzSrc="/gridvo-ui/assets/gridvo/file-type/annex.png"
-                  nzDisablePreview
-                  *ngIf="(!filterImg(data).length || !isDetail) && !isForm"
-                />
-                <span
-                  class="color-#5182e4"
-                  [ngStyle]="
-                    !filterImg(data).length || !isDetail
-                      ? {}
-                      : {
-                          fontWeight: 'bold',
-                          fontSize: '16px',
-                          marginLeft: '8px',
-                        }
-                  "
-                >
-                  {{
-                    (!filterImg(data).length || !isDetail) && !isForm
-                      ? '多附件'
-                      : '···'
-                  }}
-                </span>
-                <!-- <div *ngIf="isFile" class="ml-8" [ngStyle]="{fontWeight: 'bold', fontSize: '16px', color: '#5182e4'}">
-                  ···
-                </div> -->
-                <span
-                  class="absolute w-16px h-16px top-0 bg-#d1e4ff color-#1a79ff rounded-10px -right-22px line-height-16px text-center text-12px"
-                  style="width: 16px !important"
-                  >{{ data.length }}</span
-                >
-              </div>
-            </div>
-            <!-- 扩展数据 -->
-            <ng-template
-              cdkConnectedOverlay
-              centerHorizontally
-              [cdkConnectedOverlayOrigin]="trigger!"
-              [cdkConnectedOverlayOpen]="isOpen"
-              [cdkConnectedOverlayPositions]="overlayPositions"
-              OverlayKeyboardDispatcher
-              [positionStrategy]="positionStrategy"
-            >
-              <div
-                *ngIf="data.length > 1"
-                class="flex flex-col relative cursor-pointer min-w-250px rounded-8px border-1px border-solid border-#e3e3e3 p-5px shadow-2xl"
-                [class]="isForm ? 'w-full' : 'upload-fit-content'"
-                style="background-color: var(--base-bg-color)"
-                [style]="{ width: fileOverlayWidth }"
-              >
-                <div class="flex justify-end">
-                  <button
-                    mat-icon-button
-                    (click)="isOpen = !isOpen"
-                  >
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </div>
-                <mat-divider class="pb-6px"></mat-divider>
-                @let scrollHeight =
-                  isFile
-                    ? data.length >= 8
-                      ? '250px'
-                      : 'auto'
-                    : data.length >= 12
-                      ? '270px'
-                      : 'auto';
-                <ng-scrollbar
-                  class="w-full!"
-                  [style]="{ height: scrollHeight }"
-                  #scrollbarRef="ngScrollbar"
-                  externalViewport
-                  visibility="hover"
-                  appearance="compact"
-                  orientation="auto"
-                >
-                  <div scrollViewport>
-                    <div
-                      [class]="isFile ? 'w-full' : 'flex flex-row flex-wrap'"
-                    >
-                      <ng-container
-                        *ngTemplateOutlet="
-                          FileList;
-                          context: { fileData: data.slice(3) }
-                        "
-                      >
-                      </ng-container>
-                    </div>
-                  </div>
-                </ng-scrollbar>
-              </div>
-            </ng-template>
+            </ng-container>
           }
-        </div>
-      }
-      @case (IFileShowType.DETAIL) {}
-      @case (IFileShowType.LIST) {}
+        </ng-template>
+        <!-- 前三个 -->
+        <ng-container
+          *ngTemplateOutlet="
+            FileList;
+            context: { fileData: fileData.slice(0, 3) }
+          "
+        >
+        </ng-container>
+        <!-- 扩展 -->
+        @if (fileData.length > 3) {
+          <!-- 扩展按钮 -->
+          <div
+            class="flex-center p-3px"
+            cdkOverlayOrigin
+            #trigger="cdkOverlayOrigin"
+            (click)="isOpen = !isOpen"
+          >
+            <div class="relative">
+              <span
+                class="color-#5182e4"
+              >
+              ···
+              </span>
+              <span
+                class="absolute w-16px h-16px top-0 bg-#d1e4ff color-#1a79ff rounded-10px -right-22px line-height-16px text-center text-12px"
+                style="width: 16px !important"
+                >{{ fileData.length }}</span
+              >
+            </div>
+          </div>
+          <!-- 扩展数据 -->
+          <ng-template
+            cdkConnectedOverlay
+            centerHorizontallys
+            [cdkConnectedOverlayOrigin]="trigger!"
+            [cdkConnectedOverlayOpen]="isOpen"
+            [cdkConnectedOverlayPositions]="overlayPositions"
+            OverlayKeyboardDispatcher
+            [positionStrategy]="positionStrategy"
+          >
+            <div
+              *ngIf="fileData.length > 1"
+              class="w-full flex flex-col relative cursor-pointer min-w-250px rounded-8px p-5px shadow-2xl qy-upload-file-border"
+              style="background-color: var(--base-bg-color)"
+              [style]="{ width: fileOverlayWidth }"
+            >
+              <div class="flex justify-end">
+                <button
+                  mat-icon-button
+                  (click)="isOpen = !isOpen"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+
+              <mat-divider class="pt-6px"></mat-divider>
+              @let scrollHeight =
+                isFile
+                  ? fileData.length >= 8
+                    ? '250px'
+                    : 'auto'
+                  : fileData.length >= 12
+                    ? '270px'
+                    : 'auto';
+              <ng-scrollbar
+                class="w-full!"
+                [style]="{ height: scrollHeight }"
+                #scrollbarRef="ngScrollbar"
+                externalViewport
+                visibility="hover"
+                appearance="compact"
+                orientation="auto"
+              >
+                <div scrollViewport>
+                  <div
+                    [class]="isFile ? 'w-full' : 'flex flex-row flex-wrap'"
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        FileList;
+                        context: { fileData: fileData.slice(3) }
+                      "
+                    >
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-scrollbar>
+            </div>
+          </ng-template>
+        }
+      </div>
     }
-  </content>
-} @else {
-  <div>无</div>
-}
-
-<!-- 单 -->
-<!-- <div *ngIf="data.length === 1" [class]="isForm ? 'upload-file-wrapper' : ''" [style]="{backgroundColor: isDisabled ? '#f5f5f5' : ''}">
-  <ng-container *ngTemplateOutlet="
-    OnceFile;
-    context: {
-      fileData: data[0] || {},
-      index: 0
-    }"
-  >
-  </ng-container>
-</div> -->
-
+    @case (IFileShowType.DETAIL) {}
+    @case (IFileShowType.LIST) {
+      <div class="w-full">
+        @if(fileData.length === 1) {
+          <ng-container *ngTemplateOutlet="
+            FileItem;
+              context: {
+                fileData: fileData[0] || {},
+                index: 0
+              }"
+            >
+          </ng-container>
+        }@else {
+          <div
+            class="flex-center py-3px"
+            (click)="openFilePreviewDialog(fileData)"
+          >
+            <div class="relative">
+              <img
+                width="24px"
+                height="24px"
+                src="/assets/file-type/annex.png"
+              />
+              <span class="color-#5182e4">
+                多附件
+              </span>
+              <span
+                class="absolute w-16px h-16px top-0 bg-#d1e4ff color-#1a79ff rounded-10px -right-22px line-height-16px text-center text-12px"
+                style="width: 16px !important"
+              >{{ fileData.length }}</span
+              >
+            </div>
+          </div>
+        }
+      </div>
+    } 
+  }
+</content>
 <ng-template
   #FileItem
   let-fileData="fileData"
   let-index="index"
+  let-length="length"
 >
   <div
-    class="relative p-5px flex items-center rounded-5px hover:bg-red-1 group file-item"
+    class="relative p-5px flex items-center rounded-5px cursor-pointer group"
+    [class]="!isList ? 'qy-file-item' : ''"
   >
-    <!-- 列表 -->
-    @if (fileShowType === IFileShowType.FORM) {
-      <ng-container>
-        <img
-          nz-image
-          [src]="
-            '/gridvo-ui/assets/gridvo/file-type/' + fileData.suffix + '.png'
-          "
-          class="cursor"
-          [class]="isFile ? 'w-40px h-40px' : 'w-80px h-80px'"
-          nzDisablePreview
-          (click)="preview(fileData)"
-        />
-      </ng-container>
-    }
-
-    <!-- 详情 -->
-    <!-- <ng-container *ngIf="isDetail && fileData.suffix === 'img'">
-      <img
-        nz-image
-        [src]="autoPrefix(fileData)"
-        class="cursor"
-        nzDisablePreview
-        class="once-preview-img"
-        [class]="
-          isForm
-            ? !isFile
-              ? 'w-68px h-68px'
-              : 'w-40px h-40px'
-            : 'w-40px h-40px'
-        "
-        (click)="preview(fileData)"
-      />
-    </ng-container> -->
-    <!-- 上传相关 -->
-    <span
-      class="ml-8 ellipsis cursor text-content flex-1"
+    @let imgClass = isList ? 'w-21px h-21px' : isFile ? 'w-40px h-40px' : 'w-80px h-80px qy-upload-file-border';
+    <img
+      src="
+        assets/workbench/heartsync.png
+      "
+      [class]="imgClass"
+      nzDisablePreview
       (click)="preview(fileData)"
-      *ngIf="isFile !== false"
-      >{{ fileData.name }}</span
-    >
-    <!-- 操作 -->
-    <!-- @if (isFile) { -->
+    />
+    @if(isFile) {
+      <span class="w-0 flex-1 ml-8px truncate color-#5182e4">我是文件的名称xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+    }
     <div
       [class]="
-        !isFile ? 'absolute wh-full top-0 left-0 hidden group-hover:block' : ''
+        !isFile ? 'absolute wh-full top-0 left-0 hidden group-hover:block backdrop-blur-6px qy-upload-file-border' : ''
       "
     >
-      <ng-container
-        *ngTemplateOutlet="FileHandle; context: { fileData, index }"
-      >
-      </ng-container>
+      <hs-file-handle 
+        [fileItemData]="fileData"
+        [index]="index" 
+        [preview]="!isFile"
+        [download]="!isForm"
+      ></hs-file-handle>
     </div>
-
-    <!-- } -->
   </div>
+  @if(isFile && !isList && index < length - 1) {
+    <mat-divider class="w-full"></mat-divider>
+  }
   <!-- {{fileData.status}} -->
   <!-- <div class="progress-wrapper" *ngIf="findUpload(fileData)">
     <nz-progress [nzShowInfo]="false" [nzPercent]="this.inUploadInfo[fileData.uid]?.event?.percent" class="progress"></nz-progress>
   </div> -->
-</ng-template>
-
-<ng-template
-  #PreviewFile
-  let-params
->
-  <div class="flex items-center justify-center flex-col viewFile">
-    <!--       [nzDataSource]="params.value" -->
-    <ul
-      nz-list
-      nzSize="large"
-      style="width: 100%"
-    >
-      <li
-        nz-list-item
-        *ngFor="let item of params.value; let index = index"
-        nzNoFlex
-        class="space-between"
-        style="display: flex !important"
-      >
-        <ul nz-list-item-actions>
-          <!-- <nz-list-item-action> -->
-          <div class="flex-center">
-            <ng-container *ngIf="item.suffix === 'img'">
-              <img
-                nz-image
-                width="40px"
-                height="40px"
-                [src]="autoPrefix(item)"
-                class="cursor preview-img"
-              />
-              <!-- <nz-divider nzType="vertical"></nz-divider> -->
-            </ng-container>
-            <ng-container
-              *ngTemplateOutlet="FileHandle; context: { fileData: item, index }"
-            >
-            </ng-container>
-          </div>
-          <!-- </nz-list-item-action> -->
-        </ul>
-        <div
-          class="flex items-center flex-1 cursor w-0"
-          (click)="preview(item)"
-        >
-          <!-- 视图 -->
-          <img
-            width="20px"
-            height="20px"
-            nz-image
-            nzDisablePreview
-          />
-          <!-- [nzSrc]="
-            '/gridvo-ui/assets/gridvo/file-type/' + item.suffix + '.png'
-          " -->
-          <span class="ml-8 ellipsis">{{ item.name }}</span>
-        </div>
-      </li>
-    </ul>
-  </div>
-</ng-template>
-
-<ng-template
-  #FileHandle
-  let-fileData="fileData"
-  let-index="index"
->
-  <div class="h-full flex-center">
-    <ng-content>
-      <mat-icon class="text-18px! w-18px! h-18px!">remove_red_eye</mat-icon>
-      <mat-divider
-        [vertical]="true"
-        class="h-16px mx-3px!"
-      ></mat-divider>
-    </ng-content>
-    <ng-content>
-      <mat-icon class="text-18px! w-18px! h-18px!">download</mat-icon>
-      <mat-divider
-        [vertical]="true"
-        class="h-16px mx-3px!"
-      ></mat-divider>
-    </ng-content>
-    <ng-container *ngIf="isForm && !isDisabled">
-      <mat-icon class="text-18px! w-18px! h-18px!">delete</mat-icon>
-    </ng-container>
-  </div>
 </ng-template>

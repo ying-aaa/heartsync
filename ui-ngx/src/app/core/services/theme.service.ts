@@ -76,6 +76,10 @@ export class HsThemeService {
     }
     return themeConfigMap.get(this.currentTheme()!);
   }
+
+  public getBaseColor(opacity: number): string {
+    return this.getCurrentThemeConfig([`rgba(0, 0, 0, .${opacity})`, `rgba(255, 255, 255, .${opacity})`]);
+  }
 }
 
 function concatSuffix(name: string): string {

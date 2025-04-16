@@ -11,7 +11,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  HostListener,
   inject,
   Input,
   OnInit,
@@ -20,11 +19,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-// import { formatSmdUrl } from '@app/modules/workbench/widget/smd-module/components/smd-form-render/core/utils';
-// import { NzMessageService } from 'ng-zorro-antd/message';
-// import { NzModalService } from 'ng-zorro-antd/modal';
-// import { jsonToObj } from '@app/core2/utils';
-// import { NzImageService } from 'ng-zorro-antd/image';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isMobile } from '@src/app/core/utils';
 import { IFileShowType } from '@shared/models/common-component';
@@ -32,12 +26,17 @@ import { MatDividerModule } from '@angular/material/divider';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatButtonModule } from '@angular/material/button';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
+import { FileDialogComponent } from './file-dialog/file-dialog.component';
+import { FileHandleComponent } from './file-handle/file-handle.component';
 
 @Component({
   selector: 'hs-upload-flie',
   templateUrl: './upload-flie.component.html',
   styleUrls: ['./upload-flie.component.less'],
   imports: [
+    FileHandleComponent,
     CommonModule,
     MatIconModule,
     OverlayModule,
@@ -45,10 +44,12 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     PortalModule,
     MatButtonModule,
     NgScrollbarModule,
+    MatDialogModule,
+    MatListModule
   ],
 })
 export class HsUploadFlieComponent implements OnInit, AfterViewInit {
-  @ViewChild('PreviewFile') previewFile: any;
+  @ViewChild('FilePreview') filePreview: any;
   // 源数据
   @Input() rdata: any;
   // key
@@ -64,7 +65,7 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   // 上传文件时的文件上传进度信息
   @Input() fileUploadInfo: any;
 
-  @Input() fileShowType: IFileShowType = IFileShowType.FORM;
+  @Input() fileShowType: IFileShowType | string = IFileShowType.FORM;
 
   @Output() change = new EventEmitter<any>();
 
@@ -73,32 +74,7 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   IFileShowType = IFileShowType;
 
   inUploadInfo = {};
-  data = [
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-  ];
+  fileData = Array.from({length: 9}, () => ({}));
   mayPreview = ['img', 'docx', 'doc', 'pdf'];
   isMobileTerminal: boolean = isMobile();
   isOpen = false;
@@ -119,12 +95,11 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   positionStrategy = this.overlay.position().global().left('0').top('0'); // 设置浮层左上角对齐屏幕左上角
 
   constructor(
-    private _snackBar: MatSnackBar,
     private overlay: Overlay,
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
   ) {}
-
-  ngOnInit(): void {}
 
   deletFile(fileData: any, index: number) {
     this.change.emit({
@@ -189,8 +164,9 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
     // }
   }
 
-  more(entity: any) {
-    if (this.isForm) return;
+  openFilePreviewDialog(fileData: any) {
+    console.log("%c Line:166 🍏 fileData", "color:#ed9ec7", fileData);
+    // if (this.isForm) return;
     // const newUrl = entity.map((item: any) => {
     //   const file = {
     //     name: item.name,
@@ -210,6 +186,14 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
     //   nzWidth: '40%',
     //   nzFooter: null,
     // });
+    const width = isMobile() ? '100vw' : '500px';
+    const dialogRef = this.dialog.open(FileDialogComponent, {
+      width,
+      minWidth: width,
+      data: {
+        fileData,
+      },
+    });
   }
 
   fileDownload(url: string, fileName: string) {
@@ -258,6 +242,8 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
     // return false
   }
 
+  ngOnInit(): void {}
+
   ngAfterViewInit(): void {
     this.fileOverlayWidth = this.isMobileTerminal
       ? 'calc(100vw - 16px)'
@@ -272,7 +258,7 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
       } else {
         // objData = jsonToObj(this.rdata[this.column.td], []);
       }
-      this.data = objData.map(this.suffixHandle);
+      this.fileData = objData.map(this.suffixHandle);
       this.cdr.detectChanges();
     }
     // if (changes['fileUploadInfo']) {
