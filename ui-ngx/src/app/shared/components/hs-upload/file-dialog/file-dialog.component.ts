@@ -61,14 +61,7 @@ import { FileHandleComponent } from '../file-handle/file-handle.component';
       </ng-scrollbar>
     </div>
   `,
-  imports: [
-    FileHandleComponent,
-    NgScrollbarModule,
-    MatButtonModule, 
-    MatDialogModule,
-    MatIconModule, 
-    MatDivider,
-  ]
+  standalone: false
 })
 export class FileDialogComponent implements OnInit, OnChanges {
   @Input() fileData: any[] = [];

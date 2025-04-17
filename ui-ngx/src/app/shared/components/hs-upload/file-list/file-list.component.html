@@ -7,7 +7,7 @@
   @switch (fileShowType) {
     @case (IFileShowType.FORM) {
       <div
-        class="flex w-0"
+        class="flex"
         [class]="isFile ? 'flex-col flex-1' : ''"
       >
         <!-- 公共列表 -->
@@ -67,7 +67,6 @@
             [cdkConnectedOverlayOpen]="isOpen"
             [cdkConnectedOverlayPositions]="overlayPositions"
             OverlayKeyboardDispatcher
-            [positionStrategy]="positionStrategy"
           >
             <div
               *ngIf="fileData.length > 1"
@@ -90,7 +89,7 @@
                   ? fileData.length >= 8
                     ? '250px'
                     : 'auto'
-                  : fileData.length >= 12
+                  : fileData.length > 13
                     ? '270px'
                     : 'auto';
               <ng-scrollbar
@@ -165,40 +164,56 @@
   let-index="index"
   let-length="length"
 >
-  <div
-    class="relative p-5px flex items-center rounded-5px cursor-pointer group"
-    [class]="!isList ? 'qy-file-item' : ''"
-  >
-    @let imgClass = isList ? 'w-21px h-21px' : isFile ? 'w-40px h-40px' : 'w-80px h-80px qy-upload-file-border';
-    <img
-      src="
-        assets/workbench/heartsync.png
-      "
-      [class]="imgClass"
-      nzDisablePreview
-      (click)="preview(fileData)"
-    />
-    @if(isFile) {
-      <span class="w-0 flex-1 ml-8px truncate color-#5182e4">我是文件的名称xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-    }
+  {{log(fileData)}}
+  <div class="relative">
     <div
-      [class]="
-        !isFile ? 'absolute wh-full top-0 left-0 hidden group-hover:block backdrop-blur-6px qy-upload-file-border' : ''
-      "
+      class="relative p-5px flex items-center rounded-5px cursor-pointer group"
+      [class]="!isList ? 'qy-file-item qy-upload-file-border' : ''"
+      [style.MarginRight]="index < length - 1 && '5px'"
     >
-      <hs-file-handle 
-        [fileItemData]="fileData"
-        [index]="index" 
-        [preview]="!isFile"
-        [download]="!isForm"
-      ></hs-file-handle>
+      @let imgClass = isList ? 'w-21px h-21px' : isFile ? 'w-40px h-40px' : 'w-80px h-80px';
+      <img
+        src="
+          assets/workbench/heartsync.png
+        "
+        [class]="imgClass"
+        nzDisablePreview
+        (click)="preview(fileData)"
+      />
+      @if(isFile) {
+        <span class="w-0 flex-1 ml-8px truncate color-#5182e4">我是文件的名称xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+      }
+      <div
+        [class]="
+          !isFile ? 'absolute wh-full top-0 left-0 hidden group-hover:block backdrop-blur-6px' : ''
+        "
+      >
+        <hs-file-handle 
+          [fileItemData]="fileData"
+          [index]="index" 
+          [preview]="!isFile"
+          [download]="!isForm"
+        ></hs-file-handle>
+      </div>
     </div>
+    @if(fileData.progress) {
+      <style>
+        mat-progress-bar{ width: calc(100% - 12px); }
+      </style>
+      <mat-progress-bar
+        class="absolute! left-6px bottom-3px"
+        [mode]="'buffer'"
+        [value]="fileData.progress"
+        [bufferValue]="0">
+      </mat-progress-bar>
+    }
   </div>
   @if(isFile && !isList && index < length - 1) {
     <mat-divider class="w-full"></mat-divider>
   }
-  <!-- {{fileData.status}} -->
-  <!-- <div class="progress-wrapper" *ngIf="findUpload(fileData)">
-    <nz-progress [nzShowInfo]="false" [nzPercent]="this.inUploadInfo[fileData.uid]?.event?.percent" class="progress"></nz-progress>
-  </div> -->
+    <!-- {{fileData.status}} -->
+    <!-- <div class="progress-wrapper" *ngIf="findUpload(fileData)">
+      <nz-progress [nzShowInfo]="false" [nzPercent]="this.inUploadInfo[fileData.uid]?.event?.percent" class="progress"></nz-progress>
+    </div> -->
 </ng-template>
+

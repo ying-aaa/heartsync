@@ -33,7 +33,7 @@ import { MatIconModule } from '@angular/material/icon';
     }
   </div>
   `,
-  imports: [MatButtonModule, MatIconModule, MatDividerModule,]
+  standalone: false
 })
 export class FileHandleComponent implements OnInit {
   @Input() index: number;

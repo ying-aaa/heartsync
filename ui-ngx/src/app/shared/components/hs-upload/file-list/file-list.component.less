@@ -2,7 +2,8 @@
 
 .themeMixin( {
     :host {
-      width: 100%;
+      --mdc-linear-progress-track-height: 5px;
+      --mdc-linear-progress-active-indicator-height: var(--mdc-linear-progress-track-height);
 
       content {
         background-color: @base-bg-color;

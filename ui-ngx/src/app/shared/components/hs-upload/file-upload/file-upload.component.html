@@ -1,0 +1,19 @@
+<input
+  #fileInput
+  type="file"
+  ng2FileSelect
+  [uploader]="uploader"
+  [multiple]="multiple"
+  class="hidden!"
+/>
+<button 
+  mat-stroked-button 
+  class="drag-drop-button"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+  (click)="fileInput.click()"
+>
+  <mat-icon>file_upload</mat-icon>
+  选择文件
+</button>
