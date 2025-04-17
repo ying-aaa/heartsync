@@ -17,7 +17,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SelfRecordService } from '@src/app/core/http/self-record.service';
 import { HsThemeService } from '@src/app/core/services/theme.service';
-import { HsUploadFlieComponent } from '@src/app/shared/components/upload-flie/upload-flie.component';
+import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-file.module';
 
 @Component({
   selector: 'hs-add-record',
@@ -34,7 +34,7 @@ import { HsUploadFlieComponent } from '@src/app/shared/components/upload-flie/up
     MatRippleModule,
     FormsModule,
     ReactiveFormsModule,
-    HsUploadFlieComponent
+    HsUploadFileModule
   ],
 })
 export class AddRecordComponent implements OnInit {

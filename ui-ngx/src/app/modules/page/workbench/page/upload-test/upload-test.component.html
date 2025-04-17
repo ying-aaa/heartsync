@@ -3,10 +3,18 @@
   <div class="upload-controls">
     <input
       type="file"
+      #fileInput
       ng2FileSelect
       [uploader]="uploader"
-      multiple
+      [multiple]="multiple"
+      class="hidden!"
     />
+    <button mat-stroked-button class="drag-drop-button"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    (click)="fileInput.click()">选择文件</button>
+
     <button
       (click)="uploader.uploadAll()"
       [disabled]="!uploader.getNotUploadedItems().length"
@@ -33,14 +41,20 @@
         <span class="file-size">{{ item.file.size | filesize }}</span>
         <span class="file-status">{{ getStatus(item) }}</span>
       </div>
-      <div class="progress-container">
+      <!-- <div class="progress-container">
         <div
           class="progress-bar"
           [style.width]="item.progress + '%'"
         >
           <span class="progress-text">{{ item.progress }}%</span>
         </div>
-      </div>
+      </div> -->
+      <mat-progress-bar
+        class="example-margin"
+        [mode]="'buffer'"
+        [value]="item.progress"
+        [bufferValue]="0">
+      </mat-progress-bar>
       <div class="item-actions">
         <button
           *ngIf="!item.isUploading"
