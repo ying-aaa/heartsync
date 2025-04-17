@@ -1,5 +1,17 @@
-<content class="qy-upload-file-border flex items-center">
-  <hs-file-list [fileData]="fileData" class="mr-8px"></hs-file-list>
+<content
+  class="qy-upload-file-border flex items-center py-8px"
+  [ngClass]="{ 'flex-col': isMobileTerminal && fileData.length }"
+>
+  <hs-file-list
+    [fileData]="fileData"
+    [isFile]="isFile"
+    [ngClass]="{
+      'w-0 flex-1 mr-8px': isFile && !isMobileTerminal,
+      'w-full mb-8px': isMobileTerminal,
+      hidden: !fileData.length,
+    }"
+    (deleteItemFile)="deleteItemFile($event)"
+  ></hs-file-list>
 
   <input
     #fileInput
@@ -9,15 +21,23 @@
     [multiple]="multiple"
     class="hidden!"
   />
-  <button 
-    mat-stroked-button 
+  <button
+    mat-button
     class="drag-drop-button"
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)"
     (click)="fileInput.click()"
+    [ngClass]="{
+      'w-92px! h-92px!': !isFile,
+    }"
   >
-    <mat-icon>file_upload</mat-icon>
-    上传
+    @if (isFile) {
+      <div class="flex-center">
+        <mat-icon class="mr-5px">file_upload</mat-icon> 上传
+      </div>
+    } @else {
+      <mat-icon class="m-0 text-28px! w-28px! h-28px!">add</mat-icon>
+    }
   </button>
 </content>

@@ -1,25 +1,37 @@
 import { ConnectionPositionPair, Overlay } from '@angular/cdk/overlay';
-import { ChangeDetectorRef, Component, ElementRef, inject, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IFileShowType } from '@src/app/shared/models/common-component';
 import { FileDialogComponent } from '../file-dialog/file-dialog.component';
 import { isMobile } from '@src/app/core/utils';
+import { FileItem } from 'ng2-file-upload';
 
 @Component({
   selector: 'hs-file-list',
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.less'],
-  standalone: false
+  standalone: false,
 })
 export class FileListComponent implements OnInit {
   @Input() isFile = false;
   @Input() disabled = false;
   @Input() fileShowType: IFileShowType | string = IFileShowType.FORM;
-  @Input() fileData = Array.from({length: 0}, () => ({}));
+  @Input() fileData = Array.from({ length: 0 }, () => ({}));
+
+  @Output() deleteItemFile = new EventEmitter<[number, FileItem]>();
 
   elementRef = inject(ElementRef);
-  
+
   IFileShowType = IFileShowType;
   isMobileTerminal: boolean = isMobile();
 
@@ -57,7 +69,7 @@ export class FileListComponent implements OnInit {
   }
 
   openFilePreviewDialog(fileData: any) {
-    console.log("%c Line:166 🍏 fileData", "color:#ed9ec7", fileData);
+    console.log('%c Line:166 🍏 fileData', 'color:#ed9ec7', fileData);
     // if (this.isForm) return;
     // const newUrl = entity.map((item: any) => {
     //   const file = {
@@ -89,16 +101,14 @@ export class FileListComponent implements OnInit {
   }
 
   log(val: any) {
-    console.log("%c Line:92 🥟 val", "color:#ed9ec7", val);
+    console.log('%c Line:92 🥟 val', 'color:#ed9ec7', val);
   }
 
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
     this.fileOverlayWidth = this.isMobileTerminal
       ? 'calc(100vw - 16px)'
-      :  '283px';
+      : '306px';
   }
 }

@@ -11,7 +11,7 @@
         [class]="isFile ? 'flex-col flex-1' : ''"
       >
         <!-- 公共列表 -->
-        <ng-template  
+        <ng-template
           #FileList
           let-fileData="fileData"
         >
@@ -22,7 +22,7 @@
                 context: {
                   fileData: item,
                   index: $index,
-                  length: fileData.length
+                  length: fileData.length,
                 }
               "
             >
@@ -47,11 +47,7 @@
             (click)="isOpen = !isOpen"
           >
             <div class="relative">
-              <span
-                class="color-#5182e4"
-              >
-              ···
-              </span>
+              <span class="color-#5182e4"> ··· </span>
               <span
                 class="absolute w-16px h-16px top-0 bg-#d1e4ff color-#1a79ff rounded-10px -right-22px line-height-16px text-center text-12px"
                 style="width: 16px !important"
@@ -102,9 +98,7 @@
                 orientation="auto"
               >
                 <div scrollViewport>
-                  <div
-                    [class]="isFile ? 'w-full' : 'flex flex-row flex-wrap'"
-                  >
+                  <div [class]="isFile ? 'w-full' : 'flex flex-row flex-wrap'">
                     <ng-container
                       *ngTemplateOutlet="
                         FileList;
@@ -123,16 +117,18 @@
     @case (IFileShowType.DETAIL) {}
     @case (IFileShowType.LIST) {
       <div class="w-full">
-        @if(fileData.length === 1) {
-          <ng-container *ngTemplateOutlet="
-            FileItem;
+        @if (fileData.length === 1) {
+          <ng-container
+            *ngTemplateOutlet="
+              FileItem;
               context: {
                 fileData: fileData[0] || {},
-                index: 0
-              }"
-            >
+                index: 0,
+              }
+            "
+          >
           </ng-container>
-        }@else {
+        } @else {
           <div
             class="flex-center py-3px"
             (click)="openFilePreviewDialog(fileData)"
@@ -143,19 +139,17 @@
                 height="24px"
                 src="/assets/file-type/annex.png"
               />
-              <span class="color-#5182e4">
-                多附件
-              </span>
+              <span class="color-#5182e4"> 多附件 </span>
               <span
                 class="absolute w-16px h-16px top-0 bg-#d1e4ff color-#1a79ff rounded-10px -right-22px line-height-16px text-center text-12px"
                 style="width: 16px !important"
-              >{{ fileData.length }}</span
+                >{{ fileData.length }}</span
               >
             </div>
           </div>
         }
       </div>
-    } 
+    }
   }
 </content>
 <ng-template
@@ -164,14 +158,22 @@
   let-index="index"
   let-length="length"
 >
-  {{log(fileData)}}
-  <div class="relative">
+  {{ log(fileData) }}
+  <div
+    class="relative"
+    [ngClass]="{
+      'p-3px': !isFile,
+    }"
+  >
     <div
       class="relative p-5px flex items-center rounded-5px cursor-pointer group"
-      [class]="!isList ? 'qy-file-item qy-upload-file-border' : ''"
-      [style.MarginRight]="index < length - 1 && '5px'"
+      [ngClass]="{
+        'qy-file-item qy-upload-file-border': !isList && !isFile,
+        'qy-file-item': isFile,
+      }"
     >
-      @let imgClass = isList ? 'w-21px h-21px' : isFile ? 'w-40px h-40px' : 'w-80px h-80px';
+      @let imgClass =
+        isList ? 'w-21px h-21px' : isFile ? 'w-40px h-40px' : 'w-80px h-80px';
       <img
         src="
           assets/workbench/heartsync.png
@@ -180,40 +182,47 @@
         nzDisablePreview
         (click)="preview(fileData)"
       />
-      @if(isFile) {
-        <span class="w-0 flex-1 ml-8px truncate color-#5182e4">我是文件的名称xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+      @if (isFile) {
+        <span class="w-0 flex-1 ml-8px truncate color-#5182e4 text-14px">{{
+          fileData.file.name
+        }}</span>
       }
       <div
         [class]="
-          !isFile ? 'absolute wh-full top-0 left-0 hidden group-hover:block backdrop-blur-6px' : ''
+          !isFile
+            ? 'absolute wh-full top-0 left-0 hidden group-hover:block backdrop-blur-6px'
+            : ''
         "
       >
-        <hs-file-handle 
+        <hs-file-handle
           [fileItemData]="fileData"
-          [index]="index" 
+          [index]="index"
           [preview]="!isFile"
           [download]="!isForm"
+          (deleteItemFile)="deleteItemFile.emit($event)"
         ></hs-file-handle>
       </div>
     </div>
-    @if(fileData.progress) {
+    @if (fileData.progress) {
       <style>
-        mat-progress-bar{ width: calc(100% - 12px); }
+        mat-progress-bar {
+          width: calc(100% - 12px);
+        }
       </style>
       <mat-progress-bar
         class="absolute! left-6px bottom-3px"
         [mode]="'buffer'"
         [value]="fileData.progress"
-        [bufferValue]="0">
+        [bufferValue]="0"
+      >
       </mat-progress-bar>
     }
   </div>
-  @if(isFile && !isList && index < length - 1) {
+  @if (isFile && !isList && index < length - 1) {
     <mat-divider class="w-full"></mat-divider>
   }
-    <!-- {{fileData.status}} -->
-    <!-- <div class="progress-wrapper" *ngIf="findUpload(fileData)">
+  <!-- {{fileData.status}} -->
+  <!-- <div class="progress-wrapper" *ngIf="findUpload(fileData)">
       <nz-progress [nzShowInfo]="false" [nzPercent]="this.inUploadInfo[fileData.uid]?.event?.percent" class="progress"></nz-progress>
     </div> -->
 </ng-template>
-

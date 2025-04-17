@@ -6,6 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { IFileShowType } from '@shared/models/common-component';
+import { isMobile } from '@src/app/core/utils';
 import { FileItem, FileUploader } from 'ng2-file-upload';
 
 const uploadUrl = 'http://localhost:3000/api/';
@@ -16,14 +17,14 @@ interface UploadedFile extends FileItem {
     size: number;
     url: string;
     uploadDate: Date;
-  }
+  };
 }
 
 @Component({
   selector: 'hs-upload',
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.less'],
-  standalone: false
+  standalone: false,
 })
 export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   @ViewChild('FilePreview') filePreview: any;
@@ -43,7 +44,9 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   @Input() authToken: string;
   // 允许上传的文件类型
   @Input() allowedFileType: string[];
-  
+
+  isMobileTerminal: boolean = isMobile();
+
   public uploader: FileUploader;
   public uploadedFiles: UploadedFile[] = [];
 
@@ -53,7 +56,16 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
 
   get fileData() {
     const queue = this.uploader.queue || [];
-    return [...queue, ...this.uploadedFiles]
+    return [...queue, ...this.uploadedFiles];
+  }
+
+  deleteItemFile([index, fileData]: any) {
+    console.log(
+      '%c Line:60 🍔 index, fileData',
+      'color:#7f2b82',
+      index,
+      fileData,
+    );
   }
 
   private initializeUploader(): void {
@@ -64,6 +76,8 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
       autoUpload: this.autoUpload, // 是否自动上传
       allowedFileType: this.allowedFileType, // 允许的文件类型
       removeAfterUpload: true,
+      allowedMimeType: ['image/jpeg', 'image/png'],
+
       // maxFileSize: 5 * 1024 * 1024, // 10MB
     });
 
@@ -73,12 +87,11 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   private setupUploaderEvents(): void {
     this.uploader.onSuccessItem = (item: UploadedFile, response: string) => {
       const serverResponse = JSON.parse(response);
-      Reflect.deleteProperty(item, "progress");
+      Reflect.deleteProperty(item, 'progress');
       item.serverResponse = serverResponse;
       this.uploadedFiles.push(item);
     };
 
-    
     this.uploader.onAfterAddingFile = (fileItem) => {
       if (fileItem._file.size > 5 * 1024 * 1024) {
         this.uploader.removeFromQueue(fileItem); // 从队列中移除文件
@@ -86,7 +99,6 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
         // this.fileSizeError = false;
       }
     };
-
 
     this.uploader.onErrorItem = (item: FileItem) => {
       console.error(`文件 ${item.file.name} 上传失败`);
@@ -120,9 +132,7 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }
