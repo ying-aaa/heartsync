@@ -6,7 +6,7 @@
     [fileData]="fileData"
     [isFile]="isFile"
     [ngClass]="{
-      'w-0 flex-1 mr-8px': isFile && !isMobileTerminal,
+      'w-0 flex-1 mr-8px': !isMobileTerminal,
       'w-full mb-8px': isMobileTerminal,
       hidden: !fileData.length,
     }"
@@ -19,6 +19,7 @@
     ng2FileSelect
     [uploader]="uploader"
     [multiple]="multiple"
+    (change)="onFilesSelected($event)" 
     class="hidden!"
   />
   <button

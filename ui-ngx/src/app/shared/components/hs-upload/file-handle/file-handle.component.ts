@@ -39,8 +39,9 @@ import { FileItem } from 'ng2-file-upload';
 
       @if (delete) {
         <button
-          class="w-28px! h-28px! p-1px!"
           mat-icon-button
+          color="#fff"
+          class="w-28px! h-28px! p-1px!"
           (click)="deleteItemFileEvent()"
         >
           <mat-icon class="text-18px! w-18px! h-18px! color-#ff0000"

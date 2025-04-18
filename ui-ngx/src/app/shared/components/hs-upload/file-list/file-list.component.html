@@ -168,18 +168,17 @@
     <div
       class="relative p-5px flex items-center rounded-5px cursor-pointer group"
       [ngClass]="{
-        'qy-file-item qy-upload-file-border': !isList && !isFile,
+        'qy-upload-file-border': !isList && !isFile,
         'qy-file-item': isFile,
       }"
     >
-      @let imgClass =
-        isList ? 'w-21px h-21px' : isFile ? 'w-40px h-40px' : 'w-80px h-80px';
       <img
-        src="
-          assets/workbench/heartsync.png
-        "
-        [class]="imgClass"
-        nzDisablePreview
+        [src]="fileData.previewSrc"
+        [ngClass]="{
+          'w-21px h-21px': isList,
+          'w-40px h-40px': isFile,
+          'w-80px h-80px qy-upload-file-border': !isFile,
+        }"
         (click)="preview(fileData)"
       />
       @if (isFile) {
@@ -188,11 +187,9 @@
         }}</span>
       }
       <div
-        [class]="
-          !isFile
-            ? 'absolute wh-full top-0 left-0 hidden group-hover:block backdrop-blur-6px'
-            : ''
-        "
+        [ngClass]="{
+          'absolute wh-full top-0 left-0 hidden group-hover:block rounded-5px qy-file-shade-80': !isFile,
+        }"
       >
         <hs-file-handle
           [fileItemData]="fileData"
@@ -204,13 +201,14 @@
       </div>
     </div>
     @if (fileData.progress) {
-      <style>
+      <div class='absolute wh-full top-0 left-0 rounded-5px qy-file-shade-30'></div>
+      <style class="">
         mat-progress-bar {
           width: calc(100% - 12px);
         }
       </style>
       <mat-progress-bar
-        class="absolute! left-6px bottom-3px"
+        class="absolute! left-6px top-50% -translate-y-50% bottom-3px z-999"
         [mode]="'buffer'"
         [value]="fileData.progress"
         [bufferValue]="0"
