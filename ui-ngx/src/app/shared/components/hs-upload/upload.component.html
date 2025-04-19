@@ -3,8 +3,11 @@
   [ngClass]="{ 'flex-col': isMobileTerminal && fileData.length }"
 >
   <hs-file-list
-    [fileData]="fileData"
+    [fold]="fold"
     [isFile]="isFile"
+    [fileData]="fileData"
+    [fileShowType]="fileShowType"
+    [foldStartIndex]="foldStartIndex"
     [ngClass]="{
       'w-0 flex-1 mr-8px': !isMobileTerminal,
       'w-full mb-8px': isMobileTerminal,
@@ -19,7 +22,7 @@
     ng2FileSelect
     [uploader]="uploader"
     [multiple]="multiple"
-    (change)="onFilesSelected($event)" 
+    (change)="onFilesSelected($event)"
     class="hidden!"
   />
   <button

@@ -7,38 +7,26 @@
   @switch (fileShowType) {
     @case (IFileShowType.FORM) {
       <div
-        class="flex"
-        [class]="isFile ? 'flex-col flex-1' : ''"
+        class="w-full flex"
+        [ngClass]="{ 'flex-col flex-1': isFile }"
       >
-        <!-- 公共列表 -->
-        <ng-template
-          #FileList
-          let-fileData="fileData"
-        >
-          @for (item of fileData; track $index) {
-            <ng-container
-              *ngTemplateOutlet="
-                FileItem;
-                context: {
-                  fileData: item,
-                  index: $index,
-                  length: fileData.length,
-                }
-              "
-            >
-            </ng-container>
-          }
-        </ng-template>
-        <!-- 前三个 -->
-        <ng-container
-          *ngTemplateOutlet="
-            FileList;
-            context: { fileData: fileData.slice(0, 3) }
-          "
-        >
-        </ng-container>
+        <div>
+          @let startFileData =
+            !fold ? fileData : fileData.slice(0, foldStartIndex);
+          <!-- 前三个 -->
+          <ng-container
+            *ngTemplateOutlet="
+              FileList;
+              context: {
+                fileData: startFileData,
+                length: startFileData.length,
+              }
+            "
+          >
+          </ng-container>
+        </div>
         <!-- 扩展 -->
-        @if (fileData.length > 3) {
+        @if (fold && fileData.length > foldStartIndex) {
           <!-- 扩展按钮 -->
           <div
             class="flex-center p-3px"
@@ -80,35 +68,13 @@
               </div>
 
               <mat-divider class="pt-6px"></mat-divider>
-              @let scrollHeight =
-                isFile
-                  ? fileData.length >= 8
-                    ? '250px'
-                    : 'auto'
-                  : fileData.length > 13
-                    ? '270px'
-                    : 'auto';
-              <ng-scrollbar
-                class="w-full!"
-                [style]="{ height: scrollHeight }"
-                #scrollbarRef="ngScrollbar"
-                externalViewport
-                visibility="hover"
-                appearance="compact"
-                orientation="auto"
+              <ng-container
+                *ngTemplateOutlet="
+                  FileList;
+                  context: { fileData: fileData.slice(3) }
+                "
               >
-                <div scrollViewport>
-                  <div [class]="isFile ? 'w-full' : 'flex flex-row flex-wrap'">
-                    <ng-container
-                      *ngTemplateOutlet="
-                        FileList;
-                        context: { fileData: fileData.slice(3) }
-                      "
-                    >
-                    </ng-container>
-                  </div>
-                </div>
-              </ng-scrollbar>
+              </ng-container>
             </div>
           </ng-template>
         }
@@ -120,10 +86,11 @@
         @if (fileData.length === 1) {
           <ng-container
             *ngTemplateOutlet="
-              FileItem;
+              FileList;
               context: {
-                fileData: fileData[0] || {},
+                fileData: fileData,
                 index: 0,
+                length: 1,
               }
             "
           >
@@ -153,74 +120,114 @@
   }
 </content>
 <ng-template
-  #FileItem
+  #FileList
   let-fileData="fileData"
   let-index="index"
   let-length="length"
 >
-  {{ log(fileData) }}
-  <div
-    class="relative"
+  <ng-scrollbar
+    class="w-full!"
     [ngClass]="{
-      'p-3px': !isFile,
+      'h-full': fileData.length < 8,
+      'h-250px': isFile && fileData.length >= 8,
+      'h-294px': !isFile && fileData.length >= 13,
     }"
+    #scrollbarRef="ngScrollbar"
+    externalViewport
+    visibility="hover"
+    appearance="compact"
+    orientation="auto"
   >
-    <div
-      class="relative p-5px flex items-center rounded-5px cursor-pointer group"
-      [ngClass]="{
-        'qy-upload-file-border': !isList && !isFile,
-        'qy-file-item': isFile,
-      }"
-    >
-      <img
-        [src]="fileData.previewSrc"
-        [ngClass]="{
-          'w-21px h-21px': isList,
-          'w-40px h-40px': isFile,
-          'w-80px h-80px qy-upload-file-border': !isFile,
-        }"
-        (click)="preview(fileData)"
-      />
-      @if (isFile) {
-        <span class="w-0 flex-1 ml-8px truncate color-#5182e4 text-14px">{{
-          fileData.file.name
-        }}</span>
-      }
-      <div
-        [ngClass]="{
-          'absolute wh-full top-0 left-0 hidden group-hover:block rounded-5px qy-file-shade-80': !isFile,
-        }"
-      >
-        <hs-file-handle
-          [fileItemData]="fileData"
-          [index]="index"
-          [preview]="!isFile"
-          [download]="!isForm"
-          (deleteItemFile)="deleteItemFile.emit($event)"
-        ></hs-file-handle>
+    <div scrollViewport>
+      <div class="flex flex-wrap">
+        @for (fileItemData of fileData; track $index) {
+          <div [class]="isFile ? 'w-full' : 'flex flex-row flex-wrap'">
+            <div
+              class="relative"
+              [ngClass]="{
+                'p-3px': !isFile,
+              }"
+            >
+              <div
+                class="p-5px"
+                [ngClass]="{
+                  'qy-upload-file-border': !isList && !isFile,
+                  'qy-file-item': isFile,
+                  'border-#ff4d4f!': !isFile && fileItemData.isError,
+                }"
+              >
+                <div
+                  class="flex items-center cursor-pointer relative overflow-hidden group"
+                >
+                  <img
+                    [src]="fileItemData.previewUrl"
+                    [ngClass]="{
+                      'w-21px h-21px': isList,
+                      'w-40px h-40px': isFile,
+                      'w-80px h-80px': !isFile,
+                      'opacity-50': fileItemData.isError,
+                    }"
+                    (click)="preview(fileItemData)"
+                  />
+
+                  <!-- 文件名称 -->
+                  @if (isFile) {
+                    <span
+                      class="w-0 flex-1 ml-8px truncate color-#5182e4 text-14px"
+                      [ngClass]="{
+                        'color-#5182e4': !fileItemData.isError,
+                        'color-red': fileItemData.isError,
+                      }"
+                      >{{ fileItemData.file.name }}</span
+                    >
+                  }
+
+                  <!-- 操作符 -->
+                  <div
+                    class="z-999"
+                    [ngClass]="{
+                      'absolute wh-full top-0 left-0 hidden group-hover:block qy-file-shade-80':
+                        !isFile,
+                      relative: isFile,
+                    }"
+                  >
+                    <hs-file-handle
+                      [fileItemData]="fileItemData"
+                      [index]="index"
+                      [preview]="!isFile"
+                      [download]="!isForm"
+                      [delete]="!isList"
+                      (deleteItemFile)="deleteItemFile.emit($event)"
+                    ></hs-file-handle>
+                  </div>
+
+                  <!-- 上传过程中文件的进程 -->
+                  @if (!fileItemData.isError && !fileItemData.isSuccess) {
+                    <div
+                      class="absolute wh-full top-0 left-0 qy-file-shade-30"
+                    ></div>
+                    <style class="">
+                      mat-progress-bar {
+                        width: calc(100% - 12px);
+                      }
+                    </style>
+                    <mat-progress-bar
+                      class="absolute! left-6px top-10% -translate-y-50% bottom-3px z-999"
+                      [mode]="'buffer'"
+                      [value]="fileItemData.progress"
+                      [bufferValue]="0"
+                    >
+                    </mat-progress-bar>
+                  }
+                </div>
+              </div>
+            </div>
+            @if (isFile && !isList && index < length - 1) {
+              <mat-divider class="w-full"></mat-divider>
+            }
+          </div>
+        }
       </div>
     </div>
-    @if (fileData.progress) {
-      <div class='absolute wh-full top-0 left-0 rounded-5px qy-file-shade-30'></div>
-      <style class="">
-        mat-progress-bar {
-          width: calc(100% - 12px);
-        }
-      </style>
-      <mat-progress-bar
-        class="absolute! left-6px top-50% -translate-y-50% bottom-3px z-999"
-        [mode]="'buffer'"
-        [value]="fileData.progress"
-        [bufferValue]="0"
-      >
-      </mat-progress-bar>
-    }
-  </div>
-  @if (isFile && !isList && index < length - 1) {
-    <mat-divider class="w-full"></mat-divider>
-  }
-  <!-- {{fileData.status}} -->
-  <!-- <div class="progress-wrapper" *ngIf="findUpload(fileData)">
-      <nz-progress [nzShowInfo]="false" [nzPercent]="this.inUploadInfo[fileData.uid]?.event?.percent" class="progress"></nz-progress>
-    </div> -->
+  </ng-scrollbar>
 </ng-template>

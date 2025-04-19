@@ -2,15 +2,27 @@ import {
   AfterViewInit,
   Component,
   ComponentRef,
+  EventEmitter,
   Input,
+  OnChanges,
+  OnDestroy,
   OnInit,
+  Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { IFileShowType } from '@shared/models/common-component';
 import { isMobile } from '@src/app/core/utils';
 import { FileItem, FileUploader } from 'ng2-file-upload';
 
-const uploadUrl = 'http://localhost:3000/api/';
+const uploadUrl = 'http://192.168.31.129:3000/api/';
+
+interface IOriginFileItem {
+  id?: number;
+  name: string;
+  previewUrl: string;
+}
 
 interface UploadedFile extends FileItem {
   serverResponse?: {
@@ -19,7 +31,8 @@ interface UploadedFile extends FileItem {
     url: string;
     uploadDate: Date;
   };
-  previewSrc?: any
+  originFileItem?: IOriginFileItem;
+  previewUrl?: any;
 }
 
 @Component({
@@ -28,8 +41,14 @@ interface UploadedFile extends FileItem {
   styleUrls: ['./upload.component.less'],
   standalone: false,
 })
-export class HsUploadFlieComponent implements OnInit, AfterViewInit {
+export class HsUploadFlieComponent
+  implements OnInit, AfterViewInit, OnDestroy, OnChanges
+{
   @ViewChild('FilePreview') filePreview: ComponentRef<any>;
+
+  @Input() filesData: IOriginFileItem[] = [];
+  @Output() filesDataChange = new EventEmitter<IOriginFileItem[]>();
+
   // 文件还是图片
   @Input() isFile = false;
   // 禁用
@@ -46,13 +65,19 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   @Input() authToken: string;
   // 允许上传的文件类型
   @Input() allowedFileType: string[];
+  // 最大上传大小
+  @Input() maxFileSize: number;
+  // 开启折叠
+  @Input() fold = false;
+  // 第几个开始折叠
+  @Input() foldStartIndex = 3;
 
   isMobileTerminal: boolean = isMobile();
 
   public uploader: FileUploader;
   public fileData: UploadedFile[] = [];
 
-  constructor() {
+  constructor(private _snackBar: MatSnackBar) {
     this.initializeUploader();
   }
 
@@ -64,7 +89,8 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
 
         reader.onload = (e: ProgressEvent<FileReader>) => {
           if (e.target) {
-            file.previewSrc = e.target.result as string; // 将 Base64 URL 添加到数组
+            file.previewUrl = e.target.result as string; // 将 Base64 URL 添加到数组
+            this.updateFilesData();
           }
         };
 
@@ -73,12 +99,14 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
     }
   }
 
-  deleteItemFile([index, fileData]: any) {
-    const fileItemIndex = this.fileData.findIndex(file => file === fileData);
+  deleteItemFile(fileItem: FileItem) {
+    const fileItemIndex = this.fileData.findIndex((file) => file === fileItem);
     this.fileData.splice(fileItemIndex, 1);
 
-    const queueIndex = this.uploader.queue.findIndex(file => file === fileData);
-    if(queueIndex !== -1) this.uploader.queue.splice(queueIndex, 1);
+    this.uploader.cancelItem(fileItem);
+    this.uploader.removeFromQueue(fileItem);
+
+    this.updateFilesData();
   }
 
   private initializeUploader(): void {
@@ -99,19 +127,32 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
   private setupUploaderEvents(): void {
     this.uploader.onSuccessItem = (item: UploadedFile, response: string) => {
       const serverResponse = JSON.parse(response);
-      Reflect.deleteProperty(item, 'progress');
       item.serverResponse = serverResponse;
       // this.fileData.push(item);
     };
 
     this.uploader.onAfterAddingFile = (fileItem) => {
-      console.log("%c Line:95 🍿 fileItem", "color:#93c0a4", fileItem);
-      if (fileItem._file.size > 100 * 1024 * 1024) {
+      if (
+        this.maxFileSize &&
+        fileItem._file.size > this.maxFileSize * 1024 * 1024
+      ) {
         this.uploader.removeFromQueue(fileItem); // 从队列中移除文件
+        this._snackBar.open(
+          // ${fileItem._file.name}：
+          `超出允许的最大上传大小 ${this.maxFileSize}MB`,
+          '确定',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 3 * 1000,
+          },
+        );
       } else {
         // this.fileSizeError = false;
-        this.fileData.push(fileItem)
+        this.fileData.push(fileItem);
       }
+
+      this.updateFilesData();
     };
 
     this.uploader.onErrorItem = (item: FileItem) => {
@@ -124,6 +165,23 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
     this.uploader.onProgressItem = (item: FileItem, progress: number) => {
       console.log(`文件 ${item.file.name} 上传进度: ${progress}%`);
     };
+  }
+
+  updateFilesData() {
+    this.fileData.forEach((fileItem) => {
+      if (!fileItem.originFileItem) {
+        fileItem.originFileItem = {
+          name: fileItem._file.name,
+          previewUrl: fileItem.previewUrl,
+        };
+      } else {
+        fileItem.originFileItem.previewUrl = fileItem.previewUrl;
+      }
+    });
+    const newFilesData = this.fileData.map(
+      ({ originFileItem }) => originFileItem!,
+    );
+    this.filesDataChange.emit(newFilesData);
   }
 
   // 拖拽文件到按钮
@@ -148,7 +206,50 @@ export class HsUploadFlieComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {}
+  syncFilesData(
+    newFilesData: { id: string; name: string; url: string }[],
+  ): void {
+    // 清空当前的上传队列
+    this.uploader.queue = [];
+
+    // 将新的文件数据转换为 FileItem 并添加到队列
+    newFilesData.forEach((fileData) => {
+      // @ts-ignore
+      const fileItem = new FileItem(
+        this.uploader,
+        // @ts-ignore
+        fileData,
+        {},
+      );
+      // fileItem.file.id = fileData.id; // 为 FileItem 添加自定义属性
+      // this.uploader.queue.push(fileItem);
+      const file = this.fileData.find(
+        (item) => (item.originFileItem as any) === fileData,
+      );
+      if (!file) {
+        (fileItem as any).originFileItem = fileData;
+        this.fileData.push(fileItem);
+      }
+    });
+  }
 
   ngOnInit() {}
+
+  ngAfterViewInit(): void {}
+
+  ngOnDestroy(): void {
+    // 销毁 Uploader 实例
+    if (this.uploader) {
+      this.uploader.cancelAll(); // 取消所有未完成的上传任务
+      // this.uploader = null;
+      // this.uploader.destroy();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['filesData'] && changes['filesData'].currentValue) {
+      // 当 filesData 发生变化时，重新同步数据
+      // this.syncFilesData(changes['filesData'].currentValue);
+    }
+  }
 }

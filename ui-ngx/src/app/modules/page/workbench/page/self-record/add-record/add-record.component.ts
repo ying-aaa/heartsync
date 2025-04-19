@@ -34,7 +34,7 @@ import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-
     MatRippleModule,
     FormsModule,
     ReactiveFormsModule,
-    HsUploadFileModule
+    HsUploadFileModule,
   ],
 })
 export class AddRecordComponent implements OnInit {
@@ -46,12 +46,29 @@ export class AddRecordComponent implements OnInit {
     visibility: new FormControl('public'),
   });
 
+  filesData: any = [];
+
   constructor(
     private hsThemeService: HsThemeService,
     private selfRecordService: SelfRecordService,
     private _snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<AddRecordComponent>,
-  ) {}
+  ) {
+    setTimeout(() => {
+      this.filesData = [
+        {
+          name: 'xxx',
+          previewUrl:
+            'https://kimi-img.moonshot.cn/prod-chat-kimi/avatar/kimiplus/research.png',
+        },
+        {
+          name: 'aaa',
+          previewUrl:
+            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        },
+      ];
+    }, 1000);
+  }
 
   matRippleColor = () =>
     this.hsThemeService.getCurrentThemeConfig(['#00000010', '#ffffff10']);

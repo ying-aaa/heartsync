@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const forwardUrl = 'http://localhost:3000/';
-const wsForwardUrl = 'http://localhost:3000/';
+const forwardUrl = 'http://192.168.31.129:3000/';
+const wsForwardUrl = 'http://192.168.31.129:3000/';
 // const forwardUrl = 'https://wjy.apihub.net';
 // const wsForwardUrl = 'https://wjy.apihub.net';
 const ruleNodeUiforwardUrl = forwardUrl;

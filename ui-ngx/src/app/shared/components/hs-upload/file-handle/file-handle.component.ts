@@ -31,10 +31,12 @@ import { FileItem } from 'ng2-file-upload';
             >download</mat-icon
           >
         </button>
-        <mat-divider
-          [vertical]="true"
-          class="h-16px"
-        ></mat-divider>
+        @if (delete) {
+          <mat-divider
+            [vertical]="true"
+            class="h-16px"
+          ></mat-divider>
+        }
       }
 
       @if (delete) {
@@ -60,12 +62,12 @@ export class FileHandleComponent implements OnInit {
   @Input() delete: boolean = true;
   @Input() fileItemData: FileItem;
 
-  @Output() deleteItemFile = new EventEmitter<[number, FileItem]>();
+  @Output() deleteItemFile = new EventEmitter<FileItem>();
 
   constructor() {}
 
   deleteItemFileEvent() {
-    this.deleteItemFile.emit([this.index, this.fileItemData]);
+    this.deleteItemFile.emit(this.fileItemData);
   }
 
   ngOnInit() {}

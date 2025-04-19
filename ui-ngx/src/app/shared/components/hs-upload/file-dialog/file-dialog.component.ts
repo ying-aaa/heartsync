@@ -1,4 +1,11 @@
-import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatDivider } from '@angular/material/divider';
@@ -10,7 +17,10 @@ import { FileHandleComponent } from '../file-handle/file-handle.component';
   selector: 'hs-file-dialog',
   template: `
     <div class="flex items-center justify-center flex-col viewFile">
-      <div mat-dialog-title class="relative w-full flex justify-between">
+      <div
+        mat-dialog-title
+        class="relative w-full flex justify-between"
+      >
         <span>文件查看</span>
         <button
           mat-icon-button
@@ -31,29 +41,32 @@ import { FileHandleComponent } from '../file-handle/file-handle.component';
         appearance="compact"
         orientation="auto"
       >
-        <ul scrollViewport class="w-full px-20px py-3px">
-          @for (item of fileData; track $index) {
-            <li 
-              class="h-56px"
-            >
-              <div  class="wh-full flex-center">
+        <ul
+          scrollViewport
+          class="w-full px-20px py-3px"
+        >
+          @for (fileItemData of fileData; track $index) {
+            <li class="h-56px">
+              <div class="wh-full flex-center">
                 <img
-                  width="21px"
-                  height="21px"
-                  src="/assets/file-type/annex.png"
+                  [src]="fileItemData.previewUrl"
+                  width="32px"
+                  height="32px"
                 />
-                <div class="line-height-24px w-0 flex-1 mx-8px truncate text-14px color-#5182e4 cursor-pointer">我是文件的名称xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
-                <hs-file-handle 
-                  [fileItemData]="item" 
-                  [index]="$index" 
+                <div
+                  class="line-height-24px w-0 flex-1 mx-8px truncate text-14px color-#5182e4 cursor-pointer"
+                >
+                  {{ fileItemData._file.name }}
+                </div>
+                <hs-file-handle
+                  [fileItemData]="fileItemData"
+                  [index]="$index"
                   [preview]="false"
                   [delete]="false"
                 ></hs-file-handle>
               </div>
-              @if($index < fileData.length - 1) {
-                <mat-divider
-                  class="w-full h-1px"
-                ></mat-divider>
+              @if ($index < fileData.length - 1) {
+                <mat-divider class="w-full h-1px"></mat-divider>
               }
             </li>
           }
@@ -61,14 +74,12 @@ import { FileHandleComponent } from '../file-handle/file-handle.component';
       </ng-scrollbar>
     </div>
   `,
-  standalone: false
+  standalone: false,
 })
 export class FileDialogComponent implements OnInit, OnChanges {
   @Input() fileData: any[] = [];
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public dialogData: any 
-  ) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public dialogData: any) {}
 
   ngOnInit(): void {
     if (this.dialogData && this.dialogData.fileData) {

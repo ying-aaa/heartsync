@@ -6,8 +6,10 @@ import {
   EventEmitter,
   inject,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -26,9 +28,11 @@ export class FileListComponent implements OnInit {
   @Input() isFile = false;
   @Input() disabled = false;
   @Input() fileShowType: IFileShowType | string = IFileShowType.FORM;
-  @Input() fileData = Array.from({ length: 0 }, () => ({}));
+  @Input() fileData: FileItem[] = [];
+  @Input() fold = false;
+  @Input() foldStartIndex = 3;
 
-  @Output() deleteItemFile = new EventEmitter<[number, FileItem]>();
+  @Output() deleteItemFile = new EventEmitter<FileItem>();
 
   elementRef = inject(ElementRef);
 
@@ -69,27 +73,6 @@ export class FileListComponent implements OnInit {
   }
 
   openFilePreviewDialog(fileData: any) {
-    console.log('%c Line:166 🍏 fileData', 'color:#ed9ec7', fileData);
-    // if (this.isForm) return;
-    // const newUrl = entity.map((item: any) => {
-    //   const file = {
-    //     name: item.name,
-    //     url: formatSmdUrl(item.url).prefix(),
-    //     previewUrl: formatSmdUrl(item.previewUrl).prefix()
-    //   }
-    //   return this.suffixHandle(file)
-    // })
-
-    // this.modal.create({
-    //   nzTitle: '文件查看',
-    //   nzContent: this.previewFile,
-    //   nzWrapClassName: this.isMobileTerminal && 'fullscreen-modal',
-    //   nzComponentParams: {
-    //     value: newUrl
-    //   },
-    //   nzWidth: '40%',
-    //   nzFooter: null,
-    // });
     const width = isMobile() ? '100vw' : '500px';
     const dialogRef = this.dialog.open(FileDialogComponent, {
       width,
@@ -98,10 +81,6 @@ export class FileListComponent implements OnInit {
         fileData,
       },
     });
-  }
-
-  log(val: any) {
-    console.log('%c Line:92 🥟 val', 'color:#ed9ec7', val);
   }
 
   ngOnInit() {}

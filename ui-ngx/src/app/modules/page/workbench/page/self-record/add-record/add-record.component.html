@@ -27,8 +27,10 @@
         <!-- <mat-icon>add</mat-icon> -->
         <!-- </div> -->
         <hs-upload
+          [(filesData)]="filesData"
           fileShowType="form"
           [isFile]="true"
+          [fold]="true"
         ></hs-upload>
       </div>
     </main>
