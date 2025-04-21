@@ -55,7 +55,7 @@ import { FileItem } from 'ng2-file-upload';
   `,
   standalone: false,
 })
-export class FileHandleComponent implements OnInit {
+export class HsFileHandleComponent implements OnInit {
   @Input() index: number;
   @Input() preview: boolean = true;
   @Input() download: boolean = true;

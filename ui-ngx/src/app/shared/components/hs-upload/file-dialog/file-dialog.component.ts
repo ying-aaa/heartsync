@@ -6,12 +6,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { MatDivider } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
-import { NgScrollbarModule } from 'ngx-scrollbar';
-import { FileHandleComponent } from '../file-handle/file-handle.component';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'hs-file-dialog',
@@ -49,14 +44,14 @@ import { FileHandleComponent } from '../file-handle/file-handle.component';
             <li class="h-56px">
               <div class="wh-full flex-center">
                 <img
-                  [src]="fileItemData.previewUrl"
+                  [src]="fileItemData.url"
                   width="32px"
                   height="32px"
                 />
                 <div
                   class="line-height-24px w-0 flex-1 mx-8px truncate text-14px color-#5182e4 cursor-pointer"
                 >
-                  {{ fileItemData._file.name }}
+                  {{ fileItemData.name }}
                 </div>
                 <hs-file-handle
                   [fileItemData]="fileItemData"
@@ -76,7 +71,7 @@ import { FileHandleComponent } from '../file-handle/file-handle.component';
   `,
   standalone: false,
 })
-export class FileDialogComponent implements OnInit, OnChanges {
+export class HsFileDialogComponent implements OnInit, OnChanges {
   @Input() fileData: any[] = [];
 
   constructor(@Inject(MAT_DIALOG_DATA) public dialogData: any) {}

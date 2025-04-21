@@ -12,7 +12,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IFileShowType } from '@src/app/shared/models/common-component';
-import { FileDialogComponent } from '../file-dialog/file-dialog.component';
+import { HsFileDialogComponent } from '../file-dialog/file-dialog.component';
 import { isMobile } from '@src/app/core/utils';
 import { FileItem } from 'ng2-file-upload';
 
@@ -22,7 +22,7 @@ import { FileItem } from 'ng2-file-upload';
   styleUrls: ['./file-list.component.less'],
   standalone: false,
 })
-export class FileListComponent implements OnInit {
+export class HsFileListComponent implements OnInit {
   @Input() isFile = false;
   @Input() disabled = false;
   @Input() fileShowType: IFileShowType | string = IFileShowType.FORM;
@@ -72,7 +72,7 @@ export class FileListComponent implements OnInit {
 
   openFilePreviewDialog(fileData: any) {
     const width = isMobile() ? '100vw' : '500px';
-    const dialogRef = this.dialog.open(FileDialogComponent, {
+    const dialogRef = this.dialog.open(HsFileDialogComponent, {
       width,
       minWidth: width,
       data: {
