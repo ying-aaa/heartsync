@@ -290,6 +290,7 @@
 .line-height-40px{line-height:40px;}
 .line-height-50px{line-height:50px;}
 .tracking-0{letter-spacing:0;}
+.line-through\!{text-decoration-line:line-through !important;}
 .tab{-moz-tab-size:4;-o-tab-size:4;tab-size:4;}
 .opacity-20{opacity:0.2;}
 .opacity-50{opacity:0.5;}

@@ -35,6 +35,22 @@ interface UploadedFile extends FileItem {
   previewUrl?: any;
 }
 
+export function getFileStatus(fileItem: any): string {
+  if (fileItem.isCancel) {
+    return 'canceled'; // 文件被取消上传
+  } else if (fileItem.isError) {
+    return 'error'; // 文件上传失败
+  } else if (fileItem.isSuccess) {
+    return 'done'; // 文件上传成功
+  } else if (fileItem.isUploading) {
+    return 'uploading'; // 文件正在上传
+  } else if (fileItem.isReady) {
+    return 'ready'; // 文件准备好，等待上传
+  } else {
+    return 'unknown'; // 未知状态
+  }
+}
+
 @Component({
   selector: 'hs-upload',
   templateUrl: './upload.component.html',
@@ -46,8 +62,8 @@ export class HsUploadFlieComponent
 {
   @ViewChild('FilePreview') filePreview: ComponentRef<any>;
 
-  @Input() filesData: IOriginFileItem[] = [];
-  @Output() filesDataChange = new EventEmitter<IOriginFileItem[]>();
+  @Input() fileData: any[] = [];
+  @Output() fileDataChange = new EventEmitter<any[]>();
 
   // 文件还是图片
   @Input() isFile = false;
@@ -75,7 +91,7 @@ export class HsUploadFlieComponent
   isMobileTerminal: boolean = isMobile();
 
   public uploader: FileUploader;
-  public fileData: UploadedFile[] = [];
+  // public fileData: UploadedFile[] = [];
 
   constructor(private _snackBar: MatSnackBar) {
     this.initializeUploader();
@@ -90,23 +106,21 @@ export class HsUploadFlieComponent
         reader.onload = (e: ProgressEvent<FileReader>) => {
           if (e.target) {
             file.previewUrl = e.target.result as string; // 将 Base64 URL 添加到数组
-            this.updateFilesData();
           }
         };
 
-        reader.readAsDataURL(file._file); // 读取文件内容为 Base64 格式
+        // reader.readAsDataURL(file._file); // 读取文件内容为 Base64 格式
       }
     }
   }
 
   deleteItemFile(fileItem: FileItem) {
-    const fileItemIndex = this.fileData.findIndex((file) => file === fileItem);
-    this.fileData.splice(fileItemIndex, 1);
+    // const fileItemIndex = this.fileData.findIndex((file) => file === fileItem);
+    // this.fileData.splice(fileItemIndex, 1);
 
     this.uploader.cancelItem(fileItem);
     this.uploader.removeFromQueue(fileItem);
 
-    this.updateFilesData();
   }
 
   private initializeUploader(): void {
@@ -149,10 +163,14 @@ export class HsUploadFlieComponent
         );
       } else {
         // this.fileSizeError = false;
-        this.fileData.push(fileItem);
+        // this.fileData.push(fileItem);
+        this.fileData.push({
+          name: fileItem.file.name,
+          fileUrl: "",
+          status: getFileStatus(fileItem),
+        })
       }
 
-      this.updateFilesData();
     };
 
     this.uploader.onErrorItem = (item: FileItem) => {
@@ -165,23 +183,6 @@ export class HsUploadFlieComponent
     this.uploader.onProgressItem = (item: FileItem, progress: number) => {
       console.log(`文件 ${item.file.name} 上传进度: ${progress}%`);
     };
-  }
-
-  updateFilesData() {
-    this.fileData.forEach((fileItem) => {
-      if (!fileItem.originFileItem) {
-        fileItem.originFileItem = {
-          name: fileItem._file.name,
-          previewUrl: fileItem.previewUrl,
-        };
-      } else {
-        fileItem.originFileItem.previewUrl = fileItem.previewUrl;
-      }
-    });
-    const newFilesData = this.fileData.map(
-      ({ originFileItem }) => originFileItem!,
-    );
-    this.filesDataChange.emit(newFilesData);
   }
 
   // 拖拽文件到按钮
@@ -204,33 +205,6 @@ export class HsUploadFlieComponent
     if (files && files.length > 0) {
       this.uploader.addToQueue(files);
     }
-  }
-
-  syncFilesData(
-    newFilesData: { id: string; name: string; url: string }[],
-  ): void {
-    // 清空当前的上传队列
-    this.uploader.queue = [];
-
-    // 将新的文件数据转换为 FileItem 并添加到队列
-    newFilesData.forEach((fileData) => {
-      // @ts-ignore
-      const fileItem = new FileItem(
-        this.uploader,
-        // @ts-ignore
-        fileData,
-        {},
-      );
-      // fileItem.file.id = fileData.id; // 为 FileItem 添加自定义属性
-      // this.uploader.queue.push(fileItem);
-      const file = this.fileData.find(
-        (item) => (item.originFileItem as any) === fileData,
-      );
-      if (!file) {
-        (fileItem as any).originFileItem = fileData;
-        this.fileData.push(fileItem);
-      }
-    });
   }
 
   ngOnInit() {}

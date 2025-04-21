@@ -2,7 +2,7 @@
   class="qy-upload-file-border flex items-center py-8px"
   [ngClass]="{ 'flex-col': isMobileTerminal && fileData.length }"
 >
-  <hs-file-list
+  <!-- <hs-file-list
     [fold]="fold"
     [isFile]="isFile"
     [fileData]="fileData"
@@ -14,7 +14,7 @@
       hidden: !fileData.length,
     }"
     (deleteItemFile)="deleteItemFile($event)"
-  ></hs-file-list>
+  ></hs-file-list> -->
 
   <input
     #fileInput

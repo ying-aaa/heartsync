@@ -176,10 +176,9 @@
                       class="w-0 flex-1 ml-8px truncate color-#5182e4 text-14px"
                       [ngClass]="{
                         'color-#5182e4': !fileItemData.isError,
-                        'color-red': fileItemData.isError,
+                        'color-red line-through!': fileItemData.isError,
                       }"
-                      >{{ fileItemData.file.name }}</span
-                    >
+                      >{{ fileItemData.file.name }}</span>
                   }
 
                   <!-- 操作符 -->
@@ -222,7 +221,7 @@
                 </div>
               </div>
             </div>
-            @if (isFile && !isList && index < length - 1) {
+            @if (isFile && !isList && $index < length - 1) {
               <mat-divider class="w-full"></mat-divider>
             }
           </div>
