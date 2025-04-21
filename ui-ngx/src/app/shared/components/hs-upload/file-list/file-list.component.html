@@ -141,6 +141,10 @@
     <div scrollViewport>
       <div class="flex flex-wrap">
         @for (fileItemData of fileData; track $index) {
+          <!-- @let isCancel = fileItemData.status === 'canceled'; -->
+          @let isError = fileItemData.status === 'error';
+          @let isSuccess = fileItemData.status === 'done';
+          <!-- @let isReady = fileItemData.status === 'ready'; -->
           <div [class]="isFile ? 'w-full' : 'flex flex-row flex-wrap'">
             <div
               class="relative"
@@ -153,19 +157,19 @@
                 [ngClass]="{
                   'qy-upload-file-border': !isList && !isFile,
                   'qy-file-item': isFile,
-                  'border-#ff4d4f!': !isFile && fileItemData.isError,
+                  'border-#ff4d4f!': !isFile && isError,
                 }"
               >
                 <div
                   class="flex items-center cursor-pointer relative overflow-hidden group"
                 >
                   <img
-                    [src]="fileItemData.previewUrl"
+                    [src]="fileItemData.url"
                     [ngClass]="{
                       'w-21px h-21px': isList,
                       'w-40px h-40px': isFile,
                       'w-80px h-80px': !isFile,
-                      'opacity-50': fileItemData.isError,
+                      'opacity-50': isError,
                     }"
                     (click)="preview(fileItemData)"
                   />
@@ -175,10 +179,11 @@
                     <span
                       class="w-0 flex-1 ml-8px truncate color-#5182e4 text-14px"
                       [ngClass]="{
-                        'color-#5182e4': !fileItemData.isError,
-                        'color-red line-through!': fileItemData.isError,
+                        'color-#5182e4': !isError,
+                        'color-red line-through!': isError,
                       }"
-                      >{{ fileItemData.file.name }}</span>
+                      >{{ fileItemData.name }}</span
+                    >
                   }
 
                   <!-- 操作符 -->
@@ -201,7 +206,7 @@
                   </div>
 
                   <!-- 上传过程中文件的进程 -->
-                  @if (!fileItemData.isError && !fileItemData.isSuccess) {
+                  @if (!isError && !isSuccess && fileItemData.status) {
                     <div
                       class="absolute wh-full top-0 left-0 qy-file-shade-30"
                     ></div>

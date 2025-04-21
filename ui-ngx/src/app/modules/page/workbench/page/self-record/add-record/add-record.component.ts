@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
@@ -35,6 +36,7 @@ import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-
     FormsModule,
     ReactiveFormsModule,
     HsUploadFileModule,
+    CommonModule,
   ],
 })
 export class AddRecordComponent implements OnInit {
@@ -58,13 +60,11 @@ export class AddRecordComponent implements OnInit {
       this.filesData = [
         {
           name: 'xxx',
-          previewUrl:
-            'https://kimi-img.moonshot.cn/prod-chat-kimi/avatar/kimiplus/research.png',
+          url: 'https://kimi-img.moonshot.cn/prod-chat-kimi/avatar/kimiplus/research.png',
         },
         {
           name: 'aaa',
-          previewUrl:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
         },
       ];
     }, 1000);
