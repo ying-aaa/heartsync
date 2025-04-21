@@ -164,7 +164,9 @@
                   class="flex items-center cursor-pointer relative overflow-hidden group"
                 >
                   <img
+                    hs-image-preview
                     [src]="fileItemData.url"
+                    [previewSrc]="fileItemData.url"
                     [ngClass]="{
                       'w-21px h-21px': isList,
                       'w-40px h-40px': isFile,
