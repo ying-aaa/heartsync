@@ -16,8 +16,8 @@ export class HsSelfRecord {
   @Column({ type: 'text' })
   content: string;
 
-  @Column({ type: 'text', nullable: true })
-  filesData: string;
+  @Column({ type: 'json', nullable: true, default: [] })
+  filesData: object;
 
   @Column({ type: 'text', nullable: true })
   location: string;
