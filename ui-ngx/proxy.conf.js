@@ -30,7 +30,7 @@ const PROXY_CONFIG = {
     ws: true,
     secure: false,
   },
-  'files': {
+  '/files': {
     target: filesUrl,
     secure: false,
   },

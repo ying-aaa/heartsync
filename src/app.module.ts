@@ -4,11 +4,14 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SelfModule } from './app/self/self.module';
+import { HsUploadModule } from './app/upload/upload.module';
 
 @Module({
   imports: [
-    WidgetsModule,
     SelfModule,
+    WidgetsModule,
+    HsUploadModule,
+
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
