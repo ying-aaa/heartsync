@@ -12,9 +12,9 @@ import { HsFileHandleComponent } from './file-handle/file-handle.component';
 import { HsFileListComponent } from './file-list/file-list.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { HsImagePreviewDirective } from '@shared/directive/image-preview.directive';
 import { HsFlieUploadComponent } from './file-upload.component';
 import { NgModule } from '@angular/core';
+import { HsImagePreviewModule } from '@shared/directive/image-preview/image-preview.module';
 
 const uploadFileComponents = [
   HsFlieUploadComponent,
@@ -24,7 +24,7 @@ const uploadFileComponents = [
 ];
 
 @NgModule({
-  declarations: [...uploadFileComponents, HsImagePreviewDirective],
+  declarations: [...uploadFileComponents],
   imports: [
     CommonModule,
     MatIconModule,
@@ -38,6 +38,7 @@ const uploadFileComponents = [
     MatDialogModule,
     FileUploadModule,
     MatProgressBarModule,
+    HsImagePreviewModule,
   ],
   exports: [...uploadFileComponents],
 })
