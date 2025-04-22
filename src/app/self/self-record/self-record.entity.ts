@@ -17,7 +17,7 @@ export class HsSelfRecord {
   content: string;
 
   @Column({ type: 'text', nullable: true })
-  fileUrl: string;
+  filesData: string;
 
   @Column({ type: 'text', nullable: true })
   location: string;

@@ -35,7 +35,7 @@ export class HsUploadService {
       }
       return true;
     } catch (error) {
-      throw new InternalServerErrorException('Bucket creation failed');
+      throw new InternalServerErrorException('桶创建失败！' + error);
     }
   }
 
@@ -66,7 +66,7 @@ export class HsUploadService {
       );
 
       // 返回上传结果和公共 URL（如果文件是公开的）
-      const url = `/files/${params.bucket}/${path}`;
+      const url = `/${params.bucket}/${path}`;
 
       return {
         url, // 如果文件是公开的，返回公共 URL
@@ -76,7 +76,7 @@ export class HsUploadService {
         // mimetype: params.file.mimetype,
       };
     } catch (error) {
-      throw new InternalServerErrorException('上传文件失败！');
+      throw new InternalServerErrorException('上传文件失败！' + error);
     }
   }
 
@@ -98,7 +98,7 @@ export class HsUploadService {
 
       return objects;
     } catch (error) {
-      throw new InternalServerErrorException('文件列表获取失败！');
+      throw new InternalServerErrorException('文件列表获取失败！' + error);
     }
   }
 
@@ -110,11 +110,11 @@ export class HsUploadService {
   ) {
     try {
       if (type === 'public') {
-        return `/files/${bucket}/${path}`;
+        return `/${bucket}/${path}`;
       }
       return await this.minioClient.presignedGetObject(bucket, path, expiry);
     } catch (error) {
-      throw new InternalServerErrorException('URL生成失败！');
+      throw new InternalServerErrorException('URL生成失败！' + error);
     }
   }
 
@@ -123,7 +123,7 @@ export class HsUploadService {
       await this.minioClient.removeObject(bucket, path);
       return true;
     } catch (error) {
-      throw new InternalServerErrorException('文件删除失败！');
+      throw new InternalServerErrorException('文件删除失败！' + error);
     }
   }
 }
