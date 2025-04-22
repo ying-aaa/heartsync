@@ -42,12 +42,12 @@ import { IFileData } from '@src/app/shared/models/common-component';
   ],
 })
 export class AddRecordComponent implements OnInit {
+  bucket = 'heartsync-files';
   folderName = 'self-record';
 
   recordForm = new FormGroup({
     title: new FormControl('', Validators.required),
     content: new FormControl('', Validators.required),
-    fileUrl: new FormControl(''),
     location: new FormControl(''),
     visibility: new FormControl('public'),
   });
@@ -64,11 +64,12 @@ export class AddRecordComponent implements OnInit {
 
   delItemFile(fileItem: IFileData) {
     this.uploadFileService
-      .deleteFile('heartsync', `${this.folderName}/${fileItem.name}`)
+      .deleteFile(this.bucket, `${this.folderName}/${fileItem.name}`)
       .subscribe((res) => {
         this._snackBar.open('删除文件成功!!!', '确定', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
+          duration: 1 * 1000,
         });
       });
   }
@@ -79,7 +80,10 @@ export class AddRecordComponent implements OnInit {
   submit(): void {
     if (this.recordForm.valid) {
       this.selfRecordService
-        .create(this.recordForm.value)
+        .create({
+          ...this.recordForm.value,
+          filesData: this.filesData,
+        })
         .subscribe((newRecord) => {
           this._snackBar.open('新增记录成功!!!', '确定', {
             horizontalPosition: 'center',

@@ -31,7 +31,9 @@
           [isFile]="true"
           fileShowType="form"
           [(fileData)]="filesData"
-          [uploadUrl]="'/api/files/upload?bucket=heartsync&path=' + folderName"
+          [uploadUrl]="
+            '/api/files/upload?bucket=' + bucket + '&path=' + folderName
+          "
           (delItemFile)="delItemFile($event)"
         ></hs-file-upload>
       </div>
