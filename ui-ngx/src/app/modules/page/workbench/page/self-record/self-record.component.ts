@@ -7,12 +7,14 @@ import { isMobile } from '@src/app/core/utils';
 import { SelfRecordService } from '@src/app/core/http/self-record.service';
 import { MatListModule } from '@angular/material/list';
 import { DatePipe } from '@angular/common';
+import { HsImagePreviewModule } from '@shared/directive/image-preview/image-preview.module';
 
 @Component({
   selector: 'app-self-record',
   templateUrl: './self-record.component.html',
   styleUrls: ['./self-record.component.less'],
   imports: [
+    HsImagePreviewModule,
     MatButtonModule,
     MatIconModule,
     MatDialogModule,

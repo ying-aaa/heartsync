@@ -6,7 +6,6 @@
   >
     新增记录
   </button>
-
   <mat-list class="pt-30px!">
     @for (item of recordData; track $index) {
       <mat-list-item class="h-auto! mb-6px!">
@@ -15,7 +14,25 @@
           class="text-18px! font-700!"
           >{{ item.title }}</span
         >
-        <div matListItemLine class="whitespace-normal!">{{ item.content }}</div>
+        <div
+          matListItemLine
+          class="whitespace-normal!"
+        >
+          {{ item.content }}
+        </div>
+
+        @if (item.filesData.length) {
+          <div class="flex flex-wrap gap-8px mt-5px">
+            @for (fileItem of item.filesData; track $index) {
+              <img
+                hs-image-preview
+                [src]="fileItem.url"
+                [previewSrc]="fileItem.url"
+                class="w-100px h-100px"
+              />
+            }
+          </div>
+        }
         <span class="opacity-80 text-12px">{{
           item.createdAt | date: 'yyyy-MM-dd HH:mm:ss'
         }}</span>
