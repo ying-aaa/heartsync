@@ -1,8 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
-import { FileItem } from 'ng2-file-upload';
+import { IFileData } from '@src/app/shared/models/common-component';
 
 @Component({
   selector: 'hs-file-handle',
@@ -60,9 +57,9 @@ export class HsFileHandleComponent implements OnInit {
   @Input() preview: boolean = true;
   @Input() download: boolean = true;
   @Input() delete: boolean = true;
-  @Input() fileItemData: FileItem;
+  @Input() fileItemData: IFileData;
 
-  @Output() deleteItemFile = new EventEmitter<FileItem>();
+  @Output() deleteItemFile = new EventEmitter<IFileData>();
 
   constructor() {}
 

@@ -27,10 +27,12 @@
         <!-- <mat-icon>add</mat-icon> -->
         <!-- </div> -->
         <hs-file-upload
-          [(fileData)]="filesData"
-          fileShowType="form"
-          [isFile]="true"
           [fold]="true"
+          [isFile]="true"
+          fileShowType="form"
+          [(fileData)]="filesData"
+          [uploadUrl]="'/api/files/upload?bucket=heartsync&path=' + folderName"
+          (delItemFile)="delItemFile($event)"
         ></hs-file-upload>
       </div>
     </main>

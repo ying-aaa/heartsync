@@ -50,6 +50,8 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() fileData: any[] = [];
   @Output() fileDataChange = new EventEmitter<IFileData[]>();
 
+  @Output() delItemFile = new EventEmitter<IFileData>();
+
   // 文件还是图片
   @Input() isFile = false;
   // 禁用
@@ -57,7 +59,9 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   // 上传文件时的文件上传进度信息
   @Input() fileShowType: IFileShowType | string = IFileShowType.FORM;
   // url
-  @Input() uploadUrl = uploadUrl;
+  @Input() uploadUrl: string;
+  // formData
+  @Input() formData: any;
   // 多选
   @Input() multiple = true;
   // 自动上传
@@ -78,9 +82,7 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   public uploader: FileUploader;
   // public fileData: UploadedFile[] = [];
 
-  constructor(private _snackBar: MatSnackBar) {
-    this.initializeUploader();
-  }
+  constructor(private _snackBar: MatSnackBar) {}
 
   onFilesSelected(event: Event): void {
     if (this.fileData && this.fileData.length > 0) {
@@ -102,7 +104,7 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  deleteItemFile(fileItem: any) {
+  deleteItemFile(fileItem: IFileData) {
     // 删除fileData的
     const fileItemIndex = this.fileData.findIndex((file) => file === fileItem);
     this.fileData.splice(fileItemIndex, 1);
@@ -114,12 +116,15 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
       this.uploader.cancelItem(queueItem);
       this.uploader.removeFromQueue(queueItem);
     }
+
+    this.delItemFile.emit(fileItem);
   }
 
   private initializeUploader(): void {
     this.uploader = new FileUploader({
       url: this.uploadUrl,
       isHTML5: true,
+      additionalParameter: this.formData,
       authToken: this.authToken,
       autoUpload: this.autoUpload, // 是否自动上传
       allowedFileType: this.allowedFileType, // 允许的文件类型
@@ -186,6 +191,7 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   updateFileData(fileItem: UploadedFile) {
     const index = this.fileData.findIndex((file) => file.id === fileItem.id);
     if (index !== -1) {
+      this.fileData[index].url = fileItem.serverResponse?.url;
       this.fileData[index].status = getFileStatus(fileItem);
       this.fileData[index].progress = fileItem.progress;
       if (fileItem.isSuccess)
@@ -216,7 +222,9 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.initializeUploader();
+  }
 
   ngAfterViewInit(): void {}
 

@@ -17,8 +17,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SelfRecordService } from '@src/app/core/http/self-record.service';
+import { UploadFileService } from '@src/app/core/http/upload-file.service';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-file.module';
+import { IFileData } from '@src/app/shared/models/common-component';
 
 @Component({
   selector: 'hs-add-record',
@@ -40,6 +42,8 @@ import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-
   ],
 })
 export class AddRecordComponent implements OnInit {
+  folderName = 'self-record';
+
   recordForm = new FormGroup({
     title: new FormControl('', Validators.required),
     content: new FormControl('', Validators.required),
@@ -48,26 +52,25 @@ export class AddRecordComponent implements OnInit {
     visibility: new FormControl('public'),
   });
 
-  filesData: any = [];
+  filesData: IFileData[] = [];
 
   constructor(
     private hsThemeService: HsThemeService,
     private selfRecordService: SelfRecordService,
     private _snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<AddRecordComponent>,
-  ) {
-    setTimeout(() => {
-      this.filesData = [
-        {
-          name: 'xxx',
-          url: 'https://kimi-img.moonshot.cn/prod-chat-kimi/avatar/kimiplus/research.png',
-        },
-        {
-          name: 'aaa',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-      ];
-    }, 1000);
+    private uploadFileService: UploadFileService,
+  ) {}
+
+  delItemFile(fileItem: IFileData) {
+    this.uploadFileService
+      .deleteFile('heartsync', `${this.folderName}/${fileItem.name}`)
+      .subscribe((res) => {
+        this._snackBar.open('删除文件成功!!!', '确定', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        });
+      });
   }
 
   matRippleColor = () =>

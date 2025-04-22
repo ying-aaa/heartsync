@@ -11,7 +11,10 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IFileShowType } from '@src/app/shared/models/common-component';
+import {
+  IFileData,
+  IFileShowType,
+} from '@src/app/shared/models/common-component';
 import { HsFileDialogComponent } from '../file-dialog/file-dialog.component';
 import { isMobile } from '@src/app/core/utils';
 import { FileItem } from 'ng2-file-upload';
@@ -30,7 +33,7 @@ export class HsFileListComponent implements OnInit {
   @Input() fold = false;
   @Input() foldStartIndex = 3;
 
-  @Output() deleteItemFile = new EventEmitter<FileItem>();
+  @Output() deleteItemFile = new EventEmitter<IFileData>();
 
   elementRef = inject(ElementRef);
 
