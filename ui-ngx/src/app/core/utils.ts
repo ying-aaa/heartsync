@@ -257,6 +257,42 @@ export function isBoolean(value: any) {
   return typeof value === 'boolean';
 }
 
+export function isDefined(value: any): boolean {
+  return typeof value !== 'undefined';
+}
+
+export function isUndefined(value: any): boolean {
+  return typeof value === 'undefined';
+}
+
+export function isDefinedAndNotNull(value: any): boolean {
+  return typeof value !== 'undefined' && value !== null;
+}
+
+export function isUndefinedOrNull(value: any): boolean {
+  return typeof value === 'undefined' || value === null;
+}
+
+export function isEmptyStr(value: any): boolean {
+  return value === '';
+}
+
+export function isNotEmptyStr(value: any): boolean {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+export function isFunction(value: any): boolean {
+  return typeof value === 'function';
+}
+
+export function isNumber(value: any): boolean {
+  return typeof value === 'number';
+}
+
+export function isString(value: any): boolean {
+  return typeof value === 'string';
+}
+
 export function isMobile() {
   // 使用正则表达式匹配常见的移动设备浏览器的用户代理字符串
   const regex =
