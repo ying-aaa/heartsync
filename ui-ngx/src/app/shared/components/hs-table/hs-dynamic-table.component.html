@@ -1,0 +1,101 @@
+<ng-scrollbar
+  class="relative"
+  externalViewport
+  visibility="hover"
+  appearance="compact"
+  class="wh-full"
+>
+  <section
+    tabindex="0"
+    scrollViewport
+  >
+    <table
+      mat-table
+      [dataSource]="dataSource"
+    >
+      @for (column of tableConfig().tableColumn; track $index) {
+        @switch (column.type) {
+          @case (ColumnType.SELECTION) {
+            <ng-container matColumnDef="select">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+              >
+                <mat-checkbox
+                  (change)="$event ? toggleAllRows() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                  [aria-label]="checkboxLabel()"
+                >
+                </mat-checkbox>
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let row"
+              >
+                <mat-checkbox
+                  (click)="$event.stopPropagation()"
+                  (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)"
+                  [aria-label]="checkboxLabel(row)"
+                >
+                </mat-checkbox>
+              </td>
+            </ng-container>
+          }
+          @case (ColumnType.TEXT) {
+            <ng-container matColumnDef="{{ column.prop }}">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+              >
+                <b>{{ column.label }}</b>
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let data"
+              >
+                {{ data[column.prop] }}
+              </td>
+            </ng-container>
+          }
+          @case (ColumnType.ACTION) {
+            <ng-container matColumnDef="{{ column.prop }}">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+              >
+                <b>{{ column.label }}</b>
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let data"
+              >
+                @for (action of column.config; track $index) {
+                  <button
+                    mat-button
+                    (click)="action.action(data, $event)"
+                  >
+                    {{ action.name }}
+                  </button>
+                }
+              </td>
+            </ng-container>
+          }
+        }
+      }
+
+      @let displayedColumns = tableConfig().displayedColumns;
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns; sticky: true"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="selection.toggle(row)"
+        class="cursor-pointer"
+      ></tr>
+    </table>
+  </section>
+</ng-scrollbar>

@@ -45,11 +45,9 @@
   </div>
   <mat-divider class="opacity-20"></mat-divider>
   <div class="h-0 flex-1 pb-24px px-24px">
-    <style>
-      .app-manage-table td{
-        background-color: red;
-      }
-    </style>
-    <hs-table class="app-manage-table"></hs-table>
+    <hs-dynamic-table
+      class="app-manage-table"
+      [tableConfig]="tableConfig()"
+    ></hs-dynamic-table>
   </div>
 </div>
