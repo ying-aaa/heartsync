@@ -9,6 +9,7 @@
 .absolute\!{position:absolute !important;}
 .fixed{position:fixed;}
 .relative{position:relative;}
+.sticky{position:sticky;}
 .static{position:static;}
 .-right-22px{right:-22px;}
 .-top-16px{top:-16px;}
@@ -59,6 +60,7 @@
 .ml-5px{margin-left:5px;}
 .ml-8px{margin-left:8px;}
 .mr-10px{margin-right:10px;}
+.mr-12px{margin-right:12px;}
 .mr-5px{margin-right:5px;}
 .mr-8px{margin-right:8px;}
 .mt-10px\!{margin-top:10px !important;}
@@ -216,7 +218,6 @@
 .p-12px{padding:12px;}
 .p-1px\!{padding:1px !important;}
 .p-20px{padding:20px;}
-.p-24px{padding:24px;}
 .p-3px{padding:3px;}
 .p-4px\!{padding:4px !important;}
 .p-5px{padding:5px;}
@@ -255,6 +256,7 @@
 .pt-48px{padding-top:48px;}
 .pt-6px{padding-top:6px;}
 .text-center{text-align:center;}
+.text-center\!{text-align:center !important;}
 .indent{text-indent:1.5rem;}
 .text-12px{font-size:12px;}
 .text-14px{font-size:14px;}

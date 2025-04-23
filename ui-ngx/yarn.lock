@@ -2374,6 +2374,13 @@
   resolved "https://registry.npmmirror.com/@socket.io/component-emitter/-/component-emitter-3.1.2.tgz"
   integrity sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==
 
+"@swimlane/ngx-datatable@^21.0.0-alpha.1":
+  version "21.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@swimlane/ngx-datatable/-/ngx-datatable-21.0.0-alpha.1.tgz#2fc02b2cc02efeb6337ac3f38ff37c255ae4857c"
+  integrity sha512-04OrKAA1HgtznDzZuVR8xiGNESNTu+SQxhXxR1VOdnzd5/q3tHIjUwBANiaZhmtKeWT4FKnVMExHM+KTsEQ3Vw==
+  dependencies:
+    tslib "^2.0.0"
+
 "@tufjs/canonical-json@2.0.0":
   version "2.0.0"
   resolved "https://registry.npmmirror.com/@tufjs/canonical-json/-/canonical-json-2.0.0.tgz"
