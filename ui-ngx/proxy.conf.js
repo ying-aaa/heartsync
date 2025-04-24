@@ -31,8 +31,9 @@ const PROXY_CONFIG = {
     secure: false,
   },
   '/heartsync-files': {
-    target: filesUrl,
-    secure: false,
+    target: forwardUrl,
+    // secure: false,
+    changeOrigin: true, // 支持跨域
   },
 };
 

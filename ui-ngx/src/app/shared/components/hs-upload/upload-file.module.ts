@@ -1,3 +1,4 @@
+import { NgModule, Type } from '@angular/core';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
@@ -13,10 +14,9 @@ import { HsFileListComponent } from './file-list/file-list.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HsFlieUploadComponent } from './file-upload.component';
-import { NgModule } from '@angular/core';
 import { HsImagePreviewModule } from '@shared/directive/image-preview/image-preview.module';
 
-const uploadFileComponents = [
+const uploadFileComponents: Type<any>[] = [
   HsFlieUploadComponent,
   HsFileHandleComponent,
   HsFileDialogComponent,

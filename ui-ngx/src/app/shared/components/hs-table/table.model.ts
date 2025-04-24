@@ -1,10 +1,4 @@
-// 枚举类型
-export enum QueryFormType {
-  Text = 'text',
-  Select = 'select',
-  Radio = 'radio',
-  Date = 'date',
-}
+import { Observable } from "rxjs";
 
 export enum SORTFILTER {
   ASC = 'asc',
@@ -22,7 +16,7 @@ export enum ColumnType {
   ACTION = 'action',
 }
 
-export interface ColumnConfigPropType {}
+export interface ColumnConfigPropType { }
 
 export class BaseColumn<T = any> {
   constructor(
@@ -33,7 +27,19 @@ export class BaseColumn<T = any> {
     public align: string = 'center',
     public className?: string,
     public config?: T,
-  ) {}
+  ) { }
+}
+
+export class CustomColumn extends BaseColumn {
+  constructor(
+    public override prop: string,
+    public override label: string,
+    public override width: number | string,
+    public override align: string = 'center',
+    public override className?: string,
+  ) {
+    super(ColumnType.TEXT, prop, label, width, align, className);
+  }
 }
 
 export class TextColumn extends BaseColumn {
@@ -141,12 +147,28 @@ export class ActionColumn extends BaseColumn<
   }
 }
 
+export type TableColumn = SelectionColumn
+  | CustomColumn
+  | TextColumn
+  | DateColumn
+  | ImgColumn
+  | TagColumn
+  | SwitchColumn
+  | ActionColumn;
+
 export interface QySearchParams {
   [key: string]: string | number;
 }
 
 export interface QySortParams {
   [key: string]: SORTFILTER;
+}
+
+export interface DataType {
+  data: any[];
+  total: number;
+  page: number;
+  pageSize: number;
 }
 
 // 类
@@ -161,9 +183,6 @@ export class QueryParams {
   ) {
     if (queryFormConfig) {
       this.queryFormConfig.forEach((item: any) => {
-        if (item.type === QueryFormType.Date) {
-          // 可以在这里添加日期类型的特殊处理逻辑
-        }
         this.searchParams[item.prop] = item.config?.default || '';
       });
     }
@@ -238,6 +257,10 @@ export class PageLink extends QueryParams {
     this.multipleFiled = val;
   }
 
+  get fieldMultipleSelection(): any[] {
+    return this.multipleSelection.map((item) => item[this.multipleFiled]).filter(Boolean);
+  }
+
   sortColumnConfig(newArr: any[]): void {
     this.columnConfig = newArr;
   }
@@ -252,6 +275,7 @@ export class PageLink extends QueryParams {
 
   sortColumn(value: any[]): void {
     this.columnConfig = value;
+    this.getData();
   }
 
   /**
@@ -290,7 +314,7 @@ export class PageLink extends QueryParams {
 
   // 改变当前页
   changePage(page: number): void {
-    if (page < 1 || page > Math.ceil(this.total / this.pageSize)) return;
+    if (page < 0 || page + 1 > Math.ceil(this.total / this.pageSize)) return;
     this.page = page;
     this.getData();
   }
@@ -298,7 +322,7 @@ export class PageLink extends QueryParams {
   // 改变每页条数
   changePageSize(pageSize: number): void {
     this.pageSize = pageSize;
-    this.getData();
+    this.changePage(0);
   }
 
   // 更新获取的条数
@@ -307,37 +331,56 @@ export class PageLink extends QueryParams {
   }
 }
 
+export type ILayoutType = 'total' | 'sizes' | 'first/last';
+
+type ConfigWithSelection = {
+  selection: true;
+  multipleFiled: string;
+};
+
+type ConfigWithoutSelection = {
+  selection?: false;
+  multipleFiled?: undefined;
+};
+
+type ConfigBase = {
+  layouts?: ILayoutType[];
+  pageSizes?: number[];
+  pageDislabled?: boolean;
+  pageLink: PageLink;
+  tableColumn: Array<TableColumn>;
+  getData: () => Observable<DataType>;
+};
+
+type ITableConfig = ConfigWithSelection & ConfigBase | ConfigWithoutSelection & ConfigBase;
+
 export class IDynamicTable {
-  public layout: string;
+  public layouts: ILayoutType[];
   public selection: boolean;
   public pageSizes: number[];
+  public pageDislabled?: boolean;
   public pageLink: PageLink;
   public tableColumn: BaseColumn[];
-
   public displayedColumns: string[] = []; // 显示的列
 
-  constructor(config: {
-    layout?: string;
-    selection?: boolean;
-    pageSizes?: number[];
-    pageLink: PageLink;
-    tableColumn: Array<
-      | TextColumn
-      | DateColumn
-      | ImgColumn
-      | TagColumn
-      | SwitchColumn
-      | ActionColumn
-    >;
-  }) {
-    this.layout = config.layout || '';
+  public matchLayout = (layout: ILayoutType) => {
+    return this.layouts.includes(layout);
+  }
+
+  getData: () => Observable<DataType>;
+
+  constructor(config: ITableConfig) {
+    this.layouts = config.layouts || [];
     this.selection = config.selection || false;
     this.pageSizes = config.pageSizes || [];
+    this.pageDislabled = config.pageDislabled || false;
     this.pageLink = config.pageLink;
     this.tableColumn = config.tableColumn;
+    this.getData = config.getData;
 
     if (this.selection) {
-      this.tableColumn.unshift(new SelectionColumn('select', '选择', 50));
+      this.tableColumn.unshift(new SelectionColumn(ColumnType.SELECTION, '选择', 50));
+      this.pageLink.setMultipleFiled(config.multipleFiled || '');
     }
     this.displayedColumns = this.tableColumn.map((item) => item.prop);
   }

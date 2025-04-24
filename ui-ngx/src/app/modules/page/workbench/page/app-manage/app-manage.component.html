@@ -44,7 +44,8 @@
     <button mat-flat-button>新增</button>
   </div>
   <mat-divider class="opacity-20"></mat-divider>
-  <div class="h-0 flex-1 pb-24px px-24px">
+  <div class="h-0 flex-1 pb-8px px-24px">
+    {{ pageLink.fieldMultipleSelection }}
     <hs-dynamic-table
       class="app-manage-table"
       [tableConfig]="tableConfig()"
