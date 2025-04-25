@@ -1,5 +1,17 @@
-:host {
-  table {
-    width: 100%;
+@import "themeMixin";
+
+.themeMixin( {
+    :host {
+      table {
+        width: 100%;
+
+        ::ng-deep {
+          .mat-mdc-header-cell {
+            background-color: @table-header-bg-color;
+          }
+        }
+      }
+    }
   }
-}
+
+);

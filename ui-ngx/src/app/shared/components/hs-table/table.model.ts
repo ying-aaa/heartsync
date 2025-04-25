@@ -1,4 +1,5 @@
 import { Observable } from "rxjs";
+import dayjs from "dayjs";
 
 export enum SORTFILTER {
   ASC = 'asc',
@@ -8,6 +9,7 @@ export enum SORTFILTER {
 export enum ColumnType {
   SELECTION = 'selection',
   TEXT = 'text',
+  CUSTOM = 'custom',
   DATE = 'date',
   IMG = 'img',
   TAG = 'tag',
@@ -23,10 +25,10 @@ export class BaseColumn<T = any> {
     public type: ColumnType,
     public prop: string,
     public label: string,
-    public width: number | string,
-    public align: string = 'center',
-    public className?: string,
     public config?: T,
+    public width?: number | string,
+    public align?: string,
+    public className?: string,
   ) { }
 }
 
@@ -34,11 +36,12 @@ export class CustomColumn extends BaseColumn {
   constructor(
     public override prop: string,
     public override label: string,
-    public override width: number | string,
-    public override align: string = 'center',
+    public override config?: any,
+    public override width?: number | string,
+    public override align?: string,
     public override className?: string,
   ) {
-    super(ColumnType.TEXT, prop, label, width, align, className);
+    super(ColumnType.CUSTOM, prop, label, config, width, align, className);
   }
 }
 
@@ -46,24 +49,26 @@ export class TextColumn extends BaseColumn {
   constructor(
     public override prop: string,
     public override label: string,
-    public override width: number | string,
-    public override align: string = 'center',
+    public override config?: { dateFormat: string },
+    public override width?: number | string,
+    public override align?: string,
     public override className?: string,
   ) {
-    super(ColumnType.TEXT, prop, label, width, align, className);
+    super(ColumnType.TEXT, prop, label, config, width, align, className);
   }
 }
 
 export class DateColumn extends BaseColumn {
+  public format = (time: string | number | Date | dayjs.Dayjs) => dayjs(time).format(this.config?.dateFormat || 'YYYY-MM-DD HH:mm:ss');
   constructor(
     public override prop: string,
     public override label: string,
-    public override width: number | string,
-    public override align: string = 'center',
-    public override className?: string,
     public override config?: { dateFormat: string },
+    public override width?: number | string,
+    public override align?: string,
+    public override className?: string,
   ) {
-    super(ColumnType.DATE, prop, label, width, align, className, config);
+    super(ColumnType.DATE, prop, label, config, width, align, className);
   }
 }
 
@@ -71,25 +76,71 @@ export class ImgColumn extends BaseColumn<{ src: string }> {
   constructor(
     public override prop: string,
     public override label: string,
-    public override width: number | string,
-    public override align: string = 'center',
-    public override className?: string,
     public override config?: { src: string },
+    public override width?: number | string,
+    public override align?: string,
+    public override className?: string,
   ) {
-    super(ColumnType.IMG, prop, label, width, align, className, config);
+    super(ColumnType.IMG, prop, label, config, width, align, className);
   }
 }
 
-export class TagColumn extends BaseColumn<{ color: string }> {
+interface TagMap {
+  color: string;
+  value: string | number;
+  label: string;
+}
+
+// 定义一个类型，表示 config 必须包含 request 或 tagMap，但不能同时包含两者
+type TagConfigType = {
+  request: Observable<Array<TagMap>>;
+  tagMap?: never; // 确保不能同时存在
+} | {
+  request?: never; // 确保不能同时存在
+  tagMap: Array<TagMap>;
+};
+
+export class TagColumn extends BaseColumn<TagConfigType> {
+  tagMap: Array<TagMap> = [];
+
   constructor(
     public override prop: string,
     public override label: string,
-    public override width: number | string,
-    public override align: string = 'center',
+    public override config?: TagConfigType,
+    public override width?: number | string,
+    public override align?: string,
     public override className?: string,
-    public override config?: { color: string },
+
   ) {
-    super(ColumnType.TAG, prop, label, width, align, className, config);
+    super(ColumnType.TAG, prop, label, config, width, align, className);
+
+    if (config?.tagMap) {
+      this.tagMap = config.tagMap;
+    } else if (config?.request) {
+      config.request.subscribe((data) => {
+        this.tagMap = data;
+      });
+    }
+  }
+
+  getChips(value: string | number | Array<string | number>): Array<string | number> {
+    if (Array.isArray(value)) {
+      return value;
+    } else if(typeof value === 'string') {
+      return value.split(',').map((item) => item.trim());
+    }else {
+      return [value];
+    }
+  }
+
+  getLabel(value: string | number): string {
+    const tag = this.tagMap.find((item) => item.value === value);
+    return tag ? tag.label : value.toString();
+  }
+
+  getColor(value: string | number): string {
+    const tag = this.tagMap.find((item) => item.value === value);
+    return tag ? tag.color : 'transparent';
   }
 }
 
@@ -100,12 +151,12 @@ export class SwitchColumn extends BaseColumn<{
   constructor(
     public override prop: string,
     public override label: string,
-    public override width: number | string,
-    public override align: string = 'center',
-    public override className?: string,
     public override config?: { activeValue: any; inactiveValue: any },
+    public override width?: number | string,
+    public override align?: string,
+    public override className?: string,
   ) {
-    super(ColumnType.SWITCH, prop, label, width, align, className, config);
+    super(ColumnType.SWITCH, prop, label, config, width, align, className);
   }
 }
 
@@ -115,12 +166,12 @@ export class SelectionColumn extends BaseColumn<{
   constructor(
     public override prop: string,
     public override label: string,
-    public override width: number | string,
-    public override align: string = 'center',
-    public override className?: string,
     public override config?: { selectable: (row: any) => boolean },
+    public override width?: number | string,
+    public override align?: string,
+    public override className?: string,
   ) {
-    super(ColumnType.SELECTION, prop, label, width, align, className, config);
+    super(ColumnType.SELECTION, prop, label, config, width, align, className);
   }
 }
 
@@ -134,16 +185,16 @@ export class ActionColumn extends BaseColumn<
   constructor(
     public override prop: string,
     public override label: string,
-    public override width: number | string,
-    public override align: string = 'center',
-    public override className?: string,
     public override config?: Array<{
       name: string;
       icon: string;
       action: (row: any, event: Event) => void;
     }>,
+    public override width?: number | string,
+    public override align?: string,
+    public override className?: string,
   ) {
-    super(ColumnType.ACTION, prop, label, width, align, className, config);
+    super(ColumnType.ACTION, prop, label, config, width, align, className);
   }
 }
 
@@ -154,7 +205,7 @@ export type TableColumn = SelectionColumn
   | ImgColumn
   | TagColumn
   | SwitchColumn
-  | ActionColumn;
+  | ActionColumn|any;
 
 export interface QySearchParams {
   [key: string]: string | number;
@@ -360,7 +411,7 @@ export class IDynamicTable {
   public pageSizes: number[];
   public pageDislabled?: boolean;
   public pageLink: PageLink;
-  public tableColumn: BaseColumn[];
+  public tableColumn: TableColumn[];
   public displayedColumns: string[] = []; // 显示的列
 
   public matchLayout = (layout: ILayoutType) => {
@@ -379,7 +430,7 @@ export class IDynamicTable {
     this.getData = config.getData;
 
     if (this.selection) {
-      this.tableColumn.unshift(new SelectionColumn(ColumnType.SELECTION, '选择', 50));
+      this.tableColumn.unshift(new SelectionColumn(ColumnType.SELECTION, '选择'));
       this.pageLink.setMultipleFiled(config.multipleFiled || '');
     }
     this.displayedColumns = this.tableColumn.map((item) => item.prop);

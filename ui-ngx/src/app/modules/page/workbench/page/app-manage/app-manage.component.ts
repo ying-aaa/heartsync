@@ -7,12 +7,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import {
   ActionColumn,
+  DateColumn,
   IDynamicTable,
+  ImgColumn,
   PageLink,
+  TagColumn,
   TextColumn,
 } from '@src/app/shared/components/hs-table/table.model';
 import { HsDynamicTableModule } from '@src/app/shared/components/hs-table/hs-dynamic-table.module';
-import { of } from 'rxjs';
+import { map, of } from 'rxjs';
 
 @Component({
   selector: 'hs-app-manage',
@@ -34,16 +37,39 @@ export class AppManageComponent implements OnInit {
   treeConfig = signal({});
   fileName = new FormControl('');
 
-  pageLink = new PageLink(0, 10);
+  pageLink = new PageLink(0, 30);
+
+  TextColumn = TextColumn;
+
+  test = eval("this.TextColumn");
+
   tableConfig = signal(
     new IDynamicTable({
       pageLink: this.pageLink,
-      selection: true,
-      multipleFiled: 'appName',
       tableColumn: [
-        new TextColumn('appName', '应用名称', 'auto'),
-        new TextColumn('description', '应用描述', 'auto'),
-        new ActionColumn('actions', '操作', '', '', '', [
+        // new TextColumn('appName', '应用名称'),
+        Reflect.construct(this.test, ['appName', '应用名称']),
+
+        Reflect.construct(this.test, ['description', '应用描述']),
+        // new TextColumn('description', '应用描述'),
+        new DateColumn('createTime', '应用描述', {
+          dateFormat: 'YYYY-MM-DD',
+        }),
+        new ImgColumn('url', '应用图标'),
+        new TagColumn('status', '状态', {
+          // request: of([
+          //     { a: '1111', b: 1, c: 'green' },
+          //     { a: '失败', b: 'error', c: 'red' },
+          // ]).pipe( 
+          //   map((res) => 
+          //     res.map((item) => ({ label: item.a, value: item.b, color: item.c })
+          // ))),
+          tagMap: [
+            { label: '成功', value: 1, color: 'green' },
+            { label: '失败', value: 'error', color: 'red' },
+          ]
+        }),
+        new ActionColumn('actions', '操作', [
           {
             name: '编辑',
             icon: 'edit',
@@ -68,7 +94,8 @@ export class AppManageComponent implements OnInit {
             appName: '办公助手' + (this.pageLink.page || '') + index,
             description: '提高工作效率的办公软件。',
             createTime: '2024-06-01T12:30:00+08:00',
-            status: 'active',
+            url: '/heartsync-files/self-record/2231745493689_.pic.jpg',
+            status: 'error',
             actions: 'edit, delete',
           })),
           total: 50,
@@ -85,7 +112,5 @@ export class AppManageComponent implements OnInit {
     
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 }

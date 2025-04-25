@@ -40,12 +40,11 @@
 ></mat-divider>
 <!-- 右侧 -->
 <div class="w-0 flex-1 h-100% flex flex-col">
-  <div class="h-64px flex flex-row justify-end items-center px-24px gap-10px">
+  <div class="h-56px flex flex-row justify-end items-center px-24px gap-10px">
     <button mat-flat-button>新增</button>
   </div>
-  <mat-divider class="opacity-20"></mat-divider>
-  <div class="h-0 flex-1 pb-8px px-24px">
-    {{ pageLink.fieldMultipleSelection }}
+  <mat-divider></mat-divider>
+  <div class="h-0 flex-1 px-24px">
     <hs-dynamic-table
       class="app-manage-table"
       [tableConfig]="tableConfig()"

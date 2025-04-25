@@ -8,6 +8,9 @@ import { CommonModule } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { MatDividerModule } from '@angular/material/divider';
+import { HsImagePreviewModule } from '@shared/directive/image-preview/image-preview.module';
+import { MatChipsModule } from '@angular/material/chips';
 
 const dynamicTableComponents: Type<any>[] = [
   HsDynamicTableComponent,
@@ -17,11 +20,14 @@ const dynamicTableComponents: Type<any>[] = [
   declarations: [...dynamicTableComponents],
   imports: [
     CommonModule,
+    MatChipsModule,
     MatTableModule,
     MatButtonModule,
+    MatDividerModule,
     NgScrollbarModule,
     MatCheckboxModule,
     MatPaginatorModule,
+    HsImagePreviewModule,
     CdkVirtualScrollViewport
   ],
   exports: [...dynamicTableComponents],

@@ -2374,13 +2374,6 @@
   resolved "https://registry.npmmirror.com/@socket.io/component-emitter/-/component-emitter-3.1.2.tgz"
   integrity sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==
 
-"@swimlane/ngx-datatable@^21.0.0-alpha.1":
-  version "21.0.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@swimlane/ngx-datatable/-/ngx-datatable-21.0.0-alpha.1.tgz#2fc02b2cc02efeb6337ac3f38ff37c255ae4857c"
-  integrity sha512-04OrKAA1HgtznDzZuVR8xiGNESNTu+SQxhXxR1VOdnzd5/q3tHIjUwBANiaZhmtKeWT4FKnVMExHM+KTsEQ3Vw==
-  dependencies:
-    tslib "^2.0.0"
-
 "@tufjs/canonical-json@2.0.0":
   version "2.0.0"
   resolved "https://registry.npmmirror.com/@tufjs/canonical-json/-/canonical-json-2.0.0.tgz"
@@ -3817,6 +3810,11 @@ date-format@^4.0.14:
   version "4.0.14"
   resolved "https://registry.npmmirror.com/date-format/-/date-format-4.0.14.tgz"
   integrity sha512-39BOQLs9ZjKh0/patS9nrT8wc3ioX3/eA/zgbKNopnF2wCqJEoxywwwElATYvRsXdnOxA/OQeQoFZ3rFjVajhg==
+
+dayjs@^1.11.13:
+  version "1.11.13"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.13.tgz#92430b0139055c3ebb60150aa13e860a4b5a366c"
+  integrity sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==
 
 debug@2.6.9:
   version "2.6.9"
