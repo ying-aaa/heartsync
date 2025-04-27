@@ -425,7 +425,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     // 销毁 jsTree 实例
     if (this.treeInstance) {
-      this.treeInstance.destroy();
+      $.jstree.destroy && $.jstree.destroy();
     }
   }
 }
