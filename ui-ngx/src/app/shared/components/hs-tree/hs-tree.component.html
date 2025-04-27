@@ -1,1 +1,35 @@
-<div id="jsTree-container" #jsTreeContainer></div>
+<mat-form-field class="example-form-field w-full hs-density--5 mb-12px">
+  <!-- <mat-label>搜索你的文件</mat-label> -->
+  <input
+    matInput
+    type="text"
+    placeholder="搜索你的文件"
+    [formControl]="fileName"
+  />
+  @if (fileName.getRawValue()) {
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="fileName.setValue('')"
+      class="mr-5px"
+    >
+      <mat-icon aria-hidden="false">close</mat-icon>
+    </button>
+  }
+</mat-form-field>
+
+<!-- 过滤数量：{{ filterCount }} -->
+<ng-scrollbar
+  class="flex-1 h-0"
+  #scrollbarRef="ngScrollbar"
+  externalViewport
+  visibility="hover"
+  appearance="compact"
+  orientation="auto"
+>
+  <div
+    id="jsTree-container"
+    #jsTreeContainer
+  ></div>
+</ng-scrollbar>

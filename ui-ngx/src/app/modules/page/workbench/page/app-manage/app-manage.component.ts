@@ -17,21 +17,21 @@ import {
 import { HsDynamicTableModule } from '@src/app/shared/components/hs-table/hs-dynamic-table.module';
 import { map, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
 
 @Component({
   selector: 'hs-app-manage',
   templateUrl: './app-manage.component.html',
   imports: [
     MatDividerModule,
-    // HsTreeComponent,
-    // HsFancytreeComponent,
+    HsTreeComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
     MatButtonModule,
     MatIconModule,
-    HsDynamicTableModule
+    HsDynamicTableModule,
   ],
 })
 export class AppManageComponent implements OnInit {
@@ -42,7 +42,7 @@ export class AppManageComponent implements OnInit {
 
   TextColumn = TextColumn;
 
-  test = eval("this.TextColumn");
+  test = eval('this.TextColumn');
 
   tableConfig = signal(
     new IDynamicTable({
@@ -61,14 +61,14 @@ export class AppManageComponent implements OnInit {
           // request: of([
           //     { a: '1111', b: 1, c: 'green' },
           //     { a: '失败', b: 'error', c: 'red' },
-          // ]).pipe( 
-          //   map((res) => 
+          // ]).pipe(
+          //   map((res) =>
           //     res.map((item) => ({ label: item.a, value: item.b, color: item.c })
           // ))),
           tagMap: [
             { label: '成功', value: 1, color: 'green' },
             { label: '失败', value: 'error', color: 'red' },
-          ]
+          ],
         }),
         new ActionColumn('actions', '操作', [
           {
@@ -93,7 +93,7 @@ export class AppManageComponent implements OnInit {
       getData: () => {
         // 模拟数据请求REQUES
         return of({
-          data: Array.from({length: this.pageLink.pageSize}, (_, index) => ({
+          data: Array.from({ length: this.pageLink.pageSize }, (_, index) => ({
             appName: '办公助手' + (this.pageLink.page || '') + index,
             description: '提高工作效率的办公软件。',
             createTime: '2024-06-01T12:30:00+08:00',
@@ -104,16 +104,14 @@ export class AppManageComponent implements OnInit {
           total: 50,
           page: 0,
           pageSize: 10,
-        })
+        });
       },
       layouts: ['total', 'sizes', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],
     }),
   );
 
-  constructor(private router: Router) {
-    
-  }
+  constructor(private router: Router) {}
 
   ngOnInit() {}
 }

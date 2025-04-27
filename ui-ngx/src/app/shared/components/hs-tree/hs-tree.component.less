@@ -1,108 +1,156 @@
-:host {
-  display: block;
-  overflow: hidden;
+@import 'themeMixin';
 
-  // 覆盖图标公共样式
-  .icon-class {
-    background-size: 100% 100%;
-    background-position: unset;
-  }
-
-  // 收缩按钮图标
-  .wh-12px {
-    width: 12px;
-    height: 12px;
-    margin: 12px 8px 12px 0;
-  }
-
-  // 文件夹图标
-  .wh-24px {
-    width: 24x;
-    height: 24px;
-    margin: 6px 8px 6px 0;
-  }
-
-
-  @node-height: 36px;
-  @node-rounded: 6px;
-
-  ::ng-deep {
-    .truncate {
-      text-overflow: ellipsis;
+.themeMixin( {
+    :host {
+      height: 100%;
       overflow: hidden;
-      white-space: nowrap;
-    }
+      display: flex;
+      flex-direction: column;
 
-    .jstree-default .jstree-striped {
-      width: 100%;
-      padding: 0 8px;
-      font-size: 14px;
-      background: transparent !important;
-    }
+      // 覆盖图标公共样式
+      .icon-class {
+        background-size: 100% 100%;
+        background-position: unset;
+      }
 
-
-    // node高度
-    .jstree-default .jstree-wholerow {
-      height: @node-height;
-    }
-
-    .jstree-default .jstree-anchor {
-      line-height: @node-height;
-      height: @node-height;
-    }
-
-    .jstree-open {
-
-      // 展开收缩图标
-      .jstree-icon.jstree-ocl {
-        .icon-class();
-        .wh-12px();
-        background-image: url('/assets/workbench/expand.png') !important;
+      // 收缩按钮图标
+      .wh-12px {
+        width: 12px;
+        height: 12px;
+        margin: 12px 6px 12px 0;
       }
 
       // 文件夹图标
-      .jstree-anchor .jstree-icon {
-        .icon-class();
-        .wh-24px();
-        background-image: url('/assets/workbench/folder-fold.png') !important;
-      }
-    }
-
-
-    .jstree-closed {
-
-      // 展开收缩图标
-      .jstree-icon.jstree-ocl {
-        .icon-class();
-        .wh-12px();
-        background-image: url('/assets/workbench/collapse.png') !important;
-        background-image: url('/assets/workbench/fold.png') !important;
+      .wh-24px {
+        width: 24x;
+        height: 24px;
+        margin: 6px 6px 6px 0;
       }
 
-      // 文件夹图标
-      .jstree-anchor .jstree-icon {
-        .icon-class();
-        .wh-24px();
-        background-image: url('/assets/workbench/folder-expand.png') !important;
+
+      @node-height: 36px;
+      @node-rounded: 6px;
+
+      ::ng-deep {
+        .truncate {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+
+        .jstree-default .jstree-striped {
+          width: 100%;
+          padding: 0 12px;
+          font-size: 14px;
+          background: transparent !important;
+        }
+
+
+        // node高度
+        .jstree-default .jstree-wholerow {
+          height: @node-height;
+        }
+
+        .jstree-default .jstree-anchor {
+          line-height: @node-height;
+          height: @node-height;
+        }
+
+        .jstree-open {
+
+          // 展开收缩图标
+          &>.jstree-icon.jstree-ocl {
+            .icon-class();
+            .wh-12px();
+            background-image: url('/assets/workbench/expand.png') !important;
+          }
+
+          // 文件夹图标
+          &>.jstree-anchor>.hs-folder-icon {
+            .icon-class();
+            .wh-24px();
+            background-image: url('/assets/workbench/folder-fold.png') !important;
+          }
+        }
+
+
+        .jstree-node {
+
+          // 展开收缩图标
+          .jstree-icon.jstree-ocl {
+            .icon-class();
+            .wh-12px();
+            background-position: unset !important;
+            background-image: url('/assets/workbench/fold.png');
+          }
+
+          // 文件夹图标
+          .jstree-anchor>.hs-folder-icon {
+            .icon-class();
+            .wh-24px();
+            background-image: url('/assets/workbench/folder-expand.png');
+          }
+
+          // 文件图标
+          .jstree-anchor>.hs-file-icon {
+            .icon-class();
+            .wh-24px();
+            background-image: url('/assets/workbench/file-tree.png');
+          }
+        }
+
+        // 隐藏文件的展开收缩图标
+        .jstree-node[aria-expanded="false"] .jstree-icon.jstree-ocl {
+          visibility: hidden;
+        }
+
+        // 选中状态
+        .jstree-wholerow.jstree-wholerow-clicked {
+          border-radius: @node-rounded;
+          background: unset;
+          background-color: rgba(47, 144, 185, 0.2) !important;
+        }
+
+        // 选中文字颜色
+        .jstree-clicked {
+          color: #2F90B9;
+        }
+
+        // 移入背景色
+        .jstree-wholerow.jstree-wholerow-hovered {
+          border-radius: @node-rounded;
+          background: unset;
+          background-color: rgba(47, 144, 185, 0.1);
+        }
+
+        /* 修改默认的重命名输入框样式 */
+        .jstree-rename-input {
+          padding: 5px;
+          border: 2px solid #3498db;
+          border-radius: 4px;
+          box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+          background-color: transparent;
+          color: @base-text-color;
+          font-size: 14px;
+          outline: none;
+        }
+
+        /* 输入框获得焦点时的样式 */
+        .jstree-rename-input:focus {
+          border-color: #2980b9;
+          box-shadow: 0 0 8px rgba(52, 152, 219, 0.7);
+        }
+
+        // 搜索样式
+        .jstree-default .jstree-search {
+          font-style: unset;
+        }
       }
-    }
-
-
-    // 选中状态
-    .jstree-wholerow.jstree-wholerow-clicked {
-      border-radius: @node-rounded;
-      background: unset;
-      background-color: rgba(47, 144, 185, 0.2) !important;
-    }
-
-    .jstree-clicked {
-      color: #2F90B9;
-    }
-
-    // 移入状态
-    .jstree-wholerow.jstree-wholerow-hovered {
-      border-radius: @node-rounded;
-      background: unset;
     }
   }
+
+);
+
+.vakata-context {
+  background-color: red;
 }
