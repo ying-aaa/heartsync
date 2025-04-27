@@ -1,64 +1,108 @@
-@import "themeMixin";
-.themeMixin({
-  :host {
-    font-size: 14px;
-    height: 100%;
-    display: block;
-    overflow: auto;
-    
-    cdk-tree {
-      cursor: pointer;
-      display: block;
+:host {
+  display: block;
+  overflow: hidden;
+
+  // 覆盖图标公共样式
+  .icon-class {
+    background-size: 100% 100%;
+    background-position: unset;
+  }
+
+  // 收缩按钮图标
+  .wh-12px {
+    width: 12px;
+    height: 12px;
+    margin: 12px 8px 12px 0;
+  }
+
+  // 文件夹图标
+  .wh-24px {
+    width: 24x;
+    height: 24px;
+    margin: 6px 8px 6px 0;
+  }
+
+
+  @node-height: 36px;
+  @node-rounded: 6px;
+
+  ::ng-deep {
+    .truncate {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
-    ::ng-deep .cdk-tree-node {
-      border: none !important;
-      outline: none !important;
-    }
-    
-    ::ng-deep .cdk-tree-node::after,
-    ::ng-deep .cdk-tree-node::before {
-      border: none !important;
-      outline: none !important;
+    .jstree-default .jstree-striped {
+      width: 100%;
+      padding: 0 8px;
+      font-size: 14px;
+      background: transparent !important;
     }
 
-    .active-el {
-      background: rgba(47, 144, 185, .3) !important;
-      // border-radius: 8px;
+
+    // node高度
+    .jstree-default .jstree-wholerow {
+      height: @node-height;
     }
 
-    .example-tree-invisible {
-      display: none;
+    .jstree-default .jstree-anchor {
+      line-height: @node-height;
+      height: @node-height;
     }
 
-    .example-tree ul,
-    .example-tree li {
-      margin-top: 0;
-      margin-bottom: 0;
-      list-style-type: none;
-    }
+    .jstree-open {
 
-    .example-tree-node {
-      display: block;
-    }
+      // 展开收缩图标
+      .jstree-icon.jstree-ocl {
+        .icon-class();
+        .wh-12px();
+        background-image: url('/assets/workbench/expand.png') !important;
+      }
 
-    .first-tree-node {
-      display: flex;
-      align-items: center;
-      height: 36px;
-      // border-radius: 8px;
-      user-select: none; /* 禁止选择文本 */
-      // padding-left: 30px;
-    }
-
-    .node-hover:hover {
-      background: rgba(47, 144, 185, .3) ;
-    }
-
-    .example-tree-node .example-tree-node { 
-      & > div{
-        // padding-left: 30px;
+      // 文件夹图标
+      .jstree-anchor .jstree-icon {
+        .icon-class();
+        .wh-24px();
+        background-image: url('/assets/workbench/folder-fold.png') !important;
       }
     }
+
+
+    .jstree-closed {
+
+      // 展开收缩图标
+      .jstree-icon.jstree-ocl {
+        .icon-class();
+        .wh-12px();
+        background-image: url('/assets/workbench/collapse.png') !important;
+        background-image: url('/assets/workbench/fold.png') !important;
+      }
+
+      // 文件夹图标
+      .jstree-anchor .jstree-icon {
+        .icon-class();
+        .wh-24px();
+        background-image: url('/assets/workbench/folder-expand.png') !important;
+      }
+    }
+
+
+    // 选中状态
+    .jstree-wholerow.jstree-wholerow-clicked {
+      border-radius: @node-rounded;
+      background: unset;
+      background-color: rgba(47, 144, 185, 0.2) !important;
+    }
+
+    .jstree-clicked {
+      color: #2F90B9;
+    }
+
+    // 移入状态
+    .jstree-wholerow.jstree-wholerow-hovered {
+      border-radius: @node-rounded;
+      background: unset;
+    }
   }
-});
+}

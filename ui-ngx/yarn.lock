@@ -5281,7 +5281,7 @@ jquery.fancytree@^2.38.4:
   resolved "https://registry.npmmirror.com/jquery.fancytree/-/jquery.fancytree-2.38.4.tgz"
   integrity sha512-f4Fv5jZiZ6pBml/9txcJRAQDZpqQGGoJ8BUbicZKcO4CpgGbqBX9W7eQFwEaKQS0bxdVBLbqWQ9RoUK05ON2kQ==
 
-"jquery@>=1.12.0 <5.0.0", jquery@>=1.7, jquery@^3.7.1:
+"jquery@>=1.12.0 <5.0.0", jquery@>=1.7, jquery@^3.5.0, jquery@^3.7.1:
   version "3.7.1"
   resolved "https://registry.npmmirror.com/jquery/-/jquery-3.7.1.tgz"
   integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
@@ -5374,6 +5374,13 @@ jsonparse@^1.3.1:
   version "1.3.1"
   resolved "https://registry.npmmirror.com/jsonparse/-/jsonparse-1.3.1.tgz"
   integrity sha512-POQXvpdL69+CluYsillJ7SUhKvytYjW9vG/GKpnf+xP8UWgYEM/RaMzHHofbALDiKbbP1W8UEYmgGl39WkPZsg==
+
+jstree@^3.3.17:
+  version "3.3.17"
+  resolved "https://registry.yarnpkg.com/jstree/-/jstree-3.3.17.tgz#aa7f22ee504ba7f63f8942c3d71c62ff21f756cf"
+  integrity sha512-V0Pl1B6BIaxHUQMiWkol37QlhlBKoZA9RUeUmm95+UnV2QeZsj2QP1sOQl/m2EIOyZXOOxOHvR0SYZLSDC7EFw==
+  dependencies:
+    jquery "^3.5.0"
 
 karma-chrome-launcher@~3.2.0:
   version "3.2.0"

@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { DashboardToolbarComponent } from './dashboard-toolbar.component';
+import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
 
 @Component({
   selector: 'hs-dashboard-manage',
@@ -20,6 +21,7 @@ import { DashboardToolbarComponent } from './dashboard-toolbar.component';
     MatButtonModule,
     MatIconModule,
     DashboardToolbarComponent,
+    HsTreeComponent
   ],
 })
 export class DashboardManageComponent implements OnInit {

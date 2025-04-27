@@ -1,0 +1,64 @@
+@import "themeMixin";
+.themeMixin({
+  :host {
+    font-size: 14px;
+    height: 100%;
+    display: block;
+    overflow: auto;
+    
+    cdk-tree {
+      cursor: pointer;
+      display: block;
+    }
+
+    ::ng-deep .cdk-tree-node {
+      border: none !important;
+      outline: none !important;
+    }
+    
+    ::ng-deep .cdk-tree-node::after,
+    ::ng-deep .cdk-tree-node::before {
+      border: none !important;
+      outline: none !important;
+    }
+
+    .active-el {
+      background: rgba(47, 144, 185, .3) !important;
+      // border-radius: 8px;
+    }
+
+    .example-tree-invisible {
+      display: none;
+    }
+
+    .example-tree ul,
+    .example-tree li {
+      margin-top: 0;
+      margin-bottom: 0;
+      list-style-type: none;
+    }
+
+    .example-tree-node {
+      display: block;
+    }
+
+    .first-tree-node {
+      display: flex;
+      align-items: center;
+      height: 36px;
+      // border-radius: 8px;
+      user-select: none; /* 禁止选择文本 */
+      // padding-left: 30px;
+    }
+
+    .node-hover:hover {
+      background: rgba(47, 144, 185, .3) ;
+    }
+
+    .example-tree-node .example-tree-node { 
+      & > div{
+        // padding-left: 30px;
+      }
+    }
+  }
+});

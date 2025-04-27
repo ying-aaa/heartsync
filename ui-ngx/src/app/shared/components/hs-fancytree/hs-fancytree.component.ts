@@ -34,7 +34,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
 
   constructor(private scriptLoaderService: ScriptLoaderService) {}
 
-  ngOnInit() {}
+  ngOnInit() {} 
 
   async loadTreeData() {
     try {
@@ -69,8 +69,8 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
 
     $('#hs-fancytree')
       .fancytree({
-        extensions: ['dnd5', 'edit', 'multi', 'childcounter', 'filter'],
-        checkbox: true,
+        extensions: ['dnd5', 'edit', 'multi', 'childcounter', 'filter', "glyph", "wide"],
+        checkbox: false,
         quicksearch: true,
         filter: {
           autoApply: true, // Re-apply last filter if lazy data is loaded
@@ -86,7 +86,16 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           mode: 'hide', // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
         },
         source: this.config().loadTreeData(),
-        renderTitle: this.config().renderTitle,
+        renderNode: function(event: any, data: any) {
+          var node = data.node;
+          console.log("%c Line:91 🥖", "color:#ffdd4d");
+          var $span = $("<span>", {
+              text: 111,
+              class: "custom-node"
+          });
+          return $span;
+        },
+        // renderTitle: this.config().renderTitle,
         strings: {
           noData: '暂无数据',
           loading: '加载中...',
@@ -95,14 +104,14 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
           appendCheckbox: '添加复选框',
           selectMode: '单选模式',
         },
-        init: function (event: any, data: any) {
-          if (that.config().init) return that.config().init!(data);
-          var tree = data.tree;
-          var firstNode = tree.getRootNode().children[0]; // 获取根节点的第一个子节点
-          if (firstNode && that.config().isDefaultFirst) {
-            firstNode.setSelected(true); // 设置选中状态
-          }
-        },
+        // init: function (event: any, data: any) {
+        //   if (that.config().init) return that.config().init!(data);
+        //   var tree = data.tree;
+        //   var firstNode = tree.getRootNode().children[0]; // 获取根节点的第一个子节点
+        //   if (firstNode && that.config().isDefaultFirst) {
+        //     firstNode.setSelected(true); // 设置选中状态
+        //   }
+        // },
         childcounter: {
           deep: true,
           hideZeros: true,
@@ -126,11 +135,11 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
             // data.dropEffect = "move";
             return true;
           },
-          // dragDrag: function(node, data: any) {
-          //   data.node.info("dragDrag", data: any);
-          //   data.dropEffect = "copy";
-          //   return true;
-          // },
+          dragDrag: function(node: any, data: any) {
+            data.node.info("dragDrag", data);
+            data.dropEffect = "copy";
+            return true;
+          },
           dragEnter: function (node: any, data: any) {
             data.node.info('dragEnter', data);
             // data.dropEffect = "link";
@@ -212,19 +221,18 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
             console.log('save...', this, data.node);
             // Simulate to start a slow ajax request...
 
-            setTimeout(() => {
-              that.config().addNodeEvent?.(data);
-              $(data.node.span).removeClass('pending');
-              // Let's pretend the server returned a slightly modified
-              // title:
-              // data.node.setTitle(data.node.title + '!');
-            }, 100);
+            // setTimeout(() => {
+            //   that.config().addNodeEvent?.(data);
+            //   $(data.node.span).removeClass('pending');
+            //   // Let's pretend the server returned a slightly modified
+            //   // title:
+            //   // data.node.setTitle(data.node.title + '!');
+            // }, 100);
             // We return true, so ext-edit will set the current user input
             // as title
             return true;
           },
           remove: function (event: any, data: any) {
-            console.log('%c Line:215 🥥', 'color:#33a5ff');
             return true;
           },
           close: function (event: any, data: any) {
@@ -235,12 +243,73 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
             }
           },
         },
+        glyph: {
+          preset: "bootstrap3",
+          map: {
+          //   // 普通节点图标（未展开）
+          //   doc: "fa fa-file", // 默认的文件图标，用于普通节点
+          //   // 普通节点图标（已展开）
+          //   docOpen: "fa fa-file", // 已展开的文件图标，通常与 `doc` 保持一致
+          //   // 复选框图标（未选中）
+          //   checkbox: "fa fa-square-o", // 未选中的复选框
+          //   // 复选框图标（选中）
+          //   checkboxSelected: "fa fa-check-square-o", // 选中的复选框
+          //   // 复选框图标（不确定状态）
+          //   checkboxUnknown: "fa fa-minus-square-o", // 不确定状态的复选框（例如子节点部分选中）
+          //   // 拖拽辅助图标
+          //   dragHelper: "fa fa-arrows", // 拖拽时显示的辅助图标
+          //   // 拖拽目标标记图标
+          //   dropMarker: "fa fa-arrow-right", // 拖拽目标位置的标记图标
+          //   // 错误图标
+          //   error: "fa fa-exclamation-triangle", // 表示错误或警告的图标
+          //   // 未展开的展开器图标
+          //   expanderClosed: "fa fa-chevron-right", // 未展开的节点展开器（向右箭头）
+          //   // 懒加载的展开器图标
+          //   expanderLazy: "fa fa-chevron-right", // 懒加载节点的展开器（向右箭头）
+          //   // 已展开的展开器图标
+          //   expanderOpen: "fa fa-chevron-down", // 已展开的节点展开器（向下箭头）
+          //   // 文件夹图标（未展开）
+          //   folder: "fa fa-folder", // 默认的文件夹图标
+          //   // 文件夹图标（已展开）
+          //   folderOpen: "fa fa-folder-open", // 已展开的文件夹图标
+          //   // 加载中的图标
+          //   loading: "fa fa-refresh fa-spin", // 表示加载中的动画图标
+          //   // 默认节点图标
+          //   node: "fa fa-circle-o" // 默认的节点图标，用于没有指定图标的节点
+          }
+        },
+        // @ts-ignore
+        icon(event, data) {
+          // For the sake of this example set specific icons in different ways.
+          //
+          switch( data.node.title ) {
+            case "Art of War":
+              // Insert an SVG reference to an SVG symbol (defined below)
+              return { html: '<svg><use xlink:href="#svg-android-black"></use></svg>' };
+            case "The Hobbit":
+              // Insert an <i> tag that will be replaced with an inline SVG graphic
+              // by Font Awesome's all.js library.
+              // Note: We DON'T want this, since it will be slow for large trees!
+              return { html: '<i class="fas fa-book"></i>' };
+            case "The Little Prince":
+              // Here we use Font Awesome's auto conversion (as above), to create the
+              // <i> tags that where created separately below.
+              // The nodes nodes contain inline tags that reference those icons:
+              return { html: '<svg class="fa-spin"><use xlink:href="#fas-fa-circle-notch"></use></svg>' };
+          }
+        },
+        wide: {
+          iconWidth: "1em",       // Adjust this if @fancy-icon-width != "16px"
+          iconSpacing: "0.5em",   // Adjust this if @fancy-icon-spacing != "3px"
+          labelSpacing: "0.1em",  // Adjust this if padding between icon and label != "3px"
+          levelOfs: "1.5em"       // Adjust this if ul padding != "16px"
+        },  
         select: function (event: any, data: any) {
-          that.config().defaultSelectNodeEvent?.(data);
+          // that.config().defaultSelectNodeEvent?.(data);
         },
         lazyLoad: (event: any, data: any) => {
           data.result = {
-            title: 'Lazy Loaded Node',
+            title: '延迟加载节点',
             key: '3',
           };
         },
@@ -273,7 +342,7 @@ export class HsFancytreeComponent implements OnInit, AfterViewInit {
         },
         modifyChild: function (event: any, data: any) {
           if (data.operation === 'remove') {
-            that.config().deleteNodeEvent?.(data.childNode.data.id);
+            // that.config().deleteNodeEvent?.(data.childNode.data.id);
           }
           data.tree.info(event.type, data);
         },

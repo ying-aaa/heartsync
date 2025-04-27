@@ -113,6 +113,11 @@
                 "inject": false
               },
               {
+                "input": "./node_modules/jstree/dist/jstree.min.js",
+                "bundleName": "jstree.min",
+                "inject": false
+              },
+              {
                 "input": "./node_modules/jquery-ui/dist/jquery-ui.min.js",
                 "bundleName": "jquery-ui.min",
                 "inject": false

@@ -1,0 +1,65 @@
+<cdk-tree
+  [dataSource]="dataSource"
+  [treeControl]="treeControl"
+  #HsTree
+>
+  <cdk-nested-tree-node
+    *cdkTreeNodeDef="let node"
+    [attr.aria-key]="node.key"
+    class="example-tree-node"
+  >
+    <div
+      [class.node-hover]="!(dragCatalog?.isMove$ | async)"
+      matRipple
+      matRippleColor="#ffffff20"
+      [class.active-el]="node.key === activeKey() || hasActive(node)"
+      (click)="clickNode($event)"
+      [style.paddingLeft]="getRecursivePosition(node) * 30 + 'px'"
+      class="first-tree-node"
+    >
+      <button
+        mat-icon-button
+        disabled
+      ></button>
+      <mat-icon class="mat-icon-rtl-mirror mr-10px h-22px!">
+        description
+      </mat-icon>
+      <p>{{ node.name }}</p>
+    </div>
+  </cdk-nested-tree-node>
+  <cdk-nested-tree-node
+    *cdkTreeNodeDef="let node; when: hasChild"
+    [attr.aria-key]="node.key"
+    [attr.aria-folder]="true"
+    class="example-tree-node"
+  >
+    <div
+      matRipple
+      matRippleColor="#ffffff20"
+      (click)="clickNode($event)"
+      [class.node-hover]="!(dragCatalog?.isMove$ | async)"
+      [class.active-el]="node.key === activeKey() || hasActive(node)"
+      [style.paddingLeft]="getRecursivePosition(node) * 30 + 'px'"
+      cdkTreeNodeToggle
+      class="first-tree-node"
+    >
+      <button
+        mat-icon-button
+        [attr.aria-label]="'Toggle ' + node.name"
+        cdkTreeNodeToggle
+        class="w-36px! h-36px! p-6px!"
+      >
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+        </mat-icon>
+      </button>
+      <mat-icon class="mat-icon-rtl-mirror mr-10px h-22px!">
+        {{ treeControl.isExpanded(node) ? 'folder_open' : 'folder' }}
+      </mat-icon>
+      <p>{{ node.name }}</p>
+    </div>
+    <div [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+      <ng-container cdkTreeNodeOutlet></ng-container>
+    </div>
+  </cdk-nested-tree-node>
+</cdk-tree>

@@ -16,6 +16,7 @@ import {
 } from '@src/app/shared/components/hs-table/table.model';
 import { HsDynamicTableModule } from '@src/app/shared/components/hs-table/hs-dynamic-table.module';
 import { map, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hs-app-manage',
@@ -75,7 +76,9 @@ export class AppManageComponent implements OnInit {
             icon: 'edit',
             action: (row, event) => {
               event.stopPropagation();
-              console.log('编辑', row, event);
+              this.router.navigate(['/design'], {
+                queryParams: { appId: row.appName },
+              });
             },
           },
           {
@@ -108,7 +111,7 @@ export class AppManageComponent implements OnInit {
     }),
   );
 
-  constructor() {
+  constructor(private router: Router) {
     
   }
 

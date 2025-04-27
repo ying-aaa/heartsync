@@ -22,10 +22,10 @@
                 *matHeaderCellDef
               >
                 <mat-checkbox
+                  [aria-label]="checkboxLabel()"
                   (change)="$event ? toggleAllRows() : null"
                   [checked]="selection.hasValue() && isAllSelected()"
                   [indeterminate]="selection.hasValue() && !isAllSelected()"
-                  [aria-label]="checkboxLabel()"
                 >
                 </mat-checkbox>
               </th>
