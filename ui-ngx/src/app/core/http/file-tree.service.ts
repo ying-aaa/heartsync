@@ -22,7 +22,7 @@ export interface MoveNodeDto {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FileTreeService {
   private apiUrl = '/api/nodes'; // 根据实际情况调整 API 地址
