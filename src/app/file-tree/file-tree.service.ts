@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, EntityManager, Repository } from 'typeorm';
+import { DataSource, EntityManager, IsNull, Repository } from 'typeorm';
 import { HsFileNode, NodeType } from './entities/file-node.entity';
 import { CreateNodeDto } from './dto/create-node.dto';
 import { UpdateNodeDto } from './dto/update-node.dto';
@@ -42,6 +42,7 @@ export class FileTreeService {
           businessId: dto.businessId,
           parentId: dto.parentId ?? null,
           name: dto.name,
+          type: dto.type,
         },
       });
 
@@ -90,26 +91,28 @@ export class FileTreeService {
       const node = await manager.findOneBy(HsFileNode, { id });
       if (!node) throw new NotFoundException();
 
-      // 查询目标父目录
-      const newParent = await manager.findOne(HsFileNode, {
-        where: {
-          id: dto.newParentId,
-        },
-      });
+      if (dto.newParentId) {
+        // 查询目标父目录
+        const newParent = await manager.findOne(HsFileNode, {
+          where: {
+            id: dto.newParentId,
+          },
+        });
 
-      // 检查目标父目录是否存在
-      if (!newParent) throw new NotFoundException('目标父目录不存在');
+        // 检查目标父目录是否存在
+        if (!newParent) throw new NotFoundException('目标父目录不存在');
 
-      // 检查目标父目录的类型是否为 'file'
-      if (newParent.type === NodeType.FILE) {
-        throw new BadRequestException('无法移入至非目录下！');
+        // 检查目标父目录的类型是否为 'file'
+        if (newParent.type === NodeType.FILE) {
+          throw new BadRequestException('无法移入至非目录下！');
+        }
       }
 
       // 检查目标位置是否存在同名
       const existing = await manager.findOne(HsFileNode, {
         where: {
           businessId: dto.businessId,
-          parentId: dto.newParentId ?? null,
+          parentId: dto.newParentId ?? IsNull(),
           name: node.name,
         },
       });
@@ -119,7 +122,7 @@ export class FileTreeService {
       const originalParent = node.parentId;
 
       // 执行移动
-      node.parentId = dto.newParentId;
+      node.parentId = dto.newParentId ?? null;
       await manager.save(node);
 
       // 更新新旧父节点状态
@@ -144,7 +147,6 @@ export class FileTreeService {
       // 删除节点
       await manager.remove(node);
 
-      console.log('%c Line:117 🍕', 'color:#2eafb0');
       // 更新父节点状态
       if (node.parentId) {
         await this.refreshParentStatus(manager, node.parentId);
