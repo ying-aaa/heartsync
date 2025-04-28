@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// const forwardUrl = 'http://localhost:3000';
-// const wsForwardUrl = 'http://localhost:3000';
-const forwardUrl = 'https://wjy.apihub.net';
-const wsForwardUrl = 'https://wjy.apihub.net';
+const forwardUrl = 'http://localhost:3000';
+const wsForwardUrl = 'http://localhost:3000';
+// const forwardUrl = 'https://wjy.apihub.net';
+// const wsForwardUrl = 'https://wjy.apihub.net';
 const filesUrl = 'http://10.168.1.100:9000/';
 
 const PROXY_CONFIG = {
@@ -31,7 +31,7 @@ const PROXY_CONFIG = {
     secure: false,
   },
   '/heartsync-files': {
-    target: filesUrl,
+    target: forwardUrl,
     // secure: false,
     changeOrigin: true, // 支持跨域
   },

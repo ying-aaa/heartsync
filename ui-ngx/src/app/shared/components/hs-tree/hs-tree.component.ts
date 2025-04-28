@@ -12,149 +12,17 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { FileTreeService } from '@src/app/core/http/file-tree.service';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { debounceTime } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { debounceTime, delay, map } from 'rxjs/operators';
 
 declare const $: any;
 const clipboard: any = {
   node: null,
   mode: null, // 'copy' 或 'cut'
 };
-// 自定义右键菜单函数
-function customContextMenu(node: any) {
-  // 默认菜单项
-  const defaultItems = {
-    rename: {
-      label: '重命名',
-      action: function (data: any) {
-        const inst = $.jstree.reference(data.reference);
-        inst.edit(inst.get_node(data.reference));
-      },
-    },
-    remove: {
-      label: '删除',
-      action: function (data: any) {
-        const inst = $.jstree.reference(data.reference);
-        const selected = inst.get_selected();
-
-        const node = inst.get_node(selected[0]);
-
-        // 检查是否为目录且有子节点
-        if (
-          node.type === 'folder' &&
-          node.children &&
-          node.children.length > 0
-        ) {
-          console.log('不能删除包含子节点的目录', 'error');
-          return;
-        }
-        inst.delete_node(data.reference);
-      },
-    },
-    copy: {
-      label: '复制',
-      icon: 'fa fa-copy',
-      action: function (data: any) {
-        const inst = $.jstree.reference(data.reference);
-        clipboard.node = inst.get_node(data.reference);
-        clipboard.mode = 'copy';
-        console.log('已复制节点:', clipboard.node.text);
-      },
-    },
-    cut: {
-      label: '剪切',
-      icon: 'fa fa-cut',
-      action: function (data: any) {
-        const inst = $.jstree.reference(data.reference);
-        clipboard.node = inst.get_node(data.reference);
-        clipboard.mode = 'cut';
-        console.log('已剪切节点:', clipboard.node.text);
-
-        // 视觉反馈 - 添加剪切样式
-        $('#' + clipboard.node.id).addClass('jstree-cut');
-      },
-    },
-
-    // sep: { type: 'separator' },
-  };
-
-  // 根据节点类型调整菜单项
-  if (node.type === 'folder') {
-    return {
-      createFolder: {
-        label: '添加目录',
-        action: function (data: any) {
-          const inst = $.jstree.reference(data.reference);
-          inst.create_node(
-            data.reference,
-            { text: '目录名称', type: 'folder' },
-            'last',
-            (newNode: any) => {
-              if (newNode) {
-                inst.edit(newNode);
-              }
-            },
-          );
-        },
-      },
-      createFile: {
-        label: '添加文件',
-        action: function (data: any) {
-          const inst = $.jstree.reference(data.reference);
-          inst.create_node(
-            data.reference,
-            { text: '文件名称', type: 'file' },
-            'last',
-            (newNode: any) => {
-              if (newNode) {
-                console.log('%c Line:83 🌭 newNode', 'color:#ea7e5c', newNode);
-                inst.edit(newNode);
-              }
-            },
-          );
-        },
-      },
-      ...defaultItems,
-      paste: {
-        label: '粘贴',
-        icon: 'fa fa-paste',
-        _disabled: function (data: any) {
-          // 如果没有复制/剪切节点或尝试粘贴到自身，则禁用
-          return (
-            !clipboard.node ||
-            clipboard.node.id === node.id ||
-            $.inArray(node.id, clipboard.node.parents) !== -1
-          );
-        },
-        action: function (data: any) {
-          const inst = $.jstree.reference(data.reference);
-          const targetNode = inst.get_node(data.reference);
-
-          if (clipboard.mode === 'copy') {
-            // 复制节点
-            const newNode = $.extend(true, {}, clipboard.node);
-            newNode.id = 'new_' + new Date().getTime(); // 生成新ID
-
-            inst.create_node(targetNode, newNode, 'last', function () {
-              console.log('节点已复制到:', targetNode.text);
-            });
-          } else if (clipboard.mode === 'cut') {
-            // 移动节点
-            inst.move_node(clipboard.node, targetNode, 'last', function () {
-              console.log('节点已移动到:', targetNode.text);
-              $('#' + clipboard.node.id).removeClass('jstree-cut');
-              clipboard.node = null;
-              clipboard.mode = null;
-            });
-          }
-        },
-      },
-    };
-  }
-
-  return defaultItems; // 默认菜单项
-}
 
 @Component({
   selector: 'hs-tree',
@@ -178,53 +46,12 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   filterCount = 0;
 
-  constructor(private scriptLoaderService: ScriptLoaderService) {}
+  constructor(
+    private scriptLoaderService: ScriptLoaderService,
+    private fileTreeService: FileTreeService
+  ) { }
 
   initJstree() {
-    const data = [
-      {
-        text: '常规费用报销',
-        type: 'folder',
-        children: [
-          {
-            text: '常规报销表单',
-            type: 'file',
-          },
-          {
-            text: '常规报销列表',
-            type: 'file',
-          },
-          {
-            text: '组件',
-            type: 'folder',
-          },
-        ],
-      },
-      {
-        text: '相关科目',
-        type: 'folder',
-        children: [
-          {
-            text: '科目列表',
-            type: 'file',
-          },
-          {
-            text: '科目详情',
-            type: 'folder',
-            children: [
-              {
-                text: '一级科目',
-                type: 'file',
-              },
-              {
-                text: '二级科目',
-                type: 'file',
-              },
-            ],
-          },
-        ],
-      },
-    ];
     const jstreeContainerElement = this.jstreeContainer.nativeElement;
 
     // 注册 jsTree
@@ -232,14 +59,32 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       core: {
         animation: 0,
         // @ts-ignore
-        check_callback: function (op, node, parent, pos, more) {
+        check_callback (op, node, parent, pos, more) {
           if (op === 'move_node' || op === 'copy_node') {
             if (parent && parent.type === 'file') return false; // 禁止操作
           }
           return true; // 其他操作允许
         },
-        themes: { stripes: true },
-        data: data,
+        themes: { stripes: true, ellipsis: true },
+        "strings": {
+          "Loading ...": "加载中...",
+          "New node": "新节点",
+          // 可以添加更多自定义文本
+        },
+        data: (node: any, callback: any) => {
+          this.fileTreeService.getEntireTree("147258369")
+            .subscribe({
+              next(res) {
+                callback(res.data);
+              },
+              error() {
+                callback([]);
+              }
+            }
+          )
+        },
+        expand_selected_onload: true,
+        open_parents: true // 自动展开所有父节点
       },
       types: {
         folder: {
@@ -253,13 +98,13 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         },
       },
       contextmenu: {
-        items: customContextMenu, // 自定义右键菜单
+        items: this.customContextMenu, // 自定义右键菜单
       },
       plugins: ['contextmenu', 'dnd', 'search', 'state', 'types', 'wholerow'],
     });
 
     // 菜单位置更新事件
-    $(jstreeContainerElement).on('contextmenu.jstree', function (e: any) {
+    $(jstreeContainerElement).on('contextmenu.jstree',  (e: any) => {
       e.preventDefault();
       const inst = $.jstree.reference(e.target);
       const node = inst.get_node(e.target);
@@ -276,7 +121,34 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // 绑定事件监听
     this.treeInstance.on('changed.jstree', (e: Event, data: any) => {
-      console.log('Node selected:', data.selected);
+      console.log('Node selected:', data);
+    });
+
+    // 重命名节点
+    this.treeInstance.on('rename_node.jstree', (e: Event, data: any) => {
+      const { id, text: name } = data.node;
+      this.fileTreeService.updateNode(id, { name }).subscribe({
+        next(res) { }
+      });
+    });
+
+    // 移动节点
+    this.treeInstance.on('move_node.jstree', (e: Event, data: any) => {
+      const { id, parent } = data.node;
+      const formData = { 
+        businessId: "147258369", 
+        newParentId: +parent
+      }
+      this.fileTreeService.moveNode(id, formData).subscribe({
+        next(res) { 
+           // data.parent: 目标父节点 ID
+          const parentNode = data.parent;
+          const treeInstance = $.jstree.reference(data.reference);
+
+          // 展开父节点
+          treeInstance.open_node(parentNode);
+        }
+      });
     });
   }
 
@@ -408,13 +280,147 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngOnInit() {}
+  // 自定义右键菜单函数
+customContextMenu(node: any) {
+  // 默认菜单项
+  const defaultItems = {
+    rename: {
+      label: '重命名',
+      action (data: any) {
+        const inst = $.jstree.reference(data.reference);
+        inst.edit(inst.get_node(data.reference));
+      },
+    },
+    remove: {
+      label: '删除',
+      action (data: any) {
+        const inst = $.jstree.reference(data.reference);
+        const selected = inst.get_selected();
 
-  async ngAfterViewInit() {
+        const node = inst.get_node(selected[0]);
+
+        // 检查是否为目录且有子节点
+        if (
+          node.type === 'folder' &&
+          node.children &&
+          node.children.length > 0
+        ) {
+          console.log('不能删除包含子节点的目录', 'error');
+          return;
+        }
+        inst.delete_node(data.reference);
+      },
+    },
+    copy: {
+      label: '复制',
+      icon: 'fa fa-copy',
+      action (data: any) {
+        const inst = $.jstree.reference(data.reference);
+        clipboard.node = inst.get_node(data.reference);
+        clipboard.mode = 'copy';
+        console.log('已复制节点:', clipboard.node.text);
+      },
+    },
+    cut: {
+      label: '剪切',
+      icon: 'fa fa-cut',
+      action (data: any) {
+        const inst = $.jstree.reference(data.reference);
+        clipboard.node = inst.get_node(data.reference);
+        clipboard.mode = 'cut';
+        console.log('已剪切节点:', clipboard.node.text);
+
+        // 视觉反馈 - 添加剪切样式
+        $('#' + clipboard.node.id).addClass('jstree-cut');
+      },
+    },
+
+    // sep: { type: 'separator' },
+  };
+
+  // 根据节点类型调整菜单项
+  if (node.type === 'folder') {
+    return {
+      createFile: {
+        label: '添加文件',
+        action (data: any) {
+          const inst = $.jstree.reference(data.reference);
+          inst.create_node(
+            data.reference,
+            { text: '文件名称', type: 'file' },
+            'last',
+            (newNode: any) => {
+              if (newNode) {
+                inst.edit(newNode);
+              }
+            },
+          );
+        },
+      },
+      createFolder: {
+        label: '添加目录',
+        action (data: any) {
+          const inst = $.jstree.reference(data.reference);
+          inst.create_node(
+            data.reference,
+            { text: '目录名称', type: 'folder' },
+            'last',
+            (newNode: any) => {
+              if (newNode) {
+                inst.edit(newNode);
+              }
+            },
+          );
+        },
+      },
+      ...defaultItems,
+      paste: {
+        label: '粘贴',
+        icon: 'fa fa-paste',
+        _disabled (data: any) {
+          // 如果没有复制/剪切节点或尝试粘贴到自身，则禁用
+          return (
+            !clipboard.node ||
+            clipboard.node.id === node.id ||
+            $.inArray(node.id, clipboard.node.parents) !== -1
+          );
+        },
+        action (data: any) {
+          const inst = $.jstree.reference(data.reference);
+          const targetNode = inst.get_node(data.reference);
+
+          if (clipboard.mode === 'copy') {
+            // 复制节点
+            const newNode = $.extend(true, {}, clipboard.node);
+            newNode.id = 'new_' + new Date().getTime(); // 生成新ID
+
+            inst.create_node(targetNode, newNode, 'last', function () {
+              console.log('节点已复制到:', targetNode.text);
+            });
+          } else if (clipboard.mode === 'cut') {
+            // 移动节点
+            inst.move_node(clipboard.node, targetNode, 'last', function () {
+              console.log('节点已移动到:', targetNode.text);
+              $('#' + clipboard.node.id).removeClass('jstree-cut');
+              clipboard.node = null;
+              clipboard.mode = null;
+            });
+          }
+        },
+      },
+    };
+  }
+
+  return defaultItems; // 默认菜单项
+}
+
+  ngOnInit() { }
+
+  ngAfterViewInit() {
     this.scriptLoaderService
       .loadScripts(['jquery.min.js', 'jstree.min.js'])
       .subscribe({
-        next: () => {},
+        next: () => { },
         error: (error) => console.error('Error loading script:', error),
         complete: () => this.initJstree(),
       });
