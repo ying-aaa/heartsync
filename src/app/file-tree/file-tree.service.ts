@@ -22,25 +22,27 @@ export class FileTreeService {
   async create(dto: CreateNodeDto): Promise<HsFileNode> {
     return this.dataSource.transaction(async (manager) => {
       // 查询目标父目录
-      const parentData = await manager.findOne(HsFileNode, {
-        where: {
-          id: dto.parentId,
-        },
-      });
+      if (dto.parentId) {
+        const parentData = await manager.findOne(HsFileNode, {
+          where: {
+            id: dto.parentId,
+          },
+        });
 
-      // 检查目标父目录是否存在
-      if (!parentData) throw new NotFoundException('目标父目录不存在');
+        // 检查目标父目录是否存在
+        if (!parentData) throw new NotFoundException('目标父目录不存在');
 
-      // 检查目标父目录的类型是否为 'file'
-      if (parentData.type === NodeType.FILE) {
-        throw new BadRequestException('无法创建至非目录下！');
+        // 检查目标父目录的类型是否为 'file'
+        if (parentData.type === NodeType.FILE) {
+          throw new BadRequestException('无法创建至非目录下！');
+        }
       }
 
       // 检查同级节点名称唯一性
       const existing = await manager.findOne(HsFileNode, {
         where: {
           businessId: dto.businessId,
-          parentId: dto.parentId ?? null,
+          parentId: dto.parentId ?? IsNull(),
           name: dto.name,
           type: dto.type,
         },
@@ -75,7 +77,7 @@ export class FileTreeService {
         const existing = await manager.findOne(HsFileNode, {
           where: {
             businessId: node.businessId,
-            parentId: node.parentId,
+            parentId: node.parentId || IsNull(),
             name: dto.name,
           },
         });
