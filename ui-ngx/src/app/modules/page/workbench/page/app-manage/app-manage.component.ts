@@ -15,10 +15,14 @@ import {
   TextColumn,
 } from '@src/app/shared/components/hs-table/table.model';
 import { HsDynamicTableModule } from '@src/app/shared/components/hs-table/hs-dynamic-table.module';
-import { map, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
 import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
+import { isMobile } from '@src/app/core/utils';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateAppComponent } from './create-app/create-app.component';
+import { ApplicationService } from '@src/app/core/http/application.service';
+import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'hs-app-manage',
@@ -36,45 +40,32 @@ import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
   ],
 })
 export class AppManageComponent implements OnInit {
-  @ViewChild("HsTreeRef") hsTreeRef: HsTreeComponent;  
+  @ViewChild('HsTreeRef') hsTreeRef: HsTreeComponent;
 
   fileName = new FormControl('');
 
-  pageLink = new PageLink(0, 30);
+  pageLink = new PageLink(0, 5, 'createdAt', 'DESC');
 
   TextColumn = TextColumn;
 
-  test = eval('this.TextColumn');
-
   treeConfig = signal<IFileTreeConfig>({
-    featureList: ["createFolder", "rename", "remove", "blank"]
+    featureList: ['createFolder', 'rename', 'remove', 'blank'],
   });
-
 
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
       pageLink: this.pageLink,
       tableColumn: [
-        // new TextColumn('appName', '应用名称'),
-        Reflect.construct(this.test, ['appName', '应用名称']),
-
-        Reflect.construct(this.test, ['description', '应用描述']),
-        // new TextColumn('description', '应用描述'),
-        new DateColumn('createTime', '应用描述', {
-          dateFormat: 'YYYY-MM-DD',
+        new TextColumn('name', '应用名称'),
+        new TextColumn('description', '应用描述'),
+        new DateColumn('createdAt', '创建时间', {
+          dateFormat: 'YYYY-MM-DD HH:mm:ss',
         }),
-        new ImgColumn('url', '应用图标'),
+        new ImgColumn('imageUrl', '应用图标'),
         new TagColumn('status', '状态', {
-          // request: of([
-          //     { a: '1111', b: 1, c: 'green' },
-          //     { a: '失败', b: 'error', c: 'red' },
-          // ]).pipe(
-          //   map((res) =>
-          //     res.map((item) => ({ label: item.a, value: item.b, color: item.c })
-          // ))),
           tagMap: [
-            { label: '成功', value: 1, color: 'green' },
-            { label: '失败', value: 'error', color: 'red' },
+            { label: '激活', value: 'active', color: 'green' },
+            { label: '关闭', value: 'close', color: 'red' },
           ],
         }),
         new ActionColumn('actions', '操作', [
@@ -99,26 +90,33 @@ export class AppManageComponent implements OnInit {
       ],
       getData: () => {
         // 模拟数据请求REQUES
-        return of({
-          data: Array.from({ length: this.pageLink.pageSize }, (_, index) => ({
-            appName: '办公助手' + (this.pageLink.page || '') + index,
-            description: '提高工作效率的办公软件。',
-            createTime: '2024-06-01T12:30:00+08:00',
-            url: '/heartsync-files/self-record/2231745493689_.pic.jpg',
-            status: 'error',
-            actions: 'edit, delete',
-          })),
-          total: 50,
-          page: 0,
-          pageSize: 10,
-        });
+        return this.applicationService.findAllApplications(this.pageLink);
       },
       layouts: ['total', 'sizes', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],
     }),
   );
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private dialog: MatDialog,
+    private applicationService: ApplicationService,
+  ) {}
+
+  createRecord() {
+    const width = isMobile() ? '100vw' : '800px';
+    const height = isMobile() ? '100vh' : '600px';
+    const dialogRef = this.dialog.open(CreateAppComponent, {
+      width,
+      height,
+      minWidth: width,
+      minHeight: height,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.pageLink.getData();
+    });
+  }
 
   ngOnInit() {}
 }

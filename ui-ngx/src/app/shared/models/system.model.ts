@@ -29,5 +29,5 @@ export enum IEventsType {
 }
 
 export interface IAnyPropObj {
-  [key: string]: any
+  [key: string]: any;
 }

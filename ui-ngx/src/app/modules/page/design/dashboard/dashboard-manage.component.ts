@@ -21,7 +21,7 @@ import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.comp
     MatButtonModule,
     MatIconModule,
     DashboardToolbarComponent,
-    HsTreeComponent
+    HsTreeComponent,
   ],
 })
 export class DashboardManageComponent implements OnInit {

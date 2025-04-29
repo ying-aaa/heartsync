@@ -23,5 +23,5 @@ export interface IFileData {
 }
 
 export interface IAnyPropObj {
-  [key: string]: any
+  [key: string]: any;
 }

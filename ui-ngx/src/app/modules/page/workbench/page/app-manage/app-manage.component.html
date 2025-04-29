@@ -24,7 +24,7 @@
   <mat-divider class="mt-10px! mb-8px!"></mat-divider>
   <!-- 目录 -->
   <main class="h-0 flex-1 mb-18px">
-    <hs-tree 
+    <hs-tree
       #HsTreeRef
       [treeConfig]="treeConfig()"
       class="flex-1 p-8px"
@@ -46,7 +46,12 @@
 <!-- 右侧 -->
 <div class="w-0 flex-1 h-100% flex flex-col">
   <div class="h-56px flex flex-row justify-end items-center px-24px gap-10px">
-    <button mat-flat-button>新增</button>
+    <button
+      mat-flat-button
+      (click)="createRecord()"
+    >
+      新增
+    </button>
   </div>
   <mat-divider></mat-divider>
   <div class="h-0 flex-1 px-24px">

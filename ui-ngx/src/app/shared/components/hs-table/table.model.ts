@@ -1,5 +1,5 @@
-import { Observable } from "rxjs";
-import dayjs from "dayjs";
+import { Observable } from 'rxjs';
+import dayjs from 'dayjs';
 
 export enum SORTFILTER {
   ASC = 'asc',
@@ -18,7 +18,7 @@ export enum ColumnType {
   ACTION = 'action',
 }
 
-export interface ColumnConfigPropType { }
+export interface ColumnConfigPropType {}
 
 export class BaseColumn<T = any> {
   constructor(
@@ -29,7 +29,7 @@ export class BaseColumn<T = any> {
     public width?: number | string,
     public align?: string,
     public className?: string,
-  ) { }
+  ) {}
 }
 
 export class CustomColumn extends BaseColumn {
@@ -59,7 +59,8 @@ export class TextColumn extends BaseColumn {
 }
 
 export class DateColumn extends BaseColumn {
-  public format = (time: string | number | Date | dayjs.Dayjs) => dayjs(time).format(this.config?.dateFormat || 'YYYY-MM-DD HH:mm:ss');
+  public format = (time: string | number | Date | dayjs.Dayjs) =>
+    dayjs(time).format(this.config?.dateFormat || 'YYYY-MM-DD HH:mm:ss');
   constructor(
     public override prop: string,
     public override label: string,
@@ -92,13 +93,15 @@ interface TagMap {
 }
 
 // 定义一个类型，表示 config 必须包含 request 或 tagMap，但不能同时包含两者
-type TagConfigType = {
-  request: Observable<Array<TagMap>>;
-  tagMap?: never; // 确保不能同时存在
-} | {
-  request?: never; // 确保不能同时存在
-  tagMap: Array<TagMap>;
-};
+type TagConfigType =
+  | {
+      request: Observable<Array<TagMap>>;
+      tagMap?: never; // 确保不能同时存在
+    }
+  | {
+      request?: never; // 确保不能同时存在
+      tagMap: Array<TagMap>;
+    };
 
 export class TagColumn extends BaseColumn<TagConfigType> {
   tagMap: Array<TagMap> = [];
@@ -110,7 +113,6 @@ export class TagColumn extends BaseColumn<TagConfigType> {
     public override width?: number | string,
     public override align?: string,
     public override className?: string,
-
   ) {
     super(ColumnType.TAG, prop, label, config, width, align, className);
 
@@ -123,12 +125,14 @@ export class TagColumn extends BaseColumn<TagConfigType> {
     }
   }
 
-  getChips(value: string | number | Array<string | number>): Array<string | number> {
+  getChips(
+    value: string | number | Array<string | number>,
+  ): Array<string | number> {
     if (Array.isArray(value)) {
       return value;
-    } else if(typeof value === 'string') {
+    } else if (typeof value === 'string') {
       return value.split(',').map((item) => item.trim());
-    }else {
+    } else {
       return [value];
     }
   }
@@ -198,14 +202,16 @@ export class ActionColumn extends BaseColumn<
   }
 }
 
-export type TableColumn = SelectionColumn
+export type TableColumn =
+  | SelectionColumn
   | CustomColumn
   | TextColumn
   | DateColumn
   | ImgColumn
   | TagColumn
   | SwitchColumn
-  | ActionColumn|any;
+  | ActionColumn
+  | any;
 
 export interface QySearchParams {
   [key: string]: string | number;
@@ -263,6 +269,8 @@ export class QueryParams {
   }
 }
 
+export type IOrder = 'ASC' | 'DESC';
+
 export class PageLink extends QueryParams {
   public table: any;
   public total: number = 0;
@@ -280,6 +288,8 @@ export class PageLink extends QueryParams {
   constructor(
     public page: number = 1,
     public pageSize: number = 10,
+    public sortBy: string = '',
+    public order: IOrder = 'ASC',
     queryFormConfig: any[] = [],
     queryButtonConfig: any = {},
   ) {
@@ -309,7 +319,9 @@ export class PageLink extends QueryParams {
   }
 
   get fieldMultipleSelection(): any[] {
-    return this.multipleSelection.map((item) => item[this.multipleFiled]).filter(Boolean);
+    return this.multipleSelection
+      .map((item) => item[this.multipleFiled])
+      .filter(Boolean);
   }
 
   sortColumnConfig(newArr: any[]): void {
@@ -403,7 +415,9 @@ type ConfigBase = {
   getData: () => Observable<DataType>;
 };
 
-type ITableConfig = ConfigWithSelection & ConfigBase | ConfigWithoutSelection & ConfigBase;
+type ITableConfig =
+  | (ConfigWithSelection & ConfigBase)
+  | (ConfigWithoutSelection & ConfigBase);
 
 export class IDynamicTable {
   public layouts: ILayoutType[];
@@ -416,7 +430,7 @@ export class IDynamicTable {
 
   public matchLayout = (layout: ILayoutType) => {
     return this.layouts.includes(layout);
-  }
+  };
 
   getData: () => Observable<DataType>;
 
@@ -430,7 +444,9 @@ export class IDynamicTable {
     this.getData = config.getData;
 
     if (this.selection) {
-      this.tableColumn.unshift(new SelectionColumn(ColumnType.SELECTION, '选择'));
+      this.tableColumn.unshift(
+        new SelectionColumn(ColumnType.SELECTION, '选择'),
+      );
       this.pageLink.setMultipleFiled(config.multipleFiled || '');
     }
     this.displayedColumns = this.tableColumn.map((item) => item.prop);

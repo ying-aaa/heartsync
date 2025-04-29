@@ -142,7 +142,7 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
       response: string,
     ) => {
       const serverResponse = JSON.parse(response);
-      fileItem.serverResponse = serverResponse;
+      fileItem.serverResponse = serverResponse.data;
       this.updateFileData(fileItem);
     };
 

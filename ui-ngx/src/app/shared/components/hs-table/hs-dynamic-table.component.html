@@ -15,7 +15,7 @@
         [dataSource]="dataSource"
       >
         @for (column of tableColumn(); track $index) {
-          @if(column.type === ColumnType.SELECTION) {
+          @if (column.type === ColumnType.SELECTION) {
             <ng-container matColumnDef="selection">
               <th
                 mat-header-cell
@@ -42,7 +42,7 @@
                 </mat-checkbox>
               </td>
             </ng-container>
-          }@else{
+          } @else {
             <ng-container matColumnDef="{{ column.prop }}">
               <div>
                 <th
@@ -55,61 +55,66 @@
                   mat-cell
                   *matCellDef="let data"
                 >
-                @switch (column.type) {
-                  @case (ColumnType.TEXT) {
-                    {{ data[column.prop] }}
-                  }
-                  @case (ColumnType.CUSTOM) {
-                    <img 
-                      hs-image-preview 
-                      class="w-40px h-40px" 
-                      [src]="data[column.prop]"
-                      [previewSrc]="data[column.prop]" 
-                    />
-                  }
-                  @case (ColumnType.DATE) {
-                    {{ column.format(data[column.prop])  }}
-                  }
-                  @case (ColumnType.IMG) {
-                    <img 
-                      hs-image-preview 
-                      class="w-40px h-40px" 
-                      [src]="data[column.prop]"
-                      [previewSrc]="data[column.prop]" 
-                    />                  
-                  }
-                  @case (ColumnType.TAG) {
-                    <mat-chip-set aria-label="Dog selection">
-                      <!-- {{data[column.prop]}} -->
-                      @for (chip of column.getChips(data[column.prop]); track $index) {
-                        <mat-chip
-                          [color]="column.getColor(chip)"
-                          [disabled]="chip.disabled"
-                          [removable]="chip.removable"
+                  @switch (column.type) {
+                    @case (ColumnType.TEXT) {
+                      {{ data[column.prop] }}
+                    }
+                    @case (ColumnType.CUSTOM) {
+                      <img
+                        hs-image-preview
+                        class="w-40px h-40px"
+                        [src]="data[column.prop]"
+                        [previewSrc]="data[column.prop]"
+                      />
+                    }
+                    @case (ColumnType.DATE) {
+                      {{ column.format(data[column.prop]) }}
+                    }
+                    @case (ColumnType.IMG) {
+                      <img
+                        hs-image-preview
+                        class="w-40px h-40px"
+                        [src]="data[column.prop]"
+                        [previewSrc]="data[column.prop]"
+                      />
+                    }
+                    @case (ColumnType.TAG) {
+                      <mat-chip-set aria-label="Dog selection">
+                        <!-- {{data[column.prop]}} -->
+                        @for (
+                          chip of column.getChips(data[column.prop]);
+                          track $index
+                        ) {
+                          <mat-chip
+                            [color]="column.getColor(chip)"
+                            [disabled]="chip.disabled"
+                            [removable]="chip.removable"
+                          >
+                            {{ column.getLabel(chip) }}
+                            <mat-icon
+                              *ngIf="chip.removable"
+                              matChipRemove
+                              >cancel</mat-icon
+                            >
+                          </mat-chip>
+                        }
+                      </mat-chip-set>
+                    }
+                    @case (ColumnType.ACTION) {
+                      @for (action of column.config; track $index) {
+                        <button
+                          mat-button
+                          (click)="action.action(data, $event)"
                         >
-                          {{ column.getLabel(chip) }}
-                          <mat-icon *ngIf="chip.removable" matChipRemove>cancel</mat-icon>
-                        </mat-chip>
+                          {{ action.name }}
+                        </button>
                       }
-                    </mat-chip-set>
-                  }
-                  @case (ColumnType.ACTION) {
-                    @for (action of column.config; track $index) {
-                      <button
-                        mat-button
-                        (click)="action.action(data, $event)"
-                      >
-                        {{ action.name }}
-                      </button>
                     }
                   }
-                }
                 </td>
               </div>
             </ng-container>
           }
-
-
         }
 
         <tr
@@ -130,14 +135,16 @@
 
   @let matchLayout = tableConfig().matchLayout;
   @let pageSizeOptions = matchLayout('sizes') ? tableConfig().pageSizes : [];
-  <mat-paginator #paginator
-                [length]="pageLink().total"
-                [pageIndex]="pageLink().page"
-                [pageSize]="pageLink().pageSize"
-                [showFirstLastButtons]="matchLayout('first/last')"
-                [hidePageSize]="!matchLayout('sizes')"
-                [pageSizeOptions]="pageSizeOptions"
-                [disabled]="tableConfig().pageDislabled"
-                (page)="onPageChange($event)">
+  <mat-paginator
+    #paginator
+    [length]="pageLink().total"
+    [pageIndex]="pageLink().page"
+    [pageSize]="pageLink().pageSize"
+    [showFirstLastButtons]="matchLayout('first/last')"
+    [hidePageSize]="!matchLayout('sizes')"
+    [pageSizeOptions]="pageSizeOptions"
+    [disabled]="tableConfig().pageDislabled"
+    (page)="onPageChange($event)"
+  >
   </mat-paginator>
 </content>
