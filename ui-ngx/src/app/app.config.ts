@@ -6,8 +6,13 @@ import {
   withEventReplay,
 } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { provideHighlightOptions } from 'ngx-highlightjs';
+import { ResponentInterceptor } from './core/interceptors/response.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([ResponentInterceptor])),
     provideHighlightOptions({
       // fullLibraryLoader: () => import('highlight.js'),
       lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
