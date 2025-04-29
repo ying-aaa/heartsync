@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,6 +18,7 @@ import { HsDynamicTableModule } from '@src/app/shared/components/hs-table/hs-dyn
 import { map, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
+import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
 
 @Component({
   selector: 'hs-app-manage',
@@ -35,7 +36,8 @@ import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.comp
   ],
 })
 export class AppManageComponent implements OnInit {
-  treeConfig = signal({});
+  @ViewChild("HsTreeRef") hsTreeRef: HsTreeComponent;  
+
   fileName = new FormControl('');
 
   pageLink = new PageLink(0, 30);
@@ -44,7 +46,12 @@ export class AppManageComponent implements OnInit {
 
   test = eval('this.TextColumn');
 
-  tableConfig = signal(
+  treeConfig = signal<IFileTreeConfig>({
+    featureList: ["createFolder", "rename", "remove", "blank"]
+  });
+
+
+  tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
       pageLink: this.pageLink,
       tableColumn: [

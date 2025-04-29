@@ -27,3 +27,7 @@ export enum IEventsType {
   KeyUp = 'keyup',
   Click = 'click',
 }
+
+export interface IAnyPropObj {
+  [key: string]: any
+}
