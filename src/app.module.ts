@@ -1,18 +1,24 @@
 import { WidgetsModule } from './app/widget/widgets.module';
 // src/app.module.ts
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SelfModule } from './app/self/self.module';
 import { HsUploadModule } from './app/upload/upload.module';
 import { HsFileTreeModule } from './app/file-tree/file-tree.module';
+import { FileProxyMiddleware } from './middlewares/file-proxy.middleware';
+import { HsApplicationModule } from './app/applications/application.module';
+import { HsPaginationService } from './common/services/pagination.service';
 
 @Module({
+  providers: [HsPaginationService],
+  exports: [HsPaginationService],
   imports: [
     SelfModule,
     WidgetsModule,
     HsUploadModule,
     HsFileTreeModule,
+    HsApplicationModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -33,4 +39,10 @@ import { HsFileTreeModule } from './app/file-tree/file-tree.module';
     }),
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(FileProxyMiddleware)
+      .forRoutes({ path: 'heartsync-files', method: RequestMethod.ALL });
+  }
+}

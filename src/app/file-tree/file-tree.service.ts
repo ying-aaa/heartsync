@@ -12,7 +12,7 @@ import { UpdateNodeDto } from './dto/update-node.dto';
 import { MoveNodeDto } from './dto/move-node.dto';
 
 @Injectable()
-export class FileTreeService {
+export class HsFileTreeService {
   constructor(
     private dataSource: DataSource,
     @InjectRepository(HsFileNode)

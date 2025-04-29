@@ -9,7 +9,7 @@ import {
   Query,
   // UseGuards,
 } from '@nestjs/common';
-import { FileTreeService } from './file-tree.service';
+import { HsFileTreeService } from './file-tree.service';
 import { CreateNodeDto } from './dto/create-node.dto';
 import { UpdateNodeDto } from './dto/update-node.dto';
 import { MoveNodeDto } from './dto/move-node.dto';
@@ -17,8 +17,8 @@ import { BusinessId } from 'src/decorators/business-id.decorator';
 
 @Controller('nodes')
 // @UseGuards(BusinessGuard)
-export class FileTreeController {
-  constructor(private readonly service: FileTreeService) {}
+export class HsFileTreeController {
+  constructor(private readonly service: HsFileTreeService) {}
 
   /**
    * 创建新节点
