@@ -10,7 +10,7 @@ export class UpdateApplicationDto {
   @IsOptional()
   directoryId?: string;
 
-  @IsUrl()
+  @IsString()
   @IsOptional()
   imageUrl?: string;
 

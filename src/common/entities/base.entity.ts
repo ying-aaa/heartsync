@@ -11,20 +11,28 @@ export abstract class HsBaseEntity {
   @PrimaryColumn()
   id: string;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({
+    name: 'create_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn({
+    name: 'update_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ name: 'created_by', type: 'varchar', nullable: true })
   createdBy: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ name: 'updated_by', type: 'varchar', nullable: true })
   updatedBy: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  createdByDepartment: string;
+  @Column({ name: 'by_department', type: 'varchar', nullable: true })
+  byDepartment: string;
 
   constructor() {
     this.id = uuidv4(); // 自动生成 UUID

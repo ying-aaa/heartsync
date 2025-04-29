@@ -9,6 +9,9 @@ export class HsApplication extends HsBaseEntity {
   @Column()
   name: string;
 
+  @Column({ nullable: true, default: 'web' })
+  type: string;
+
   @Column({ nullable: true })
   imageUrl: string;
 
