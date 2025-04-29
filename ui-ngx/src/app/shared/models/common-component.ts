@@ -21,3 +21,7 @@ export interface IFileData {
   name: string;
   url: string;
 }
+
+export interface IAnyPropObj {
+  [key: string]: any
+}

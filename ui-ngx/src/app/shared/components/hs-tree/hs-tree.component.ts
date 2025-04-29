@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  computed,
   ElementRef,
   HostListener,
+  input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -14,14 +16,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
+  CreateNodeDto,
   FileTreeService,
   MoveNodeDto,
 } from '@src/app/core/http/file-tree.service';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
-import { deepClone } from '@src/app/core/utils';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { of } from 'rxjs';
-import { debounceTime, delay, map } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
+import { IFileTreeConfig, ITreeFeatureList } from './tree.model';
+import { IAnyPropObj } from '@shared/models/common-component';
+import { pick } from '@src/app/core/utils';
 
 declare const $: any;
 const clipboard: any = {
@@ -45,6 +49,9 @@ const clipboard: any = {
 export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('jsTreeContainer', { static: false }) jstreeContainer: ElementRef;
 
+  treeConfig = input.required<IFileTreeConfig>();
+  featureList = computed(() => this.treeConfig().featureList)
+
   treeInstance: any;
 
   fileName = new FormControl('');
@@ -58,6 +65,10 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     private fileTreeService: FileTreeService,
     private _snackBar: MatSnackBar,
   ) {}
+
+  includesFeature(feature: ITreeFeatureList) {
+    return this.featureList().includes(feature);
+  }
 
   initJstree() {
     const jstreeContainerElement = this.jstreeContainer.nativeElement;
@@ -107,15 +118,18 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       contextmenu: {
         items: this.customContextMenu.bind(this), // 自定义右键菜单
       },
-      plugins: [
-        'contextmenu',
-        'dnd',
-        'search',
-        'state',
-        'types',
-        'wholerow',
-        'sort',
-      ],
+      plugins: (() => {
+        const plugins = [
+          'contextmenu',
+          'state',
+          'types',
+          'wholerow',
+          'sort',
+        ]
+        if(this.includesFeature("dnd")) plugins.push("dnd");
+        if(this.includesFeature("search")) plugins.push("search");
+        return plugins;
+      })(),
       sort: function (a: any, b: any) {
         // 获取两个节点的文本内容
         const aText = this.get_node(a).text.toLowerCase();
@@ -156,14 +170,16 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       const tempNode = data.node;
       if (this.newNodeFlag && this.newNodeFlag.id === tempNode.id) {
         const { parent: parentId, text: name, type } = tempNode;
-
+        const nodeData: CreateNodeDto = {
+          name,
+          type,
+          businessId: '147258369',
+        }
+        if(parentId !== "#") {
+          nodeData.parentId = parentId;
+        }
         this.fileTreeService
-          .createNode({
-            name,
-            type,
-            parentId,
-            businessId: '147258369',
-          })
+          .createNode(nodeData)
           .subscribe({
             next: (res) => {
               this.treeInstance.jstree().set_id(tempNode, res.data.id); // 替换临时ID为正式ID
@@ -284,7 +300,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     if (selected.length === 0) return;
 
     // Delete键 - 删除节点
-    if (e.keyCode === 46) {
+    if (e.keyCode === 46 && this.includesFeature("remove")) {
       // Delete键
       e.preventDefault();
 
@@ -317,7 +333,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // Ctrl+C - 复制
-    if (e.ctrlKey && e.keyCode === 67) {
+    if (e.ctrlKey && e.keyCode === 67 && this.includesFeature("copy")) {
       e.preventDefault();
       clipboard.node = inst.get_node(selected[0]);
       clipboard.mode = 'copy';
@@ -325,7 +341,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log('已复制: ' + clipboard.node.text);
     }
     // Ctrl+X - 剪切
-    else if (e.ctrlKey && e.keyCode === 88) {
+    else if (e.ctrlKey && e.keyCode === 88 && this.includesFeature("cut")) {
       e.preventDefault();
       clipboard.node = inst.get_node(selected[0]);
       clipboard.mode = 'cut';
@@ -336,7 +352,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     }
     // Ctrl+V - 粘贴
-    else if (e.ctrlKey && e.keyCode === 86) {
+    else if (e.ctrlKey && e.keyCode === 86 && this.includesFeature("paste")) {
       e.preventDefault();
       if (!clipboard.node) {
         console.log('剪贴板为空', 'error');
@@ -427,7 +443,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   customContextMenu(node: any) {
     const that = this;
     // 默认菜单项
-    const defaultItems = {
+    let defaultItems: IAnyPropObj = {
       rename: {
         label: '重命名',
         action(data: any) {
@@ -493,37 +509,17 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // 根据节点类型调整菜单项
     if (node.type === 'folder') {
-      return {
+      defaultItems = {
         createFile: {
           label: '添加文件',
-          action(data: any) {
-            const inst = $.jstree.reference(data.reference);
-            inst.create_node(
-              data.reference,
-              { text: '文件名称', type: 'file' },
-              'last',
-              (newNode: any) => {
-                if (!newNode) return;
-                that.newNodeFlag = newNode;
-                inst.edit(newNode);
-              },
-            );
+          action: (data: any) => {
+            this.createNode("file", data.reference);
           },
         },
         createFolder: {
           label: '添加目录',
-          action(data: any) {
-            const inst = $.jstree.reference(data.reference);
-            inst.create_node(
-              data.reference,
-              { text: '目录名称', type: 'folder' },
-              'last',
-              (newNode: any) => {
-                if (!newNode) return;
-                that.newNodeFlag = newNode;
-                inst.edit(newNode);
-              },
-            );
+          action: (data: any) => {
+            this.createNode("folder", data.reference);
           },
         },
         ...defaultItems,
@@ -603,7 +599,21 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       };
     }
 
-    return defaultItems; // 默认菜单项
+    return pick(defaultItems, this.featureList()); // 默认菜单项
+  }
+
+  public createNode(type: string, inNode?: any) {
+    const inst = this.treeInstance.jstree();
+    inst.create_node(
+      inNode || '#',
+      { text: type === 'file' ? '文件名称' : '目录名称', type },
+      'last',
+      (newNode: any) => {
+        if (!newNode) return;
+        this.newNodeFlag = newNode;
+        inst.edit(newNode);
+      },
+    );
   }
 
   ngOnInit() {}

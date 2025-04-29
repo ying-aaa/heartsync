@@ -1,4 +1,5 @@
 import { Renderer2 } from '@angular/core';
+import { IAnyPropObj } from '@shared/models/common-component';
 
 /** 判断一个值是否为 Object
  * @param {any} value
@@ -298,4 +299,26 @@ export function isMobile() {
   const regex =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
   return regex.test(navigator.userAgent);
+}
+
+/**
+ * 从对象中提取指定的属性。
+ * @param {T} obj - 原始对象。
+ * @param {string[]} keys - 需要提取的属性键数组。
+ * @returns {Pick<T, K>} - 一个新对象，只包含指定的属性。
+ */
+export function pick(obj: IAnyPropObj, keys: Array<string>) {
+  if (typeof obj !== "object" || obj === null || !Array.isArray(keys)) {
+    return obj;
+  }
+
+  const result: IAnyPropObj = {};
+
+  keys.forEach((key) => {
+    if (key in obj) {
+      result[key] = obj[key];
+    }
+  });
+
+  return result;
 }
