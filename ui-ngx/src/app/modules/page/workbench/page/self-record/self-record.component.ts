@@ -47,7 +47,7 @@ export class SelfRecordComponent implements OnInit {
 
   getRecordData() {
     this.selfRecordService.getAll().subscribe((res: any) => {
-      this.recordData = res;
+      this.recordData = res.data;
     });
   }
 
