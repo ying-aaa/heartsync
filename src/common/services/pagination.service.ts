@@ -3,13 +3,13 @@ import { Repository } from 'typeorm';
 import { PageOptionsDto } from '../dtos/pagination.dto';
 import { PageDto } from '../dtos/page.dto';
 import { Injectable } from '@nestjs/common';
+import { omit } from 'lodash';
 
 @Injectable()
 export class HsPaginationService {
   async paginate<T>(
     repository: Repository<T>,
     pageOptionsDto: PageOptionsDto,
-    queryOptions: any = {},
   ): Promise<PageDto<T>> {
     const { page, pageSize, sortBy, order } = pageOptionsDto;
     const skip = page * pageSize;
@@ -21,9 +21,10 @@ export class HsPaginationService {
       queryBuilder.orderBy(`entity.${sortBy}`, order);
     }
 
+    const where = omit(pageOptionsDto, ['page', 'pageSize', 'sortBy', 'order']);
     // 添加自定义查询条件
-    if (queryOptions.where) {
-      queryBuilder.where(queryOptions.where);
+    if (where) {
+      queryBuilder.where(where);
     }
 
     // 执行查询

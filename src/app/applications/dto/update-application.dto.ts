@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEnum, IsUrl } from 'class-validator';
+import { IsString, IsOptional, IsEnum } from 'class-validator';
 import { ApplicationStatus } from './create-application.dto';
 
 export class UpdateApplicationDto {

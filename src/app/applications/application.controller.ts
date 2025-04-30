@@ -14,8 +14,8 @@ import { HsApplicationService } from './application.service';
 import { HsApplication } from './entities/application.entity';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
-import { PageOptionsDto } from 'src/common/dtos/pagination.dto';
 import { PageDto } from 'src/common/dtos/page.dto';
+import { QueryApplicationDto } from './dto/query-application.dto';
 
 @Controller('applications')
 export class ApplicationController {
@@ -31,9 +31,9 @@ export class ApplicationController {
 
   @Get()
   async findAll(
-    @Query() pageOptionsDto: PageOptionsDto,
+    @Query() queryApplicationDto: QueryApplicationDto,
   ): Promise<PageDto<HsApplication>> {
-    return this.applicationService.findAll(pageOptionsDto);
+    return this.applicationService.findAll(queryApplicationDto);
   }
 
   @Get(':id')

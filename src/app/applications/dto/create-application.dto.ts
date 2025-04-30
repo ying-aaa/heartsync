@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsOptional,
-  IsEnum,
-  IsUrl,
-  IsNotEmpty,
-} from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsNotEmpty } from 'class-validator';
 
 export enum ApplicationStatus {
   Active = 'active',
