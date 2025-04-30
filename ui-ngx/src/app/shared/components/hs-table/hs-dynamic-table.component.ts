@@ -1,12 +1,18 @@
-import { Component, computed, Injector, input, OnDestroy, OnInit } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {
-  ColumnType,
-  IDynamicTable,
-} from './table.model';
+  AfterViewInit,
+  Component,
+  computed,
+  input,
+  OnDestroy,
+  OnInit,
+  viewChild,
+} from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { ColumnType, IDynamicTable, ISortType } from './table.model';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { Subject, Subscription, switchMap, takeUntil } from 'rxjs';
+import { MatSort, Sort, SortDirection } from '@angular/material/sort';
 
 @Component({
   selector: 'hs-dynamic-table',
@@ -15,6 +21,8 @@ import { Subject, Subscription, switchMap, takeUntil } from 'rxjs';
   standalone: false,
 })
 export class HsDynamicTableComponent implements OnInit, OnDestroy {
+  sort = viewChild<MatSort>(MatSort);
+
   tableConfig = input.required<IDynamicTable>();
 
   pageLink = computed(() => this.tableConfig().pageLink);
@@ -37,6 +45,18 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
     this.selection.changed.subscribe((event) => {
       this.pageLink().setMultipleSelection(this.selection.selected);
     });
+  }
+
+  setDefaultSort() {
+    const { sortBy, order } = this.pageLink().sortData;
+    if (!(sortBy && order)) return;
+    this.sort()!.active = sortBy;
+    this.sort()!.direction = order!.toLowerCase() as SortDirection;
+  }
+
+  onSortChange(event: Sort): void {
+    const { active: sortBy, direction: order } = event;
+    this.pageLink().changeSort(sortBy, order.toUpperCase() as ISortType);
   }
 
   customizePaginatorIntl() {
@@ -76,7 +96,7 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
   private dataSubscription?: Subscription;
 
   request$ = new Subject<void>();
-  
+
   // 获取表格数据
   async getTableData() {
     this.request$.next();
@@ -84,25 +104,27 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
 
   handleTableData() {
     const { getData } = this.tableConfig();
-    
-    this.dataSubscription = this.request$.pipe(
-      switchMap(() => {
-        this.loadingStatus = true;
-        return getData().pipe(
-          // 确保组件销毁时自动取消
-          takeUntil(this.destroy$) 
-        );
-      })
-    ).subscribe({
-      next: ({ data, total }) => {
-        this.dataSource.data = data;
-        this.pageLink().updateTotal(total);
-        this.loadingStatus = false;
-      },
-      error: () => {
-        this.loadingStatus = false;
-      }
-    });
+
+    this.dataSubscription = this.request$
+      .pipe(
+        switchMap(() => {
+          this.loadingStatus = true;
+          return getData().pipe(
+            // 确保组件销毁时自动取消
+            takeUntil(this.destroy$),
+          );
+        }),
+      )
+      .subscribe({
+        next: ({ data, total }) => {
+          this.dataSource.data = data;
+          this.pageLink().updateTotal(total);
+          this.loadingStatus = false;
+        },
+        error: () => {
+          this.loadingStatus = false;
+        },
+      });
   }
 
   // 选择
@@ -131,12 +153,13 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.setDefaultSort();
+
     this.handleTableData();
 
     this.pageLink().setGetData(this.getTableData.bind(this));
 
-    console.log("%c Line:138 🥃", "color:#4fff4B", this.tableConfig().initExec);
-    if(this.tableConfig().initExec) {
+    if (this.tableConfig().initExec) {
       this.pageLink().getData();
     }
   }

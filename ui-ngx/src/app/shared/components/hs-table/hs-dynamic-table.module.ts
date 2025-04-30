@@ -1,4 +1,3 @@
-
 import { NgModule, Type } from '@angular/core';
 import { HsDynamicTableComponent } from './hs-dynamic-table.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,15 +11,15 @@ import { MatDividerModule } from '@angular/material/divider';
 import { HsImagePreviewModule } from '@shared/directive/image-preview/image-preview.module';
 import { MatChipsModule } from '@angular/material/chips';
 import { HsLoadingModule } from '@shared/directive/loading/loading.module';
+import { MatSortModule } from '@angular/material/sort';
 
-const dynamicTableComponents: Type<any>[] = [
-  HsDynamicTableComponent,
-];
+const dynamicTableComponents: Type<any>[] = [HsDynamicTableComponent];
 
 @NgModule({
   declarations: [...dynamicTableComponents],
   imports: [
     CommonModule,
+    MatSortModule,
     MatChipsModule,
     MatTableModule,
     HsLoadingModule,
@@ -30,9 +29,8 @@ const dynamicTableComponents: Type<any>[] = [
     MatCheckboxModule,
     MatPaginatorModule,
     HsImagePreviewModule,
-    CdkVirtualScrollViewport
+    CdkVirtualScrollViewport,
   ],
   exports: [...dynamicTableComponents],
-
 })
-export class HsDynamicTableModule { }
+export class HsDynamicTableModule {}

@@ -1,12 +1,8 @@
 import { Observable } from 'rxjs';
 import dayjs from 'dayjs';
-import { isNumber, isString } from '@src/app/core/utils';
+import { isNotEmpty, isNumber, isString } from '@src/app/core/utils';
 import { IAnyPropObj } from '../../models/common-component';
-
-export enum SORTFILTER {
-  ASC = 'asc',
-  DESC = 'desc',
-}
+import { HttpParams } from '@angular/common/http';
 
 export enum ColumnType {
   SELECTION = 'selection',
@@ -22,11 +18,11 @@ export enum ColumnType {
 
 export interface ColumnConfigPropType {}
 
-export type IColumnAlign = "left" | "center" | undefined;
+export type IColumnAlign = 'left' | 'center' | undefined;
 export class BaseColumn<T = any> {
   getWidth(width: number | string) {
-    if(isNumber(width) || Number(width)) return width + "px";
-    return width || "auto";
+    if (isNumber(width) || Number(width)) return width + 'px';
+    return width || 'auto';
   }
 
   constructor(
@@ -57,7 +53,7 @@ export class TextColumn extends BaseColumn {
   constructor(
     public override prop: string,
     public override label: string,
-    public override config?: {  },
+    public override config?: {},
     public override width?: number | string,
     public override align?: IColumnAlign,
     public override className?: string,
@@ -86,8 +82,8 @@ export class ImgColumn extends BaseColumn<{ defaultValue?: any }> {
     public override prop: string,
     public override label: string,
     public override config?: {
-      defaultValue?: any
-     },
+      defaultValue?: any;
+    },
     public override width?: number | string,
     public override align?: IColumnAlign,
     public override className?: string,
@@ -223,13 +219,7 @@ export type TableColumn =
   | ActionColumn
   | any;
 
-export interface QySearchParams {
-  [key: string]: string | number;
-}
-
-export interface QySortParams {
-  [key: string]: SORTFILTER;
-}
+export type ISortType = 'ASC' | 'DESC';
 
 export interface DataType {
   data: any[];
@@ -238,43 +228,70 @@ export interface DataType {
   pageSize: number;
 }
 
+export interface IsearchConfig {
+  prop: string;
+  defaultValue?: any;
+}
+
+export interface ISortConfig {
+  sortBy: string;
+  order?: ISortType;
+}
+
+export interface IQueryDatatype {
+  page: number;
+  pageSize: number;
+  sortBy?: string;
+  order?: ISortType;
+  [key: string]: any;
+}
+
 // 类
 export class QueryParams {
-  public searchParams: QySearchParams = {};
+  public searchData: IAnyPropObj = {};
+  public sortData: { sortBy?: any; order?: ISortType } = {};
   public getData: () => void;
 
   constructor(
-    public queryFormConfig: any[],
-    public queryButtonConfig: any,
-    public sortParams: QySortParams = {},
+    public searchParams: IsearchConfig[],
+    public sortParams: ISortConfig[],
   ) {
-    if (queryFormConfig) {
-      this.queryFormConfig.forEach((item: any) => {
-        this.searchParams[item.prop] = item.config?.default || '';
-      });
+    searchParams.forEach((item) => {
+      this.searchData[item.prop] = item.defaultValue || '';
+    });
+
+    const sort = this.sortParams.find((item) => item.order);
+    if (sort) {
+      this.sortData.sortBy = sort.sortBy;
+      this.sortData.order = sort.order;
     }
+  }
+
+  public isSortField(prop: string): boolean {
+    const is = this.sortParams.find((item) => item.sortBy === prop);
+    return !!is;
   }
 
   // 修改排序
-  changeSort(prop: string): void {
-    const currentSortOrder = this.sortParams[prop];
-    if (currentSortOrder) {
-      this.sortParams[prop] =
-        currentSortOrder === SORTFILTER.ASC ? SORTFILTER.DESC : SORTFILTER.ASC;
+  public changeSort(prop: string, value?: ISortType): void {
+    if (value) {
+      this.sortData.sortBy = prop;
+      this.sortData.order = value;
     } else {
-      this.sortParams[prop] = SORTFILTER.DESC;
+      this.sortData = {};
     }
+    this.getData();
   }
 
   // 修改搜索
-  changeSearch(prop: string, value: any): void {
-    this.searchParams[prop] = value;
+  public changeSearch(prop: string, value: any): void {
+    this.searchData[prop] = value;
   }
 
   // 重置搜索
-  reset(): void {
-    this.searchParams = {};
-    this.sortParams = {};
+  public reset(): void {
+    this.searchData = {};
+    this.sortData = {};
     this.getData();
   }
 }
@@ -284,36 +301,22 @@ export type IOrder = 'ASC' | 'DESC';
 export class PageLink extends QueryParams {
   public table: any;
   public total: number = 0;
-  public columnConfig: any[];
   public multipleSelection: any[] = []; // table选中项
   public multipleFiled: string = ''; // table默认选中的校准字段
   public tableData: any[] = []; // table 数据
   public override getData: () => void;
 
-  public get queryParams(): QySearchParams {
-    const { page, pageSize } = this;
-    return { ...this.searchParams, page, pageSize };
-  }
-
   constructor(
     public page: number = 1,
     public pageSize: number = 10,
-    public sortBy: string = '',
-    public order: IOrder = 'ASC',
-    queryFormConfig: any[] = [],
-    queryButtonConfig: any = {},
+    public override searchParams: IsearchConfig[] = [],
+    public override sortParams: ISortConfig[] = [],
   ) {
-    super(queryFormConfig, queryButtonConfig);
+    super(searchParams, sortParams);
   }
 
   setGetData(getData: () => void): void {
     this.getData = getData;
-  }
-
-  setColumnConfig(columnConfig: any[], is: boolean = false): void {
-    this.columnConfig = columnConfig.map((item) =>
-      is ? item : { ...item, nohidden: true },
-    );
   }
 
   setTableData(tableData: any[]): void {
@@ -334,43 +337,46 @@ export class PageLink extends QueryParams {
       .filter(Boolean);
   }
 
-  sortColumnConfig(newArr: any[]): void {
-    this.columnConfig = newArr;
+  public get getQueryParams(): IAnyPropObj {
+    const { page, pageSize } = this;
+    const queryParams = {
+      ...this.searchData,
+      ...this.sortData,
+      page,
+      pageSize,
+    };
+    return queryParams;
   }
 
-  handlerColumn(value: string, prop: string, index?: number): void {
-    if (index !== undefined) {
-      this.columnConfig[index][prop] = value;
-    } else {
-      this.columnConfig.forEach((item) => (item[prop] = value));
+  toQueryString(props?: Array<string>): string {
+    props = props ? props : Object.keys(this.searchData);
+    let params: string = '?';
+    for (const prop of props) {
+      const value = this.getQueryParams[prop];
+      if (isNotEmpty(value)) params += `${prop}=${value}&`;
     }
+    return params.slice(0, -1);
   }
 
-  sortColumn(value: any[]): void {
-    this.columnConfig = value;
-    this.getData();
-  }
-
-  /**
-   *
-   * @param props 哪些属性值是传给后端的，不写则传已有属性，写了为传写入的
-   * @param isString 是否是字符串拼接参数
-   * @returns
-   */
-  toQueryString(
-    props?: Array<string>,
-    isString: boolean = true,
-  ): string | QySearchParams {
-    props = props ? props : Object.keys(this.queryParams);
-    const { queryParams } = this;
-    let params: any = isString ? '?' : {};
-    for (const key of props) {
-      const value = queryParams[key];
-      if (value || value === 0) {
-        isString ? (params += `${key}=${value}&`) : (params[key] = value);
-      }
+  toQueryObj(props?: Array<string>): IQueryDatatype {
+    props = props ? props : Object.keys(this.searchData);
+    const { page, pageSize } = this;
+    let params: IQueryDatatype = { page, pageSize };
+    for (const prop of props) {
+      const value = this.getQueryParams[prop];
+      if (isNotEmpty(value)) params[prop] = value;
     }
-    return isString ? params.slice(0, -1) : params;
+    return params;
+  }
+
+  toQueryHttp(props?: Array<string>): HttpParams {
+    props = props ? props : Object.keys(this.getQueryParams);
+    let params: HttpParams = new HttpParams();
+    for (const prop of props) {
+      const value = this.getQueryParams[prop];
+      if (isNotEmpty(value)) params = params.set(prop, value);
+    }
+    return params;
   }
 
   prevPage(): void {
@@ -417,7 +423,7 @@ type ConfigWithoutSelection = {
 };
 
 type ConfigBase = {
-  tableStyle?: IAnyPropObj,
+  tableStyle?: IAnyPropObj;
   layouts?: ILayoutType[];
   pageSizes?: number[];
   pageDislabled?: boolean;

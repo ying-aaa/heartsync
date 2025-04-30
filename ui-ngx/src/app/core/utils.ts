@@ -294,6 +294,11 @@ export function isString(value: any): boolean {
   return typeof value === 'string';
 }
 
+export function isNotEmpty(value: any): boolean {
+  if (typeof value === 'string') return isNotEmptyStr(value);
+  return value || value === 0;
+}
+
 export function isMobile() {
   // 使用正则表达式匹配常见的移动设备浏览器的用户代理字符串
   const regex =
@@ -308,7 +313,7 @@ export function isMobile() {
  * @returns {Pick<T, K>} - 一个新对象，只包含指定的属性。
  */
 export function pick(obj: IAnyPropObj, keys: Array<string>) {
-  if (typeof obj !== "object" || obj === null || !Array.isArray(keys)) {
+  if (typeof obj !== 'object' || obj === null || !Array.isArray(keys)) {
     return obj;
   }
 
