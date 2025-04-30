@@ -22,7 +22,8 @@ import { isMobile } from '@src/app/core/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateAppComponent } from './create-app/create-app.component';
 import { ApplicationService } from '@src/app/core/http/application.service';
-import { map, tap } from 'rxjs';
+import { delay, map, tap } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'hs-app-manage',
@@ -42,40 +43,54 @@ import { map, tap } from 'rxjs';
 export class AppManageComponent implements OnInit {
   @ViewChild('HsTreeRef') hsTreeRef: HsTreeComponent;
 
-  fileName = new FormControl('');
+  appName = new FormControl('');
 
-  pageLink = new PageLink(0, 5, 'createdAt', 'DESC');
+  directoryId = "";
 
-  TextColumn = TextColumn;
+  pageLink = new PageLink(0, 20, 'createdAt', 'DESC');
+
 
   treeConfig = signal<IFileTreeConfig>({
-    featureList: ['createFolder', 'rename', 'remove', 'blank'],
+    featureList: ['createFolder', 'rename', 'remove', 'blank', 'search'],
+    deleteEvent: (node, jsTree) => {
+      return false;
+    },
+    selectEvent: (node, jsTree) => {
+      if(node) {
+        this.directoryId = node.id;
+        this.pageLink.getData();
+      }
+    }
   });
 
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
+      initExec: false,
+      tableStyle: {padding: "0 24px"},
       pageLink: this.pageLink,
       tableColumn: [
-        new TextColumn('name', '应用名称'),
-        new TextColumn('description', '应用描述'),
-        new DateColumn('createdAt', '创建时间', {
-          dateFormat: 'YYYY-MM-DD HH:mm:ss',
-        }),
-        new ImgColumn('imageUrl', '应用图标'),
+        new TextColumn('name', '应用名称', {}, 300),
+        new TextColumn('description', '应用描述', {}, 300),
+        new ImgColumn('imageUrl', '应用图标', {
+          defaultValue: "/assets/workbench/app.png"
+        }, 300),
         new TagColumn('status', '状态', {
           tagMap: [
             { label: '激活', value: 'active', color: 'green' },
             { label: '关闭', value: 'close', color: 'red' },
           ],
-        }),
+        }, 300),
+        new DateColumn('createdAt', '创建时间', {
+          dateFormat: 'YYYY-MM-DD HH:mm:ss',
+        }, 300),
         new ActionColumn('actions', '操作', [
           {
-            name: '编辑',
+            name: '去开发',
             icon: 'edit',
             action: (row, event) => {
               event.stopPropagation();
               this.router.navigate(['/design'], {
-                queryParams: { appId: row.appName },
+                queryParams: { appId: row.id },
               });
             },
           },
@@ -84,15 +99,25 @@ export class AppManageComponent implements OnInit {
             icon: 'delete',
             action: (row, event) => {
               console.log('删除', row, event);
+              this.applicationService.deleteApplication(row.id).subscribe(res => {
+                this.pageLink.getData();
+                this._snackBar.open('删除应用成功!!!', '', {
+                  horizontalPosition: 'center',
+                  verticalPosition: 'top',
+                  duration: 1 * 1000,
+                });
+              });
             },
           },
-        ]),
+        ], 300, "center"),
       ],
       getData: () => {
         // 模拟数据请求REQUES
-        return this.applicationService.findAllApplications(this.pageLink);
+        return this.applicationService.findAllApplications({...this.pageLink, directoryId: this.directoryId} as any).pipe(
+          delay(0)
+        );
       },
-      layouts: ['total', 'sizes', 'first/last'],
+      layouts: ["paginator", 'total',  'first/last'],
       pageSizes: [5, 10, 20, 50, 100],
     }),
   );
@@ -100,6 +125,7 @@ export class AppManageComponent implements OnInit {
   constructor(
     private router: Router,
     private dialog: MatDialog,
+    private _snackBar: MatSnackBar,
     private applicationService: ApplicationService,
   ) {}
 
@@ -107,6 +133,9 @@ export class AppManageComponent implements OnInit {
     const width = isMobile() ? '100vw' : '800px';
     const height = isMobile() ? '100vh' : '600px';
     const dialogRef = this.dialog.open(CreateAppComponent, {
+      data: {
+        directoryId: this.directoryId,
+      },
       width,
       height,
       minWidth: width,

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +20,6 @@ import {
   ApplicationService,
   CreateApplicationDto,
 } from '@src/app/core/http/application.service';
-import { SelfRecordService } from '@src/app/core/http/self-record.service';
 import { UploadFileService } from '@src/app/core/http/upload-file.service';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-file.module';
@@ -42,7 +41,6 @@ import { IFileData } from '@src/app/shared/models/common-component';
     FormsModule,
     ReactiveFormsModule,
     HsUploadFileModule,
-    CommonModule,
   ],
 })
 export class CreateAppComponent implements OnInit {
@@ -57,6 +55,7 @@ export class CreateAppComponent implements OnInit {
   filesData: IFileData[] = [];
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { directoryId: string },
     private hsThemeService: HsThemeService,
     private applicationService: ApplicationService,
     private _snackBar: MatSnackBar,
@@ -82,7 +81,7 @@ export class CreateAppComponent implements OnInit {
   submit(): void {
     if (this.appForm.valid) {
       const createApplicationData: CreateApplicationDto = {
-        directoryId: '1',
+        directoryId: this.data.directoryId,
         ...this.appForm.value,
       } as CreateApplicationDto;
 

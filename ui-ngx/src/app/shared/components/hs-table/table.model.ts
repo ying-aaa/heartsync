@@ -1,5 +1,7 @@
 import { Observable } from 'rxjs';
 import dayjs from 'dayjs';
+import { isNumber, isString } from '@src/app/core/utils';
+import { IAnyPropObj } from '../../models/common-component';
 
 export enum SORTFILTER {
   ASC = 'asc',
@@ -20,14 +22,20 @@ export enum ColumnType {
 
 export interface ColumnConfigPropType {}
 
+export type IColumnAlign = "left" | "center" | undefined;
 export class BaseColumn<T = any> {
+  getWidth(width: number | string) {
+    if(isNumber(width) || Number(width)) return width + "px";
+    return width || "auto";
+  }
+
   constructor(
     public type: ColumnType,
     public prop: string,
     public label: string,
     public config?: T,
     public width?: number | string,
-    public align?: string,
+    public align?: IColumnAlign,
     public className?: string,
   ) {}
 }
@@ -38,7 +46,7 @@ export class CustomColumn extends BaseColumn {
     public override label: string,
     public override config?: any,
     public override width?: number | string,
-    public override align?: string,
+    public override align?: IColumnAlign,
     public override className?: string,
   ) {
     super(ColumnType.CUSTOM, prop, label, config, width, align, className);
@@ -49,9 +57,9 @@ export class TextColumn extends BaseColumn {
   constructor(
     public override prop: string,
     public override label: string,
-    public override config?: { dateFormat: string },
+    public override config?: {  },
     public override width?: number | string,
-    public override align?: string,
+    public override align?: IColumnAlign,
     public override className?: string,
   ) {
     super(ColumnType.TEXT, prop, label, config, width, align, className);
@@ -66,20 +74,22 @@ export class DateColumn extends BaseColumn {
     public override label: string,
     public override config?: { dateFormat: string },
     public override width?: number | string,
-    public override align?: string,
+    public override align?: IColumnAlign,
     public override className?: string,
   ) {
     super(ColumnType.DATE, prop, label, config, width, align, className);
   }
 }
 
-export class ImgColumn extends BaseColumn<{ src: string }> {
+export class ImgColumn extends BaseColumn<{ defaultValue?: any }> {
   constructor(
     public override prop: string,
     public override label: string,
-    public override config?: { src: string },
+    public override config?: {
+      defaultValue?: any
+     },
     public override width?: number | string,
-    public override align?: string,
+    public override align?: IColumnAlign,
     public override className?: string,
   ) {
     super(ColumnType.IMG, prop, label, config, width, align, className);
@@ -111,7 +121,7 @@ export class TagColumn extends BaseColumn<TagConfigType> {
     public override label: string,
     public override config?: TagConfigType,
     public override width?: number | string,
-    public override align?: string,
+    public override align?: IColumnAlign,
     public override className?: string,
   ) {
     super(ColumnType.TAG, prop, label, config, width, align, className);
@@ -157,7 +167,7 @@ export class SwitchColumn extends BaseColumn<{
     public override label: string,
     public override config?: { activeValue: any; inactiveValue: any },
     public override width?: number | string,
-    public override align?: string,
+    public override align?: IColumnAlign,
     public override className?: string,
   ) {
     super(ColumnType.SWITCH, prop, label, config, width, align, className);
@@ -172,7 +182,7 @@ export class SelectionColumn extends BaseColumn<{
     public override label: string,
     public override config?: { selectable: (row: any) => boolean },
     public override width?: number | string,
-    public override align?: string,
+    public override align?: IColumnAlign,
     public override className?: string,
   ) {
     super(ColumnType.SELECTION, prop, label, config, width, align, className);
@@ -195,7 +205,7 @@ export class ActionColumn extends BaseColumn<
       action: (row: any, event: Event) => void;
     }>,
     public override width?: number | string,
-    public override align?: string,
+    public override align?: IColumnAlign,
     public override className?: string,
   ) {
     super(ColumnType.ACTION, prop, label, config, width, align, className);
@@ -394,7 +404,7 @@ export class PageLink extends QueryParams {
   }
 }
 
-export type ILayoutType = 'total' | 'sizes' | 'first/last';
+export type ILayoutType = 'paginator' | 'total' | 'sizes' | 'first/last';
 
 type ConfigWithSelection = {
   selection: true;
@@ -407,11 +417,13 @@ type ConfigWithoutSelection = {
 };
 
 type ConfigBase = {
+  tableStyle?: IAnyPropObj,
   layouts?: ILayoutType[];
   pageSizes?: number[];
   pageDislabled?: boolean;
   pageLink: PageLink;
   tableColumn: Array<TableColumn>;
+  initExec?: boolean;
   getData: () => Observable<DataType>;
 };
 
@@ -420,6 +432,7 @@ type ITableConfig =
   | (ConfigWithoutSelection & ConfigBase);
 
 export class IDynamicTable {
+  public tableStyle: IAnyPropObj;
   public layouts: ILayoutType[];
   public selection: boolean;
   public pageSizes: number[];
@@ -427,6 +440,7 @@ export class IDynamicTable {
   public pageLink: PageLink;
   public tableColumn: TableColumn[];
   public displayedColumns: string[] = []; // 显示的列
+  public initExec: boolean = true; // 显示的列
 
   public matchLayout = (layout: ILayoutType) => {
     return this.layouts.includes(layout);
@@ -435,13 +449,15 @@ export class IDynamicTable {
   getData: () => Observable<DataType>;
 
   constructor(config: ITableConfig) {
+    this.tableStyle = config.tableStyle || {};
     this.layouts = config.layouts || [];
-    this.selection = config.selection || false;
+    this.selection = config.selection ?? false;
     this.pageSizes = config.pageSizes || [];
-    this.pageDislabled = config.pageDislabled || false;
+    this.pageDislabled = config.pageDislabled ?? false;
     this.pageLink = config.pageLink;
     this.tableColumn = config.tableColumn;
     this.getData = config.getData;
+    this.initExec = config.initExec ?? true;
 
     if (this.selection) {
       this.tableColumn.unshift(

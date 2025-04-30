@@ -11,7 +11,6 @@ import {
 import { DynamicComponentFactoryService } from '@core/services/dynamic-component-factory.service';
 import { DynamicWidgetComponent } from './dynamic-widget.component';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
-import { LoadingDirective } from '@src/app/shared/directive/loading.directive';
 import { FormlyRunModule } from '@app/modules/formly/formly-run.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormlyModule } from '@ngx-formly/core';
@@ -21,11 +20,12 @@ import { FullscreenDirective } from '@src/app/shared/directive/fullscreen.direct
 import { ICodeWidgetConfig } from '@src/app/shared/models/code-widget.model';
 import { ActivatedRoute } from '@angular/router';
 import { CodeWidgetService } from '@src/app/core/http/code-widget.service';
+import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 @Component({
   selector: 'hs-widget-code',
   templateUrl: './widget-code.component.html',
   imports: [
-    LoadingDirective,
+    HsLoadingModule,
     FullscreenDirective,
     MatIconModule,
     MatButtonModule,

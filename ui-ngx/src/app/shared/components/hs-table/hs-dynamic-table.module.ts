@@ -11,6 +11,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { MatDividerModule } from '@angular/material/divider';
 import { HsImagePreviewModule } from '@shared/directive/image-preview/image-preview.module';
 import { MatChipsModule } from '@angular/material/chips';
+import { HsLoadingModule } from '@shared/directive/loading/loading.module';
 
 const dynamicTableComponents: Type<any>[] = [
   HsDynamicTableComponent,
@@ -22,6 +23,7 @@ const dynamicTableComponents: Type<any>[] = [
     CommonModule,
     MatChipsModule,
     MatTableModule,
+    HsLoadingModule,
     MatButtonModule,
     MatDividerModule,
     NgScrollbarModule,

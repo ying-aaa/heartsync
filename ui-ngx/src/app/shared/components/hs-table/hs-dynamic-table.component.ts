@@ -1,13 +1,12 @@
-import { Component, computed, Injector, input, OnInit } from '@angular/core';
+import { Component, computed, Injector, input, OnDestroy, OnInit } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {
   ColumnType,
-  DataType,
   IDynamicTable,
-  TableColumn,
 } from './table.model';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { Subject, Subscription, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'hs-dynamic-table',
@@ -15,7 +14,7 @@ import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
   styleUrls: ['./hs-dynamic-table.component.less'],
   standalone: false,
 })
-export class HsDynamicTableComponent implements OnInit {
+export class HsDynamicTableComponent implements OnInit, OnDestroy {
   tableConfig = input.required<IDynamicTable>();
 
   pageLink = computed(() => this.tableConfig().pageLink);
@@ -24,9 +23,13 @@ export class HsDynamicTableComponent implements OnInit {
 
   displayedColumns = computed(() => this.tableConfig().displayedColumns);
 
+  tableStyle = computed(() => this.tableConfig().tableStyle);
+
   dataSource = new MatTableDataSource<any[]>([]);
 
   ColumnType = ColumnType;
+
+  loadingStatus = false;
 
   constructor(private paginatorIntl: MatPaginatorIntl) {
     this.customizePaginatorIntl();
@@ -69,18 +72,37 @@ export class HsDynamicTableComponent implements OnInit {
     }
   }
 
+  private destroy$ = new Subject<void>();
+  private dataSubscription?: Subscription;
+
+  request$ = new Subject<void>();
+  
   // 获取表格数据
   async getTableData() {
-    try {
-      const { getData } = this.tableConfig();
-      getData().subscribe({
-        next: ({ data, total, page, pageSize }: DataType) => {
-          this.dataSource.data = data;
-          this.pageLink().updateTotal(total);
-        },
-        error: () => {},
-      });
-    } catch (error) {}
+    this.request$.next();
+  }
+
+  handleTableData() {
+    const { getData } = this.tableConfig();
+    
+    this.dataSubscription = this.request$.pipe(
+      switchMap(() => {
+        this.loadingStatus = true;
+        return getData().pipe(
+          // 确保组件销毁时自动取消
+          takeUntil(this.destroy$) 
+        );
+      })
+    ).subscribe({
+      next: ({ data, total }) => {
+        this.dataSource.data = data;
+        this.pageLink().updateTotal(total);
+        this.loadingStatus = false;
+      },
+      error: () => {
+        this.loadingStatus = false;
+      }
+    });
   }
 
   // 选择
@@ -109,7 +131,19 @@ export class HsDynamicTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.handleTableData();
+
     this.pageLink().setGetData(this.getTableData.bind(this));
-    this.pageLink().getData();
+
+    console.log("%c Line:138 🥃", "color:#4fff4B", this.tableConfig().initExec);
+    if(this.tableConfig().initExec) {
+      this.pageLink().getData();
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.dataSubscription?.unsubscribe();
   }
 }
