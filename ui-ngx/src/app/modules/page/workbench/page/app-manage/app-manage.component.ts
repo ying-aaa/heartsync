@@ -45,79 +45,107 @@ export class AppManageComponent implements OnInit {
 
   appName = new FormControl('');
 
-  directoryId = "";
+  directoryId = '';
 
-  pageLink = new PageLink(0, 20, 'createdAt', 'DESC');
-
+  pageLink = new PageLink(
+    0,
+    20,
+    [{ prop: 'directoryId' }, { prop: 'name' }],
+    [{ sortBy: 'name', order: 'DESC' }, { sortBy: 'description' }],
+  );
 
   treeConfig = signal<IFileTreeConfig>({
     featureList: ['createFolder', 'rename', 'remove', 'blank', 'search'],
     deleteEvent: (node, jsTree) => {
-      return false;
+      return true;
     },
     selectEvent: (node, jsTree) => {
-      if(node) {
+      if (node) {
         this.directoryId = node.id;
+        this.pageLink.changeSearch('directoryId', this.directoryId);
         this.pageLink.getData();
       }
-    }
+    },
   });
 
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
       initExec: false,
-      tableStyle: {padding: "0 24px"},
+      tableStyle: { padding: '0 24px' },
       pageLink: this.pageLink,
       tableColumn: [
         new TextColumn('name', '应用名称', {}, 300),
         new TextColumn('description', '应用描述', {}, 300),
-        new ImgColumn('imageUrl', '应用图标', {
-          defaultValue: "/assets/workbench/app.png"
-        }, 300),
-        new TagColumn('status', '状态', {
-          tagMap: [
-            { label: '激活', value: 'active', color: 'green' },
-            { label: '关闭', value: 'close', color: 'red' },
-          ],
-        }, 300),
-        new DateColumn('createdAt', '创建时间', {
-          dateFormat: 'YYYY-MM-DD HH:mm:ss',
-        }, 300),
-        new ActionColumn('actions', '操作', [
+        new ImgColumn(
+          'imageUrl',
+          '应用图标',
           {
-            name: '去开发',
-            icon: 'edit',
-            action: (row, event) => {
-              event.stopPropagation();
-              this.router.navigate(['/design'], {
-                queryParams: { appId: row.id },
-              });
-            },
+            defaultValue: '/assets/workbench/app.png',
           },
+          300,
+        ),
+        new TagColumn(
+          'status',
+          '状态',
           {
-            name: '删除',
-            icon: 'delete',
-            action: (row, event) => {
-              console.log('删除', row, event);
-              this.applicationService.deleteApplication(row.id).subscribe(res => {
-                this.pageLink.getData();
-                this._snackBar.open('删除应用成功!!!', '', {
-                  horizontalPosition: 'center',
-                  verticalPosition: 'top',
-                  duration: 1 * 1000,
+            tagMap: [
+              { label: '激活', value: 'active', color: 'green' },
+              { label: '关闭', value: 'close', color: 'red' },
+            ],
+          },
+          300,
+        ),
+        new DateColumn(
+          'createdAt',
+          '创建时间',
+          {
+            dateFormat: 'YYYY-MM-DD HH:mm:ss',
+          },
+          300,
+        ),
+        new ActionColumn(
+          'actions',
+          '操作',
+          [
+            {
+              name: '去开发',
+              icon: 'edit',
+              action: (row, event) => {
+                event.stopPropagation();
+                this.router.navigate(['/design'], {
+                  queryParams: { appId: row.id },
                 });
-              });
+              },
             },
-          },
-        ], 300, "center"),
+            {
+              name: '删除',
+              icon: 'delete',
+              action: (row, event) => {
+                console.log('删除', row, event);
+                this.applicationService
+                  .deleteApplication(row.id)
+                  .subscribe((res) => {
+                    this.pageLink.getData();
+                    this._snackBar.open('删除应用成功!!!', '', {
+                      horizontalPosition: 'center',
+                      verticalPosition: 'top',
+                      duration: 1 * 1000,
+                    });
+                  });
+              },
+            },
+          ],
+          300,
+          'center',
+        ),
       ],
       getData: () => {
         // 模拟数据请求REQUES
-        return this.applicationService.findAllApplications({...this.pageLink, directoryId: this.directoryId} as any).pipe(
-          delay(0)
-        );
+        return this.applicationService
+          .findAllApplications(this.pageLink)
+          .pipe(delay(0));
       },
-      layouts: ["paginator", 'total',  'first/last'],
+      layouts: ['paginator', 'total', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],
     }),
   );

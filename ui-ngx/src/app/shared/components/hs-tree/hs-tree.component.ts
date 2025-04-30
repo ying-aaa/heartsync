@@ -187,7 +187,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
               duration: 3 * 1000,
             });
           },
-          error: ({ error }) => {
+          error: (error) => {
             this._snackBar.open(`创建失败 ${error.message}`, '确定', {
               horizontalPosition: 'center',
               verticalPosition: 'top',
@@ -206,7 +206,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
               duration: 3 * 1000,
             });
           },
-          error: ({ error }) => {
+          error: (error) => {
             this._snackBar.open(`修改失败 ${error.message}`, '确定', {
               horizontalPosition: 'center',
               verticalPosition: 'top',
@@ -236,7 +236,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
             duration: 3 * 1000,
           });
         },
-        error: ({ error }) => {
+        error: (error) => {
           this._snackBar.open(`移动失败 ${error.message}`, '确定', {
             horizontalPosition: 'center',
             verticalPosition: 'top',
@@ -305,10 +305,11 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
       const node = inst.get_node(selected[0]);
 
-      if(
-        this.treeConfig().deleteEvent && 
+      if (
+        this.treeConfig().deleteEvent &&
         !this.treeConfig().deleteEvent!(node, this.treeInstance)
-      ) return;
+      )
+        return;
 
       // 检查是否为目录且有子节点
       if (node.type === 'folder' && node.children && node.children.length > 0) {
@@ -414,7 +415,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
                     duration: 3 * 1000,
                   });
                 },
-                error: ({ error }) => {
+                error: (error) => {
                   this._snackBar.open(`粘贴失败 ${error.message}`, '确定', {
                     horizontalPosition: 'center',
                     verticalPosition: 'top',
@@ -458,10 +459,11 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
           const node = inst.get_node(selected[0]);
 
-          if(
-            this.treeConfig().deleteEvent && 
+          if (
+            this.treeConfig().deleteEvent &&
             !this.treeConfig().deleteEvent!(node, this.treeInstance)
-          ) return;
+          )
+            return;
 
           // 检查是否为目录且有子节点
           if (
@@ -573,7 +575,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
                           duration: 3 * 1000,
                         });
                       },
-                      error: ({ error }) => {
+                      error: (error) => {
                         this._snackBar.open(
                           `粘贴失败 ${error.message}`,
                           '确定',
