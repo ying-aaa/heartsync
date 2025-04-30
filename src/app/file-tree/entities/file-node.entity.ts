@@ -1,10 +1,5 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { HsBaseEntity } from 'src/common/entities/base.entity';
+import { Entity, Column } from 'typeorm';
 
 export enum NodeType {
   FILE = 'file',
@@ -12,15 +7,12 @@ export enum NodeType {
 }
 
 @Entity()
-export class HsFileNode {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class HsFileNode extends HsBaseEntity {
   @Column({ length: 50 })
   businessId: string;
 
   @Column({ nullable: true })
-  parentId: number;
+  parentId: string;
 
   @Column({ length: 255 })
   name: string;
@@ -37,10 +29,4 @@ export class HsFileNode {
 
   @Column('jsonb', { nullable: true })
   meta: Record<string, any>;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
 }

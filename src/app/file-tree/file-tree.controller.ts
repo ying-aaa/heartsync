@@ -47,7 +47,7 @@ export class HsFileTreeController {
    */
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateNodeDto) {
-    return this.service.update(+id, dto);
+    return this.service.update(id, dto);
   }
 
   /**
@@ -61,7 +61,7 @@ export class HsFileTreeController {
    */
   @Post('/move/:id')
   move(@Param('id') id: string, @Body() dto: MoveNodeDto) {
-    return this.service.move(+id, dto);
+    return this.service.move(id, dto);
   }
 
   /**
@@ -71,7 +71,7 @@ export class HsFileTreeController {
    */
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return await this.service.delete(+id);
+    return await this.service.delete(id);
   }
 
   @Get('/tree')
@@ -89,9 +89,6 @@ export class HsFileTreeController {
     @Query('parentId') parentId: string,
     @BusinessId() businessId: string,
   ) {
-    return this.service.getChildren(
-      parentId ? parseInt(parentId) : null,
-      businessId,
-    );
+    return this.service.getChildren(parentId ? parentId : null, businessId);
   }
 }

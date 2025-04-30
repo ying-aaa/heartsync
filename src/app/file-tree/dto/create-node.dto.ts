@@ -6,8 +6,9 @@ export class CreateNodeDto {
   @IsNotEmpty()
   businessId: string;
 
+  @IsString()
   @IsOptional()
-  parentId?: number;
+  parentId?: string;
 
   @IsString()
   @IsNotEmpty()

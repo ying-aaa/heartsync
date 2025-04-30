@@ -67,7 +67,7 @@ export class HsFileTreeService {
     });
   }
 
-  async update(id: number, dto: UpdateNodeDto): Promise<HsFileNode> {
+  async update(id: string, dto: UpdateNodeDto): Promise<HsFileNode> {
     return this.dataSource.transaction(async (manager) => {
       const node = await manager.findOneBy(HsFileNode, { id });
       if (!node) throw new NotFoundException();
@@ -88,7 +88,7 @@ export class HsFileTreeService {
     });
   }
 
-  async move(id: number, dto: MoveNodeDto): Promise<void> {
+  async move(id: string, dto: MoveNodeDto): Promise<void> {
     await this.dataSource.transaction(async (manager) => {
       const node = await manager.findOneBy(HsFileNode, { id });
       if (!node) throw new NotFoundException();
@@ -133,7 +133,7 @@ export class HsFileTreeService {
     });
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.dataSource.transaction(async (manager) => {
       const node = await manager.findOne(HsFileNode, {
         where: { id },
@@ -178,7 +178,7 @@ export class HsFileTreeService {
   }
 
   async getChildren(
-    parentId: number | null,
+    parentId: string | null,
     businessId: string,
   ): Promise<HsFileNode[]> {
     return this.repo.find({
@@ -195,7 +195,7 @@ export class HsFileTreeService {
 
   private async refreshParentStatus(
     manager: EntityManager,
-    parentId?: number,
+    parentId?: string,
   ): Promise<void> {
     if (!parentId) return;
 

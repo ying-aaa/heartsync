@@ -1,9 +1,9 @@
-import { IsString, IsNumber, IsOptional, IsNotEmpty } from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class MoveNodeDto {
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  newParentId?: number; // 新父节点ID（null表示根目录）
+  newParentId?: string; // 新父节点ID（null表示根目录）
 
   @IsString()
   @IsNotEmpty()
