@@ -157,6 +157,8 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     // 绑定事件监听
     this.treeInstance.on('changed.jstree', (e: Event, data: any) => {
       console.log('Node selected:', data);
+      const selectEvent = this.treeConfig().selectEvent;
+      selectEvent && selectEvent(data.node, this.treeInstance);
     });
 
     // 重命名节点
@@ -174,7 +176,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.fileTreeService.createNode(nodeData).subscribe({
           next: (res) => {
-            this.treeInstance.jstree().set_id(tempNode, res.data.id); // 替换临时ID为正式ID
+            this.treeInstance.jstree().set_id(tempNode, res.id); // 替换临时ID为正式ID
             tempNode.original = res.data;
             this.treeInstance.jstree().deselect_all(); // 清除历史选中
             this.treeInstance.jstree().select_node(tempNode, false, false); // true 表示聚焦
@@ -302,6 +304,11 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       const node = inst.get_node(selected[0]);
+
+      if(
+        this.treeConfig().deleteEvent && 
+        !this.treeConfig().deleteEvent!(node, this.treeInstance)
+      ) return;
 
       // 检查是否为目录且有子节点
       if (node.type === 'folder' && node.children && node.children.length > 0) {
@@ -450,6 +457,11 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
           const selected = inst.get_selected();
 
           const node = inst.get_node(selected[0]);
+
+          if(
+            this.treeConfig().deleteEvent && 
+            !this.treeConfig().deleteEvent!(node, this.treeInstance)
+          ) return;
 
           // 检查是否为目录且有子节点
           if (

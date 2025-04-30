@@ -3,4 +3,6 @@ export type ITreeFeatureList =
 
 export interface IFileTreeConfig {
   featureList: Array<ITreeFeatureList>,
+  deleteEvent?: (node: any, jsTree: any) => boolean 
+  selectEvent?: (node: any, jsTree: any) => void 
 }

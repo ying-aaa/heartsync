@@ -7,9 +7,10 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[ng-loading]',
+  selector: '[hs-loading]',
+  standalone: false, // 明确指定这个 Directive 不是独立的
 })
-export class LoadingDirective {
+export class HsLoadingDirective {
   @Input() isLoading: boolean = false; // 控制加载动画的显示与隐藏
   // @Input() message: string = 'Loading...'; // 加载时的提示信息
 
@@ -26,7 +27,9 @@ export class LoadingDirective {
   }
 
   ngOnInit() {
-    this.updateOverlay();
+    setTimeout(() => {
+      this.updateOverlay();
+    }, 50);
   }
 
   ngOnChanges() {
@@ -45,6 +48,14 @@ export class LoadingDirective {
   }
 
   private createOverlay() {
+    const hostElement = this.el.nativeElement;
+    this.renderer.setStyle(hostElement, "position", "relative");
+    const currentPosition = hostElement.style.position;
+
+    if (!currentPosition || currentPosition === 'static') {
+      this.renderer.setStyle(hostElement, 'position', 'relative');
+    }
+
     this.overlay = this.renderer.createElement('div');
     this.renderer.addClass(this.overlay, 'loading-overlay');
     this.renderer.setStyle(this.overlay, 'position', 'absolute');
@@ -55,7 +66,8 @@ export class LoadingDirective {
     this.renderer.setStyle(
       this.overlay,
       'background-color',
-      'var(--base-bg-color)',
+      // 'var(--base-bg-color)',
+      'var(--base-color-10)',
     );
     this.renderer.setStyle(this.overlay, 'display', 'flex');
     this.renderer.setStyle(this.overlay, 'justify-content', 'center');
@@ -95,8 +107,8 @@ export class LoadingDirective {
     if (this.overlay) {
       const hostElement = this.el.nativeElement;
       const rect = hostElement.getBoundingClientRect();
-      this.renderer.setStyle(this.overlay, 'top', `${rect.top}px`);
-      this.renderer.setStyle(this.overlay, 'left', `${rect.left}px`);
+      this.renderer.setStyle(this.overlay, 'top', `${0}px`);
+      this.renderer.setStyle(this.overlay, 'left', `${0}px`);
       this.renderer.setStyle(this.overlay, 'width', `${rect.width}px`);
       this.renderer.setStyle(this.overlay, 'height', `${rect.height}px`);
     }

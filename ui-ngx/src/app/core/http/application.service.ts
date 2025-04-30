@@ -45,13 +45,14 @@ export class ApplicationService {
 
   // 获取所有应用（分页）
   findAllApplications(
-    pageOptionsDto: PageLink,
+    pageOptionsDto: any,
   ): Observable<IResponseStructure<HsApplication>> {
     const params = new HttpParams()
       .set('page', pageOptionsDto.page.toString())
       .set('pageSize', pageOptionsDto.pageSize.toString())
       .set('sortBy', pageOptionsDto.sortBy)
-      .set('order', pageOptionsDto.order);
+      .set('order', pageOptionsDto.order)
+      .set('directoryId', pageOptionsDto.directoryId);
     return this.http.get<IResponseStructure<HsApplication>>(this.apiUrl, {
       params,
     });
