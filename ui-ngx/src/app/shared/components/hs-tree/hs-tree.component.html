@@ -34,5 +34,16 @@
       #jsTreeContainer
       class="min-h-200px"
     ></div>
+
+    @let treeDataLength = treeInstance?.jstree(true).get_json('#').length;
+    @let is_loading = treeInstance?.jstree(true).is_loading('#');
+    @if (treeInstance && !treeDataLength && !is_loading) {
+      <div class="absolute-center w-full">
+        <hs-svg
+          name="empty"
+          title="暂无数据"
+        ></hs-svg>
+      </div>
+    }
   </div>
 </ng-scrollbar>

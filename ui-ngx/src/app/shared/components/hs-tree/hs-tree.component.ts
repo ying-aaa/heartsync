@@ -22,10 +22,11 @@ import {
 } from '@src/app/core/http/file-tree.service';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, delay } from 'rxjs/operators';
 import { IFileTreeConfig, ITreeFeatureList } from './tree.model';
 import { IAnyPropObj } from '@shared/models/common-component';
 import { pick } from '@src/app/core/utils';
+import { HsSvgModule } from '@shared/components/hs-svg/hs-svg.module';
 
 declare const $: any;
 const clipboard: any = {
@@ -38,7 +39,7 @@ const clipboard: any = {
   templateUrl: './hs-tree.component.html',
   styleUrls: ['./hs-tree.component.less'],
   imports: [
-    CommonModule,
+    HsSvgModule,
     ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
@@ -49,7 +50,9 @@ const clipboard: any = {
 export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('jsTreeContainer', { static: false }) jstreeContainer: ElementRef;
 
+  businessId = input.required<string>();
   treeConfig = input.required<IFileTreeConfig>();
+
   featureList = computed(() => this.treeConfig().featureList);
 
   treeInstance: any;
@@ -92,14 +95,17 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
           // 可以添加更多自定义文本
         },
         data: (node: any, callback: any) => {
-          this.fileTreeService.getEntireTree('147258369').subscribe({
-            next(responseData) {
-              callback(responseData);
-            },
-            error() {
-              callback([]);
-            },
-          });
+          this.fileTreeService
+            .getEntireTree(this.businessId())
+            .pipe(delay(3000))
+            .subscribe({
+              next(responseData) {
+                callback(responseData);
+              },
+              error() {
+                callback([]);
+              },
+            });
         },
         expand_selected_onload: true,
         open_parents: true, // 自动展开所有父节点
@@ -169,7 +175,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         const nodeData: CreateNodeDto = {
           name,
           type,
-          businessId: '147258369',
+          businessId: this.businessId(),
         };
         if (parentId !== '#') {
           nodeData.parentId = parentId;
@@ -223,7 +229,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.treeInstance.on('move_node.jstree', (e: Event, data: any) => {
       const { id, parent } = data.node;
       const formData: MoveNodeDto = {
-        businessId: '147258369',
+        businessId: this.businessId(),
       };
       if (parent !== '#') {
         formData.newParentId = +parent;
@@ -283,7 +289,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostListener('keydown', ['$event'])
-  onKeyDown(e: KeyboardEvent): void {
+  async onKeyDown(e: KeyboardEvent): Promise<void> {
     // 确保树已初始化且获得焦点
     if (!this.treeInstance || !this.treeInstance.jstree(true)) return;
 
@@ -305,11 +311,13 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
       const node = inst.get_node(selected[0]);
 
-      if (
-        this.treeConfig().deleteEvent &&
-        !this.treeConfig().deleteEvent!(node, this.treeInstance)
-      )
-        return;
+      if (this.treeConfig().deleteEvent) {
+        const res = await this.treeConfig().deleteEvent!(
+          node,
+          this.treeInstance,
+        );
+        if (!res) return;
+      }
 
       // 检查是否为目录且有子节点
       if (node.type === 'folder' && node.children && node.children.length > 0) {
@@ -400,7 +408,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
                 name,
                 type,
                 parentId,
-                businessId: '147258369',
+                businessId: this.businessId(),
               })
               .subscribe({
                 next: (res) => {
@@ -453,31 +461,41 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       remove: {
         label: '删除',
-        action: (data: any) => {
+        action: async (data: any) => {
           const inst = $.jstree.reference(data.reference);
           const selected = inst.get_selected();
 
           const node = inst.get_node(selected[0]);
 
-          if (
-            this.treeConfig().deleteEvent &&
-            !this.treeConfig().deleteEvent!(node, this.treeInstance)
-          )
-            return;
+          if (this.treeConfig().deleteEvent) {
+            const res = await this.treeConfig().deleteEvent!(
+              node,
+              this.treeInstance,
+            );
+            if (!res) return;
+          }
 
           // 检查是否为目录且有子节点
-          if (
-            node.type === 'folder' &&
-            node.children &&
-            node.children.length > 0
-          ) {
-            console.log('不能删除包含子节点的目录', 'error');
-            return;
-          }
+          // if (
+          //   node.type === 'folder' &&
+          //   node.children &&
+          //   node.children.length > 0
+          // ) {
+          //   console.log('不能删除包含子节点的目录', 'error');
+          //   return;
+          // }
+
           this.fileTreeService.deleteNode(node.id).subscribe({
             next: () => {
               inst.delete_node(node);
               this._snackBar.open('删除成功！', '确定', {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                duration: 3 * 1000,
+              });
+            },
+            error: (error) => {
+              this._snackBar.open(`${error.message}`, '确定', {
                 horizontalPosition: 'center',
                 verticalPosition: 'top',
                 duration: 3 * 1000,
@@ -558,7 +576,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
                       name,
                       type,
                       parentId,
-                      businessId: '147258369',
+                      businessId: this.businessId(),
                     })
                     .subscribe({
                       next: (res) => {

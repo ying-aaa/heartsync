@@ -53,6 +53,14 @@ export class ApplicationService {
     });
   }
 
+  // 判断某个目录下是否有应用
+  checkDataExists(directoryId: string): Observable<{ hasData: boolean }> {
+    const params = { directoryId };
+    return this.http.get<{ hasData: boolean }>(`${this.apiUrl}/check-data`, {
+      params,
+    });
+  }
+
   // 根据ID获取单个应用
   findApplicationById(id: string): Observable<HsApplication> {
     return this.http.get<HsApplication>(`${this.apiUrl}/${id}`);

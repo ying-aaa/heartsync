@@ -22,7 +22,7 @@ import { isMobile } from '@src/app/core/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateAppComponent } from './create-app/create-app.component';
 import { ApplicationService } from '@src/app/core/http/application.service';
-import { delay, map, tap } from 'rxjs';
+import { delay, lastValueFrom, map, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -51,13 +51,31 @@ export class AppManageComponent implements OnInit {
     0,
     20,
     [{ prop: 'directoryId' }, { prop: 'name' }],
-    [{ sortBy: 'name', order: 'DESC' }, { sortBy: 'description' }],
+    [
+      { sortBy: 'name' },
+      { sortBy: 'description' },
+      { sortBy: 'createdAt', order: 'DESC' },
+    ],
   );
 
   treeConfig = signal<IFileTreeConfig>({
     featureList: ['createFolder', 'rename', 'remove', 'blank', 'search'],
-    deleteEvent: (node, jsTree) => {
-      return true;
+    deleteEvent: async (node, jsTree) => {
+      const hasData$ = this.applicationService
+        .checkDataExists(node.id)
+        .pipe(map((res) => res.hasData));
+      let value;
+      try {
+        value = await lastValueFrom(hasData$);
+        if (value) {
+          this._snackBar.open('该目录下有应用，无法删除!', '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 1 * 1000,
+          });
+        }
+      } catch (error) {}
+      return !value;
     },
     selectEvent: (node, jsTree) => {
       if (node) {

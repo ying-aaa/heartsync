@@ -12,6 +12,7 @@ import { HsImagePreviewModule } from '@shared/directive/image-preview/image-prev
 import { MatChipsModule } from '@angular/material/chips';
 import { HsLoadingModule } from '@shared/directive/loading/loading.module';
 import { MatSortModule } from '@angular/material/sort';
+import { HsSvgModule } from '@shared/components//hs-svg/hs-svg.module';
 
 const dynamicTableComponents: Type<any>[] = [HsDynamicTableComponent];
 
@@ -19,6 +20,7 @@ const dynamicTableComponents: Type<any>[] = [HsDynamicTableComponent];
   declarations: [...dynamicTableComponents],
   imports: [
     CommonModule,
+    HsSvgModule,
     MatSortModule,
     MatChipsModule,
     MatTableModule,
