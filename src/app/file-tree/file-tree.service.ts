@@ -58,12 +58,14 @@ export class HsFileTreeService {
         hasChildren: false,
       });
 
+      const data = await manager.save(node);
+
       // 更新父节点状态
       if (dto.parentId) {
         await this.refreshParentStatus(manager, dto.parentId);
       }
 
-      return manager.save(node);
+      return data;
     });
   }
 

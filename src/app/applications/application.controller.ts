@@ -9,6 +9,7 @@ import {
   UsePipes,
   ValidationPipe,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { HsApplicationService } from './application.service';
 import { HsApplication } from './entities/application.entity';
@@ -34,6 +35,17 @@ export class ApplicationController {
     @Query() queryApplicationDto: QueryApplicationDto,
   ): Promise<PageDto<HsApplication>> {
     return this.applicationService.findAll(queryApplicationDto);
+  }
+
+  @Get('check-data')
+  async checkData(@Query('directoryId') directoryId: string) {
+    // 检查 directoryId 是否必传且为字符串
+    if (!directoryId || typeof directoryId !== 'string') {
+      throw new BadRequestException('directoryId是必需的，并且必须是字符串');
+    }
+
+    const hasData = await this.applicationService.hasData({ directoryId });
+    return { hasData };
   }
 
   @Get(':id')

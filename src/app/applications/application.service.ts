@@ -28,6 +28,12 @@ export class HsApplicationService {
     );
   }
 
+  // 判断是否存在数据
+  async hasData(condition: { [key: string]: any }): Promise<boolean> {
+    const count = await this.applicationRepository.count({ where: condition });
+    return count > 0;
+  }
+
   async findOne(id: string): Promise<HsApplication> {
     return this.applicationRepository.findOneBy({ id });
   }

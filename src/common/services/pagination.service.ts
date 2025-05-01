@@ -22,12 +22,9 @@ export class HsPaginationService {
     }
 
     const where = omit(pageOptionsDto, ['page', 'pageSize', 'sortBy', 'order']);
-    // 添加自定义查询条件
-    if (where) {
-      queryBuilder.where(where);
-    }
 
-    // 执行查询
+    queryBuilder.where(where);
+
     const [data, total] = await queryBuilder
       .skip(skip)
       .take(pageSize)
