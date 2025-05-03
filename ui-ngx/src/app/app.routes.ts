@@ -9,7 +9,7 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/page/workbench/workbench.routing'),
   },
   {
-    path: 'design',
+    path: 'design/:appId',
     data: { preload: true },
     loadChildren: () => import('./modules/page/design/design.routing'),
   },

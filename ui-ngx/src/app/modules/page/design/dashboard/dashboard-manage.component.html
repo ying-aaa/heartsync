@@ -23,11 +23,18 @@
         [fixedInViewport]="false"
       >
         <aside class="flex wh-full">
-          <!-- <hs-tree class="flex-1 p-8px"></hs-tree> -->
-          <mat-divider
+          <div class="flex-1 px-12px pt-12px pb-8px">
+            @if (appId) {
+              <hs-tree
+                [businessId]="appId"
+                [treeConfig]="treeConfig()"
+              ></hs-tree>
+            }
+          </div>
+          <!-- <mat-divider
             [vertical]="true"
             class="h-full"
-          ></mat-divider>
+          ></mat-divider> -->
         </aside>
       </mat-sidenav>
 
@@ -44,10 +51,10 @@
         [fixedInViewport]="false"
       >
         <aside class="flex wh-full">
-          <mat-divider
+          <!-- <mat-divider
             [vertical]="true"
             class="h-full"
-          ></mat-divider>
+          ></mat-divider> -->
           <hs-widget-folder class="flex-1 p-8px"></hs-widget-folder>
         </aside>
       </mat-sidenav>

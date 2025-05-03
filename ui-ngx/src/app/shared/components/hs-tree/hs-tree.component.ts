@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -8,7 +7,9 @@ import {
   input,
   OnDestroy,
   OnInit,
+  TemplateRef,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,12 +28,11 @@ import { IFileTreeConfig, ITreeFeatureList } from './tree.model';
 import { IAnyPropObj } from '@shared/models/common-component';
 import { pick } from '@src/app/core/utils';
 import { HsSvgModule } from '@shared/components/hs-svg/hs-svg.module';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { CommonModule } from '@angular/common';
 
 declare const $: any;
-const clipboard: any = {
-  node: null,
-  mode: null, // 'copy' 或 'cut'
-};
 
 @Component({
   selector: 'hs-tree',
@@ -40,6 +40,8 @@ const clipboard: any = {
   styleUrls: ['./hs-tree.component.less'],
   imports: [
     HsSvgModule,
+    CommonModule,
+    MatIconModule,
     ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
@@ -49,6 +51,9 @@ const clipboard: any = {
 })
 export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('jsTreeContainer', { static: false }) jstreeContainer: ElementRef;
+  @ViewChild('ContentMenu') contentMenuTemplate!: TemplateRef<any>;
+
+  private overlayRef!: OverlayRef;
 
   businessId = input.required<string>();
   treeConfig = input.required<IFileTreeConfig>();
@@ -61,12 +66,84 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   filterCount = 0;
 
+  // 创建的新node
   newNodeFlag: any = null;
+
+  // 右键的node
+  dbClickNode: any = null;
+
+  // 复制和剪切板
+  clipboard: any = {
+    node: null,
+    mode: null, // 'copy' 或 'cut'
+  };
+
+  customContextMenu1 = {
+    createFile: {
+      label: '添加文件',
+      icon: 'file',
+      action: (data: any) => {
+        this.createNode('file', this.dbClickNode);
+      },
+    },
+    createFolder: {
+      label: '添加目录',
+      icon: 'folder-close',
+      action: (data: any) => {
+        this.createNode('folder', this.dbClickNode);
+      },
+    },
+    rename: {
+      label: '重命名',
+      icon: 'edit',
+      action: (data: any) => {
+        this.renameNode(this.dbClickNode);
+        this.closeMenu();
+      },
+    },
+    remove: {
+      label: '删除',
+      icon: 'remove',
+      action: async (data: any) => {
+        this.removeNode(this.dbClickNode);
+        this.closeMenu();
+      },
+    },
+    copy: {
+      label: '复制',
+      matIcon: true,
+      icon: 'file_copy',
+      action: (data: any) => {
+        this.copyNode(this.dbClickNode);
+        this.closeMenu();
+      },
+    },
+    cut: {
+      label: '剪切',
+      matIcon: true,
+      icon: 'content_cut',
+      action: (data: any) => {
+        this.cutNode(this.dbClickNode);
+        this.closeMenu();
+      },
+    },
+    paste: {
+      label: '粘贴',
+      matIcon: true,
+      icon: 'content_paste',
+      action: (data: any) => {
+        this.pasteNode(this.dbClickNode?.id);
+        this.closeMenu();
+      },
+    },
+  };
 
   constructor(
     private scriptLoaderService: ScriptLoaderService,
     private fileTreeService: FileTreeService,
     private _snackBar: MatSnackBar,
+    private overlay: Overlay,
+    private vcRef: ViewContainerRef,
   ) {}
 
   includesFeature(feature: ITreeFeatureList) {
@@ -97,7 +174,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         data: (node: any, callback: any) => {
           this.fileTreeService
             .getEntireTree(this.businessId())
-            .pipe(delay(3000))
+            .pipe(delay(0))
             .subscribe({
               next(responseData) {
                 callback(responseData);
@@ -121,11 +198,9 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
           no_children: true, // 禁止文件节点有子节点
         },
       },
-      contextmenu: {
-        items: this.customContextMenu.bind(this), // 自定义右键菜单
-      },
+
       plugins: (() => {
-        const plugins = ['contextmenu', 'state', 'types', 'wholerow', 'sort'];
+        const plugins = ['state', 'types', 'wholerow', 'sort'];
         if (this.includesFeature('dnd')) plugins.push('dnd');
         if (this.includesFeature('search')) plugins.push('search');
         return plugins;
@@ -142,27 +217,8 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     });
 
-    // 菜单位置更新事件
-    $(jstreeContainerElement).on('contextmenu.jstree', (e: any) => {
-      e.preventDefault();
-      const inst = $.jstree.reference(e.target);
-      const node = inst.get_node(e.target);
-      inst.show_contextmenu(node);
-
-      if (node) {
-        const $menu = $('.vakata-context.jstree-contextmenu');
-        $menu.css({
-          top: e.pageY + 5 + 'px',
-          left: e.pageX + 5 + 'px',
-        });
-      }
-    });
-    // 监听节点选中事件
-    // @ts-ignore
-
     // 绑定事件监听
     this.treeInstance.on('changed.jstree', (e: Event, data: any) => {
-      console.log('Node selected:', data);
       const selectEvent = this.treeConfig().selectEvent;
       selectEvent && selectEvent(data.node, this.treeInstance);
     });
@@ -227,32 +283,13 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // 移动节点
     this.treeInstance.on('move_node.jstree', (e: Event, data: any) => {
-      const { id, parent } = data.node;
-      const formData: MoveNodeDto = {
-        businessId: this.businessId(),
-      };
-      if (parent !== '#') {
-        formData.newParentId = +parent;
-      }
-      this.fileTreeService.moveNode(id, formData).subscribe({
-        next: (res) => {
-          this._snackBar.open(`移动成功`, '确定', {
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            duration: 3 * 1000,
-          });
-        },
-        error: (error) => {
-          this._snackBar.open(`移动失败 ${error.message}`, '确定', {
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            duration: 3 * 1000,
-          });
-        },
-      });
+      // 向已有父目录调用移动时，无法调用接口
+      if (data.node.parent === (data.node.original.parentId || '#')) return;
+
+      this.clipboard.node = data.node;
+      this.moveNode(data.node.parent);
     });
   }
-
   initJsTreeFilter() {
     this.fileName.valueChanges
       .pipe(debounceTime(300))
@@ -300,330 +337,68 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     if (selected.length === 0) return;
 
     // Delete键 - 删除节点
-    if (e.keyCode === 46 && this.includesFeature('remove')) {
+    if (e.key === 'Delete' && this.includesFeature('remove')) {
       // Delete键
       e.preventDefault();
-
-      if (selected.length === 0) {
-        console.log('请先选择要删除的节点', 'warning');
-        return;
-      }
-
       const node = inst.get_node(selected[0]);
 
-      if (this.treeConfig().deleteEvent) {
-        const res = await this.treeConfig().deleteEvent!(
-          node,
-          this.treeInstance,
-        );
-        if (!res) return;
-      }
-
-      // 检查是否为目录且有子节点
-      if (node.type === 'folder' && node.children && node.children.length > 0) {
-        console.log('不能删除包含子节点的目录', 'error');
-        return;
-      }
-
-      this.fileTreeService.deleteNode(node.id).subscribe({
-        next: () => {
-          inst.delete_node(node);
-          this._snackBar.open('删除成功！', '确定', {
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            duration: 3 * 1000,
-          });
-        },
-      });
-
-      // 触发删除操作（会经过check_callback验证）
+      this.removeNode(node);
       return;
     }
 
     // Ctrl+C - 复制
-    if (e.ctrlKey && e.keyCode === 67 && this.includesFeature('copy')) {
+    if (e.ctrlKey && e.key === 'c' && this.includesFeature('copy')) {
       e.preventDefault();
-      clipboard.node = inst.get_node(selected[0]);
-      clipboard.mode = 'copy';
-      $('.jstree-cut').removeClass('jstree-cut');
-      console.log('已复制: ' + clipboard.node.text);
+      this.clipboard.node = inst.get_node(selected[0]);
+      this.clipboard.mode = 'copy';
     }
     // Ctrl+X - 剪切
-    else if (e.ctrlKey && e.keyCode === 88 && this.includesFeature('cut')) {
+    else if (e.ctrlKey && e.key === 'x' && this.includesFeature('cut')) {
       e.preventDefault();
-      clipboard.node = inst.get_node(selected[0]);
-      clipboard.mode = 'cut';
-      $('.jstree-cut').removeClass('jstree-cut');
-      $('#' + clipboard.node.id).addClass('jstree-cut');
-      console.log(
-        '已剪切: ' + clipboard.node.text + ' - 请选择目标位置后按Ctrl+V粘贴',
-      );
+      this.clipboard.node = inst.get_node(selected[0]);
+      this.clipboard.mode = 'cut';
     }
     // Ctrl+V - 粘贴
-    else if (e.ctrlKey && e.keyCode === 86 && this.includesFeature('paste')) {
+    else if (e.ctrlKey && e.key === 'v' && this.includesFeature('paste')) {
       e.preventDefault();
-      if (!clipboard.node) {
-        console.log('剪贴板为空', 'error');
-        return;
-      }
-
-      const moveInNodeId = selected[0];
-      const moveInNode = inst.get_node(moveInNodeId);
-      const targetNode = clipboard.node;
-
-      // 查询子节点中是否存在指定名称的节点
-      const hasChildWithName = (parentNode: any, name: string) => {
-        const children = parentNode.children;
-        if (!children) return false;
-
-        // 遍历子节点
-        for (const childId of children) {
-          const child = this.treeInstance.jstree().get_node(childId);
-          if (child.text === name) return true;
-        }
-        return false; // 未找到匹配的子节点
-      };
-
-      // 检查是否尝试粘贴到自身或子节点
-      if (
-        targetNode.id === moveInNode.id ||
-        targetNode.parent === moveInNode.id ||
-        hasChildWithName(moveInNode, targetNode.text)
-      ) {
-        console.log('同一目录下重复的节点名称', 'error');
-        return;
-      }
-
-      if (clipboard.mode === 'copy') {
-        inst.create_node(
-          moveInNode,
-          { text: targetNode.text, type: targetNode.type },
-          'last',
-          (newNode: any) => {
-            const { text: name, type } = newNode;
-            const { id: parentId } = moveInNode;
-
-            this.fileTreeService
-              .createNode({
-                name,
-                type,
-                parentId,
-                businessId: this.businessId(),
-              })
-              .subscribe({
-                next: (res) => {
-                  this.treeInstance.jstree().set_id(newNode, res.data.id); // 替换临时ID为正式ID
-                  newNode.original = res.data;
-                  this.treeInstance.jstree().deselect_all(); // 清除历史选中
-                  this.treeInstance.jstree().select_node(newNode, false, false); // true 表示聚焦
-
-                  this._snackBar.open(`粘贴成功`, '确定', {
-                    horizontalPosition: 'center',
-                    verticalPosition: 'top',
-                    duration: 3 * 1000,
-                  });
-                },
-                error: (error) => {
-                  this._snackBar.open(`粘贴失败 ${error.message}`, '确定', {
-                    horizontalPosition: 'center',
-                    verticalPosition: 'top',
-                    duration: 3 * 1000,
-                  });
-                  this.treeInstance.jstree().delete_node(newNode);
-                },
-              });
-            console.log('已粘贴复制的节点到: ' + moveInNode.text);
-          },
-        );
-      } else if (clipboard.mode === 'cut') {
-        // 移动节点
-        inst.move_node(clipboard.node, moveInNode, 'last', function () {
-          console.log('已移动节点到: ' + moveInNode.text);
-          $('#' + clipboard.node.id).removeClass('jstree-cut');
-          clipboard.node = null;
-          clipboard.mode = null;
-        });
-      }
+      if (!this.clipboard.node) return;
+      const InNodeId = selected[0];
+      // if (InNodeId === this.clipboard.node.parent) return;
+      this.pasteNode(InNodeId);
     }
   }
 
   // 自定义右键菜单函数
-  customContextMenu(node: any) {
-    const that = this;
-    // 默认菜单项
-    let defaultItems: IAnyPropObj = {
-      rename: {
-        label: '重命名',
-        action(data: any) {
-          const inst = $.jstree.reference(data.reference);
-          inst.edit(inst.get_node(data.reference));
-        },
-      },
-      remove: {
-        label: '删除',
-        action: async (data: any) => {
-          const inst = $.jstree.reference(data.reference);
-          const selected = inst.get_selected();
-
-          const node = inst.get_node(selected[0]);
-
-          if (this.treeConfig().deleteEvent) {
-            const res = await this.treeConfig().deleteEvent!(
-              node,
-              this.treeInstance,
-            );
-            if (!res) return;
-          }
-
-          // 检查是否为目录且有子节点
-          // if (
-          //   node.type === 'folder' &&
-          //   node.children &&
-          //   node.children.length > 0
-          // ) {
-          //   console.log('不能删除包含子节点的目录', 'error');
-          //   return;
-          // }
-
-          this.fileTreeService.deleteNode(node.id).subscribe({
-            next: () => {
-              inst.delete_node(node);
-              this._snackBar.open('删除成功！', '确定', {
-                horizontalPosition: 'center',
-                verticalPosition: 'top',
-                duration: 3 * 1000,
-              });
-            },
-            error: (error) => {
-              this._snackBar.open(`${error.message}`, '确定', {
-                horizontalPosition: 'center',
-                verticalPosition: 'top',
-                duration: 3 * 1000,
-              });
-            },
-          });
-        },
-      },
-      copy: {
-        label: '复制',
-        icon: 'fa fa-copy',
-        action(data: any) {
-          const inst = $.jstree.reference(data.reference);
-          clipboard.node = inst.get_node(data.reference);
-          clipboard.mode = 'copy';
-          console.log('已复制节点:', clipboard.node.text);
-        },
-      },
-      cut: {
-        label: '剪切',
-        icon: 'fa fa-cut',
-        action(data: any) {
-          const inst = $.jstree.reference(data.reference);
-          clipboard.node = inst.get_node(data.reference);
-          clipboard.mode = 'cut';
-          console.log('已剪切节点:', clipboard.node.text);
-
-          // 视觉反馈 - 添加剪切样式
-          $('#' + clipboard.node.id).addClass('jstree-cut');
-        },
-      },
-
-      // sep: { type: 'separator' },
-    };
-
-    // 根据节点类型调整菜单项
-    if (node.type === 'folder') {
-      defaultItems = {
-        createFile: {
-          label: '添加文件',
-          action: (data: any) => {
-            this.createNode('file', data.reference);
-          },
-        },
-        createFolder: {
-          label: '添加目录',
-          action: (data: any) => {
-            this.createNode('folder', data.reference);
-          },
-        },
-        ...defaultItems,
-        paste: {
-          label: '粘贴',
-          icon: 'fa fa-paste',
-          _disabled(data: any) {
-            // 如果没有复制/剪切节点或尝试粘贴到自身，则禁用
-            return (
-              !clipboard.node ||
-              clipboard.node.id === node.id ||
-              $.inArray(node.id, clipboard.node.parents) !== -1
-            );
-          },
-          action: (data: any) => {
-            const inst = $.jstree.reference(data.reference);
-            const moveInNode = inst.get_node(data.reference);
-            const targetNode = clipboard.node;
-            if (clipboard.mode === 'copy') {
-              inst.create_node(
-                data.reference,
-                { text: targetNode.text, type: targetNode.type },
-                'last',
-                (newNode: any) => {
-                  const { text: name, type } = newNode;
-                  const { id: parentId } = moveInNode;
-
-                  this.fileTreeService
-                    .createNode({
-                      name,
-                      type,
-                      parentId,
-                      businessId: this.businessId(),
-                    })
-                    .subscribe({
-                      next: (res) => {
-                        this.treeInstance.jstree().set_id(newNode, res.data.id); // 替换临时ID为正式ID
-                        newNode.original = res.data;
-                        this.treeInstance.jstree().deselect_all(); // 清除历史选中
-                        this.treeInstance
-                          .jstree()
-                          .select_node(newNode, false, false); // true 表示聚焦
-
-                        this._snackBar.open(`粘贴成功`, '确定', {
-                          horizontalPosition: 'center',
-                          verticalPosition: 'top',
-                          duration: 3 * 1000,
-                        });
-                      },
-                      error: (error) => {
-                        this._snackBar.open(
-                          `粘贴失败 ${error.message}`,
-                          '确定',
-                          {
-                            horizontalPosition: 'center',
-                            verticalPosition: 'top',
-                            duration: 3 * 1000,
-                          },
-                        );
-                        this.treeInstance.jstree().delete_node(newNode);
-                      },
-                    });
-                  console.log('已粘贴复制的节点到: ' + moveInNode.text);
-                },
-              );
-            } else if (clipboard.mode === 'cut') {
-              // 移动节点
-              inst.move_node(clipboard.node, moveInNode, 'last', function () {
-                console.log('节点已移动到:', moveInNode.text);
-                $('#' + clipboard.node.id).removeClass('jstree-cut');
-                clipboard.node = null;
-                clipboard.mode = null;
-              });
-            }
-          },
-        },
-      };
+  get contextMenu(): any {
+    const node = this.dbClickNode;
+    let menus: any = {};
+    if (node) {
+      if (node.type === 'file') {
+        menus = pick(this.customContextMenu1, [
+          'rename',
+          'remove',
+          'copy',
+          'cut',
+        ]);
+      } else {
+        menus = pick(this.customContextMenu1, [
+          'createFile',
+          'createFolder',
+          'rename',
+          'remove',
+          'copy',
+          'cut',
+          'paste',
+        ]);
+      }
+    } else {
+      menus = pick(this.customContextMenu1, [
+        'createFile',
+        'createFolder',
+        'paste',
+      ]);
     }
-
-    return pick(defaultItems, this.featureList()); // 默认菜单项
+    return Object.values(pick(menus, this.featureList()));
   }
 
   public createNode(type: string, inNode?: any) {
@@ -635,9 +410,142 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       (newNode: any) => {
         if (!newNode) return;
         this.newNodeFlag = newNode;
-        inst.edit(newNode);
+        this.renameNode(newNode);
       },
     );
+  }
+
+  public renameNode(node: any) {
+    const inst = this.treeInstance.jstree();
+    inst.edit(node);
+  }
+
+  public async removeNode(node: any) {
+    const inst = this.treeInstance.jstree();
+
+    if (this.treeConfig().deleteEvent) {
+      const res = await this.treeConfig().deleteEvent!(node, this.treeInstance);
+      if (!res) return;
+    }
+
+    this.fileTreeService.deleteNode(node.id).subscribe({
+      next: () => {
+        inst.delete_node(node);
+        this._snackBar.open('删除成功！', '确定', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 3 * 1000,
+        });
+      },
+      error: (error) => {
+        this._snackBar.open(`${error.message}`, '确定', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 3 * 1000,
+        });
+      },
+    });
+  }
+
+  public copyNode(node: any) {
+    this.clipboard.node = node;
+    this.clipboard.mode = 'copy';
+  }
+
+  public cutNode(node: any) {
+    this.clipboard.node = node;
+    this.clipboard.mode = 'cut';
+  }
+
+  public pasteNode(parentId: string) {
+    const { mode } = this.clipboard;
+    if (mode === 'copy') {
+      this.copyPasteNode(parentId);
+    } else {
+      this.cutPasteNode(parentId);
+    }
+  }
+
+  copyPasteNode(parentId: string) {
+    parentId = parentId ?? '#';
+    const inst = this.treeInstance.jstree(true);
+    const node = this.clipboard.node;
+    const { text, type } = node;
+
+    inst.create_node(parentId, { text, type }, 'first', (newNode: any) => {
+      const treeData: any = {
+        name: text,
+        type,
+        businessId: this.businessId(),
+      };
+      if (parentId !== '#') {
+        treeData.parentId = parentId;
+      }
+      this.fileTreeService.createNode(treeData).subscribe({
+        next: (res) => {
+          this.dbClickNode = null;
+          this.treeInstance.jstree().set_id(newNode, res.id); // 替换临时ID为正式ID
+          newNode.original = res;
+          this.treeInstance.jstree().deselect_all(); // 清除历史选中
+          this.treeInstance.jstree().select_node(newNode, false, false); // true 表示聚焦
+
+          this._snackBar.open(`粘贴成功`, '确定', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 3 * 1000,
+          });
+        },
+        error: (error) => {
+          this._snackBar.open(`粘贴失败 ${error.message}`, '确定', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 3 * 1000,
+          });
+          this.treeInstance.jstree().delete_node(newNode);
+        },
+      });
+      console.log('已粘贴复制的节点到: ' + node.text);
+    });
+  }
+
+  cutPasteNode(parentId: string) {
+    parentId = parentId ?? '#';
+    const inst = this.treeInstance.jstree(true);
+    const node = this.clipboard.node;
+    inst.move_node(node, parentId, 'last');
+  }
+
+  public moveNode(parentId: string) {
+    const inst = this.treeInstance.jstree(true);
+    const node = this.clipboard.node;
+    const { id } = node;
+    const treeData: MoveNodeDto = {
+      businessId: this.businessId(),
+    };
+    if (parentId !== '#') {
+      treeData.newParentId = parentId;
+    }
+
+    this.fileTreeService.moveNode(id, treeData).subscribe({
+      next: (res) => {
+        this.dbClickNode = null;
+        node.original.parentId = parentId;
+
+        this._snackBar.open(`移动成功`, '确定', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 3 * 1000,
+        });
+      },
+      error: (error) => {
+        this._snackBar.open(`移动失败 ${error.message}`, '确定', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 3 * 1000,
+        });
+        inst.move_node(node, node.original.parentId || '#', 'last');
+      },
+    });
   }
 
   ngOnInit() {}
@@ -648,10 +556,78 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe({
         next: () => {},
         error: (error) => console.error('Error loading script:', error),
-        complete: () => this.initJstree(),
+        complete: () => {
+          this.initJstree();
+          this.listenToRightClick();
+        },
       });
 
     this.initJsTreeFilter();
+  }
+
+  private listenToRightClick() {
+    this.treeInstance.on('contextmenu.jstree', (e: any) => {
+      e.preventDefault();
+
+      // 获取 jsTree 实例
+      const jsTreeApi = this.treeInstance.jstree(true);
+
+      // 通过事件目标元素获取节点数据
+      const node = jsTreeApi.get_node(e.target);
+
+      // 判断是否为有效节点
+      if (node && node.id !== '#') {
+        this.dbClickNode = node;
+        this.openMenu(e.clientX + 8, e.clientY + 8);
+      } else {
+        this.dbClickNode = null;
+        this.openMenu(e.clientX + 8, e.clientY + 8);
+      }
+    });
+  }
+
+  private openMenu(x: number, y: number) {
+    if (this.overlayRef) {
+      this.overlayRef.detach();
+    }
+
+    // 创建 Overlay
+    this.overlayRef = this.overlay.create({
+      positionStrategy: this.overlay
+        .position()
+        .flexibleConnectedTo({ x, y })
+        .withPositions([
+          {
+            originX: 'start',
+            originY: 'top',
+            overlayX: 'start',
+            overlayY: 'top',
+          },
+        ]),
+      scrollStrategy: this.overlay.scrollStrategies.close(),
+    });
+
+    // 将菜单模板附加到 Overlay
+    const portal = new TemplatePortal(this.contentMenuTemplate, this.vcRef);
+    this.overlayRef.attach(portal);
+
+    document.addEventListener('click', this.globalClickListener);
+  }
+
+  private globalClickListener = (event: MouseEvent) => {
+    const menuElement = this.overlayRef?.overlayElement;
+    const clickedInside = menuElement?.contains(event.target as Node);
+
+    if (!clickedInside) {
+      this.closeMenu();
+    }
+  };
+
+  private closeMenu() {
+    if (this.overlayRef) {
+      this.overlayRef.detach();
+      document.removeEventListener('click', this.globalClickListener); // 清理监听
+    }
   }
 
   ngOnDestroy(): void {

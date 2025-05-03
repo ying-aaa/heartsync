@@ -19,6 +19,7 @@ import { SvgService } from '@src/app/core/http/svg.service';
       }
 
       <div
+        [ngStyle]="{ width, height }"
         [innerHTML]="svgContent"
         [class]="svgClass"
         [style]="svgStyle"

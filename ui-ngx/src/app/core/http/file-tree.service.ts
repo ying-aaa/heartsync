@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface CreateNodeDto {
   businessId: string;
-  parentId?: number;
+  parentId?: string;
   name: string;
   type: string;
   meta?: any;
@@ -16,7 +16,7 @@ export interface UpdateNodeDto {
 }
 
 export interface MoveNodeDto {
-  newParentId?: number;
+  newParentId?: string;
   businessId: string;
   newName?: string;
 }

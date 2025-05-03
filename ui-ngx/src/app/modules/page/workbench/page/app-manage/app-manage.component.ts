@@ -130,9 +130,7 @@ export class AppManageComponent implements OnInit {
               icon: 'edit',
               action: (row, event) => {
                 event.stopPropagation();
-                this.router.navigate(['/design'], {
-                  queryParams: { appId: row.id },
-                });
+                this.router.navigate(['/design', row.id]);
               },
             },
             {

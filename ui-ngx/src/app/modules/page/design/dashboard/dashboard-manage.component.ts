@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
 import { WidgetFolderComponent } from '../widget/widget-folder.component';
@@ -8,6 +8,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { DashboardToolbarComponent } from './dashboard-toolbar.component';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
+import { getParamFromRoute } from '@src/app/core/utils';
 
 @Component({
   selector: 'hs-dashboard-manage',
@@ -25,11 +28,36 @@ import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.comp
   ],
 })
 export class DashboardManageComponent implements OnInit {
-  shouldRun = /(^|.)(stackblitz|webcontainer).(io|com)$/.test(
-    window.location.host,
-  );
+  appId: string | null = getParamFromRoute('appId', this.route);
+  fileId: string;
 
-  constructor(private widgetEditorService: WidgetEditorService) {}
+  treeConfig = signal<IFileTreeConfig>({
+    featureList: [
+      'createFile',
+      'createFolder',
+      'rename',
+      'remove',
+      'copy',
+      'cut',
+      'paste',
+      'dnd',
+      'blank',
+      'search',
+    ],
+    deleteEvent: async (node, jsTree) => {
+      return true;
+    },
+    selectEvent: (node, jsTree) => {
+      if (node) {
+        this.fileId = node.id;
+      }
+    },
+  });
+
+  constructor(
+    private widgetEditorService: WidgetEditorService,
+    private route: ActivatedRoute,
+  ) {}
 
   get widgetConfig() {
     return this.widgetEditorService.currentWidgetConfig();

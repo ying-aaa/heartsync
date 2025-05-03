@@ -1,3 +1,5 @@
+<!-- {{ dbClickNode | json }} -->
+
 <mat-form-field class="example-form-field w-full hs-density--5 mb-12px">
   <!-- <mat-label>搜索你的文件</mat-label> -->
   <input
@@ -34,7 +36,7 @@
       #jsTreeContainer
       class="min-h-200px"
     ></div>
-
+    <!-- [cdkContextMenuTriggerFor]="innerMenu" -->
     @let treeDataLength = treeInstance?.jstree(true).get_json('#').length;
     @let is_loading = treeInstance?.jstree(true).is_loading('#');
     @if (treeInstance && !treeDataLength && !is_loading) {
@@ -47,3 +49,45 @@
     }
   </div>
 </ng-scrollbar>
+
+<ng-template #ContentMenu>
+  <style>
+    #hs-context-menu {
+      background-color: var(--base-bg-color);
+      border: 1px solid var(--base-color-10);
+      li:hover {
+        background-color: var(--base-color-10);
+      }
+    }
+  </style>
+  <ul
+    role="menu"
+    id="hs-context-menu"
+    data-popover="profile-menu"
+    data-popover-placement="bottom"
+    class="absolute z-10 min-w-[180px] overflow-auto rounded-lg border border-slate-200 p-1.5 shadow-lg shadow-sm focus:outline-none"
+  >
+    @for (menu of contextMenu; track $index) {
+      <li
+        role="menuitem"
+        (click)="menu.action()"
+        class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
+      >
+        @if (menu.matIcon) {
+          <mat-icon class="color-#2c7eac w-20px! h-20px! text-20px">{{
+            menu.icon
+          }}</mat-icon>
+        } @else {
+          <hs-svg
+            [name]="menu.icon"
+            width="16px"
+            height="16px"
+            containerClass="p-2px"
+          ></hs-svg>
+        }
+
+        <p class="font-medium ml-2">{{ menu.label }}</p>
+      </li>
+    }
+  </ul>
+</ng-template>

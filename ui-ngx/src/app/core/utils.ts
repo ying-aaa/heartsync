@@ -1,4 +1,5 @@
 import { Renderer2 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { IAnyPropObj } from '@shared/models/common-component';
 
 /** 判断一个值是否为 Object
@@ -326,4 +327,24 @@ export function pick(obj: IAnyPropObj, keys: Array<string>) {
   });
 
   return result;
+}
+
+export function getParamFromRoute(
+  paramName: string,
+  route: ActivatedRoute,
+): string | null {
+  let currentRoute: ActivatedRoute | null = route;
+
+  while (currentRoute) {
+    // 同时检查路径参数和查询参数
+    const paramValue =
+      currentRoute.snapshot.paramMap.get(paramName) ||
+      currentRoute.snapshot.queryParamMap.get(paramName);
+
+    if (paramValue !== null) return paramValue;
+
+    currentRoute = currentRoute.parent;
+  }
+
+  return null;
 }

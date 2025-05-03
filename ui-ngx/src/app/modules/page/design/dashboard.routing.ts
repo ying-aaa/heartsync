@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 
 export default [
-  { path: '', redirectTo: 'resource', pathMatch: 'full' },
+  { path: '', redirectTo: '', pathMatch: 'full' },
   {
     title: '仪表版资源',
-    path: 'resource',
+    path: '',
     loadComponent: () =>
       import('./dashboard/dashboard-manage.component').then(
         (m) => m.DashboardManageComponent,
