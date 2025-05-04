@@ -53,6 +53,7 @@ declare const $: any;
 })
 export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('jsTreeContainer', { static: false }) jstreeContainer: ElementRef;
+  @ViewChild('NgScrollbar', { static: false }) ngScrollbar: ElementRef;
   @ViewChild('ContentMenu') contentMenuTemplate!: TemplateRef<any>;
 
   private overlayRef!: OverlayRef;
@@ -80,7 +81,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     mode: null, // 'copy' 或 'cut'
   };
 
-  customContextMenu1 = {
+  customContextMenu = {
     createFile: {
       label: '添加文件',
       icon: 'file',
@@ -143,6 +144,8 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     },
   };
+
+  jsTreeContainerStyle: any = {};
 
   constructor(
     private scriptLoaderService: ScriptLoaderService,
@@ -407,14 +410,14 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     let menus: any = {};
     if (node) {
       if (node.type === 'file') {
-        menus = pick(this.customContextMenu1, [
+        menus = pick(this.customContextMenu, [
           'rename',
           'remove',
           'copy',
           'cut',
         ]);
       } else {
-        menus = pick(this.customContextMenu1, [
+        menus = pick(this.customContextMenu, [
           'createFile',
           'createFolder',
           'rename',
@@ -425,7 +428,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         ]);
       }
     } else {
-      menus = pick(this.customContextMenu1, [
+      menus = pick(this.customContextMenu, [
         'createFile',
         'createFolder',
         'paste',
@@ -594,8 +597,19 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
           this.listenToRightClick();
         },
       });
-
     this.initJsTreeFilter();
+    setTimeout(() => {
+      this.resetJsTreeContainerStyle();
+    }, 10);
+  }
+
+  public resetJsTreeContainerStyle() {
+    const { offsetWidth, offsetHeight } = this.ngScrollbar.nativeElement;
+
+    this.jsTreeContainerStyle = {
+      maxWidth: offsetWidth + 'px',
+      minHeight: offsetHeight + 'px',
+    };
   }
 
   private listenToRightClick() {
