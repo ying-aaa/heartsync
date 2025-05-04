@@ -22,6 +22,7 @@
 </mat-form-field>
 
 <!-- 过滤数量：{{ filterCount }} -->
+@let treeMinHeight = NgScrollbar.nativeElement.offsetHeight;
 <ng-scrollbar
   class="flex-1 h-0"
   #scrollbarRef="ngScrollbar"
@@ -29,12 +30,14 @@
   visibility="hover"
   appearance="compact"
   orientation="auto"
+  #NgScrollbar
 >
   <div scrollViewport>
     <div
       id="jsTree-container"
       #jsTreeContainer
       class="min-h-200px"
+      [style.minHeight]="treeMinHeight + 'px'"
     ></div>
     <!-- [cdkContextMenuTriggerFor]="innerMenu" -->
     @let treeDataLength = treeInstance?.jstree(true).get_json('#').length;
@@ -88,6 +91,9 @@
 
         <p class="font-medium ml-2">{{ menu.label }}</p>
       </li>
+      @if (menu.divider && $index !== contextMenu.length - 1) {
+        <mat-divider class="my-3px!"></mat-divider>
+      }
     }
   </ul>
 </ng-template>

@@ -31,6 +31,7 @@ import { HsSvgModule } from '@shared/components/hs-svg/hs-svg.module';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
 
 declare const $: any;
 
@@ -42,11 +43,12 @@ declare const $: any;
     HsSvgModule,
     CommonModule,
     MatIconModule,
-    ReactiveFormsModule,
-    MatInputModule,
     MatIconModule,
+    MatInputModule,
     MatButtonModule,
+    MatDividerModule,
     NgScrollbarModule,
+    ReactiveFormsModule,
   ],
 })
 export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -89,6 +91,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     createFolder: {
       label: '添加目录',
       icon: 'folder-close',
+      divider: true,
       action: (data: any) => {
         this.createNode('folder', this.dbClickNode);
       },
@@ -104,6 +107,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     remove: {
       label: '删除',
       icon: 'remove',
+      divider: true,
       action: async (data: any) => {
         this.removeNode(this.dbClickNode);
         this.closeMenu();
@@ -333,6 +337,8 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     const inst = this.treeInstance.jstree(true);
     const selected = inst.get_selected();
 
+    const node = inst.get_node(selected[0]);
+
     // 只处理当有节点被选中时的Ctrl组合键
     if (selected.length === 0) return;
 
@@ -340,8 +346,6 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     if (e.key === 'Delete' && this.includesFeature('remove')) {
       // Delete键
       e.preventDefault();
-      const node = inst.get_node(selected[0]);
-
       this.removeNode(node);
       return;
     }
@@ -349,21 +353,18 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     // Ctrl+C - 复制
     if (e.ctrlKey && e.key === 'c' && this.includesFeature('copy')) {
       e.preventDefault();
-      this.clipboard.node = inst.get_node(selected[0]);
-      this.clipboard.mode = 'copy';
+      this.copyNode(node);
     }
     // Ctrl+X - 剪切
     else if (e.ctrlKey && e.key === 'x' && this.includesFeature('cut')) {
       e.preventDefault();
-      this.clipboard.node = inst.get_node(selected[0]);
-      this.clipboard.mode = 'cut';
+      this.cutNode(node);
     }
     // Ctrl+V - 粘贴
     else if (e.ctrlKey && e.key === 'v' && this.includesFeature('paste')) {
       e.preventDefault();
       if (!this.clipboard.node) return;
       const InNodeId = selected[0];
-      // if (InNodeId === this.clipboard.node.parent) return;
       this.pasteNode(InNodeId);
     }
   }
@@ -529,8 +530,8 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fileTreeService.moveNode(id, treeData).subscribe({
       next: (res) => {
         this.dbClickNode = null;
+        inst.open_node(parentId);
         node.original.parentId = parentId;
-
         this._snackBar.open(`移动成功`, '确定', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
