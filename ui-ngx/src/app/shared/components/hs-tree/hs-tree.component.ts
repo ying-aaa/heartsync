@@ -86,6 +86,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       icon: 'file',
       action: (data: any) => {
         this.createNode('file', this.dbClickNode);
+        this.closeMenu();
       },
     },
     createFolder: {
@@ -94,6 +95,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       divider: true,
       action: (data: any) => {
         this.createNode('folder', this.dbClickNode);
+        this.closeMenu();
       },
     },
     rename: {
@@ -210,14 +212,44 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         return plugins;
       })(),
       sort: function (a: any, b: any) {
-        // 获取两个节点的文本内容
-        const aText = this.get_node(a).text.toLowerCase();
-        const bText = this.get_node(b).text.toLowerCase();
+        const getNodeText = (node: any) =>
+          this.get_node(node).text.toLowerCase();
+        const aText = getNodeText(a);
+        const bText = getNodeText(b);
 
-        // 按字母顺序排序
-        if (aText < bText) return -1;
-        if (aText > bText) return 1;
-        return 0;
+        // 自然排序比较函数
+        const naturalCompare = (aStr: any, bStr: any) => {
+          // 使用正则拆分数字和非数字部分
+          const tokenize = (str: string) => str.match(/(\d+)|(\D+)/g) || [];
+          const aTokens = tokenize(aStr);
+          const bTokens = tokenize(bStr);
+
+          // 逐块比较
+          for (let i = 0; i < Math.max(aTokens.length, bTokens.length); i++) {
+            const aToken = aTokens[i] || '';
+            const bToken = bTokens[i] || '';
+
+            // 尝试解析为数字
+            const aNum = parseInt(aToken, 10);
+            const bNum = parseInt(bToken, 10);
+
+            // 处理数字比较
+            if (!isNaN(aNum) && !isNaN(bNum)) {
+              if (aNum !== bNum) return aNum - bNum;
+            }
+            // 处理文本比较（使用本地化排序）
+            else {
+              const compareResult = aToken.localeCompare(bToken, undefined, {
+                numeric: true,
+                sensitivity: 'base',
+              });
+              if (compareResult !== 0) return compareResult;
+            }
+          }
+          return 0; // 所有块相等
+        };
+
+        return naturalCompare(aText, bText);
       },
     });
 
