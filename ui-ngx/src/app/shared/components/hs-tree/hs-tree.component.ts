@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   computed,
+  effect,
   ElementRef,
   HostListener,
   input,
@@ -154,7 +155,18 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     private _snackBar: MatSnackBar,
     private overlay: Overlay,
     private vcRef: ViewContainerRef,
-  ) {}
+  ) {
+    // 创建 Effect 来监听 businessId 或 businessKey 的变化
+    effect(() => {
+      const currentBusinessId = this.businessId();
+      const currentBusinessKey = this.businessKey();
+
+      // 可以在这里添加逻辑，比如检查是否两个值都已设置
+      if (currentBusinessId !== null && currentBusinessKey !== null) {
+        this.refreshTree();
+      }
+    });
+  }
 
   includesFeature(feature: ITreeFeatureList) {
     return this.featureList().includes(feature);
@@ -554,7 +566,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     inst.move_node(node, parentId, 'last');
   }
 
-  public moveNode(parentId: string) {
+  moveNode(parentId: string) {
     const inst = this.treeInstance.jstree(true);
     const node = this.clipboard.node;
     const { id } = node;
@@ -588,6 +600,12 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         inst.move_node(node, node.original?.parentId || '#', 'last');
       },
     });
+  }
+
+  public refreshTree() {
+    const inst = this.treeInstance;
+
+    inst && inst.jstree('refresh');
   }
 
   ngOnInit() {}
