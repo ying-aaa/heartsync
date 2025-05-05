@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 
 export default [
-  { path: '', redirectTo: 'resource', pathMatch: 'full' },
+  { path: '', redirectTo: '', pathMatch: 'full' },
   {
     title: '部件资源',
-    path: 'resource',
+    path: '',
     loadComponent: () =>
       import('./widget/widget-manage.component').then(
         (m) => m.WidgetManageComponent,

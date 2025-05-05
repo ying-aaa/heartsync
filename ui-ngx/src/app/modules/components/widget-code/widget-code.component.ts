@@ -33,11 +33,11 @@ import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.modul
 })
 export class WidgetCodeComponent implements OnInit {
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef })
+  widgetId = input<string>();
+
   dynamicComponentContainer: ViewContainerRef;
 
   fullscreen = false;
-
-  widgetId = input<string>();
 
   widgetInfo = signal<ICodeWidgetConfig>({} as ICodeWidgetConfig);
 

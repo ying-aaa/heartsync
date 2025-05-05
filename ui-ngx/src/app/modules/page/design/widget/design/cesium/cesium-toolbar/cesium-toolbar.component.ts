@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
 import { IRadioConfig } from '@src/app/shared/models/public-api';
+import { WidgetTitleBackComponent } from '../../widget-title-back.component';
 const toolbarConfigs: IRadioConfig[] = [
   {
     label: '底图',
@@ -54,7 +55,12 @@ const toolbarConfigs: IRadioConfig[] = [
 @Component({
   selector: 'hs-cesium-toolbar',
   templateUrl: './cesium-toolbar.component.html',
-  imports: [MatButtonModule, MatIconModule, HsRadioComponent],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    HsRadioComponent,
+    WidgetTitleBackComponent,
+  ],
 })
 export class CesiumToolbarComponent implements OnInit {
   toolbarConfigs = toolbarConfigs;

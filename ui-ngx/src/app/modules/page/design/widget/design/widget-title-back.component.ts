@@ -1,44 +1,37 @@
 import { Component, computed, OnInit } from '@angular/core';
-import { MatTabsModule } from '@angular/material/tabs';
-import { PresetComponentsComponent } from '@src/app/modules/page/common/preset-components/preset-components.component';
-import { WidgetOutlineComponent } from './widget-outline/widget-outline.component';
-import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { PresetComponentsComponent } from '../../../common/preset-components/preset-components.component';
+import { WidgetOutlineComponent } from './form/workspace-contorl/widget-outline/widget-outline.component';
 import {
   flatWidgetTypesList,
   WidgetEditorService,
-} from '@app/core/services/widget-editor.service';
-import { MatButtonModule } from '@angular/material/button';
-import { FormEditorService } from '@app/core/services/form-editor.service';
-import { MatTooltipModule } from '@angular/material/tooltip';
+} from '@src/app/core/services/widget-editor.service';
+import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { Router } from '@angular/router';
 import { matchSubstring } from '@src/app/core/utils';
-import { WidgetTitleBackComponent } from '../../widget-title-back.component';
 
 @Component({
-  selector: 'hs-workspace-contorl',
-  templateUrl: './workspace-contorl.component.html',
-  styleUrls: ['./workspace-contorl.component.less'],
+  selector: 'hs-widget-title-back',
+  templateUrl: './widget-title-back.component.html',
   imports: [
     MatTabsModule,
     MatIconModule,
-    PresetComponentsComponent,
-    WidgetOutlineComponent,
     MatDividerModule,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    WidgetTitleBackComponent,
   ],
 })
-export class WorkspaceContorlComponent implements OnInit {
+export class WidgetTitleBackComponent implements OnInit {
   constructor(
     public widgetEditorService: WidgetEditorService,
     public formEditorService: FormEditorService,
     private router: Router,
   ) {}
-
-  ngOnInit() {}
 
   activeWidgetTypeName = computed(() =>
     flatWidgetTypesList.get(this.widgetEditorService.currentWidgetType()),
@@ -53,4 +46,6 @@ export class WorkspaceContorlComponent implements OnInit {
     const toUrl = matchSubstring(currentUrl, '/design', '/widget');
     this.router.navigate([toUrl]);
   }
+
+  ngOnInit() {}
 }

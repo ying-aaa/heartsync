@@ -40,7 +40,9 @@ export class WidgetViewportComponent {
   toWidgetDesign() {
     const widgetId = this.widgetEditorService.currentWidgetId();
     const widgetType = this.widgetEditorService.currentWidgetType();
-    this.router.navigate([`/design/widget/${widgetType}`], {
+    const currentUrl = this.router.url;
+
+    this.router.navigate([`${currentUrl}/${widgetType}`], {
       queryParams: { widgetId },
     });
   }

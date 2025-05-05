@@ -348,3 +348,34 @@ export function getParamFromRoute(
 
   return null;
 }
+
+/**
+ * 从字符串中匹配指定开头字符串和指定结尾字符串之间的子字符串（包括开头和结尾字符串）。
+ * @param {string} str - 需要匹配的源字符串。
+ * @param {string} startStr - 指定的开头字符串。
+ * @param {string} endStr - 指定的结尾字符串。
+ * @returns {string} - 匹配到的子字符串，如果没有匹配到则返回空字符串。
+ */
+export function matchSubstring(str: string, startStr: string, endStr: string) {
+  // 找到第一个匹配的开头字符串的位置
+  const startIndex = str.indexOf(startStr);
+
+  // 如果没有找到开头字符串，返回空字符串
+  if (startIndex === -1) {
+    return '';
+  }
+
+  // 计算结尾字符串的起始位置（从开头字符串的下一个字符开始）
+  const endSearchStart = startIndex + startStr.length;
+
+  // 从 endSearchStart 位置开始，找到第一个匹配的结尾字符串的位置
+  const endIndex = str.indexOf(endStr, endSearchStart);
+
+  // 如果没有找到结尾字符串，返回空字符串
+  if (endIndex === -1) {
+    return '';
+  }
+
+  // 返回匹配的子字符串（包括开头字符串和结尾字符串）
+  return str.substring(startIndex, endIndex + endStr.length);
+}

@@ -1,23 +1,7 @@
 <content
   class="px-16px flex items-center justify-between h-40px line-height-40px bg-##a7c1de"
 >
-  <div class="flex-center gap-8px">
-    <button
-      matSuffix
-      mat-icon-button
-      (click)="toWidgetManage()"
-      [matTooltip]="'返回部件管理'"
-    >
-      <mat-icon class="material-icons-round">arrow_back </mat-icon>
-    </button>
-
-    <span
-      class="w-180px truncate"
-      [matTooltip]="'XXX部件'"
-    >
-      XXX部件
-    </span>
-  </div>
+  <hs-widget-title-back></hs-widget-title-back>
 
   <div class="flex-center gap-8px">
     <button

@@ -1,31 +1,6 @@
-<div class="line-height-24px h-24px mb-12px relative">
-  <button
-    matSuffix
-    mat-icon-button
-    aria-label="Clear"
-    (click)="toWidgetManage()"
-    [matTooltip]="'返回部件管理'"
-    class="absolute! top-50% left-3px -translate-y-50%"
-  >
-    <mat-icon
-      class="material-icons-round"
-      matChipAvatar
-      >arrow_back
-    </mat-icon>
-  </button>
-
-  <div class="pl-50px flex">
-    <span class="text-20px font-bold mr-8px"
-      >{{ activeWidgetTypeName() }} :</span
-    >
-    <div
-      [matTooltip]="activeWidgetName()"
-      class="text-16px truncate flex-1 w-0 mt-1px"
-    >
-      {{ activeWidgetName() }}
-    </div>
-  </div>
-</div>
+<header class="mb-12px">
+  <hs-widget-title-back></hs-widget-title-back>
+</header>
 <mat-divider class="w-full mb-10px!"></mat-divider>
 
 <!-- class - mat-tab-item3-full -->
