@@ -12,7 +12,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormEditorService } from '@app/core/services/form-editor.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { matchSubstring } from '@src/app/core/utils';
 import { WidgetTitleBackComponent } from '../../widget-title-back.component';
 
 @Component({
@@ -47,10 +46,4 @@ export class WorkspaceContorlComponent implements OnInit {
   activeWidgetName = computed(() => {
     return this.widgetEditorService.currentWidgetConfig().workspaceName;
   });
-
-  toWidgetManage() {
-    const currentUrl = this.router.url;
-    const toUrl = matchSubstring(currentUrl, '/design', '/widget');
-    this.router.navigate([toUrl]);
-  }
 }

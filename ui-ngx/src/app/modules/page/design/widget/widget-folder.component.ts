@@ -78,7 +78,6 @@ export class WidgetFolderComponent implements OnInit {
   treeConfig = signal<IFileTreeConfig>({
     featureList: [
       'createFile',
-      'createFolder',
       'rename',
       'remove',
       'copy',
@@ -94,6 +93,7 @@ export class WidgetFolderComponent implements OnInit {
     selectEvent: (node, jsTree) => {
       if (node) {
         this.widgetId = node.id;
+        this.widgetEditorService.setWidgetId(this.widgetId);
       }
     },
   });

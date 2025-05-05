@@ -51,16 +51,16 @@ export class WidgetEditorService {
 
   setWidgetId(widgetId: string) {
     this.currentWidgetId.set(widgetId);
-    this.updateProductId(widgetId);
+    // this.updateProductId(widgetId);
     this.getWidgetConfig(widgetId);
   }
 
-  updateProductId(widgetId: string) {
-    if (!widgetId) return;
-    const currentPath = this.location.path().split('?')[0];
-    const newUrl = `${currentPath}?widgetId=${widgetId}`;
-    this.location.go(newUrl);
-  }
+  // updateProductId(widgetId: string) {
+  //   if (!widgetId) return;
+  //   const currentPath = this.location.path().split('?')[0];
+  //   const newUrl = `${currentPath}?widgetId=${widgetId}`;
+  //   this.location.go(newUrl);
+  // }
 
   getWidgetConfig(widgetId: string) {
     widgetId = widgetId || this.currentWidgetId();
