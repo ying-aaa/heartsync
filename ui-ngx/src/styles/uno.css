@@ -276,6 +276,7 @@
 .text-20px{font-size:20px;}
 .text-22px{font-size:22px;}
 .text-24px{font-size:24px;}
+.text-28px{font-size:28px;}
 .text-28px\!{font-size:28px !important;}
 .text-32px{font-size:32px;}
 .text-36px{font-size:36px;}
@@ -304,6 +305,7 @@
 .line-height-36px{line-height:36px;}
 .line-height-40px{line-height:40px;}
 .line-height-50px{line-height:50px;}
+.line-height-64px{line-height:64px;}
 .tracking-0{letter-spacing:0;}
 .line-through\!{text-decoration-line:line-through !important;}
 .tab{-moz-tab-size:4;-o-tab-size:4;tab-size:4;}

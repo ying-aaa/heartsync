@@ -24,8 +24,11 @@ import { SvgService } from '@src/app/core/http/svg.service';
         [class]="svgClass"
         [style]="svgStyle"
       ></div>
-
-      <div class="text-center">{{ title }}</div>
+      @if (title) {
+        <div class="text-center">{{ title }}</div>
+      } @else {
+        <ng-content></ng-content>
+      }
     </div>
   `,
   standalone: false,
