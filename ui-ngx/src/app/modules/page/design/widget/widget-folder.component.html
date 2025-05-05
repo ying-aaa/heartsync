@@ -1,11 +1,20 @@
-<div class="w-full overflow-hidden mb-12px">
-  <hs-radio
-    [configs]="widgetTypesList"
-    [rows]="2"
-    [(ngModel)]="widgetEditorService.currentWidgetType"
-  ></hs-radio>
-</div>
+<content class="h-full flex flex-col">
+  <div class="w-full overflow-hidden mb-12px">
+    <hs-radio
+      [configs]="widgetTypesList"
+      [rows]="2"
+      [(ngModel)]="widgetEditorService.currentWidgetType"
+    ></hs-radio>
+  </div>
 
-<div class="pb-10px">
-  <hs-fancytree [config]="treeConfig()"></hs-fancytree>
-</div>
+  <div class="flex-1 h-0">
+    <!-- <hs-fancytree [config]="treeConfig()"></hs-fancytree> -->
+    @if (appId) {
+      <hs-tree
+        [businessId]="appId"
+        [businessKey]="businessKey()"
+        [treeConfig]="treeConfig()"
+      ></hs-tree>
+    }
+  </div>
+</content>

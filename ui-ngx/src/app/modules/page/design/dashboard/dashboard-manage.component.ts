@@ -29,6 +29,7 @@ import { getParamFromRoute } from '@src/app/core/utils';
 })
 export class DashboardManageComponent implements OnInit {
   appId: string | null = getParamFromRoute('appId', this.route);
+  businessKey = 'dashboard';
   fileId: string;
 
   treeConfig = signal<IFileTreeConfig>({

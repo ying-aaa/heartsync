@@ -59,6 +59,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   private overlayRef!: OverlayRef;
 
   businessId = input.required<string>();
+  businessKey = input<string>();
   treeConfig = input.required<IFileTreeConfig>();
 
   featureList = computed(() => this.treeConfig().featureList);
@@ -182,7 +183,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         data: (node: any, callback: any) => {
           this.fileTreeService
-            .getEntireTree(this.businessId())
+            .getEntireTree(this.businessId(), this.businessKey())
             .pipe(delay(0))
             .subscribe({
               next(responseData) {
@@ -271,14 +272,15 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
           name,
           type,
           businessId: this.businessId(),
+          businessKey: this.businessKey(),
         };
         if (parentId !== '#') {
           nodeData.parentId = parentId;
         }
         this.fileTreeService.createNode(nodeData).subscribe({
-          next: (res) => {
-            this.treeInstance.jstree().set_id(tempNode, res.id); // 替换临时ID为正式ID
-            tempNode.original = res.data;
+          next: (data) => {
+            this.treeInstance.jstree().set_id(tempNode, data.id); // 替换临时ID为正式ID
+            tempNode.original = data;
             this.treeInstance.jstree().deselect_all(); // 清除历史选中
             this.treeInstance.jstree().select_node(tempNode, false, false); // true 表示聚焦
 
@@ -323,7 +325,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     // 移动节点
     this.treeInstance.on('move_node.jstree', (e: Event, data: any) => {
       // 向已有父目录调用移动时，无法调用接口
-      if (data.node.parent === (data.node.original.parentId || '#')) return;
+      if (data.node.parent === (data.node.original?.parentId || '#')) return;
 
       this.clipboard.node = data.node;
       this.moveNode(data.node.parent);
@@ -513,6 +515,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         name: text,
         type,
         businessId: this.businessId(),
+        businessKey: this.businessKey(),
       };
       if (parentId !== '#') {
         treeData.parentId = parentId;
@@ -557,6 +560,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     const { id } = node;
     const treeData: MoveNodeDto = {
       businessId: this.businessId(),
+      businessKey: this.businessKey(),
     };
     if (parentId !== '#') {
       treeData.newParentId = parentId;
@@ -566,7 +570,9 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (res) => {
         this.dbClickNode = null;
         inst.open_node(parentId);
-        node.original.parentId = parentId;
+        if (node.original) {
+          node.original.parentId = parentId;
+        }
         this._snackBar.open(`移动成功`, '确定', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -579,7 +585,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
           verticalPosition: 'top',
           duration: 3 * 1000,
         });
-        inst.move_node(node, node.original.parentId || '#', 'last');
+        inst.move_node(node, node.original?.parentId || '#', 'last');
       },
     });
   }

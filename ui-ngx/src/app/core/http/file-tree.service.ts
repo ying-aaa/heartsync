@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface CreateNodeDto {
   businessId: string;
+  businessKey?: string;
   parentId?: string;
   name: string;
   type: string;
@@ -18,6 +19,7 @@ export interface UpdateNodeDto {
 export interface MoveNodeDto {
   newParentId?: string;
   businessId: string;
+  businessKey?: string;
   newName?: string;
 }
 
@@ -50,13 +52,27 @@ export class FileTreeService {
   }
 
   // 获取整个树结构
-  getEntireTree(businessId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/tree`, { params: { businessId } });
+  getEntireTree(businessId: string, businessKey?: string): Observable<any> {
+    const params: any = { businessId };
+    if (businessKey) {
+      params.businessKey = businessKey;
+    }
+    return this.http.get(`${this.apiUrl}/tree`, {
+      params,
+    });
   }
 
   // 获取子节点列表
-  getChildren(parentId?: number, businessId?: string): Observable<any> {
-    const params = { parentId: parentId?.toString(), businessId };
+  getChildren(
+    parentId?: number,
+    businessId?: string,
+    businessKey?: string,
+  ): Observable<any> {
+    const params = {
+      parentId: parentId?.toString(),
+      businessId,
+      businessKey,
+    };
     // @ts-ignore
     return this.http.get(`${this.apiUrl}/children`, { params });
   }
