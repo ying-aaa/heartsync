@@ -11,6 +11,9 @@ export class HsFileNode extends HsBaseEntity {
   @Column({ length: 50 })
   businessId: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  businessKey?: string;
+
   @Column({ nullable: true })
   parentId: string;
 

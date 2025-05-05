@@ -42,6 +42,7 @@ export class HsFileTreeService {
       const existing = await manager.findOne(HsFileNode, {
         where: {
           businessId: dto.businessId,
+          businessKey: dto.businessKey ?? IsNull(),
           parentId: dto.parentId ?? IsNull(),
           name: dto.name,
           type: dto.type,
@@ -79,6 +80,7 @@ export class HsFileTreeService {
         const existing = await manager.findOne(HsFileNode, {
           where: {
             businessId: node.businessId,
+            businessKey: node.businessKey || IsNull(),
             parentId: node.parentId || IsNull(),
             name: dto.name,
           },
@@ -116,6 +118,7 @@ export class HsFileTreeService {
       const existing = await manager.findOne(HsFileNode, {
         where: {
           businessId: dto.businessId,
+          businessKey: dto.businessKey || IsNull(),
           parentId: dto.newParentId ?? IsNull(),
           name: node.name,
         },
@@ -158,10 +161,10 @@ export class HsFileTreeService {
     });
   }
 
-  async getEntireTree(businessId: string): Promise<any[]> {
+  async getEntireTree(BusinessParams: object): Promise<any[]> {
     // 获取所有节点（按父级排序优化树构建）
     const allNodes = await this.repo.find({
-      where: { businessId },
+      where: BusinessParams,
       order: { parentId: 'ASC' },
     });
 
@@ -181,11 +184,11 @@ export class HsFileTreeService {
 
   async getChildren(
     parentId: string | null,
-    businessId: string,
+    BusinessParams: object,
   ): Promise<HsFileNode[]> {
     return this.repo.find({
       where: {
-        businessId,
+        ...BusinessParams,
         parentId: parentId ?? null,
       },
       order: {

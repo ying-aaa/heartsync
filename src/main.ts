@@ -27,9 +27,9 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new ResponseInterceptor()); // 全局应用拦截器
 
-  // 设置请求体大小限制为 100MB
-  app.use(bodyParser.json({ limit: '100mb' }));
-  app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+  // 设置请求体大小限制为 1gb
+  app.use(bodyParser.json({ limit: '1gb' }));
+  app.use(bodyParser.urlencoded({ limit: '1gb', extended: true }));
   await app.listen(3000);
 }
 bootstrap();

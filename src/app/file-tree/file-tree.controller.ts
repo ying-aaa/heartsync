@@ -13,7 +13,7 @@ import { HsFileTreeService } from './file-tree.service';
 import { CreateNodeDto } from './dto/create-node.dto';
 import { UpdateNodeDto } from './dto/update-node.dto';
 import { MoveNodeDto } from './dto/move-node.dto';
-import { BusinessId } from 'src/decorators/business-id.decorator';
+import { BusinessParams } from 'src/decorators/business-params.decorator';
 
 @Controller('nodes')
 // @UseGuards(BusinessGuard)
@@ -75,8 +75,13 @@ export class HsFileTreeController {
   }
 
   @Get('/tree')
-  getEntireTree(@BusinessId() businessId: string) {
-    return this.service.getEntireTree(businessId);
+  getEntireTree(@BusinessParams() BusinessParams: object) {
+    console.log(
+      '%c Line:79 🥝 BusinessParams',
+      'color:#3f7cff',
+      BusinessParams,
+    );
+    return this.service.getEntireTree(BusinessParams);
   }
 
   /**
@@ -87,8 +92,9 @@ export class HsFileTreeController {
   @Get('/children')
   getChildren(
     @Query('parentId') parentId: string,
-    @BusinessId() businessId: string,
+    @BusinessParams() BusinessParams: object,
   ) {
-    return this.service.getChildren(parentId ? parentId : null, businessId);
+    console.log('%c Line:92 🌶', 'color:#2eafb0', BusinessParams);
+    return this.service.getChildren(parentId ? parentId : null, BusinessParams);
   }
 }

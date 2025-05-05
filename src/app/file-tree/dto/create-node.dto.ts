@@ -8,6 +8,10 @@ export class CreateNodeDto {
 
   @IsString()
   @IsOptional()
+  businessKey: string;
+
+  @IsString()
+  @IsOptional()
   parentId?: string;
 
   @IsString()
