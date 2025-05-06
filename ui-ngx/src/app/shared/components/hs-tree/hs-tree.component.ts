@@ -296,6 +296,9 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
             this.treeInstance.jstree().deselect_all(); // 清除历史选中
             this.treeInstance.jstree().select_node(tempNode, false, false); // true 表示聚焦
 
+            const createNodeSuccess = this.treeConfig().createNodeSuccess;
+            createNodeSuccess && createNodeSuccess(tempNode, this.treeInstance);
+
             this._snackBar.open(`创建成功`, '确定', {
               horizontalPosition: 'center',
               verticalPosition: 'top',
@@ -315,6 +318,9 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         const { id, text: name } = data.node;
         this.fileTreeService.updateNode(id, { name }).subscribe({
           next: (res) => {
+            const renameNodeSuccess = this.treeConfig().renameNodeSuccess;
+            renameNodeSuccess && renameNodeSuccess(tempNode, this.treeInstance);
+
             this._snackBar.open(`修改成功`, '确定', {
               horizontalPosition: 'center',
               verticalPosition: 'top',
@@ -481,6 +487,11 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fileTreeService.deleteNode(node.id).subscribe({
       next: () => {
         inst.delete_node(node);
+
+        const createNodeSuccess = this.treeConfig().createNodeSuccess;
+        createNodeSuccess && createNodeSuccess(node, this.treeInstance);
+
+
         this._snackBar.open('删除成功！', '确定', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -539,6 +550,9 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
           newNode.original = res;
           this.treeInstance.jstree().deselect_all(); // 清除历史选中
           this.treeInstance.jstree().select_node(newNode, false, false); // true 表示聚焦
+
+          const createNodeSuccess = this.treeConfig().createNodeSuccess;
+          createNodeSuccess && createNodeSuccess(newNode, this.treeInstance);
 
           this._snackBar.open(`粘贴成功`, '确定', {
             horizontalPosition: 'center',
