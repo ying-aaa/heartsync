@@ -53,6 +53,18 @@ export class DashboardManageComponent implements OnInit {
         this.fileId = node.id;
       }
     },
+    renameNodeSuccess: (node, jsTree) => {
+      console.log("%c Line:57 🧀 node, jsTree", "color:#42b983", node, jsTree);
+    },
+    createNodeSuccess: (node, jsTree) => {
+      console.log("%c Line:57 🧀 node, jsTree", "color:#42b983", node, jsTree);
+    },
+    copyPasteNodeSuccess: (node, jsTree) => {
+      console.log("%c Line:57 🧀 node, jsTree", "color:#42b983", node, jsTree);
+    },
+    deleteNodeSuccess: (node, jsTree) => {
+      console.log("%c Line:57 🧀 node, jsTree", "color:#42b983", node, jsTree);
+    },
   });
 
   constructor(
