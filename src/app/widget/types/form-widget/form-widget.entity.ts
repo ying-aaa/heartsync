@@ -1,6 +1,6 @@
 // src/modules/form/entities/form-widget.entity.ts
-import { Entity, Column } from 'typeorm';
-import { HsBaseWidgetEntity } from '../base-widget.entity';
+import { Column, Entity } from 'typeorm';
+import { HsBaseEntity } from 'src/common/entities/base.entity';
 
 export enum IFormSubTypes {
   FLAT = 'flat', // 网格布局
@@ -34,34 +34,44 @@ export interface IFormLogicConfig {}
 export interface IFormButtonConfig {}
 
 @Entity()
-export class HsFormWidget extends HsBaseWidgetEntity {
-  @Column({ type: 'varchar', nullable: false })
+export class HsFormWidget extends HsBaseEntity {
+  @Column({ name: 'form_name', type: 'varchar', nullable: false })
   formName: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ name: 'edit_name', type: 'varchar', nullable: true })
   editName?: string;
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column({ name: 'sub_type', type: 'simple-json', nullable: true })
   subType?: IFormSubTypes;
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column({ name: 'form_style', type: 'simple-json', nullable: true })
   formStyle?: IFormStyle;
 
-  @Column({ type: 'simple-json', nullable: true, default: [] })
+  @Column({
+    name: 'flat_type_field',
+    type: 'simple-json',
+    nullable: true,
+    default: [],
+  })
   flatTypeField: IEditorFormlyField;
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column({ name: 'canvas_type_field', type: 'simple-json', nullable: true })
   canvasTypeField?: IEditorFormlyField;
 
-  @Column({ type: 'boolean', nullable: false, default: false })
+  @Column({
+    name: 'is_use_flow',
+    type: 'boolean',
+    nullable: false,
+    default: false,
+  })
   isUseFlow?: boolean;
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column({ name: 'flow_config', type: 'simple-json', nullable: true })
   flowConfig?: IFormFlowConfig;
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column({ name: 'logic_config', type: 'simple-json', nullable: true })
   logicConfig?: IFormLogicConfig;
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column({ name: 'button_config', type: 'simple-json', nullable: true })
   buttonConfig?: IFormButtonConfig;
 }

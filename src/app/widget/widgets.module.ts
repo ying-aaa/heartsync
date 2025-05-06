@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HsFormWidget } from './form-widget/form-widget.entity';
-import { HsFormWidgetsController } from './form-widget/form-widget.controller';
-import { HsFormWidgetsService } from './form-widget/form-widget.service';
-import { HsCodeWidget } from './code-wieget/code-widget.entity';
-import { HsCodeWidgetsService } from './code-wieget/code-widget.service';
-import { HsCodeWidgetsController } from './code-wieget/code-widget.controller';
+import { HsCodeWidget } from './types/code-wieget/code-widget.entity';
+import { HsCodeWidgetsService } from './types/code-wieget/code-widget.service';
+import { HsCodeWidgetsController } from './types/code-wieget/code-widget.controller';
+import { HsWidgetModule } from './widget/widget.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([HsFormWidget, HsCodeWidget])],
-  providers: [HsFormWidgetsService, HsCodeWidgetsService],
-  controllers: [HsFormWidgetsController, HsCodeWidgetsController],
+  controllers: [HsCodeWidgetsController],
+  imports: [TypeOrmModule.forFeature([HsCodeWidget]), HsWidgetModule],
+  providers: [HsCodeWidgetsService],
+  exports: [HsWidgetModule],
 })
 export class WidgetsModule {}
