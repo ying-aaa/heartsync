@@ -60,8 +60,12 @@ export class WidgetCodeComponent implements OnInit {
   public loadResourceScript() {
     const { resourceScript } = this.widgetInfo();
     const resourceUrls = resourceScript.map((item: any) => item.resourceUrl);
-    this.scriptLoaderService.loadScripts(resourceUrls).subscribe((res) => {
-      this.loadDynamicComponent();
+    this.scriptLoaderService.loadScripts(resourceUrls).subscribe({
+      next: (res) => {},
+      error: (error) => {},
+      complete: () => {
+        this.loadDynamicComponent();
+      }
     });
   }
 

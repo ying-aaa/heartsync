@@ -14,7 +14,7 @@ import {
 } from '@src/app/shared/models/public-api';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
-import { FormWidgetService } from '@src/app/core/http/widget.service';
+import { FormWidgetService } from '@src/app/core/http/form-widget.service';
 import { IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -62,7 +62,7 @@ export class WidgetFormComponent implements OnInit {
     this.formWidgetService.getFormWidgetById(widgetId as string).subscribe({
       next: (widgetConfig: IFormWidgetConfig) => {
         this.widgetConfig.set(widgetConfig);
-        this.fields.set(widgetConfig.flatTypeField as IEditorFormlyField[]);
+        this.fields.set(widgetConfig.flatTypeField as IEditorFormlyField[] || []);
         this.loadingState.set(false);
         setTimeout(() => {
           this.setOutermostLayerFieldSize();

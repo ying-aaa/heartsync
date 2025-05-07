@@ -16,7 +16,13 @@ export class ScriptLoaderService {
   }
 
   loadScripts(scripts: string[]): Observable<any> {
-    this.loadingStatus = true; // 开始加载时设置为true
+    this.loadingStatus = true; 
+
+    if (scripts.length === 0) {
+      this.loadingStatus = false; 
+      return of(null);
+    }
+
     return from(scripts).pipe(
       concatMap((script) => this.insertScriptElement(script)),
       last(),
@@ -24,9 +30,8 @@ export class ScriptLoaderService {
         this.loadingStatus = false; // 全部加载完成后设置为false
       }),
       catchError((error) => {
-        console.error('Error loading script:', error);
         this.loadingStatus = false; // 加载失败也设置为false
-        return throwError(() => new Error('Script loading failed'));
+        return throwError(() => new Error('Script loading failed', error));
       }),
     );
   }

@@ -2,7 +2,7 @@ import { computed, effect, Injectable, signal, untracked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IRadioConfig, IWidgetType } from '@src/app/shared/models/public-api';
 import { Location } from '@angular/common';
-import { FormWidgetService } from '@app/core/http/widget.service';
+import { FormWidgetService } from '@src/app/core/http/form-widget.service';
 import { IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 
 export interface IWidgetSelected {
@@ -30,46 +30,22 @@ export const flatWidgetTypesList = new Map(
 export class WidgetEditorService {
   public currentWidgetId = signal<string>('');
 
+  public currentWidgetType = signal<IWidgetType>(IWidgetType.FORM);
+
   public currentWidgetConfig = signal<IFormWidgetConfig>(
     {} as IFormWidgetConfig,
   );
 
-  public currentWidgetType = signal<IWidgetType>(IWidgetType.FORM);
-
-  constructor(
-    private route: ActivatedRoute,
-    private location: Location,
-    private formWidgetService: FormWidgetService,
-  ) {
-    this.initRouteWidget();
-  }
-
-  private initRouteWidget() {
-    const widgetId = this.route.snapshot.queryParams['widgetId'];
-    this.setWidgetId(widgetId);
+  constructor() {
+    effect(() => {
+      if(this.currentWidgetType()) {
+        this.currentWidgetId.set('');
+      }
+    })
   }
 
   setWidgetId(widgetId: string) {
+    if(widgetId === this.currentWidgetId()) return;
     this.currentWidgetId.set(widgetId);
-    // this.updateProductId(widgetId);
-    this.getWidgetConfig(widgetId);
-  }
-
-  // updateProductId(widgetId: string) {
-  //   if (!widgetId) return;
-  //   const currentPath = this.location.path().split('?')[0];
-  //   const newUrl = `${currentPath}?widgetId=${widgetId}`;
-  //   this.location.go(newUrl);
-  // }
-
-  getWidgetConfig(widgetId: string) {
-    widgetId = widgetId || this.currentWidgetId();
-    if (!widgetId) return;
-    this.formWidgetService.getFormWidgetById(widgetId).subscribe({
-      next: (widgetConfig: IFormWidgetConfig) => {
-        this.currentWidgetConfig.set(widgetConfig);
-      },
-      error: (err: any) => console.error('Get widget error:', err),
-    });
   }
 }
