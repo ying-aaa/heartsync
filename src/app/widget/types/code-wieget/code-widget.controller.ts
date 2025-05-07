@@ -18,7 +18,8 @@ export class HsCodeWidgetsController {
   async createHsCodeWidget(
     @Body() createHsCodeWidgetDto: any,
   ): Promise<HsCodeWidget> {
-    return await this.hsCodeWidgetsService.createHsCodeWidget(
+    return await this.hsCodeWidgetsService.createWidget(
+      createHsCodeWidgetDto.widgetId,
       createHsCodeWidgetDto,
     );
   }
@@ -28,24 +29,26 @@ export class HsCodeWidgetsController {
     return await this.hsCodeWidgetsService.getAllHsCodeWidgets();
   }
 
-  @Get(':id')
-  async getHsCodeWidgetById(@Param('id') id: number): Promise<HsCodeWidget> {
-    return await this.hsCodeWidgetsService.getHsCodeWidgetById(id);
+  @Get(':widgetId')
+  async getHsCodeWidgetById(
+    @Param('widgetId') widgetId: string,
+  ): Promise<HsCodeWidget> {
+    return await this.hsCodeWidgetsService.getHsCodeWidgetById(widgetId);
   }
 
-  @Put(':id')
+  @Put(':widgetId')
   async updateHsCodeWidget(
-    @Param('id') id: number,
+    @Param('widgetId') widgetId: string,
     @Body() updateHsCodeWidgetDto: any,
   ): Promise<HsCodeWidget> {
-    return await this.hsCodeWidgetsService.updateHsCodeWidget(
-      id,
+    return await this.hsCodeWidgetsService.updateWidget(
+      widgetId,
       updateHsCodeWidgetDto,
     );
   }
 
-  @Delete(':id')
-  async deleteHsCodeWidget(@Param('id') id: number): Promise<void> {
-    return await this.hsCodeWidgetsService.deleteHsCodeWidget(id);
+  @Delete(':widgetId')
+  async deleteHsCodeWidget(@Param('widgetId') widgetId: string): Promise<void> {
+    return await this.hsCodeWidgetsService.deleteWidget(widgetId);
   }
 }

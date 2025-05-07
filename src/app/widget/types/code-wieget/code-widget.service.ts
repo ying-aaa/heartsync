@@ -2,18 +2,26 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { HsCodeWidget } from './code-widget.entity';
+import { WidgetStrategy } from '../../model/widget-strategy.interface';
+import { WidgetType } from '../../entities/widget.entity';
 
 @Injectable()
-export class HsCodeWidgetsService {
+export class HsCodeWidgetsService implements WidgetStrategy {
+  type = WidgetType.CODE;
+
   constructor(
     @InjectRepository(HsCodeWidget)
     private hsCodeWidgetsRepository: Repository<HsCodeWidget>,
   ) {}
 
-  async createHsCodeWidget(createHsCodeWidgetDto: any): Promise<HsCodeWidget> {
-    const hsCodeWidget = this.hsCodeWidgetsRepository.create(
-      createHsCodeWidgetDto,
-    );
+  async createWidget(
+    widgetId: string,
+    createHsCodeWidgetDto: any,
+  ): Promise<HsCodeWidget> {
+    const hsCodeWidget = this.hsCodeWidgetsRepository.create({
+      ...createHsCodeWidgetDto,
+      widgetId,
+    });
     return await this.hsCodeWidgetsRepository.save(hsCodeWidget as any);
   }
 
@@ -21,19 +29,19 @@ export class HsCodeWidgetsService {
     return await this.hsCodeWidgetsRepository.find();
   }
 
-  async getHsCodeWidgetById(id: number): Promise<HsCodeWidget> {
-    return await this.hsCodeWidgetsRepository.findOneBy({ id });
+  async getHsCodeWidgetById(widgetId: string): Promise<HsCodeWidget> {
+    return await this.hsCodeWidgetsRepository.findOneBy({ widgetId });
   }
 
-  async updateHsCodeWidget(
-    id: number,
+  async updateWidget(
+    widgetId: string,
     updateHsCodeWidgetDto: any,
   ): Promise<HsCodeWidget> {
-    await this.hsCodeWidgetsRepository.update(id, updateHsCodeWidgetDto);
-    return await this.getHsCodeWidgetById(id);
+    await this.hsCodeWidgetsRepository.update(widgetId, updateHsCodeWidgetDto);
+    return await this.getHsCodeWidgetById(widgetId);
   }
 
-  async deleteHsCodeWidget(id: number): Promise<void> {
-    await this.hsCodeWidgetsRepository.delete(id);
+  async deleteWidget(widgetId: string): Promise<void> {
+    await this.hsCodeWidgetsRepository.delete({ widgetId });
   }
 }

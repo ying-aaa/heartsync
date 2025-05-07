@@ -70,6 +70,14 @@ export class HsFileTreeService {
     });
   }
 
+  async getNodeById(id: string): Promise<HsFileNode> {
+    const nodeData = await this.repo.findOneBy({ id });
+    if (!nodeData) {
+      throw new NotFoundException(`没有找到相关节点 ${id}`);
+    }
+    return nodeData;
+  }
+
   async update(id: string, dto: UpdateNodeDto): Promise<HsFileNode> {
     return this.dataSource.transaction(async (manager) => {
       const node = await manager.findOneBy(HsFileNode, { id });

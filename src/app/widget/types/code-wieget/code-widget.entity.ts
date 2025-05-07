@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { HsBaseEntity } from 'src/common/entities/base.entity';
+import { Entity, Column } from 'typeorm';
+
 export interface IResourceScript {
   resourceUrl: string;
   isModule: boolean;
@@ -13,19 +15,44 @@ export interface ICodeWidgetConfig {
 }
 
 @Entity()
-export class HsCodeWidget {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class HsCodeWidget extends HsBaseEntity {
+  @Column({ name: 'widget_id', type: 'varchar', nullable: false })
+  widgetId;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({
+    name: 'template_html',
+    type: 'varchar',
+    nullable: true,
+    default: '',
+  })
   templateHtml: string;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({
+    name: 'template_css',
+    type: 'varchar',
+    nullable: true,
+    default: '#container{color: green}',
+  })
   templateCss: string;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({
+    name: 'template_js',
+    type: 'varchar',
+    nullable: true,
+    default: 'return class extends DynamicWidgetComponent  {  }',
+  })
   templateJs: string;
 
-  @Column({ type: 'simple-json', nullable: true, default: [] })
+  @Column({
+    name: 'resource_script',
+    type: 'simple-json',
+    nullable: true,
+    default: [],
+  })
   resourceScript: Array<IResourceScript>;
+
+  constructor() {
+    super();
+    this.templateHtml = `<div id="container">你好世界</div>` + this.id; // 自动生成 UUID
+  }
 }

@@ -5,27 +5,38 @@ import { HsWidget } from '../entities/widget.entity';
 import { CreateWidgetDto } from './dto/create-widget.dto';
 import { UpdateWidgetDto } from './dto/update-widget.dto';
 import { HsWidgetServiceFactory } from '../widget-service.factory';
+import { HsFileTreeService } from 'src/app/file-tree/file-tree.service';
 @Injectable()
 export class HsWidgetService {
   constructor(
     @InjectRepository(HsWidget)
     private readonly widgetRepository: Repository<HsWidget>,
     private widgetServiceFactory: HsWidgetServiceFactory,
+    private readonly fileTreeService: HsFileTreeService,
   ) {}
 
   async create(
     createDto: CreateWidgetDto,
   ): Promise<HsWidget & { widgetTypeData: any }> {
-    const widget = this.widgetRepository.create({
+    const data = {
       ...createDto,
       version: 1, // 初始版本
-    });
+    };
+    const { nodeId } = createDto;
+    const nodeData = await this.fileTreeService.getNodeById(nodeId);
+    if (nodeData) {
+      if (nodeId) {
+        data['id'] = nodeId;
+      }
+    }
+
+    const widget = this.widgetRepository.create(data);
     const widgetData = await this.widgetRepository.save(widget);
 
-    const { id, type, name } = widgetData;
+    const { id: widgetId, type, name } = widgetData;
     const widgetService = this.widgetServiceFactory.getService(type);
 
-    const widgetTypeData = await widgetService.createWidget(id, {
+    const widgetTypeData = await widgetService.createWidget(widgetId, {
       formName: name,
     });
     return {
@@ -54,9 +65,18 @@ export class HsWidgetService {
   }
 
   async remove(id: string): Promise<void> {
-    const result = await this.widgetRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Widget ${id} not found`);
+    const widgetData = await this.widgetRepository.findOne({
+      where: { id },
+    });
+
+    if (!widgetData) {
+      throw new NotFoundException(`没有找到小部件${id}`);
     }
+
+    await this.widgetRepository.delete(id);
+
+    const { id: widgetId, type } = widgetData;
+    const widgetService = this.widgetServiceFactory.getService(type);
+    await widgetService.deleteWidget(widgetId);
   }
 }

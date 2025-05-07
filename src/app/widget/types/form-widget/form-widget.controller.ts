@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common';
 import { HsFormWidget } from './form-widget.entity';
 import { HsFormWidgetsService } from './form-widget.service';
+// import { UpdateFormWidgetDto } from './dto/update-form-widget.dto';
+import { CreateFormWidgetDto } from './dto/create-form-widget.dto';
 
 @Controller('/widget/form')
 export class HsFormWidgetsController {
@@ -16,10 +18,10 @@ export class HsFormWidgetsController {
 
   @Post()
   async createFormWidget(
-    @Body() createFormWidgetDto: any,
-  ): Promise<HsFormWidget[]> {
+    @Body() createFormWidgetDto: CreateFormWidgetDto,
+  ): Promise<HsFormWidget> {
     return await this.formWidgetsService.createWidget(
-      createFormWidgetDto.id,
+      createFormWidgetDto.widgetId,
       createFormWidgetDto,
     );
   }
@@ -29,21 +31,33 @@ export class HsFormWidgetsController {
     return await this.formWidgetsService.getAllFormWidgets();
   }
 
-  @Get(':id')
-  async getFormWidgetById(@Param('id') id: string): Promise<HsFormWidget> {
-    return await this.formWidgetsService.getFormWidgetById(id);
+  @Get(':widgetId')
+  async getFormWidgetById(
+    @Param('widgetId') widgetId: string,
+  ): Promise<HsFormWidget> {
+    return await this.formWidgetsService.getFormWidgetByWidgetId(widgetId);
   }
 
-  @Put(':id')
+  // @Get('widget/:widgetId')
+  // async getFormWidgetByWidgetId(
+  //   @Param('widgetId') widgetId: string,
+  // ): Promise<HsFormWidget> {
+  //   return await this.formWidgetsService.getFormWidgetByWidgetId(widgetId);
+  // }
+
+  @Put(':widgetId')
   async updateFormWidget(
-    @Param('id') id: string,
+    @Param('widgetId') widgetId: string,
     @Body() updateFormWidgetDto: any,
   ): Promise<HsFormWidget> {
-    return await this.formWidgetsService.updateWidget(id, updateFormWidgetDto);
+    return await this.formWidgetsService.updateWidget(
+      widgetId,
+      updateFormWidgetDto,
+    );
   }
 
-  @Delete(':id')
-  async deleteFormWidget(@Param('id') id: string): Promise<void> {
-    return await this.formWidgetsService.deleteWidget(id);
+  @Delete(':widgetId')
+  async deleteFormWidget(@Param('widgetId') widgetId: string): Promise<void> {
+    return await this.formWidgetsService.deleteWidget(widgetId);
   }
 }

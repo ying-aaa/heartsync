@@ -35,13 +35,21 @@ export interface IFormButtonConfig {}
 
 @Entity()
 export class HsFormWidget extends HsBaseEntity {
+  @Column({ name: 'widget_id', type: 'varchar', nullable: false })
+  widgetId: string;
+
   @Column({ name: 'form_name', type: 'varchar', nullable: false })
   formName: string;
 
   @Column({ name: 'edit_name', type: 'varchar', nullable: true })
   editName?: string;
 
-  @Column({ name: 'sub_type', type: 'simple-json', nullable: true })
+  @Column({
+    name: 'sub_type',
+    type: 'varchar',
+    nullable: true,
+    default: IFormSubTypes.FLAT,
+  })
   subType?: IFormSubTypes;
 
   @Column({ name: 'form_style', type: 'simple-json', nullable: true })

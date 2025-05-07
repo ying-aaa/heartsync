@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { HsFormWidget } from './form-widget.entity'; // 确保实体类名已改为 HsFormWidget
 import { WidgetStrategy } from 'src/app/widget/model/widget-strategy.interface';
 import { WidgetType } from '../../entities/widget.entity';
+import { CreateFormWidgetDto } from './dto/create-form-widget.dto';
+// import { UpdateFormWidgetDto } from './dto/update-form-widget.dto';
 @Injectable()
 export class HsFormWidgetsService implements WidgetStrategy {
   type = WidgetType.FORM;
@@ -15,11 +17,11 @@ export class HsFormWidgetsService implements WidgetStrategy {
 
   async createWidget(
     widgetId: string,
-    createFormWidgetDto: any,
-  ): Promise<HsFormWidget[]> {
+    createFormWidgetDto: CreateFormWidgetDto,
+  ): Promise<HsFormWidget> {
     const formWidget = this.formWidgetsRepository.create({
       ...createFormWidgetDto,
-      id: widgetId,
+      widgetId,
     });
     return await this.formWidgetsRepository.save(formWidget);
   }
@@ -28,19 +30,23 @@ export class HsFormWidgetsService implements WidgetStrategy {
     return await this.formWidgetsRepository.find();
   }
 
-  async getFormWidgetById(id: string): Promise<HsFormWidget> {
-    return await this.formWidgetsRepository.findOneBy({ id });
+  async getFormWidgetByWidgetId(widgetId: string): Promise<HsFormWidget> {
+    return await this.formWidgetsRepository.findOneBy({ widgetId });
   }
+
+  // async getFormWidgetByWidgetId(widgetId: string): Promise<HsFormWidget> {
+  //   return await this.formWidgetsRepository.findOneBy({ widgetId });
+  // }
 
   async updateWidget(
-    id: string,
+    widgetId: string,
     updateFormWidgetDto: any,
   ): Promise<HsFormWidget> {
-    await this.formWidgetsRepository.update(id, updateFormWidgetDto);
-    return await this.getFormWidgetById(id);
+    await this.formWidgetsRepository.update({ widgetId }, updateFormWidgetDto);
+    return await this.getFormWidgetByWidgetId(widgetId);
   }
 
-  async deleteWidget(id: string): Promise<void> {
-    await this.formWidgetsRepository.delete(id);
+  async deleteWidget(widgetId: string): Promise<void> {
+    await this.formWidgetsRepository.delete({ widgetId });
   }
 }

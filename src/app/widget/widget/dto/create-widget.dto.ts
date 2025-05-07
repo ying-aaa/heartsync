@@ -22,7 +22,7 @@ export class CreateWidgetDto {
 
   @IsString()
   @IsOptional()
-  parentId: string;
+  nodeId: string;
 
   @IsOptional()
   generalConfig?: Record<string, any>;
