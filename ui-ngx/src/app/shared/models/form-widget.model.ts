@@ -16,6 +16,7 @@ export interface IFormLogicConfig {}
 export interface IFormButtonConfig {}
 
 export interface IFormWidgetConfig extends IBaseWidgetConfig {
+  widgetId: string,
   formName: string;
   editName?: string;
   subType: IFormSubTypes;

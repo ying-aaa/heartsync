@@ -11,11 +11,11 @@ import { SvgService } from '@src/app/core/http/svg.service';
       [style]="containerStyle"
     >
       @if (!svgContent && !error) {
-        <div class="loading">Loading...</div>
+        <div [ngStyle]="{ width, height }" class="loading">...</div>
       }
 
       @if (error) {
-        <div class="error">未找到SVG</div>
+        <div class="error">无</div>
       }
 
       <div

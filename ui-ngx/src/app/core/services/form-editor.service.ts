@@ -20,7 +20,7 @@ import {
   IFormSubTypes,
   IFormWidgetConfig,
 } from '@src/app/shared/models/form-widget.model';
-import { FormWidgetService } from '@src/app/core/http/widget.service';
+import { FormWidgetService } from '@src/app/core/http/form-widget.service';
 import { FormlyFormOptions } from '@ngx-formly/core';
 
 @Injectable({
@@ -29,15 +29,7 @@ import { FormlyFormOptions } from '@ngx-formly/core';
 export class FormEditorService {
   HS_DEFAULT_ID = 'workspace';
 
-  widgetConfig = signal<IFormWidgetConfig>({
-    id: 1,
-    type: IWidgetType.FORM,
-    subType: IFormSubTypes.FLAT,
-    formName: '',
-    isUseFlow: false,
-    workspaceName: '',
-    flatTypeField: [],
-  });
+  widgetConfig = signal<IFormWidgetConfig>({} as IFormWidgetConfig);
 
   // 是否编辑模式
   isEditMode = signal(true);
@@ -80,7 +72,6 @@ export class FormEditorService {
               this.widgetConfig.set(widget);
               const fieldConfig = widget.flatTypeField as IEditorFormlyField[];
               if (
-                widget.type === IWidgetType.FORM &&
                 widget.subType === IFormSubTypes.FLAT
               ) {
                 // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置

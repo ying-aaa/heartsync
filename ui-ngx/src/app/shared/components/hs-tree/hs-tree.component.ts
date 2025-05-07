@@ -198,8 +198,11 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
             .getEntireTree(this.businessId(), this.businessKey())
             .pipe(delay(0))
             .subscribe({
-              next(responseData) {
-                callback(responseData);
+              next: async (responseData) => {
+                await callback(responseData);
+                setTimeout(() => {
+                  this.defaultSelectorNode();
+                }, 100);
               },
               error() {
                 callback([]);
@@ -348,7 +351,12 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.clipboard.node = data.node;
       this.moveNode(data.node.parent);
     });
+    this.treeInstance.on('ready.jstree', () => {
+      this.defaultSelectorNode();
+    });
+
   }
+
   initJsTreeFilter() {
     this.fileName.valueChanges
       .pipe(debounceTime(300))
@@ -382,6 +390,19 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
           });
         });
       });
+  }
+
+  defaultSelectorNode() {
+    const tree = this.treeInstance.jstree(true);
+    const selectedNodes = tree.get_selected();
+
+    if (selectedNodes.length === 0) {
+      // 如果没有选中节点，则选中第一个节点
+      const allNodes = tree.get_json('#', { flat: true });
+      if (allNodes.length > 0) {
+        tree.select_node(allNodes[0].id);
+      }
+    }
   }
 
   @HostListener('keydown', ['$event'])
@@ -487,10 +508,6 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fileTreeService.deleteNode(node.id).subscribe({
       next: () => {
         inst.delete_node(node);
-
-        const createNodeSuccess = this.treeConfig().createNodeSuccess;
-        createNodeSuccess && createNodeSuccess(node, this.treeInstance);
-
 
         this._snackBar.open('删除成功！', '确定', {
           horizontalPosition: 'center',
@@ -620,6 +637,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     const inst = this.treeInstance;
 
     inst && inst.jstree('refresh');
+
   }
 
   ngOnInit() {}

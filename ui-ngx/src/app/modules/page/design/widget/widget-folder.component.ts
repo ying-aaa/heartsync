@@ -2,7 +2,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { Component, computed, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormWidgetService } from '@src/app/core/http/widget.service';
+import { FormWidgetService } from '@src/app/core/http/form-widget.service';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
 import {
   IFancyTreeConfig,
@@ -18,6 +18,8 @@ import { getParamFromRoute } from '@src/app/core/utils';
 import { ActivatedRoute } from '@angular/router';
 import { HsTreeComponent } from '@shared/components/hs-tree/hs-tree.component';
 import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
+import { WidgetService } from '@src/app/core/http/widget.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'hs-widget-folder',
@@ -29,51 +31,7 @@ export class WidgetFolderComponent implements OnInit {
   businessKey = computed(() => this.widgetEditorService.currentWidgetType());
 
   widgetId: string;
-  // treeConfig = signal<IFancyTreeConfig>({
-  //   isDefaultFirst: true,
-  //   loadTreeData: () => {
-  //     return this.formWidgetService.getAllFormWidgets().toPromise();
-  //   },
-  //   renderTitle: (event, data) => {
-  //     return `<span class="fancytree-title">${data?.node?.data?.workspaceName}</span>`;
-  //   },
-  //   addNodeEvent: (data) => {
-  //     this.formWidgetService
-  //       .createFormWidget({
-  //         formName: data.node.title,
-  //         type: IWidgetType.FORM,
-  //         subType: IFormSubTypes.FLAT,
-  //         workspaceName: data.node.title,
-  //       })
-  //       .subscribe({
-  //         next: (res) => {
-  //           this._snackBar.open('新增部件成功!!!', '确定', {
-  //             horizontalPosition: 'center',
-  //             verticalPosition: 'top',
-  //             duration: 3 * 1000,
-  //           });
-  //           data.node.data.id = res.id;
-  //           data.node.data.key = res.id;
-  //         },
-  //       });
-  //   },
-  //   deleteNodeEvent: (id: number) => {
-  //     this.formWidgetService.deleteFormWidget(id).subscribe({
-  //       next: () => {
-  //         this._snackBar.open('删除部件成功!!!', '确定', {
-  //           horizontalPosition: 'center',
-  //           verticalPosition: 'top',
-  //           duration: 3 * 1000,
-  //         });
-  //       },
-  //     });
-  //   },
-  //   defaultSelectNodeEvent: (data: any) => {
-  //     const selectedNode = data.node;
-  //     const { workspaceName: widgetName, id } = selectedNode.data;
-  //     this.widgetEditorService.setWidgetId(id);
-  //   },
-  // });
+  widgetType = computed(() => this.widgetEditorService.currentWidgetType())
 
   treeConfig = signal<IFileTreeConfig>({
     featureList: [
@@ -88,6 +46,14 @@ export class WidgetFolderComponent implements OnInit {
       'search',
     ],
     deleteEvent: async (node, jsTree) => {
+      const { id } = node;
+      let next = false;
+      try {
+        const res = await firstValueFrom(this.widgetService.removeWidget(id));
+        if(res.statusCode === 200) next = true;
+      } catch (error) {
+        next = false;
+      }
       return true;
     },
     selectEvent: (node, jsTree) => {
@@ -96,13 +62,21 @@ export class WidgetFolderComponent implements OnInit {
         this.widgetEditorService.setWidgetId(this.widgetId);
       }
     },
+    createNodeSuccess: (node, jsTree) => {
+      const { id: nodeId, text: name } = node;
+      this.widgetService.createWidget({
+        nodeId,
+        name,
+        appId: this.appId!,
+        type: this.widgetType()
+      }).subscribe()
+    },
   });
 
   widgetTypesList = widgetTypesList;
 
   constructor(
-    private formWidgetService: FormWidgetService,
-    private formEditorService: FormEditorService,
+    private widgetService: WidgetService,
     public widgetEditorService: WidgetEditorService,
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
