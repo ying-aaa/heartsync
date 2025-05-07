@@ -25,12 +25,7 @@ export class CodeToolbarComponent implements OnInit {
   constructor(
     public widgetEditorService: WidgetEditorService,
     private router: Router,
-    private scriptLoaderService: ScriptLoaderService,
   ) {}
-
-  get scriptLoadingStatus() {
-    return this.scriptLoaderService.getLoadingStatus();
-  }
 
   toWidgetManage() {
     this.router.navigate(['/design/widget/resource']);

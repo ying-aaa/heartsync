@@ -61,13 +61,7 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
     private _snackBar: MatSnackBar,
   ) {}
 
-  widgetInfo = signal<ICodeWidgetConfig>({
-    id: '1',
-    templateHtml: ``,
-    templateCss: ``,
-    templateJs: ``,
-    resourceScript: [],
-  });
+  widgetInfo = signal<ICodeWidgetConfig>({} as ICodeWidgetConfig);
 
   fields = [
     {

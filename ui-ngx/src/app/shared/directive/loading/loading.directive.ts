@@ -49,7 +49,7 @@ export class HsLoadingDirective {
 
   private createOverlay() {
     const hostElement = this.el.nativeElement;
-    this.renderer.setStyle(hostElement, "position", "relative");
+    this.renderer.setStyle(hostElement, 'position', 'relative');
     const currentPosition = hostElement.style.position;
 
     if (!currentPosition || currentPosition === 'static') {

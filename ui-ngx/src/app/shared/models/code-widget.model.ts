@@ -5,6 +5,7 @@ export interface IResourceScript {
 
 export interface ICodeWidgetConfig {
   id: string;
+  widgetId: string;
   templateHtml: string;
   templateCss: string;
   templateJs: string;
