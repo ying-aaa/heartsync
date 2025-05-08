@@ -13,5 +13,10 @@ export const routes: Routes = [
     data: { preload: true },
     loadChildren: () => import('./modules/page/design/design.routing'),
   },
+  {
+    path: 'login',
+    data: { preload: true },
+    loadChildren: () => import('./modules/page/login/login.routing'),
+  },
   { path: '**', component: PageNotFoundComponent },
 ];
