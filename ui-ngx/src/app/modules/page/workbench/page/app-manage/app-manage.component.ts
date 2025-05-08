@@ -136,6 +136,7 @@ export class AppManageComponent implements OnInit {
             {
               name: '删除',
               icon: 'delete',
+              moreName: '确认删除',
               action: (row, event) => {
                 console.log('删除', row, event);
                 this.applicationService

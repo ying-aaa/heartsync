@@ -126,10 +126,16 @@
                       @for (action of column.config; track $index) {
                         <button
                           mat-button
-                          (click)="action.action(data, $event)"
+                          #menuTrigger
+                          [matMenuTriggerFor]="action.moreName && menu" 
+                          (click)="!action.moreName && action.action(data, $event)"
                         >
                           {{ action.name }}
                         </button>
+
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="action.action(data, $event)">{{ action.moreName }}</button>
+                        </mat-menu>
                       }
                     }
                   }
