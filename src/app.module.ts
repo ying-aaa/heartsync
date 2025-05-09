@@ -1,14 +1,14 @@
-import { WidgetsModule } from './app/widget/widgets.module';
 // src/app.module.ts
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SelfModule } from './app/self/self.module';
-import { HsUploadModule } from './app/upload/upload.module';
-import { HsFileTreeModule } from './app/file-tree/file-tree.module';
-import { FileProxyMiddleware } from './middlewares/file-proxy.middleware';
-import { HsApplicationModule } from './app/applications/application.module';
 import { HsPaginationService } from './common/services/pagination.service';
+import { FileProxyMiddleware } from './common/middlewares/file-proxy.middleware';
+import { HsApplicationModule } from './modules/applications/application.module';
+import { HsFileTreeModule } from './modules/file-tree/file-tree.module';
+import { SelfModule } from './modules/self/self.module';
+import { HsUploadModule } from './modules/upload/upload.module';
+import { WidgetsModule } from './modules/widget/widgets.module';
 
 @Module({
   providers: [HsPaginationService],
