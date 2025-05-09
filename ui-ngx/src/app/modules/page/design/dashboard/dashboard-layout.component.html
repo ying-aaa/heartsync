@@ -2,53 +2,15 @@
   <gridster [options]="options">
     @for (item of dashboard; track item) {
       <gridster-item [item]="item">
-        <!-- <div class="button-holder">
-          @if (item['hasContent']) {
-            <div class="gridster-item-content">
-              <div class="stuff">
-                <span
-                  >Some content to select and click without dragging the
-                  widget</span
-                >
-                <a
-                  href="https://www.google.com"
-                  target="_blank"
-                  >Link to Google</a
-                >
-              </div>
-            </div>
-          }
-          @if (item['hasContent']) {
-            <div class="item-buttons">
-              <button
-                class="drag-handler"
-                mat-icon-button
-              >
-                <mat-icon>open_with</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                class="remove-button"
-                (mousedown)="removeItem($event, item)"
-                (touchstart)="removeItem($event, item)"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          }
-          @if (!item['hasContent']) {
-            <label>{{ item['label'] }}</label>
-          }
-          @if (!item['hasContent']) {
-            <button
-              mat-mini-fab
-              (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-          }
-        </div> -->
+        <div class="button-holder">
+          <button
+            mat-mini-fab
+            (mousedown)="removeItem($event, item)"
+            (touchstart)="removeItem($event, item)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </gridster-item>
     }
   </gridster>

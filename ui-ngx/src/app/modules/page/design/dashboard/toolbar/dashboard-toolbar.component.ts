@@ -4,12 +4,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
+import { WidgetPresetListComponent } from './widget-preset-list.component';
+import { DashboardSettingsComponent } from './dashboard-settings.component';
 
 @Component({
   selector: 'hs-dashboard-toolbar',
   templateUrl: './dashboard-toolbar.component.html',
   styleUrls: ['./dashboard-toolbar.component.css'],
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    WidgetPresetListComponent,
+    DashboardSettingsComponent,
+  ],
 })
 export class DashboardToolbarComponent implements OnInit {
   sidenavStart = input.required<MatSidenav>();
