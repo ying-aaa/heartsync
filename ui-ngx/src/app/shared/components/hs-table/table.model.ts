@@ -190,6 +190,7 @@ export class ActionColumn extends BaseColumn<
     name: string;
     icon: string;
     action: (row: any, event: Event) => void;
+    moreName?: string;
   }>
 > {
   constructor(
@@ -199,6 +200,7 @@ export class ActionColumn extends BaseColumn<
       name: string;
       icon: string;
       action: (row: any, event: Event) => void;
+      moreName?: string;
     }>,
     public override width?: number | string,
     public override align?: IColumnAlign,

@@ -1,7 +1,7 @@
 <div
   class="wh-full relative"
   hs-loading
-  [isLoading]="scriptLoadingStatus"
+  [isLoading]="loadingStatus || !widgetInfo().id"
   hs-fullscreen
   [fullscreen]="fullscreen"
 >

@@ -21,8 +21,8 @@ export class CodeWidgetService {
   }
 
   // 根据ID获取代码部件
-  getCodeWidgetById(id: number | string): Observable<ICodeWidgetConfig> {
-    const url = `${this.apiUrl}/${id}`;
+  getCodeWidgetById(widgetId: string): Observable<ICodeWidgetConfig> {
+    const url = `${this.apiUrl}/${widgetId}`;
     return this.http
       .get<ICodeWidgetConfig>(url)
       .pipe(catchError(this.handleError));

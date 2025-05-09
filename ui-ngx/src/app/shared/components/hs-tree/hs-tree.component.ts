@@ -274,8 +274,10 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // 绑定事件监听
     this.treeInstance.on('changed.jstree', (e: Event, data: any) => {
-      const selectEvent = this.treeConfig().selectEvent;
-      selectEvent && selectEvent(data.node, this.treeInstance);
+      if (!this.newNodeFlag) {
+        const selectEvent = this.treeConfig().selectEvent;
+        selectEvent && selectEvent(data.node, this.treeInstance);
+      }
     });
 
     // 重命名节点
@@ -299,6 +301,8 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
             this.treeInstance.jstree().deselect_all(); // 清除历史选中
             this.treeInstance.jstree().select_node(tempNode, false, false); // true 表示聚焦
 
+            this.newNodeFlag = null;
+
             const createNodeSuccess = this.treeConfig().createNodeSuccess;
             createNodeSuccess && createNodeSuccess(tempNode, this.treeInstance);
 
@@ -314,6 +318,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
               verticalPosition: 'top',
               duration: 3 * 1000,
             });
+            this.newNodeFlag = null;
             this.treeInstance.jstree().delete_node(tempNode);
           },
         });
@@ -339,8 +344,6 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
           },
         });
       }
-
-      this.newNodeFlag = null;
     });
 
     // 移动节点
@@ -354,7 +357,6 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.treeInstance.on('ready.jstree', () => {
       this.defaultSelectorNode();
     });
-
   }
 
   initJsTreeFilter() {
@@ -638,6 +640,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     inst && inst.jstree('refresh');
 
+    this.fileName.setValue('');
   }
 
   ngOnInit() {}

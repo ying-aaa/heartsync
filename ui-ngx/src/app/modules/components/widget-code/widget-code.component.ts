@@ -42,6 +42,8 @@ export class WidgetCodeComponent implements OnInit {
 
   compRef: ComponentRef<any> | null = null;
 
+  loadingStatus = false;
+
   constructor(
     private DynamicComponentFactoryService: DynamicComponentFactoryService,
     private scriptLoaderService: ScriptLoaderService,
@@ -53,10 +55,6 @@ export class WidgetCodeComponent implements OnInit {
     });
   }
 
-  get scriptLoadingStatus() {
-    return this.scriptLoaderService.getLoadingStatus();
-  }
-
   public loadResourceScript() {
     const { resourceScript } = this.widgetInfo();
     const resourceUrls = resourceScript.map((item: any) => item.resourceUrl);
@@ -64,8 +62,9 @@ export class WidgetCodeComponent implements OnInit {
       next: (res) => {},
       error: (error) => {},
       complete: () => {
+        this.loadingStatus = false;
         this.loadDynamicComponent();
-      }
+      },
     });
   }
 
@@ -93,6 +92,7 @@ export class WidgetCodeComponent implements OnInit {
   }
 
   loadWidgetInfo() {
+    this.loadingStatus = true;
     this.codeWidgetService
       .getCodeWidgetById(this.widgetId() as string)
       .subscribe((widgetInfo) => {
@@ -102,6 +102,7 @@ export class WidgetCodeComponent implements OnInit {
   }
 
   setWidgetInfo(widgetInfo: ICodeWidgetConfig) {
+    this.loadingStatus = true;
     this.widgetInfo.set(widgetInfo);
     this.loadResourceScript();
   }

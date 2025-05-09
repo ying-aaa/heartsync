@@ -118,21 +118,6 @@
                 "inject": false
               },
               {
-                "input": "./node_modules/jquery-ui/dist/jquery-ui.min.js",
-                "bundleName": "jquery-ui.min",
-                "inject": false
-              },
-              {
-                "input": "./node_modules/ui-contextmenu/jquery.ui-contextmenu.min.js",
-                "bundleName": "jquery.ui-contextmenu.min",
-                "inject": false
-              },
-              {
-                "input": "./node_modules/jquery.fancytree/dist/jquery.fancytree-all.min.js",
-                "bundleName": "jquery.fancytree-all.min",
-                "inject": false
-              },
-              {
                 "input": "./node_modules/cesium/Build/Cesium/Cesium.js",
                 "bundleName": "Cesium",
                 "inject": false

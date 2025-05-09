@@ -31,7 +31,7 @@ export class WidgetFolderComponent implements OnInit {
   businessKey = computed(() => this.widgetEditorService.currentWidgetType());
 
   widgetId: string;
-  widgetType = computed(() => this.widgetEditorService.currentWidgetType())
+  widgetType = computed(() => this.widgetEditorService.currentWidgetType());
 
   treeConfig = signal<IFileTreeConfig>({
     featureList: [
@@ -50,7 +50,7 @@ export class WidgetFolderComponent implements OnInit {
       let next = false;
       try {
         const res = await firstValueFrom(this.widgetService.removeWidget(id));
-        if(res.statusCode === 200) next = true;
+        if (res.statusCode === 200) next = true;
       } catch (error) {
         next = false;
       }
@@ -58,18 +58,21 @@ export class WidgetFolderComponent implements OnInit {
     },
     selectEvent: (node, jsTree) => {
       if (node) {
-        this.widgetId = node.id;
-        this.widgetEditorService.setWidgetId(this.widgetId);
+        this.updateWidgetId(node.id);
       }
     },
     createNodeSuccess: (node, jsTree) => {
       const { id: nodeId, text: name } = node;
-      this.widgetService.createWidget({
-        nodeId,
-        name,
-        appId: this.appId!,
-        type: this.widgetType()
-      }).subscribe()
+      this.widgetService
+        .createWidget({
+          nodeId,
+          name,
+          appId: this.appId!,
+          type: this.widgetType(),
+        })
+        .subscribe({
+          next: () => this.updateWidgetId(nodeId),
+        });
     },
   });
 
@@ -81,6 +84,11 @@ export class WidgetFolderComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
   ) {}
+
+  updateWidgetId(widgetId: string) {
+    this.widgetId = widgetId;
+    this.widgetEditorService.setWidgetId(this.widgetId);
+  }
 
   ngOnInit() {}
 }

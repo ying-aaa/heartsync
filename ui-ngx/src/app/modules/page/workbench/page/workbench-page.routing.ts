@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { IRouterUse } from '@src/app/shared/models/route.model';
+import systemRouting from './system/system.routing';
 
 export default [
   // { path: '', redirectTo: 'workbench', pathMatch: 'full' },
@@ -20,6 +21,12 @@ export default [
       import('./app-manage/app-manage.component').then(
         (m) => m.AppManageComponent,
       ),
+  },
+  {
+    title: '系统管理',
+    path: 'system',
+    data: { preload: true, key: 'system', use: IRouterUse.MENU },
+    children: systemRouting,
   },
   {
     title: '记录',
