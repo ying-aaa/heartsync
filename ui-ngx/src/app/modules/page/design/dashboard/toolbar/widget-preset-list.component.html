@@ -1,0 +1,13 @@
+<content class="flex">
+  <mat-chip-listbox [value]="currentWidgetType">
+    @for (item of widgetTypesList; track $index) {
+      <mat-chip-option 
+        draggable="true" 
+        [value]="item.value" 
+        (selectionChange)="onSelectionChange($event)"
+      >
+        {{ item.label }}
+      </mat-chip-option>
+    }
+  </mat-chip-listbox>
+  </content>

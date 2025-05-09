@@ -54,7 +54,7 @@ export class WidgetFolderComponent implements OnInit {
       } catch (error) {
         next = false;
       }
-      return true;
+      return next;
     },
     selectEvent: (node, jsTree) => {
       if (node) {

@@ -6,11 +6,13 @@ import { DashboardViewportComponent } from './dashboard-viewport.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
-import { DashboardToolbarComponent } from './dashboard-toolbar.component';
+import { DashboardToolbarComponent } from './toolbar/dashboard-toolbar.component';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
 import { getParamFromRoute } from '@src/app/core/utils';
+import { DashboardService } from '@src/app/core/http/dashboard.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'hs-dashboard-manage',
@@ -46,7 +48,17 @@ export class DashboardManageComponent implements OnInit {
       'search',
     ],
     deleteEvent: async (node, jsTree) => {
-      return true;
+      const { id } = node;
+      let next = false;
+      try {
+        const res = await firstValueFrom(
+          this.dashboardService.removeDashboard(id),
+        );
+        if (res.statusCode === 200) next = true;
+      } catch (error) {
+        next = false;
+      }
+      return next;
     },
     selectEvent: (node, jsTree) => {
       if (node) {
@@ -54,21 +66,34 @@ export class DashboardManageComponent implements OnInit {
       }
     },
     renameNodeSuccess: (node, jsTree) => {
-      console.log("%c Line:57 🧀 node, jsTree", "color:#42b983", node, jsTree);
+      console.log('%c Line:57 🧀 node, jsTree', 'color:#42b983', node, jsTree);
     },
     createNodeSuccess: (node, jsTree) => {
-      console.log("%c Line:57 🧀 node, jsTree", "color:#42b983", node, jsTree);
+      const { id: nodeId, text: name } = node;
+
+      this.dashboardService
+        .createDashboard({
+          nodeId,
+          name,
+          appId: this.appId!,
+          type: 'gridster',
+        })
+        .subscribe({
+          next: () => {},
+        });
+      console.log('%c Line:57 🧀 node, jsTree', 'color:#42b983', node, jsTree);
     },
     copyPasteNodeSuccess: (node, jsTree) => {
-      console.log("%c Line:57 🧀 node, jsTree", "color:#42b983", node, jsTree);
+      console.log('%c Line:57 🧀 node, jsTree', 'color:#42b983', node, jsTree);
     },
-    deleteNodeSuccess: (node, jsTree) => {
-      console.log("%c Line:57 🧀 node, jsTree", "color:#42b983", node, jsTree);
+    deleteNodeSuccess: async (node, jsTree) => {
+      console.log('%c Line:57 🧀 node, jsTree', 'color:#42b983', node, jsTree);
     },
   });
 
   constructor(
     private widgetEditorService: WidgetEditorService,
+    private dashboardService: DashboardService,
     private route: ActivatedRoute,
   ) {}
 
