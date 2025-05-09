@@ -9,6 +9,7 @@ import { HsFileTreeModule } from './modules/file-tree/file-tree.module';
 import { SelfModule } from './modules/self/self.module';
 import { HsUploadModule } from './modules/upload/upload.module';
 import { WidgetsModule } from './modules/widget/widgets.module';
+import { HsDashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
   providers: [HsPaginationService],
@@ -17,6 +18,7 @@ import { WidgetsModule } from './modules/widget/widgets.module';
     SelfModule,
     WidgetsModule,
     HsUploadModule,
+    HsDashboardModule,
     HsFileTreeModule,
     HsApplicationModule,
     ConfigModule.forRoot({

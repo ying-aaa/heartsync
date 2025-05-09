@@ -22,10 +22,11 @@ export class HsWidgetService {
       ...createDto,
       version: 1, // 初始版本
     };
+
     const { nodeId } = createDto;
-    const nodeData = await this.fileTreeService.getNodeById(nodeId);
-    if (nodeData) {
-      if (nodeId) {
+    if (nodeId) {
+      const nodeData = await this.fileTreeService.getNodeById(nodeId);
+      if (nodeData) {
         data['id'] = nodeId;
       }
     }
