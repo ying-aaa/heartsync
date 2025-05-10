@@ -23,6 +23,9 @@ export class HsDashboard extends HsBaseEntity {
   @Column('varchar', { nullable: true })
   description?: string;
 
+  @Column('json', { name: 'gridster_option', default: {} })
+  gridsterOption?: Record<string, any>;
+
   @Column('json', { name: 'layout_config', default: {} })
   layoutConfig: Record<string, any>;
 

@@ -29,6 +29,11 @@ class BaseDashboardDto {
   @IsOptional()
   description?: string;
 
+  @ApiProperty({ type: Object, description: '网格配置' })
+  @IsObject()
+  @IsOptional()
+  gridsterOption: Record<string, any>;
+
   @ApiProperty({ type: Object, description: '布局配置' })
   @IsObject()
   @IsOptional()
@@ -141,4 +146,20 @@ export class WidgetsDto {
   @ApiProperty({ description: '层级索引' })
   @IsInt()
   layerIndex: number;
+
+  // @ApiProperty({ description: '最大行数' })
+  // @IsInt()
+  // maxItemRows: number;
+
+  // @ApiProperty({ description: '最大列数' })
+  // @IsInt()
+  // maxItemCols: number;
+
+  // @ApiProperty({ description: '最小行数' })
+  // @IsInt()
+  // minItemRows: number;
+
+  // @ApiProperty({ description: '最小列数' })
+  // @IsInt()
+  // minItemCols: number;
 }
