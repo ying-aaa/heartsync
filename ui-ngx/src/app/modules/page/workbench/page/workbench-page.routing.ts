@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { IRouterUse } from '@src/app/shared/models/route.model';
 import systemRouting from './system/system.routing';
+import { OverseasGuard } from '@src/app/core/guards/overseas.guard';
 
 export default [
   // { path: '', redirectTo: 'workbench', pathMatch: 'full' },
@@ -32,6 +33,7 @@ export default [
     title: '记录',
     path: 'record',
     data: { preload: true, key: 'record', use: IRouterUse.MENU },
+    canActivate: [OverseasGuard],
     loadComponent: () =>
       import('./self-record/self-record.component').then(
         (m) => m.SelfRecordComponent,
