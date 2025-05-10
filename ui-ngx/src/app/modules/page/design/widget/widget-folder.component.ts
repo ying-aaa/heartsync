@@ -57,8 +57,10 @@ export class WidgetFolderComponent implements OnInit {
       return next;
     },
     selectEvent: (node, jsTree) => {
-      if (node) {
-        this.updateWidgetId(node.id);
+      const { type, id } = node || {};
+      if (type === 'folder') return;
+      if (id) {
+        this.updateWidgetId(id);
       }
     },
     createNodeSuccess: (node, jsTree) => {

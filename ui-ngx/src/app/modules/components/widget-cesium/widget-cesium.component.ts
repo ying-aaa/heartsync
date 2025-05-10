@@ -17,7 +17,7 @@ declare var Cesium: any;
   templateUrl: './widget-cesium.component.html',
 })
 export class WidgetCesiumComponent implements OnInit, AfterViewInit {
-  @Input() styles = { width: '800px', height: '400px' };
+  @Input() styles = { width: '100%', height: '100%' };
 
   cesiumInstance: TemplateRef<Element> | any =
     viewChild<ElementRef>('cesiumContainer');

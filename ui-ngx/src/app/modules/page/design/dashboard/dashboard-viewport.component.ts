@@ -1,15 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { DashboardLayoutComponent } from './dashboard-layout.component';
+import { DashboardDesignComponent } from './dashboard-design.component';
+import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
 
 @Component({
   selector: 'hs-dashboard-viewport',
   templateUrl: './dashboard-viewport.component.html',
-  imports: [MatButtonModule, DashboardLayoutComponent],
+  imports: [MatButtonModule, DashboardDesignComponent],
 })
 export class DashboardViewportComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private dashboardEditorService: DashboardEditorService,
+  ) {}
+
+  get dashboardId() {
+    return this.dashboardEditorService.currentDashboardId();
+  }
 
   toDashboardDesign() {
     const dashboardId = 1;

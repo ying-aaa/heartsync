@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 import { IWidgetType } from '@src/app/shared/models/widget.model';
 import { GridsterComponent } from 'angular-gridster2';
 
@@ -6,9 +6,15 @@ import { GridsterComponent } from 'angular-gridster2';
   providedIn: 'root',
 })
 export class DashboardEditorService {
+  public currentDashboardId = signal<string>('');
+
   currentWidgetType = signal<IWidgetType>(IWidgetType.CESIUM);
 
+  currentSelectWidgetId = signal<string>('');
+
   gridsterInstall: GridsterComponent;
+
+  isRuntime = signal(false);
 
   constructor() {}
 
@@ -19,6 +25,11 @@ export class DashboardEditorService {
   updateWidgetType(type: IWidgetType) {
     if (type === this.currentWidgetType()) return;
     this.currentWidgetType.set(type);
+  }
+
+  updateDashboardId(dahsboardId: string) {
+    if (dahsboardId === this.currentDashboardId()) return;
+    this.currentDashboardId.set(dahsboardId);
   }
 
   resizeGridster() {

@@ -25,7 +25,11 @@ import {
   ],
 })
 export class WidgetContainerComponent implements OnInit {
-  workSizeConfigStyle = input.required<IWidgetSizeStyle>();
+  workSizeConfigStyle = input<any>({} as IWidgetSizeStyle);
+
+  widgetId = input.required<string>();
+
+  widgetType = input.required<IWidgetType>();
 
   widgetTypes = IWidgetType;
 
@@ -33,11 +37,11 @@ export class WidgetContainerComponent implements OnInit {
 
   ngOnInit() {}
 
-  get widgetId() {
-    return this.widgetEditorService.currentWidgetId;
-  }
+  // get widgetId() {
+  //   return this.widgetEditorService.currentWidgetId;
+  // }
 
-  get widgetType() {
-    return this.widgetEditorService.currentWidgetType();
-  }
+  // get widgetType() {
+  //   return this.widgetEditorService.currentWidgetType();
+  // }
 }

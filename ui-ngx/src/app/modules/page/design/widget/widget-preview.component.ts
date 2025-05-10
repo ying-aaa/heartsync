@@ -27,6 +27,14 @@ export class WidgetPreviewComponent {
   zoomControl = viewChild.required<WidgetZoomComponent>('ZoomControl');
   workSizeConfigStyle = {} as IWidgetSizeStyle;
 
+  get widgetId() {
+    return this.widgetEditorService.currentWidgetId();
+  }
+
+  get widgetType() {
+    return this.widgetEditorService.currentWidgetType();
+  }
+
   constructor(
     private widgetEditorService: WidgetEditorService,
     private router: Router,

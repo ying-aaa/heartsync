@@ -38,14 +38,14 @@ export class WidgetEditorService {
 
   constructor() {
     effect(() => {
-      if(this.currentWidgetType()) {
+      if (this.currentWidgetType()) {
         this.currentWidgetId.set('');
       }
-    })
+    });
   }
 
   setWidgetId(widgetId: string) {
-    if(widgetId === this.currentWidgetId()) return;
+    if (widgetId === this.currentWidgetId()) return;
     this.currentWidgetId.set(widgetId);
   }
 }

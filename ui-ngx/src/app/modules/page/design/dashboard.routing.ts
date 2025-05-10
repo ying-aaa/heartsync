@@ -14,8 +14,8 @@ export default [
     title: '仪表板设计',
     path: 'layout',
     loadComponent: () =>
-      import('./dashboard/dashboard-layout.component').then(
-        (m) => m.DashboardLayoutComponent,
+      import('./dashboard/dashboard-design.component').then(
+        (m) => m.DashboardDesignComponent,
       ),
   },
 ] as Routes;

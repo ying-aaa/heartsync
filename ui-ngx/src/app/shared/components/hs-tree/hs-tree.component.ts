@@ -396,6 +396,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   defaultSelectorNode() {
     const tree = this.treeInstance.jstree(true);
+    if (!tree) return;
     const selectedNodes = tree.get_selected();
 
     if (selectedNodes.length === 0) {
