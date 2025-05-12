@@ -1,4 +1,4 @@
-@import "themeMixin";
+@import 'themeMixin';
 
 .themeMixin ( {
     :host {
@@ -15,6 +15,16 @@
 
           gridster-item {
             background-color: @gridster-item-bg-color;
+
+            &.select-gridster-item {
+              overflow: unset;
+
+              .select-shade {
+                cursor: pointer;
+                border: 1px solid #039be5;
+                box-shadow: 0 0 20px #039be5;
+              }
+            }
           }
         }
       }
@@ -22,4 +32,4 @@
     }
   }
 
-);
+);;

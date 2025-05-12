@@ -4,37 +4,44 @@
   [isLoading]="loadingStatus()"
 >
   @if (!loadingStatus() && !widgets.length) {
-    <div class="wh-full flex-center text-22px absolute top-0 left-0">
-      未配置部件
-    </div>
+  <div class="wh-full flex-center text-22px absolute top-0 left-0">
+    未配置部件
+  </div>
   }
   @if (gridsterOption().gridType) {
-    <gridster [options]="gridsterOption()">
-      @for (item of widgets; track item) {
-        <gridster-item [item]="item">
-          <div
-            class="#containter"
-            class="wh-full relative"
+  <gridster [options]="gridsterOption()">
+    @for (item of widgets; track item) {
+    <gridster-item
+      [item]="item"
+      [class.select-gridster-item]="item.widgetId === selectWidgetId()"
+      (click)="selectGridster(item)"
+    >
+      <div
+        id="#containter"
+        class="wh-full relative select-shade"
+      >
+        <div class="absolute wh-full z-999">
+          <button
+            mat-mini-fab
+            (mousedown)="removeItem($event, item)"
+            (touchstart)="removeItem($event, item)"
+            class="absolute! top-8px right-8px z-999"
           >
-            <button
-              mat-mini-fab
-              (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)"
-              class="absolute! top-8px right-8px z-999"
-            >
-              <mat-icon class="material-icons-round text-32px w-32px! h-32px!">
-                delete
-              </mat-icon>
-            </button>
+            <mat-icon class="material-icons-round text-32px w-32px! h-32px!">
+              delete
+            </mat-icon>
+          </button>
+        </div>
 
-            <hs-widget-container
-              [widgetId]="item.widgetId!"
-              [widgetType]="item['type']"
-              [workSizeConfigStyle]="{}"
-            ></hs-widget-container>
-          </div>
-        </gridster-item>
-      }
-    </gridster>
+
+        <hs-widget-container
+          [widgetId]="item.widgetId!"
+          [widgetType]="item['type']"
+          [workSizeConfigStyle]="{}"
+        ></hs-widget-container>
+      </div>
+    </gridster-item>
+    }
+  </gridster>
   }
 </content>

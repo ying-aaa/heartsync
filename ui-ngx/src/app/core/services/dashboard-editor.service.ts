@@ -16,7 +16,7 @@ export class DashboardEditorService {
 
   isRuntime = signal(false);
 
-  constructor() {}
+  constructor() { }
 
   setGridsterInstall(gridsterInstall: GridsterComponent) {
     this.gridsterInstall = gridsterInstall;
@@ -30,6 +30,10 @@ export class DashboardEditorService {
   updateDashboardId(dahsboardId: string) {
     if (dahsboardId === this.currentDashboardId()) return;
     this.currentDashboardId.set(dahsboardId);
+  }
+
+  updateWidgetId(widgetId: string) {
+    this.currentSelectWidgetId.set(widgetId);
   }
 
   resizeGridster() {

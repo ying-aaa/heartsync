@@ -18,14 +18,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
 
 import {
-  CompactType,
-  DisplayGrid,
   Draggable,
   GridsterComponent,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
-  GridType,
   PushDirections,
   Resizable,
 } from 'angular-gridster2';
@@ -97,9 +94,13 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     this.dashboardEditorService.currentWidgetType(),
   );
 
+  selectWidgetId = computed(() =>
+    this.dashboardEditorService.currentSelectWidgetId(),
+  );
+
   constructor(
     private dashboardEditorService: DashboardEditorService,
-    public dashboardConfigService: DashboardConfigService,
+    private dashboardConfigService: DashboardConfigService,
   ) {
     effect(() => {
       if (this.dashboardConfigService.dashboardConfig().widgets) {
@@ -148,6 +149,10 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     //   ev.dataTransfer.setData('text/plain', 'Drag Me Button');
     //   ev.dataTransfer.dropEffect = 'copy';
     // }
+  }
+
+  selectGridster(item: IDashboardWidgetContext) {
+    item.widgetId && this.dashboardEditorService.updateWidgetId(item.widgetId);
   }
 
   ngAfterViewInit(): void {
