@@ -2,7 +2,7 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-@import "base.less";
+@import 'base.less';
 
 * {
   box-sizing: border-box;
@@ -99,6 +99,7 @@ video {
   /* 继承父元素的颜色，去除默认的蓝色 */
   text-decoration: none;
   /* 去除下划线 */
+  outline: none;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -159,8 +160,8 @@ img {
   font-weight: normal !important;
   border: none;
   color: #fff !important;
-  border-color: @base-primary-color  !important;
-  background: @base-primary-color  !important;
+  border-color: @base-primary-color !important;
+  background: @base-primary-color !important;
 }
 
 .ui-state-active .ui-icon {

@@ -22,17 +22,16 @@
 .left-50\%{left:50%;}
 .left-6px{left:6px;}
 .left-8px\!{left:8px !important;}
+.right-0{right:0;}
 .right-12px{right:12px;}
 .right-16px{right:16px;}
 .right-3px{right:3px;}
-.right-8px{right:8px;}
 .top-0{top:0;}
 .top-10\%{top:10%;}
 .top-12px{top:12px;}
 .top-16px{top:16px;}
 .top-32px{top:32px;}
 .top-50\%{top:50%;}
-.top-8px{top:8px;}
 .-z-1{z-index:-1;}
 .-z-999{z-index:-999;}
 .z-10{z-index:10;}
@@ -153,6 +152,7 @@
 .w-21px{width:21px;}
 .w-240px{width:240px;}
 .w-24px{width:24px;}
+.w-24px\!{width:24px !important;}
 .w-282px{width:282px;}
 .w-284px{width:284px;}
 .w-28px\!{width:28px !important;}
@@ -317,6 +317,7 @@
 .text-20px{font-size:20px;}
 .text-22px{font-size:22px;}
 .text-24px{font-size:24px;}
+.text-24px\!{font-size:24px !important;}
 .text-28px{font-size:28px;}
 .text-28px\!{font-size:28px !important;}
 .text-2xl{font-size:1.5rem;line-height:2rem;}

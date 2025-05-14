@@ -35,6 +35,10 @@ import { DashboardConfigService } from '@src/app/core/services/dashboard-config.
 import { CommonModule } from '@angular/common';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { IWidgetType } from '@src/app/shared/models/widget.model';
+import { MatMenuModule } from '@angular/material/menu';
+import { CdkMenu, CdkMenuItem, CdkContextMenuTrigger } from '@angular/cdk/menu';
+import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
+import { MatDividerModule } from '@angular/material/divider';
 
 interface Safe extends GridsterConfig {
   draggable: Draggable;
@@ -42,22 +46,39 @@ interface Safe extends GridsterConfig {
   pushDirections: PushDirections;
 }
 
+interface IContextMenuConfig {
+  label: string,
+  icon: string,
+  matIcon?: boolean,
+  action: Function
+}
+
+interface IContextMenu {
+  [key: string]: IContextMenuConfig
+}
+
 @Component({
   selector: 'hs-dashboard-design',
   templateUrl: './dashboard-design.component.html',
   styleUrls: ['./dashboard-design.component.less'],
   imports: [
+    CdkMenu,
+    HsSvgModule,
+    CdkMenuItem,
     FormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
+    CommonModule,
+    MatMenuModule,
     MatIconModule,
     MatInputModule,
+    HsLoadingModule,
+    MatButtonModule,
     MatSelectModule,
+    MatDividerModule,
+    MatCheckboxModule,
     GridsterComponent,
+    CdkContextMenuTrigger,
     GridsterItemComponent,
     WidgetContainerComponent,
-    HsLoadingModule,
-    CommonModule,
   ],
 })
 export class DashboardDesignComponent implements OnInit, AfterViewInit {
@@ -72,7 +93,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   isRuntime = computed(() => !this.dashboardEditorService.isRuntime());
 
   gridsterOption = computed(() => {
-    const isRuntime = !this.dashboardEditorService.isRuntime();
+    const isRuntime = this.isRuntime();
     return {
       ...this.dashboardConfigService.gridsterOption(),
       // 拖拽生成
@@ -97,6 +118,32 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   selectWidgetId = computed(() =>
     this.dashboardEditorService.currentSelectWidgetId(),
   );
+
+  gridsterItemContextMenu: IContextMenu = {
+    rename: {
+      label: '编辑',
+      icon: 'edit',
+      action: (data: any) => {
+      },
+    },
+    copy: {
+      label: '复制',
+      matIcon: true,
+      icon: 'file_copy',
+      action: (data: any) => {
+      },
+    },
+    remove: {
+      label: '删除',
+      icon: 'remove',
+      action: async (data: any) => {
+      },
+    },
+  };
+
+  gridsterItemContextMenuArr() {
+    return Object.values(this.gridsterItemContextMenu);
+  }
 
   constructor(
     private dashboardEditorService: DashboardEditorService,

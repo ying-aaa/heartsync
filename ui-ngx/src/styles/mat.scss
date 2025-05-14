@@ -25,6 +25,20 @@ $base-radius: 8px;
   @include mat.theme((density: 0));
 }
 
+.hs-icon-button-32 {
+  &.mdc-icon-button{
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    padding: 6px;
+    .mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+    }
+  }
+}
+
 html {
 
   // 按钮
