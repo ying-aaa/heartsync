@@ -74,10 +74,17 @@ export class AppManageComponent implements OnInit {
             duration: 1 * 1000,
           });
         }
-      } catch (error) {}
+      } catch (error) { }
       return !value;
     },
     selectEvent: (node, jsTree) => {
+      if (node) {
+        this.directoryId = node.id;
+        this.pageLink.changeSearch('directoryId', this.directoryId);
+        this.pageLink.getData();
+      }
+    },
+    createNodeSuccess: (node, jsTree) => {
       if (node) {
         this.directoryId = node.id;
         this.pageLink.changeSearch('directoryId', this.directoryId);
@@ -172,7 +179,7 @@ export class AppManageComponent implements OnInit {
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private applicationService: ApplicationService,
-  ) {}
+  ) { }
 
   createRecord() {
     const width = isMobile() ? '100vw' : '800px';
@@ -192,5 +199,5 @@ export class AppManageComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }
