@@ -1,0 +1,19 @@
+@import 'themeMixin';
+
+.themeMixin({
+  :host {
+    display: block;
+    
+    .text-content{
+      &:hover{
+        background-color: @base-color-10;;
+      }
+    }
+
+    input {
+      border-style: solid;
+      color: @base-text-color;
+    }
+  }
+  
+});

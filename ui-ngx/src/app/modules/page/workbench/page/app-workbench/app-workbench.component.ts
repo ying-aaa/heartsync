@@ -8,7 +8,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { HttpClient } from '@angular/common/http';
 import { debounceTime } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { HsInlineEditorModule } from '@src/app/shared/components/hs-inline-editor/inline-editor.module';
 @Component({
   selector: 'hs-app-workbench',
   styleUrl: './app-workbench.component.less',
@@ -24,12 +25,13 @@ import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
     MatDividerModule,
     CommonModule,
     NgScrollbarModule,
+    HsInlineEditorModule
   ],
 })
 export class AppWorkbenchComponent {
   appValue = new FormControl('');
   appList: any = [];
-
+  textValue = "1111111111111111";
   constructor(private http: HttpClient) {
     this.appValue.valueChanges
       .pipe(debounceTime(500)) // 设置节流时间为500ms

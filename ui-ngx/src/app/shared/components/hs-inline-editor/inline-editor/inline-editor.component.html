@@ -1,0 +1,48 @@
+<div class="w-full max-w-[200px] text-14px relative">
+  @if(!isEdit) {
+  <div
+    #editorTrigger
+    class="truncate text-content px-3 py-2 rounded-6px line-height-16px"
+    (click)="editTriggerEvent()"
+  >
+    {{ textValue }}
+  </div>
+  }@else {
+
+  @switch (type) {
+  @case ("text") {
+  <input
+    class="line-height-16px w-full bg-transparent placeholder:text-slate-400 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-300 shadow-sm focus:shadow"
+    #inputRef
+    (blur)="editFinishEvent($event)"
+    [(ngModel)]="textValue"
+    (ngModelChange)="changeValue($event)"
+  />
+  }
+  }
+
+  @if(showButton) {
+  <div class="absolute right-0 top-100% pt-3px">
+    <button
+      mat-icon-button
+      class="hs-icon-button-32"
+    >
+      <mat-icon class="material-icons-round">
+        check
+      </mat-icon>
+    </button>
+
+    <button
+      mat-icon-button
+      class="hs-icon-button-32"
+    >
+      <mat-icon class="material-icons-round">
+        close
+      </mat-icon>
+    </button>
+  </div>
+  }
+
+  }
+
+</div>
