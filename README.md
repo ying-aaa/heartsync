@@ -112,8 +112,8 @@ HeartSync 提供了栅格、Flex、绝对定位三种布局方式，用户可以
 2. **克隆项目**
 
    ```bash
-   git clone https://github.com/ying-aaa/HeartSync.git
-   cd HeartSync
+   git clone https://github.com/ying-aaa/heartsync.git
+   cd heartsync
    ```
 3. **安装依赖**
 
@@ -185,6 +185,6 @@ HeartSync 提供了栅格、Flex、绝对定位三种布局方式，用户可以
 如果你有任何问题或建议，可以通过以下方式联系我们：
 
 - 邮箱：[775296271@qq.com](mailto:775296271@qq.com)
-- GitHub：[https://github.com/ying-aaa/HeartSync](https://github.com/ying-aaa/HeartSync)
+- GitHub：[https://github.com/ying-aaa/heartsync](https://github.com/ying-aaa/heartsync)
 
 感谢你对 HeartSync 的关注和支持，让我们一起打造一个更强大的低代码平台！

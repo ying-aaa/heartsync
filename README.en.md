@@ -112,8 +112,8 @@ Provides a visual configuration interface, allowing users to build and configure
 2. **Clone the Project**
 
    ```bash
-   git clone https://github.com/ying-aaa/HeartSync.git
-   cd HeartSync
+   git clone https://github.com/ying-aaa/heartsync.git
+   cd heartsync
    ```
 3. **Install Dependencies**
 
@@ -185,6 +185,6 @@ We welcome all developers interested in HeartSync to contribute. You can partici
 If you have any questions or suggestions, you can contact us through the following methods:
 
 - Email: [775296271@qq.com](mailto:775296271@qq.com)
-- GitHub: [https://github.com/ying-aaa/HeartSync](https://github.com/ying-aaa/HeartSync)
+- GitHub: [https://github.com/ying-aaa/heartsync](https://github.com/ying-aaa/heartsync)
 
 Thank you for
