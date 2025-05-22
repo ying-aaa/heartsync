@@ -91,7 +91,7 @@ HeartSync 提供了栅格、Flex、绝对定位三种布局方式，用户可以
 
 ### 环境要求
 
-- **Node.js**：需要 Node.js 16 或更高版本。建议使用 [Node Version Manager (nvm)](https://github.com/nvm-sh/nvm) 来管理 Node.js 版本。
+- **Node.js**：需要 Node.js 18 或更高版本。建议使用 [Node Version Manager (nvm)](https://github.com/nvm-sh/nvm) 来管理 Node.js 版本。
 - **Angular CLI**：需要 Angular CLI 19 或更高版本。可以通过以下命令安装：
   ```bash
   npm install -g @angular/cli
