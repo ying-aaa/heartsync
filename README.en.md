@@ -91,7 +91,7 @@ Provides a visual configuration interface, allowing users to build and configure
 
 ### Environment Requirements
 
-- **Node.js**: Node.js version 16 or higher is required. It is recommended to use [Node Version Manager (nvm)](https://github.com/nvm-sh/nvm) to manage Node.js versions.
+- **Node.js**: Node.js version 18 or higher is required. It is recommended to use [Node Version Manager (nvm)](https://github.com/nvm-sh/nvm) to manage Node.js versions.
 - **Angular CLI**: Angular CLI version 19 or higher is required. You can install it using the following command:
   ```bash
   npm install -g @angular/cli
