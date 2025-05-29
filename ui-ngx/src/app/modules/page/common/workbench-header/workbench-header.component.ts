@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import {
   ActivatedRoute,
   Route,
@@ -17,6 +17,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { VerseThemeComponent } from '@src/app/shared/components/ui-verse/verse-theme/verse-theme.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { AuthService } from '@src/app/core/auth/auth.service';
 
 @Component({
   selector: 'hs-workbench-header',
@@ -38,9 +39,15 @@ export class WorkbenchHeaderComponent {
 
   menuList: Route[] = [];
   checked = true;
+
+  isAuthenticated = computed(() =>
+    this.authService.isAuthenticated()
+  );
+
   constructor(
     private route: ActivatedRoute,
     public hsThemeService: HsThemeService,
+    private authService: AuthService
   ) {
     this.menuList = this.route.routeConfig!.children!.filter(
       (item) => item.data?.['use'] === IRouterUse.MENU,
@@ -51,5 +58,9 @@ export class WorkbenchHeaderComponent {
     this.hsThemeService.toggleDarkTheme(
       event.checked ? IThemeType.DARK : IThemeType.LIGHT,
     );
+  }
+
+  login() {
+    this.authService.logout()
   }
 }

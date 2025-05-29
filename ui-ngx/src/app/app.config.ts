@@ -13,11 +13,15 @@ import {
 } from '@angular/common/http';
 import { provideHighlightOptions } from 'ngx-highlightjs';
 import { ResponentInterceptor } from './core/interceptors/response.interceptor';
+import { provideKeycloakAngular } from './lib/keycloak.config';
+import { includeBearerTokenInterceptor } from 'keycloak-angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideKeycloakAngular(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([ResponentInterceptor])),

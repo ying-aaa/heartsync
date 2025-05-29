@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --ssl",
     "start-uno": "ng serve & unocss --watch",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
@@ -42,6 +42,8 @@
     "highlight.js": "^11.11.1",
     "jquery": "^3.7.1",
     "jstree": "^3.3.17",
+    "keycloak-angular": "^19.0.2",
+    "keycloak-js": "^25.0.0",
     "material-icons": "^1.13.13",
     "ng2-file-upload": "^8.0.0",
     "ngx-highlightjs": "^14.0.0",
