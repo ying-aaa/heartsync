@@ -18,6 +18,7 @@ import { VerseThemeComponent } from '@src/app/shared/components/ui-verse/verse-t
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '@src/app/core/auth/auth.service';
+import { WorkbenchUserDropdownComponent } from './workbench-user-dropdown/workbench-user-dropdown.component';
 
 @Component({
   selector: 'hs-workbench-header',
@@ -31,6 +32,7 @@ import { AuthService } from '@src/app/core/auth/auth.service';
     VerseThemeComponent,
     MatIconModule,
     MatDividerModule,
+    WorkbenchUserDropdownComponent,
   ],
 })
 export class WorkbenchHeaderComponent {
@@ -40,14 +42,12 @@ export class WorkbenchHeaderComponent {
   menuList: Route[] = [];
   checked = true;
 
-  isAuthenticated = computed(() =>
-    this.authService.isAuthenticated()
-  );
+  isAuthenticated = computed(() => this.authService.isAuthenticated());
 
   constructor(
     private route: ActivatedRoute,
     public hsThemeService: HsThemeService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     this.menuList = this.route.routeConfig!.children!.filter(
       (item) => item.data?.['use'] === IRouterUse.MENU,
@@ -58,9 +58,5 @@ export class WorkbenchHeaderComponent {
     this.hsThemeService.toggleDarkTheme(
       event.checked ? IThemeType.DARK : IThemeType.LIGHT,
     );
-  }
-
-  login() {
-    this.authService.logout()
   }
 }

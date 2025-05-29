@@ -1,7 +1,19 @@
 // auth.service.ts
-import { computed, DestroyRef, effect, inject, Injectable, signal } from '@angular/core';
+import {
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  Injectable,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType, ReadyArgs, typeEventArgs } from 'keycloak-angular';
+import {
+  KEYCLOAK_EVENT_SIGNAL,
+  KeycloakEventType,
+  ReadyArgs,
+  typeEventArgs,
+} from 'keycloak-angular';
 import Keycloak, { KeycloakProfile, KeycloakTokenParsed } from 'keycloak-js';
 import { debounceTime, Subject, switchMap } from 'rxjs';
 
@@ -11,7 +23,6 @@ interface AuthState {
   userProfile: KeycloakProfile | undefined;
   tokenParsed: KeycloakTokenParsed | undefined;
 }
-
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -23,66 +34,80 @@ export class AuthService {
     isAuthenticated: false,
     status: undefined,
     userProfile: undefined,
-    tokenParsed: undefined
+    tokenParsed: undefined,
   });
-  
+
   readonly isAuthenticated = computed(() => this.state().isAuthenticated);
   readonly userProfile = computed(() => this.state().userProfile);
-  
-  private loadProfileTrigger = new Subject<void>();
 
+  public username = computed(() => {
+    const profile = this.state().userProfile;
+    return profile?.username || null;
+  });
+
+  private loadProfileTrigger = new Subject<void>();
 
   constructor() {
     effect(() => {
       const keycloakEvent = this.keycloakSignal();
       const status = keycloakEvent.type;
-      this.state.update(s => ({ ...s, status}));
+      this.state.update((s) => ({ ...s, status }));
       switch (status) {
         case KeycloakEventType.Ready:
           this.handleReady(keycloakEvent);
           break;
         case KeycloakEventType.AuthSuccess:
-          this.state.update(s => ({ ...s, isAuthenticated: true }));
+          this.state.update((s) => ({ ...s, isAuthenticated: true }));
           this.loadProfileTrigger.next();
           break;
         case KeycloakEventType.TokenExpired:
           this.keycloak.updateToken(30);
           break;
         case KeycloakEventType.AuthLogout:
-          this.state.set({ isAuthenticated: false, status: undefined, userProfile: undefined, tokenParsed: undefined });
+          this.state.set({
+            isAuthenticated: false,
+            status: undefined,
+            userProfile: undefined,
+            tokenParsed: undefined,
+          });
           break;
       }
+    });
 
-      
-      this.loadProfileTrigger.pipe(
+    this.loadProfileTrigger
+      .pipe(
         debounceTime(300),
         switchMap(() => this.loadUserProfile()),
-        takeUntilDestroyed(this.destroyRef)
-      ).subscribe((userProfile: any) => {
-        if (userProfile) this.state.update(s => ({ ...s, userProfile, tokenParsed: this.keycloak.tokenParsed }));
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((userProfile: any) => {
+        if (userProfile)
+          this.state.update((s) => ({
+            ...s,
+            userProfile,
+            tokenParsed: this.keycloak.tokenParsed,
+          }));
       });
 
-      // 初始状态检查
-      // this.keycloak.isLoggedIn().then((loggedIn: any) => {
-      //   this.state.update(s => ({ ...s, isAuthenticated: loggedIn }));
-      //   if (loggedIn) this.loadProfileTrigger.next();
-      // });
-    }); 
-  }   
+    // 初始状态检查
+    // this.keycloak.isLoggedIn().then((loggedIn: any) => {
+    //   this.state.update(s => ({ ...s, isAuthenticated: loggedIn }));
+    //   if (loggedIn) this.loadProfileTrigger.next();
+    // });
+  }
 
   private handleReady(event: any): void {
     const isAuthenticated = typeEventArgs<boolean>(event.args);
-    this.state.update(s => ({ ...s, isAuthenticated }));
-    if (isAuthenticated) this.loadProfileTrigger.next();
+    this.state.update((s) => ({ ...s, isAuthenticated }));
+    if (isAuthenticated) {
+      this.loadProfileTrigger.next();
+    }
   }
 
   private async loadUserProfile(): Promise<KeycloakProfile | null> {
     try {
       const profile = await this.keycloak.loadUserProfile();
-      return { 
-        ...profile, 
-        // name: [profile.firstName, profile.lastName].filter(Boolean).join(' ') || '匿名用户' 
-      };
+      return profile;
     } catch (e) {
       return null;
     }

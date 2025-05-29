@@ -1,0 +1,42 @@
+@if (isAuthenticated()) {
+  <div
+    [matMenuTriggerFor]="beforeMenu"
+    class="w-128px h-100% flex-center cursor-pointer relative pl-24px"
+  >
+    <img
+      class="w-40px h-40px mr-8px rounded-full absolute left-0"
+      [src]="'/assets/workbench/hs.jpg'"
+      alt="User Avatar"
+    />
+    @if (username()) {
+      <div class="name-text">
+        {{ username() }}
+      </div>
+    }
+  </div>
+} @else {
+  <div
+    (click)="login()"
+    class="w-120px h-100% flex-center cursor-pointer"
+  >
+    去登陆
+  </div>
+}
+
+<mat-menu
+  #beforeMenu="matMenu"
+  xPosition="before"
+  panelClass="workbench-user-dropdown"
+>
+  <button mat-menu-item>
+    <mat-icon>person</mat-icon>
+    <span>个人中心</span>
+  </button>
+  <button
+    mat-menu-item
+    (click)="logout()"
+  >
+    <mat-icon>exit_to_app </mat-icon>
+    <span>退出登陆</span>
+  </button>
+</mat-menu>
