@@ -1,10 +1,26 @@
 import { Routes } from '@angular/router';
 import { IRouterUse } from '@src/app/shared/models/route.model';
-import widgetRoutes from './widget.routing';
+import configurationRoutes from './configuration.routing';
 import dashboardRoutes from './dashboard.routing';
+import widgetRoutes from './widget.routing';
 
 const designPageRoutes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'configuration', pathMatch: 'full' },
+  {
+    title: '应用配置',
+    path: 'configuration',
+    data: {
+      preload: true,
+      key: 'configuration',
+      use: IRouterUse.MENU,
+      icon: 'app_registration',
+    },
+    loadComponent: () =>
+      import('./configuration/configuration-editor.component').then(
+        (m) => m.ConfigurationEditorComponent
+      ),
+    children: configurationRoutes,
+  },
   {
     title: '仪表版',
     path: 'dashboard',
