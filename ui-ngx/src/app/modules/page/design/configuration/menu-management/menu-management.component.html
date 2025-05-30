@@ -1,0 +1,74 @@
+<!-- app.component.html -->
+<div class="container">
+  <div class="card">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- 名称列 (带缩进) -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>部门名称</th>
+        <td mat-cell *matCellDef="let node">
+          <div class="tree-node" [style.padding-left]="node.level * 24 + 'px'">
+            <button mat-icon-button 
+                    *ngIf="node.expandable" 
+                    (click)="toggleRow(node); $event.stopPropagation()"
+                    class="tree-toggle">
+              <mat-icon>
+                {{treeControl.isExpanded(node) ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}}
+              </mat-icon>
+            </button>
+            <span *ngIf="!node.expandable" class="tree-spacer"></span>
+            <mat-icon class="tree-icon">
+              {{treeControl.isExpanded(node) ? 'folder_open' : node.expandable ? 'folder' : 'description'}}
+            </mat-icon>
+            <span>{{node.name}}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- 负责人列 -->
+      <ng-container matColumnDef="manager">
+        <th mat-header-cell *matHeaderCellDef>负责人</th>
+        <td mat-cell *matCellDef="let node">{{node.manager}}</td>
+      </ng-container>
+
+      <!-- 预算列 -->
+      <ng-container matColumnDef="budget">
+        <th mat-header-cell *matHeaderCellDef>预算</th>
+        <td mat-cell *matCellDef="let node">{{node.budget}}</td>
+      </ng-container>
+
+      <!-- 员工数列 -->
+      <ng-container matColumnDef="employees">
+        <th mat-header-cell *matHeaderCellDef>员工数</th>
+        <td mat-cell *matCellDef="let node">{{node.employees}}</td>
+      </ng-container>
+
+      <!-- 状态列 -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>状态</th>
+        <td mat-cell *matCellDef="let node">
+          <span [class]="getStatusClass(node.status)">
+            {{getStatusText(node.status)}}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- 操作列 -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>操作</th>
+        <td mat-cell *matCellDef="let node">
+          <button mat-icon-button color="primary" title="编辑">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" title="删除">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row 
+          *matRowDef="let row; columns: displayedColumns;">
+      </tr>
+    </table>
+  </div>
+</div>
