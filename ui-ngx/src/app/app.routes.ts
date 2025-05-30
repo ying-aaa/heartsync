@@ -14,6 +14,11 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/page/design/design.routing'),
   },
   {
+    path: 'run-app/:appId',
+    data: { preload: true },
+    loadChildren: () => import('./modules/page/run-app/run-app.routing'),
+  },
+  {
     path: 'login',
     data: { preload: true },
     loadChildren: () => import('./modules/page/login/login.routing'),

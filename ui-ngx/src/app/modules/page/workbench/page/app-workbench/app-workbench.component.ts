@@ -31,7 +31,7 @@ import { HsInlineEditorModule } from '@src/app/shared/components/hs-inline-edito
 export class AppWorkbenchComponent {
   appValue = new FormControl('');
   appList: any = [];
-  textValue = "1111111111111111";
+
   constructor(private http: HttpClient) {
     this.appValue.valueChanges
       .pipe(debounceTime(500)) // 设置节流时间为500ms
@@ -47,5 +47,11 @@ export class AppWorkbenchComponent {
       },
       error: (err) => console.error('err ->', err),
     });
+  }
+
+  navigateToApp(appId: string): void {
+    if (appId) {
+      window.open(`/run-app/${appId}`);
+    }
   }
 }
