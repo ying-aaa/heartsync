@@ -1,0 +1,27 @@
+@import 'themeMixin';
+
+.themeMixin( {
+    :host {
+      width: 100%;
+      display: block;
+
+      .highlight-bg {
+        background-color: @base-color-10; ;
+      }
+
+      .text-content {
+        &:hover {
+          background-color: @base-color-10;
+          border: 1px solid #3b82f6;
+        }
+      }
+
+      input {
+        border-style: solid;
+        color: @base-text-color;
+      }
+    }
+
+  }
+
+);

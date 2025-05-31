@@ -25,7 +25,7 @@ import { HsInlineEditorModule } from '@src/app/shared/components/hs-inline-edito
     MatDividerModule,
     CommonModule,
     NgScrollbarModule,
-    HsInlineEditorModule
+    HsInlineEditorModule,
   ],
 })
 export class AppWorkbenchComponent {
