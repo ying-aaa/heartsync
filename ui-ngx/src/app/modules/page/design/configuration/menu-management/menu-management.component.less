@@ -1,119 +1,135 @@
-:host {
+@import "themeMixin";
 
+.themeMixin( {
+    :host {
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .header {
-    text-align: center;
-    padding: 30px 0;
-    color: #2c3e50;
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
-
-    p {
-      font-size: 1.1rem;
-      color: #7f8c8d;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-  }
-
-  .card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    margin-bottom: 30px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .mat-header-row {
-    background: #3f51b5;
-    color: white;
-    font-weight: 500;
-
-    th {
-      font-size: 16px;
-    }
-  }
-
-  .mat-row {
-    border-bottom: 1px solid #e0e0e0;
-    transition: background-color 0.3s;
-
-    &:hover {
-      background-color: #f9f9f9;
-      cursor: pointer;
-    }
-  }
-
-  .mat-cell {
-    padding: 16px;
-    font-size: 14px;
-    color: #333;
-  }
-
-  .tree-node {
-    display: flex;
-    align-items: center;
-
-    .tree-toggle {
-      margin-right: 8px;
-      color: #3f51b5;
-    }
-
-    .tree-spacer {
-      width: 40px;
-    }
-
-    .tree-icon {
-      margin-right: 8px;
-      color: #ff9800;
-    }
-  }
-
-  .status-active {
-    background: #e8f5e9;
-    color: #2e7d32;
-    padding: 4px 12px;
-    border-radius: 16px;
-    font-size: 13px;
-    display: inline-block;
-  }
-
-  .status-inactive {
-    background: #ffebee;
-    color: #c62828;
-    padding: 4px 12px;
-    border-radius: 16px;
-    font-size: 13px;
-    display: inline-block;
-  }
-
-  .status-warning {
-    background: #fff8e1;
-    color: #ff8f00;
-    padding: 4px 12px;
-    border-radius: 16px;
-    font-size: 13px;
-    display: inline-block;
-  }
-
-  .footer {
-    text-align: center;
-    padding: 20px;
-    color: #7f8c8d;
-    font-size: 14px;
-  }
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
 }
+
+.mat-mdc-row:hover {
+  background-color: @base-color-05;
+}
+
+
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        padding: 30px 0;
+        color: #2c3e50;
+
+        h1 {
+          font-size: 2.5rem;
+          margin-bottom: 10px;
+          font-weight: 500;
+        }
+
+        p {
+          font-size: 1.1rem;
+          color: #7f8c8d;
+          max-width: 700px;
+          margin: 0 auto;
+        }
+      }
+
+      .card {
+        background: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        margin-bottom: 30px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .mat-header-row {
+        background: #3f51b5;
+        color: white;
+        font-weight: 500;
+
+        th {
+          font-size: 16px;
+        }
+      }
+
+      .mat-row {
+        border-bottom: 1px solid #e0e0e0;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #f9f9f9;
+          cursor: pointer;
+        }
+      }
+
+      .mat-cell {
+        padding: 16px;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .tree-node {
+        display: flex;
+        align-items: center;
+
+        .tree-toggle {
+          margin-right: 8px;
+          color: #3f51b5;
+        }
+
+        .tree-spacer {
+          width: 40px;
+        }
+
+        .tree-icon {
+          margin-right: 8px;
+          color: #ff9800;
+        }
+      }
+
+      .status-active {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 13px;
+        display: inline-block;
+      }
+
+      .status-inactive {
+        background: #ffebee;
+        color: #c62828;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 13px;
+        display: inline-block;
+      }
+
+      .status-warning {
+        background: #fff8e1;
+        color: #ff8f00;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 13px;
+        display: inline-block;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 20px;
+        color: #7f8c8d;
+        font-size: 14px;
+      }
+    }
+  }
+
+);
