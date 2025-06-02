@@ -70,7 +70,7 @@
       <th
         mat-header-cell
         *matHeaderCellDef
-        [style.width]="'300px'"
+        [style.width]="'320px'"
       >
         菜单
       </th>
@@ -79,7 +79,7 @@
         *matCellDef="let node"
       >
         <div
-          class="tree-node"
+          class="tree-node flex"
           [style.padding-left]="node.level * 24 + 'px'"
         >
           @if (node.expandable) {
@@ -116,7 +116,7 @@
                     : 'description'
               }} -->
           </mat-icon>
-          <div class="w-200px">
+          <div class="flex-1 w-0">
             <hs-inline-editor
               type="text"
               [(ngModel)]="node.name"
@@ -201,7 +201,7 @@
       "
       [cdkContextMenuTriggerData]="{ context: row }"
       [class.bg-color-05]="clickedRows?.id === row.id"
-      (click)="rowClicked(row); $event.stopPropagation()"
+      (click)="rowClicked(row)"
     ></tr>
   </table>
 </div>

@@ -105,7 +105,6 @@ export class HsInlineEditorComponent
   setDisabledState?(isDisabled: boolean): void {}
 
   editTriggerEvent(event: Event) {
-    event.stopPropagation();
     if (this.disabled) return;
     this.isEdit = true;
     this.editStart.emit();

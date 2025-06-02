@@ -206,11 +206,11 @@ export class MenuManagementComponent {
   }
 
   rowClicked(row: IMenuNode) {
-    if (this.clickedRows === row) {
-      this.clickedRows = null; // 取消选中
-    } else {
-      this.clickedRows = row; // 选中当前行
-    }
+    // if (this.clickedRows === row) {
+    //   this.clickedRows = null; // 取消选中
+    // } else {
+    this.clickedRows = row; // 选中当前行
+    // }
   }
 
   customContextMenu = {
