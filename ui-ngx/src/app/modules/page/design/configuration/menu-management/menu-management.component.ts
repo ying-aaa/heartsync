@@ -1,9 +1,4 @@
 import { Component, computed, signal } from '@angular/core';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import {
-  MatTreeFlatDataSource,
-  MatTreeFlattener,
-} from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -13,16 +8,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { CdkContextMenuTrigger, CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
 import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
-import { OptimizedTreeComponent } from './optimized-tree.component';
+import { MatChipsModule } from '@angular/material/chips';
 
-interface ExampleFlatNode extends IMenuNode {
-  expandable: boolean;
-  level: number;
-}
-
-interface TreeNode extends IMenuNode {}
-
-interface FlatTreeNode extends TreeNode {
+interface FlatIMenuNode extends IMenuNode {
   level: number;
   expandable: boolean;
   isExpanded: boolean;
@@ -44,10 +32,11 @@ interface FlatTreeNode extends TreeNode {
     CdkMenu,
     CdkMenuItem,
     HsSvgModule,
-    OptimizedTreeComponent,
+    MatChipsModule,
   ],
 })
 export class MenuManagementComponent {
+  IMenuType = IMenuType;
   displayedColumns: string[] = [
     'menuType',
     'name',
@@ -55,79 +44,21 @@ export class MenuManagementComponent {
     'isFullscreen',
     'actions',
   ];
-  title = true;
-  private _transformer = (node: IMenuNode, level: number) => {
-    return {
-      ...node,
-      expandable: !!node.children && node.children.length > 0,
-      level: level,
-    };
-  };
 
-  // treeControl = new NestedTreeControl<DepartmentNode>(node => node.children);
-  // dataSource = new MatTreeNestedDataSource<DepartmentNode>();
-
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
-    (node) => node.level,
-    (node) => node.expandable,
-  );
-
-  treeFlattener = new MatTreeFlattener(
-    this._transformer,
-    (node) => node.level,
-    (node) => node.expandable,
-    (node) => node.children,
-  );
-
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  clickedRows: IMenuNode | null = null;
 
   // 使用信号管理树数据
-  treeData = signal<TreeNode[]>([
-    {
-      id: '1',
-      name: '系统管理0',
-      icon: 'system-icon',
-      menuType: IMenuType.Parent,
-      parentMenuId: null,
-      isFullscreen: false,
-      sortOrder: 1,
-      dashboardId: null,
-      children: [
-        {
-          id: '2',
-          name: '系统管理1',
-          icon: 'system-icon',
-          menuType: IMenuType.Child,
-          parentMenuId: null,
-          isFullscreen: false,
-          sortOrder: 1,
-          dashboardId: null,
-          children: [],
-        },
-      ],
-    },
-    {
-      id: '2',
-      name: '系统管理2',
-      icon: 'system-icon',
-      menuType: IMenuType.Child,
-      parentMenuId: null,
-      isFullscreen: false,
-      sortOrder: 1,
-      dashboardId: null,
-      children: [],
-    },
-  ]);
+  treeData = signal<IMenuNode[]>([]);
 
   // 节点展开状态管理（独立信号）
   expandedNodes = signal<Set<string>>(new Set());
 
   // 扁平节点计算（仅计算需要渲染的节点）
   flattenedNodes = computed(() => {
-    const result: FlatTreeNode[] = [];
+    const result: FlatIMenuNode[] = [];
     const expandedSet = this.expandedNodes();
 
-    const processNode = (node: TreeNode, level: number) => {
+    const processNode = (node: IMenuNode, level: number) => {
       const isExpanded = expandedSet.has(node.id);
       const expandable = !!(node.children && node.children.length > 0);
 
@@ -152,7 +83,7 @@ export class MenuManagementComponent {
   }
 
   // 获取子节点（优化渲染）
-  // getChildren(parent: FlatTreeNode): FlatTreeNode[] {
+  // getChildren(parent: FlatIMenuNode): FlatIMenuNode[] {
   //   const parentNode = this.findNode(parent.id);
   //   if (!parentNode || !parentNode.children) return [];
 
@@ -165,7 +96,7 @@ export class MenuManagementComponent {
   // }
 
   // 查找节点（优化性能）
-  private findNode(id: string, nodes?: TreeNode[]): TreeNode | null {
+  private findNode(id: string, nodes?: IMenuNode[]): IMenuNode | null {
     const searchNodes = nodes || this.treeData();
     for (const node of searchNodes) {
       if (node.id === id) return node;
@@ -177,8 +108,92 @@ export class MenuManagementComponent {
     return null;
   }
 
+  addChildNode(type: IMenuType, node: any) {
+    const newNode: IMenuNode = {
+      id: Math.random().toString(36).substring(2, 15), // 生成随机 ID
+      name: `新${type === IMenuType.Parent ? '目录' : '菜单'}`,
+      icon: 'system-icon',
+      menuType: type,
+      parentMenuId: node.id,
+      isFullscreen: false,
+      sortOrder: 1,
+      dashboardId: null,
+      children: [],
+    };
+
+    if (node.children) {
+      node.children.push(newNode);
+    } else {
+      node.children = [newNode];
+    }
+
+    this.treeData.update((currentData) => [...currentData]);
+
+    // 触发展开状态更新
+    this.expandedNodes.update((expanded) => {
+      const newSet = new Set(expanded);
+      newSet.add(node.id);
+      return newSet;
+    });
+  }
+
+  addSameNode(type: IMenuType, node: any) {
+    const newNode: IMenuNode = {
+      id: Math.random().toString(36).substring(2, 15), // 生成随机 ID
+      name: `新${type === IMenuType.Parent ? '目录' : '菜单'}`,
+      icon: 'system-icon',
+      menuType: type,
+      parentMenuId: node && node.parentMenuId,
+      isFullscreen: false,
+      sortOrder: 1,
+      dashboardId: null,
+      children: [],
+    };
+
+    const parentNode = this.findNode(node?.parentMenuId);
+
+    if (parentNode) {
+      if (parentNode.children) {
+        parentNode.children.push(newNode);
+      } else {
+        parentNode.children = [newNode];
+      }
+      return this.treeData.update((currentData) => [...currentData]);
+    } else {
+      return this.treeData.update((currentData) => [...currentData, newNode]);
+    }
+  }
+
+  deleteNode(node: IMenuNode) {
+    const removeNodeRecursively = (
+      nodes: IMenuNode[],
+      id: string,
+    ): IMenuNode[] => {
+      return nodes
+        .map((n) => {
+          if (n.id === id) {
+            return null; // 标记为删除
+          }
+          if (n.children) {
+            n.children = removeNodeRecursively(n.children, id);
+          }
+          return n;
+        })
+        .filter((n) => n !== null);
+    };
+
+    this.treeData.update((currentData) =>
+      removeNodeRecursively(currentData, node.id),
+    );
+    this.expandedNodes.update((expanded) => {
+      const newSet = new Set(expanded);
+      newSet.delete(node.id);
+      return newSet;
+    });
+  }
+
   // 切换节点展开状态
-  toggleNode(node: FlatTreeNode) {
+  toggleNode(node: FlatIMenuNode) {
     this.expandedNodes.update((expanded) => {
       const newSet = new Set(expanded);
       if (newSet.has(node.id)) {
@@ -190,24 +205,20 @@ export class MenuManagementComponent {
     });
   }
 
+  rowClicked(row: IMenuNode) {
+    if (this.clickedRows === row) {
+      this.clickedRows = null; // 取消选中
+    } else {
+      this.clickedRows = row; // 选中当前行
+    }
+  }
+
   customContextMenu = {
     createFile: {
       label: '添加菜单',
       icon: 'file',
       action: (data: any) => {
-        // const parentData = findParentMenuById(this.dataSource.data, data.id);
-        // console.log('%c Line:80 🎂 parentData', 'color:#3f7cff', parentData);
-        data.children.push({
-          id: '3',
-          name: '菜单1',
-          icon: 'system-icon',
-          menuType: IMenuType.Child,
-          parentMenuId: null,
-          isFullscreen: false,
-          sortOrder: 1,
-          dashboardId: null,
-          children: [],
-        });
+        this.addChildNode(IMenuType.Child, data);
       },
     },
     createFolder: {
@@ -215,17 +226,7 @@ export class MenuManagementComponent {
       icon: 'folder-close',
       divider: true,
       action: (data: any) => {
-        data.push({
-          id: '4',
-          name: '目录1',
-          icon: 'system-icon',
-          menuType: IMenuType.Child,
-          parentMenuId: null,
-          isFullscreen: false,
-          sortOrder: 1,
-          dashboardId: null,
-          children: [],
-        });
+        this.addChildNode(IMenuType.Parent, data);
       },
     },
   };
@@ -236,17 +237,7 @@ export class MenuManagementComponent {
 
   constructor() {}
 
-  // 在组件中
-  updateDataSource(newNode: any) {
-    const newData = structuredClone(this.dataSource.data); // 或使用 lodash.cloneDeep
-    newData[0].children!.push(newNode);
-    this.dataSource.data = newData;
-  }
-
   editConfirm(value: any) {
     console.log('%c Line:34 🍬 value', 'color:#ea7e5c', value);
-  }
-  toggleRow(node: ExampleFlatNode) {
-    this.treeControl.toggle(node);
   }
 }

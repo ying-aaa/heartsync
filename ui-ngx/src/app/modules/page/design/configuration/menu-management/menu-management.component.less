@@ -3,15 +3,26 @@
 .themeMixin( {
     :host {
 
-.mat-mdc-row .mat-mdc-cell {
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
-  cursor: pointer;
-}
+      .bg-color-05 {
+        background-color: @base-color-05;
 
-.mat-mdc-row:hover {
-  background-color: @base-color-05;
-}
+      }
+
+      ::ng-deep {
+        .mat-mdc-row .mat-mdc-cell {
+          border-bottom: 1px solid transparent;
+          border-top: 1px solid transparent;
+          cursor: pointer;
+        }
+
+        .mat-mdc-row:hover {
+          .bg-color-05();
+        }
+
+        .mat-mdc-chip-action {
+          cursor: pointer !important;
+        }
+      }
 
 
 

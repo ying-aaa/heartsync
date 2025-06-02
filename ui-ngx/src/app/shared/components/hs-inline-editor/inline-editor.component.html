@@ -6,7 +6,7 @@
   @if (!isEdit) {
     <div
       #editorTrigger
-      class="w-full truncate px-3 py-2 rounded-6px line-height-16px"
+      class="w-full cursor-text truncate px-3 py-2 rounded-6px line-height-16px"
       [class.highlight-bg]="highlight && !disabled"
       [class.text-content]="!disabled"
       (click)="editTriggerEvent($event)"

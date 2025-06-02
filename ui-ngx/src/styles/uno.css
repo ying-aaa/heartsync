@@ -184,6 +184,7 @@
 .w-4{width:1rem;}
 .w-40px{width:40px;}
 .w-40px\!{width:40px !important;}
+.w-48px{width:48px;}
 .w-52px{width:52px;}
 .w-6{width:1.5rem;}
 .w-65\%{width:65%;}
@@ -210,6 +211,7 @@
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .keyframes-spin{animation:spin;}
 .cursor-pointer{cursor:pointer;}
+.cursor-text{cursor:text;}
 .cursor-move{cursor:move;}
 .resize{resize:both;}
 .items-end{align-items:flex-end;}

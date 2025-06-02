@@ -1,174 +1,209 @@
 <!-- app.component.html -->
 <div class="container">
-  <div class="card">
-    <table
-      mat-table
-      [dataSource]="flattenedNodes()"
-      [trackBy]="trackById"
-      class="mat-elevation-z8"
-    >
-      <ng-container matColumnDef="menuType">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-        >
-          菜单类型
-        </th>
-        <td
-          mat-cell
-          *matCellDef="let node"
-          [style.width]="'100px'"
-        >
-          <div class="w-100px">
-            <hs-inline-editor
-              type="select"
-              [(ngModel)]="node.menuType"
-              [selectOptions]="[
-                { value: 'parent', label: '目录', disabled: true },
-                { value: 'child', label: '菜单' },
-                { value: 'urlRedirect', label: 'url跳转' },
-                { value: 'appRedirect', label: '应用跳转' },
-              ]"
-              selectLabelField="label"
-              [showButton]="false"
-              [highlight]="true"
-              [disabled]="node.menuType === 'parent'"
-              (editConfirm)="editConfirm($event)"
-            ></hs-inline-editor>
-          </div>
-        </td>
-      </ng-container>
+  @let isMenu = clickedRows?.menuType !== 'parent';
+  <div class="flex-center p-12px">
+    <mat-chip-set aria-label="Dog selection">
+      <mat-chip (click)="addSameNode(IMenuType.Child, clickedRows)">
+        <mat-icon matChipAvatar>view_list</mat-icon>
+        新增菜单
+      </mat-chip>
+      <mat-chip (click)="addSameNode(IMenuType.Parent, clickedRows)">
+        <mat-icon matChipAvatar>view_list</mat-icon>
+        新增目录
+      </mat-chip>
+      <mat-chip
+        [disabled]="isMenu"
+        (click)="addChildNode(IMenuType.Child, clickedRows)"
+      >
+        <mat-icon matChipAvatar>account_tree</mat-icon>
+        新增子级菜单
+      </mat-chip>
+      <mat-chip
+        [disabled]="isMenu"
+        (click)="addChildNode(IMenuType.Parent, clickedRows)"
+      >
+        <mat-icon matChipAvatar>account_tree</mat-icon>
+        新增子级目录
+      </mat-chip>
+    </mat-chip-set>
+  </div>
 
-      <ng-container matColumnDef="name">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          [style.width]="'300px'"
-        >
-          菜单
-        </th>
-        <td
-          mat-cell
-          *matCellDef="let node"
-        >
-          <div
-            class="tree-node"
-            [style.padding-left]="node.level * 24 + 'px'"
-          >
-            @if (node.expandable) {
-              <button
-                mat-icon-button
-                (click)="toggleNode(node)"
-                class="tree-toggle"
-              >
-                <mat-icon>
-                  {{
-                    node.isExpanded
-                      ? 'keyboard_arrow_down'
-                      : 'keyboard_arrow_right'
-                  }}
-                </mat-icon>
-              </button>
-            } @else {
-              <span class="tree-spacer"></span>
-            }
+  <table
+    mat-table
+    [dataSource]="flattenedNodes()"
+    [trackBy]="trackById"
+    class="mat-elevation-z8"
+  >
+    <ng-container matColumnDef="menuType">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+      >
+        菜单类型
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let node"
+        [style.width]="'100px'"
+      >
+        <div class="w-100px">
+          <hs-inline-editor
+            type="select"
+            [(ngModel)]="node.menuType"
+            [selectOptions]="[
+              { value: 'parent', label: '目录', disabled: true },
+              { value: 'child', label: '菜单' },
+              { value: 'urlRedirect', label: 'url跳转' },
+              { value: 'appRedirect', label: '应用跳转' },
+            ]"
+            selectLabelField="label"
+            [showButton]="false"
+            [highlight]="true"
+            [disabled]="node.menuType === 'parent'"
+            (editConfirm)="editConfirm($event)"
+          ></hs-inline-editor>
+        </div>
+      </td>
+    </ng-container>
 
-            <mat-icon class="tree-icon">
-              {{ node.menuType === 'parent' ? 'folder' : 'description' }}
-              <!-- {{
+    <ng-container matColumnDef="name">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        [style.width]="'300px'"
+      >
+        菜单
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let node"
+      >
+        <div
+          class="tree-node"
+          [style.padding-left]="node.level * 24 + 'px'"
+        >
+          @if (node.expandable) {
+            <button
+              mat-icon-button
+              (click)="toggleNode(node)"
+              class="tree-toggle"
+            >
+              <mat-icon>
+                {{
+                  node.isExpanded
+                    ? 'keyboard_arrow_down'
+                    : 'keyboard_arrow_right'
+                }}
+              </mat-icon>
+            </button>
+          } @else {
+            <div class="w-48px"></div>
+          }
+
+          <mat-icon class="tree-icon">
+            {{
+              node.menuType === 'parent'
+                ? node.isExpanded
+                  ? 'folder_open'
+                  : 'folder'
+                : 'description'
+            }}
+            <!-- {{
                 treeControl.isExpanded(node)
                   ? 'folder_open'
                   : node.expandable
                     ? 'folder'
                     : 'description'
               }} -->
-            </mat-icon>
-            <div class="w-200px">
-              <hs-inline-editor
-                type="text"
-                [(ngModel)]="node.name"
-                [showButton]="false"
-                [highlight]="true"
-              ></hs-inline-editor>
-            </div>
-          </div>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="dashboardId">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-        >
-          关联仪表版
-        </th>
-        <td
-          mat-cell
-          *matCellDef="let node"
-        >
-          {{ node.dashboardId }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="isFullscreen">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-        >
-          是否全屏
-        </th>
-        <td
-          mat-cell
-          *matCellDef="let node"
-        >
-          <div class="w-84px">
+          </mat-icon>
+          <div class="w-200px">
             <hs-inline-editor
-              type="switch"
-              [(ngModel)]="node.isFullscreen"
+              type="text"
+              [(ngModel)]="node.name"
               [showButton]="false"
               [highlight]="true"
-            >
-              {{ node.isFullscreen ? '是' : '否' }}
-            </hs-inline-editor>
+            ></hs-inline-editor>
           </div>
-        </td>
-      </ng-container>
+        </div>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="actions">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-        >
-          操作
-        </th>
-        <td
-          mat-cell
-          *matCellDef="let node"
-        >
-          <button
-            mat-icon-button
-            color="warn"
-            title="删除"
+    <ng-container matColumnDef="dashboardId">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+      >
+        关联仪表版
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let node"
+      >
+        {{ node.dashboardId }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="isFullscreen">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+      >
+        是否全屏
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let node"
+      >
+        <div class="w-84px">
+          <hs-inline-editor
+            type="switch"
+            [(ngModel)]="node.isFullscreen"
+            [showButton]="false"
+            [highlight]="true"
           >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+            {{ node.isFullscreen ? '是' : '否' }}
+          </hs-inline-editor>
+        </div>
+      </td>
+    </ng-container>
 
-      <tr
-        mat-header-row
-        *matHeaderRowDef="displayedColumns"
-      ></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        [cdkContextMenuTriggerFor]="
-          row.menuType === 'parent' ? ContentMenu : null
-        "
-        [cdkContextMenuTriggerData]="{ context: row }"
-      ></tr>
-    </table>
-  </div>
+    <ng-container matColumnDef="actions">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+      >
+        操作
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let node"
+      >
+        <button
+          mat-icon-button
+          color="warn"
+          title="删除"
+          (click)="deleteNode(node)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedColumns"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      [cdkContextMenuTriggerFor]="
+        row.menuType === 'parent' ? ContentMenu : null
+      "
+      [cdkContextMenuTriggerData]="{ context: row }"
+      [class.bg-color-05]="clickedRows?.id === row.id"
+      (click)="rowClicked(row); $event.stopPropagation()"
+    ></tr>
+  </table>
 </div>
 
 <ng-template
@@ -214,5 +249,3 @@
     }
   </ul>
 </ng-template>
-
-<app-optimized-tree></app-optimized-tree>

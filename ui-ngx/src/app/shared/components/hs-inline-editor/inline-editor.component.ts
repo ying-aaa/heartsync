@@ -105,6 +105,7 @@ export class HsInlineEditorComponent
   setDisabledState?(isDisabled: boolean): void {}
 
   editTriggerEvent(event: Event) {
+    event.stopPropagation();
     if (this.disabled) return;
     this.isEdit = true;
     this.editStart.emit();
@@ -122,6 +123,8 @@ export class HsInlineEditorComponent
       case ElementRef:
         const nativeElement = (this.inputRef as ElementRef).nativeElement;
         nativeElement.focus();
+        nativeElement.select();
+
         break;
       case MatSelect:
         (this.inputRef as MatSelect).open();
