@@ -4,11 +4,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { IMenuNode, IMenuType } from '@shared/models/app-menu.model';
 import { HsInlineEditorModule } from '@shared/components/hs-inline-editor/inline-editor.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { CdkContextMenuTrigger, CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
 import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 interface FlatIMenuNode extends IMenuNode {
   level: number;
@@ -33,13 +36,19 @@ interface FlatIMenuNode extends IMenuNode {
     CdkMenuItem,
     HsSvgModule,
     MatChipsModule,
+    MatFormField,
+    MatInputModule,
+    MatTooltipModule,
   ],
 })
 export class MenuManagementComponent {
   IMenuType = IMenuType;
+
+  searchControl = new FormControl('');
+
   displayedColumns: string[] = [
-    'menuType',
     'name',
+    'menuType',
     'dashboardId',
     'isFullscreen',
     'actions',
@@ -77,6 +86,30 @@ export class MenuManagementComponent {
     this.treeData().forEach((node) => processNode(node, 0));
     return result;
   });
+
+  constructor() {
+    this.initMenuFilter();
+  }
+
+  initMenuFilter() {}
+
+  collapseAll() {
+    this.expandedNodes.set(new Set());
+  }
+
+  expandAll() {
+    const allNodeIds = new Set<string>();
+    const collectNodeIds = (nodes: IMenuNode[]) => {
+      nodes.forEach((node) => {
+        allNodeIds.add(node.id);
+        if (node.children) {
+          collectNodeIds(node.children);
+        }
+      });
+    };
+    collectNodeIds(this.treeData());
+    this.expandedNodes.set(allNodeIds);
+  }
 
   trackById(index: number, item: any): number {
     return index;
@@ -116,7 +149,7 @@ export class MenuManagementComponent {
       menuType: type,
       parentMenuId: node.id,
       isFullscreen: false,
-      sortOrder: 1,
+      sort: 1,
       dashboardId: null,
       children: [],
     };
@@ -145,7 +178,7 @@ export class MenuManagementComponent {
       menuType: type,
       parentMenuId: node && node.parentMenuId,
       isFullscreen: false,
-      sortOrder: 1,
+      sort: 1,
       dashboardId: null,
       children: [],
     };
@@ -235,9 +268,5 @@ export class MenuManagementComponent {
     return Object.values(this.customContextMenu);
   }
 
-  constructor() {}
-
-  editConfirm(value: any) {
-    console.log('%c Line:34 🍬 value', 'color:#ea7e5c', value);
-  }
+  editConfirm(value: any) {}
 }

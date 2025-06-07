@@ -1,32 +1,89 @@
 <!-- app.component.html -->
 <div class="container">
   @let isMenu = clickedRows?.menuType !== 'parent';
-  <div class="flex-center p-12px">
-    <mat-chip-set aria-label="Dog selection">
-      <mat-chip (click)="addSameNode(IMenuType.Child, clickedRows)">
-        <mat-icon matChipAvatar>view_list</mat-icon>
-        新增菜单
-      </mat-chip>
-      <mat-chip (click)="addSameNode(IMenuType.Parent, clickedRows)">
-        <mat-icon matChipAvatar>view_list</mat-icon>
-        新增目录
-      </mat-chip>
-      <mat-chip
-        [disabled]="isMenu"
-        (click)="addChildNode(IMenuType.Child, clickedRows)"
-      >
-        <mat-icon matChipAvatar>account_tree</mat-icon>
-        新增子级菜单
-      </mat-chip>
-      <mat-chip
-        [disabled]="isMenu"
-        (click)="addChildNode(IMenuType.Parent, clickedRows)"
-      >
-        <mat-icon matChipAvatar>account_tree</mat-icon>
-        新增子级目录
-      </mat-chip>
-    </mat-chip-set>
-  </div>
+  <header class="flex items-center justify-between p-12px">
+    <div class="flex-center">
+      <mat-chip-set aria-label="Dog selection">
+        <mat-chip (click)="addSameNode(IMenuType.Child, clickedRows)">
+          <mat-icon matChipAvatar>view_list</mat-icon>
+          新增菜单
+        </mat-chip>
+        <mat-chip (click)="addSameNode(IMenuType.Parent, clickedRows)">
+          <mat-icon matChipAvatar>view_list</mat-icon>
+          新增目录
+        </mat-chip>
+        <mat-chip
+          [disabled]="isMenu"
+          (click)="addChildNode(IMenuType.Child, clickedRows)"
+        >
+          <mat-icon matChipAvatar>account_tree</mat-icon>
+          新增子级菜单
+        </mat-chip>
+        <mat-chip
+          [disabled]="isMenu"
+          (click)="addChildNode(IMenuType.Parent, clickedRows)"
+        >
+          <mat-icon matChipAvatar>account_tree</mat-icon>
+          新增子级目录
+        </mat-chip>
+      </mat-chip-set>
+    </div>
+
+    <div class="flex-center">
+      <!-- 全部展开和全部收缩按钮 -->
+      <!-- (click)="expandAll()"
+      [disabled]="treeControl.isEmpty()" -->
+      <mat-form-field class="w-200px hs-density--5">
+        <input
+          matInput
+          type="text"
+          placeholder="搜索菜单"
+          [formControl]="searchControl"
+        />
+        @if (searchControl.getRawValue()) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="searchControl.setValue('')"
+            class="mr-5px"
+          >
+            <mat-icon aria-hidden="false">close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <div class="ml-8px">
+        <button
+          mat-icon-button
+          matTooltip="全部展开"
+          (click)="expandAll()"
+          [matTooltipPosition]="'above'"
+        >
+          <mat-icon>unfold_more</mat-icon>
+        </button>
+        <!--         (click)="collapseAll()"
+        [disabled]="treeControl.isEmpty()" -->
+        <button
+          mat-icon-button
+          matTooltip="全部收缩"
+          (click)="collapseAll()"
+          [matTooltipPosition]="'above'"
+        >
+          <mat-icon>unfold_less</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          matTooltip="刷新"
+          [matTooltipPosition]="'above'"
+        >
+          <mat-icon>refresh</mat-icon>
+          <!-- (click)="refreshMenu()" -->
+        </button>
+      </div>
+    </div>
+  </header>
 
   <table
     mat-table
