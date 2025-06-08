@@ -12,12 +12,13 @@ export interface IMenuNode {
   menuType: IMenuType;
   parentMenuId: string | null;
   isFullscreen: boolean;
-  sort: number;
   dashboardId: string | null;
+  sort: number;
   url?: string;
   appId?: string;
   children?: IMenuNode[];
   externalLink?: string;
   visible?: boolean;
   authRoles?: string[];
+  version?: number;
 }

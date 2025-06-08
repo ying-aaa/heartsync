@@ -280,6 +280,7 @@
 .bg-center{background-position:center;}
 .bg-no-repeat{background-repeat:no-repeat;}
 .p-0{padding:0;}
+.p-0\!{padding:0 !important;}
 .p-1{padding:0.25rem;}
 .p-1\.5{padding:0.375rem;}
 .p-10px{padding:10px;}

@@ -6,7 +6,7 @@ import {
   Router,
 } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { NetworkService } from '../http/network.services';
+import { NetworkService } from '../http/network.service';
 
 @Injectable({
   providedIn: 'root',

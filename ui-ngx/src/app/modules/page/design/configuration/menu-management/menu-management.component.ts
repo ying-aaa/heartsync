@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -12,6 +12,11 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ActivatedRoute } from '@angular/router';
+import { generateUUID, getParamFromRoute } from '@src/app/core/utils';
+import { MenuService } from '@src/app/core/http/menu.service';
+import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
+import { MatMenuModule } from '@angular/material/menu';
 
 interface FlatIMenuNode extends IMenuNode {
   level: number;
@@ -38,13 +43,18 @@ interface FlatIMenuNode extends IMenuNode {
     MatChipsModule,
     MatFormField,
     MatInputModule,
+    HsLoadingModule,
     MatTooltipModule,
+    MatMenuModule,
   ],
 })
-export class MenuManagementComponent {
+export class MenuManagementComponent implements OnInit {
   IMenuType = IMenuType;
+  appId: string = getParamFromRoute('appId', this.route)!;
 
   searchControl = new FormControl('');
+
+  loadingStatus = false;
 
   displayedColumns: string[] = [
     'name',
@@ -87,8 +97,38 @@ export class MenuManagementComponent {
     return result;
   });
 
-  constructor() {
+  constructor(
+    private route: ActivatedRoute,
+    private menuService: MenuService,
+  ) {
     this.initMenuFilter();
+  }
+
+  // 根据nodeId查找节点并更新节点值
+  changeNodeValue(nodeId: string, field: keyof IMenuNode, value: any) {
+    let isChanged = false;
+    let matchedNode: IMenuNode | undefined;
+    const updateNodeValue = (nodes: IMenuNode[]): IMenuNode[] => {
+      return nodes.map((node) => {
+        if (node.id === nodeId) {
+          isChanged = node[field] !== value;
+          matchedNode = node;
+          return { ...node, [field]: value };
+        }
+        if (node.children) {
+          return { ...node, children: updateNodeValue(node.children) };
+        }
+        return node;
+      });
+    };
+    this.treeData.update((currentData) => updateNodeValue(currentData));
+
+    if (isChanged && matchedNode) {
+      const updateData = { id: matchedNode.id, [field]: value } as IMenuNode;
+      this.menuService
+        .updateMenu(matchedNode.id, updateData)
+        .subscribe((res) => {});
+    }
   }
 
   initMenuFilter() {}
@@ -143,7 +183,8 @@ export class MenuManagementComponent {
 
   addChildNode(type: IMenuType, node: any) {
     const newNode: IMenuNode = {
-      id: Math.random().toString(36).substring(2, 15), // 生成随机 ID
+      id: generateUUID(),
+      appId: this.appId!,
       name: `新${type === IMenuType.Parent ? '目录' : '菜单'}`,
       icon: 'system-icon',
       menuType: type,
@@ -151,13 +192,14 @@ export class MenuManagementComponent {
       isFullscreen: false,
       sort: 1,
       dashboardId: null,
-      children: [],
     };
 
-    if (node.children) {
-      node.children.push(newNode);
+    const nodeOriginData = this.findNode(node.id)!;
+
+    if (nodeOriginData.children) {
+      nodeOriginData.children.push(newNode);
     } else {
-      node.children = [newNode];
+      nodeOriginData.children = [newNode];
     }
 
     this.treeData.update((currentData) => [...currentData]);
@@ -168,11 +210,14 @@ export class MenuManagementComponent {
       newSet.add(node.id);
       return newSet;
     });
+
+    this.menuService.createMenu(newNode).subscribe((res) => {});
   }
 
   addSameNode(type: IMenuType, node: any) {
     const newNode: IMenuNode = {
-      id: Math.random().toString(36).substring(2, 15), // 生成随机 ID
+      id: generateUUID(),
+      appId: this.appId!,
       name: `新${type === IMenuType.Parent ? '目录' : '菜单'}`,
       icon: 'system-icon',
       menuType: type,
@@ -180,7 +225,6 @@ export class MenuManagementComponent {
       isFullscreen: false,
       sort: 1,
       dashboardId: null,
-      children: [],
     };
 
     const parentNode = this.findNode(node?.parentMenuId);
@@ -191,13 +235,17 @@ export class MenuManagementComponent {
       } else {
         parentNode.children = [newNode];
       }
-      return this.treeData.update((currentData) => [...currentData]);
+      this.treeData.update((currentData) => [...currentData]);
     } else {
-      return this.treeData.update((currentData) => [...currentData, newNode]);
+      this.treeData.update((currentData) => [...currentData, newNode]);
     }
+
+    this.menuService.createMenu(newNode).subscribe((res) => {});
   }
 
-  deleteNode(node: IMenuNode) {
+  deleteMenu(node: IMenuNode) {
+    if (node.id === this.clickedRows?.id) this.clickedRows = null;
+
     const removeNodeRecursively = (
       nodes: IMenuNode[],
       id: string,
@@ -223,6 +271,8 @@ export class MenuManagementComponent {
       newSet.delete(node.id);
       return newSet;
     });
+
+    this.menuService.deleteMenu(node.id).subscribe((res) => {});
   }
 
   // 切换节点展开状态
@@ -268,5 +318,23 @@ export class MenuManagementComponent {
     return Object.values(this.customContextMenu);
   }
 
-  editConfirm(value: any) {}
+  loadMenuData() {
+    this.loadingStatus = true;
+    // 清空对应数据
+    this.menuService.getMenusByAppId(this.appId).subscribe(
+      (res: IMenuNode[]) => {
+        this.expandedNodes.set(new Set());
+        this.treeData.set(res);
+        this.loadingStatus = false;
+        this.expandAll();
+      },
+      (error) => {
+        this.loadingStatus = false;
+      },
+    );
+  }
+
+  ngOnInit(): void {
+    this.loadMenuData();
+  }
 }
