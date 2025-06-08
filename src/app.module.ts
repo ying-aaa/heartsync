@@ -10,12 +10,14 @@ import { SelfModule } from './modules/self/self.module';
 import { HsUploadModule } from './modules/upload/upload.module';
 import { WidgetsModule } from './modules/widget/widgets.module';
 import { HsDashboardModule } from './modules/dashboard/dashboard.module';
+import { HsMenuModule } from './modules/menu/hs-menu.module';
 
 @Module({
   providers: [HsPaginationService],
   exports: [HsPaginationService],
   imports: [
     SelfModule,
+    HsMenuModule,
     WidgetsModule,
     HsUploadModule,
     HsDashboardModule,
