@@ -24,26 +24,31 @@ import { CreateAppComponent } from './create-app/create-app.component';
 import { ApplicationService } from '@src/app/core/http/application.service';
 import { delay, lastValueFrom, map, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'hs-app-manage',
   templateUrl: './app-manage.component.html',
   imports: [
-    MatDividerModule,
-    HsTreeComponent,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
     FormsModule,
-    MatButtonModule,
     MatIconModule,
+    MatInputModule,
+    MatInputModule,
+    MatButtonModule,
+    HsTreeComponent,
+    MatDividerModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
     HsDynamicTableModule,
+    MatButtonToggleModule,
   ],
 })
 export class AppManageComponent implements OnInit {
   @ViewChild('HsTreeRef') hsTreeRef: HsTreeComponent;
 
   appName = new FormControl('');
+
+  displayMode: 'list' | 'card' = 'list';
 
   directoryId = '';
 
@@ -74,7 +79,7 @@ export class AppManageComponent implements OnInit {
             duration: 1 * 1000,
           });
         }
-      } catch (error) { }
+      } catch (error) {}
       return !value;
     },
     selectEvent: (node, jsTree) => {
@@ -179,7 +184,7 @@ export class AppManageComponent implements OnInit {
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private applicationService: ApplicationService,
-  ) { }
+  ) {}
 
   createRecord() {
     const width = isMobile() ? '100vw' : '800px';
@@ -199,5 +204,5 @@ export class AppManageComponent implements OnInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

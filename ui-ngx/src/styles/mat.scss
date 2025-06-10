@@ -26,11 +26,12 @@ $base-radius: 8px;
 }
 
 .hs-icon-button-32 {
-  &.mdc-icon-button{
+  &.mdc-icon-button {
     width: 32px;
     height: 32px;
     font-size: 20px;
     padding: 6px;
+
     .mat-icon {
       width: 20px;
       height: 20px;
@@ -38,6 +39,7 @@ $base-radius: 8px;
     }
   }
 }
+
 
 html {
 

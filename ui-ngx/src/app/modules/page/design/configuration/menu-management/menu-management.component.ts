@@ -41,7 +41,6 @@ interface FlatIMenuNode extends IMenuNode {
     CdkMenuItem,
     HsSvgModule,
     MatChipsModule,
-    MatFormField,
     MatInputModule,
     HsLoadingModule,
     MatTooltipModule,
