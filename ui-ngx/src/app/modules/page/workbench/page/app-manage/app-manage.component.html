@@ -52,6 +52,7 @@
         [(ngModel)]="displayMode"
         hideSingleSelectionIndicator
         class="hs-density--3 rounded-8px!"
+        (change)="displayModeChange()"
       >
         <mat-button-toggle value="card">
           <mat-icon>view_module</mat-icon>
@@ -98,76 +99,7 @@
         [tableConfig]="tableConfig()"
       ></hs-dynamic-table>
     } @else {
-      <div class="p-24px grid grid-cols-4 gap-24px">
-        @let data = [1, 2, 3, 4, 5, 6, 7, 8];
-        @for (item of data; track $index) {
-          <div
-            class="cursor-pointer flex flex-col min-w-320px p-24px h-178px rounded-12px border-1px border-solid border-#2f90b920"
-          >
-            <div class="flex h-52px gap-10px">
-              <img
-                src=""
-                class="w-52px h-52px rounded-12px"
-              />
-              <div class="w-0 flex-1">
-                <div class="line-height-28px text-18px font-800">
-                  智能客服系统
-                </div>
-                <div class="text-14px line-height-20px color-#6B7280">
-                  智能对话平台
-                </div>
-              </div>
-            </div>
-            <div class="flex items-center text-14px h-0 flex-1 color-#6B7280">
-              <div>最近更新: 2024-02-15</div>
-              &nbsp; &nbsp;
-              <div>负责人: 赵晓华</div>
-            </div>
-            <div class="flex justify-between h-24px line-height-16px">
-              <div class="flex gap-8px h-full text-12px">
-                <span
-                  class="rounded-4px py-4px px-8px bg-#2563EB20 color-#2563EB"
-                  >生产环境</span
-                >
-                <span
-                  class="rounded-4px py-4px px-8px bg-#16A34A20 color-#16A34A"
-                  >正常运行</span
-                >
-              </div>
-              <div class="w-0 flex-1 flex items-center justify-end h-full">
-                <button
-                  mat-icon-button
-                  class="hs-icon-button-32"
-                >
-                  <mat-icon class="w-16px! h-16px! text-16px! color-#999"
-                    >border_color</mat-icon
-                  >
-                </button>
-                <mat-divider
-                  [vertical]="true"
-                  class="h-full"
-                ></mat-divider>
-                <button
-                  mat-icon-button
-                  class="hs-icon-button-32"
-                >
-                  <mat-icon class="color-#999">remove_red_eye</mat-icon>
-                </button>
-                <mat-divider
-                  [vertical]="true"
-                  class="h-full"
-                ></mat-divider>
-                <button
-                  mat-icon-button
-                  class="hs-icon-button-32"
-                >
-                  <mat-icon class="color-#999">more_horiz</mat-icon>
-                </button>
-              </div>
-            </div>
-          </div>
-        }
-      </div>
+      <hs-app-card-list [tableConfig]="tableConfig()"></hs-app-card-list>
     }
   </div>
 </div>

@@ -5,15 +5,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import {
-  ActionColumn,
-  DateColumn,
-  IDynamicTable,
-  ImgColumn,
-  PageLink,
-  TagColumn,
-  TextColumn,
-} from '@src/app/shared/components/hs-table/table.model';
 import { HsDynamicTableModule } from '@src/app/shared/components/hs-table/hs-dynamic-table.module';
 import { Router } from '@angular/router';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
@@ -25,6 +16,16 @@ import { ApplicationService } from '@src/app/core/http/application.service';
 import { delay, lastValueFrom, map, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { AppCardListComponent } from './app-card-list/app-card-list.component';
+import {
+  ActionColumn,
+  DateColumn,
+  IDynamicTable,
+  ImgColumn,
+  PageLink,
+  TagColumn,
+  TextColumn,
+} from '@src/app/shared/components/hs-table/table.model';
 
 @Component({
   selector: 'hs-app-manage',
@@ -41,6 +42,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     ReactiveFormsModule,
     HsDynamicTableModule,
     MatButtonToggleModule,
+    AppCardListComponent,
   ],
 })
 export class AppManageComponent implements OnInit {
@@ -48,7 +50,7 @@ export class AppManageComponent implements OnInit {
 
   appName = new FormControl('');
 
-  displayMode: 'list' | 'card' = 'list';
+  displayMode: 'list' | 'card' = 'card';
 
   directoryId = '';
 
@@ -139,7 +141,7 @@ export class AppManageComponent implements OnInit {
           [
             {
               name: '去开发',
-              icon: 'edit',
+              icon: 'border_color',
               action: (row, event) => {
                 event.stopPropagation();
                 this.router.navigate(['/design', row.id]);
@@ -202,6 +204,12 @@ export class AppManageComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.pageLink.getData();
     });
+  }
+
+  displayModeChange() {
+    setTimeout(() => {
+      this.pageLink.getData();
+    }, 50);
   }
 
   ngOnInit() {}
