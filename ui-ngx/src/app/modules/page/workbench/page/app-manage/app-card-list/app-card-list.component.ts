@@ -17,6 +17,7 @@ import {
 } from '@src/app/shared/components/hs-table/table.model';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { Subject, Subscription, switchMap, takeUntil } from 'rxjs';
+import { HsSvgModule } from '@shared/components/hs-svg/hs-svg.module';
 
 @Component({
   selector: 'hs-app-card-list',
@@ -29,6 +30,7 @@ import { Subject, Subscription, switchMap, takeUntil } from 'rxjs';
     MatButtonModule,
     HsLoadingModule,
     MatDividerModule,
+    HsSvgModule,
   ],
 })
 export class AppCardListComponent implements OnInit, OnDestroy {
