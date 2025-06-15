@@ -1,3 +1,13 @@
-<div class="wh-full flex-center text-28px">
-  欢迎进入heartsync应用！应用渲染运行还在开发中...
-</div>
+<content class="wh-full flex">
+  <aside class="w-252px">
+    <hs-side-menu></hs-side-menu>
+  </aside>
+  <mat-divider
+    [vertical]="true"
+    class="h-full"
+  ></mat-divider>
+  <main class="w-0 flex-1">
+    {{ appId }}
+    <router-outlet></router-outlet>
+  </main>
+</content>

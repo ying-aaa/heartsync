@@ -39,27 +39,28 @@
     >
       <div scrollViewport>
         <div class="flex flex-wrap w-full pt-48px pb-24px gap-24px">
-          @let list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-          @for (item of list; track $index) {
+          @for (item of appList(); track $index) {
             <div
               class="workbench-app-card"
-              (click)="navigateToApp('heartsync-app')"
+              (click)="navigateToApp(item.id)"
             >
               <div class="w-120px h-120px rounded-16px">
                 <img
-                  class="wh-full"
-                  src="/assets/workbench/photo.jpg"
+                  class="wh-full rounded-12px"
+                  [src]="item.imageUrl"
                 />
               </div>
               <div class="flex flex-col flex-1 text-14px">
-                <div class="text-18px line-height-36px">宇宙奥妙</div>
+                <div class="text-18px line-height-36px">{{ item.name }}</div>
                 <div class="flex line-height-24px">
                   <div class="w-84px">当前版本：</div>
                   <div>12</div>
                 </div>
                 <div class="flex line-height-24px text-12px">
                   <!-- <span class="w-84px truncate"></span> -->
-                  <span class="truncate">2025-01-04 12:59</span>
+                  <span class="truncate">{{
+                    item.updatedAt | date: 'YYYY-MM-dd HH:mm:ss'
+                  }}</span>
                 </div>
                 <mat-divider
                   class="w-100% mt-12px! mb-7px! my-auto!"

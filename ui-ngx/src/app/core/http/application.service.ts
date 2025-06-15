@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
-import { IResponseStructure } from './request.model';
+import { IBaseResponseData, IResponseStructure } from './request.model';
 
 // 定义类型
 export interface CreateApplicationDto {
@@ -18,7 +18,7 @@ export interface UpdateApplicationDto {
   description?: string;
 }
 
-export interface HsApplication {
+export interface HsApplication extends IBaseResponseData {
   directoryId: string;
   name: string;
   type?: string; // 默认值为 'web'

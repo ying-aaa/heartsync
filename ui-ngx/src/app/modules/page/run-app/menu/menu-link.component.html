@@ -1,0 +1,17 @@
+<a
+  mat-button
+  class="hs-menu-link flex-center"
+  routerLinkActive="tb-active"
+  [routerLinkActiveOptions]="{
+    paths: 'subset',
+    queryParams: 'ignored',
+    matrixParams: 'ignored',
+    fragment: 'ignored',
+  }"
+  routerLink="{{ section.dashboardId }}"
+>
+  @if (section.icon !== null) {
+    <mat-icon> description </mat-icon>
+  }
+  <span>{{ section.name }}</span>
+</a>

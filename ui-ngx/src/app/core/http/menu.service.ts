@@ -6,7 +6,7 @@ import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 @Injectable({
   providedIn: 'root',
 })
-export class MenuService {
+export class MenuHttpService {
   private readonly apiUrl = '/api/menus'; // 根据实际API基础路径调整
 
   constructor(private http: HttpClient) {}

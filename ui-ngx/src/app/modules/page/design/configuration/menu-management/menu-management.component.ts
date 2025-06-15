@@ -14,7 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
 import { generateUUID, getParamFromRoute } from '@src/app/core/utils';
-import { MenuService } from '@src/app/core/http/menu.service';
+import { MenuHttpService } from '@src/app/core/http/menu.service';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { MatMenuModule } from '@angular/material/menu';
 
@@ -98,7 +98,7 @@ export class MenuManagementComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private menuService: MenuService,
+    private menuHttpService: MenuHttpService,
   ) {
     this.initMenuFilter();
   }
@@ -124,7 +124,7 @@ export class MenuManagementComponent implements OnInit {
 
     if (isChanged && matchedNode) {
       const updateData = { id: matchedNode.id, [field]: value } as IMenuNode;
-      this.menuService
+      this.menuHttpService
         .updateMenu(matchedNode.id, updateData)
         .subscribe((res) => {});
     }
@@ -210,7 +210,7 @@ export class MenuManagementComponent implements OnInit {
       return newSet;
     });
 
-    this.menuService.createMenu(newNode).subscribe((res) => {});
+    this.menuHttpService.createMenu(newNode).subscribe((res) => {});
   }
 
   addSameNode(type: IMenuType, node: any) {
@@ -239,7 +239,7 @@ export class MenuManagementComponent implements OnInit {
       this.treeData.update((currentData) => [...currentData, newNode]);
     }
 
-    this.menuService.createMenu(newNode).subscribe((res) => {});
+    this.menuHttpService.createMenu(newNode).subscribe((res) => {});
   }
 
   deleteMenu(node: IMenuNode) {
@@ -271,7 +271,7 @@ export class MenuManagementComponent implements OnInit {
       return newSet;
     });
 
-    this.menuService.deleteMenu(node.id).subscribe((res) => {});
+    this.menuHttpService.deleteMenu(node.id).subscribe((res) => {});
   }
 
   // 切换节点展开状态
@@ -300,7 +300,7 @@ export class MenuManagementComponent implements OnInit {
       label: '添加菜单',
       icon: 'file',
       action: (data: any) => {
-        this.addChildNode(IMenuType.Child, data);
+        this.addChildNode(IMenuType.Dashboard, data);
       },
     },
     createFolder: {
@@ -320,7 +320,7 @@ export class MenuManagementComponent implements OnInit {
   loadMenuData() {
     this.loadingStatus = true;
     // 清空对应数据
-    this.menuService.getMenusByAppId(this.appId).subscribe(
+    this.menuHttpService.getMenusByAppId(this.appId).subscribe(
       (res: IMenuNode[]) => {
         this.expandedNodes.set(new Set());
         this.treeData.set(res);

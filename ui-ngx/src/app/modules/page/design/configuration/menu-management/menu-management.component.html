@@ -4,7 +4,7 @@
   <header class="flex items-center justify-between p-12px">
     <div class="flex-center">
       <mat-chip-set aria-label="Dog selection">
-        <mat-chip (click)="addSameNode(IMenuType.Child, clickedRows)">
+        <mat-chip (click)="addSameNode(IMenuType.Dashboard, clickedRows)">
           <mat-icon matChipAvatar>view_list</mat-icon>
           新增菜单
         </mat-chip>
@@ -14,7 +14,7 @@
         </mat-chip>
         <mat-chip
           [disabled]="isMenu"
-          (click)="addChildNode(IMenuType.Child, clickedRows)"
+          (click)="addChildNode(IMenuType.Dashboard, clickedRows)"
         >
           <mat-icon matChipAvatar>account_tree</mat-icon>
           新增子级菜单
@@ -115,7 +115,7 @@
               [value]="node.menuType"
               [selectOptions]="[
                 { value: 'parent', label: '目录', disabled: true },
-                { value: 'child', label: '菜单' },
+                { value: 'dashboard', label: '菜单' },
                 { value: 'urlRedirect', label: 'url跳转' },
                 { value: 'appRedirect', label: '应用跳转' },
               ]"

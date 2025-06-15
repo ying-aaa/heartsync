@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -7,9 +12,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
 import { HttpClient } from '@angular/common/http';
 import { debounceTime } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { HsInlineEditorModule } from '@src/app/shared/components/hs-inline-editor/inline-editor.module';
+import {
+  ApplicationService,
+  HsApplication,
+} from '@src/app/core/http/application.service';
+import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 @Component({
   selector: 'hs-app-workbench',
   styleUrl: './app-workbench.component.less',
@@ -26,13 +36,19 @@ import { HsInlineEditorModule } from '@src/app/shared/components/hs-inline-edito
     CommonModule,
     NgScrollbarModule,
     HsInlineEditorModule,
+    DatePipe,
   ],
 })
-export class AppWorkbenchComponent {
+export class AppWorkbenchComponent implements OnInit {
   appValue = new FormControl('');
-  appList: any = [];
+  appList = signal<HsApplication[]>([]);
 
-  constructor(private http: HttpClient) {
+  pageLink = new PageLink(0, 100);
+
+  constructor(
+    private http: HttpClient,
+    private applicationService: ApplicationService,
+  ) {
     this.appValue.valueChanges
       .pipe(debounceTime(500)) // 设置节流时间为500ms
       .subscribe((value) => {
@@ -41,17 +57,20 @@ export class AppWorkbenchComponent {
   }
 
   getAppList(value: string | null): void {
-    this.http.get(`/api/app?appValue=${value}`).subscribe({
-      next: (data) => {
-        this.appList = data;
+    this.applicationService.findAllApplications(this.pageLink).subscribe({
+      next: (res) => {
+        this.pageLink.updateTotal(res.total);
+        this.appList.set(res.data);
       },
       error: (err) => console.error('err ->', err),
     });
   }
 
   navigateToApp(appId: string): void {
-    if (appId) {
-      window.open(`/run-app/${appId}`);
-    }
+    window.open(`/run-app/${appId}`);
+  }
+
+  ngOnInit(): void {
+    this.getAppList(null);
   }
 }

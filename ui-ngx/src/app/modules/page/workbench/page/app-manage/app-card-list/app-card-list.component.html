@@ -7,6 +7,7 @@
     <div class="app-card wh-full p-24px grid grid-cols-4 gap-24px">
       @for (item of dataSource(); track $index) {
         <div
+          (click)="actionColumn()[0].action(item, $event)"
           class="hs-basic-card cursor-pointer flex flex-col min-w-320px p-24px h-178px rounded-12px"
         >
           <div class="flex h-52px gap-10px">
@@ -58,6 +59,7 @@
                 #menuTrigger
                 [matMenuTriggerFor]="menu"
                 class="hs-icon-button-32"
+                (click)="$event.stopPropagation()"
               >
                 <!-- <mat-icon class="color-#999">remove_red_eye</mat-icon> -->
                 <mat-icon class="color-#999">delete</mat-icon>
@@ -65,10 +67,7 @@
               <mat-menu #menu="matMenu">
                 <button
                   mat-menu-item
-                  (click)="
-                    actionColumn()[1].action(item, $event);
-                    $event.stopPropagation()
-                  "
+                  (click)="actionColumn()[1].action(item, $event)"
                 >
                   {{ actionColumn()[1].moreName }}
                 </button>

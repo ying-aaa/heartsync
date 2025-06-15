@@ -3,9 +3,10 @@ export interface IResponseStructure<T> {
   total: number;
   page: number;
   pageSize: number;
+  totalPages: number;
 }
 
-export interface IBaseResponseData<T> {
+export interface IBaseResponseData {
   id: string;
   createdAt: Date;
   updatedAt: Date;

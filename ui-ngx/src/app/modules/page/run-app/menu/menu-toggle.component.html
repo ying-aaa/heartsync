@@ -1,0 +1,21 @@
+<a
+  class="flex-center"
+  (click)="toggleSection($event)"
+>
+  @if (section.icon !== null) {
+    <mat-icon> folder_open </mat-icon>
+  }
+  <span>{{ section.name }}</span>
+  <span class="pull-right fa fa-chevron-down tb-toggle-icon"></span>
+</a>
+<ul>
+  @if (section.children?.length) {
+    <!-- <hs-side-menu></hs-side-menu> -->
+  }
+  <!-- @for (item of section.children; track $index) {
+    @if (item.menuType === IMenuType.Dashboard) {}
+    <li class="tb-menu-item">
+      <hs-menu-link [section]="section"></hs-menu-link>
+    </li> -->
+  <!-- } -->
+</ul>

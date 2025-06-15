@@ -1,0 +1,16 @@
+<ul class="tb-side-menu flex flex-col items-stretch justify-start">
+  @for (menuItem of menuData(); track $index) {
+    <li class="tb-menu-item">
+      @switch (menuItem.menuType) {
+        @case (IMenuType.Parent) {
+          <hs-menu-toggle [section]="menuItem"></hs-menu-toggle>
+        }
+        @case (IMenuType.Dashboard) {
+          <hs-menu-link [section]="menuItem"></hs-menu-link>
+        }
+        @case (IMenuType.AppRedirect) {}
+        @case (IMenuType.UrlRedirect) {}
+      }
+    </li>
+  }
+</ul>
