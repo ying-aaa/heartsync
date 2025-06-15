@@ -10,7 +10,7 @@ import { HsBaseEntity } from './hs-base.entity';
 
 export enum IMenuType {
   Parent = 'parent',
-  Child = 'child',
+  Dashboard = 'dashboard',
   UrlRedirect = 'urlRedirect',
   AppRedirect = 'appRedirect',
 }
