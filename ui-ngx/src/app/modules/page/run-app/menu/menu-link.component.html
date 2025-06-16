@@ -1,17 +1,17 @@
 <a
   mat-button
-  class="hs-menu-link flex-center"
-  routerLinkActive="tb-active"
+  class="hs-menu-link"
+  routerLinkActive="hs-menu-active"
   [routerLinkActiveOptions]="{
     paths: 'subset',
     queryParams: 'ignored',
     matrixParams: 'ignored',
     fragment: 'ignored',
   }"
-  routerLink="{{ section.dashboardId }}"
+  routerLink="{{ 'dashboard/' + section.id }}"
 >
   @if (section.icon !== null) {
-    <mat-icon> description </mat-icon>
+    <mat-icon class="hs-menu-icon"> description </mat-icon>
   }
   <span>{{ section.name }}</span>
 </a>

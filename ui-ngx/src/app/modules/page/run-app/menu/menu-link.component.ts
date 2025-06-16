@@ -1,3 +1,4 @@
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,7 +6,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { getParamFromRoute } from '@src/app/core/utils';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 
 @Component({
@@ -18,7 +20,11 @@ import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 export class MenuLinkComponent implements OnInit {
   @Input() section: IMenuNode;
 
-  constructor() {}
+  appId: string | null = getParamFromRoute('appId', this.route);
+
+  constructor(
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit() {}
 }

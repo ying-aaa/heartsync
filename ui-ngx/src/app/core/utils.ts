@@ -333,19 +333,30 @@ export function getParamFromRoute(
   paramName: string,
   route: ActivatedRoute,
 ): string | null {
-  let currentRoute: ActivatedRoute | null = route;
+  let pcurrentRoute: ActivatedRoute | null = route;
+  let ccurrentRoute: ActivatedRoute | null = route;
 
-  while (currentRoute) {
+  while (pcurrentRoute) {
     // 同时检查路径参数和查询参数
     const paramValue =
-      currentRoute.snapshot.paramMap.get(paramName) ||
-      currentRoute.snapshot.queryParamMap.get(paramName);
+    pcurrentRoute.snapshot.paramMap.get(paramName) ||
+    pcurrentRoute.snapshot.queryParamMap.get(paramName);
 
     if (paramValue !== null) return paramValue;
 
-    currentRoute = currentRoute.parent;
+    pcurrentRoute = pcurrentRoute.parent;
   }
+  while (ccurrentRoute) {
+    if(!ccurrentRoute || !ccurrentRoute.snapshot) return null;
+    // 同时检查路径参数和查询参数
+    const paramValue =
+    ccurrentRoute.snapshot.paramMap.get(paramName) ||
+    ccurrentRoute.snapshot.queryParamMap.get(paramName);
 
+    if (paramValue !== null) return paramValue;
+
+    ccurrentRoute = ccurrentRoute.firstChild;
+  }
   return null;
 }
 

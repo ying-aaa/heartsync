@@ -1,21 +1,29 @@
 <a
-  class="flex-center"
+  class="hs-menu-link"
   (click)="toggleSection($event)"
 >
   @if (section.icon !== null) {
-    <mat-icon> folder_open </mat-icon>
+    <mat-icon class="hs-menu-icon"> folder_open </mat-icon>
   }
   <span>{{ section.name }}</span>
   <span class="pull-right fa fa-chevron-down tb-toggle-icon"></span>
 </a>
 <ul>
-  @if (section.children?.length) {
+  <!-- @if (section.children?.length) { -->
     <!-- <hs-side-menu></hs-side-menu> -->
-  }
-  <!-- @for (item of section.children; track $index) {
-    @if (item.menuType === IMenuType.Dashboard) {}
-    <li class="tb-menu-item">
-      <hs-menu-link [section]="section"></hs-menu-link>
-    </li> -->
   <!-- } -->
+  @for (menuItem of section.children; track $index) {
+    <li class="tb-menu-item">
+      @switch (menuItem.menuType) {
+        @case (IMenuType.Parent) {
+          <hs-menu-toggle [section]="menuItem"></hs-menu-toggle>
+        }
+        @case (IMenuType.Dashboard) {
+          <hs-menu-link [section]="menuItem"></hs-menu-link>
+        }
+        @case (IMenuType.AppRedirect) {}
+        @case (IMenuType.UrlRedirect) {}
+      }    
+    </li>
+  }
 </ul>

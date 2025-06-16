@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { getParamFromRoute } from '@src/app/core/utils';
 
 @Component({
   selector: 'hs-dashboard-page',
@@ -8,7 +9,12 @@ import { Router, RouterModule } from '@angular/router';
   imports: [RouterModule],
 })
 export class DashboardPageComponent implements OnInit {
-  constructor(private router: Router) {}
+  dashboardId: string | null = getParamFromRoute('dashboardId', this.route);
+
+  constructor(    
+    private router: Router,
+    private route: ActivatedRoute,
+    ) {}
 
   ngOnInit() {}
 }

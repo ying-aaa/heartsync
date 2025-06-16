@@ -1,6 +1,6 @@
-<ul class="tb-side-menu flex flex-col items-stretch justify-start">
+<ul class="tb-side-menu wh-full py-12px px-18px flex flex-col items-stretch justify-start">
   @for (menuItem of menuData(); track $index) {
-    <li class="tb-menu-item">
+    <li class="hs-menu-item">
       @switch (menuItem.menuType) {
         @case (IMenuType.Parent) {
           <hs-menu-toggle [section]="menuItem"></hs-menu-toggle>
