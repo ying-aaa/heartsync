@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { getParamFromRoute } from '@src/app/core/utils';
+import { VerseThemeComponent } from "@shared/components/ui-verse/verse-theme/verse-theme.component";
 
 @Component({
   selector: 'hs-dashboard-page',
   templateUrl: './dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.less'],
-  imports: [RouterModule],
+  imports: [RouterModule, VerseThemeComponent],
 })
 export class DashboardPageComponent implements OnInit {
   dashboardId: string | null = getParamFromRoute('dashboardId', this.route);

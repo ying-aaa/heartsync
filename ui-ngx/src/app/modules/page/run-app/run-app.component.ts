@@ -5,6 +5,7 @@ import { getParamFromRoute } from '@src/app/core/utils';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
+import { HsThemeService } from '@src/app/core/services/theme.service';
 
 @Component({
   selector: 'hs-run-app',
@@ -17,6 +18,7 @@ export class RunAppComponent implements OnInit {
 
   constructor(
     private runAppMenuService: RunAppMenuService,
+    private hsThemeService: HsThemeService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
