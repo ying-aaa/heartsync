@@ -223,8 +223,6 @@
 .resize{resize:both;}
 .items-end{align-items:flex-end;}
 .items-center{align-items:center;}
-.items-stretch{align-items:stretch;}
-.justify-start{justify-content:flex-start;}
 .justify-end{justify-content:flex-end;}
 .justify-center{justify-content:center;}
 .justify-between{justify-content:space-between;}
@@ -315,7 +313,6 @@
 .px-12px{padding-left:12px;padding-right:12px;}
 .px-16px{padding-left:16px;padding-right:16px;}
 .px-16px\!{padding-left:16px !important;padding-right:16px !important;}
-.px-18px{padding-left:18px;padding-right:18px;}
 .px-2{padding-left:0.5rem;padding-right:0.5rem;}
 .px-20px{padding-left:20px;padding-right:20px;}
 .px-24px{padding-left:24px;padding-right:24px;}

@@ -6,8 +6,10 @@ import { Observable, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class MenuService {
+export class RunAppMenuService {
   menuData = signal<IMenuNode[]>([]);
+
+  constructor(private menuHttpService: MenuHttpService) {}
 
   loadMenuData(appId: string): Observable<IMenuNode[]> {
     return this.menuHttpService.getMenusByAppId(appId).pipe(
@@ -16,6 +18,4 @@ export class MenuService {
       })
     );
   }
-
-  constructor(private menuHttpService: MenuHttpService) {}
 }

@@ -8,12 +8,9 @@ export default [
     loadComponent: () =>
       import('./run-app.component').then((m) => m.RunAppComponent),
     children: [
-      // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-
       {
         title: '应用',
         path: 'dashboard/:dashboardId',
-        pathMatch: 'full',
         loadComponent: () =>
           import('./dashboard-page/dashboard-page.component').then(
             (m) => m.DashboardPageComponent,

@@ -1,34 +1,43 @@
-:host {
-  width: 100%;
+@import "themeMixin";
 
-}
+// .themeMixin({
+  :host {
+    display: block;
+    padding: 10px 20px;
 
-:host ::ng-deep {
-
-  .hs-menu-item {
-    .hs-menu-link {
-      height: 18px;
-      display: flex;
-      font-size: 14px;
-      line-height: 18px;
-      position: relative;
-      font-weight: 500 !important;
-      padding: 8px 8px;
-      // border-radius: 99px;
-      box-shadow: none !important;
-      cursor: pointer;
-      box-sizing: content-box;
-    }
-
-    .hs-menu-active{
-      background-color: red;
-    }
-
-    .hs-menu-icon{
-      height: 18px;
-      width: 18px;
-      font-size: 18px;
-      margin-right: 7px;
+    ::ng-deep {
+      .hs-menu-item {
+        display: block;
+    
+        .hs-menu-link {
+          height: 18px;
+          display: flex;
+          font-size: 14px;
+          line-height: 18px;
+          position: relative;
+          font-weight: 500 !important;
+          padding: 8px 8px;
+          box-shadow: none !important;
+          cursor: pointer;
+          box-sizing: content-box;
+        }
+    
+        .hs-menu-active{
+          background-color: rgb(0 0 0 / 10%);
+          border-radius: 8px;
+        }
+    
+        .hs-menu-icon{
+          height: 18px;
+          width: 18px;
+          font-size: 18px;
+          margin-right: 7px;
+        }
+      }
+    
+      .hs-tree-invisible {
+        display: none;
+      }
     }
   }
-}
+// });
