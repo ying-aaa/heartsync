@@ -26,12 +26,7 @@ export class RunAppComponent implements OnInit {
   ngOnInit() {
     this.runAppMenuService.loadMenuData(this.appId!).subscribe({
       next: (menuData: IMenuNode[]) => {        
-        const regex = /\/dashboard\/.*/;
-        const isOnDashboardPath = regex.test(this.router.url); // 返回布尔值，表示是否匹配
-        if(isOnDashboardPath) return;
-        const dashboardId = menuData[0].id; 
-        const url = `/run-app/${this.appId}/dashboard/${dashboardId}`;
-        this.router.navigate([url]);
+        this.runAppMenuService.navigateToDefaultDashboard(this.appId!, menuData);
       },
       error: (err) => {
 

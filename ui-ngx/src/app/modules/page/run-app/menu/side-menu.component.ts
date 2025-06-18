@@ -84,7 +84,7 @@ export class SideMenuComponent implements OnInit {
 
   // 展开活动节点路径
   private expandActiveNodePath() {
-    const activeId = localStorage.getItem('selectedMenuId');
+    const activeId = sessionStorage.getItem('selectedMenuId');
     if (!activeId || !this.dataSource.data) return;
 
     const path = this.findNodePath(this.dataSource.data, activeId);

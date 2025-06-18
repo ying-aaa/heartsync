@@ -49,7 +49,7 @@ export class MenuLinkComponent implements OnInit {
   ) {}
 
   onMenuClick() {
-    localStorage.setItem('selectedMenuId', this.section.id);
+    sessionStorage.setItem('selectedMenuId', this.section.id);
   }
 
   ngOnInit() {}

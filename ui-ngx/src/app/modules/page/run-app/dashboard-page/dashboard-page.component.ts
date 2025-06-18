@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { getParamFromRoute } from '@src/app/core/utils';
 import { VerseThemeComponent } from "@shared/components/ui-verse/verse-theme/verse-theme.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hs-dashboard-page',
@@ -10,12 +11,29 @@ import { VerseThemeComponent } from "@shared/components/ui-verse/verse-theme/ver
   imports: [RouterModule, VerseThemeComponent],
 })
 export class DashboardPageComponent implements OnInit {
-  dashboardId: string | null = getParamFromRoute('dashboardId', this.route);
+  dashboardId: string;
+  private routeSub: Subscription | null = null;
+
 
   constructor(    
-    private router: Router,
     private route: ActivatedRoute,
-    ) {}
+  ) {
+      this.routeSub = this.route.params.subscribe(params => {
+      const dashboardId = params['dashboardId']; 
+      console.log("%c Line:24 🥝 dashboardId", "color:#f5ce50", dashboardId);
+      if (dashboardId !== this.dashboardId) {
+        this.dashboardId = dashboardId;
+        this.updateComponent(dashboardId); 
+      }
+    });
+  }
 
-  ngOnInit() {}
+  
+  updateComponent(dashboardId: string): void {
+    console.log('路由参数更新，执行更新逻辑，当前 ID:', dashboardId);
+  }
+
+  ngOnInit() {
+
+  }
 }
