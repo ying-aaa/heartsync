@@ -112,8 +112,9 @@ export class HsInlineEditorComponent
       if (this.inputRef) {
         this.handleInputElement();
         document.addEventListener('click', this.globalClickListener);
+        document.addEventListener('keydown', this.globalEnterListener);
       }
-    }, 0);
+    }, 50);
   }
 
   handleInputElement() {
@@ -128,6 +129,13 @@ export class HsInlineEditorComponent
       case MatSelect:
         (this.inputRef as MatSelect).open();
         break;
+    }
+  }
+
+  globalEnterListener = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      console.log("%c Line:136 🍡", "color:#ed9ec7", this);
+      this.confirmEdit();
     }
   }
 
@@ -152,11 +160,13 @@ export class HsInlineEditorComponent
     this.onChange.emit(this.textValue());
     this.propagateChange(this.textValue());
     document.removeEventListener('click', this.globalClickListener);
+    document.removeEventListener('keydown', this.globalEnterListener);
   }
 
   cancelEdit() {
     this.isEdit = false;
     document.removeEventListener('click', this.globalClickListener);
+    document.removeEventListener('keydown', this.globalEnterListener);
     this.textValue.set(this.value());
     this.editCancel.emit(this.textValue());
   }
