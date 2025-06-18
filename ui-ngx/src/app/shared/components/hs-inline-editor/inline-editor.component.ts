@@ -134,7 +134,6 @@ export class HsInlineEditorComponent
 
   globalEnterListener = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
-      console.log("%c Line:136 🍡", "color:#ed9ec7", this);
       this.confirmEdit();
     }
   }

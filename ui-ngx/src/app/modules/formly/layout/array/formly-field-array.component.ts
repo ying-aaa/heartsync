@@ -47,11 +47,11 @@ export class FormlyFieldArrayComponent
     fieldGroup: IEditorFormlyField[],
     itemField: IEditorFormlyField,
   ): string {
-    const itemRow = itemField.props?.['row'] ?? 0;
+    const itemRow = itemField.props?.['row'] ?? 1;
     const totalRow = fieldGroup.reduce(
       (acc, ori) => acc + (ori.props?.['row'] ?? 0),
       0,
-    );
+    ) || 1;
     return `calc(100% * ${itemRow / totalRow}) `;
   }
 
