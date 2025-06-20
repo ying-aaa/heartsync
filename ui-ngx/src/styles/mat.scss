@@ -25,6 +25,21 @@ $base-radius: 8px;
   @include mat.theme((density: 0));
 }
 
+.hs-icon-button-24 {
+  &.mdc-icon-button {
+    width: 24px;
+    height: 24px;
+    font-size: 20px;
+    padding: 2px;
+
+    .mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+    }
+  }
+}
+
 .hs-icon-button-32 {
   &.mdc-icon-button {
     width: 32px;

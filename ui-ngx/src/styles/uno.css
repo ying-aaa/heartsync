@@ -79,6 +79,7 @@
 .mb-7px\!{margin-bottom:7px !important;}
 .mb-8px{margin-bottom:8px;}
 .mb-8px\!{margin-bottom:8px !important;}
+.me{margin-inline-end:1rem;}
 .ml-12px{margin-left:12px;}
 .ml-2{margin-left:0.5rem;}
 .ml-3{margin-left:0.75rem;}
@@ -86,6 +87,7 @@
 .ml-5px{margin-left:5px;}
 .ml-8px{margin-left:8px;}
 .mr-10px{margin-right:10px;}
+.mr-3px{margin-right:3px;}
 .mr-5px{margin-right:5px;}
 .mr-8px{margin-right:8px;}
 .mt-10px\!{margin-top:10px !important;}

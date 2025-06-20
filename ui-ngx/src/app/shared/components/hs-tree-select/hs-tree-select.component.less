@@ -1,0 +1,61 @@
+.hs-overlay-container {
+  width: 100px;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  text-align: center;
+  padding: 3px;
+  margin: 0;
+  animation: slideDown 0.1s ease forwards;
+  overflow: auto;
+  margin-top: 3px;
+}
+
+.hs-tree-select-node{
+  height: 32px;
+  min-height: 32px;
+  line-height: 32px;
+  padding: 3px 7px;
+  cursor: pointer;
+  display: flex;
+  font-size: 14PX;
+  gap: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  
+  &:hover{
+    background-color: var(--base-color-10);
+    border-radius: 5px;
+  }
+
+  .hs-tree-select-checkbox{
+    ::ng-deep{
+      .mdc-checkbox{
+        flex: 0 0 14px;
+        width: 14px;
+        height: 14px;
+      }
+      .mdc-checkbox__background{
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+}
+
+.hs-tree-select-invisible {
+  display: none;
+}
+
+.hs-tree-select-container .mat-nested-tree-node div[role=group] {
+  padding-left: 24px;
+}
+
+.hs-tree-select-container div[role=group] > .mat-tree-node {
+  padding-left: 24px;
+}
+
+@keyframes slideDown {
+  from { height: 0; }
+  to { height: 200px; } 
+}
