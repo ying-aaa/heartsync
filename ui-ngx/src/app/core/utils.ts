@@ -338,8 +338,8 @@ export function getParamFromRoute(
   while (currentRoute) {
     // 同时检查路径参数和查询参数
     const paramValue =
-    currentRoute.snapshot.paramMap.get(paramName) ||
-    currentRoute.snapshot.queryParamMap.get(paramName);
+      currentRoute.snapshot.paramMap.get(paramName) ||
+      currentRoute.snapshot.queryParamMap.get(paramName);
 
     if (paramValue !== null) return paramValue;
 
@@ -377,4 +377,22 @@ export function matchSubstring(str: string, startStr: string, endStr: string) {
 
   // 返回匹配的子字符串（包括开头字符串和结尾字符串）
   return str.substring(startIndex, endIndex + endStr.length);
+}
+
+/**
+ * 将树结构数据按照指定 key 拉平为一维数组
+ * @param {Array<any>} treeData - 树结构数据
+ * @param {string} key - 用于拉平的 key
+ * @returns {Array<any>} - 拉平后的数组
+ */
+export function flattenTree(treeData: Array<any>, key: string) {
+  const result: Array<any> = [];
+  treeData.forEach((item) => {
+    result.push(item);
+    if (item[key]) {
+      result.push(...flattenTree(item[key], key));
+    }
+  });
+
+  return result;
 }

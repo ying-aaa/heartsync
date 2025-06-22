@@ -1,21 +1,33 @@
-<mat-form-field 
-	#formFieldRef
-	cdkOverlayOrigin 
-	#trigger="cdkOverlayOrigin"
-	(click)="toggleOverlayStatus()" 
-  class="w-full hs-density--5"
+<mat-form-field
+  #formFieldRef
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  (click)="toggleOverlayStatus()"
+  class="w-full hs-density--5 relative"
 >
-  <mat-label 		
-    (click)="$event.stopPropagation()" 
-  >Clearable input</mat-label>
-  <input
-		matInput
-		type="text"
-		[(ngModel)]="value"
-		placeholder="你好世界"
-	>
+  <mat-label (click)="$event.stopPropagation()">Clearable input</mat-label>
+  <!-- <input
+    matInput
+    type="text"
+    [(ngModel)]="value"
+    placeholder="你好世界"
+  /> -->
+  <div class="hs-tree-select-value">
+    {{ multiple ? selectedValues() : selectedValuesStr() }}
+  </div>
+  <select
+    matNativeControl
+    required
+    [disabled]="disabled"
+  ></select>
   @if (value) {
-    <button matSuffix mat-icon-button aria-label="Clear" (click)="value=''" class="hs-icon-button-24 mr-3px">
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="value = ''"
+      class="hs-icon-button-24 mr-3px"
+    >
       <mat-icon>close</mat-icon>
     </button>
   }
@@ -26,26 +38,105 @@
   [cdkConnectedOverlayOrigin]="trigger"
   [cdkConnectedOverlayOpen]="isOpenOverlay()"
 >
-  <div #overlayElement  [style.width.px]="formFieldRefWidth" class="hs-overlay-container">
-    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="hs-tree-select-container">
-      <mat-tree-node class="hs-tree-select-node" *matTreeNodeDef="let node" matTreeNodeToggle>
-        <mat-checkbox class="hs-tree-select-checkbox hs-density--5">
-          {{node.name}}
-        </mat-checkbox>
+  <div
+    #overlayElement
+    [style.width.px]="formFieldRefWidth"
+    class="hs-overlay-container"
+  >
+    @if (filter) {
+      <mat-form-field
+        appearance="outline"
+        class="w-full hs-density--5"
+      >
+        <input
+          #searchInputRef
+          matInput
+          type="text"
+          [formControl]="searchControl"
+        />
+        @if (searchControl.getRawValue()) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="searchControl.setValue('')"
+            class="hs-icon-button-24 mr-3px"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        } @else {
+          <button
+            disabled
+            matSuffix
+            mat-icon-button
+            class="hs-icon-button-24 mr-3px"
+          >
+            <mat-icon>search</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    }
+
+    <mat-tree
+      [dataSource]="dataSource"
+      [treeControl]="treeControl"
+      class="hs-tree-select-container"
+    >
+      <mat-tree-node
+        *matTreeNodeDef="let node"
+        matTreeNodeToggle
+      >
+        <!-- 切换选中的node -->
+        <div
+          class="hs-tree-select-node"
+          [class.hs-tree-select-node-active]="selectedValue() === node[key]"
+          (click)="selectSingleNode(node)"
+        >
+          <div class="w-24px"></div>
+          @if (multiple) {
+            <mat-checkbox
+              class="hs-tree-select-checkbox hs-density--5"
+              [checked]="selectedValues().includes(node[key])"
+              (change)="selectMultipleNode(node, $event)"
+            >
+            </mat-checkbox>
+          }
+          <span>{{ node.name }}</span>
+        </div>
       </mat-tree-node>
       <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-          <div class="mat-tree-node hs-tree-select-node" matTreeNodeToggle>
-            <button mat-icon-button matTreeNodeToggle class="hs-icon-button-24"
-                    [attr.aria-label]="'Toggle ' + node.name">
-              <mat-icon class="mat-icon-rtl-mirror">
-                {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-              </mat-icon>
-            </button>
-            {{node.name}}
-          </div>
-          <div [class.hs-tree-select-invisible]="!treeControl.isExpanded(node)"
-              role="group">
-            <ng-container matTreeNodeOutlet></ng-container>
+        <div
+          class="mat-tree-node hs-tree-select-node"
+          matTreeNodeToggle
+        >
+          <button
+            mat-icon-button
+            matTreeNodeToggle
+            class="hs-icon-button-24"
+            [attr.aria-label]="'Toggle ' + node.name"
+          >
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{
+                treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'
+              }}
+            </mat-icon>
+          </button>
+          @if (multiple) {
+            <mat-checkbox
+              class="hs-tree-select-checkbox hs-density--5"
+              (change)="selectMultipleNode(node, $event)"
+              [indeterminate]="hasChildNodeSomeSelected(node)"
+              [checked]="selectedValues().includes(node[key])"
+            >
+            </mat-checkbox>
+          }
+          <span>{{ node.name }}</span>
+        </div>
+        <div
+          [class.hs-tree-select-invisible]="!treeControl.isExpanded(node)"
+          role="group"
+        >
+          <ng-container matTreeNodeOutlet></ng-container>
         </div>
       </mat-nested-tree-node>
     </mat-tree>

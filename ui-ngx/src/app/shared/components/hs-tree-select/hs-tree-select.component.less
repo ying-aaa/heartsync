@@ -1,5 +1,14 @@
+:host {
+  .hs-tree-select-value {
+    position: absolute;
+    width: calc(100% - 16px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 .hs-overlay-container {
-  width: 100px;
   border: solid 1px #ccc;
   border-radius: 5px;
   text-align: center;
@@ -7,55 +16,97 @@
   margin: 0;
   animation: slideDown 0.1s ease forwards;
   overflow: auto;
-  margin-top: 3px;
-}
+  margin: 3px 0;
 
-.hs-tree-select-node{
-  height: 32px;
-  min-height: 32px;
-  line-height: 32px;
-  padding: 3px 7px;
-  cursor: pointer;
-  display: flex;
-  font-size: 14PX;
-  gap: 3px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  
-  &:hover{
-    background-color: var(--base-color-10);
-    border-radius: 5px;
-  }
 
-  .hs-tree-select-checkbox{
-    ::ng-deep{
-      .mdc-checkbox{
-        flex: 0 0 14px;
-        width: 14px;
-        height: 14px;
-      }
-      .mdc-checkbox__background{
-        width: 14px;
-        height: 14px;
+
+  .hs-tree-select-node {
+    width: 100%;
+    height: 32px;
+    min-height: 32px;
+    line-height: 32px;
+    padding: 3px 7px;
+    cursor: pointer;
+    display: flex;
+    font-size: 14PX;
+    gap: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    margin: 2px 0;
+
+    & span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+
+    div&.hs-tree-select-node-active {
+      background-color: #2f90b9;
+      border-radius: 5px;
+      color: #fff;
+    }
+
+    &:hover {
+      background-color: var(--base-color-05);
+      border-radius: 5px;
+    }
+
+    .hs-tree-select-checkbox {
+      height: 100%;
+
+      ::ng-deep {
+        .mdc-checkbox {
+          flex: 0 0 14px;
+          width: 14px;
+          height: 14px;
+        }
+
+        .mat-internal-form-field {
+          height: 100%;
+          vertical-align: unset;
+        }
+
+        .mdc-checkbox__background {
+          width: 14px;
+          height: 14px;
+        }
       }
     }
   }
+
+  .mat-tree-node {
+    min-height: 32px;
+  }
+
+  .hs-tree-select-invisible {
+    display: none;
+  }
+
+  .hs-tree-select-container .mat-nested-tree-node div[role=group] {
+    padding-left: 24px;
+  }
+
+  .hs-tree-select-container div[role=group]>.hs-tree-select-node {
+    padding-left: 24px;
+  }
+
+  // .hs-tree-select-container div[role=group]>.mat-tree-node>.hs-tree-select-node {
+  //   padding-left: 24px;
+  // }
 }
 
-.hs-tree-select-invisible {
-  display: none;
-}
 
-.hs-tree-select-container .mat-nested-tree-node div[role=group] {
-  padding-left: 24px;
-}
-
-.hs-tree-select-container div[role=group] > .mat-tree-node {
-  padding-left: 24px;
-}
 
 @keyframes slideDown {
-  from { height: 0; }
-  to { height: 200px; } 
+  from {
+    height: 0;
+  }
+
+  to {
+    max-height: 320px;
+  }
 }
