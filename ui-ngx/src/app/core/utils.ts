@@ -396,3 +396,39 @@ export function flattenTree(treeData: Array<any>, key: string) {
 
   return result;
 }
+
+/**
+ * 查询树节点中某个节点的父节点数据
+ * @param {Array<IAnyPropObj>} treeData - 树结构数据
+ * @param {string} value - 用于查找的值
+ * @param {attributes} key - 用于查找的存储key
+ * @param {string} key - 用于查找的key
+ * @returns {IAnyPropObj | null} - 拉平后的数组
+ */
+export function findParentById(
+  treeData: IAnyPropObj[],
+  targetValue: string,
+  childrenName: string = 'children',
+  key: string = 'id',
+): IAnyPropObj | null {
+  for (let node of treeData) {
+    if (node[childrenName]) {
+      const isInParent = node[childrenName].some(
+        (item: IAnyPropObj) => item[key] === targetValue,
+      );
+      if (isInParent) {
+        return node; // 找到目标节点的父节点
+      }
+      const parent = findParentById(
+        node[childrenName],
+        targetValue,
+        childrenName,
+        key,
+      ); // 递归搜索子节点
+      if (parent) {
+        return parent; // 如果在子节点中找到父节点，返回结果
+      }
+    }
+  }
+  return null; // 如果遍历完所有节点仍未找到，返回 null
+}

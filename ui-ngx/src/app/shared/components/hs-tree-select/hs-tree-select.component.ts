@@ -30,7 +30,7 @@ import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTreeModule, MatTreeNestedDataSource } from '@angular/material/tree';
-import { flattenTree } from '@src/app/core/utils';
+import { findParentById, flattenTree } from '@src/app/core/utils';
 
 @Component({
   selector: 'hs-tree-select',
@@ -95,7 +95,6 @@ export class TreeSelectComponent
 
   selectedValuesStr = computed(() => {
     const values = this.selectedValues();
-    console.log('%c Line:98 🍐 values', 'color:#6ec1c2', values);
     return values.join(',');
   });
 
@@ -154,14 +153,20 @@ export class TreeSelectComponent
     this.selectionChange.emit(node);
   }
 
-  // 多选事件
+  /**
+   * 多选事件
+   * 1、如果点击的是父节点，根据判断条件将下属子节点全部做选中
+   * 2、子节点切换状态时修改父节点状态
+   */
   selectMultipleNode(node: any, event: MatCheckboxChange) {
     let currentValues = this.selectedValues();
 
     const checkNodeValue = node[this.key];
     const isChildNodeSomeSelected = this.hasChildNodeSomeSelected(node);
 
+    // 点击之前的状态
     let prevIsSelected = currentValues.includes(checkNodeValue);
+
     if (prevIsSelected && isChildNodeSomeSelected) {
       // 之前选中了，但是有些许字节点选中，改为没选中
       prevIsSelected = false;
@@ -169,14 +174,11 @@ export class TreeSelectComponent
     } else if (prevIsSelected && !isChildNodeSomeSelected) {
       // 之前选中了，没有一个字节点选中，删除选中
       currentValues = currentValues.filter((item) => item !== checkNodeValue);
-    } else if (!prevIsSelected && isChildNodeSomeSelected) {
-      // 之前没有选中，只有些许字节点选中，则全部选中
-      currentValues.push(checkNodeValue);
-    } else if (!prevIsSelected && !isChildNodeSomeSelected) {
-      // 之前没有选中，所有字节点都未选中，则取消选中
+    } else {
       currentValues.push(checkNodeValue);
     }
 
+    // 1、如果点击的是父节点，根据判断条件将下属子节点全部做选中
     if (node.children) {
       const flattenNodeData = flattenTree(node.children, 'children');
 
@@ -188,11 +190,45 @@ export class TreeSelectComponent
           currentValues.splice(index, 1);
         }
 
+        // 之前没有选中，则下面子节点全部做选中
         if (!prevIsSelected) {
           currentValues.push(itemNodeValue);
         }
       });
     }
+
+    // 2、子节点切换状态时修改父节点状态
+    let parentNode = findParentById(this.nodes, checkNodeValue);
+    while (parentNode) {
+      const parentNodeValue = parentNode[this.key];
+      const flattenparentNodeData = flattenTree(
+        parentNode['children'],
+        'children',
+      );
+      const isAllChildrenSelected = flattenparentNodeData.every((item) =>
+        currentValues.includes(item[this.key]),
+      );
+
+      const isNoChildSelected = !flattenparentNodeData.some((item) =>
+        currentValues.includes(item[this.key]),
+      );
+
+      if (isNoChildSelected) {
+        const index = currentValues.indexOf(parentNodeValue);
+        if (index > -1) {
+          currentValues.splice(index, 1);
+        }
+      }
+      if (
+        isAllChildrenSelected &&
+        !currentValues.includes(parentNodeValue)
+      ) {
+        currentValues.push(parentNodeValue);
+      }
+
+      parentNode = findParentById(this.nodes, parentNodeValue);
+    }
+
     this.selectedValues.set([...currentValues]);
     this.onChange(currentValues);
     this.selectionChange.emit(currentValues);

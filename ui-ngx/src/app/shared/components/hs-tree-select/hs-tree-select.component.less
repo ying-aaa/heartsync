@@ -13,12 +13,12 @@
   border-radius: 5px;
   text-align: center;
   padding: 3px;
-  margin: 0;
-  animation: slideDown 0.1s ease forwards;
+  // animation: slideDown 0.1s ease forwards;
   overflow: auto;
   margin: 3px 0;
-
-
+  height: auto;
+  min-height: 100px;
+  max-height: 320px;
 
   .hs-tree-select-node {
     width: 100%;
@@ -58,13 +58,9 @@
     .hs-tree-select-checkbox {
       height: 100%;
 
-      ::ng-deep {
-        .mdc-checkbox {
-          flex: 0 0 14px;
-          width: 14px;
-          height: 14px;
-        }
+      --mdc-checkbox-state-layer-size: 22px;
 
+      ::ng-deep {
         .mat-internal-form-field {
           height: 100%;
           vertical-align: unset;
@@ -73,6 +69,9 @@
         .mdc-checkbox__background {
           width: 14px;
           height: 14px;
+          left: 50%;
+          top: 50%;
+          transform: translateX(-50%) translateY(-50%);
         }
       }
     }

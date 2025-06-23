@@ -12,9 +12,13 @@
     [(ngModel)]="value"
     placeholder="你好世界"
   /> -->
-  <div class="hs-tree-select-value">
-    {{ multiple ? selectedValues() : selectedValuesStr() }}
-  </div>
+  @let displayValue = multiple ? selectedValues() : selectedValuesStr();
+  @if(displayValue) {
+    <div class="hs-tree-select-value">
+      {{ displayValue }}
+    </div>
+  }
+
   <select
     matNativeControl
     required
@@ -97,7 +101,7 @@
             <mat-checkbox
               class="hs-tree-select-checkbox hs-density--5"
               [checked]="selectedValues().includes(node[key])"
-              (change)="selectMultipleNode(node, $event)"
+              (change)="selectMultipleNode(node, $event);"
             >
             </mat-checkbox>
           }
@@ -127,6 +131,7 @@
               (change)="selectMultipleNode(node, $event)"
               [indeterminate]="hasChildNodeSomeSelected(node)"
               [checked]="selectedValues().includes(node[key])"
+              (click)="$event.stopPropagation()"
             >
             </mat-checkbox>
           }
