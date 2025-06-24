@@ -1,6 +1,8 @@
 :host {
   .hs-tree-select-value {
     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     width: calc(100% - 16px);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -19,6 +21,7 @@
   height: auto;
   min-height: 100px;
   max-height: 320px;
+  background-color: var(--base-bg-color);
 
   .hs-tree-select-node {
     width: 100%;
@@ -51,7 +54,7 @@
     }
 
     &:hover {
-      background-color: var(--base-color-05);
+      background-color: var(--base-color-10);
       border-radius: 5px;
     }
 

@@ -7,7 +7,7 @@ import {
 import { IMenuNode, IMenuType } from '@src/app/shared/models/app-menu.model';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { VerseTreeTogglerSwitchComponent } from "@shared/components/ui-verse/verse-tree-toggler-switch/verse-tree-toggler-switch.component";
+import { VerseTreeTogglerSwitchComponent } from '@shared/components/ui-verse/verse-tree-toggler-switch/verse-tree-toggler-switch.component';
 @Component({
   selector: 'hs-menu-toggle',
   template: `
@@ -19,13 +19,15 @@ import { VerseTreeTogglerSwitchComponent } from "@shared/components/ui-verse/ver
       (click)="onMenuClick()"
     >
       @if (section.icon !== null) {
-        <mat-icon class="hs-menu-icon"> {{ isExpanded ? "folder_open" : "folder_close"}} </mat-icon>
+        <mat-icon class="hs-menu-icon">
+          {{ isExpanded ? 'folder_open' : 'folder_close' }}
+        </mat-icon>
       }
       <span>{{ section.name }}</span>
     </a>
 
-    <verse-tree-toggler-switch 
-      [isChecked]="isExpanded" 
+    <verse-tree-toggler-switch
+      [isChecked]="isExpanded"
       class="absolute top-50% -translateY-50% right-16px"
     ></verse-tree-toggler-switch>
   `,
@@ -45,7 +47,10 @@ export class MenuToggleComponent implements OnInit {
   toggleSection(event: Event) {}
 
   onMenuClick() {
-    localStorage.setItem('selectedMenuId', this.section.id);
+    localStorage.setItem(
+      'selectedMenuId',
+      this.section.dashboardId || 'not-found',
+    );
   }
 
   ngOnInit(): void {}

@@ -9,7 +9,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { CdkContextMenuTrigger, CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
 import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
@@ -17,6 +16,9 @@ import { generateUUID, getParamFromRoute } from '@src/app/core/utils';
 import { MenuHttpService } from '@src/app/core/http/menu.service';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { MatMenuModule } from '@angular/material/menu';
+import { TreeSelectComponent } from '@src/app/shared/components/hs-tree-select/hs-tree-select.component';
+import { FileTreeService } from '@src/app/core/http/file-tree.service';
+import { delay } from 'rxjs';
 
 interface FlatIMenuNode extends IMenuNode {
   level: number;
@@ -45,9 +47,11 @@ interface FlatIMenuNode extends IMenuNode {
     HsLoadingModule,
     MatTooltipModule,
     MatMenuModule,
+    TreeSelectComponent
   ],
 })
 export class MenuManagementComponent implements OnInit {
+
   IMenuType = IMenuType;
   appId: string = getParamFromRoute('appId', this.route)!;
 
@@ -67,6 +71,8 @@ export class MenuManagementComponent implements OnInit {
 
   // 使用信号管理树数据
   treeData = signal<IMenuNode[]>([]);
+
+  dashboardData = signal<IMenuNode[]>([]);
 
   // 节点展开状态管理（独立信号）
   expandedNodes = signal<Set<string>>(new Set());
@@ -99,12 +105,14 @@ export class MenuManagementComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private menuHttpService: MenuHttpService,
+    private fileTreeService: FileTreeService
   ) {
     this.initMenuFilter();
   }
 
   // 根据nodeId查找节点并更新节点值
   changeNodeValue(nodeId: string, field: keyof IMenuNode, value: any) {
+    console.log("%c Line:118 🍫 nodeId", "color:#fca650", nodeId, value);
     let isChanged = false;
     let matchedNode: IMenuNode | undefined;
     const updateNodeValue = (nodes: IMenuNode[]): IMenuNode[] => {
@@ -333,7 +341,22 @@ export class MenuManagementComponent implements OnInit {
     );
   }
 
+  loadDashboardData() {
+    this.fileTreeService
+    .getEntireTree(this.appId, "dashboard")
+    .pipe(delay(0))
+    .subscribe({
+      next: async (responseData) => {
+        this.dashboardData.set(responseData);
+        console.log("%c Line:353 🍷 responseData", "color:#42b983", responseData);
+      },
+      error() {
+      },
+    });
+  }
+
   ngOnInit(): void {
     this.loadMenuData();
+    this.loadDashboardData();
   }
 }

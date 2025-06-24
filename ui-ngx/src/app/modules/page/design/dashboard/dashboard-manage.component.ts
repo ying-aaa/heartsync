@@ -3,11 +3,9 @@ import {
   effect,
   OnInit,
   signal,
-  ViewChild,
   viewChild,
 } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
 import { WidgetFolderComponent } from '../widget/widget-folder.component';
 import { DashboardViewportComponent } from './dashboard-viewport.component';
 import { MatButtonModule } from '@angular/material/button';

@@ -4,10 +4,12 @@ import {
   AfterViewInit,
   Component,
   computed,
+  effect,
   ElementRef,
   EventEmitter,
   forwardRef,
   HostListener,
+  input,
   Input,
   OnInit,
   Output,
@@ -26,9 +28,14 @@ import {
   MatCheckboxChange,
   MatCheckboxModule,
 } from '@angular/material/checkbox';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatFormFieldAppearance,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTreeModule, MatTreeNestedDataSource } from '@angular/material/tree';
 import { findParentById, flattenTree } from '@src/app/core/utils';
 
@@ -49,6 +56,7 @@ import { findParentById, flattenTree } from '@src/app/core/utils';
     MatCheckboxModule,
     FormsModule,
     ReactiveFormsModule,
+    MatSelectModule,
   ],
   providers: [
     {
@@ -65,17 +73,22 @@ export class TreeSelectComponent
   @ViewChild('overlayElement') overlayElement: ElementRef;
   @ViewChild('searchInputRef') searchInputRef: ElementRef;
 
-  @Input() nodes: Array<any> = [];
-  @Input() key = 'id';
+  @Input() labelField = 'name';
+  @Input() keyField = 'id';
   @Input() filter = true;
-  @Input() placeholder = '';
+  @Input() placeholder = '请选择';
   @Input() label = '';
   @Input() disabled = false;
   @Input() required = false;
   @Input() readonly = false;
   @Input() multiple = false;
   @Input() errorState = false;
-  @Input() value: any;
+  @Input() allowClear = false;
+
+  @Input() appearance: MatFormFieldAppearance = 'outline';
+
+  value = input<string | Array<any>>('');
+  nodes = input<Array<any>>([]);
 
   @Output() selectionChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -98,7 +111,19 @@ export class TreeSelectComponent
     return values.join(',');
   });
 
+  selectedValueLabel = computed(() => {
+    const value = this.selectedValue();
+    const nodes = flattenTree(this.nodes(), 'children');
+    const label = nodes.find((item) => item[this.keyField] === value)?.[
+      this.labelField
+    ];
+    return label;
+  });
+
   constructor() {
+    effect(() => {
+      this.selectedValue.set(this.value() as any);
+    });
     this.searchControl.valueChanges.subscribe((searchString: string | null) => {
       this.filterTree(searchString || '');
     });
@@ -106,11 +131,11 @@ export class TreeSelectComponent
 
   filterTree(searchString: string) {
     if (!searchString) {
-      this.dataSource.data = this.nodes;
+      this.dataSource.data = this.nodes();
       return;
     }
 
-    const filteredData = this.nodes.map((node) =>
+    const filteredData = this.nodes().map((node) =>
       this.filterNode(node, searchString),
     );
     this.dataSource.data = filteredData.filter(
@@ -138,6 +163,18 @@ export class TreeSelectComponent
     return null;
   }
 
+  resetValue() {
+    if (this.multiple) {
+      this.selectedValues.set([]);
+      this.onChange([]);
+      this.selectionChange.emit([]);
+    } else {
+      this.selectedValue.set('');
+      this.onChange('');
+      this.selectionChange.emit('');
+    }
+  }
+
   @HostListener('window:resize')
   onResize() {
     this.formFieldRefWidth =
@@ -147,7 +184,7 @@ export class TreeSelectComponent
   // 单选事件
   selectSingleNode(node: any) {
     if (this.multiple) return;
-    this.selectedValue.set(node[this.key as keyof any] as string);
+    this.selectedValue.set(node[this.keyField as keyof any] as string);
     this.toggleOverlayStatus(false);
     this.onChange(this.selectedValue()!);
     this.selectionChange.emit(node);
@@ -161,7 +198,7 @@ export class TreeSelectComponent
   selectMultipleNode(node: any, event: MatCheckboxChange) {
     let currentValues = this.selectedValues();
 
-    const checkNodeValue = node[this.key];
+    const checkNodeValue = node[this.keyField];
     const isChildNodeSomeSelected = this.hasChildNodeSomeSelected(node);
 
     // 点击之前的状态
@@ -183,7 +220,7 @@ export class TreeSelectComponent
       const flattenNodeData = flattenTree(node.children, 'children');
 
       flattenNodeData.forEach((itemNode: any) => {
-        const itemNodeValue = itemNode[this.key];
+        const itemNodeValue = itemNode[this.keyField];
 
         const index = currentValues.indexOf(itemNodeValue);
         if (index > -1) {
@@ -198,19 +235,19 @@ export class TreeSelectComponent
     }
 
     // 2、子节点切换状态时修改父节点状态
-    let parentNode = findParentById(this.nodes, checkNodeValue);
+    let parentNode = findParentById(this.nodes(), checkNodeValue);
     while (parentNode) {
-      const parentNodeValue = parentNode[this.key];
+      const parentNodeValue = parentNode[this.keyField];
       const flattenparentNodeData = flattenTree(
         parentNode['children'],
         'children',
       );
       const isAllChildrenSelected = flattenparentNodeData.every((item) =>
-        currentValues.includes(item[this.key]),
+        currentValues.includes(item[this.keyField]),
       );
 
       const isNoChildSelected = !flattenparentNodeData.some((item) =>
-        currentValues.includes(item[this.key]),
+        currentValues.includes(item[this.keyField]),
       );
 
       if (isNoChildSelected) {
@@ -219,14 +256,11 @@ export class TreeSelectComponent
           currentValues.splice(index, 1);
         }
       }
-      if (
-        isAllChildrenSelected &&
-        !currentValues.includes(parentNodeValue)
-      ) {
+      if (isAllChildrenSelected && !currentValues.includes(parentNodeValue)) {
         currentValues.push(parentNodeValue);
       }
 
-      parentNode = findParentById(this.nodes, parentNodeValue);
+      parentNode = findParentById(this.nodes(), parentNodeValue);
     }
 
     this.selectedValues.set([...currentValues]);
@@ -240,7 +274,7 @@ export class TreeSelectComponent
   // 验证节点下的子节点是否有选中又不是全部选中的
   hasChildNodeSomeSelected(node: any): boolean {
     const currentValues = this.selectedValues();
-    const key = this.key;
+    const key = this.keyField;
     if (!this.multiple || !node.children?.length) return false;
     const flattenNodeData = flattenTree(node.children, 'children');
     // 判断是否有任何一个选中的
@@ -288,7 +322,7 @@ export class TreeSelectComponent
 
   writeValue(value: string | Array<any>): void {
     if (this.multiple) {
-      this.selectedValues.set(value as Array<any>);
+      this.selectedValues.set(Array.isArray(value) ? value : [value]);
     } else {
       this.selectedValue.set(value as string);
     }
@@ -306,7 +340,7 @@ export class TreeSelectComponent
   }
 
   ngOnInit(): void {
-    this.dataSource.data = this.nodes;
+    this.dataSource.data = this.nodes();
   }
 
   ngAfterViewInit() {

@@ -10,7 +10,7 @@ import { TreeSelectComponent } from '@shared/components/hs-tree-select/hs-tree-s
   imports: [TreeSelectComponent, FormsModule, CommonModule],
 })
 export class UserManageComponent implements OnInit {
-  value = [1, 11];
+  value = 1;
 
   departmentTree: any[] = [
     {

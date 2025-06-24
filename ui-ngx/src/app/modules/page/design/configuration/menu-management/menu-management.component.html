@@ -76,7 +76,7 @@
         <button
           mat-icon-button
           matTooltip="刷新"
-          (click)="loadMenuData()"
+          (click)="loadMenuData(); loadDashboardData()"
           [matTooltipPosition]="'above'"
         >
           <mat-icon>refresh</mat-icon>
@@ -189,6 +189,7 @@
         <th
           mat-header-cell
           *matHeaderCellDef
+          [style.width]="'320px'"
         >
           关联仪表版
         </th>
@@ -196,7 +197,12 @@
           mat-cell
           *matCellDef="let node"
         >
-          {{ node.dashboardId }}
+          <hs-tree-select
+            class="w-320px"
+            [value]="node.dashboardId"
+            [nodes]="dashboardData()"
+            (selectionChange)="changeNodeValue(node.id, 'dashboardId', $event.id)"
+          ></hs-tree-select>
         </td>
       </ng-container>
 

@@ -5,8 +5,8 @@
     class="w-320px"
     [(ngModel)]="value"
     [nodes]="departmentTree"
-    [multiple]="true"
-    [key]="'id'"
+    [multiple]="false"
+    [keyField]="'id'"
     (selectionChange)="onSelectionChange($event)"
     [disabled]="false"
   ></hs-tree-select>
