@@ -1,0 +1,19 @@
+<content class="flex wh-full text-14px">
+  <aside
+    class="w-225px h-full px-8px"
+    style="width: 225px"
+  >
+    <hs-user-feature-list [(ngModel)]="activeFeature"></hs-user-feature-list>
+  </aside>
+
+  <mat-divider
+    [vertical]="true"
+    class="h-full"
+  ></mat-divider>
+  
+  <main class="w-0 flex-1">
+    <hs-user-feature-content
+      [activeFeature]="activeFeature()"
+    ></hs-user-feature-content>
+  </main>
+</content>

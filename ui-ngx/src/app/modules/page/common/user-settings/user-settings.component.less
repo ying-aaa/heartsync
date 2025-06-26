@@ -1,0 +1,46 @@
+@import "themeMixin";
+
+.themeMixin({
+  :host {
+    ::ng-deep {
+      mat-list-item {
+        cursor: pointer;
+        height: 32px;
+        line-height: 32px;
+        margin: 5px 0;
+        border-radius: 5px;
+
+        mat-icon{
+          --mdc-list-list-item-leading-icon-size: 20px;
+
+          margin-right: 8px;
+          color: #999;
+        }
+
+        .mat-mdc-list-item-unscoped-content {
+          font-size: 14px;
+        }
+
+        &:hover{
+          background-color: rgba(47, 144, 185, .1);
+        }
+
+        &.hs-list-active {
+          background-color: rgba(47, 144, 185, .8);
+    
+          mat-icon,.mat-mdc-list-item-unscoped-content {
+            color: #fff;
+          }
+        }
+      }
+
+      .hs-list-title {
+        font-size: 13px;
+        color: @base-color-50;
+        font-weight: 700
+      }
+    }
+
+  }
+
+}); 
