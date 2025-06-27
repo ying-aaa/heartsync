@@ -1,8 +1,8 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { UserFeatureListComponent } from './user-feature-list.component';
+import { UserSettingOptionComponent } from './user-setting-option.component';
 import { folders, IFolderKey } from './data.model';
-import { UserFeatureContetnComponent } from './user-feature-content.compoent';
+import { UserSettingContetnComponent } from './user-setting-content.compoent';
 
 @Component({
   selector: 'hs-user-settings',
@@ -10,8 +10,8 @@ import { UserFeatureContetnComponent } from './user-feature-content.compoent';
   styleUrl: './user-settings.component.less',
   imports: [
     MatDividerModule,
-    UserFeatureListComponent,
-    UserFeatureContetnComponent,
+    UserSettingOptionComponent,
+    UserSettingContetnComponent,
   ],
 })
 export class UserSettingsComponent implements OnInit {

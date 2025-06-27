@@ -29,7 +29,7 @@ export class WorkbenchUserDropdownComponent implements OnInit {
   username = computed(() => this.authService.username());
 
   openUserSettings() {
-    const width = isMobile() ? '100vw' : '960px';
+    const width = isMobile() ? '100vw' : '880px';
     const height = isMobile() ? '100vh' : '600px';
     const dialogRef = this.dialog.open(UserSettingsComponent, {
       width,

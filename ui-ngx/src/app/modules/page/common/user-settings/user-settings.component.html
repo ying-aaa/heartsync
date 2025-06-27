@@ -3,7 +3,7 @@
     class="w-225px h-full px-8px"
     style="width: 225px"
   >
-    <hs-user-feature-list [(ngModel)]="activeFeature"></hs-user-feature-list>
+    <hs-user-setting-option [(ngModel)]="activeFeature"></hs-user-setting-option>
   </aside>
 
   <mat-divider
@@ -12,8 +12,8 @@
   ></mat-divider>
   
   <main class="w-0 flex-1">
-    <hs-user-feature-content
+    <hs-user-setting-content
       [activeFeature]="activeFeature()"
-    ></hs-user-feature-content>
+    ></hs-user-setting-content>
   </main>
 </content>

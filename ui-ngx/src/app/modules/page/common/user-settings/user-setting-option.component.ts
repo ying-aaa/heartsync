@@ -5,7 +5,7 @@ import { MatListModule } from '@angular/material/list';
 import { folders } from './data.model';
 
 @Component({
-  selector: 'hs-user-feature-list',
+  selector: 'hs-user-setting-option',
   template: `
     <mat-list>
       @for (item of folders; track $index) {
@@ -24,6 +24,7 @@ import { folders } from './data.model';
             (click)="ngModel.set(item.key!)"
             [class.hs-list-active]="ngModel() === item.key"
             [style.marginBottom]="isNextTitle && '20px'"
+            class="hs-list-item"
           >
             <mat-icon
               class="hs-icon-16"
@@ -38,7 +39,7 @@ import { folders } from './data.model';
   `,
   imports: [MatListModule, MatIconModule, MatDividerModule],
 })
-export class UserFeatureListComponent implements OnInit {
+export class UserSettingOptionComponent implements OnInit {
   ngModel = model<string>();
 
   folders = folders;

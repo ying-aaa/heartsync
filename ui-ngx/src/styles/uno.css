@@ -72,6 +72,7 @@
 .-mt-2px{margin-top:-2px;}
 .mb-10px\!{margin-bottom:10px !important;}
 .mb-12px{margin-bottom:12px;}
+.mb-12px\!{margin-bottom:12px !important;}
 .mb-18px{margin-bottom:18px;}
 .mb-32px{margin-bottom:32px;}
 .mb-4px{margin-bottom:4px;}
@@ -184,6 +185,7 @@
 .w-282px{width:282px;}
 .w-284px{width:284px;}
 .w-28px\!{width:28px !important;}
+.w-30\%{width:30%;}
 .w-300px{width:300px;}
 .w-312px{width:312px;}
 .w-32{width:8rem;}
@@ -196,6 +198,7 @@
 .w-40px{width:40px;}
 .w-40px\!{width:40px !important;}
 .w-48px{width:48px;}
+.w-50\%{width:50%;}
 .w-52px{width:52px;}
 .w-6{width:1.5rem;}
 .w-65\%{width:65%;}
@@ -350,6 +353,7 @@
 .pr-8px{padding-right:8px;}
 .pt-10px{padding-top:10px;}
 .pt-12px{padding-top:12px;}
+.pt-20px{padding-top:20px;}
 .pt-30px\!{padding-top:30px !important;}
 .pt-3px{padding-top:3px;}
 .pt-48px{padding-top:48px;}
