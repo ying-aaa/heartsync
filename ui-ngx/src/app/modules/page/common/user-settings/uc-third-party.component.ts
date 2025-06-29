@@ -15,11 +15,11 @@ import { MatListModule } from '@angular/material/list';
       >
         <mat-list-item role="listitem">
           <img
-            src="https://th.bing.com/th/id/ODLS.f8b0bfee-f356-42b7-b0f4-cb7656b969a7"
+            src="assets/svg/github.svg"
             MatListItemAvatar
-            class="w-32px h-32px rounded-5px mr-8px"
+            class="w-32px h-32px mr-8px bg-#fff rounded-32px"
           />
-          <span class="inline-block w-30% line-height-24px">微信</span>
+          <span class="inline-block w-30% line-height-24px">Github</span>
           <button
             mat-button
             MatListItemMeta
@@ -31,17 +31,34 @@ import { MatListModule } from '@angular/material/list';
         <mat-divider></mat-divider>
         <mat-list-item role="listitem">
           <img
-            src="https://th.bing.com/th/id/ODLS.b2099a11-ca12-45ce-bede-5df940e38a48"
+            src="assets/svg/wechat.svg"
             MatListItemAvatar
-            class="w-32px h-32px rounded-5px mr-8px"
+            class="w-32px h-32px mr-8px bg-#fff rounded-32px"
           />
-          <span class="inline-block w-30% line-height-24px">Github</span>
+          <span class="inline-block w-30% line-height-24px">微信</span>
           <button
             mat-button
             MatListItemMeta
             class="absolute! right-0 top-50% -translate-y-50%"
           >
-           绑定
+            绑定
+          </button>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+
+        <mat-list-item role="listitem">
+          <img
+            src="assets/svg/qq.svg"
+            MatListItemAvatar
+            class="w-32px h-32px  mr-8px bg-#fff rounded-32px"
+          />
+          <span class="inline-block w-30% line-height-24px">QQ</span>
+          <button
+            mat-button
+            MatListItemMeta
+            class="absolute! right-0 top-50% -translate-y-50%"
+          >
+            绑定
           </button>
         </mat-list-item>
       </mat-list>

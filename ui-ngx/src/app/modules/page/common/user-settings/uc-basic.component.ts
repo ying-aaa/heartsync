@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { UserService } from '@src/app/core/auth/user.service';
 
 @Component({
   selector: 'hs-uc-basic',
@@ -33,7 +34,7 @@ import { MatListModule } from '@angular/material/list';
         <mat-divider></mat-divider>
         <mat-list-item role="listitem">
           <span class="inline-block w-30%">名称</span>
-          <span>不读诗意</span>
+          <span>{{ username() }}</span>
           <button
             mat-button
             MatListItemMeta
@@ -45,7 +46,7 @@ import { MatListModule } from '@angular/material/list';
         <mat-divider></mat-divider>
         <mat-list-item role="listitem">
           <span class="inline-block w-30%">账户</span>
-          <span>heart</span>
+          <span>{{ accountNumber() }}</span>
           <!-- <button
             mat-button
             MatListItemMeta
@@ -69,7 +70,7 @@ import { MatListModule } from '@angular/material/list';
         <mat-divider></mat-divider>
         <mat-list-item role="listitem">
           <span class="inline-block w-30%">邮箱</span>
-          <span>{{ '775296271@qq.com' }}</span>
+          <span>{{ email() }}</span>
           <button
             mat-button
             MatListItemMeta
@@ -91,18 +92,7 @@ import { MatListModule } from '@angular/material/list';
           </button>
         </mat-list-item>
         <mat-divider></mat-divider>
-        <mat-list-item role="listitem">
-          <span class="inline-block w-30%">邮箱</span>
-          <span>{{ '775296271@qq.com' }}</span>
-          <button
-            mat-button
-            MatListItemMeta
-            class="absolute! right-0 top-50% -translate-y-50%"
-          >
-            修改
-          </button>
-        </mat-list-item>
-        <mat-divider></mat-divider>
+
         <mat-list-item role="listitem">
           <span class="inline-block w-30%">个人简介</span>
           <span>有空一起吃个火锅不喽！</span>
@@ -156,7 +146,16 @@ import { MatListModule } from '@angular/material/list';
   imports: [MatListModule, MatIconModule, MatDividerModule, MatButtonModule],
 })
 export class UcBasicComponent implements OnInit {
-  constructor() {}
+  userProfile = computed(() => this.userService.userProfile());
+  username = computed(() => this.userService.username());
+  accountNumber = computed(() => this.userProfile()?.username);
+  email = computed(() => this.userProfile()?.email);
 
-  ngOnInit() {}
+  constructor(private readonly userService: UserService) {}
+
+  ngOnInit() {
+    setTimeout(() => {
+      console.log('%c Line:166 🍔', 'color:#3f7cff', this.userProfile());
+    }, 1000);
+  }
 }
