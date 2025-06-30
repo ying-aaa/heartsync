@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   computed,
   input,
@@ -118,6 +117,7 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
       .subscribe({
         next: ({ data, total }) => {
           this.dataSource.data = data;
+          total = total || data.length;
           this.pageLink().updateTotal(total);
           this.loadingStatus = false;
         },

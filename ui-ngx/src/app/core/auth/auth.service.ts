@@ -73,6 +73,10 @@ export class AuthService {
     }
   }
 
+  getToken() {
+    return this.keycloak.token;
+  }
+
   login() {
     this.keycloak.login();
   }

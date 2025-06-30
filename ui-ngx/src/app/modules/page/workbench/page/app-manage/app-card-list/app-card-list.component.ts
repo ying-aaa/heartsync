@@ -89,6 +89,7 @@ export class AppCardListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: ({ data, total }) => {
           this.dataSource.set(data);
+          total = total || data.length;
           this.pageLink().updateTotal(total);
           this.loadingStatus = false;
         },

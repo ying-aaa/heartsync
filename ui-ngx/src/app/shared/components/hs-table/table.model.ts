@@ -225,9 +225,9 @@ export type ISortType = 'ASC' | 'DESC';
 
 export interface DataType {
   data: any[];
-  total: number;
-  page: number;
-  pageSize: number;
+  total?: number;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface IsearchConfig {

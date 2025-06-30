@@ -1,0 +1,59 @@
+<section class="wh-full">
+  <mat-tree
+    #tree
+    [dataSource]="dataSource"
+    [childrenAccessor]="childrenAccessor"
+  >
+    <mat-tree-node
+      *matTreeNodeDef="let node"
+      matTreeNodePadding
+      [routerLinkActiveOptions]="{
+        paths: 'subset',
+        queryParams: 'ignored',
+        matrixParams: 'ignored',
+        fragment: 'ignored',
+      }"
+      routerLinkActive="hs-menu-active"
+      routerLink="{{ node.path }}"
+      class="hs-menu-item cursor-pointer"
+    >
+      <button
+        mat-icon-button
+        disabled
+      ></button>
+      <hs-svg
+        [name]="node.data.icon"
+        width="18px"
+        height="18px"
+        color="red"
+        class="mr-8px"
+      ></hs-svg>
+      {{ node.title }}
+    </mat-tree-node>
+    <mat-tree-node
+      *matTreeNodeDef="let node; when: hasChild"
+      matTreeNodePadding
+      matTreeNodeToggle
+      [cdkTreeNodeTypeaheadLabel]="node.title"
+      class="cursor-pointer"
+    >
+      <button
+        mat-icon-button
+        matTreeNodeToggle
+        [attr.aria-label]="'Toggle ' + node.title"
+      >
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+        </mat-icon>
+      </button>
+      <hs-svg
+        [name]="node.data.icon"
+        width="18px"
+        height="18px"
+        color="red"
+        class="mr-8px"
+      ></hs-svg>
+      {{ node.title }}
+    </mat-tree-node>
+  </mat-tree>
+</section>

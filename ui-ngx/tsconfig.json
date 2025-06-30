@@ -39,7 +39,8 @@
       "@widget/*": ["src/app/widget/*"],
       "@env/*": ["src/environments/*"],
       "@shared/*": ["src/app/shared/*"],
-      "@assets/*": ["src/assets/*"]
+      "@assets/*": ["src/assets/*"],
+      "@environments/*": ["src/environments/*"],
     },
     "allowSyntheticDefaultImports": true
   },

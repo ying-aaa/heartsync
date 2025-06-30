@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { IRouterUse } from '@src/app/shared/models/route.model';
-import systemRouting from './system/system.routing';
+import systemPages from './system/pages/system-page.routing';
 import { OverseasGuard } from '@src/app/core/guards/overseas.guard';
 
 export default [
@@ -27,7 +27,11 @@ export default [
     title: '系统管理',
     path: 'system',
     data: { preload: true, key: 'system', use: IRouterUse.MENU },
-    children: systemRouting,
+    loadComponent: () =>
+      import('./system/system-manage.component').then(
+        (m) => m.SystemManageComponent,
+      ),
+    children: systemPages,
   },
   {
     title: '记录',

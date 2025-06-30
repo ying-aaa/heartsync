@@ -6,14 +6,12 @@ import {
   withEventReplay,
 } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideHighlightOptions } from 'ngx-highlightjs';
 import { ResponentInterceptor } from './core/interceptors/response.interceptor';
 import { provideKeycloakAngular } from './lib/keycloak.config';
 import { includeBearerTokenInterceptor } from 'keycloak-angular';
+import { RequestInterceptor } from './core/interceptors/resquest.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,7 +21,9 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([ResponentInterceptor])),
+    provideHttpClient(
+      withInterceptors([RequestInterceptor, ResponentInterceptor]),
+    ),
     provideHighlightOptions({
       // fullLibraryLoader: () => import('highlight.js'),
       lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),

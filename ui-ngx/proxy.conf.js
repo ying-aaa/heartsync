@@ -10,15 +10,18 @@ const PROXY_CONFIG = {
     // secure: false, // 表示后端服务使用了有效的 SSL 证书
     changeOrigin: true, // 支持跨域
   },
+  '/uc': {
+    target: forwardUrl,
+    changeOrigin: true,
+  },
   '/api/ws': {
     target: wsForwardUrl,
     ws: true,
     secure: false,
   },
   '/heartsync-files': {
-    target: "https://wjy.apihub.net",
-    // secure: false,
-    changeOrigin: true, // 支持跨域
+    target: forwardUrl,
+    changeOrigin: true,
   },
 };
 

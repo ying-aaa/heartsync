@@ -18,11 +18,7 @@ export class WorkbenchUserDropdownComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private authService: AuthService,
-  ) {
-    setTimeout(() => {
-      this.openUserSettings();
-    }, 50);
-  }
+  ) {}
 
   isAuthenticated = computed(() => this.authService.isAuthenticated());
 
@@ -38,8 +34,7 @@ export class WorkbenchUserDropdownComponent implements OnInit {
       minHeight: height,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   login() {

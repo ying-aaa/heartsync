@@ -1,4 +1,3 @@
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,7 +9,6 @@ import { MatTreeModule } from '@angular/material/tree';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { getParamFromRoute } from '@src/app/core/utils';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
-import { MenuToggleComponent } from './menu-toggle.component';
 
 @Component({
   selector: 'hs-menu-link',
@@ -35,7 +33,7 @@ import { MenuToggleComponent } from './menu-toggle.component';
       <span>{{ section.name }}</span>
     </a>
   `,
-  imports: [MatTreeModule,MatIconModule, RouterModule],
+  imports: [MatTreeModule, MatIconModule, RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuLinkComponent implements OnInit {
@@ -44,9 +42,7 @@ export class MenuLinkComponent implements OnInit {
 
   appId: string | null = getParamFromRoute('appId', this.route);
 
-  constructor(
-    private route: ActivatedRoute,
-  ) {}
+  constructor(private route: ActivatedRoute) {}
 
   onMenuClick() {
     sessionStorage.setItem('selectedMenuId', this.section.id);

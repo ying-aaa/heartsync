@@ -11,7 +11,12 @@ import { SvgService } from '@src/app/core/http/svg.service';
       [style]="containerStyle"
     >
       @if (!svgContent && !error) {
-        <div [ngStyle]="{ width, height }" class="loading">...</div>
+        <div
+          [ngStyle]="{ width, height }"
+          class="loading"
+        >
+          ...
+        </div>
       }
 
       @if (error) {
