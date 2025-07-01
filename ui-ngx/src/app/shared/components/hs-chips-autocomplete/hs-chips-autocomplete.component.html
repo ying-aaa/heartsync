@@ -1,0 +1,51 @@
+<!-- chips-autocomplete.component.html -->
+<div>
+  <mat-chip-grid
+    #chipGrid
+    matChipInputFor=""
+    [attr.aria-label]="ariaLabel"
+  >
+    @for (item of value; track $index) {
+      <mat-chip-row
+        (removed)="removeItem(item)"
+        [disabled]="disabled"
+      >
+        {{ getOptionLabelByValue(item) }}
+        @if (!disabled) {
+          <button
+            matChipRemove
+            [attr.aria-label]="'remove ' + item"
+            [disabled]="disabled"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+        }
+      </mat-chip-row>
+    }
+  </mat-chip-grid>
+
+  <input
+    #input
+    [placeholder]="placeholder"
+    [(ngModel)]="inputValue"
+    [matChipInputFor]="chipGrid"
+    [matAutocomplete]="auto"
+    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+    (focus)="focused = true; stateChanges.next()"
+    (blur)="onBlur()"
+    [disabled]="disabled"
+    style="margin: 0"
+    [style.display]="disabled && 'none'"
+  />
+
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="selected($event)"
+  >
+    @for (item of filteredOptions(); track item) {
+      <mat-option [value]="item[valueField]"
+        >{{ item[labelField] }}
+      </mat-option>
+    }
+  </mat-autocomplete>
+</div>
