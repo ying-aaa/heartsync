@@ -105,7 +105,7 @@ export class SystemUserComponent implements OnInit {
   onAddUser() {
     // 打开用户添加对话框或页面
     const width = isMobile() ? '100vw' : '800px';
-    const height = isMobile() ? '100vh' : '600px';
+    const height = isMobile() ? '100vh' : 'auto';
     const dialogRef = this.dialog.open(CreateUserComponent, {
       width,
       height,
@@ -127,5 +127,7 @@ export class SystemUserComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.onAddUser();
+  }
 }

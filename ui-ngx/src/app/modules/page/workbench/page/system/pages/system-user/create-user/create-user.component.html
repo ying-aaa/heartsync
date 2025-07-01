@@ -1,3 +1,154 @@
-<p>
-  create-user works!
-</p>
+<div mat-dialog-title>创建用户</div>
+<mat-divider></mat-divider>
+<mat-dialog-content class="h-0 flex-1 max-h-none!">
+  <form
+    [formGroup]="userForm"
+    (ngSubmit)="onSubmit()"
+    class="hs-density--5 max-w-xl mx-auto pt-12px"
+  >
+    <div class="flex mb-6 items-center">
+      <span class="w-30">必需的用户操作：</span>
+      <mat-form-field
+        appearance="outline"
+        class="full-width"
+        floatLabel="always"
+        class="flex-1"
+      >
+        <hs-chips-autocomplete
+          formControlName="requiredActions"
+          [options]="userRuquiredActions"
+          labelField="label"
+          valueField="providerId"
+        >
+        </hs-chips-autocomplete>
+        @let requiredActionsValidate =
+          userForm.get('requiredActions')?.errors?.['required'];
+        @if (requiredActionsValidate) {
+          <mat-error class="text-red-500"> 用户必需操作是必填项 </mat-error>
+        }
+        {{ requiredActionsValidate }}
+      </mat-form-field>
+      @let userTooltip =
+        '用户登录时需要执行操作。“验证电子邮件”将向用户发送电子邮件以验证其电子邮件地址。“更新个人资料”要求用户输入新的个人信息。“更新密码”要求用户输入新密码。“配置OTP”需要设置动态密码生成器。';
+      <mat-icon
+        [matTooltip]="userTooltip"
+        class="text-18px! p-3px cursor-pointer"
+        >question_mark</mat-icon
+      >
+    </div>
+
+    <div class="flex mb-6 items-center">
+      <span class="w-30">电子邮箱验证：</span>
+      <mat-slide-toggle formControlName="emailVerified">
+        <!-- {{ '开' }} -->
+      </mat-slide-toggle>
+      @let emailTooltip = '用户的电子邮件是否已验证？';
+      <mat-icon
+        [matTooltip]="emailTooltip"
+        class="text-18px! p-3px cursor-pointer"
+        >question_mark</mat-icon
+      >
+    </div>
+
+    <h2 class="text-18px font-bold mb-6">常规设置</h2>
+
+    <div class="flex mb-6 items-center">
+      <span class="w-30">用户名：</span>
+      <mat-form-field
+        appearance="outline"
+        class="flex-1"
+      >
+        <input
+          matInput
+          formControlName="username"
+          required
+          class="w-full p-2 border border-gray-300 rounded-md"
+        />
+        @let userNameValidate = userForm.get('username')?.errors?.['required'];
+        @if (userNameValidate) {
+          <mat-error class="text-red-500"> 用户名是必填项 </mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="flex mb-6 items-center">
+      <span class="w-30">电子邮件：</span>
+      <mat-form-field
+        appearance="outline"
+        class="flex-1"
+      >
+        <input
+          matInput
+          formControlName="email"
+          required
+          class="w-full p-2 border border-gray-300 rounded-md"
+        />
+        @let emailRequired = userForm.get('email')?.errors?.['required'];
+        @if (emailRequired) {
+          <mat-error class="text-red-500"> 电子邮件是必填项 </mat-error>
+        }
+        @let isEmail = userForm.get('email')?.errors?.['email'];
+        @if (isEmail) {
+          <mat-error class="text-red-500"> 电子邮件是必填项 </mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="flex mb-6 items-center">
+      <span class="w-30">名：</span>
+      <mat-form-field
+        appearance="outline"
+        class="flex-1"
+      >
+        <input
+          matInput
+          formControlName="firstName"
+          class="w-full p-2 border border-gray-300 rounded-md"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="flex mb-6 items-center">
+      <span class="w-30">姓：</span>
+      <mat-form-field
+        appearance="outline"
+        class="flex-1"
+      >
+        <input
+          matInput
+          formControlName="lastName"
+          class="w-full p-2 border border-gray-300 rounded-md"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="flex mb-6 items-center">
+      <span class="w-30">群组管理：</span>
+      <mat-form-field
+        appearance="outline"
+        class="flex-1"
+      >
+        <input
+          matInput
+          formControlName="groups"
+          class="w-full p-2 border border-gray-300 rounded-md"
+        />
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-divider>location</mat-divider>
+<mat-dialog-actions align="end">
+  <button
+    mat-button
+    mat-dialog-close
+  >
+    取消
+  </button>
+  <button
+    mat-flat-button
+    (click)="onSubmit()"
+  >
+    确定
+  </button>
+</mat-dialog-actions>
