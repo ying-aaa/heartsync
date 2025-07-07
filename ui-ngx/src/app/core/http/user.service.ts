@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import {
+  IGroupInfo,
   IUserInfo,
   IUserRequiredAction,
 } from '@src/app/shared/models/user.model';
@@ -13,7 +14,8 @@ export class UserHttpService {
   private realm = 'keycloak-angular-sandbox';
 
   constructor(private http: HttpClient) {}
-
+  // ----------------- 用户管理 -----------------
+  // 获取用户列表
   getUsers(pageLink: PageLink) {
     const params = pageLink.toQueryHttp();
 
@@ -24,13 +26,50 @@ export class UserHttpService {
     );
   }
 
+  // 创建用户
   createUser(userInfo: IUserInfo) {
     return this.http.post<IUserInfo>('/uc/admin/realms/master/users', userInfo);
   }
 
+  // 创建用户时选择的用户必需操作
   getUserRequiredCtions() {
     return this.http.get<Array<any>>(
       `/uc/admin/realms/master/authentication/required-actions`,
+    );
+  }
+
+  // ----------------- 群组管理 -----------------
+  // 获取群组列表
+  getGroups(params: any = {}) {
+    return this.http.get<Array<IGroupInfo>>(
+      `/uc/admin/realms/${this.realm}/groups`,
+      {
+        params,
+      },
+    );
+  }
+
+  // 获取子群组
+  getSubGroups(groupId: string, params: any = {}) {
+    return this.http.get<Array<IGroupInfo>>(
+      `/uc/admin/realms/${this.realm}/groups/${groupId}/children`,
+      { params },
+    );
+  }
+
+  // 获取群组成员
+  getGroupMembers(groupId: string, params: any = {}) {
+    return this.http.get<Array<IUserInfo>>(
+      `/uc/admin/realms/${this.realm}/groups/${groupId}/members`,
+      { params },
+    );
+  }
+
+  // 获取群组属性
+  getGroupAttributes(groupId: string, params: any = {}) {
+    return this.http.get<IGroupInfo>(
+      `/uc/admin/realms/${this.realm}/groups/${groupId}`,
+      { params },
     );
   }
 }

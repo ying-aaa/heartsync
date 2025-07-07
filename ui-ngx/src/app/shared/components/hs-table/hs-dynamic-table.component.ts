@@ -39,8 +39,6 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
   loadingStatus = false;
 
   constructor(private paginatorIntl: MatPaginatorIntl) {
-    this.customizePaginatorIntl();
-
     this.selection.changed.subscribe((event) => {
       this.pageLink().setMultipleSelection(this.selection.selected);
     });
@@ -153,6 +151,8 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.customizePaginatorIntl();
+
     this.setDefaultSort();
 
     this.handleTableData();

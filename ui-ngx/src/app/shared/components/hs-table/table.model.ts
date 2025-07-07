@@ -306,7 +306,7 @@ export class PageLink extends QueryParams {
   public multipleSelection: any[] = []; // table选中项
   public multipleFiled: string = ''; // table默认选中的校准字段
   public tableData: any[] = []; // table 数据
-  public override getData: () => void;
+  public override getData: () => void = () => {};
 
   constructor(
     public page: number = 1,

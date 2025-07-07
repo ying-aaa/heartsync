@@ -1,1 +1,12 @@
-<p>system-organization works!</p>
+<content class="wh-full">
+  <as-split>
+    <as-split-area size="25">
+      <hs-department-list [(activeGroup)]="activeGroup"></hs-department-list>
+    </as-split-area>
+    <as-split-area size="75">
+      <hs-department-details
+        [activeGroup]="activeGroup()"
+      ></hs-department-details>
+    </as-split-area>
+  </as-split>
+</content>

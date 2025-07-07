@@ -15,7 +15,6 @@ export class HsThemeService {
   }
 
   constructor(private localStorageService: LocalStorageService) {
-    console.log(11111111, 11111111)
     this.toggleDarkTheme(
       this.localStorageService.getItem('theme') || IThemeType.LIGHT,
       true,
@@ -79,7 +78,10 @@ export class HsThemeService {
   }
 
   public getBaseColor(opacity: number): string {
-    return this.getCurrentThemeConfig([`rgba(0, 0, 0, .${opacity})`, `rgba(255, 255, 255, .${opacity})`]);
+    return this.getCurrentThemeConfig([
+      `rgba(0, 0, 0, .${opacity})`,
+      `rgba(255, 255, 255, .${opacity})`,
+    ]);
   }
 }
 

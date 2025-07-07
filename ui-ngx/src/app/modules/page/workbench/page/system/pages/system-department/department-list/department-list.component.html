@@ -1,0 +1,42 @@
+<mat-tree
+  [dataSource]="dataSource"
+  [treeControl]="treeControl"
+>
+  <mat-tree-node
+    *matTreeNodeDef="let node"
+    matTreeNodePadding
+    class="hs-node-item"
+    [class.hs-node-active]="activeGroup() === node.item"
+    (click)="selectNode(node.item)"
+  >
+    <button
+      mat-icon-button
+      disabled
+    ></button>
+    {{ node.item.name }}
+  </mat-tree-node>
+  <mat-tree-node
+    matTreeNodePadding
+    *matTreeNodeDef="let node; when: hasChild"
+    [cdkTreeNodeTypeaheadLabel]="node.item"
+    class="hs-node-item"
+    [class.hs-node-active]="activeGroup() === node.item"
+    (click)="selectNode(node.item)"
+  >
+    <button
+      mat-icon-button
+      [attr.aria-label]="'Toggle ' + node.item"
+      matTreeNodeToggle
+      class="hs-icon-button-32"
+    >
+      @if (node.isLoading()) {
+        <hs-loading class="text-16px"></hs-loading>
+      } @else {
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+        </mat-icon>
+      }
+    </button>
+    {{ node.item.name }}
+  </mat-tree-node>
+</mat-tree>

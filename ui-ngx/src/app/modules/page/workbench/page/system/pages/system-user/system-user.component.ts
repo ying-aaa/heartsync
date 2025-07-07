@@ -127,7 +127,5 @@ export class SystemUserComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.onAddUser();
-  }
+  ngOnInit() {}
 }
