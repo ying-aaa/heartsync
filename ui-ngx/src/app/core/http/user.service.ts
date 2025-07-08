@@ -81,4 +81,16 @@ export class UserHttpService {
       { params },
     );
   }
+
+  // ----------------- 领域角色 -----------------
+  // 获取领域角色
+  getRealmRoles(pageLink: PageLink) {
+    const params = pageLink.toQueryHttp();
+    params.set('first', 0);
+    params.set('max', 101);
+
+    return this.http.get<Array<any>>(`/uc/admin/realms/${this.realm}/roles`, {
+      params,
+    });
+  }
 }

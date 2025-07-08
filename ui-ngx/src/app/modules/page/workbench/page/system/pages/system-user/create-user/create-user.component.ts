@@ -31,7 +31,6 @@ import { userRequiredCtions } from '../data';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ChipsAutocompleteComponent } from '@shared/components/hs-chips-autocomplete/hs-chips-autocomplete.component';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'hs-create-user',

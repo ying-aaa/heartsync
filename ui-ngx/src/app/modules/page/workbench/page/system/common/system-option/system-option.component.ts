@@ -1,14 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTreeModule } from '@angular/material/tree';
 import { ActivatedRoute, Route, RouterModule, Routes } from '@angular/router';
-import { HsSvgModule } from '../../../../../../../shared/components/hs-svg/hs-svg.module';
+import { HsSvgModule } from '@shared/components/hs-svg/hs-svg.module';
 
 @Component({
   selector: 'hs-system-option',
@@ -21,7 +16,6 @@ import { HsSvgModule } from '../../../../../../../shared/components/hs-svg/hs-sv
     HsSvgModule,
   ],
   styleUrls: ['./system-option.component.less'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SystemOptionComponent implements OnInit {
   dataSource: Routes = [];
@@ -29,7 +23,7 @@ export class SystemOptionComponent implements OnInit {
   childrenAccessor = (node: Route) => node.children ?? [];
 
   hasChild = (_: number, node: Route) =>
-    !!node.children && node.children.length > 0;
+    node.data!['expand'] && !!node.children && node.children.length > 0;
 
   constructor(private route: ActivatedRoute) {
     this.dataSource = this.route.routeConfig!.children!.filter(

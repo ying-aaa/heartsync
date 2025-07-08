@@ -1,0 +1,57 @@
+<div mat-dialog-title>创建用户</div>
+<mat-divider></mat-divider>
+<mat-dialog-content class="h-0 flex-1 max-h-none!">
+  <form
+    [formGroup]="roleForm"
+    (ngSubmit)="onSubmit()"
+    class="hs-density--5 max-w-xl mx-auto pt-12px"
+  >
+    <div class="flex mb-6 items-center">
+      <span class="w-30">角色名称：</span>
+      <mat-form-field
+        appearance="outline"
+        class="flex-1"
+      >
+        <input
+          matInput
+          formControlName="name"
+          required
+          class="w-full p-2 border border-gray-300 rounded-md"
+        />
+        @let nameValidate = roleForm.get('name')?.errors?.['required'];
+        @if (nameValidate) {
+          <mat-error class="text-red-500"> 角色名称是必填项 </mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="flex mb-6 items-center">
+      <span class="w-30">角色描述：</span>
+      <mat-form-field
+        appearance="outline"
+        class="flex-1"
+      >
+        <input
+          matInput
+          formControlName="description"
+          class="w-full p-2 border border-gray-300 rounded-md"
+        />
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-divider>location</mat-divider>
+<mat-dialog-actions align="end">
+  <button
+    mat-button
+    mat-dialog-close
+  >
+    取消
+  </button>
+  <button
+    mat-flat-button
+    (click)="onSubmit()"
+  >
+    确定
+  </button>
+</mat-dialog-actions>
