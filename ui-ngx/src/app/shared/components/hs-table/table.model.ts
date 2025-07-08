@@ -40,7 +40,9 @@ export class CustomColumn extends BaseColumn {
   constructor(
     public override prop: string,
     public override label: string,
-    public override config?: any,
+    public override config?: {
+      click?: () => void;
+    },
     public override width?: number | string,
     public override align?: IColumnAlign,
     public override className?: string,
@@ -53,7 +55,10 @@ export class TextColumn extends BaseColumn {
   constructor(
     public override prop: string,
     public override label: string,
-    public override config?: {},
+    public override config?: {
+      click?: (row: any, event: Event) => void;
+      styles?: IAnyPropObj;
+    },
     public override width?: number | string,
     public override align?: IColumnAlign,
     public override className?: string,
@@ -68,7 +73,7 @@ export class DateColumn extends BaseColumn {
   constructor(
     public override prop: string,
     public override label: string,
-    public override config?: { dateFormat: string },
+    public override config?: { dateFormat: string; click?: () => void },
     public override width?: number | string,
     public override align?: IColumnAlign,
     public override className?: string,
@@ -83,6 +88,7 @@ export class ImgColumn extends BaseColumn<{ defaultValue?: any }> {
     public override label: string,
     public override config?: {
       defaultValue?: any;
+      click?: () => void;
     },
     public override width?: number | string,
     public override align?: IColumnAlign,
@@ -103,10 +109,12 @@ type TagConfigType =
   | {
       request: Observable<Array<TagMap>>;
       tagMap?: never; // 确保不能同时存在
+      click?: (tag: TagMap) => void;
     }
   | {
       request?: never; // 确保不能同时存在
       tagMap: Array<TagMap>;
+      click?: (tag: TagMap) => void;
     };
 
 export class TagColumn extends BaseColumn<TagConfigType> {
@@ -176,7 +184,10 @@ export class SelectionColumn extends BaseColumn<{
   constructor(
     public override prop: string,
     public override label: string,
-    public override config?: { selectable: (row: any) => boolean },
+    public override config?: {
+      selectable: (row: any) => boolean;
+      click?: () => void;
+    },
     public override width?: number | string,
     public override align?: IColumnAlign,
     public override className?: string,

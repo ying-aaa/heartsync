@@ -75,70 +75,87 @@
                   *matCellDef="let data"
                   [style.textAlign]="column.align"
                 >
-                  @switch (column.type) {
-                    @case (ColumnType.TEXT) {
-                      {{ data[column.prop] ?? column.config?.defaultValue }}
-                    }
-                    @case (ColumnType.CUSTOM) {
-                      <img
-                        hs-image-preview
-                        class="w-40px h-40px"
-                        [src]="data[column.prop]"
-                        [previewSrc]="data[column.prop]"
-                      />
-                    }
-                    @case (ColumnType.DATE) {
-                      {{ column.format(data[column.prop]) }}
-                    }
-                    @case (ColumnType.IMG) {
-                      <img
-                        hs-image-preview
-                        class="w-40px h-40px"
-                        [src]="data[column.prop] ?? column.config?.defaultValue"
-                        [previewSrc]="
-                          data[column.prop] ?? column.config?.defaultValue
-                        "
-                      />
-                    }
-                    @case (ColumnType.TAG) {
-                      <mat-chip-set aria-label="Dog selection">
-                        <!-- {{data[column.prop]}} -->
-                        @for (
-                          chip of column.getChips(data[column.prop]);
-                          track $index
-                        ) {
-                          <mat-chip
-                            [color]="column.getColor(chip)"
-                            [disabled]="chip.disabled"
-                            [removable]="chip.removable"
-                          >
-                            {{ column.getLabel(chip) }}
-                            <mat-icon
-                              *ngIf="chip.removable"
-                              matChipRemove
-                              >cancel</mat-icon
+                  @let styles = column.config?.styles;
+                  @let click = column.config?.click;
+                  <div
+                    [ngStyle]="styles"
+                    [class]="column.className"
+                    (click)="click && click(data, $event)"
+                  >
+                    @switch (column.type) {
+                      @case (ColumnType.TEXT) {
+                        {{ data[column.prop] ?? column.config?.defaultValue }}
+                      }
+                      @case (ColumnType.CUSTOM) {
+                        <img
+                          hs-image-preview
+                          class="w-40px h-40px"
+                          [src]="data[column.prop]"
+                          [previewSrc]="data[column.prop]"
+                        />
+                      }
+                      @case (ColumnType.DATE) {
+                        {{ column.format(data[column.prop]) }}
+                      }
+                      @case (ColumnType.IMG) {
+                        <img
+                          hs-image-preview
+                          class="w-40px h-40px"
+                          [src]="
+                            data[column.prop] ?? column.config?.defaultValue
+                          "
+                          [previewSrc]="
+                            data[column.prop] ?? column.config?.defaultValue
+                          "
+                        />
+                      }
+                      @case (ColumnType.TAG) {
+                        <mat-chip-set aria-label="Dog selection">
+                          <!-- {{data[column.prop]}} -->
+                          @for (
+                            chip of column.getChips(data[column.prop]);
+                            track $index
+                          ) {
+                            <mat-chip
+                              [color]="column.getColor(chip)"
+                              [disabled]="chip.disabled"
+                              [removable]="chip.removable"
                             >
-                          </mat-chip>
-                        }
-                      </mat-chip-set>
-                    }
-                    @case (ColumnType.ACTION) {
-                      @for (action of column.config; track $index) {
-                        <button
-                          mat-button
-                          #menuTrigger
-                          [matMenuTriggerFor]="action.moreName && menu" 
-                          (click)="!action.moreName && action.action(data, $event)"
-                        >
-                          {{ action.name }}
-                        </button>
+                              {{ column.getLabel(chip) }}
+                              <mat-icon
+                                *ngIf="chip.removable"
+                                matChipRemove
+                                >cancel</mat-icon
+                              >
+                            </mat-chip>
+                          }
+                        </mat-chip-set>
+                      }
+                      @case (ColumnType.ACTION) {
+                        @for (action of column.config; track $index) {
+                          <button
+                            mat-button
+                            #menuTrigger
+                            [matMenuTriggerFor]="action.moreName && menu"
+                            (click)="
+                              !action.moreName && action.action(data, $event)
+                            "
+                          >
+                            {{ action.name }}
+                          </button>
 
-                        <mat-menu #menu="matMenu">
-                          <button mat-menu-item (click)="action.action(data, $event)">{{ action.moreName }}</button>
-                        </mat-menu>
+                          <mat-menu #menu="matMenu">
+                            <button
+                              mat-menu-item
+                              (click)="action.action(data, $event)"
+                            >
+                              {{ action.moreName }}
+                            </button>
+                          </mat-menu>
+                        }
                       }
                     }
-                  }
+                  </div>
                 </td>
               </div>
             </ng-container>
