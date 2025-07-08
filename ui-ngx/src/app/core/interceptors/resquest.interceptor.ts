@@ -30,8 +30,8 @@ const modifyRequest = (
   // }
   headers = headers
     // .set('Accept', 'application/json')
-    .set('X-Requested-With', 'XMLHttpRequest')
-    .set('X-Client-Version', environment.version);
+    .set('X-Requested-With', 'XMLHttpRequest');
+  // .set('X-Client-Version', environment.version);
 
   // 处理FormData的特殊情况
   if (req.body instanceof FormData) {
