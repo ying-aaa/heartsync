@@ -9,17 +9,20 @@ import {
 import { FormGroup } from '@angular/forms';
 import { UserHttpService } from '@src/app/core/http/user.service';
 import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
+import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { IAnyPropObj } from '@src/app/shared/models/common-component';
 import { IGroupInfo } from '@src/app/shared/models/user.model';
 
 @Component({
   selector: 'hs-groups-attributes',
   templateUrl: './groups-attributes.component.html',
-  imports: [FormlyRunModule],
+  imports: [FormlyRunModule, HsLoadingModule],
 })
 export class GroupsAttributesComponent implements OnInit {
   activeGroup = input<IAnyPropObj | null>();
   groupId = computed(() => this.activeGroup()?.['id']);
+
+  loadingStatus = signal<boolean>(false);
 
   model = signal<any>({
     attributes: [],
@@ -102,11 +105,16 @@ export class GroupsAttributesComponent implements OnInit {
 
   loadGroupAttributes() {
     const groupId = this.groupId();
-    this.userHttpService
-      .getGroupAttributes(groupId)
-      .subscribe((groupInfo: IGroupInfo) => {
+    this.loadingStatus.set(true);
+    this.userHttpService.getGroupAttributes(groupId).subscribe(
+      (groupInfo: IGroupInfo) => {
         this.handlerGroupInfo(groupInfo);
-      });
+        this.loadingStatus.set(false);
+      },
+      (err) => {
+        this.loadingStatus.set(false);
+      },
+    );
   }
 
   // 转换请求到的群组信息数据

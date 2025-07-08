@@ -4,6 +4,7 @@ import { GroupsChildrenComponent } from './groups-children/groups-children.compo
 import { IAnyPropObj } from '@src/app/shared/models/system.model';
 import { GroupsMembersComponent } from './groups-members/groups-members.component';
 import { GroupsAttributesComponent } from './groups-attributes/groups-attributes.component';
+import { GroupsRolesComponent } from './groups-roles/groups-roles.component';
 
 @Component({
   selector: 'hs-department-details',
@@ -14,6 +15,7 @@ import { GroupsAttributesComponent } from './groups-attributes/groups-attributes
     GroupsChildrenComponent,
     GroupsMembersComponent,
     GroupsAttributesComponent,
+    GroupsRolesComponent,
   ],
 })
 export class DepartmentDetailsComponent implements OnInit {

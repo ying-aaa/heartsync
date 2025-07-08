@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import {
   IGroupInfo,
+  IGroupRoleMappings,
   IUserInfo,
   IUserRequiredAction,
 } from '@src/app/shared/models/user.model';
@@ -69,6 +70,14 @@ export class UserHttpService {
   getGroupAttributes(groupId: string, params: any = {}) {
     return this.http.get<IGroupInfo>(
       `/uc/admin/realms/${this.realm}/groups/${groupId}`,
+      { params },
+    );
+  }
+
+  // 获取群组角色映射
+  getGroupRoleMappings(groupId: string, params: any = {}) {
+    return this.http.get<IGroupRoleMappings>(
+      `/uc/admin/realms/${this.realm}/groups/${groupId}/role-mappings`,
       { params },
     );
   }

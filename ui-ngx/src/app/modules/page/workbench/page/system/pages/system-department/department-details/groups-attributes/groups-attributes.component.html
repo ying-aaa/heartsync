@@ -1,4 +1,8 @@
-<content class="wh-full p-20px">
+<content
+  class="wh-full p-20px"
+  hs-loading
+  [isLoading]="loadingStatus()"
+>
   <formly-form
     [form]="formGroup"
     [fields]="fields"

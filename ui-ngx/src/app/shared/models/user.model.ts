@@ -57,3 +57,26 @@ export interface IGroupAccess {
 export interface IGroupAttributes extends IAnyPropObj {}
 
 export interface IGroupClientRoles extends IAnyPropObj {}
+
+export interface IGroupRoleMappings {
+  clientMappings: IClientMappings;
+}
+
+export interface IClientMappings {
+  [key: string]: IClientMappingsAccount;
+}
+
+export interface IClientMappingsAccount {
+  id: string;
+  client: string;
+  mappings: IRoleMapping[];
+}
+
+export interface IRoleMapping {
+  id: string;
+  name: string;
+  description: string;
+  composite: boolean;
+  clientRole: boolean;
+  containerId: string;
+}
