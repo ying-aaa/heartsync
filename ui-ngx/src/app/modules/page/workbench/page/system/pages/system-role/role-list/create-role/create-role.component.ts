@@ -69,7 +69,6 @@ export class CreateRoleComponent implements OnInit {
   onSubmit() {
     if (this.roleForm.valid) {
       const roleInfo = this.roleForm.value;
-      console.log('%c Line:72 🥕 roleInfo', 'color:#7f2b82', roleInfo);
       // this.userHttpService.createRole(roleInfo).subscribe(
       //   (response) => {
       //     console.log('返回结果:', response);

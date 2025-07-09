@@ -23,7 +23,7 @@ export class SystemOptionComponent implements OnInit {
   childrenAccessor = (node: Route) => node.children ?? [];
 
   hasChild = (_: number, node: Route) =>
-    node.data!['expand'] && !!node.children && node.children.length > 0;
+    node.data?.['expand'] && !!node.children && node.children.length > 0;
 
   constructor(private route: ActivatedRoute) {
     this.dataSource = this.route.routeConfig!.children!.filter(

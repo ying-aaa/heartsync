@@ -1,0 +1,45 @@
+<nav
+  aria-label="breadcrumb"
+  class="breadcrumb-container"
+>
+  <ol class="breadcrumb-list">
+    <li
+      *ngFor="let item of breadcrumbItems; let last = last"
+      class="breadcrumb-item"
+      [class.active]="last"
+    >
+      <!-- 图标 -->
+      <mat-icon
+        *ngIf="showIcons && item.icon"
+        class="breadcrumb-icon"
+      >
+        {{ item.icon }}
+      </mat-icon>
+
+      <!-- 可点击的链接 -->
+      <a
+        *ngIf="useRouterLink && !last"
+        [routerLink]="item.path"
+        class="breadcrumb-link"
+      >
+        {{ item.label }}
+      </a>
+
+      <!-- 不可点击的文本 -->
+      <span
+        *ngIf="!useRouterLink || last"
+        class="breadcrumb-text"
+      >
+        {{ item.label }}
+      </span>
+
+      <!-- 分隔符 -->
+      <span
+        *ngIf="!last"
+        class="breadcrumb-separator"
+      >
+        {{ separator }}
+      </span>
+    </li>
+  </ol>
+</nav>

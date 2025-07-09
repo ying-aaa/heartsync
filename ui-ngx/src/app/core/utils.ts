@@ -1,5 +1,5 @@
 import { Renderer2 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Route } from '@angular/router';
 import { IAnyPropObj } from '@shared/models/common-component';
 
 /** 判断一个值是否为 Object
@@ -431,4 +431,20 @@ export function findParentById(
     }
   }
   return null; // 如果遍历完所有节点仍未找到，返回 null
+}
+
+/**
+ * 获取路由路径片段
+ * @param route 路由对象
+ * @returns 路由路径片段
+ */
+export function getRoutePathSegments(route: ActivatedRoute | null): Route[] {
+  const segments: Route[] = [];
+  while (route) {
+    if (route.routeConfig) {
+      segments.push(route.routeConfig);
+    }
+    route = route.firstChild;
+  }
+  return segments;
 }

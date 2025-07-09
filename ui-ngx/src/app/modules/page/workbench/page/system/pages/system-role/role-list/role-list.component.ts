@@ -19,9 +19,10 @@ import { map } from 'rxjs';
 import { isMobile } from '@src/app/core/utils';
 import { CreateRoleComponent } from './create-role/create-role.component';
 import { Router } from '@angular/router';
+
 @Component({
-  selector: 'hs-system-role',
-  templateUrl: './system-role.component.html',
+  selector: 'hs-role-list',
+  templateUrl: './role-list.component.html',
   imports: [
     MatFormFieldModule,
     MatInputModule,
@@ -32,7 +33,7 @@ import { Router } from '@angular/router';
     MatIconModule,
   ],
 })
-export class SystemRoleComponent implements OnInit {
+export class RoleListComponent implements OnInit {
   searchValue = new FormControl('');
 
   pageLink = new PageLink(0, 20, [{ prop: 'search' }], []);
@@ -58,6 +59,8 @@ export class SystemRoleComponent implements OnInit {
             },
           },
           300,
+          'left',
+          'hover-underline',
         ),
         new TextColumn('composite', '复合', {}, 300),
         new TextColumn('description', '描述', {}, 300),
