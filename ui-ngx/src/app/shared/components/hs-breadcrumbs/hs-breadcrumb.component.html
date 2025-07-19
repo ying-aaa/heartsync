@@ -2,8 +2,8 @@
   aria-label="breadcrumb"
   class="breadcrumb-container"
 >
-  <ol class="breadcrumb-list">
-    <li
+  <div class="breadcrumb-list">
+    <span
       *ngFor="let item of breadcrumbSections(); let last = last"
       class="breadcrumb-item"
       [class.active]="last"
@@ -38,6 +38,6 @@
           {{ separator }}
         </span>
       }
-    </li>
-  </ol>
+    </span>
+  </div>
 </nav>

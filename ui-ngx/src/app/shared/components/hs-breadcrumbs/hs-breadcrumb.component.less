@@ -1,0 +1,22 @@
+@import 'themeMixin';
+
+.themeMixin({
+  :host{
+    .breadcrumb-container{
+      color: @base-color-70;
+      font-size: 14px;
+
+      .breadcrumb-link{
+        &:hover{
+          color: @base-primary-color;
+          text-decoration-line: underline;
+        }
+      }
+
+      .breadcrumb-separator{
+        margin: 0 8px;
+      }
+
+    }
+  }  
+});

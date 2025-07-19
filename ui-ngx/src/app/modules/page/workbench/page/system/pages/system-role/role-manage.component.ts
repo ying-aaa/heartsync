@@ -13,21 +13,38 @@ import { BreadcrumbComponent } from '@src/app/shared/components/hs-breadcrumbs/h
 @Component({
   selector: 'hs-system-role',
   template: `
-    <content class="wh-full">
-      1<hs-breadcrumb></hs-breadcrumb>1
-      <nav class="py-12px px-24px">
-        @for (item of routePaths(); track $index) {
-          <a
-            class="text-sm text-gray-500 hover:text-gray-700"
-            [routerLink]="item.path"
-            >{{ item.title }}</a
-          >
-          @if ($index < routePaths().length - 1) {
-            <span class="mx-3px">/</span>
-          }
-        }
+    <content class="wh-full flex flex-col">
+      <nav class="p-20px">
+        <hs-breadcrumb
+          [autoGenerate]="false"
+          [breadcrumbs]="[
+            {
+              title: '角色管理',
+              path: 'role',
+              data: {
+                icon: 'role',
+              },
+              children: [
+                {
+                  title: '角色列表',
+                  path: '',
+                },
+                {
+                  title: '角色详情',
+                  path: ':roleId/detail',
+                },
+              ],
+            },
+            {
+              title: '角色列表',
+              path: '',
+            },
+          ]"
+        ></hs-breadcrumb>
       </nav>
-      <router-outlet></router-outlet>
+      <main class="h-0 flex-1">
+        <router-outlet></router-outlet>
+      </main>
     </content>
   `,
   imports: [RouterModule, BreadcrumbComponent],

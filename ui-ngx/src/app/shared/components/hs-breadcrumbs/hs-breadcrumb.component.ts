@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  effect,
+  input,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   signal,
-  SimpleChanges,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import {
@@ -14,7 +14,6 @@ import {
   ActivatedRoute,
   NavigationEnd,
   Route,
-  Data,
   RouterModule,
 } from '@angular/router';
 import { getRoutePathSegments } from '@src/app/core/utils';
@@ -30,44 +29,51 @@ interface IBreadcrumbSections {
 @Component({
   selector: 'hs-breadcrumb',
   templateUrl: './hs-breadcrumb.component.html',
-  styleUrls: ['./hs-breadcrumb.component.scss'],
+  styleUrls: ['./hs-breadcrumb.component.less'],
   imports: [MatIconModule, CommonModule, RouterModule],
 })
 export class BreadcrumbComponent implements OnInit, OnDestroy {
-  // 输入属性
-  @Input() autoGenerate: boolean = true;
-  @Input() breadcrumbs: Route[] = [];
+  breadcrumbs = input<Route[]>([]);
+
   @Input() useRouterLink: boolean = true;
   @Input() showIcons: boolean = false;
   @Input() separator: string = '/';
 
-  // 内部使用的面包屑项数组
   breadcrumbSections = signal<IBreadcrumbSections[]>([]);
 
   private routerSubscription!: Subscription;
+
+  autoGenerate = input<Boolean>(true);
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    if (this.autoGenerate) {
-      this.generateBreadcrumbs();
-      this.routerSubscription = this.router.events
-        .pipe(
-          filter(
-            (event): event is NavigationEnd => event instanceof NavigationEnd,
-          ),
-        )
-        .subscribe(() => {
-          this.generateBreadcrumbs();
-        });
-    } else {
-    }
+    effect(() => {
+      const shouldAuto = this.autoGenerate();
+      if (shouldAuto) {
+        this.generateBreadcrumbs();
+        this.routerSubscription?.unsubscribe();
+        this.routerSubscription = this.router.events
+          .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+          .subscribe(() => this.generateBreadcrumbs());
+      } else {
+        this.routerSubscription?.unsubscribe();
+        this.generateBreadcrumbs(this.breadcrumbs());
+      }
+    });
+  
+    effect(() => {
+      if (!this.autoGenerate()) {
+        const breadcrumbConfigs = this.breadcrumbs();
+        this.generateBreadcrumbs(breadcrumbConfigs);
+      }
+    });
   }
 
   // 从当前路由自动生成面包屑
-  private generateBreadcrumbs(): void {
-    const routerPathConfig = getRoutePathSegments(this.route);
+  private generateBreadcrumbs(breadcrumbs?: Route[]): void {
+    const routerPathConfig = breadcrumbs || getRoutePathSegments(this.route);
     const breadcrumbSections =
       this.convertRouterPathConfigToBreadcrumbs(routerPathConfig);
     this.breadcrumbSections.set(breadcrumbSections);
@@ -77,15 +83,29 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
   convertRouterPathConfigToBreadcrumbs(
     routerPathConfig: Route[],
   ): IBreadcrumbSections[] {
-    const breadcrumbSections = routerPathConfig.map((route) => ({
-      label: route.title as string,
-      path: route.path as string,
-      icon: route.data?.['icon'],
-    }));
+    let path = this.getParentUrl();
+    const breadcrumbSections = routerPathConfig.map((route, index) => {
+      const label = route.title as string;
+      const icon = route.data?.['icon'];
+      path = `${path}/${route.path}`;
+      return { label, path, icon };
+    });
     return breadcrumbSections;
   }
 
-  ngOnInit() {}
+  getParentUrl(): string {
+    const path = this.route.pathFromRoot
+      .filter((r) => r.routeConfig?.path)
+      .slice(0, -1)
+      .map((r) => r.routeConfig!.path)
+      .join('/');
+
+    return `/${path}`;
+  }
+
+  ngOnInit() {
+
+  }
 
   ngOnDestroy() {
     this.routerSubscription?.unsubscribe();
