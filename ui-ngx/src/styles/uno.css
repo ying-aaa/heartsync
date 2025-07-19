@@ -384,11 +384,13 @@
 .text-sm{font-size:0.875rem;line-height:1.25rem;}
 .text-xs{font-size:0.75rem;line-height:1rem;}
 .text-gray-100{--un-text-opacity:1;color:rgb(243 244 246 / var(--un-text-opacity)) /* #f3f4f6 */;}
+.text-gray-500{--un-text-opacity:1;color:rgb(107 114 128 / var(--un-text-opacity)) /* #6b7280 */;}
 .text-gray-600{--un-text-opacity:1;color:rgb(75 85 99 / var(--un-text-opacity)) /* #4b5563 */;}
 .text-gray-800{--un-text-opacity:1;color:rgb(31 41 55 / var(--un-text-opacity)) /* #1f2937 */;}
 .text-gray-900{--un-text-opacity:1;color:rgb(17 24 39 / var(--un-text-opacity)) /* #111827 */;}
 .color-red-5,
 .text-red-500{--un-text-opacity:1;color:rgb(239 68 68 / var(--un-text-opacity)) /* #ef4444 */;}
+.hover\:text-gray-700:hover{--un-text-opacity:1;color:rgb(55 65 81 / var(--un-text-opacity)) /* #374151 */;}
 .color-\#16A34A{--un-text-opacity:1;color:rgb(22 163 74 / var(--un-text-opacity)) /* #16A34A */;}
 .color-\#1a79ff{--un-text-opacity:1;color:rgb(26 121 255 / var(--un-text-opacity)) /* #1a79ff */;}
 .color-\#2563EB{--un-text-opacity:1;color:rgb(37 99 235 / var(--un-text-opacity)) /* #2563EB */;}
@@ -426,6 +428,8 @@
 .tracking-0{letter-spacing:0;}
 .tracking-wide{letter-spacing:0.025em;}
 .line-through\!{text-decoration-line:line-through !important;}
+.underline{text-decoration-line:underline;}
+.hover-underline:hover{text-decoration-line:underline;}
 .tab{-moz-tab-size:4;-o-tab-size:4;tab-size:4;}
 .opacity-50{opacity:0.5;}
 .opacity-80{opacity:0.8;}

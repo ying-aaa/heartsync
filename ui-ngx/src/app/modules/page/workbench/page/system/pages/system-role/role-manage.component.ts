@@ -8,11 +8,13 @@ import {
 } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { getRoutePathSegments } from '@core/utils';
+import { BreadcrumbComponent } from '@src/app/shared/components/hs-breadcrumbs/hs-breadcrumb.component';
 
 @Component({
   selector: 'hs-system-role',
   template: `
     <content class="wh-full">
+      1<hs-breadcrumb></hs-breadcrumb>1
       <nav class="py-12px px-24px">
         @for (item of routePaths(); track $index) {
           <a
@@ -28,7 +30,7 @@ import { getRoutePathSegments } from '@core/utils';
       <router-outlet></router-outlet>
     </content>
   `,
-  imports: [RouterModule],
+  imports: [RouterModule, BreadcrumbComponent],
 })
 export class SystemRoleComponent implements OnInit, OnDestroy {
   routePaths = signal<Route[]>(getRoutePathSegments(this.route));
