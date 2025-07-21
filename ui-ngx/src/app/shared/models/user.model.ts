@@ -79,4 +79,5 @@ export interface IRoleMapping {
   composite: boolean;
   clientRole: boolean;
   containerId: string;
+  attributes?: IAnyPropObj;
 }

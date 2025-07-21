@@ -15,32 +15,7 @@ import { BreadcrumbComponent } from '@src/app/shared/components/hs-breadcrumbs/h
   template: `
     <content class="wh-full flex flex-col">
       <nav class="p-20px">
-        <hs-breadcrumb
-          [autoGenerate]="false"
-          [breadcrumbs]="[
-            {
-              title: '角色管理',
-              path: 'role',
-              data: {
-                icon: 'role',
-              },
-              children: [
-                {
-                  title: '角色列表',
-                  path: '',
-                },
-                {
-                  title: '角色详情',
-                  path: ':roleId/detail',
-                },
-              ],
-            },
-            {
-              title: '角色列表',
-              path: '',
-            },
-          ]"
-        ></hs-breadcrumb>
+        <hs-breadcrumb></hs-breadcrumb>
       </nav>
       <main class="h-0 flex-1">
         <router-outlet></router-outlet>

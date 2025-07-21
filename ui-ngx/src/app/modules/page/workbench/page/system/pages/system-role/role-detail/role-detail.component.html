@@ -6,9 +6,17 @@
     mat-align-tabs="start"
     class="wh-full"
   >
-    <mat-tab label="详情">详情</mat-tab>
-    <mat-tab label="关联角色">关联角色</mat-tab>
-    <mat-tab label="属性">属性</mat-tab>
-    <mat-tab label="相关用户">相关用户</mat-tab>
+    <mat-tab label="详情">
+      <hs-role-mapping [roleMapping]="roleMapping()"></hs-role-mapping>
+    </mat-tab>
+    <mat-tab label="关联角色">
+      <hs-role-liitosrooli [roleId]="roleId"></hs-role-liitosrooli>
+    </mat-tab>
+    <mat-tab label="属性">
+      <hs-role-attributes [roleMapping]="roleMapping()"></hs-role-attributes>
+    </mat-tab>
+    <mat-tab label="相关用户">
+      <hs-role-user-list [roleMapping]="roleMapping()"></hs-role-user-list>
+    </mat-tab>
   </mat-tab-group>
 </content>

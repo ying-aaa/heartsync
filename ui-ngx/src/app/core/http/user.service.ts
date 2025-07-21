@@ -4,6 +4,7 @@ import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import {
   IGroupInfo,
   IGroupRoleMappings,
+  IRoleMapping,
   IUserInfo,
   IUserRequiredAction,
 } from '@src/app/shared/models/user.model';
@@ -92,5 +93,43 @@ export class UserHttpService {
     return this.http.get<Array<any>>(`/uc/admin/realms/${this.realm}/roles`, {
       params,
     });
+  }
+
+  // 根据角色id获取领域角色详情
+  getRealmRoleById(id: string) {
+    return this.http.get<IRoleMapping>(
+      `/uc/admin/realms/${this.realm}/roles-by-id/${id}`,
+    );
+  }
+
+  // 根据角色id获取角色关联的角色
+  getRoleLiitosrooliById(id: string, pageLink: PageLink) {
+    console.log("%c Line:107 🌶", "color:#465975");
+    const params = pageLink.toQueryHttp();
+    return this.http.get<IRoleMapping[]>(
+      `/uc/admin/realms/${this.realm}/roles-by-id/${id}/composites`,
+      {
+        params,
+      },
+    );
+  }
+
+  // 获取领域角色下的用户
+  getRealmRoleUsers(roleName: string, pageLink: PageLink) {
+    const params = pageLink.toQueryHttp();
+
+    return this.http.get<Array<any>>(
+      `/uc/admin/realms/${this.realm}/roles/${roleName}/users`,
+      {
+        params,
+      },
+    );
+  }
+
+  // 获取领域角色的属性
+  getRealmRoleAttributes(roleName: string) {
+    return this.http.get<IRoleMapping>(
+      `/uc/admin/realms/${this.realm}/roles/${roleName}`,
+    );
   }
 }

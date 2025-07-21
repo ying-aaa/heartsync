@@ -145,6 +145,12 @@ html {
   }
 }
 
+// tab选项外层容器撑满
+.mat-mdc-tab-body-wrapper {
+  height: 0;
+  flex: 1;
+}
+
 div.mat-mdc-dialog-title::before {
   height: 28px;
 }

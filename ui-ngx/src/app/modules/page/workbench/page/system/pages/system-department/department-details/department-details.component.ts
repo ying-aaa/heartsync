@@ -9,7 +9,6 @@ import { GroupsRolesComponent } from './groups-roles/groups-roles.component';
 @Component({
   selector: 'hs-department-details',
   templateUrl: './department-details.component.html',
-  styleUrls: ['./department-details.component.less'],
   imports: [
     MatTabsModule,
     GroupsChildrenComponent,

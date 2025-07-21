@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, input, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -10,13 +10,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import {
-  MatDialogActions,
-  MatDialogContent,
-  MatDialogTitle,
-  MatDialogModule,
-  MatDialogRef,
-} from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule, MatError } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,9 +18,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserHttpService } from '@src/app/core/http/user.service';
+import { IRoleMapping } from '@src/app/shared/models/user.model';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
-  selector: 'hs-create-role',
-  templateUrl: './create-role.component.html',
+  selector: 'hs-role-mapping',
+  templateUrl: './role-mapping.component.html',
   imports: [
     MatInputModule,
     MatCheckboxModule,
@@ -36,9 +32,6 @@ import { UserHttpService } from '@src/app/core/http/user.service';
     FormsModule,
     ReactiveFormsModule,
     MatDividerModule,
-    MatDialogActions,
-    MatDialogContent,
-    MatDialogTitle,
     MatSlideToggleModule,
     MatIconModule,
     MatTooltipModule,
@@ -46,19 +39,27 @@ import { UserHttpService } from '@src/app/core/http/user.service';
     MatChipsModule,
     MatAutocompleteModule,
     MatError,
-    MatDialogModule,
   ],
 })
-export class CreateRoleComponent implements OnInit {
+export class RoleMappingComponent implements OnInit {
+  roleMapping = input<IRoleMapping | null>(null);
+
   roleForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
+    name: new FormControl({ value: '', disabled: true }),
     description: new FormControl(''),
   });
 
   constructor(
-    private dialogRef: MatDialogRef<CreateRoleComponent>,
     private userHttpService: UserHttpService,
+    private toastr: ToastrService,
   ) {
+    effect(() => {
+      const roleMapping = this.roleMapping();
+      if (roleMapping) {
+        this.roleForm.patchValue(roleMapping);
+      }
+    });
+
     this.roleForm.valueChanges.subscribe((values) => {
       console.log('Form updated:', values);
     });
@@ -67,6 +68,10 @@ export class CreateRoleComponent implements OnInit {
   onSubmit() {
     if (this.roleForm.valid) {
       const roleInfo = this.roleForm.value;
+      this.toastr.warning('权限不足', '', {
+        // 居中
+        positionClass: 'toast-top-center',
+      });
       // this.userHttpService.createRole(roleInfo).subscribe(
       //   (response) => {
       //     console.log('返回结果:', response);

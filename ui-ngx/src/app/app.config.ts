@@ -5,6 +5,7 @@ import {
   provideClientHydration,
   withEventReplay,
 } from '@angular/platform-browser';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideHighlightOptions } from 'ngx-highlightjs';
@@ -12,9 +13,12 @@ import { ResponentInterceptor } from './core/interceptors/response.interceptor';
 import { provideKeycloakAngular } from './lib/keycloak.config';
 import { includeBearerTokenInterceptor } from 'keycloak-angular';
 import { RequestInterceptor } from './core/interceptors/resquest.interceptor';
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAnimations(),
+    provideToastr(),
     provideKeycloakAngular(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
