@@ -95,7 +95,11 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   gridsterOption = computed(() => {
     const isRuntime = this.isRuntime();
     return {
+      // 取自定义配置，即后端保存的
       ...this.dashboardConfigService.gridsterOption(),
+      /**
+       * 下面为编辑时的配置，不会进行保存的
+       *  */ 
       // 拖拽生成
       enableEmptyCellDrop: isRuntime,
       // 滑动生成

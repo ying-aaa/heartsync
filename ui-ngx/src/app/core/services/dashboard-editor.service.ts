@@ -27,15 +27,18 @@ export class DashboardEditorService {
     this.currentWidgetType.set(type);
   }
 
+  // 更新仪表板ID
   updateDashboardId(dahsboardId: string) {
     if (dahsboardId === this.currentDashboardId()) return;
     this.currentDashboardId.set(dahsboardId);
   }
 
+  // 更新当前选中的小部件ID
   updateWidgetId(widgetId: string) {
     this.currentSelectWidgetId.set(widgetId);
   }
 
+  // 触发Gridster的onResize事件
   resizeGridster() {
     this.gridsterInstall?.onResize();
   }

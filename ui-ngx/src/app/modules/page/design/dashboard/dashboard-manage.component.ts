@@ -1,10 +1,4 @@
-import {
-  Component,
-  effect,
-  OnInit,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, effect, OnInit, signal, viewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { WidgetFolderComponent } from '../widget/widget-folder.component';
 import { DashboardViewportComponent } from './dashboard-viewport.component';
@@ -56,6 +50,7 @@ export class DashboardManageComponent implements OnInit {
       'blank',
       'search',
     ],
+    disableSelectFolder: true,
     deleteEvent: async (node, jsTree) => {
       const { id, type } = node;
       if (type === 'folder') return true;
@@ -72,10 +67,7 @@ export class DashboardManageComponent implements OnInit {
     },
     selectEvent: (node, jsTree) => {
       const { type, id } = node || {};
-      if (type === 'folder') return;
-      if (id) {
-        this.updateDashboardId(id);
-      }
+      this.updateDashboardId(id);
     },
     renameNodeSuccess: (node, jsTree) => {
       const { type, id, text: name } = node || {};
