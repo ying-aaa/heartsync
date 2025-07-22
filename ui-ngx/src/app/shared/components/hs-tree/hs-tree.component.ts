@@ -223,9 +223,24 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
           no_children: true, // 禁止文件节点有子节点
         },
       },
-
+      conditionalselect: (node: any) => {
+        const disableSelectFolder = this.treeConfig().disableSelectFolder;
+        console.log("%c Line:228 🌭 this.treeConfig()", "color:#b03734", this.treeConfig());
+        console.log("%c Line:228 🍇 disableSelectFolder", "color:#6ec1c2", disableSelectFolder);
+        if(disableSelectFolder) {
+          return node.original.type !== 'folder';
+        }else{
+          return true;
+        }
+      },
       plugins: (() => {
-        const plugins = ['state', 'types', 'wholerow', 'sort'];
+        const plugins = [
+          'state',
+          'types',
+          'wholerow',
+          'sort',
+          'conditionalselect',
+        ];
         if (this.includesFeature('dnd')) plugins.push('dnd');
         if (this.includesFeature('search')) plugins.push('search');
         return plugins;

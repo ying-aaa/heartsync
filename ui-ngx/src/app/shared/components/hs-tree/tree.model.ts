@@ -11,6 +11,8 @@ export type ITreeFeatureList =
   | 'search';
 
 export interface IFileTreeConfig {
+  // 是否禁止选择目录
+  disableSelectFolder?: boolean;
   featureList: Array<ITreeFeatureList>;
   deleteEvent?: (node: any, jsTree: any) => Promise<boolean>;
   selectEvent?: (node: any, jsTree: any) => void;
