@@ -3,6 +3,7 @@ import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   forwardRef,
+  Input,
   OnInit,
 } from '@angular/core';
 import {
@@ -30,6 +31,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class VerseDesignModeSwitchComponent
   implements ControlValueAccessor, OnInit
 {
+  @Input() tooltip = '';
+
   isChecked = false;
 
   private onChange: any = () => {};

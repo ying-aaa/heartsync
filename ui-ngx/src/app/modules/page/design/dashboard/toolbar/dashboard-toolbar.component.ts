@@ -6,8 +6,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
 import { WidgetPresetListComponent } from './widget-preset-list.component';
 import { DashboardSettingsComponent } from './dashboard-settings.component';
-import { VerseDesignModeSwitchComponent } from '@shared/components/ui-verse/verse-design-mode-switch/verse-design-mode-switch.component';
+// import { VerseDesignModeSwitchComponent } from '@shared/components/ui-verse/verse-design-mode-switch/verse-design-mode-switch.component';
 import { FormsModule } from '@angular/forms';
+import { DashboardConfigService } from '@src/app/core/services/dashboard-config.service';
 
 @Component({
   selector: 'hs-dashboard-toolbar',
@@ -20,7 +21,7 @@ import { FormsModule } from '@angular/forms';
     MatTooltipModule,
     WidgetPresetListComponent,
     DashboardSettingsComponent,
-    VerseDesignModeSwitchComponent,
+    // VerseDesignModeSwitchComponent,
   ],
 })
 export class DashboardToolbarComponent implements OnInit {
@@ -29,16 +30,35 @@ export class DashboardToolbarComponent implements OnInit {
 
   toggleState = true;
 
-  constructor(public dashboardEditorService: DashboardEditorService) {}
+  isRuntime = this.dashboardEditorService.isRuntime;
 
-  ngOnInit() {}
+  constructor(
+    public dashboardEditorService: DashboardEditorService,
+    private dashboardConfigService: DashboardConfigService,
+  ) {}
+
+  updateRuntimeStatus(is: boolean) {
+    this.dashboardEditorService.updateRuntimeStatus(is);
+  }
+
+  saveConfig() {
+    this.dashboardConfigService.saveConfig();
+
+    this.updateRuntimeStatus(true);
+  }
+
+  cancel(is: boolean) {
+    this.updateRuntimeStatus(is);
+  }
 
   toggleSidenav(sidenav: MatSidenav) {
     sidenav.toggle();
-    this.dashboardEditorService.resizeGridster();
+    this.resizeGridster();
   }
 
   resizeGridster() {
-    this.dashboardEditorService.resizeGridster;
+    this.dashboardEditorService.resizeGridster();
   }
+
+  ngOnInit() {}
 }

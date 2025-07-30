@@ -53,6 +53,7 @@
 .-z-999{z-index:-999;}
 .z-10{z-index:10;}
 .z-999{z-index:999;}
+.z-99999{z-index:99999;}
 .grid{display:grid;}
 .cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}
 .grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr));}

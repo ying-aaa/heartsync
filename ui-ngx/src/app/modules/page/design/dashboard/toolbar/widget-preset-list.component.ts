@@ -1,6 +1,4 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatChipSelectionChange,
   MatChipsModule,
@@ -28,7 +26,13 @@ export class WidgetPresetListComponent implements OnInit {
     if (!event.selected) {
       event.selected = true;
     }
-    this.dashboardEditorService.updateWidgetType(event.source.value);
+    const widgetType = event.source.value;
+    this.dashboardEditorService.updateWidgetType(widgetType);
+  }
+
+  onPresetDragStart(ev: DragEvent) {
+    const widgetType = (ev.target as HTMLElement).getAttribute('ng-reflect-value');
+    this.dashboardEditorService.updatePresetWidgetType(widgetType as IWidgetType);
   }
 
   ngOnInit() {}

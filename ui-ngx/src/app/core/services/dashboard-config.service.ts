@@ -1,12 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { computed, effect, Injectable, Injector, signal } from '@angular/core';
-import {
-  BehaviorSubject,
-  distinctUntilChanged,
-  shareReplay,
-  Subject,
-  takeUntil,
-} from 'rxjs';
+import { computed, effect, Injectable, signal } from '@angular/core';
 import {
   DashboardService,
   IDashboardContext,
@@ -14,14 +6,13 @@ import {
 } from '../http/dashboard.service';
 import { DashboardEditorService } from './dashboard-editor.service';
 import { deepClone } from '../utils';
-import { toObservable } from '@angular/core/rxjs-interop';
+import { ToastrService } from 'ngx-toastr';
+import { DashboardDesignComponent } from '@src/app/modules/page/design/dashboard/dashboard-design.component';
 
 // dashboard-config.service.ts
 @Injectable({ providedIn: 'root' })
 export class DashboardConfigService {
   dashboardConfig = signal<IDashboardContext>({} as IDashboardContext);
-
-  widgets = computed(() => this.dashboardConfig().widgets);
 
   gridsterOption = computed(() => this.dashboardConfig().gridsterOption);
 
@@ -29,7 +20,10 @@ export class DashboardConfigService {
 
   loadingStatus = signal<boolean>(false);
 
+  dashboardDesignInstall: DashboardDesignComponent | null = null;
+
   constructor(
+    private toastr: ToastrService,
     private dashboardService: DashboardService,
     private dashboardEditorService: DashboardEditorService,
   ) {
@@ -37,6 +31,10 @@ export class DashboardConfigService {
       const dashboardId = this.dashboardEditorService.currentDashboardId();
       dashboardId && this.loadDashboardConfig(dashboardId);
     });
+  }
+
+  setDashboardDesignInstall(dashboardDesignInstall: DashboardDesignComponent) {
+    this.dashboardDesignInstall = dashboardDesignInstall; 
   }
 
   loadDashboardConfig(dashboardId: string) {
@@ -65,11 +63,21 @@ export class DashboardConfigService {
 
   // 保存配置
   async saveConfig() {
+    if(!this.dashboardDesignInstall) return;
     const { id } = this.dashboardConfig();
+    // 获取新编辑的widget配置
+    const widgets = this.dashboardDesignInstall.widgets;
+    // 更新
+    this.updateWidgets(widgets);
+    // 调用接口保存
     this.dashboardService
       .updateDashboard(id!, this.dashboardConfig())
       .subscribe({
-        next: () => {},
+        next: () => {
+          this.toastr.success('仪表板配置已保存', '', {
+            positionClass: 'toast-top-center',
+          });
+        },
       });
   }
 }

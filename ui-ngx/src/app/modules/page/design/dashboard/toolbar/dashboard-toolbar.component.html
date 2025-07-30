@@ -1,6 +1,4 @@
-<content
-  class="px-8px flex items-center justify-between h-40px line-height-40px bg-##a7c1de"
->
+<content class="px-8px flex items-center justify-between h-40px line-height-40px bg-##a7c1de">
   <div class="flex-center gap-8px">
     @let isSidenavStartOpen = sidenavStart().opened;
     <button
@@ -10,8 +8,8 @@
       [matTooltip]="isSidenavStartOpen ? '隐藏资源目录' : '显示资源目录'"
       class="p-4px!"
     >
-      <mat-icon class="material-icons-round text-32px w-32px! h-32px!"
-        >{{ isSidenavStartOpen ? 'arrow_left' : 'arrow_right' }}
+      <mat-icon class="material-icons-round text-32px w-32px! h-32px!">{{ isSidenavStartOpen ? 'arrow_left' :
+        'arrow_right' }}
       </mat-icon>
     </button>
 
@@ -23,36 +21,48 @@
     </span>
   </div>
 
-  <hs-widget-preset-list></hs-widget-preset-list>
 
   <div class="flex-center gap-16px">
-    <hs-dashboard-settings></hs-dashboard-settings>
+    @if(!isRuntime()) {
+    <hs-widget-preset-list></hs-widget-preset-list>
 
-    <verse-design-mode-switch
-      [(ngModel)]="dashboardEditorService.isRuntime"
-    ></verse-design-mode-switch>
+    <hs-dashboard-settings></hs-dashboard-settings>
     <div class="flex-center gap-8px">
       <button
         mat-raised-button
         class="btn-save min-w-72px! w-72px! h-32px! p-5px! rounded-5px!"
+        (click)="saveConfig()"
       >
-        <mat-icon class="material-icons-round">save </mat-icon>
+        <mat-icon class="material-icons-round">save</mat-icon>
         保存
       </button>
-    </div>
 
-    <!-- <span>部件资源</span>
-    @let isSidenavEndOpen = sidenavEnd().opened;
+      <button
+        mat-button
+        class="min-w-72px! w-72px! h-32px! p-5px! rounded-5px!"
+        (click)="cancel(true)"
+        >
+        <mat-icon class="material-icons-round">cancel</mat-icon>
+        取消
+      </button>
+    </div>
+    }@else {
     <button
-      matSuffix
-      mat-icon-button
-      (click)="toggleSidenav(sidenavEnd())"
-      [matTooltip]="isSidenavStartOpen ? '隐藏部件资源' : '显示部件资源'"
-      class="p-4px!"
+      mat-flat-button
+      class="min-w-72px! w-72px! h-32px! p-5px! rounded-5px!"
+      (click)="updateRuntimeStatus(false)"
     >
-      <mat-icon class="material-icons-round text-32px w-32px! h-32px!"
-        >{{ isSidenavEndOpen ? 'arrow_right' : 'arrow_left' }}
-      </mat-icon>
-    </button> -->
+      <mat-icon class="material-icons-round">edit</mat-icon>
+      编辑
+    </button>
+    }
+
+
+
+
+    <!-- <verse-design-mode-switch
+      [tooltip]="isRuntime() ? '设计模式' : '预览模式'"
+      [(ngModel)]="isRuntime"
+    ></verse-design-mode-switch> -->
   </div>
 </content>

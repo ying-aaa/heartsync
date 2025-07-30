@@ -113,7 +113,7 @@ export class DashboardManageComponent implements OnInit {
   }
 
   toggleSidenav(is: boolean) {
-    this.sidenavStart().toggle(!is);
+    // this.sidenavStart().toggle(!is);
     this.sidenavEnd().toggle(!is);
   }
 
