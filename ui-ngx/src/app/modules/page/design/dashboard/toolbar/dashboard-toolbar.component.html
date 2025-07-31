@@ -24,9 +24,17 @@
 
   <div class="flex-center gap-16px">
     @if(!isRuntime()) {
+    <!-- 预设列表 -->
     <hs-widget-preset-list></hs-widget-preset-list>
-
-    <hs-dashboard-settings></hs-dashboard-settings>
+    <!-- 布局设置按钮 -->
+    <button
+      mat-icon-button
+      class="p-6px!"
+      (click)="openLayoutSettings()"
+    >
+      <mat-icon class="material-icons-round  text-28px w-28px! h-28px!">settings</mat-icon>
+    </button>
+    <!-- 保存取消按钮 -->
     <div class="flex-center gap-8px">
       <button
         mat-raised-button
@@ -41,7 +49,7 @@
         mat-button
         class="min-w-72px! w-72px! h-32px! p-5px! rounded-5px!"
         (click)="cancel(true)"
-        >
+      >
         <mat-icon class="material-icons-round">cancel</mat-icon>
         取消
       </button>

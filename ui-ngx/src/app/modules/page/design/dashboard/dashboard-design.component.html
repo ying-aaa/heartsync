@@ -3,7 +3,7 @@
   hs-loading
   [isLoading]="loadingStatus()"
 >
-  @if(!widgets.length && !loadingStatus()) {
+  @if(!widgets().length && !loadingStatus()) {
   <div class="wh-full flex-center text-22px absolute top-0 left-0">
     <span>未配置部件</span>
   </div>
@@ -11,7 +11,7 @@
 
   @if (gridsterOption().gridType) {
   <gridster [options]="gridsterOption()">
-    @for (item of widgets; track item) {
+    @for (item of widgets(); track item) {
     <gridster-item
       [item]="item"
       [class.select-gridster-item]="item.widgetId === selectWidgetId()"

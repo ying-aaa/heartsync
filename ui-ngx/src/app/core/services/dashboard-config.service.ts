@@ -8,19 +8,20 @@ import { DashboardEditorService } from './dashboard-editor.service';
 import { deepClone } from '../utils';
 import { ToastrService } from 'ngx-toastr';
 import { DashboardDesignComponent } from '@src/app/modules/page/design/dashboard/dashboard-design.component';
+import { GridsterConfig } from 'angular-gridster2';
 
 // dashboard-config.service.ts
 @Injectable({ providedIn: 'root' })
 export class DashboardConfigService {
   dashboardConfig = signal<IDashboardContext>({} as IDashboardContext);
 
-  gridsterOption = computed(() => this.dashboardConfig().gridsterOption);
+  public widgets = signal<Array<IDashboardWidgetContext>>([]);
+
+  public gridsterOption = signal<GridsterConfig>({});
 
   layoutConfig = computed(() => this.dashboardConfig().layoutConfig);
 
   loadingStatus = signal<boolean>(false);
-
-  dashboardDesignInstall: DashboardDesignComponent | null = null;
 
   constructor(
     private toastr: ToastrService,
@@ -31,44 +32,76 @@ export class DashboardConfigService {
       const dashboardId = this.dashboardEditorService.currentDashboardId();
       dashboardId && this.loadDashboardConfig(dashboardId);
     });
+
+    effect(() => {
+      // 依据 this.dashboardConfig()
+      this.useOriginConfig();
+    });
   }
 
-  setDashboardDesignInstall(dashboardDesignInstall: DashboardDesignComponent) {
-    this.dashboardDesignInstall = dashboardDesignInstall; 
+  // 使用仪表板原始配置
+  useOriginConfig() {
+    const dashboardConfig = this.dashboardConfig();
+    const { widgets, gridsterOption } = dashboardConfig;
+    this.widgets.set(deepClone(widgets || []));
+    this.gridsterOption.set(deepClone(gridsterOption || {}));
   }
 
+  // 加载仪表板配置
   loadDashboardConfig(dashboardId: string) {
     this.loadingStatus.set(true);
     this.dashboardService.getDashboard(dashboardId).subscribe({
-      next: (gridsterOption) => {
-        this.dashboardConfig.set(gridsterOption);
+      next: (dashboardConfig) => {
+        this.dashboardConfig.set(dashboardConfig);
         this.loadingStatus.set(false);
       },
     });
   }
 
-  getDashboardWidgets() {
-    return deepClone(this.dashboardConfig().widgets);
-  }
-
-  // 原子化配置更新方法
-  updateWidgets(newWidgetChanges: Array<IDashboardWidgetContext>) {
+  // 更新仪表板部件配置
+  updateDashboardWidgets() {
+    const newWidgets = this.widgets();
     this.dashboardConfig.update((config) => {
-      config.widgets = newWidgetChanges;
+      config.widgets = newWidgets;
       return config;
     });
   }
 
-  updateDashboardLayout() {}
+  // 更新仪表板布局配置
+  updateDashboardGridsterOption() {
+    const newGridsterOption = this.gridsterOption();
+    this.dashboardConfig.update((config) => {
+      config.gridsterOption = newGridsterOption;
+      return config;
+    });
+  }
+
+  // 新增部件
+  addWidget(widget: IDashboardWidgetContext) {
+    this.widgets.update((widgets) => {
+      widgets.push(widget);
+      return widgets;
+    });
+  }
+
+  // 删除部件
+  removeWidget(widget: IDashboardWidgetContext) {
+    this.widgets.update((widgets) => widgets.filter((w) => w !== widget));
+  }
+
+  // 更新布局配置
+  updateGridsterOption(gridsterOption: GridsterConfig) {
+    this.gridsterOption.set(gridsterOption);
+  }
 
   // 保存配置
   async saveConfig() {
-    if(!this.dashboardDesignInstall) return;
     const { id } = this.dashboardConfig();
-    // 获取新编辑的widget配置
-    const widgets = this.dashboardDesignInstall.widgets;
-    // 更新
-    this.updateWidgets(widgets);
+
+    // 更新仪表板配置
+    this.updateDashboardWidgets();
+    this.updateDashboardGridsterOption();
+    
     // 调用接口保存
     this.dashboardService
       .updateDashboard(id!, this.dashboardConfig())

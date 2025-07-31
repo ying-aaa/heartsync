@@ -78,7 +78,9 @@ interface IContextMenu {
 export class DashboardDesignComponent implements OnInit, AfterViewInit {
   @ViewChild(GridsterComponent) gridster: GridsterComponent;
 
-  public widgets: Array<IDashboardWidgetContext> = [];
+  // public widgets: Array<IDashboardWidgetContext> = [];
+
+  widgets = this.dashboardConfigService.widgets;
 
   loadingStatus = computed(() => this.dashboardConfigService.loadingStatus());
 
@@ -137,14 +139,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   constructor(
     private dashboardEditorService: DashboardEditorService,
     private dashboardConfigService: DashboardConfigService,
-  ) {
-    effect(() => {
-      const dashboardConfig = this.dashboardConfigService.dashboardConfig();
-      if (dashboardConfig.widgets) {
-        this.widgets = this.dashboardConfigService.getDashboardWidgets()!;
-      }
-    });
-  }
+  ) {}
 
   // 部件右键的菜单功能
   gridsterItemContextMenuArr() {
@@ -154,23 +149,24 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   // 点击空白
   emptyCellClick(event: MouseEvent, item: IDashboardWidgetContext): void {
     console.info('empty cell click', event, item);
-    this.widgets.push(item);
+    // this.widgets.push(item);
+    const widget = { ...item };
+    this.dashboardConfigService.addWidget(widget);
   }
 
   // 拖拽预设到网格时的回调
   onPresetDropToGrid(event: MouseEvent, item: GridsterItem) {
-    const currentPresetWidgetType = this.dashboardEditorService.currentPresetWidgetType();
-    console.log("%c Line:163 🥓 currentPresetWidgetType", "color:#ea7e5c", currentPresetWidgetType);
-
-    this.widgets.push({ ...item, name: '', type: currentPresetWidgetType });
+    const currentPresetWidgetType =
+      this.dashboardEditorService.currentPresetWidgetType();
+    const widget = { ...item, name: '', type: currentPresetWidgetType };
+    this.dashboardConfigService.addWidget(widget);
   }
 
   // 滑动网格生成时的回调
   onSwipeSpawnGrid(event: MouseEvent, item: GridsterItem) {
     const currentWidgetType = this.dashboardEditorService.currentWidgetType();
-    console.log("%c Line:170 🥕 currentWidgetType", "color:#3f7cff", currentWidgetType);
-
-    this.widgets.push({ ...item, name: '', type: currentWidgetType });
+    const widget = { ...item, name: '', type: currentWidgetType };
+    this.dashboardConfigService.addWidget(widget);
   }
 
   // 变动网格item
@@ -183,10 +179,10 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   }
 
   // 删除部件
-  removeItem($event: MouseEvent | TouchEvent, item: any): void {
+  removeItem($event: MouseEvent | TouchEvent, widget: any): void {
     $event.preventDefault();
     $event.stopPropagation();
-    this.widgets.splice(this.widgets.indexOf(item), 1);
+    this.dashboardConfigService.removeWidget(widget);
   }
 
   // 新增部件
@@ -214,11 +210,9 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     item.widgetId && this.dashboardEditorService.updateWidgetId(item.widgetId);
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     this.dashboardEditorService.setGridsterInstall(this.gridster);
   }
 
-  ngOnInit(): void {
-    this.dashboardConfigService.setDashboardDesignInstall(this);
-  }
+  ngOnInit() {}
 }
