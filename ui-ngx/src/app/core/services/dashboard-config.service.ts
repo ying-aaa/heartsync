@@ -13,13 +13,11 @@ import { GridsterConfig } from 'angular-gridster2';
 // dashboard-config.service.ts
 @Injectable({ providedIn: 'root' })
 export class DashboardConfigService {
-  dashboardConfig = signal<IDashboardContext>({} as IDashboardContext);
+  private dashboardConfig = signal<IDashboardContext>({} as IDashboardContext);
 
   public widgets = signal<Array<IDashboardWidgetContext>>([]);
 
   public gridsterOption = signal<GridsterConfig>({});
-
-  layoutConfig = computed(() => this.dashboardConfig().layoutConfig);
 
   loadingStatus = signal<boolean>(false);
 
@@ -44,6 +42,7 @@ export class DashboardConfigService {
     const dashboardConfig = this.dashboardConfig();
     const { widgets, gridsterOption } = dashboardConfig;
     this.widgets.set(deepClone(widgets || []));
+    console.log("%c Line:45 🍡", "color:#ea7e5c");
     this.gridsterOption.set(deepClone(gridsterOption || {}));
   }
 

@@ -85,7 +85,7 @@ export class DashboardManageComponent implements OnInit {
         .createDashboard({
           nodeId,
           name,
-          appId: this.appId,
+          appId: this.appId!,
           type: 'gridster',
         })
         .subscribe({

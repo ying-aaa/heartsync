@@ -9,7 +9,7 @@
 
     <!-- gridType -->
     <mat-form-field appearance="outline">
-      <mat-label>gridType</mat-label>
+      <mat-label>网格类型</mat-label>
       <mat-select formControlName="gridType">
         @for (t of gridTypes; track t) {
         <mat-option [value]="t">{{ t }}</mat-option>
@@ -19,7 +19,7 @@
 
     <!-- margin -->
     <mat-form-field appearance="outline">
-      <mat-label>margin</mat-label>
+      <mat-label>间距(px)</mat-label>
       <input
         matInput
         type="number"
@@ -29,7 +29,7 @@
 
     <!-- displayGrid -->
     <mat-form-field appearance="outline">
-      <mat-label>displayGrid</mat-label>
+      <mat-label>网格线显示</mat-label>
       <mat-select formControlName="displayGrid">
         @for (d of displayGrid; track d) {
         <mat-option [value]="d">{{ d }}</mat-option>
@@ -39,12 +39,12 @@
 
     <!-- enableOccupiedCellDrop -->
     <mat-slide-toggle formControlName="enableOccupiedCellDrop">
-      enableOccupiedCellDrop
+      允许覆盖已有格子
     </mat-slide-toggle>
 
     <!-- emptyCellDragMaxCols -->
     <mat-form-field appearance="outline">
-      <mat-label>emptyCellDragMaxCols</mat-label>
+      <mat-label>拖拽探测最大列数 </mat-label>
       <input
         matInput
         type="number"
@@ -54,7 +54,7 @@
 
     <!-- emptyCellDragMaxRows -->
     <mat-form-field appearance="outline">
-      <mat-label>emptyCellDragMaxRows</mat-label>
+      <mat-label>拖拽探测最大行数 </mat-label>
       <input
         matInput
         type="number"
@@ -62,9 +62,8 @@
       />
     </mat-form-field>
 
-    <!-- minRows -->
     <mat-form-field appearance="outline">
-      <mat-label>minRows</mat-label>
+      <mat-label>最小行数</mat-label>
       <input
         matInput
         type="number"
@@ -72,19 +71,17 @@
       />
     </mat-form-field>
 
-    <!-- maxRows -->
-    <mat-form-field appearance="outline">
-      <mat-label>maxRows</mat-label>
+    <!-- <mat-form-field appearance="outline">
+      <mat-label>最大行数</mat-label>
       <input
         matInput
         type="number"
         formControlName="maxRows"
       />
-    </mat-form-field>
+    </mat-form-field> -->
 
-    <!-- minCols -->
     <mat-form-field appearance="outline">
-      <mat-label>minCols</mat-label>
+      <mat-label>最小列数</mat-label>
       <input
         matInput
         type="number"
@@ -92,15 +89,14 @@
       />
     </mat-form-field>
 
-    <!-- maxCols -->
-    <mat-form-field appearance="outline">
-      <mat-label>maxCols</mat-label>
+    <!-- <mat-form-field appearance="outline">
+      <mat-label>最大列数</mat-label>
       <input
         matInput
         type="number"
         formControlName="maxCols"
       />
-    </mat-form-field>
+    </mat-form-field> -->
 
   </form>
 </mat-dialog-content>

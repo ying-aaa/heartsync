@@ -23,6 +23,7 @@ export interface IDashboardWidgetContext extends GridsterItem {
 
 export interface IDashboardContext {
   id?: string;
+  nodeId?: string;
   name: string;
   description?: string;
   layoutConfig?: Record<string, any>;
@@ -32,6 +33,7 @@ export interface IDashboardContext {
   accessControl?: Record<string, any>;
   appId?: string;
   isActive?: boolean;
+  type?: 'gridster' | 'custom';
 }
 
 @Injectable({
@@ -53,7 +55,7 @@ export class DashboardService {
   }
 
   // 创建仪表盘
-  createDashboard(data: any): Observable<any> {
+  createDashboard(data: IDashboardContext): Observable<any> {
     data.gridsterOption = {
       gridType: GridType.Fit,
       margin: 10,
@@ -61,10 +63,8 @@ export class DashboardService {
       enableOccupiedCellDrop: true,
       emptyCellDragMaxCols: 50,
       emptyCellDragMaxRows: 50,
-      minRows: 3,
       minCols: 1,
-      maxRows: 3,
-      maxCols: 1,
+      minRows: 1,
     };
     return this.http.post(this.apiUrl, data);
   }

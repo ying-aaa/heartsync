@@ -111,9 +111,10 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   gridsterOption = computed<GridsterConfig>(() => {
     const isRuntime = this.isRuntime();
+    const gridsterOption = this.dashboardConfigService.gridsterOption();
     return {
       // 取自定义配置，即后端保存的
-      ...this.dashboardConfigService.gridsterOption(),
+      ...gridsterOption,
       /**
        * 下面为编辑时的配置，不会进行保存的
        *  */

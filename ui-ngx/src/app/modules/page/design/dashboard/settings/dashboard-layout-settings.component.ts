@@ -53,10 +53,8 @@ export class DashboardLayoutSettingsComponent implements OnInit {
       enableOccupiedCellDrop: [false],
       emptyCellDragMaxCols: [50],
       emptyCellDragMaxRows: [50],
-      minRows: [3],
-      maxRows: [3],
+      minRows: [1],
       minCols: [1],
-      maxCols: [1],
     });
 
     this.form.valueChanges.subscribe((v) => {

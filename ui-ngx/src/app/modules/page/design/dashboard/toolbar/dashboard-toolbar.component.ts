@@ -62,14 +62,15 @@ export class DashboardToolbarComponent implements OnInit {
   // 保存
   saveConfig() {
     this.dashboardConfigService.saveConfig();
-
     this.updateRuntimeStatus(true);
+    this.resizeGridster();
   }
 
   // 取消
   cancel(is: boolean) {
     this.updateRuntimeStatus(is);
     this.dashboardConfigService.useOriginConfig();
+    this.resizeGridster();
   }
 
   // 侧边栏显隐
