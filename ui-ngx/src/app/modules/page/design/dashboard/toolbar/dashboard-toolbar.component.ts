@@ -1,4 +1,11 @@
-import { Component, input, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -11,6 +18,7 @@ import { DashboardConfigService } from '@src/app/core/services/dashboard-config.
 import { isMobile } from '@src/app/core/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { DashboardLayoutSettingsComponent } from '../settings/dashboard-layout-settings.component';
+import { VerseDesignModeSwitchComponent } from '@src/app/shared/components/ui-verse/verse-design-mode-switch/verse-design-mode-switch.component';
 
 @Component({
   selector: 'hs-dashboard-toolbar',
@@ -22,22 +30,32 @@ import { DashboardLayoutSettingsComponent } from '../settings/dashboard-layout-s
     MatIconModule,
     MatTooltipModule,
     WidgetPresetListComponent,
-    // VerseDesignModeSwitchComponent,
+    VerseDesignModeSwitchComponent,
   ],
 })
 export class DashboardToolbarComponent implements OnInit {
   sidenavStart = input.required<MatSidenav>();
   sidenavEnd = input.required<MatSidenav>();
 
-  toggleState = true;
+  showWidgetList = signal<boolean>(false);
 
   isRuntime = this.dashboardEditorService.isRuntime;
+
+  currentDashboardName = computed(() =>
+    this.dashboardEditorService.currentDashboardName(),
+  );
 
   constructor(
     private dashboardEditorService: DashboardEditorService,
     private dashboardConfigService: DashboardConfigService,
     private dialog: MatDialog,
-  ) {}
+  ) {
+    effect(() => {
+      const showWidgetList = this.showWidgetList();
+      this.sidenavEnd().toggle(showWidgetList);
+      this.resizeGridster();
+    });
+  }
 
   // 打开布局设置
   openLayoutSettings() {
@@ -57,6 +75,7 @@ export class DashboardToolbarComponent implements OnInit {
   // 切换运行时状态
   updateRuntimeStatus(is: boolean) {
     this.dashboardEditorService.updateRuntimeStatus(is);
+    is && this.showWidgetList.set(false);
   }
 
   // 保存

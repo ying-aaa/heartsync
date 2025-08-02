@@ -6051,6 +6051,13 @@ ng2-file-upload@^8.0.0:
   dependencies:
     tslib "^2.3.0"
 
+ngx-color-picker@^20.1.0:
+  version "20.1.0"
+  resolved "https://registry.npmmirror.com/ngx-color-picker/-/ngx-color-picker-20.1.0.tgz#c2f28d1437b8f7e0171cef78a79a955ed8735a6c"
+  integrity sha512-669JqpvSroMt9AZjcyks0zzV0Indqjch0lAGTOvo6AR8RiSH9GPGeFT5Lk0sNFvNIa1cywS1emL4S3Jj+hMLZQ==
+  dependencies:
+    tslib "^2.3.0"
+
 ngx-highlightjs@^14.0.0:
   version "14.0.0"
   resolved "https://registry.npmmirror.com/ngx-highlightjs/-/ngx-highlightjs-14.0.0.tgz"

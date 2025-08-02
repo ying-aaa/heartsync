@@ -74,7 +74,7 @@ export class HsLoadingDirective {
     this.renderer.setStyle(this.overlay, 'align-items', 'center');
     this.renderer.setStyle(this.overlay, 'color', 'white');
     this.renderer.setStyle(this.overlay, 'font-size', '20px');
-    this.renderer.setStyle(this.overlay, 'z-index', '1000');
+    this.renderer.setStyle(this.overlay, 'z-index', '999');
 
     this.renderer.appendChild(this.overlay, this.createLoader());
     this.renderer.appendChild(this.el.nativeElement, this.overlay);
@@ -109,8 +109,8 @@ export class HsLoadingDirective {
       const rect = hostElement.getBoundingClientRect();
       this.renderer.setStyle(this.overlay, 'top', `${0}px`);
       this.renderer.setStyle(this.overlay, 'left', `${0}px`);
-      this.renderer.setStyle(this.overlay, 'width', `${rect.width}px`);
-      this.renderer.setStyle(this.overlay, 'height', `${rect.height}px`);
+      // this.renderer.setStyle(this.overlay, 'width', `${rect.width}px`);
+      // this.renderer.setStyle(this.overlay, 'height', `${rect.height}px`);
     }
   }
 }

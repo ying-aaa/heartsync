@@ -1,84 +1,98 @@
+@let backgroundImageUrl = gridsterOption()["backgroundImageFileData"]?.[0]?.url;
+
 <content
-  class="wh-full relative"
+  class="wh-full"
   hs-loading
   [isLoading]="loadingStatus()"
 >
-  @if(!widgets().length && !loadingStatus()) {
-  <div class="wh-full flex-center text-22px absolute top-0 left-0">
-    <span>未配置部件</span>
-  </div>
-  }
-
-  @if (gridsterOption().gridType) {
-  <gridster [options]="gridsterOption()">
-    @for (item of widgets(); track item) {
-    <gridster-item
-      [item]="item"
-      [class.select-gridster-item]="item.widgetId === selectWidgetId()"
-      (click)="selectGridster(item)"
-    >
-      <div
-        id="#containter"
-        class="wh-full relative"
-      >
-        <hs-widget-container
-          [widgetId]="item.widgetId!"
-          [widgetType]="item['type']"
-          [workSizeConfigStyle]="{}"
-        ></hs-widget-container>
-
-        @if (isRuntime()) {
-        <div
-          [cdkContextMenuTriggerFor]="InnerMoreVert"
-          class="absolute wh-full top-0 left-0 select-shade z-99999"
-        >
-          <div class="absolute top-0 left-0">
-            <button
-              mat-icon-button
-              [matMenuTriggerFor]="MoreVert"
-            >
-              <mat-icon class="material-icons-round text-24px! w-24px! h-24px!">
-                more_vert
-              </mat-icon>
-            </button>
-          </div>
-          <div class="absolute top-0 right-0">
-            <button
-              mat-icon-button
-              class="hs-icon-button-32"
-            >
-              <mat-icon class="material-icons-round"> edit </mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              class="hs-icon-button-32"
-            >
-              <mat-icon class="material-icons-round"> download </mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              class="hs-icon-button-32"
-              [matMenuTriggerFor]="menu"
-            >
-              <mat-icon class="material-icons-round"> delete </mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button
-                mat-menu-item
-                (mousedown)="removeItem($event, item)"
-                (touchstart)="removeItem($event, item)"
-              >
-                确认删除
-              </button>
-            </mat-menu>
-          </div>
-        </div>
-        }
-      </div>
-    </gridster-item>
+  <div
+    class="wh-full relative"
+    [style.backgroundColor]="gridsterOption()['backgroundColor']"
+    [style.backgroundImage]="backgroundImageUrl ? 'url(\'' + backgroundImageUrl + '\')' : ''"
+    [style.backgroundSize]="gridsterOption()['backgroundSize']"
+    [style]="{
+    'background-position': '0% 0%',
+    'background-repeat': 'no-repeat',
+    'background-attachment': 'scroll'
+  }"
+  >
+    @if(!widgets().length && !loadingStatus()) {
+    <div class="wh-full flex-center text-22px absolute top-0 left-0">
+      <span>未配置部件</span>
+    </div>
     }
-  </gridster>
-  }
+
+    @if (gridsterOption().gridType) {
+    <gridster [options]="gridsterOption()">
+      @for (item of widgets(); track item) {
+      <gridster-item
+        [item]="item"
+        [class.select-gridster-item]="item.widgetId === selectWidgetId()"
+        (click)="selectGridster(item)"
+      >
+        <div
+          id="#containter"
+          class="wh-full relative"
+        >
+          <hs-widget-container
+            [widgetId]="item.widgetId!"
+            [widgetType]="item['type']"
+            [workSizeConfigStyle]="{}"
+          ></hs-widget-container>
+
+          @if (isRuntime()) {
+          <div
+            [cdkContextMenuTriggerFor]="InnerMoreVert"
+            class="absolute wh-full top-0 left-0 select-shade"
+          >
+            <div class="absolute top-0 left-0 z-999">
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="MoreVert"
+              >
+                <mat-icon class="material-icons-round text-24px! w-24px! h-24px!">
+                  more_vert
+                </mat-icon>
+              </button>
+            </div>
+            <div class="absolute top-0 right-0 z-999">
+              <button
+                mat-icon-button
+                class="hs-icon-button-32"
+              >
+                <mat-icon class="material-icons-round"> edit </mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="hs-icon-button-32"
+              >
+                <mat-icon class="material-icons-round"> download </mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="hs-icon-button-32"
+                [matMenuTriggerFor]="menu"
+              >
+                <mat-icon class="material-icons-round"> delete </mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button
+                  mat-menu-item
+                  (mousedown)="removeItem($event, item)"
+                  (touchstart)="removeItem($event, item)"
+                >
+                  确认删除
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+          }
+        </div>
+      </gridster-item>
+      }
+    </gridster>
+    }
+  </div>
 </content>
 
 <mat-menu #MoreVert="matMenu">

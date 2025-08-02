@@ -46,6 +46,7 @@
     "keycloak-js": "^25.0.0",
     "material-icons": "^1.13.13",
     "ng2-file-upload": "^8.0.0",
+    "ngx-color-picker": "^20.1.0",
     "ngx-highlightjs": "^14.0.0",
     "ngx-scrollbar": "^18.0.0",
     "ngx-toastr": "^19.0.0",

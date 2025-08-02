@@ -9,23 +9,29 @@
       content {
         background-color: @gridster-bg-color;
 
-        gridster {
-          padding: 0px;
-          background-color: transparent;
+        ::ng-deep{
+          gridster {
+            padding: 0px;
+            background-color: transparent;
 
-          gridster-item {
-            background-color: @gridster-item-bg-color;
+            .gridster-item-resizable-handler{
+              z-index: 1000;
+            }
 
-            &.select-gridster-item {
-              overflow: unset;
+            gridster-item {
+              background-color: @gridster-item-bg-color;
 
-              .select-shade {
-                cursor: pointer;
-                border: 1px solid #039be5;
-                box-shadow: 0 0 20px #039be5;
+              &.select-gridster-item {
+                overflow: unset;
+
+                .select-shade {
+                  cursor: pointer;
+                  border: 1px solid #039be5;
+                  box-shadow: 0 0 20px #039be5;
+                }
               }
             }
-          }
+          } 
         }
       }
 

@@ -7,7 +7,7 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { DashboardToolbarComponent } from './toolbar/dashboard-toolbar.component';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
 import { getParamFromRoute } from '@src/app/core/utils';
 import { DashboardService } from '@src/app/core/http/dashboard.service';
@@ -66,8 +66,11 @@ export class DashboardManageComponent implements OnInit {
       return next;
     },
     selectEvent: (node, jsTree) => {
-      const { type, id } = node || {};
+      const { type, id, text: name } = node || {};
       this.updateDashboardId(id);
+      this.dashboardEditorService.updateDashboardName(name);
+      this.dashboardEditorService.updateRuntimeStatus(true);
+      this.sidenavEnd().toggle(false);
     },
     renameNodeSuccess: (node, jsTree) => {
       const { type, id, text: name } = node || {};
@@ -89,7 +92,9 @@ export class DashboardManageComponent implements OnInit {
           type: 'gridster',
         })
         .subscribe({
-          next: () => {},
+          next: () => {
+            this.updateDashboardId(nodeId);
+          },
         });
       console.log('%c Line:57 🧀 node, jsTree', 'color:#42b983', node, jsTree);
     },
@@ -106,20 +111,9 @@ export class DashboardManageComponent implements OnInit {
     private dashboardService: DashboardService,
     private route: ActivatedRoute,
   ) {
-    effect(() => {
-      const isRuntime = this.dashboardEditorService.isRuntime();
-      this.toggleSidenav(isRuntime);
-    });
+
   }
 
-  toggleSidenav(is: boolean) {
-    // this.sidenavStart().toggle(!is);
-    this.sidenavEnd().toggle(!is);
-  }
-
-  // get widgetConfig() {
-  //   return this.widgetEditorService.currentWidgetConfig();
-  // }
 
   updateDashboardId(dashboardId: string) {
     this.dashboardId = dashboardId;

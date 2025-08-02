@@ -4,7 +4,7 @@
   <form
     [formGroup]="form"
     appearance="outline"
-    class="hs-density--5 flex flex-col gap-12px"
+    class="hs-density--5 flex flex-col gap-12px mb-12px!"
   >
 
     <!-- gridType -->
@@ -42,26 +42,6 @@
       允许覆盖已有格子
     </mat-slide-toggle>
 
-    <!-- emptyCellDragMaxCols -->
-    <mat-form-field appearance="outline">
-      <mat-label>拖拽探测最大列数 </mat-label>
-      <input
-        matInput
-        type="number"
-        formControlName="emptyCellDragMaxCols"
-      />
-    </mat-form-field>
-
-    <!-- emptyCellDragMaxRows -->
-    <mat-form-field appearance="outline">
-      <mat-label>拖拽探测最大行数 </mat-label>
-      <input
-        matInput
-        type="number"
-        formControlName="emptyCellDragMaxRows"
-      />
-    </mat-form-field>
-
     <mat-form-field appearance="outline">
       <mat-label>最小行数</mat-label>
       <input
@@ -70,15 +50,6 @@
         formControlName="minRows"
       />
     </mat-form-field>
-
-    <!-- <mat-form-field appearance="outline">
-      <mat-label>最大行数</mat-label>
-      <input
-        matInput
-        type="number"
-        formControlName="maxRows"
-      />
-    </mat-form-field> -->
 
     <mat-form-field appearance="outline">
       <mat-label>最小列数</mat-label>
@@ -89,14 +60,53 @@
       />
     </mat-form-field>
 
-    <!-- <mat-form-field appearance="outline">
-      <mat-label>最大列数</mat-label>
+    <!-- <mat-form-field appearance="outline"> -->
+    <div>
+      <mat-label>背景颜色</mat-label>
+      <!-- @let backgroundColor = form.get('backgroundColor')?.value || 'transparent'; -->
       <input
-        matInput
-        type="number"
-        formControlName="maxCols"
+        color-picker
+        formControlName="backgroundColor"
+        [style.background]="form.value.backgroundColor"
+        [cpOutputFormat]="'rgba'"
+        [(colorPicker)]="form.value.backgroundColor"
+        [cpEyeDropper]="true"
+        [cpSaveClickOutside]="false"
+        [cpPresetColors]="['#fff', '#2889e9']"
+        [cpOKButton]="true"
+        [cpCancelButton]="true"
+        [cpCancelButtonText]="'取消'"
+        [cpOKButtonText]="'确定'"
+        cpCancelButtonClass="cursor-pointer"
+        cpOKButtonClass="cursor-pointer"
+        class="225px"
+        (colorPickerChange)="form.patchValue({ backgroundColor: $event })"
       />
-    </mat-form-field> -->
+    </div>
+
+    <div class="my-8px">
+      <label class="mb-8px">背景图片：</label>
+      <hs-file-upload
+        [fold]="true"
+        [isFile]="false"
+        [multiple]="false"
+        fileShowType="form"
+        [(fileData)]="fileData"
+        [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
+        (delItemFile)="delItemFile($event)"
+        class="flex-1"
+      ></hs-file-upload>
+    </div>
+    <!-- </mat-form-field> -->
+
+    <mat-form-field appearance="outline">
+      <mat-label>背景模式大小</mat-label>
+      <mat-select formControlName="backgroundSize">
+        @for (t of backgroundModeTypes; track t) {
+        <mat-option [value]="t.value">{{ t.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
   </form>
 </mat-dialog-content>
@@ -105,6 +115,7 @@
   <button
     mat-button
     mat-dialog-close
+    (click)="cancel()"
   >
     取消
   </button>

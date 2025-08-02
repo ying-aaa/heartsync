@@ -13,12 +13,12 @@
       </mat-icon>
     </button>
 
-    <span
-      [matTooltip]="'xxx'"
+    <div
+      [matTooltip]="currentDashboardName()"
       class="w-180px truncate"
     >
-      XXXXXXXXXXXXXXXXXXXXXXXX仪表版
-    </span>
+      <span class="text-14px">仪表板：</span>{{ currentDashboardName() }}
+    </div>
   </div>
 
 
@@ -26,6 +26,11 @@
     @if(!isRuntime()) {
     <!-- 预设列表 -->
     <hs-widget-preset-list></hs-widget-preset-list>
+    <!-- 控制已有内容显示 -->
+    <verse-design-mode-switch
+      [tooltip]="showWidgetList() ? '设计模式' : '预览模式'"
+      [(ngModel)]="showWidgetList"
+    ></verse-design-mode-switch>
     <!-- 布局设置按钮 -->
     <button
       mat-icon-button
@@ -64,13 +69,5 @@
       编辑
     </button>
     }
-
-
-
-
-    <!-- <verse-design-mode-switch
-      [tooltip]="isRuntime() ? '设计模式' : '预览模式'"
-      [(ngModel)]="isRuntime"
-    ></verse-design-mode-switch> -->
   </div>
 </content>

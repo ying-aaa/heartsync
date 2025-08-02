@@ -31,3 +31,5 @@ export enum IEventsType {
 export interface IAnyPropObj {
   [key: string]: any;
 }
+
+export const HS_BUCKET = 'heartsync-files';

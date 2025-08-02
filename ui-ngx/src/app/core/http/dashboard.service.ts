@@ -8,6 +8,7 @@ import {
   GridsterItem,
   GridType,
 } from 'angular-gridster2';
+import { IFileData } from '@src/app/shared/models/common-component';
 
 export enum DashboardType {}
 
@@ -21,13 +22,20 @@ export interface IDashboardWidgetContext extends GridsterItem {
   image?: string;
 }
 
+export interface IGridsterOption extends GridsterConfig {
+  backgroundColor?: string;
+  backgroundImageFileData?: IFileData[];
+  backgroundSize?: string;
+  // backgroundPosition?: string;
+}
+
 export interface IDashboardContext {
   id?: string;
   nodeId?: string;
   name: string;
   description?: string;
   layoutConfig?: Record<string, any>;
-  gridsterOption?: GridsterConfig;
+  gridsterOption?: IGridsterOption;
   widgets?: IDashboardWidgetContext[];
   dataSources?: Record<string, any>;
   accessControl?: Record<string, any>;
@@ -61,10 +69,12 @@ export class DashboardService {
       margin: 10,
       displayGrid: DisplayGrid.OnDragAndResize,
       enableOccupiedCellDrop: true,
-      emptyCellDragMaxCols: 50,
-      emptyCellDragMaxRows: 50,
       minCols: 1,
       minRows: 1,
+      backgroundColor: 'transparent',
+      backgroundImageFileData: [],
+      backgroundSize: 'cover',
+      // backgroundPosition: 'center',
     };
     return this.http.post(this.apiUrl, data);
   }
