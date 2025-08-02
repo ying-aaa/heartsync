@@ -24,6 +24,7 @@ import { UploadFileService } from '@src/app/core/http/upload-file.service';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-file.module';
 import { IFileData } from '@src/app/shared/models/common-component';
+import { HS_BUCKET } from '@src/app/shared/models/system.model';
 
 @Component({
   selector: 'hs-create-app',
@@ -44,7 +45,7 @@ import { IFileData } from '@src/app/shared/models/common-component';
   ],
 })
 export class CreateAppComponent implements OnInit {
-  bucket = 'heartsync-files';
+  bucket = HS_BUCKET;
   folderName = 'application';
 
   appForm = new FormGroup({

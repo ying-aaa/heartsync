@@ -42,7 +42,6 @@ export class DashboardConfigService {
     const dashboardConfig = this.dashboardConfig();
     const { widgets, gridsterOption } = dashboardConfig;
     this.widgets.set(deepClone(widgets || []));
-    console.log("%c Line:45 🍡", "color:#ea7e5c");
     this.gridsterOption.set(deepClone(gridsterOption || {}));
   }
 
