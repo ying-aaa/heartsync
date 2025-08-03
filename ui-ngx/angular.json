@@ -32,6 +32,11 @@
                 "input": "public"
               },
               {
+                "glob": "**/*",
+                "input": "node_modules/cesium/Build/Cesium",
+                "output": "./assets/cesium"
+              },
+              {
                 "glob": "mode-html.js",
                 "input": "./node_modules/ace-builds/src-min-noconflict/",
                 "output": "/"
@@ -116,11 +121,6 @@
               {
                 "input": "./node_modules/jstree/dist/jstree.min.js",
                 "bundleName": "jstree.min",
-                "inject": false
-              },
-              {
-                "input": "./node_modules/cesium/Build/Cesium/Cesium.js",
-                "bundleName": "Cesium",
                 "inject": false
               }
             ]

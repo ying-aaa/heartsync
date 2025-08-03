@@ -15,6 +15,8 @@ import { includeBearerTokenInterceptor } from 'keycloak-angular';
 import { RequestInterceptor } from './core/interceptors/resquest.interceptor';
 import { provideToastr } from 'ngx-toastr';
 
+import './lib/index';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),

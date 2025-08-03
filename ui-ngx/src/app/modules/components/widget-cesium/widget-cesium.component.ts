@@ -8,7 +8,8 @@ import {
   viewChild,
 } from '@angular/core';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
-import { CesiumWidget, Viewer } from 'cesium';
+import { initCesiumConfig } from '@src/app/lib/cesium.config';
+import { Viewer } from 'cesium';
 
 declare var Cesium: any;
 
@@ -33,8 +34,9 @@ export class WidgetCesiumComponent implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   public loadResourceScript() {
-    const resourceUrls = ['Cesium.js', 'cesium-widgets.css'];
+    const resourceUrls = ['/assets/cesium/Cesium.js', 'cesium-widgets.css'];
     this.scriptLoaderService.loadScripts(resourceUrls).subscribe((res) => {
+      initCesiumConfig(Cesium);
       this.initCesium();
     });
   }
