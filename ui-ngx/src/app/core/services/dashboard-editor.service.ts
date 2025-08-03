@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { IWidgetType } from '@src/app/shared/models/widget.model';
-import { GridsterComponent  } from 'angular-gridster2';
+import { GridsterComponent } from 'angular-gridster2';
 @Injectable({
   providedIn: 'root',
 })
@@ -11,7 +11,9 @@ export class DashboardEditorService {
 
   currentWidgetType = signal<IWidgetType>(IWidgetType.CODE);
 
-  currentPresetWidgetType = signal<IWidgetType>(IWidgetType.CODE);
+  currentDragstartWidgetType = signal<IWidgetType>(IWidgetType.CODE);
+
+  currentDragstartWidgetId = signal<string>('');
 
   currentSelectWidgetId = signal<string>('');
 
@@ -19,8 +21,7 @@ export class DashboardEditorService {
 
   isRuntime = signal(true);
 
-  constructor(
-  ) {}
+  constructor() {}
 
   updateRuntimeStatus(is: boolean) {
     if (is === this.isRuntime()) return;
@@ -36,9 +37,14 @@ export class DashboardEditorService {
     this.currentWidgetType.set(type);
   }
 
-  updatePresetWidgetType(type: IWidgetType) {
-    if (type === this.currentPresetWidgetType()) return;
-    this.currentPresetWidgetType.set(type);
+  updateDragstartWidgetType(type: IWidgetType) {
+    if (type === this.currentDragstartWidgetType()) return;
+    this.currentDragstartWidgetType.set(type);
+  }
+
+  updateDragstartWidgetId(widgetId: string) {
+    if (widgetId === this.currentDragstartWidgetId()) return;
+    this.currentDragstartWidgetId.set(widgetId);
   }
 
   // 更新仪表板ID

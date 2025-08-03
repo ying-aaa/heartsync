@@ -149,17 +149,16 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   // 拖拽预设到网格时的回调
   onPresetDropToGrid(event: MouseEvent, item: GridsterItem) {
-    const currentPresetWidgetType =
-      this.dashboardEditorService.currentPresetWidgetType();
-    const widget = { ...item, name: '', type: currentPresetWidgetType };
+    const widgetType = this.dashboardEditorService.currentDragstartWidgetType();
+    const widgetId = this.dashboardEditorService.currentDragstartWidgetId();
+    const widget = { ...item, name: '', type: widgetType, widgetId };
     this.dashboardConfigService.addWidget(widget);
   }
 
   // 滑动网格生成时的回调
   onSwipeSpawnGrid(event: MouseEvent, item: GridsterItem) {
-    console.log("%c Line:160 🍆 event", "color:#465975", event, item);
-    const currentWidgetType = this.dashboardEditorService.currentWidgetType();
-    const widget = { ...item, name: '', type: currentWidgetType };
+    const widgetType = this.dashboardEditorService.currentWidgetType();
+    const widget = { ...item, name: '', type: widgetType };
     this.dashboardConfigService.addWidget(widget);
   }
 
@@ -206,9 +205,6 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dashboardEditorService.setGridsterInstall(this.gridster);
-        // 监听父容器变化
-        // const observer = new ResizeObserver(() => this.gridster?.resize());
-        // observer.observe(document.querySelector('gridster')!);
   }
 
   ngOnInit() {}

@@ -31,18 +31,19 @@ export class WidgetFolderComponent implements OnInit {
   businessKey = computed(() => this.widgetEditorService.currentWidgetType());
 
   widgetId: string;
-  widgetType = computed(() => this.widgetEditorService.currentWidgetType());
+  // currentWidgetType = signal<IWidgetType>(IWidgetType.FORM);
+  widgetType = this.widgetEditorService.currentWidgetType;
 
   treeConfig = signal<IFileTreeConfig>({
     featureList: [
-      'createFile',
-      'rename',
-      'remove',
-      'copy',
-      'cut',
-      'paste',
-      'dnd',
-      'blank',
+      // 'createFile',
+      // 'rename',
+      // 'remove',
+      // 'copy',
+      // 'cut',
+      // 'paste',
+      // // 'dnd',
+      // 'blank',
       'search',
     ],
     deleteEvent: async (node, jsTree) => {

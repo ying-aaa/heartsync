@@ -12,7 +12,6 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
 import { WidgetPresetListComponent } from './widget-preset-list.component';
-// import { VerseDesignModeSwitchComponent } from '@shared/components/ui-verse/verse-design-mode-switch/verse-design-mode-switch.component';
 import { FormsModule } from '@angular/forms';
 import { DashboardConfigService } from '@src/app/core/services/dashboard-config.service';
 import { isMobile } from '@src/app/core/utils';
@@ -75,7 +74,7 @@ export class DashboardToolbarComponent implements OnInit {
   // 切换运行时状态
   updateRuntimeStatus(is: boolean) {
     this.dashboardEditorService.updateRuntimeStatus(is);
-    is && this.showWidgetList.set(false);
+    this.showWidgetList.set(false);
   }
 
   // 保存

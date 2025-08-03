@@ -225,9 +225,9 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       conditionalselect: (node: any) => {
         const disableSelectFolder = this.treeConfig().disableSelectFolder;
-        if(disableSelectFolder) {
+        if (disableSelectFolder) {
           return node.original.type !== 'folder';
-        }else{
+        } else {
           return true;
         }
       },
@@ -667,7 +667,9 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         error: (error) => console.error('Error loading script:', error),
         complete: () => {
           this.initJstree();
-          this.listenToRightClick();
+          if (this.contextMenu.length > 0) {
+            this.listenToRightClick();
+          }
         },
       });
     this.initJsTreeFilter();
