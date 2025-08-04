@@ -17,7 +17,7 @@ const designPageRoutes = [
     },
     loadComponent: () =>
       import('./configuration/configuration-editor.component').then(
-        (m) => m.ConfigurationEditorComponent
+        (m) => m.ConfigurationEditorComponent,
       ),
     children: configurationRoutes,
   },
@@ -50,6 +50,13 @@ const designPageRoutes = [
         (m) => m.WidgetEditorComponent,
       ),
     children: widgetRoutes,
+  },
+  // 测试页
+  {
+    title: '测试',
+    path: 'test',
+    loadComponent: () =>
+      import('./test/multi-layer.component').then((m) => m.MultiLayerComponent),
   },
 ];
 

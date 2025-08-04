@@ -105,7 +105,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     remove: {
       label: '删除',
       icon: 'remove',
-      action: async (data: any) => {},
+      action: this.removeItem.bind(this),
     },
   };
 
@@ -115,6 +115,14 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     return {
       // 取自定义配置，即后端保存的
       ...gridsterOption,
+      compactType: 'none', // 防止自动压缩
+      pushItems: false,    // 禁止推动其他 item
+      swap: false,         // 禁止交换
+      disableWindowResize: false,
+      allowMultiLayer: true,  // ✅ 允许多层重叠
+      defaultLayerIndex: 2,   // 默认层级
+      baseLayerIndex: 2,      // 最底层
+      maxLayerIndex: 2,      // 最大层级
       /**
        * 下面为编辑时的配置，不会进行保存的
        *  */
@@ -131,7 +139,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
       // 拖拽预设到网格时的回调
       emptyCellDropCallback: this.onPresetDropToGrid.bind(this),
       // 滑动网格生成时的回调
-      emptyCellDragCallback: this.onSwipeSpawnGrid.bind(this),
+      // emptyCellDragCallback: this.onSwipeSpawnGrid.bind(this),
       // 变动网格item
       itemChangeCallback: this.itemChangeCallback.bind(this),
     };
@@ -141,6 +149,10 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     private dashboardEditorService: DashboardEditorService,
     private dashboardConfigService: DashboardConfigService,
   ) {}
+
+  test() {
+    console.log("%c Line:155 🍺", "color:#7f2b82");
+  }
 
   // 部件右键的菜单功能
   gridsterItemContextMenuArr() {

@@ -26,13 +26,15 @@
     <gridster [options]="gridsterOption()">
       @for (item of widgets(); track item) {
       <gridster-item
+        #gridsterItem
         [item]="item"
         [class.select-gridster-item]="item.widgetId === selectWidgetId()"
         (click)="selectGridster(item)"
       >
+        <!-- 内容 -->
         <div
           id="#containter"
-          class="wh-full relative"
+          class="wh-full overflow-y-auto overflow-x-hidden"
         >
           <hs-widget-container
             [widgetId]="item.widgetId!"
@@ -43,17 +45,42 @@
           @if (isRuntime()) {
           <div
             [cdkContextMenuTriggerFor]="InnerMoreVert"
+            [cdkContextMenuTriggerData]="{ widgetData: item }"
             class="absolute wh-full top-0 left-0 select-shade"
           >
             <div class="absolute top-0 left-0 z-999">
               <button
                 mat-icon-button
                 [matMenuTriggerFor]="MoreVert"
+                (click)="test()"
               >
                 <mat-icon class="material-icons-round text-24px! w-24px! h-24px!">
                   more_vert
                 </mat-icon>
               </button>
+              <!-- 左侧菜单 -->
+              <mat-menu #MoreVert="matMenu">
+                <div class="mb-12px">当前层数:
+                  <span class="ml-10px">{{
+                    item.layerIndex === undefined ? 1 : item.layerIndex
+                    }}</span>
+                </div>
+                <button
+                  mat-menu-item
+                  (click)="gridsterItem.bringToFront(1)"
+                >
+                  <mat-icon>arrow_upward</mat-icon>
+                  向上一层
+                </button>
+                <button
+                  mat-menu-item
+                  (click)="gridsterItem.sendToBack(1)"
+                >
+                  <mat-icon>arrow_downward</mat-icon>
+                  向下一层
+                </button>
+              </mat-menu>
+
             </div>
             <div class="absolute top-0 right-0 z-999">
               <button
@@ -95,18 +122,12 @@
   </div>
 </content>
 
-<mat-menu #MoreVert="matMenu">
-  <button mat-menu-item>
-    <mat-icon>arrow_upward</mat-icon>
-    向上一层
-  </button>
-  <button mat-menu-item>
-    <mat-icon>arrow_downward</mat-icon>
-    向下一层
-  </button>
-</mat-menu>
 
-<ng-template #InnerMoreVert>
+
+<ng-template
+  #InnerMoreVert
+  let-widgetData="widgetData"
+>
   <style>
     #hs-context-menu {
       background-color: var(--base-bg-color);
@@ -129,7 +150,7 @@
     <li
       cdkMenuItem
       role="menuitem"
-      (click)="menu.action()"
+      (click)="menu.action($event, widgetData)"
       class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
     >
       @if (menu.matIcon) {
