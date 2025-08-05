@@ -13,7 +13,6 @@ import {
 import {
   IEditorFormlyField,
   IFieldType,
-  IWidgetType,
 } from '@src/app/shared/models/widget.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
@@ -196,6 +195,8 @@ export class FormEditorService {
     selected = true,
   ) {
     field = deepClone(field);
+
+    // 递归新的field为其添加id属性
     function addFieldId(field: IEditorFormlyField) {
       const key = generateUUID();
 
@@ -208,12 +209,15 @@ export class FormEditorService {
       }
     }
     addFieldId(field);
+
     // 子表的默认列数
     if (toParentField[0]?.parent?.type === IFieldType.SUBTABLE) {
       if (field.props) {
         field.props['row'] = 1;
       }
     }
+
+    // 插入
     toParentField.splice(toIndex, 0, field);
     this.formGroup = new FormGroup({});
     this.options.build && this.options.build();

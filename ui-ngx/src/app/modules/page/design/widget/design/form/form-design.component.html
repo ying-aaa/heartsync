@@ -17,20 +17,27 @@
     class="h-full"
   ></mat-divider>
 
-  <aside class="flex flex-col h-full w-312px py-12px px-12px relative">
-    @let activeFieldTypeName =
+  <aside class="flex flex-col h-full w-312px py-12px pl-12px relative">
+    <header>
+      @let activeFieldTypeName =
       formEditorService.activeField()?.props?.['typeName'];
-
-    <hs-formly-config
-      class="h-0 flex-1"
-      [model]="formEditorService.activeField()"
-    >
-      <div
-        class="relative mb-12px flex justify-between items-center line-height-24px"
-      >
+      <div class="relative mb-12px flex justify-between items-center line-height-24px pr-12px">
         {{ activeFieldTypeName || '选择组件后进行配置' }}
       </div>
-      <mat-divider class="w-full mb-10px!"></mat-divider
-    ></hs-formly-config>
+      <mat-divider class="w-full"></mat-divider>
+    </header>
+    <ng-scrollbar
+      class="flex-1 h-0"
+      #scrollbarRef="ngScrollbar"
+      externalViewport
+      visibility="hover"
+      appearance="compact"
+      orientation="auto"
+    >
+      <div scrollViewport>
+        <hs-formly-config class="pr-12px pt-10px!" [model]="formEditorService.activeField()">
+        </hs-formly-config>
+      </div>
+    </ng-scrollbar>
   </aside>
 </content>

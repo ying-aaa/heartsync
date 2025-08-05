@@ -43,6 +43,21 @@ export class FormlyFieldArrayComponent
     this.options.build!();
   }
 
+  addField(toIndex: number) {
+    this.formEditorService.addField(
+      this.model.at(-1),
+      this.model,
+      toIndex,
+      false,
+    );
+    this.options.build!();
+  }
+
+  removeField(toIndex: number) {
+    this.formEditorService.removeField(this.model, toIndex, false);
+    this.options.build!();
+  }
+
   getColumnItemWidth(
     fieldGroup: IEditorFormlyField[],
     itemField: IEditorFormlyField,

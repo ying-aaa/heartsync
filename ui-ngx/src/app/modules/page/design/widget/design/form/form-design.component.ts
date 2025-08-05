@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormlyConfigComponent } from '@src/app/modules/components/formly-config/formly-config.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 @Component({
   selector: 'hs-form-design',
@@ -19,6 +20,7 @@ import { MatButtonModule } from '@angular/material/button';
     FormlyConfigComponent,
     MatIconModule,
     MatButtonModule,
+    NgScrollbarModule
   ],
 })
 export class FormDesignComponent implements OnInit {
