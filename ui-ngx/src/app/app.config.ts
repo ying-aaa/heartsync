@@ -31,7 +31,6 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([RequestInterceptor, ResponentInterceptor]),
     ),
     provideHighlightOptions({
-      // fullLibraryLoader: () => import('highlight.js'),
       lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
       coreLibraryLoader: () => import('highlight.js/lib/core'),
       languages: {

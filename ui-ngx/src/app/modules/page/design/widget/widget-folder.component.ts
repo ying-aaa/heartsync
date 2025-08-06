@@ -36,14 +36,14 @@ export class WidgetFolderComponent implements OnInit {
 
   treeConfig = signal<IFileTreeConfig>({
     featureList: [
-      // 'createFile',
-      // 'rename',
-      // 'remove',
-      // 'copy',
-      // 'cut',
-      // 'paste',
-      // // 'dnd',
-      // 'blank',
+      'createFile',
+      'rename',
+      'remove',
+      'copy',
+      'cut',
+      'paste',
+      // 'dnd',
+      'blank',
       'search',
     ],
     deleteEvent: async (node, jsTree) => {

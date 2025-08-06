@@ -11,14 +11,14 @@ export const presetResource: IEditorFormlyField[] = [
     _design: true,
     props: {
       label: '布局',
-      typeName: '布局', // 新增属性
+      typeName: '布局',
     },
     fieldGroup: [
       {
         _design: true,
         props: {
           label: '布局器：',
-          typeName: '布局器：', // 新增属性
+          typeName: '布局器：',
         },
         fieldGroup: [
           {
@@ -28,7 +28,7 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               label: '栅格',
               icon: 'grid_on',
-              typeName: '栅格', // 新增属性
+              typeName: '栅格',
             },
             fieldGroup: [
               {
@@ -39,7 +39,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   row: 1,
                   label: '列',
-                  typeName: '列', // 新增属性
+                  typeName: '列',
                   icon: 'dehaze',
                 },
               },
@@ -51,7 +51,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   row: 2,
                   label: '列',
-                  typeName: '列', // 新增属性
+                  typeName: '列',
                   icon: 'dehaze',
                 },
               },
@@ -63,7 +63,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   row: 3,
                   label: '列',
-                  typeName: '列', // 新增属性
+                  typeName: '列',
                   icon: 'dehaze',
                 },
               },
@@ -76,7 +76,7 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               label: '群组',
               icon: 'subtitles',
-              typeName: '群组', // 新增属性
+              typeName: '群组',
             },
             fieldGroup: [
               {
@@ -86,7 +86,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   label: '栅格',
                   icon: 'grid_on',
-                  typeName: '栅格', // 新增属性
+                  typeName: '栅格',
                 },
                 fieldGroup: [
                   {
@@ -97,7 +97,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       row: 1,
                       label: '列',
-                      typeName: '列', // 新增属性
+                      typeName: '列',
                       icon: 'dehaze',
                     },
                   },
@@ -109,7 +109,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       row: 2,
                       label: '列',
-                      typeName: '列', // 新增属性
+                      typeName: '列',
                       icon: 'dehaze',
                     },
                   },
@@ -121,7 +121,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       row: 3,
                       label: '列',
-                      typeName: '列', // 新增属性
+                      typeName: '列',
                       icon: 'dehaze',
                     },
                   },
@@ -136,7 +136,7 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               label: '弹性',
               icon: 'view_column',
-              typeName: '弹性', // 新增属性
+              typeName: '弹性',
             },
             fieldGroup: [
               {
@@ -146,7 +146,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _bindKey: true,
                 props: {
                   label: '第一个文本',
-                  typeName: '第一个文本', // 新增属性
+                  typeName: '第一个文本',
                   style: {
                     type: 'text',
                     position: 'absolute',
@@ -165,7 +165,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _bindKey: true,
                 props: {
                   label: '第二个文本',
-                  typeName: '第二个文本', // 新增属性
+                  typeName: '第二个文本',
                   style: {
                     type: 'text',
                     position: 'absolute',
@@ -184,7 +184,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _bindKey: true,
                 props: {
                   label: '第三个文本',
-                  typeName: '第三个文本', // 新增属性
+                  typeName: '第三个文本',
                   style: {
                     type: 'text',
                     position: 'absolute',
@@ -205,7 +205,7 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               label: '画布',
               icon: 'select_all',
-              typeName: '画布', // 新增属性
+              typeName: '画布',
             },
             fieldGroup: [
               {
@@ -216,7 +216,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   type: 'text',
                   label: '第一个文本',
-                  typeName: '第一个文本', // 新增属性
+                  typeName: '第一个文本',
                   style: {
                     position: 'absolute',
                     left: '0',
@@ -234,7 +234,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _bindKey: true,
                 props: {
                   label: '第二个文本',
-                  typeName: '第二个文本', // 新增属性
+                  typeName: '第二个文本',
                   style: {
                     type: 'text',
                     position: 'absolute',
@@ -254,7 +254,7 @@ export const presetResource: IEditorFormlyField[] = [
                 props: {
                   type: 'text',
                   label: '第三个文本',
-                  typeName: '第三个文本', // 新增属性
+                  typeName: '第三个文本',
                   style: {
                     position: 'absolute',
                     left: '0',
@@ -273,7 +273,7 @@ export const presetResource: IEditorFormlyField[] = [
         _design: true,
         props: {
           label: '控制器：',
-          typeName: '控制器：', // 新增属性
+          typeName: '控制器：',
         },
         fieldGroup: [
           {
@@ -283,7 +283,7 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               label: '页签',
               icon: 'tab',
-              typeName: '页签', // 新增属性
+              typeName: '页签',
             },
             fieldGroup: [
               {
@@ -292,7 +292,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _design: true,
                 props: {
                   label: '第一个',
-                  typeName: '第一个', // 新增属性
+                  typeName: '第一个',
                   icon: 'dehaze',
                 },
                 fieldGroup: [
@@ -304,7 +304,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       type: 'text',
                       label: '第一个文本',
-                      typeName: '第一个文本', // 新增属性
+                      typeName: '第一个文本',
                     },
                   },
                 ],
@@ -315,7 +315,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _design: true,
                 props: {
                   label: '第二个',
-                  typeName: '第二个', // 新增属性
+                  typeName: '第二个',
                   icon: 'dehaze',
                 },
                 fieldGroup: [
@@ -327,7 +327,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       type: 'text',
                       label: '第二个文本',
-                      typeName: '第二个文本', // 新增属性
+                      typeName: '第二个文本',
                     },
                   },
                 ],
@@ -338,7 +338,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _design: true,
                 props: {
                   label: '第三个',
-                  typeName: '第三个', // 新增属性
+                  typeName: '第三个',
                   icon: 'dehaze',
                 },
                 fieldGroup: [
@@ -350,7 +350,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       type: 'text',
                       label: '第三个文本',
-                      typeName: '第三个文本', // 新增属性
+                      typeName: '第三个文本',
                     },
                   },
                 ],
@@ -364,7 +364,7 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               label: '手风琴',
               icon: 'view_day',
-              typeName: '手风琴', // 新增属性
+              typeName: '手风琴',
             },
             fieldGroup: [
               {
@@ -373,7 +373,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _design: true,
                 props: {
                   label: '第一个',
-                  typeName: '第一个', // 新增属性
+                  typeName: '第一个',
                   icon: 'dehaze',
                 },
                 fieldGroup: [
@@ -385,7 +385,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       type: 'text',
                       label: '第一个文本',
-                      typeName: '第一个文本', // 新增属性
+                      typeName: '第一个文本',
                     },
                   },
                 ],
@@ -396,7 +396,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _design: true,
                 props: {
                   label: '第二个',
-                  typeName: '第二个', // 新增属性
+                  typeName: '第二个',
                   icon: 'dehaze',
                 },
                 fieldGroup: [
@@ -408,7 +408,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       type: 'text',
                       label: '第二个文本',
-                      typeName: `第二个文本`, // 新增属性
+                      typeName: `第二个文本`,
                     },
                   },
                 ],
@@ -419,7 +419,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _design: true,
                 props: {
                   label: '第三个',
-                  typeName: '第三个', // 新增属性
+                  typeName: '第三个',
                   icon: 'dehaze',
                 },
                 fieldGroup: [
@@ -431,7 +431,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       type: 'text',
                       label: '第三个文本',
-                      typeName: '第三个文本', // 新增属性
+                      typeName: '第三个文本',
                     },
                   },
                 ],
@@ -445,7 +445,7 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               label: '步进器',
               icon: 'tab_unselected',
-              typeName: '步进器', // 新增属性
+              typeName: '步进器',
             },
             fieldGroup: [
               {
@@ -454,7 +454,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _design: true,
                 props: {
                   label: '第一个',
-                  typeName: '第一个', // 新增属性
+                  typeName: '第一个',
                   icon: 'dehaze',
                 },
                 fieldGroup: [
@@ -466,7 +466,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       type: 'text',
                       label: '第一个文本',
-                      typeName: '第一个文本', // 新增属性
+                      typeName: '第一个文本',
                     },
                   },
                 ],
@@ -477,7 +477,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _design: true,
                 props: {
                   label: '第二个',
-                  typeName: '第二个', // 新增属性
+                  typeName: '第二个',
                   icon: 'dehaze',
                 },
                 fieldGroup: [
@@ -489,7 +489,7 @@ export const presetResource: IEditorFormlyField[] = [
                     props: {
                       type: 'text',
                       label: '第二个文本',
-                      typeName: '第二个文本', // 新增属性
+                      typeName: '第二个文本',
                     },
                   },
                 ],
@@ -500,7 +500,7 @@ export const presetResource: IEditorFormlyField[] = [
                 _design: true,
                 props: {
                   label: '第三个',
-                  typeName: '第三个', // 新增属性
+                  typeName: '第三个',
                   icon: 'dehaze',
                 },
                 fieldGroup: [
@@ -512,7 +512,7 @@ export const presetResource: IEditorFormlyField[] = [
                       type: 'text',
                       _bindKey: true,
                       label: '第三个文本',
-                      typeName: '第三个文本', // 新增属性
+                      typeName: '第三个文本',
                     },
                   },
                 ],
@@ -525,7 +525,7 @@ export const presetResource: IEditorFormlyField[] = [
       //   _design: true,
       //   props: {
       //     label: '嵌套器：',
-      //     typeName: '嵌套器：', // 新增属性
+      //     typeName: '嵌套器：',
       //   },
       //   fieldGroup: [
       //     {
@@ -534,7 +534,7 @@ export const presetResource: IEditorFormlyField[] = [
       //       _design: true,
       //       props: {
       //         label: '标题',
-      //         typeName: '标题', // 新增属性
+      //         typeName: '标题',
       //         icon: 'density_medium',
       //       },
       //     },
@@ -548,14 +548,14 @@ export const presetResource: IEditorFormlyField[] = [
     _form: true,
     props: {
       label: '输入',
-      typeName: '输入', // 新增属性
+      typeName: '输入',
     },
     fieldGroup: [
       {
         _design: true,
         props: {
           label: '输入：',
-          typeName: '输入：', // 新增属性
+          typeName: '输入：',
         },
         fieldGroup: [
           {
@@ -566,7 +566,7 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               type: 'text',
               label: '单行文本',
-              typeName: '单行文本', // 新增属性
+              typeName: '单行文本',
               icon: 'format_color_text',
             },
           },
@@ -577,7 +577,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '多行文本',
-              typeName: '多行文本', // 新增属性
+              typeName: '多行文本',
               icon: 'text_fields',
             },
           },
@@ -589,7 +589,7 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               type: 'number',
               label: '数字',
-              typeName: '数字', // 新增属性
+              typeName: '数字',
               icon: '123',
             },
           },
@@ -601,19 +601,19 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               type: 'password',
               label: '密码',
-              typeName: '密码', // 新增属性
+              typeName: '密码',
               icon: 'password',
             },
           },
           {
-            key: 'color',
-            type: 'input',
+            key: 'color-picker',
+            type: 'color-picker',
             _design: true,
             _bindKey: true,
             props: {
-              type: 'color',
-              label: '颜色',
-              typeName: '颜色', // 新增属性
+              type: 'color-picker',
+              label: '颜色选择',
+              typeName: '颜色选择器',
               icon: 'color_lens',
             },
           },
@@ -624,7 +624,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '日期',
-              typeName: '日期', // 新增属性
+              typeName: '日期',
               icon: 'date_range',
             },
           },
@@ -635,7 +635,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '富文本',
-              typeName: '富文本', // 新增属性
+              typeName: '富文本',
               icon: 'text_snippet',
             },
           },
@@ -646,7 +646,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '手绘',
-              typeName: '手绘', // 新增属性
+              typeName: '手绘',
               icon: 'draw',
             },
           },
@@ -660,14 +660,14 @@ export const presetResource: IEditorFormlyField[] = [
     _form: true,
     props: {
       label: '选择',
-      typeName: '选择', // 新增属性
+      typeName: '选择',
     },
     fieldGroup: [
       {
         _design: true,
         props: {
           label: '选择：',
-          typeName: '选择：', // 新增属性
+          typeName: '选择：',
         },
         fieldGroup: [
           {
@@ -677,7 +677,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '单选',
-              typeName: '单选', // 新增属性
+              typeName: '单选',
               icon: 'radio_button_checked',
             },
           },
@@ -688,7 +688,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '多选',
-              typeName: '多选', // 新增属性
+              typeName: '多选',
               icon: 'check_box',
             },
           },
@@ -699,7 +699,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '开关',
-              typeName: '开关', // 新增属性
+              typeName: '开关',
               icon: 'toggle_on',
             },
           },
@@ -710,7 +710,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '下拉单选',
-              typeName: '下拉单选', // 新增属性
+              typeName: '下拉单选',
               icon: 'playlist_add_check',
             },
           },
@@ -721,7 +721,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '下拉多选',
-              typeName: '下拉多选', // 新增属性
+              typeName: '下拉多选',
               icon: 'checklist_rtl',
               multiple: true,
               selectAllOption: '选择全部',
@@ -740,7 +740,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '滑块',
-              typeName: '滑块', // 新增属性
+              typeName: '滑块',
               icon: 'linear_scale',
             },
           },
@@ -751,7 +751,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '评分',
-              typeName: '评分', // 新增属性
+              typeName: '评分',
               icon: 'star_half',
             },
           },
@@ -762,7 +762,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '下拉树形',
-              typeName: '下拉树形', // 新增属性
+              typeName: '下拉树形',
               icon: 'format_list_bulleted',
             },
           },
@@ -773,7 +773,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '弹窗选择',
-              typeName: '弹窗选择', // 新增属性
+              typeName: '弹窗选择',
               icon: 'view_compact_alt',
             },
           },
@@ -787,14 +787,14 @@ export const presetResource: IEditorFormlyField[] = [
     _form: true,
     props: {
       label: '上传',
-      typeName: '上传', // 新增属性
+      typeName: '上传',
     },
     fieldGroup: [
       {
         _design: true,
         props: {
           label: '上传：',
-          typeName: '上传：', // 新增属性
+          typeName: '上传：',
         },
         fieldGroup: [
           {
@@ -804,7 +804,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '照片',
-              typeName: '照片', // 新增属性
+              typeName: '照片',
               icon: 'photo',
             },
           },
@@ -815,7 +815,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '文件',
-              typeName: '文件', // 新增属性
+              typeName: '文件',
               icon: 'file_present',
             },
           },
@@ -829,14 +829,14 @@ export const presetResource: IEditorFormlyField[] = [
     _form: true,
     props: {
       label: '系统',
-      typeName: '系统', // 新增属性
+      typeName: '系统',
     },
     fieldGroup: [
       {
         _design: true,
         props: {
           label: '系统：',
-          typeName: '系统：', // 新增属性
+          typeName: '系统：',
         },
         fieldGroup: [
           {
@@ -846,7 +846,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '用户',
-              typeName: '用户', // 新增属性
+              typeName: '用户',
               icon: 'person',
             },
           },
@@ -857,7 +857,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '组织',
-              typeName: '组织', // 新增属性
+              typeName: '组织',
               icon: 'group',
             },
           },
@@ -867,7 +867,7 @@ export const presetResource: IEditorFormlyField[] = [
         _design: true,
         props: {
           label: '自动',
-          typeName: '自动：', // 新增属性
+          typeName: '自动：',
         },
         fieldGroup: [
           {
@@ -877,7 +877,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '编号生成',
-              typeName: '编号生成：', // 新增属性
+              typeName: '编号生成：',
               icon: 'numbers',
             },
           },
@@ -888,7 +888,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '数值计算',
-              typeName: '数值计算', // 新增属性
+              typeName: '数值计算',
               icon: 'calculate',
             },
           },
@@ -902,14 +902,14 @@ export const presetResource: IEditorFormlyField[] = [
     _form: true,
     props: {
       label: '位置',
-      typeName: '位置', // 新增属性
+      typeName: '位置',
     },
     fieldGroup: [
       {
         _design: true,
         props: {
           label: '位置',
-          typeName: '位置', // 新增属性
+          typeName: '位置',
         },
         fieldGroup: [
           {
@@ -919,7 +919,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '地址输入',
-              typeName: '地址输入', // 新增属性
+              typeName: '地址输入',
               icon: 'edit_location_alt',
             },
           },
@@ -930,7 +930,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '地图展示',
-              typeName: '地图展示', // 新增属性
+              typeName: '地图展示',
               icon: 'map',
             },
           },
@@ -941,7 +941,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '位置选择',
-              typeName: '位置选择', // 新增属性
+              typeName: '位置选择',
               icon: 'my_location',
             },
           },
@@ -954,7 +954,7 @@ export const presetResource: IEditorFormlyField[] = [
     _design: true,
     props: {
       label: '子表',
-      typeName: '子表', // 新增属性
+      typeName: '子表',
       wrapperAttr: {
         backgroundColor: '#f1f4fc',
       },
@@ -964,7 +964,7 @@ export const presetResource: IEditorFormlyField[] = [
         _design: true,
         props: {
           label: '输入：',
-          typeName: '输入：', // 新增属性
+          typeName: '输入：',
         },
         fieldGroup: [
           {
@@ -974,7 +974,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '普通输入',
-              typeName: '普通输入子表', // 新增属性
+              typeName: '普通输入子表',
               icon: 'subtitles',
             },
             fieldGroup: [
@@ -987,7 +987,7 @@ export const presetResource: IEditorFormlyField[] = [
                   row: 1,
                   appearance: 'fill',
                   label: '单行文本',
-                  typeName: '单行文本', // 新增属性
+                  typeName: '单行文本',
                 },
               },
             ],
@@ -998,7 +998,7 @@ export const presetResource: IEditorFormlyField[] = [
         _design: true,
         props: {
           label: '弹窗：',
-          typeName: '弹窗：', // 新增属性
+          typeName: '弹窗：',
         },
         fieldGroup: [
           {
@@ -1008,7 +1008,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '弹窗列表选择',
-              typeName: '弹窗列表选择', // 新增属性
+              typeName: '弹窗列表选择',
               icon: 'view_list',
             },
           },
@@ -1019,7 +1019,7 @@ export const presetResource: IEditorFormlyField[] = [
             _bindKey: true,
             props: {
               label: '弹窗表单输入',
-              typeName: '弹窗表单输入', // 新增属性
+              typeName: '弹窗表单输入',
               icon: 'view_stream',
             },
           },
@@ -1032,14 +1032,14 @@ export const presetResource: IEditorFormlyField[] = [
     _design: true,
     props: {
       label: '展示',
-      typeName: '展示', // 新增属性
+      typeName: '展示',
     },
     fieldGroup: [
       {
         _design: true,
         props: {
           label: '展示：',
-          typeName: '展示：', // 新增属性
+          typeName: '展示：',
         },
         fieldGroup: [
           {
@@ -1049,7 +1049,7 @@ export const presetResource: IEditorFormlyField[] = [
             props: {
               type: 'basic',
               label: '按钮',
-              typeName: '按钮', // 新增属性
+              typeName: '按钮',
               icon: 'crop_landscape',
             },
           },
@@ -1059,7 +1059,7 @@ export const presetResource: IEditorFormlyField[] = [
             _design: true,
             props: {
               label: '文本',
-              typeName: '文本', // 新增属性
+              typeName: '文本',
               icon: 'text_format',
             },
           },
@@ -1069,7 +1069,7 @@ export const presetResource: IEditorFormlyField[] = [
             _design: true,
             props: {
               label: '图片',
-              typeName: '图片', // 新增属性
+              typeName: '图片',
               icon: 'image',
             },
           },
@@ -1079,7 +1079,7 @@ export const presetResource: IEditorFormlyField[] = [
             _design: true,
             props: {
               label: '矩形',
-              typeName: '矩形', // 新增属性
+              typeName: '矩形',
               icon: 'crop_3_2',
             },
           },

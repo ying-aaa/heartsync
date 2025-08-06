@@ -1,5 +1,6 @@
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { FormlyFieldSubTableComponent } from './subtable/formly-field-subtable.component';
+import { FormlyColorPickerTypeComponent } from './color/color-picker.type';
 
 const appearance = 'outline';
 const density = 5;
@@ -207,4 +208,19 @@ export const formlyFormTypes = [
       },
     },
   },
+  {
+    name: 'color-picker',
+    component: FormlyColorPickerTypeComponent,
+    wrappers: ['form-field'],
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        typeName: '颜色选择器',
+        label: '颜色选择器',
+      },
+      expressions: {
+        ...densityExpressions,
+      },
+    },
+  }
 ];
