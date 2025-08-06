@@ -1,12 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FieldArrayType, FieldType, FormlyModule } from '@ngx-formly/core';
+import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
-export interface PeriodicElement {}
 
 @Component({
   selector: 'formly-field-subtable',

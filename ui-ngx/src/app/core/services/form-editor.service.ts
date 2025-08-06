@@ -70,9 +70,7 @@ export class FormEditorService {
             next: (widget: IFormWidgetConfig) => {
               this.widgetConfig.set(widget);
               const fieldConfig = widget.flatTypeField as IEditorFormlyField[];
-              if (
-                widget.subType === IFormSubTypes.FLAT
-              ) {
+              if (widget.subType === IFormSubTypes.FLAT) {
                 // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置
                 const fields = updateField(fieldConfig, (field) => {
                   field.fieldGroup = field.fieldArray.fieldGroup;
@@ -195,7 +193,6 @@ export class FormEditorService {
     selected = true,
   ) {
     field = deepClone(field);
-
     // 递归新的field为其添加id属性
     function addFieldId(field: IEditorFormlyField) {
       const key = generateUUID();
@@ -210,11 +207,8 @@ export class FormEditorService {
     }
     addFieldId(field);
 
-    // 子表的默认列数
-    if (toParentField[0]?.parent?.type === IFieldType.SUBTABLE) {
-      if (field.props) {
-        field.props['row'] = 1;
-      }
+    if (field.props) {
+      field.props['row'] = 1;
     }
 
     // 插入

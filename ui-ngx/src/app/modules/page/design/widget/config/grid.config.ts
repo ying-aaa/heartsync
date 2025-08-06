@@ -78,6 +78,17 @@ export const grid_config: IEditorFormlyField[] = [
         props: {
           label: '宽度',
           appearance: 'outline',
+          // 新增时默认添加的数据
+          defaultAddValue: {
+            _design: true,
+            type: 'column',
+            props: {
+              row: 1,
+            },
+            fieldGroup: [],
+          },
+          // 最后一条数据时是否允许删除
+          canRemoveLast: false,
         },
         className: 'hs-density--5',
         fieldArray: {

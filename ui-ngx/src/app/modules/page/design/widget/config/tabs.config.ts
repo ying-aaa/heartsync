@@ -18,6 +18,23 @@ export const tabs_config: IEditorFormlyField[] = [
         props: {
           label: '宽度',
           appearance: 'outline',
+          defaultAddValue: {
+            _design: true,
+            type: 'column',
+            props: {
+              label: '新页签',
+              typeName: '新页签',
+              icon: 'dehaze',
+              density: 1,
+              styles: {
+                rowGap: 12,
+                rowGapUnits: 'px',
+              },
+            },
+            fieldGroup: [],
+          },
+          // 最后一条数据时是否允许删除
+          canRemoveLast: false,
         },
         className: 'hs-density--5',
         fieldArray: {

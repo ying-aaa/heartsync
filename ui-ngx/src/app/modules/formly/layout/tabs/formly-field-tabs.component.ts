@@ -34,7 +34,6 @@ export class FormlyFieldTabsComponent
     const { action, field } = event.item.data;
     const fromParent: IEditorFormlyField[] = event.previousContainer.data;
     const toParent: IEditorFormlyField[] = event.container.data;
-    const toParentFieldId: string = event.container.id;
     const { previousIndex: formIndex, currentIndex: toIndex } = event;
 
     if (action === ICdkDrapActionType.COPY) {

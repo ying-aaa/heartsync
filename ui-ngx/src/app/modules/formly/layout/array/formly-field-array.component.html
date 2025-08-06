@@ -33,6 +33,9 @@
     >delete</mat-icon>
   </div>
   }
+
+  @let canAdd = this.field.props?.['canAdd'] ?? true;
+  @if(canAdd) {
   <button
     class="w-full mb-5px bg-transparent"
     mat-button
@@ -41,4 +44,5 @@
   >
     <mat-icon matChipAvatar>add</mat-icon> 新增
   </button>
+  }
 </div>

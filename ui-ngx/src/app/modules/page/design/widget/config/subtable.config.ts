@@ -28,6 +28,8 @@ export const subtable_config: IEditorFormlyField[] = [
         props: {
           label: '宽度',
           appearance: 'outline',
+          canRemoveLast: false,
+          canAdd: false
         },
         className: 'hs-density--5',
         fieldArray: {
