@@ -34,7 +34,7 @@ export class WidgetCesiumComponent implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   public loadResourceScript() {
-    const resourceUrls = ['/assets/cesium/Cesium.js', 'cesium-widgets.css'];
+    const resourceUrls = ['/assets/cesium/Cesium.js', '/assets/cesium/Widgets/widgets.css'];
     this.scriptLoaderService.loadScripts(resourceUrls).subscribe((res) => {
       initCesiumConfig(Cesium);
       this.initCesium();

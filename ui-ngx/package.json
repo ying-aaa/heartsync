@@ -30,6 +30,7 @@
     "@ngx-formly/material": "^6.3.12",
     "@types/jquery": "^3.5.32",
     "@types/jstree": "^3.3.46",
+    "@wangeditor/editor": "^5.1.23",
     "ace-builds": "^1.39.1",
     "angular-gridster2": "^19.0.0",
     "angular-split": "^19.0.0",

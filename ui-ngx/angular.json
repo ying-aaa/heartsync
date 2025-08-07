@@ -37,6 +37,11 @@
                 "output": "./assets/cesium"
               },
               {
+                "glob": "**/*",
+                "input": "node_modules/@wangeditor/editor/dist",
+                "output": "./assets/wangeditor"
+              },
+              {
                 "glob": "mode-html.js",
                 "input": "./node_modules/ace-builds/src-min-noconflict/",
                 "output": "/"
@@ -101,11 +106,6 @@
               {
                 "input": "src/styles/dark.less",
                 "bundleName": "dark-theme",
-                "inject": false
-              },
-              {
-                "input": "node_modules/cesium/Build/Cesium/Widgets/widgets.css",
-                "bundleName": "cesium-widgets",
                 "inject": false
               }
             ],
