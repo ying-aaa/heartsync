@@ -2,6 +2,7 @@ import { effect, Injectable, signal } from '@angular/core';
 import { IRadioConfig, IWidgetType } from '@src/app/shared/models/public-api';
 import { IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 import { Router } from '@angular/router';
+import { WidgetService } from '../http/widget.service';
 
 export interface IWidgetSelected {
   widgetName?: string;
@@ -30,12 +31,13 @@ export class WidgetEditorService {
 
   public currentWidgetType = signal<IWidgetType>(IWidgetType.FORM);
 
-  public currentWidgetConfig = signal<IFormWidgetConfig>(
-    {} as IFormWidgetConfig,
+  public currentWidgetConfig = signal<any>(
+    {} as any,
   );
 
   constructor(
     private router: Router,
+    private WidgetHttpService: WidgetService,
   ) {
     effect(() => {
       if (this.currentWidgetType()) {
@@ -47,6 +49,13 @@ export class WidgetEditorService {
   setWidgetId(widgetId: string) {
     if (widgetId === this.currentWidgetId()) return;
     this.currentWidgetId.set(widgetId);
+    this.loadWidgetInfo();
+  }
+
+  loadWidgetInfo() {
+    this.WidgetHttpService.findOneWidget(this.currentWidgetId()).subscribe((res) => {
+      this.currentWidgetConfig.set(res);
+    });
   }
 
   previewWidget(appId: string, widgetId: number, widgetType: IWidgetType) {
