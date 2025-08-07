@@ -1,0 +1,21 @@
+@switch (widgetType()) {
+@case (IWidgetType.CODE) {
+}
+@case (IWidgetType.CHART) {
+}
+@case (IWidgetType.CESIUM) {
+}
+@case (IWidgetType.X6) {
+x6
+}
+@case (IWidgetType.FORM) {
+  <hs-form-preview [widgetId]="widgetId()"></hs-form-preview>
+}
+@case (IWidgetType.LIST) {
+}
+@case (IWidgetType.DETAIL) {
+}
+@default {
+未找到该部件！
+}
+}

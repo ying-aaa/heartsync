@@ -1,9 +1,7 @@
-import { computed, effect, Injectable, signal, untracked } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { effect, Injectable, signal } from '@angular/core';
 import { IRadioConfig, IWidgetType } from '@src/app/shared/models/public-api';
-import { Location } from '@angular/common';
-import { FormWidgetService } from '@src/app/core/http/form-widget.service';
 import { IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
+import { Router } from '@angular/router';
 
 export interface IWidgetSelected {
   widgetName?: string;
@@ -36,7 +34,9 @@ export class WidgetEditorService {
     {} as IFormWidgetConfig,
   );
 
-  constructor() {
+  constructor(
+    private router: Router,
+  ) {
     effect(() => {
       if (this.currentWidgetType()) {
         this.currentWidgetId.set('');
@@ -47,5 +47,11 @@ export class WidgetEditorService {
   setWidgetId(widgetId: string) {
     if (widgetId === this.currentWidgetId()) return;
     this.currentWidgetId.set(widgetId);
+  }
+
+  previewWidget(appId: string, widgetId: number, widgetType: IWidgetType) {
+    this.router.navigate([`/design/${appId}/widget/preview`], {
+      queryParams: { widgetId, widgetType },
+    });
   }
 }

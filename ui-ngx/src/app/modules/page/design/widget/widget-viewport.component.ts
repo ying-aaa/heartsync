@@ -27,13 +27,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class WidgetViewportComponent {
   zoomControl = viewChild.required<WidgetZoomComponent>('ZoomControl');
 
-  get widgetId() {
-    return this.widgetEditorService.currentWidgetId();
-  }
-
-  get widgetType() {
-    return this.widgetEditorService.currentWidgetType();
-  }
+  widgetId = computed(() =>
+    this.widgetEditorService.currentWidgetId(),
+  );
+  
+  widgetType = computed(() =>
+    this.widgetEditorService.currentWidgetType(),
+  );
 
   constructor(
     private widgetEditorService: WidgetEditorService,

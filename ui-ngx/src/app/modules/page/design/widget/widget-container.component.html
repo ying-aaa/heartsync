@@ -1,30 +1,34 @@
-@switch (widgetType()) {
-  @case (widgetTypes.CODE) {
-    <hs-widget-code [widgetId]="widgetId()"> </hs-widget-code>
-  }
-  @case (widgetTypes.CHART) {
-    <hs-widget-chart></hs-widget-chart>
-  }
-  @case (widgetTypes.CESIUM) {
-    <hs-widget-cesium></hs-widget-cesium>
-  }
-  @case (widgetTypes.X6) {
-    x6
-  }
-  @case (widgetTypes.FORM) {
-    <hs-widget-form
-      [widgetId]="widgetId()"
-      [sizeStyle]="workSizeConfigStyle()"
-    >
-    </hs-widget-form>
-  }
-  @case (widgetTypes.LIST) {
-    <hs-widget-list></hs-widget-list>
-  }
-  @case (widgetTypes.DETAIL) {
-    <hs-widget-detail></hs-widget-detail>
-  }
-  @default {
-    暂未支持的类型！
-  }
+@if(loadingState()) {
+<hs-loading></hs-loading>
+}@else {
+@switch (widgetType) {
+@case (IWidgetType.CODE) {
+<hs-widget-code [widgetId]="widgetId()"> </hs-widget-code>
+}
+@case (IWidgetType.CHART) {
+<hs-widget-chart></hs-widget-chart>
+}
+@case (IWidgetType.CESIUM) {
+<hs-widget-cesium></hs-widget-cesium>
+}
+@case (IWidgetType.X6) {
+x6
+}
+@case (IWidgetType.FORM) {
+<hs-widget-form
+  [widgetId]="widgetId()"
+  [sizeStyle]="workSizeConfigStyle()"
+>
+</hs-widget-form>
+}
+@case (IWidgetType.LIST) {
+<hs-widget-list></hs-widget-list>
+}
+@case (IWidgetType.DETAIL) {
+<hs-widget-detail></hs-widget-detail>
+}
+@default {
+未找到该部件！
+}
+}
 }

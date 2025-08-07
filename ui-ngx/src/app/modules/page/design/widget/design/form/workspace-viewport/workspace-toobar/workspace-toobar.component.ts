@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
-import { ActivatedRoute, Router } from '@angular/router';
 import { IWidgetType } from '@src/app/shared/models/widget.model';
+import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
 import { getParamFromRoute } from '@src/app/core/utils';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hs-workspace-toobar',
@@ -17,13 +17,13 @@ import { getParamFromRoute } from '@src/app/core/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkspaceToobarComponent implements OnInit {
-  appId: string | null = getParamFromRoute('appId', this.route);
+  appId: string = getParamFromRoute('appId', this.route)!;
 
   constructor(
-    private router: Router,
     public dialog: MatDialog,
     private route: ActivatedRoute,
     public formEditorService: FormEditorService,
+    public widgetEditorService: WidgetEditorService,
   ) {}
 
   ngOnInit() {}
@@ -33,10 +33,12 @@ export class WorkspaceToobarComponent implements OnInit {
   }
 
   previewWidget() {
-    const widgetId = this.formEditorService.fieldsId();
-    this.router.navigate([`/design/${this.appId}/widget/preview`], {
-      queryParams: { widgetId },
-    });
+    const widgetId = this.formEditorService.fieldsId()!;
+    this.widgetEditorService.previewWidget(
+      this.appId,
+      widgetId,
+      IWidgetType.FORM,
+    );
   }
 
   openFieldCode() {

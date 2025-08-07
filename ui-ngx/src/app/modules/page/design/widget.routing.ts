@@ -14,7 +14,7 @@ export default [
     title: '部件预览',
     path: 'preview',
     loadComponent: () =>
-      import('./widget/widget-preview.component').then(
+      import('./widget/preview/widget-preview.component').then(
         (m) => m.WidgetPreviewComponent,
       ),
   },
