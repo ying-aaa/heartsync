@@ -4,12 +4,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
 import { WidgetContainerComponent } from './widget-container.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IWidgetSizeStyle } from '@src/app/shared/models/public-api';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
+import { getParamFromRoute } from '@src/app/core/utils';
 @Component({
   selector: 'hs-widget-preview',
   templateUrl: './widget-preview.component.html',
@@ -25,6 +26,9 @@ import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.comp
 })
 export class WidgetPreviewComponent {
   zoomControl = viewChild.required<WidgetZoomComponent>('ZoomControl');
+
+  appId: string | null = getParamFromRoute('appId', this.route);
+
   workSizeConfigStyle = {} as IWidgetSizeStyle;
 
   get widgetId() {
@@ -37,6 +41,7 @@ export class WidgetPreviewComponent {
 
   constructor(
     private widgetEditorService: WidgetEditorService,
+    private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
@@ -49,7 +54,7 @@ export class WidgetPreviewComponent {
   backWorkSpace() {
     const widgetId = this.widgetEditorService.currentWidgetId();
     const widgetType = this.widgetEditorService.currentWidgetType();
-    this.router.navigate([`/design/widget/${widgetType}`], {
+    this.router.navigate([`/design/${this.appId}/widget/${widgetType}`], {
       queryParams: { widgetId },
     });
   }

@@ -629,8 +629,8 @@ export const presetResource: IEditorFormlyField[] = [
             },
           },
           {
-            key: 'richText',
-            type: 'rich-text', // 假设你有富文本组件
+            key: 'richtext',
+            type: 'richtext', // 假设你有富文本组件
             _design: true,
             _bindKey: true,
             props: {

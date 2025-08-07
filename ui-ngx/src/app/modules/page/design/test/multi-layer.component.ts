@@ -5,7 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HsRichtextEditorComponent } from '@src/app/shared/components/hs-wang-editor/hs-richtext-editor.component';
+import { HsRichtextEditorComponent } from '@src/app/shared/components/hs-richtext-editor/hs-richtext-editor.component';
 
 @Component({
   selector: 'app-swap',
@@ -22,6 +22,5 @@ export class MultiLayerComponent implements OnInit {
     console.log('onChange:', value);
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

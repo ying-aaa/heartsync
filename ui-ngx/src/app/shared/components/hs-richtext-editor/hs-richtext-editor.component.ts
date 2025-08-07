@@ -2,12 +2,16 @@ import {
   AfterViewInit,
   Component,
   computed,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
   EventEmitter,
   forwardRef,
   input,
+  OnDestroy,
   OnInit,
   Output,
   signal,
+  viewChild,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
@@ -26,10 +30,17 @@ declare var wangEditor: any;
     },
   ],
 })
-export class HsRichtextEditorComponent implements OnInit, AfterViewInit {
+export class HsRichtextEditorComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   styles = input<object>({ width: '100%', height: '100%' });
   placeholder = input<string>('请输入内容...');
   toolbarKeys = input<string[]>();
+  disabled = input<boolean>(false);
+
+  ToolbarContainer = viewChild.required<ElementRef>('ToolbarContainer');
+  EditorContainer = viewChild.required<ElementRef>('EditorContainer');
+
   isDisabled = signal<boolean>(false);
 
   toolbar: any;
@@ -83,10 +94,12 @@ export class HsRichtextEditorComponent implements OnInit, AfterViewInit {
 
   initEditor() {
     const { createEditor, createToolbar } = wangEditor;
+    const ToolbarContainer = this.ToolbarContainer().nativeElement;
+    const EditorContainer = this.EditorContainer().nativeElement;
 
     const editorConfig = {
       placeholder: this.placeholder(),
-      autoFocus: true,
+      // autoFocus: true,
       scroll: true,
       onCreated: (editor: any) => {
         editor.setHtml(this.contentValue);
@@ -101,7 +114,7 @@ export class HsRichtextEditorComponent implements OnInit, AfterViewInit {
     };
 
     this.editor = createEditor({
-      selector: '#editor-container',
+      selector: EditorContainer,
       html: '<p><br></p>',
       config: editorConfig,
       mode: 'default',
@@ -109,7 +122,7 @@ export class HsRichtextEditorComponent implements OnInit, AfterViewInit {
 
     this.toolbar = createToolbar({
       editor: this.editor,
-      selector: '#toolbar-container',
+      selector: ToolbarContainer,
       config: this.toolbarConfig(),
       mode: 'default',
     });
@@ -119,5 +132,12 @@ export class HsRichtextEditorComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.loadResourceScript();
+  }
+
+  ngOnDestroy(): void {
+    this.toolbar?.destroy();
+    this.editor?.destroy();
+    this.toolbar = null;
+    this.editor = null;
   }
 }

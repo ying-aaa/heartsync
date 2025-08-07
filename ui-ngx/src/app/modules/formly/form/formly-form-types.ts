@@ -1,6 +1,7 @@
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { FormlyFieldSubTableComponent } from './subtable/formly-field-subtable.component';
 import { FormlyColorPickerTypeComponent } from './color/color-picker.type';
+import { FormlyRichtextTypeComponent } from './richtext/richtext-eidtor.type';
 
 const appearance = 'outline';
 const density = 5;
@@ -222,5 +223,20 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
-  }
+  },
+  {
+    name: 'richtext',
+    component: FormlyRichtextTypeComponent,
+    // wrappers: ['form-field'],
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        typeName: '颜色选择器',
+        label: '颜色选择器',
+      },
+      expressions: {
+        ...densityExpressions,
+      },
+    },
+  },
 ];

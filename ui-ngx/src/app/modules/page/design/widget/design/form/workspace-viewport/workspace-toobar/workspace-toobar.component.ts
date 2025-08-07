@@ -5,8 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IWidgetType } from '@src/app/shared/models/widget.model';
+import { getParamFromRoute } from '@src/app/core/utils';
 
 @Component({
   selector: 'hs-workspace-toobar',
@@ -16,9 +17,12 @@ import { IWidgetType } from '@src/app/shared/models/widget.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkspaceToobarComponent implements OnInit {
+  appId: string | null = getParamFromRoute('appId', this.route);
+
   constructor(
-    public dialog: MatDialog,
     private router: Router,
+    public dialog: MatDialog,
+    private route: ActivatedRoute,
     public formEditorService: FormEditorService,
   ) {}
 
@@ -30,7 +34,7 @@ export class WorkspaceToobarComponent implements OnInit {
 
   previewWidget() {
     const widgetId = this.formEditorService.fieldsId();
-    this.router.navigate([`/design/widget/preview`], {
+    this.router.navigate([`/design/${this.appId}/widget/preview`], {
       queryParams: { widgetId },
     });
   }
