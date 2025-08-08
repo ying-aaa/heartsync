@@ -53,6 +53,7 @@
     "ngx-toastr": "^19.0.0",
     "prettier": "^3.5.3",
     "rxjs": "~7.8.0",
+    "signature_pad": "^5.0.10",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

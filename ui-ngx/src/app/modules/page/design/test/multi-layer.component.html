@@ -1,6 +1,6 @@
-<hs-richtext-editor
-  [(ngModel)]="value"
-  [disabled]="disabled"
-  placeholder="你好世界！"
-  (onChange)="onChange($event)"
-></hs-richtext-editor>
+<content class="wh-full">
+  <hs-draw
+    [(ngModel)]="value"
+    [disabled]="false"
+  ></hs-draw>
+</content>

@@ -66,6 +66,7 @@ export class FormEditorService {
     effect(
       () => {
         if (this.fieldsId()) {
+          this.fields.set([]);
           this.formWidgetService.getFormWidgetById(this.fieldsId()!).subscribe({
             next: (widget: IFormWidgetConfig) => {
               this.widgetConfig.set(widget);

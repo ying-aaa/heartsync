@@ -1,20 +1,20 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewEncapsulation,
   OnInit,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HsRichtextEditorComponent } from '@src/app/shared/components/hs-richtext-editor/hs-richtext-editor.component';
+import { HsDrawComponent } from '@src/app/shared/components/hs-draw/hs-draw.component';
 
 @Component({
   selector: 'app-swap',
   templateUrl: './multi-layer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [HsRichtextEditorComponent, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, HsDrawComponent, FormsModule, ReactiveFormsModule],
 })
 export class MultiLayerComponent implements OnInit {
-  value = '';
+  value = []
 
   disabled = false;
 

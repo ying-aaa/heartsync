@@ -1,0 +1,46 @@
+<div
+  class="hs-draw-wrappper"
+  [style]="styles()"
+>
+  <canvas
+    #canvasContainter
+    class="block h-0 flex-1"
+  ></canvas>
+  <mat-divider></mat-divider>
+  <div class="hs-draw-toolbar">
+    @for (item of toolbarBtns; track $index) {
+    <button
+      mat-icon-button
+      [disabled]="isDisabled()"
+      [matTooltip]="item.tooltip"
+      [matMenuTriggerFor]="item.children ? menu : null"
+      (click)="item.action && item.action()"
+    >
+      <mat-icon>{{ item.icon }}</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      @if(item.children) {
+      @for (child of item.children; track $index) {
+      <button
+        mat-menu-item
+        (click)="child.action()"
+      >
+        <!-- <mat-icon>{{ child.icon }}</mat-icon> -->
+        <span>{{ child.tooltip }}</span>
+      </button>
+      }
+      }
+    </mat-menu>
+    }
+    <button
+      tooltip='颜色'
+      mat-icon-button
+      [disabled]="isDisabled()"
+      [style.color]="!isDisabled() && color()"
+      [(colorPicker)]="color"
+      (colorPickerChange)="signaturePad.penColor = $event;"
+    >
+      <mat-icon>color_lens</mat-icon>
+    </button>
+  </div>
+</div>

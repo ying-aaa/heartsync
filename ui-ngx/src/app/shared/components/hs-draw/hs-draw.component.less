@@ -1,0 +1,17 @@
+@import 'themeMixin';
+
+.themeMixin({
+  :host {
+    .hs-draw-wrappper{
+      border: 1px solid @base-color-10;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+
+      .hs-draw-toolbar{
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+});

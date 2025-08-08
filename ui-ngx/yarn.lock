@@ -7540,6 +7540,11 @@ signal-exit@^4.0.1, signal-exit@^4.1.0:
   resolved "https://registry.npmmirror.com/signal-exit/-/signal-exit-4.1.0.tgz"
   integrity sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==
 
+signature_pad@^5.0.10:
+  version "5.0.10"
+  resolved "https://registry.npmmirror.com/signature_pad/-/signature_pad-5.0.10.tgz#765a8e2ebab2999ab9244de6c2ffb7e868d1cbb9"
+  integrity sha512-t7rLjpAtxYAIrTHr7EKfY8ulTWF+G/LFMto502a61KZvZNWZSwhTPeLE6171YMDd2sSYRBwQ17ENK5huAi9Rsg==
+
 sigstore@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmmirror.com/sigstore/-/sigstore-3.0.0.tgz"

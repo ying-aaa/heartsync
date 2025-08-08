@@ -79,8 +79,8 @@ export class HsThemeService {
 
   public getBaseColor(opacity: number): string {
     return this.getCurrentThemeConfig([
-      `rgba(0, 0, 0, .${opacity})`,
-      `rgba(255, 255, 255, .${opacity})`,
+      `rgba(0, 0, 0, ${opacity})`,
+      `rgba(255, 255, 255, ${opacity})`,
     ]);
   }
 }

@@ -448,3 +448,39 @@ export function getRoutePathSegments(route: ActivatedRoute | null): Route[] {
   }
   return segments;
 }
+
+/**
+ * download 根据地址下载文件，可自定义文件名
+ * @param {string} dataURL - 文件地址
+ * @param {string} [fileName] - 自定义文件名
+ * @returns {void}
+ */
+export function download(dataURL: string, fileName: string) {
+  function dataURLToBlob(dataURL: string) {
+    const parts = dataURL.split(';base64,');
+    const contentType = parts[0].split(':')[1];
+    const raw = window.atob(parts[1]);
+    const rawLength = raw.length;
+    const uInt8Array = new Uint8Array(rawLength);
+
+    for (let i = 0; i < rawLength; ++i) {
+      uInt8Array[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([uInt8Array], { type: contentType });
+  }
+
+  const blob = dataURLToBlob(dataURL);
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  // 隐藏链接元素
+  a.style.display = 'none';
+  a.href = url;
+  a.download = fileName;
+
+  document.body.appendChild(a);
+  a.click();
+
+  window.URL.revokeObjectURL(url);
+}
