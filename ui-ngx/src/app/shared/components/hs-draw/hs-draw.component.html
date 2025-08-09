@@ -11,6 +11,7 @@
     @for (item of toolbarBtns; track $index) {
     <button
       mat-icon-button
+      class="hs-icon-button-32"
       [disabled]="isDisabled()"
       [matTooltip]="item.tooltip"
       [matMenuTriggerFor]="item.children ? menu : null"
@@ -35,6 +36,7 @@
     <button
       tooltip='颜色'
       mat-icon-button
+      class="hs-icon-button-32"
       [disabled]="isDisabled()"
       [style.color]="!isDisabled() && color()"
       [(colorPicker)]="color"

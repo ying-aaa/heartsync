@@ -2,6 +2,7 @@ import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { FormlyFieldSubTableComponent } from './subtable/formly-field-subtable.component';
 import { FormlyColorPickerTypeComponent } from './color/color-picker.type';
 import { FormlyRichtextTypeComponent } from './richtext/richtext-eidtor.type';
+import { FormlyDrawTypeComponent } from './draw/draw.type';
 
 const appearance = 'outline';
 const density = 5;
@@ -233,6 +234,20 @@ export const formlyFormTypes = [
         ...baseProps,
         typeName: '颜色选择器',
         label: '颜色选择器',
+      },
+      expressions: {
+        ...densityExpressions,
+      },
+    },
+  },
+  {
+    name: 'draw',
+    component: FormlyDrawTypeComponent,
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        typeName: '签名',
+        label: '签名',
       },
       expressions: {
         ...densityExpressions,
