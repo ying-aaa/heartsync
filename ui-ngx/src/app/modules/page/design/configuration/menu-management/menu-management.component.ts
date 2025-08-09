@@ -19,6 +19,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { TreeSelectComponent } from '@src/app/shared/components/hs-tree-select/hs-tree-select.component';
 import { FileTreeService } from '@src/app/core/http/file-tree.service';
 import { delay } from 'rxjs';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 interface FlatIMenuNode extends IMenuNode {
   level: number;
@@ -47,7 +50,10 @@ interface FlatIMenuNode extends IMenuNode {
     HsLoadingModule,
     MatTooltipModule,
     MatMenuModule,
-    TreeSelectComponent
+    TreeSelectComponent,
+    NgScrollbarModule,
+    MatSelectModule,
+    MatFormFieldModule
   ],
 })
 export class MenuManagementComponent implements OnInit {
@@ -112,7 +118,6 @@ export class MenuManagementComponent implements OnInit {
 
   // 根据nodeId查找节点并更新节点值
   changeNodeValue(nodeId: string, field: keyof IMenuNode, value: any) {
-    console.log("%c Line:118 🍫 nodeId", "color:#fca650", nodeId, value);
     let isChanged = false;
     let matchedNode: IMenuNode | undefined;
     const updateNodeValue = (nodes: IMenuNode[]): IMenuNode[] => {

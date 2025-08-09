@@ -123,6 +123,7 @@ export class TreeSelectComponent
   constructor() {
     effect(() => {
       this.selectedValue.set(this.value() as any);
+      this.dataSource.data = this.nodes();
     });
     this.searchControl.valueChanges.subscribe((searchString: string | null) => {
       this.filterTree(searchString || '');
@@ -339,9 +340,7 @@ export class TreeSelectComponent
     this.disabled = disabled;
   }
 
-  ngOnInit(): void {
-    this.dataSource.data = this.nodes();
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit() {
     this.formFieldRefWidth =

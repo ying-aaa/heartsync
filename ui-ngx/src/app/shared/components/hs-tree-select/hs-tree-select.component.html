@@ -6,34 +6,25 @@
   [appearance]="appearance"
   class="w-full hs-density--5 relative"
 >
-  <!-- <input
-    matInput
-    type="text"
-    [(ngModel)]="value"
-    placeholder="你好世界"
-  /> -->
-  <select
-    matNativeControl
-    [disabled]="disabled"
-  ></select>
+  <mat-select></mat-select>
   @let displayValue = multiple ? selectedValuesStr() : selectedValueLabel();
   @if (displayValue) {
-    <div class="hs-tree-select-value">
-      {{ displayValue }}
-    </div>
+  <div class="hs-tree-select-value">
+    {{ displayValue }}
+  </div>
   } @else {
-    <mat-label (click)="$event.stopPropagation()">{{ placeholder }}</mat-label>
+  <mat-label class="opacity-50">{{ placeholder }}</mat-label>
   }
 
   @if (displayValue && allowClear) {
-    <button
-      matSuffix
-      mat-icon-button
-      (click)="resetValue(); $event.stopPropagation()"
-      class="hs-icon-button-24 mr-3px"
-    >
-      <mat-icon>close</mat-icon>
-    </button>
+  <button
+    matSuffix
+    mat-icon-button
+    (click)="resetValue(); $event.stopPropagation()"
+    class="hs-icon-button-24 mr-3px"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
   }
 </mat-form-field>
 
@@ -48,37 +39,37 @@
     class="hs-overlay-container"
   >
     @if (filter) {
-      <mat-form-field
-        appearance="outline"
-        class="w-full hs-density--5"
+    <mat-form-field
+      appearance="outline"
+      class="w-full hs-density--5"
+    >
+      <input
+        #searchInputRef
+        matInput
+        type="text"
+        [formControl]="searchControl"
+      />
+      @if (searchControl.getRawValue()) {
+      <button
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="searchControl.setValue('')"
+        class="hs-icon-button-24 mr-3px"
       >
-        <input
-          #searchInputRef
-          matInput
-          type="text"
-          [formControl]="searchControl"
-        />
-        @if (searchControl.getRawValue()) {
-          <button
-            matSuffix
-            mat-icon-button
-            aria-label="Clear"
-            (click)="searchControl.setValue('')"
-            class="hs-icon-button-24 mr-3px"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        } @else {
-          <button
-            disabled
-            matSuffix
-            mat-icon-button
-            class="hs-icon-button-24 mr-3px"
-          >
-            <mat-icon>search</mat-icon>
-          </button>
-        }
-      </mat-form-field>
+        <mat-icon>close</mat-icon>
+      </button>
+      } @else {
+      <button
+        disabled
+        matSuffix
+        mat-icon-button
+        class="hs-icon-button-24 mr-3px"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+      }
+    </mat-form-field>
     }
 
     <mat-tree
@@ -100,12 +91,12 @@
         >
           <div class="w-24px"></div>
           @if (multiple) {
-            <mat-checkbox
-              class="hs-tree-select-checkbox hs-density--5"
-              [checked]="selectedValues().includes(node[keyField])"
-              (change)="selectMultipleNode(node, $event)"
-            >
-            </mat-checkbox>
+          <mat-checkbox
+            class="hs-tree-select-checkbox hs-density--5"
+            [checked]="selectedValues().includes(node[keyField])"
+            (change)="selectMultipleNode(node, $event)"
+          >
+          </mat-checkbox>
           }
           <span>{{ node.name }}</span>
         </div>
@@ -123,19 +114,19 @@
           >
             <mat-icon class="mat-icon-rtl-mirror">
               {{
-                treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'
+              treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'
               }}
             </mat-icon>
           </button>
           @if (multiple) {
-            <mat-checkbox
-              class="hs-tree-select-checkbox hs-density--5"
-              (change)="selectMultipleNode(node, $event)"
-              [indeterminate]="hasChildNodeSomeSelected(node)"
-              [checked]="selectedValues().includes(node[keyField])"
-              (click)="$event.stopPropagation()"
-            >
-            </mat-checkbox>
+          <mat-checkbox
+            class="hs-tree-select-checkbox hs-density--5"
+            (change)="selectMultipleNode(node, $event)"
+            [indeterminate]="hasChildNodeSomeSelected(node)"
+            [checked]="selectedValues().includes(node[keyField])"
+            (click)="$event.stopPropagation()"
+          >
+          </mat-checkbox>
           }
           <span>{{ node.name }}</span>
         </div>
