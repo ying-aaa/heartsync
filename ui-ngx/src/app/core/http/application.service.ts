@@ -18,11 +18,11 @@ export interface UpdateApplicationDto {
   description?: string;
 }
 
-export interface HsApplication extends IBaseResponseData {
+export interface IAppConfig extends IBaseResponseData {
   directoryId: string;
   name: string;
   type?: string; // 默认值为 'web'
-  imageUrl?: object;
+  imageUrl?: string;
   description?: string;
   version?: string;
   status: string;
@@ -39,16 +39,16 @@ export class ApplicationService {
   // 创建应用
   createApplication(
     createApplicationDto: CreateApplicationDto,
-  ): Observable<HsApplication> {
-    return this.http.post<HsApplication>(this.apiUrl, createApplicationDto);
+  ): Observable<IAppConfig> {
+    return this.http.post<IAppConfig>(this.apiUrl, createApplicationDto);
   }
 
   // 获取所有应用（分页）
   findAllApplications(
     pageLink: PageLink,
-  ): Observable<IResponseStructure<HsApplication>> {
+  ): Observable<IResponseStructure<IAppConfig>> {
     const params = pageLink.toQueryHttp();
-    return this.http.get<IResponseStructure<HsApplication>>(this.apiUrl, {
+    return this.http.get<IResponseStructure<IAppConfig>>(this.apiUrl, {
       params,
     });
   }
@@ -62,16 +62,16 @@ export class ApplicationService {
   }
 
   // 根据ID获取单个应用
-  findApplicationById(id: string): Observable<HsApplication> {
-    return this.http.get<HsApplication>(`${this.apiUrl}/${id}`);
+  findApplicationById(id: string): Observable<IAppConfig> {
+    return this.http.get<IAppConfig>(`${this.apiUrl}/${id}`);
   }
 
   // 更新应用
   updateApplication(
     id: string,
     updateApplicationDto: UpdateApplicationDto,
-  ): Observable<HsApplication> {
-    return this.http.put<HsApplication>(
+  ): Observable<IAppConfig> {
+    return this.http.put<IAppConfig>(
       `${this.apiUrl}/${id}`,
       updateApplicationDto,
     );

@@ -17,7 +17,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { HsInlineEditorModule } from '@src/app/shared/components/hs-inline-editor/inline-editor.module';
 import {
   ApplicationService,
-  HsApplication,
+  IAppConfig,
 } from '@src/app/core/http/application.service';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 @Component({
@@ -41,7 +41,7 @@ import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 })
 export class AppWorkbenchComponent implements OnInit {
   appValue = new FormControl('');
-  appList = signal<HsApplication[]>([]);
+  appList = signal<IAppConfig[]>([]);
 
   pageLink = new PageLink(0, 100);
 

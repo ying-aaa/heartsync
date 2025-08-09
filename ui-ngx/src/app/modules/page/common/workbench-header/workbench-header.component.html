@@ -1,9 +1,7 @@
 <!-- color-#f5f9fff2 bg-#19282d -->
-<div
-  class="color-#f5f9fff2 bg-#19282d h-64px flex items-center justify-between overflow-hidden"
->
+<div class="color-#f5f9fff2 bg-#19282d h-64px flex items-center justify-between overflow-hidden">
   <div
-    class="w-180px h-full flex-center"
+    class="min-w-180px max-w-225px h-full flex items-center px-20px"
     matRipple
     matRippleColor="#ffffff20"
     [routerLink]="logoSkip()"
@@ -11,58 +9,60 @@
       'cursor-pointer': logoSkip(),
     }"
   >
-    <img
-      class="w-32px h-32px mr-8px"
-      src="assets/workbench/heartsync.png"
-    />
-    HeartSync
+    <ng-content>
+      <img
+        class="w-32px h-32px mr-8px"
+        src="assets/workbench/heartsync.png"
+      />
+      <span class="flex-1 truncate">HeartSync</span>
+    </ng-content>
   </div>
   <div class="router-link flex-1 flex">
     @for (item of menuList; track $index) {
-      @let isActiveRoute =
-        item.path === outlet()!.activatedRoute.routeConfig?.path;
-      <div
-        class="h-50px line-height-50px rounded-8px mx-3px"
-        [class]="{
+    @let isActiveRoute =
+    item.path === outlet()!.activatedRoute.routeConfig?.path;
+    <div
+      class="h-50px line-height-50px rounded-8px mx-3px"
+      [class]="{
           'bg-#2F90B9': isActiveRoute,
           'hover:bg-#2F90B930': !isActiveRoute,
         }"
-        matRipple
-        matRippleColor="#ffffff20"
+      matRipple
+      matRippleColor="#ffffff20"
+    >
+      <a
+        class="flex items-center w-full h-full px-16px"
+        [routerLink]="item.path"
       >
-        <a
-          class="flex items-center w-full h-full px-16px"
-          [routerLink]="item.path"
-        >
-          @let icon_name = item.data?.['icon'];
-          @if (icon_name) {
-            <mat-icon class="mat-icon-rtl-mirror -mt-2px mr-5px h-22px!">
-              {{ icon_name }}
-            </mat-icon>
-          }
-          {{ item.title }}
-        </a>
-      </div>
+        @let icon_name = item.data?.['icon'];
+        @if (icon_name) {
+        <mat-icon class="mat-icon-rtl-mirror -mt-2px mr-5px h-22px!">
+          {{ icon_name }}
+        </mat-icon>
+        }
+        {{ item.title }}
+      </a>
+    </div>
     }
   </div>
   <div class="header-toobar w-auto flex gap-16px items-center px-20px">
     <verse-theme></verse-theme>
     @let systemConfig =
-      [
-        { iconUrl: '/assets/workbench/settings.png', size: 20 },
-        { iconUrl: '/assets/workbench/message.png', size: 24 },
-      ];
+    [
+    { iconUrl: '/assets/workbench/settings.png', size: 20 },
+    { iconUrl: '/assets/workbench/message.png', size: 24 },
+    ];
     @for (item of systemConfig; track $index) {
-      <div
-        class="bg-#ffffff20 rounded-20px w-40px h-40px flex flex-center cursor-pointer"
-        matRipple
-        matRippleColor="#ffffff20"
-      >
-        <img
-          [width]="item.size"
-          [src]="item.iconUrl"
-        />
-      </div>
+    <div
+      class="bg-#ffffff20 rounded-20px w-40px h-40px flex flex-center cursor-pointer"
+      matRipple
+      matRippleColor="#ffffff20"
+    >
+      <img
+        [width]="item.size"
+        [src]="item.iconUrl"
+      />
+    </div>
     }
   </div>
   <hs-workbench-user-dropdown></hs-workbench-user-dropdown>
