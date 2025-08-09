@@ -212,7 +212,7 @@ export class HsDrawComponent implements OnInit, AfterViewInit, OnDestroy {
     canvas.width = canvas.offsetWidth * ratio;
     canvas.height = canvas.offsetHeight * ratio;
     canvas.getContext('2d').scale(ratio, ratio);
-    this.signaturePad.clear();
+    this.signaturePad?.clear();
   }
 
   initDraw() {
@@ -242,7 +242,7 @@ export class HsDrawComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.events.forEach(({ eventName, callback }) => {
-      this.signaturePad.removeEventListener(eventName, callback);
+      this.signaturePad?.removeEventListener(eventName, callback);
     });
   }
 }
