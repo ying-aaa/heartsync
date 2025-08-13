@@ -36,7 +36,9 @@ export default [
   {
     title: '记录',
     path: 'record',
-    data: { preload: true, key: 'record', use: IRouterUse.MENU },
+    data: {
+      // preload: true, key: 'record', use: IRouterUse.MENU
+    },
     canActivate: [OverseasGuard],
     loadComponent: () =>
       import('./self-record/self-record.component').then(
