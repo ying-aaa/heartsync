@@ -12,11 +12,11 @@ export interface PeriodicElement {
 
 @Component({
   selector: 'formly-field-subtable-item',
-  templateUrl: './formly-field-subtable-item.component.html',
-  styleUrls: ['./formly-field-subtable-item.component.less'],
+  templateUrl: './subtable-item.type.html',
+  styleUrls: ['./subtable-item.type.less'],
   imports: [FormlyModule, MatButtonModule, MatTableModule],
 })
-export class FormlyFieldSubTableItemComponent
+export class FormlyFieldSubTableItem
   extends FieldWrapper<IEditorFormlyField>
   implements OnInit
 {

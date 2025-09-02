@@ -13,8 +13,8 @@ import { FieldType, FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 @Component({
   selector: 'formly-field-stepper',
-  templateUrl: './formly-field-stepper.component.html',
-  styleUrls: ['./formly-field-stepper.component.less'],
+  templateUrl: './stepper.type.html',
+  styleUrls: ['./stepper.type.less'],
   imports: [
     MatButtonModule,
     MatStepperModule,
@@ -25,7 +25,7 @@ import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
     FormlyModule,
   ],
 })
-export class FormlyFieldStepperComponent
+export class FormlyFieldStepper
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {

@@ -13,12 +13,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'formly-field-accordion',
-  templateUrl: './formly-field-accordion.component.html',
-  styleUrls: ['./formly-field-accordion.component.less'],
+  templateUrl: './accordion.type.html',
+  styleUrls: ['./accordion.type.less'],
   imports: [MatExpansionModule, FormlyModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormlyFieldAccordionComponent
+export class FormlyFieldAccordion
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {

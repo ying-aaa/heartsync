@@ -5,11 +5,11 @@ import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 
 @Component({
   selector: 'formly-field-canvas',
-  templateUrl: './formly-field-canvas.component.html',
-  styleUrls: ['./formly-field-canvas.component.less'],
+  templateUrl: './canvas.type.html',
+  styleUrls: ['./canvas.type.less'],
   imports: [FormlyModule, CdkDrag],
 })
-export class FormlyFieldCanvasComponent
+export class FormlyFieldCanvas
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {

@@ -21,7 +21,7 @@ import { NgScrollbarExt, NgScrollbarModule } from 'ngx-scrollbar';
   </ng-scrollbar>`,
   imports: [NgScrollbarModule, FormlyModule],
 })
-export class FormlyFieldScrollComponent extends FieldWrapper<IEditorFormlyField> {
+export class FormlyFieldScroll extends FieldWrapper<IEditorFormlyField> {
   constructor() {
     super();
   }

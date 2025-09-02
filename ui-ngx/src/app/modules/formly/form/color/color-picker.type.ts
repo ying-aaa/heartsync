@@ -39,6 +39,6 @@ interface InputProps extends FormlyFieldProps {}
   `,
   imports: [MatInputModule, ReactiveFormsModule, ColorPickerDirective],
 })
-export class FormlyColorPickerTypeComponent extends FieldType<
+export class FormlyFieldColorPicker extends FieldType<
   FieldTypeConfig<InputProps>
 > {}

@@ -11,10 +11,10 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { FormlyMatSliderModule } from '@ngx-formly/material/slider';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
-import { formlyDisplayTypes } from '@src/app/modules/formly/display/formly-display-types';
-import { formlyFormTypes } from '@src/app/modules/formly/form/formly-form-types';
-import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout-types';
-import { FormlyFieldScrollComponent } from '@src/app/modules/formly/layout/scroll/formly-field-scroll.component';
+import { formlyDisplayTypes } from '@src/app/modules/formly/display/formly-display.config';
+import { formlyFormTypes } from '@src/app/modules/formly/form/formly-form.config';
+import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout.config';
+import { FormlyFieldScroll } from '@src/app/modules/formly/layout/scroll/scroll.type';
 import {
   IEditorFormlyField,
   IFieldType,
@@ -59,7 +59,7 @@ export function runExtension(field: IEditorFormlyField) {
     FormlyModule.forRoot({
       types: [...formlyLayoutTypes, ...formlyFormTypes, ...formlyDisplayTypes],
       validationMessages: [{ name: 'required', message: '这个字段是必填的！' }],
-      wrappers: [{ name: 'scroll', component: FormlyFieldScrollComponent }],
+      wrappers: [{ name: 'scroll', component: FormlyFieldScroll }],
       extensions: [
         {
           name: 'run',

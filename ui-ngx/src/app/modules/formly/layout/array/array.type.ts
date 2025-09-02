@@ -6,12 +6,10 @@ import {
   CdkDropList,
 } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import {
   FieldArrayType,
-  FormlyFormBuilder,
   FormlyModule,
 } from '@ngx-formly/core';
 import { FormEditorService } from '@src/app/core/services/form-editor.service';
@@ -21,8 +19,8 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'formly-field-array',
-  templateUrl: './formly-field-array.component.html',
-  styleUrls: ['./formly-field-array.component.less'],
+  templateUrl: './array.type.html',
+  styleUrls: ['./array.type.less'],
   imports: [
     MatIcon,
     CdkDrag,
@@ -33,7 +31,7 @@ import { ToastrService } from 'ngx-toastr';
     CdkDragPlaceholder,
   ],
 })
-export class FormlyFieldArrayComponent
+export class FormlyFieldArray
   extends FieldArrayType<IEditorFormlyField>
   implements OnInit
 {

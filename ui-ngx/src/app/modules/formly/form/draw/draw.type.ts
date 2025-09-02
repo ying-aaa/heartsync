@@ -8,7 +8,7 @@ import { HsDrawComponent } from '@src/app/shared/components/hs-draw/hs-draw.comp
 interface InputProps extends FormlyFieldProps {}
 
 @Component({
-  selector: 'formly-field-richtext-editor',
+  selector: 'formly-field-draw',
   template: `
     <hs-draw
       (onChange)="formControl.setValue($event)"
@@ -18,6 +18,6 @@ interface InputProps extends FormlyFieldProps {}
   `,
   imports: [MatInputModule, ReactiveFormsModule, HsDrawComponent],
 })
-export class FormlyDrawTypeComponent extends FieldType<
+export class FormlyFieldDraw extends FieldType<
   FieldTypeConfig<InputProps>
 > {}

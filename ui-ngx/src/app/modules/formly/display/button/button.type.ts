@@ -89,7 +89,7 @@ import { ConcatUnitsPipe } from '@shared/pipes/units.pipe';
   `,
   imports: [MatButtonModule, MatIconModule, CommonModule, ConcatUnitsPipe],
 })
-export class FormlyFieldButtonComponent
+export class FormlyFieldButton
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {

@@ -8,7 +8,7 @@ import { HsRichtextEditorComponent } from '@src/app/shared/components/hs-richtex
 interface InputProps extends FormlyFieldProps {}
 
 @Component({
-  selector: 'formly-field-richtext-editor',
+  selector: 'formly-field-richtext',
   template: `
     <hs-richtext-editor
       (onChange)="formControl.setValue($event)"
@@ -18,6 +18,6 @@ interface InputProps extends FormlyFieldProps {}
   `,
   imports: [MatInputModule, ReactiveFormsModule, HsRichtextEditorComponent],
 })
-export class FormlyRichtextTypeComponent extends FieldType<
+export class FormlyFieldRichtext extends FieldType<
   FieldTypeConfig<InputProps>
 > {}

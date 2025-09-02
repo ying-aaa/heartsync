@@ -2,16 +2,16 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormlyModule, FormlyConfig } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { formlyDisplayTypes } from '@src/app/modules/formly/display/formly-display-types';
-import { formlyFormTypes } from '@src/app/modules/formly/form/formly-form-types';
-import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout-types';
-import { FormlyFieldScrollComponent } from '@src/app/modules/formly/layout/scroll/formly-field-scroll.component';
+import { formlyDisplayTypes } from '@src/app/modules/formly/display/formly-display.config';
+import { formlyFormTypes } from '@src/app/modules/formly/form/formly-form.config';
+import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout.config';
+import { FormlyFieldScroll } from '@src/app/modules/formly/layout/scroll/scroll.type';
 import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/public-api';
-import { FormlyContorlWrapperComponent } from './layout/control/formly-control-wrapper.component';
-import { FormlyFieldSubTableItemComponent } from './layout/subtable-item/formly-field-subtable-item.component';
+import { FormlyWrapperContorl } from './layout/control/control.wrapper';
+import { FormlyFieldSubTableItem } from './layout/subtable-item/subtable-item.type';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -76,11 +76,11 @@ export function editorExtension(field: IEditorFormlyField) {
       types: [...formlyFormTypes, ...formlyLayoutTypes, ...formlyDisplayTypes],
       validationMessages: [{ name: 'required', message: '这个字段是必填的！' }],
       wrappers: [
-        { name: 'contorl', component: FormlyContorlWrapperComponent },
-        { name: 'scroll', component: FormlyFieldScrollComponent },
+        { name: 'contorl', component: FormlyWrapperContorl },
+        { name: 'scroll', component: FormlyFieldScroll },
         {
           name: 'subtableitem',
-          component: FormlyFieldSubTableItemComponent,
+          component: FormlyFieldSubTableItem,
         },
       ],
       extensions: [

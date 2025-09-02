@@ -1,8 +1,8 @@
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
-import { FormlyFieldSubTableComponent } from './subtable/formly-field-subtable.component';
-import { FormlyColorPickerTypeComponent } from './color/color-picker.type';
-import { FormlyRichtextTypeComponent } from './richtext/richtext-eidtor.type';
-import { FormlyDrawTypeComponent } from './draw/draw.type';
+import { FormlyFieldSubTable } from './subtable/formly-field-subtable.component';
+import { FormlyFieldColorPicker } from './color/color-picker.type';
+import { FormlyFieldRichtext } from './richtext/richtext-eidtor.type';
+import { FormlyFieldDraw } from './draw/draw.type';
 
 const appearance = 'outline';
 const density = 5;
@@ -184,7 +184,7 @@ export const formlyFormTypes = [
   },
   {
     name: 'subtable',
-    component: FormlyFieldSubTableComponent,
+    component: FormlyFieldSubTable,
     defaultOptions: {
       props: {
         ...baseProps,
@@ -198,7 +198,7 @@ export const formlyFormTypes = [
   },
   {
     name: 'run-subtable',
-    component: FormlyFieldSubTableComponent,
+    component: FormlyFieldSubTable,
     defaultOptions: {
       props: {
         ...baseProps,
@@ -212,7 +212,7 @@ export const formlyFormTypes = [
   },
   {
     name: 'color-picker',
-    component: FormlyColorPickerTypeComponent,
+    component: FormlyFieldColorPicker,
     wrappers: ['form-field'],
     defaultOptions: {
       props: {
@@ -227,7 +227,7 @@ export const formlyFormTypes = [
   },
   {
     name: 'richtext',
-    component: FormlyRichtextTypeComponent,
+    component: FormlyFieldRichtext,
     // wrappers: ['form-field'],
     defaultOptions: {
       props: {
@@ -242,7 +242,7 @@ export const formlyFormTypes = [
   },
   {
     name: 'draw',
-    component: FormlyDrawTypeComponent,
+    component: FormlyFieldDraw,
     defaultOptions: {
       props: {
         ...baseProps,

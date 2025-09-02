@@ -12,15 +12,15 @@ import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { FormEditorService } from '../../../../core/services/form-editor.service';
+import { FormEditorService } from '@core/services/form-editor.service';
 
 @Component({
   selector: 'formly-field-tabs',
-  templateUrl: './formly-field-tabs.component.html',
-  styleUrls: ['./formly-field-tabs.component.less'],
+  templateUrl: './tabs.type.html',
+  styleUrls: ['./tabs.type.less'],
   imports: [CdkDrag, CdkDropList, MatTabsModule, FormlyModule],
 })
-export class FormlyFieldTabsComponent
+export class FormlyFieldTabs
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {

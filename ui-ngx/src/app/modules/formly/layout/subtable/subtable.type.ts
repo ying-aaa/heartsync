@@ -20,8 +20,8 @@ import { FormEditorService } from '@src/app/core/services/form-editor.service';
 
 @Component({
   selector: 'formly-field-subtable',
-  templateUrl: './formly-field-subtable.component.html',
-  styleUrls: ['./formly-field-subtable.component.less'],
+  templateUrl: './subtable.type.html',
+  styleUrls: ['./subtable.type.less'],
   imports: [
     FormlyModule,
     MatButtonModule,
@@ -33,7 +33,7 @@ import { FormEditorService } from '@src/app/core/services/form-editor.service';
     MatIconModule,
   ],
 })
-export class FormlyFieldSubTableComponent
+export class FormlyFieldSubTable
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {

@@ -19,8 +19,8 @@ import { ConcatUnitsPipe } from '../../../../shared/pipes/units.pipe';
 
 @Component({
   selector: 'formly-field-wrapper',
-  templateUrl: './formly-field-wrapper.component.html',
-  styleUrls: ['./formly-field-wrapper.component.less'],
+  templateUrl: './wrapper.type.html',
+  styleUrls: ['./wrapper.type.less'],
   host: { '[class.formly-field-wrapper]': 'true' },
   imports: [
     CdkDropList,
@@ -31,7 +31,7 @@ import { ConcatUnitsPipe } from '../../../../shared/pipes/units.pipe';
     ConcatUnitsPipe,
   ],
 })
-export class FormlyFieldWrapperComponent extends FieldType<IEditorFormlyField> {
+export class FormlyFieldWrapper extends FieldType<IEditorFormlyField> {
   @ViewChild(CdkDropList) dropList!: CdkDropList;
 
   IFieldType = IFieldType;

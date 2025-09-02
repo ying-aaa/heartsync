@@ -18,13 +18,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { FormEditorService } from '@src/app/core/services/form-editor.service';
 
 @Component({
-  selector: 'formly-control-wrapper',
-  templateUrl: './formly-control-wrapper.component.html',
-  styleUrls: ['./formly-control-wrapper.component.less'],
+  selector: 'formly-wrapper-control',
+  templateUrl: './control.wrapper.html',
+  styleUrls: ['./control.wrapper.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatButtonModule, MatIconModule, MatDividerModule],
 })
-export class FormlyContorlWrapperComponent
+export class FormlyWrapperContorl
   extends FieldWrapper<IEditorFormlyField>
   implements OnInit, OnDestroy
 {

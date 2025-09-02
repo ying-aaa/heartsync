@@ -1,13 +1,13 @@
-import { FormlyFieldAccordionComponent } from './accordion/formly-field-accordion.component';
-import { FormlyFieldWrapperComponent } from './wrapper/formly-field-wrapper.component';
-import { FormlyFieldFieldsetComponent } from './fieldset/formly-field-fieldset.component';
-import { FormlyFieldGridComponent } from './grid/formly-field-grid.component';
-import { FormlyFieldTabsComponent } from './tabs/formly-field-tabs.component';
-import { FormlyFieldStepperComponent } from './stepper/formly-field-stepper.component';
-import { FormlyFieldCanvasComponent } from './canvas/formly-field-canvas.component';
-import { FormlyFieldArrayComponent } from './array/formly-field-array.component';
+import { FormlyFieldAccordion } from './accordion/accordion.type';
+import { FormlyFieldWrapper } from './wrapper/wrapper.type';
+import { FormlyFieldFieldset } from './fieldset/fieldset.type';
+import { FormlyFieldGrid } from './grid/grid.type';
+import { FormlyFieldTabs } from './tabs/tabs.type';
+import { FormlyFieldStepper } from './stepper/stepper.type';
+import { FormlyFieldCanvas } from './canvas/canvas.type';
+import { FormlyFieldArray } from './array/array.type';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
-import { FormlyFieldSubTableComponent } from './subtable/formly-field-subtable.component';
+import { FormlyFieldSubTable } from './subtable/subtable.type';
 
 const density = 1;
 
@@ -23,7 +23,7 @@ const densityExpressions = {
 export const formlyLayoutTypes = [
   {
     name: 'column',
-    component: FormlyFieldWrapperComponent,
+    component: FormlyFieldWrapper,
     defaultOptions: {
       props: {
         density,
@@ -45,7 +45,7 @@ export const formlyLayoutTypes = [
   },
   {
     name: 'grid',
-    component: FormlyFieldGridComponent,
+    component: FormlyFieldGrid,
     defaultOptions: {
       props: {
         density,
@@ -61,7 +61,7 @@ export const formlyLayoutTypes = [
   },
   {
     name: 'flex',
-    component: FormlyFieldWrapperComponent,
+    component: FormlyFieldWrapper,
     defaultOptions: {
       props: {
         typeName: '弹性',
@@ -94,7 +94,7 @@ export const formlyLayoutTypes = [
   },
   {
     name: 'fieldset',
-    component: FormlyFieldFieldsetComponent,
+    component: FormlyFieldFieldset,
     defaultOptions: {
       props: {
         typeName: '群组',
@@ -128,7 +128,7 @@ export const formlyLayoutTypes = [
   },
   {
     name: 'tabs',
-    component: FormlyFieldTabsComponent,
+    component: FormlyFieldTabs,
     defaultOptions: {
       props: { typeName: '页签', density },
       expressions: {
@@ -138,7 +138,7 @@ export const formlyLayoutTypes = [
   },
   {
     name: 'accordion',
-    component: FormlyFieldAccordionComponent,
+    component: FormlyFieldAccordion,
     defaultOptions: {
       props: { typeName: '手风琴', density },
       expressions: {
@@ -148,7 +148,7 @@ export const formlyLayoutTypes = [
   },
   {
     name: 'mat-stepper',
-    component: FormlyFieldStepperComponent,
+    component: FormlyFieldStepper,
     defaultOptions: {
       props: { typeName: '步进器', density },
       expressions: {
@@ -158,7 +158,7 @@ export const formlyLayoutTypes = [
   },
   {
     name: 'canvas',
-    component: FormlyFieldCanvasComponent,
+    component: FormlyFieldCanvas,
     defaultOptions: {
       props: { typeName: '画布', density },
       expressions: {
@@ -168,7 +168,7 @@ export const formlyLayoutTypes = [
   },
   {
     name: 'array',
-    component: FormlyFieldArrayComponent,
+    component: FormlyFieldArray,
     defaultOptions: {
       props: { typeName: '数组', density },
       expressions: {
@@ -178,7 +178,7 @@ export const formlyLayoutTypes = [
   },
   {
     name: 'subtable',
-    component: FormlyFieldSubTableComponent,
+    component: FormlyFieldSubTable,
     defaultOptions: {
       props: {
         typeName: '普通输入子表',

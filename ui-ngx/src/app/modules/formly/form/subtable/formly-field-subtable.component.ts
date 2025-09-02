@@ -18,7 +18,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatDividerModule,
   ],
 })
-export class FormlyFieldSubTableComponent
+export class FormlyFieldSubTable
   extends FieldArrayType<IEditorFormlyField>
   implements OnInit
 {

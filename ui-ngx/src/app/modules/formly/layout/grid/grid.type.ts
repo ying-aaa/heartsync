@@ -1,12 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-// panel-wrapper.component.ts
-// import {
-//   CdkDrag,
-//   CdkDragDrop,
-//   CdkDragPlaceholder,
-//   CdkDropList,
-//   CdkDropListGroup,
-// } from '@angular/cdk/drag-drop';
+import { Component } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
 import {
   IEditorFormlyField,
@@ -18,17 +10,15 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'formly-field-grid',
-  templateUrl: './formly-field-grid.component.html',
-  styleUrls: ['./formly-field-grid.component.less'],
+  templateUrl: './grid.type.html',
+  styleUrls: ['./grid.type.less'],
   imports: [
-    // CdkDragPlaceholder,
-    // CdkDropList, CdkDrag,
     FormlyModule,
     ConcatUnitsPipe,
     CommonModule,
   ],
 })
-export class FormlyFieldGridComponent extends FieldType<IEditorFormlyField> {
+export class FormlyFieldGrid extends FieldType<IEditorFormlyField> {
   IFieldType = IFieldType;
 
   constructor(public formEditorService: FormEditorService) {

@@ -27,7 +27,7 @@ import { ConcatUnitsPipe } from '@shared/pipes/units.pipe';
   `,
   imports: [FormlyModule, ConcatUnitsPipe],
 })
-export class FormlyFieldFieldsetComponent
+export class FormlyFieldFieldset
   extends FieldType<IEditorFormlyField>
   implements OnInit
 {

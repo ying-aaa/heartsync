@@ -1,5 +1,5 @@
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
-import { FormlyFieldButtonComponent } from './button/formly-field-button.component';
+import { FormlyFieldButton } from './button/button.type';
 
 const appearance = 'outline';
 const density = 4;
@@ -26,7 +26,7 @@ const densityExpressions = {
 export const formlyDisplayTypes = [
   {
     name: 'button',
-    component: FormlyFieldButtonComponent,
+    component: FormlyFieldButton,
     defaultOptions: {
       props: {
         ...baseProps,
