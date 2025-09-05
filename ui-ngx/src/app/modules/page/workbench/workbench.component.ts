@@ -31,19 +31,5 @@ import { ToastrService } from 'ngx-toastr';
   ],
 })
 export class WorkbenchComponent {
-  constructor(private toastr: ToastrService) {
-    this.toastr.success(
-      `
-      账户/密码：johndoe/admin
-    `,
-      '系统目前开发进度30%，请使用可用账户登录',
-      {
-        positionClass: 'toast-top-center',
-        // 不消失
-        extendedTimeOut: 0,
-        // 点击不消失
-        tapToDismiss: false,
-      },
-    );
-  }
+  constructor() {}
 }
