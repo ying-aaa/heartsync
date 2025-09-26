@@ -104,7 +104,6 @@ export class UserHttpService {
 
   // 根据角色id获取角色关联的角色
   getRoleLiitosrooliById(id: string, pageLink: PageLink) {
-    console.log("%c Line:107 🌶", "color:#465975");
     const params = pageLink.toQueryHttp();
     return this.http.get<IRoleMapping[]>(
       `/uc/admin/realms/${this.realm}/roles-by-id/${id}/composites`,

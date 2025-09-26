@@ -21,24 +21,31 @@ import {
 } from '@src/app/shared/models/public-api';
 
 export function runExtension(field: IEditorFormlyField) {
+  // 关闭设计模式
   field._design = false;
 
+  // 将formly-group类型转换为COLUMN
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
   }
 
-  if (field.type === IFieldType.COLUMN) {
-    if (!field.parent) {
-      field.props!['styles'] = {
+  // 为顶级COLUMN字段设置默认样式
+  const isColumn = field.type === IFieldType.COLUMN;
+  const isTopLevel = !field.parent;
+  if (isColumn && isTopLevel) {
+    field.props = {
+      ...field.props,
+      styles: {
         rowGap: 8,
         rowGapUnits: 'px',
-      };
-    }
+      },
+    };
   }
 
-  if (field.wrappers) {
+  // 去掉多余的外层包装
+  if (field.wrappers?.length) {
     field.wrappers = field.wrappers.filter(
-      (wrapper) => wrapper !== 'contorl' && wrapper !== 'subtableitem',
+      (wrapper) => wrapper !== 'contorl' && wrapper !== 'subtableitem'
     );
   }
 }

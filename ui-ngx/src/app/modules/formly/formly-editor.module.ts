@@ -23,37 +23,33 @@ import { FormlyMatSliderModule } from '@ngx-formly/material/slider';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 
 export function editorExtension(field: IEditorFormlyField) {
-  // 最外层列
+  // 如果是最外层 formly-group，则转为 COLUMN 类型，不再向下走
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
     return;
   }
 
-  if (field.type === IFieldType.COLUMN) {
-    if (!field.parent && field.props?.['styles']) {
-      field.props!['styles']!.rowGap = 8;
-    }
+  // 如果是 COLUMN 类型且没有父级且有样式，则设置 rowGap
+  if (field.type === IFieldType.COLUMN && !field.parent && field.props?.['styles']) {
+    field.props['styles'].rowGap = 8;
   }
 
-  if (
-    !field._design ||
-    // 列配置
-    field.type === IFieldType.COLUMN ||
-    // (field.parent?.type === IFieldType.COLUMN && field.parent?.parent) ||
-    // 群组套栅格配置
-    (field.type === 'grid' && field.parent?.type === 'fieldset')
-  )
+  // 跳过无需处理的情况
+  const isColumn = field.type === IFieldType.COLUMN;
+  const isGridInFieldset = field.type === 'grid' && field.parent?.type === 'fieldset';
+  if (!field._design || isColumn || isGridInFieldset) {
     return;
-
-  if (!field.wrappers) field.wrappers = [];
-
-  // 子表添加 tableitem
-  if (field.parent?.type === IFieldType.SUBTABLE) {
-    if (!field.wrappers.includes('subtableitem')) {
-      field.wrappers.unshift('subtableitem');
-    }
   }
 
+  // 初始化 wrappers
+  field.wrappers = field.wrappers ?? [];
+
+  // 子表添加 subtableitem wrapper
+  if (field.parent?.type === IFieldType.SUBTABLE && !field.wrappers.includes('subtableitem')) {
+    field.wrappers.unshift('subtableitem');
+  }
+
+  // 添加 contorl wrapper
   if (!field.wrappers.includes('contorl')) {
     field.wrappers.unshift('contorl');
   }
