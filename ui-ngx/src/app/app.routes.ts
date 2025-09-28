@@ -6,6 +6,11 @@ export const routes: Routes = [
   {
     path: '',
     data: { preload: true },
+    loadChildren: () => import('./test/test.routing'),
+  },
+  {
+    path: 'workbench',
+    data: { preload: true },
     loadChildren: () => import('./modules/page/workbench/workbench.routing'),
   },
   {

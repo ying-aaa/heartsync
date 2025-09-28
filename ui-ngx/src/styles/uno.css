@@ -122,7 +122,6 @@
 .h-18px\!{height:18px !important;}
 .h-1px{height:1px;}
 .h-20px\!{height:20px !important;}
-.h-21px{height:21px;}
 .h-22px\!{height:22px !important;}
 .h-24px{height:24px;}
 .h-24px\!{height:24px !important;}
@@ -182,7 +181,6 @@
 .w-18px\!{width:18px !important;}
 .w-200px{width:200px;}
 .w-20px\!{width:20px !important;}
-.w-21px{width:21px;}
 .w-225px{width:225px;}
 .w-240px{width:240px;}
 .w-24px{width:24px;}
@@ -255,6 +253,7 @@
 .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .whitespace-normal{white-space:normal;}
 .whitespace-normal\!{white-space:normal !important;}
+.whitespace-nowrap{white-space:nowrap;}
 .b,
 .border,
 .border-1,

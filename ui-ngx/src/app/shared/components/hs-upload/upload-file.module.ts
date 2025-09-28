@@ -15,12 +15,16 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HsFlieUploadComponent } from './file-upload.component';
 import { HsImagePreviewModule } from '@shared/directive/image-preview/image-preview.module';
+import { HsFileGridListComponent } from './file-grid-list/file-grid-list.component';
+import { HsFileDetailListComponent } from './file-detail-list/file-detail-list.component';
 
 const uploadFileComponents: Type<any>[] = [
   HsFlieUploadComponent,
   HsFileHandleComponent,
   HsFileDialogComponent,
   HsFileListComponent,
+  HsFileGridListComponent,
+  HsFileDetailListComponent
 ];
 
 @NgModule({

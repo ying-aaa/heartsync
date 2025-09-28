@@ -1,27 +1,10 @@
-@import "themeMixin";
+@import 'themeMixin';
 
 .themeMixin( {
     :host {
       width: 100%;
 
-      .drag-drop-button {
-        border: 2px dashed #ccc;
-        padding: 20px 24px;
-        text-align: center;
-        cursor: pointer;
-        color: @base-text-color;
-        background-color: transparent;
-      }
 
-      .drag-drop-button.dragging-over {
-        color: #2f90b9;
-        border-color: #2f90b9;
-        background-color: transparent;
-      }
-
-      .drag-drop-button:hover {
-        .drag-drop-button.dragging-over();
-      }
     }
   }
 

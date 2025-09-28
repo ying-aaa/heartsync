@@ -26,6 +26,7 @@ import { FileItem } from 'ng2-file-upload';
   standalone: false,
 })
 export class HsFileListComponent implements OnInit {
+  @Input() fileInput: HTMLInputElement;
   @Input() isFile = false;
   @Input() disabled = false;
   @Input() fileShowType: IFileShowType | string = IFileShowType.FORM;
