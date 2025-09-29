@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { BroadcastService } from '@src/app/core/services/broadcast.service';
+import { download } from '@src/app/core/utils';
 import { IFileData } from '@src/app/shared/models/common-component';
+import { FILE_BROADCAST_TOKEN } from '@src/app/shared/tokens/app.token';
 
 @Component({
   selector: 'hs-file-handle',
@@ -9,8 +12,10 @@ import { IFileData } from '@src/app/shared/models/common-component';
         <button
           class="w-28px! h-28px! p-1px!"
           mat-icon-button
+          hs-image-preview
+          [previewSrc]="fileItemData.url"
         >
-          <mat-icon class="text-18px! w-18px! h-18px! color-#fff"
+          <mat-icon class="text-18px! w-18px! h-18px! color-#999"
             >remove_red_eye</mat-icon
           >
         </button>
@@ -23,6 +28,7 @@ import { IFileData } from '@src/app/shared/models/common-component';
         <button
           class="w-28px! h-28px! p-1px!"
           mat-icon-button
+          (click)="downloadItemFile()"
         >
           <mat-icon class="text-18px! w-18px! h-18px! color-blue"
             >download</mat-icon
@@ -53,18 +59,26 @@ import { IFileData } from '@src/app/shared/models/common-component';
   standalone: false,
 })
 export class HsFileHandleComponent implements OnInit {
-  @Input() index: number;
   @Input() preview: boolean = true;
   @Input() download: boolean = true;
   @Input() delete: boolean = true;
   @Input() fileItemData: IFileData;
 
-  @Output() deleteItemFile = new EventEmitter<IFileData>();
+  constructor(
+    @Inject(FILE_BROADCAST_TOKEN) private file_broadcast_token: string,
+    private broadcastService: BroadcastService,
+  ) {}
 
-  constructor() {}
+  downloadItemFile() {
+    const { url, name } = this.fileItemData;
+    download(url, name);
+  }
 
   deleteItemFileEvent() {
-    this.deleteItemFile.emit(this.fileItemData);
+    this.broadcastService.broadcast(
+      this.file_broadcast_token,
+      this.fileItemData,
+    );
   }
 
   ngOnInit() {}

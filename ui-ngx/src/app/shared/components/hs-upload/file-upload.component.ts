@@ -3,12 +3,11 @@ import {
   Component,
   ComponentRef,
   EventEmitter,
+  Inject,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,10 +16,11 @@ import {
   IFileShowType,
   UploadedFile,
 } from '@shared/models/common-component';
+import { BroadcastService } from '@src/app/core/services/broadcast.service';
 import { generateUUID, isMobile } from '@src/app/core/utils';
 import { FileUploader } from 'ng2-file-upload';
-
-const uploadUrl = 'http://192.168.31.129:3000/api/';
+import { Subscription } from 'rxjs';
+import { FILE_BROADCAST_TOKEN } from '@shared/tokens/app.token';
 
 export function getFileStatus(fileItem: any): string {
   if (fileItem.isCancel) {
@@ -43,6 +43,12 @@ export function getFileStatus(fileItem: any): string {
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.less'],
   standalone: false,
+  providers: [
+    {
+      provide: FILE_BROADCAST_TOKEN,
+      useFactory: () => generateUUID('file-broadcast-'),
+    },
+  ],
 })
 export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('FilePreview') filePreview: ComponentRef<IFileData>;
@@ -57,7 +63,7 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   // 禁用
   @Input() disabled: boolean;
   // 上传文件时的文件上传进度信息
-  @Input() fileShowType: IFileShowType | string = IFileShowType.FORM;
+  @Input() fileShowType: IFileShowType = 'form';
   // url
   @Input() uploadUrl: string;
   // formData
@@ -76,13 +82,27 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() fold = false;
   // 第几个开始折叠
   @Input() foldStartIndex = 3;
+  // 列数，当isFile为false时有效
+  @Input() cols = 3;
 
   isMobileTerminal: boolean = isMobile();
 
   public uploader: FileUploader;
-  // public fileData: UploadedFile[] = [];
 
-  constructor(private _snackBar: MatSnackBar) {}
+  subscription: Subscription;
+
+  constructor(
+    private _snackBar: MatSnackBar,
+    @Inject(FILE_BROADCAST_TOKEN) private file_broadcast_token: string,
+    private broadcastService: BroadcastService,
+  ) {
+    this.subscription = this.broadcastService.on(
+      this.file_broadcast_token,
+      (name, [fileItem]) => {
+        this.deleteItemFile(fileItem);
+      },
+    );
+  }
 
   onFilesSelected(event: Event): void {
     if (this.fileData && this.fileData.length > 0) {
@@ -230,8 +250,7 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     // 销毁 Uploader 实例
-    if (this.uploader) {
-      this.uploader.cancelAll(); // 取消所有未完成的上传任务
-    }
+    this.uploader?.cancelAll(); // 取消所有未完成的上传任务
+    this.subscription?.unsubscribe();
   }
 }

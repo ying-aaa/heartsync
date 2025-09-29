@@ -1,31 +1,14 @@
-@let isList = fileShowType === IFileShowType.LIST;
-@let isForm = fileShowType === IFileShowType.FORM;
+@let isForm = fileShowType === 'form';
 <content
   class="flex items-center relative cursor-pointer w-full"
   [class]="isForm ? 'qy-upload-file-border p-5px' : ''"
 >
   @switch (fileShowType) {
-    @case (IFileShowType.FORM) {
+    @case ('form') {
       <div
         class="w-full flex"
         [ngClass]="{ 'flex-col flex-1': isFile }"
       >
-        <div>
-          @let startFileData =
-            !fold ? fileData : fileData.slice(0, foldStartIndex);
-          <!-- 前三个 -->
-          <ng-container
-            *ngTemplateOutlet="
-              FileList;
-              context: {
-                fileData: startFileData,
-                length: startFileData.length,
-              }
-            "
-          >
-          </ng-container>
-        </div>
-        <!-- 扩展 -->
         @if (fold && fileData.length > foldStartIndex) {
           <!-- 扩展按钮 -->
           <div
@@ -80,43 +63,7 @@
         }
       </div>
     }
-    @case (IFileShowType.DETAIL) {}
-    @case (IFileShowType.LIST) {
-      <div class="w-full">
-        @if (fileData.length === 1) {
-          <ng-container
-            *ngTemplateOutlet="
-              FileList;
-              context: {
-                fileData: fileData,
-                index: 0,
-                length: 1,
-              }
-            "
-          >
-          </ng-container>
-        } @else {
-          <div
-            class="flex-center py-3px"
-            (click)="openFilePreviewDialog(fileData)"
-          >
-            <div class="relative">
-              <img
-                width="24px"
-                height="24px"
-                src="/assets/file-type/annex.png"
-              />
-              <span class="color-#5182e4"> 多附件 </span>
-              <span
-                class="absolute w-16px h-16px top-0 bg-#d1e4ff color-#1a79ff rounded-10px -right-22px line-height-16px text-center text-12px"
-                style="width: 16px !important"
-                >{{ fileData.length }}</span
-              >
-            </div>
-          </div>
-        }
-      </div>
-    }
+    @case ('detail') {}
   }
 </content>
 <ng-template
@@ -176,11 +123,8 @@
                     <div class="z-999 relative">
                       <hs-file-handle
                         [fileItemData]="fileItemData"
-                        [index]="index"
                         [preview]="false"
                         [download]="!isForm"
-                        [delete]="!isList"
-                        (deleteItemFile)="deleteItemFile.emit($event)"
                       ></hs-file-handle>
                     </div>
 
@@ -206,7 +150,7 @@
               </div>
 
               <!-- 分隔线 -->
-              @if (!isList && $index < length - 1) {
+              @if ($index < length - 1) {
                 <mat-divider class="w-full"></mat-divider>
               }
             </div>
@@ -238,11 +182,8 @@
                     >
                       <hs-file-handle
                         [fileItemData]="fileItemData"
-                        [index]="index"
                         [preview]="true"
                         [download]="!isForm"
-                        [delete]="!isList"
-                        (deleteItemFile)="deleteItemFile.emit($event)"
                       ></hs-file-handle>
                     </div>
 
@@ -269,8 +210,6 @@
             </div>
           }
         }
-
-
       </div>
     </div>
   </ng-scrollbar>

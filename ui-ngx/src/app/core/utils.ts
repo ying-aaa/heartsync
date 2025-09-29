@@ -149,9 +149,9 @@ export function handlerNgElStyle(
 /**
  * 生成自定义 UUID 的函数
  *
- * @param {number} [length=16] - UUID 的长度，默认为 16 位
- * @param {boolean} [addLetters=false] - 是否在 UUID 前面添加 6 位随机字母，默认为 false
  * @param {string} [prefix=''] - 自定义前缀，默认为空字符串
+ * @param {boolean} [addLetters=false] - 是否在 UUID 前面添加 6 位随机字母，默认为 false
+ * @param {number} [length=16] - UUID 的长度，默认为 16 位
  * @returns {string} 生成的 UUID 字符串
  */
 export function generateUUID(
@@ -455,8 +455,9 @@ export function getRoutePathSegments(route: ActivatedRoute | null): Route[] {
  * @param {string} [fileName] - 自定义文件名
  * @returns {void}
  */
-export function download(dataURL: string, fileName: string) {
-  function dataURLToBlob(dataURL: string) {
+export async function download(url: string, fileName: string) {
+  // 工具函数：dataURL转Blob（复用原有逻辑）
+  function dataURLToBlob(dataURL: string): Blob {
     const parts = dataURL.split(';base64,');
     const contentType = parts[0].split(':')[1];
     const raw = window.atob(parts[1]);
@@ -470,17 +471,64 @@ export function download(dataURL: string, fileName: string) {
     return new Blob([uInt8Array], { type: contentType });
   }
 
-  const blob = dataURLToBlob(dataURL);
-  const url = window.URL.createObjectURL(blob);
+  // 工具函数：创建a标签下载Blob
+  function downloadBlob(blob: Blob, fileName: string) {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a); // 清理DOM
+    window.URL.revokeObjectURL(url); // 释放内存
+  }
 
-  const a = document.createElement('a');
-  // 隐藏链接元素
-  a.style.display = 'none';
-  a.href = url;
-  a.download = fileName;
+  // 工具函数：将相对路径转换为绝对路径
+  function getAbsoluteUrl(relativeUrl: string): string {
+    // 利用URL构造函数自动拼接当前域名和协议
+    // window.location.origin 是当前页面的基础域名（如 https://example.com）
+    return new URL(relativeUrl, window.location.origin).href;
+  }
 
-  document.body.appendChild(a);
-  a.click();
+  try {
+    let blob: Blob;
+    let absoluteUrl = url;
 
-  window.URL.revokeObjectURL(url);
+    // 1. 处理dataURL（以data:开头）
+    if (url.startsWith('data:')) {
+      blob = dataURLToBlob(url);
+    }
+    // 2. 处理绝对路径网络URL（以http://或https://开头）
+    else if (url.startsWith('http://') || url.startsWith('https://')) {
+      absoluteUrl = url; // 已为绝对路径，无需处理
+    }
+    // 3. 处理相对路径（自动拼接当前域名）
+    else {
+      absoluteUrl = getAbsoluteUrl(url); // 转换为绝对路径
+    }
+
+    // 如果是网络URL（包括转换后的绝对路径），发起请求获取Blob
+    if (
+      absoluteUrl.startsWith('http://') ||
+      absoluteUrl.startsWith('https://')
+    ) {
+      const response = await fetch(absoluteUrl, {
+        mode: 'cors',
+        cache: 'no-store',
+      });
+      if (!response.ok) {
+        // 注入弹窗服务
+        alert(`下载失败：${response.statusText}`);
+        throw new Error(`下载失败：${response.statusText}`);
+      }
+      blob = await response.blob();
+      downloadBlob(blob, fileName);
+    }
+
+    // 执行下载
+  } catch (error) {
+    console.error('下载出错：', error);
+    throw error; // 抛出错误让调用方处理
+  }
 }

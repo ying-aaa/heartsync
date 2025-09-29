@@ -12,10 +12,26 @@ import { ToastrService } from 'ngx-toastr';
     <hs-file-upload
       [isFile]="false"
       [multiple]="true"
-      fileShowType="form"
+      fileShowType="grid"
       [(fileData)]="fileData"
-      [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
+      [uploadUrl]="
+        '/api/files/upload?bucket=' + bucket + '&path=' + folderName
+      "
       (delItemFile)="delItemFile($event)"
+      [cols]="8"
+      class="flex-1"
+    ></hs-file-upload>
+    <div class="h-200px"></div>
+    <hs-file-upload
+      [isFile]="false"
+      [multiple]="true"
+      fileShowType="more"
+      [(fileData)]="fileData1"
+      [uploadUrl]="
+        '/api1/files/upload?bucket=' + bucket + '&path=' + folderName
+      "
+      (delItemFile)="delItemFile($event)"
+      [cols]="8"
       class="flex-1"
     ></hs-file-upload>
   </div>`,
@@ -25,7 +41,9 @@ export class UploadComponent implements OnInit {
   bucket = HS_BUCKET;
   folderName = 'dashboard-background-images';
 
-  fileData: IFileData[] = [
+  fileData: IFileData[] = [];
+
+  fileData1: IFileData[] = [
     {
       id: '3765574827472950',
       name: 'images (1).jpg',

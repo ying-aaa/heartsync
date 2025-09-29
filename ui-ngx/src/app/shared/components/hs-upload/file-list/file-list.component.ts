@@ -29,16 +29,16 @@ export class HsFileListComponent implements OnInit {
   @Input() fileInput: HTMLInputElement;
   @Input() isFile = false;
   @Input() disabled = false;
-  @Input() fileShowType: IFileShowType | string = IFileShowType.FORM;
+  @Input() fileShowType: IFileShowType = 'form';
   @Input() fileData: FileItem[] = [];
   @Input() fold = false;
   @Input() foldStartIndex = 3;
+  @Input() cols = 3;
 
-  @Output() deleteItemFile = new EventEmitter<IFileData>();
+  @Output() deleteItemFile = new EventEmitter<number>();
 
   elementRef = inject(ElementRef);
 
-  IFileShowType = IFileShowType;
   isMobileTerminal: boolean = isMobile();
 
   isOpen = false;

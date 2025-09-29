@@ -1,10 +1,6 @@
 import { FileItem } from 'ng2-file-upload';
 
-export enum IFileShowType {
-  FORM = 'form',
-  LIST = 'list',
-  DETAIL = 'detail',
-}
+export type IFileShowType = 'detail' | 'fold-detail' | 'grid' | 'form' | 'more';
 
 export interface UploadedFile extends FileItem {
   id: string;

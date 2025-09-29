@@ -2,10 +2,66 @@
 
 .themeMixin( {
     :host {
-      width: 100%;
+      --mdc-linear-progress-track-height: 5px;
+      --mdc-linear-progress-active-indicator-height: var(--mdc-linear-progress-track-height);
 
+      ::ng-deep{
 
+        .drag-drop-button {
+          width: 100%;
+          height: 100%;
+          border: 1px dashed #ccc;
+          padding: 0;
+          min-width: 20px;
+          text-align: center;
+          cursor: pointer;
+          color: @base-text-color;
+          background-color: transparent;
+        }
+
+        .drag-drop-button.dragging-over {
+          color: #2f90b9;
+          border-color: #2f90b9;
+          background-color: transparent;
+        }
+
+        .drag-drop-button:hover {
+          .drag-drop-button.dragging-over();
+          // 文字强制一行
+          white-space: nowrap;
+        }
+
+        content {
+          background-color: @base-bg-color;
+        }
+      }
     }
   }
 
 );
+
+::ng-deep {
+  .qy-upload-file-border {
+    border-radius: 8px;
+    border: 1px solid var(--base-line-color);
+  }
+
+  .qy-file-item {
+    border-radius: 5px;
+    &:hover {
+      background-color: var(--base-color-10);
+    }
+  }
+
+  .qy-file-shade-80 {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .qy-file-shade-30 {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  mat-progress-bar {
+    width: calc(100% - 12px);
+  }
+}

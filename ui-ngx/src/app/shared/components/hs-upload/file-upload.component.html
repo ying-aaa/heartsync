@@ -1,22 +1,30 @@
 <content
-  class="qy-upload-file-border flex py-8px gap-8px items-center"
+  class="flex gap-8px items-center"
   [ngClass]="{
     'flex-wrap': isMobileTerminal && fileData.length,
   }"
 >
-  <hs-file-list
-    [fileInput]="fileInput"
-    [fold]="fold"
+  <hs-file-router
     [isFile]="isFile"
     [fileData]="fileData"
     [fileShowType]="fileShowType"
     [foldStartIndex]="foldStartIndex"
     class="w-full"
-    [ngClass]="{
-      hidden: !fileData.length,
-    }"
-    (deleteItemFile)="deleteItemFile($event)"
-  ></hs-file-list>
+    [cols]="cols"
+  >
+    <div class="grid-content wh-full">
+      <ng-container *ngTemplateOutlet="btn"> </ng-container>
+    </div>
+    <div class="fold-detail-content wh-full">
+      <ng-container *ngTemplateOutlet="btn"> </ng-container>
+    </div>
+    <div class="detail-content wh-full">
+      <ng-container *ngTemplateOutlet="btn"> </ng-container>
+    </div>
+    <div class="more-content wh-full">
+      <ng-container *ngTemplateOutlet="btn"> </ng-container>
+    </div>
+  </hs-file-router>
 
   <input
     #fileInput
@@ -27,25 +35,24 @@
     (change)="onFilesSelected($event)"
     class="hidden!"
   />
-  <!-- <button
-    mat-button
-    class="drag-drop-button"
-    (dragover)="onDragOver($event)"
-    (dragleave)="onDragLeave($event)"
-    (drop)="onDrop($event)"
-    (click)="fileInput.click()"
-    [ngClass]="{
-      'w-92px! h-92px!': !isFile,
-      'flex-1': fileData.length && isMobileTerminal,
-    }"
-  >
-    @if (isFile) {
-      <div class="flex-center">
-        <mat-icon class="mr-5px">file_upload</mat-icon>
-        <div class="whitespace-nowrap">上传</div>
-      </div>
-    } @else {
-      <mat-icon class="m-0! text-28px! w-28px! h-28px!">add</mat-icon>
-    }
-  </button> -->
+
+  <ng-template #btn>
+    <button
+      mat-button
+      class="drag-drop-button"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+      (click)="fileInput.click()"
+    >
+      @if (isFile) {
+        <div class="flex-center">
+          <mat-icon class="mr-5px">file_upload</mat-icon>
+          <div class="whitespace-nowrap">上传</div>
+        </div>
+      } @else {
+        <mat-icon class="m-0! text-28px! w-28px! h-28px!">add</mat-icon>
+      }
+    </button>
+  </ng-template>
 </content>

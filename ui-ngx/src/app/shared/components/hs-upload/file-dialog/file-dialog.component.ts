@@ -53,12 +53,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
                 >
                   {{ fileItemData.name }}
                 </div>
-                <hs-file-handle
+                <!-- <hs-file-handle
                   [fileItemData]="fileItemData"
-                  [index]="$index"
                   [preview]="false"
                   [delete]="false"
-                ></hs-file-handle>
+                ></hs-file-handle> -->
               </div>
               @if ($index < fileData.length - 1) {
                 <mat-divider class="w-full h-1px"></mat-divider>

@@ -1,6 +1,4 @@
-import { Component, computed, EventEmitter, Input, OnInit } from '@angular/core';
-import { IFileData, IFileShowType } from '@src/app/shared/models/common-component';
-
+import { input, Component, computed, OnInit } from '@angular/core';
 @Component({
   selector: 'hs-file-grid-list',
   template: `
@@ -13,79 +11,77 @@ import { IFileData, IFileShowType } from '@src/app/shared/models/common-componen
       orientation="auto"
     >
       <div scrollViewport>
-        <div class="flex flex-wrap">
-          @for (fileItemData of fileData; track $index) {
+        <div
+          class="grid gap-8px"
+          [style]="{ gridTemplateColumns: gridTemplateColumns() }"
+        >
+          @for (fileItemData of fileData(); track $index) {
             @let isError = fileItemData.status === 'error';
             @let isSuccess = fileItemData.status === 'done';
 
-            <div class="flex flex-row flex-wrap">
-              <div class="relative p-3px">
+            <div class="wh-full aspect-square">
+              <div
+                class="relative wh-full cursor-pointer rounded-8px overflow-hidden qy-upload-file-border group"
+                [ngClass]="{ 'border-#ff4d4f!': isError }"
+              >
+                <img
+                  [src]="fileItemData.url"
+                  class="wh-full backdrop-fit"
+                  [ngClass]="{ 'opacity-50': isError }"
+                />
+                @if (isError) {
+                  <mat-icon class="absolute-center color-#ff4d4f"
+                    >error_outline
+                  </mat-icon>
+                }
+
+                <!-- 操作符 -->
                 <div
-                  class="p-5px qy-upload-file-border"
-                  [ngClass]="{ 'border-#ff4d4f!': isError }"
+                  class="z-999 rounded-8px absolute wh-full top-0 left-0 hidden group-hover:block bg-#000 bg-opacity-80"
                 >
-                  <div
-                    class="flex items-center cursor-pointer relative overflow-hidden group"
-                  >
-                    <img
-                      hs-image-preview
-                      [src]="fileItemData.url"
-                      [previewSrc]="fileItemData.url"
-                      class="w-80px h-80px"
-                      [ngClass]="{ 'opacity-50': isError }"
-                    />
-
-                    <!-- 操作符 -->
-                    <div
-                      class="z-999 absolute wh-full top-0 left-0 hidden group-hover:block qy-file-shade-80"
-                    >
-                      <hs-file-handle
-                        [fileItemData]="fileItemData"
-                        [index]="$index"
-                        [preview]="true"
-                        [download]="!isForm"
-                        [delete]="!isList"
-                        (deleteItemFile)="deleteItemFile.emit($event)"
-                      ></hs-file-handle>
-                    </div>
-
-                    <!-- 上传过程中文件的进程 -->
-                    @if (!isError && !isSuccess && fileItemData.status) {
-                      <div
-                        class="absolute wh-full top-0 left-0 qy-file-shade-30"
-                      ></div>
-                      <style>
-                        mat-progress-bar {
-                          width: calc(100% - 12px);
-                        }
-                      </style>
-                      <mat-progress-bar
-                        class="absolute! left-6px top-10% -translate-y-50% bottom-3px z-999"
-                        [mode]="'buffer'"
-                        [value]="fileItemData.progress"
-                        [bufferValue]="0"
-                      ></mat-progress-bar>
-                    }
-                  </div>
+                  <hs-file-handle
+                    [fileItemData]="fileItemData"
+                    [preview]="true"
+                    [download]="false"
+                    [delete]="true"
+                  ></hs-file-handle>
                 </div>
+
+                <!-- 上传过程中文件的进程 -->
+                @if (!isError && !isSuccess && fileItemData.status) {
+                  <div
+                    class="absolute wh-full top-0 left-0 bg-#000 bg-opacity-30"
+                  ></div>
+                  <mat-progress-bar
+                    class="absolute! left-6px top-10% -translate-y-50% bottom-3px z-999"
+                    [mode]="'buffer'"
+                    [value]="fileItemData.progress"
+                    [bufferValue]="0"
+                  ></mat-progress-bar>
+                }
               </div>
             </div>
           }
+          <div class="wh-full flex-wrap aspect-square">
+            <ng-content></ng-content>
+          </div>
         </div>
       </div>
     </ng-scrollbar>
   `,
+  host: { class: 'wh-full' },
   standalone: false,
 })
 export class HsFileGridListComponent implements OnInit {
-  @Input() fileData: any[] = [];
-  @Input() isFile: boolean = false;
-  @Input() fileShowType: IFileShowType = IFileShowType.FORM;
+  fileData = input<any[]>([]);
+  // @ts-ignore
+  cols = input<number>(3, {
+    transform: (value: number) => Math.min(value, 5),
+  });
 
-  isList = computed(() => this.fileShowType === IFileShowType.LIST);
-  isForm = computed(() => this.fileShowType === IFileShowType.FORM);
-
-  deleteItemFile = new EventEmitter<IFileData>();
+  gridTemplateColumns = computed(
+    () => `repeat(${this.cols()}, minmax(0, 1fr))`,
+  );
 
   ngOnInit(): void {}
 }
