@@ -11,11 +11,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-  IFileData,
-  IFileShowType,
-  UploadedFile,
-} from '@shared/models/common-component';
+import { IFileData, IFileShowType, UploadedFile } from '@shared/models/common-component';
 import { BroadcastService } from '@src/app/core/services/broadcast.service';
 import { generateUUID, isMobile } from '@src/app/core/utils';
 import { FileUploader } from 'ng2-file-upload';
@@ -29,7 +25,7 @@ export function getFileStatus(fileItem: any): string {
     return 'error'; // 文件上传失败
   } else if (fileItem.isSuccess) {
     return 'done'; // 文件上传成功
-  } else if (fileItem.isUploading) {
+  } else if (fileItem?.isUploading) {
     return 'uploading'; // 文件正在上传
   } else if (fileItem.isReady) {
     return 'ready'; // 文件准备好，等待上传
@@ -58,12 +54,12 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() delItemFile = new EventEmitter<IFileData>();
 
-  // 文件还是图片
-  @Input() isFile = false;
+  // 最大上传数量
+  @Input() maxCount = 9;
   // 禁用
   @Input() disabled: boolean;
   // 上传文件时的文件上传进度信息
-  @Input() fileShowType: IFileShowType = 'form';
+  @Input() fileShowType: IFileShowType = 'grid';
   // url
   @Input() uploadUrl: string;
   // formData
@@ -82,7 +78,7 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() fold = false;
   // 第几个开始折叠
   @Input() foldStartIndex = 3;
-  // 列数，当isFile为false时有效
+  // 列数，type 为 "grid" 时有效
   @Input() cols = 3;
 
   isMobileTerminal: boolean = isMobile();
@@ -96,12 +92,9 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject(FILE_BROADCAST_TOKEN) private file_broadcast_token: string,
     private broadcastService: BroadcastService,
   ) {
-    this.subscription = this.broadcastService.on(
-      this.file_broadcast_token,
-      (name, [fileItem]) => {
-        this.deleteItemFile(fileItem);
-      },
-    );
+    this.subscription = this.broadcastService.on(this.file_broadcast_token, (name, [fileItem]) => {
+      this.deleteItemFile(fileItem);
+    });
   }
 
   onFilesSelected(event: Event): void {
@@ -132,9 +125,13 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
     const queueItem = this.uploader.queue.find(
       (queueItem) => (queueItem as UploadedFile).id === fileItem.id,
     );
-    if (queueItem) {
-      this.uploader.cancelItem(queueItem);
-      this.uploader.removeFromQueue(queueItem);
+    try {
+      if (queueItem) {
+        this.uploader.cancelItem(queueItem);
+        this.uploader.removeFromQueue(queueItem);
+      }
+    } catch (error) {
+      console.log('删除文件报错 error ->', error);
     }
 
     this.delItemFile.emit(fileItem);
@@ -157,20 +154,14 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private setupUploaderEvents(): void {
-    this.uploader.onSuccessItem = (
-      fileItem: UploadedFile,
-      response: string,
-    ) => {
+    this.uploader.onSuccessItem = (fileItem: UploadedFile, response: string) => {
       const serverResponse = JSON.parse(response);
       fileItem.serverResponse = serverResponse.data;
       this.updateFileData(fileItem);
     };
 
     this.uploader.onAfterAddingFile = (fileItem: UploadedFile) => {
-      if (
-        this.maxFileSize &&
-        fileItem._file.size > this.maxFileSize * 1024 * 1024
-      ) {
+      if (this.maxFileSize && fileItem._file.size > this.maxFileSize * 1024 * 1024) {
         this.uploader.removeFromQueue(fileItem); // 从队列中移除文件
         this._snackBar.open(
           // ${fileItem._file.name}：
@@ -211,11 +202,13 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   updateFileData(fileItem: UploadedFile) {
     const index = this.fileData.findIndex((file) => file.id === fileItem.id);
     if (index !== -1) {
-      this.fileData[index].url = fileItem.serverResponse?.url;
+      // this.fileData[index].url = fileItem.serverResponse?.url;
       this.fileData[index].status = getFileStatus(fileItem);
       this.fileData[index].progress = fileItem.progress;
-      if (fileItem.isSuccess)
+      if (fileItem.isSuccess) {
+        this.fileData[index].url = fileItem.serverResponse?.url;
         Reflect.deleteProperty(this.fileData[index], 'progress');
+      }
       this.fileDataChange.emit(this.fileData);
     }
   }

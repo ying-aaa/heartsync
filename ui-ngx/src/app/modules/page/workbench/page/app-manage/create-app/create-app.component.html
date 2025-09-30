@@ -29,15 +29,15 @@
       ></textarea>
     </mat-form-field>
     <div class="my-8px">
-      <label class="text-16px mb-8px">应用图片：</label>
+      <label class="block text-16px mb-8px">应用图片：</label>
       <hs-file-upload
-        [fold]="true"
-        [isFile]="true"
-        fileShowType="form"
+        fileShowType="grid"
         [(fileData)]="filesData"
         [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
         (delItemFile)="delItemFile($event)"
-        class="flex-1"
+        [maxCount]="1"
+        [cols]="1"
+        class="flex-1 w-120px h-120px block"
       ></hs-file-upload>
     </div>
   </content>

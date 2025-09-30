@@ -1,6 +1,7 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import angular from 'angular-eslint';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -12,11 +13,13 @@ export default [
       'plugin:@typescript-eslint/recommended',
       'prettier', // 使用 eslint-config-prettier 中的配置项
       'prettier/@typescript-eslint', // 禁用 @typescript-eslint 中的格式化规则
+      ...angular.configs.tsRecommended
     ],
+    processor: angular.processInlineTemplates,
     plugins: [
       '@typescript-eslint',
       'unused-imports',
-      'prettier', // 注册 prettier 插件
+      'prettier' // 注册 prettier 插件
     ],
     rules: {
       semi: ['error', 'always'], // 要求语句以分号结尾
@@ -30,13 +33,28 @@ export default [
           vars: 'all',
           varsIgnorePattern: '^_',
           args: 'after-used',
-          argsIgnorePattern: '^_',
-        },
+          argsIgnorePattern: '^_'
+        }
       ],
       'prettier/prettier': 'error', // 在 ESLint 中运行 Prettier，并启用该插件提供的规则    },
-    },
+      '@angular-eslint/component-selector': [
+        'error',
+        {
+          prefix: ['hs']
+        }
+      ]
+    }
   },
+    {
+    files: ["**/*.html"],
+    extends: [
+      ...angular.configs.templateRecommended,
+      ...angular.configs.templateAccessibility,
+    ],
+    rules: {
+    }
+  }
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommended
 ];

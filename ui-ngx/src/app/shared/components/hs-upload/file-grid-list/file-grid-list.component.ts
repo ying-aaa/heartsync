@@ -1,4 +1,5 @@
 import { input, Component, computed, OnInit } from '@angular/core';
+import { isImage, isVideo } from '@src/app/core/utils';
 @Component({
   selector: 'hs-file-grid-list',
   template: `
@@ -11,28 +12,33 @@ import { input, Component, computed, OnInit } from '@angular/core';
       orientation="auto"
     >
       <div scrollViewport>
-        <div
-          class="grid gap-8px"
-          [style]="{ gridTemplateColumns: gridTemplateColumns() }"
-        >
+        <div class="grid gap-8px" [style]="{ gridTemplateColumns: gridTemplateColumns() }">
           @for (fileItemData of fileData(); track $index) {
             @let isError = fileItemData.status === 'error';
             @let isSuccess = fileItemData.status === 'done';
-
+            @let isReady = fileItemData.status === 'ready' || fileItemData.status === 'unknown';
+            @let url = fileItemData.url;
             <div class="wh-full aspect-square">
               <div
                 class="relative wh-full cursor-pointer rounded-8px overflow-hidden qy-upload-file-border group"
                 [ngClass]="{ 'border-#ff4d4f!': isError }"
               >
-                <img
-                  [src]="fileItemData.url"
-                  class="wh-full backdrop-fit"
-                  [ngClass]="{ 'opacity-50': isError }"
-                />
-                @if (isError) {
-                  <mat-icon class="absolute-center color-#ff4d4f"
-                    >error_outline
-                  </mat-icon>
+                @if (isImage(url)) {
+                  <img
+                    [src]="url"
+                    class="wh-full backdrop-fit"
+                    [ngClass]="{ 'opacity-50': isError }"
+                  />
+                } @else if (isVideo(url)) {
+                  <video class="wh-full bg-#000" [ngClass]="{ 'opacity-50': isError }">
+                    <source [src]="url" />
+                  </video>
+                  <div class="flex-center absolute-center bg-#000/30 rounded-20px">
+                    <mat-icon class="color-#fff">play_arrow</mat-icon>
+                  </div>
+                }
+                @if (isError || (!isReady && !isImage(url, fileItemData) && !isVideo(url))) {
+                  <mat-icon class="absolute-center color-#ff4d4f">error_outline </mat-icon>
                 }
 
                 <!-- 操作符 -->
@@ -41,17 +47,20 @@ import { input, Component, computed, OnInit } from '@angular/core';
                 >
                   <hs-file-handle
                     [fileItemData]="fileItemData"
-                    [preview]="true"
-                    [download]="false"
-                    [delete]="true"
+                    [download]="download()"
+                    [preview]="preview()"
+                    [remove]="remove()"
                   ></hs-file-handle>
                 </div>
 
                 <!-- 上传过程中文件的进程 -->
                 @if (!isError && !isSuccess && fileItemData.status) {
-                  <div
-                    class="absolute wh-full top-0 left-0 bg-#000 bg-opacity-30"
-                  ></div>
+                  <div class="absolute wh-full top-0 left-0 bg-#000 bg-opacity-30"></div>
+                  <style>
+                    mat-progress-bar {
+                      width: calc(100% - 12px);
+                    }
+                  </style>
                   <mat-progress-bar
                     class="absolute! left-6px top-10% -translate-y-50% bottom-3px z-999"
                     [mode]="'buffer'"
@@ -79,9 +88,14 @@ export class HsFileGridListComponent implements OnInit {
     transform: (value: number) => Math.min(value, 5),
   });
 
-  gridTemplateColumns = computed(
-    () => `repeat(${this.cols()}, minmax(0, 1fr))`,
-  );
+  download = input<boolean>(false);
+  preview = input<boolean>(true);
+  remove = input<boolean>(true);
+
+  isVideo = isVideo;
+  isImage = isImage;
+
+  gridTemplateColumns = computed(() => `repeat(${this.cols()}, minmax(0, 1fr))`);
 
   ngOnInit(): void {}
 }

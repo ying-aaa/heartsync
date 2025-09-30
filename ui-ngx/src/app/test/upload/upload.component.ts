@@ -10,28 +10,23 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-upload',
   template: `<div>
     <hs-file-upload
-      [isFile]="false"
       [multiple]="true"
-      fileShowType="grid"
+      fileShowType="detail"
       [(fileData)]="fileData"
-      [uploadUrl]="
-        '/api/files/upload?bucket=' + bucket + '&path=' + folderName
-      "
+      [uploadUrl]="'/api1/files/upload?bucket=' + bucket + '&path=' + folderName"
       (delItemFile)="delItemFile($event)"
-      [cols]="8"
+      [cols]="3"
+      [maxCount]="3"
       class="flex-1"
     ></hs-file-upload>
     <div class="h-200px"></div>
     <hs-file-upload
-      [isFile]="false"
       [multiple]="true"
-      fileShowType="more"
+      fileShowType="more-detail"
       [(fileData)]="fileData1"
-      [uploadUrl]="
-        '/api1/files/upload?bucket=' + bucket + '&path=' + folderName
-      "
+      [uploadUrl]="'/api1/files/upload?bucket=' + bucket + '&path=' + folderName"
       (delItemFile)="delItemFile($event)"
-      [cols]="8"
+      [cols]="3"
       class="flex-1"
     ></hs-file-upload>
   </div>`,

@@ -1,4 +1,5 @@
 import { Component, input, OnInit } from '@angular/core';
+import { isVideo, isImage } from '@src/app/core/utils';
 
 @Component({
   selector: 'hs-file-detail-list',
@@ -20,16 +21,27 @@ import { Component, input, OnInit } from '@angular/core';
             <div class="w-full">
               <div class="relative">
                 <div class="p-5px qy-file-item">
-                  <div
-                    class="flex items-center cursor-pointer relative overflow-hidden group"
-                  >
-                    <img
-                      hs-image-preview
-                      [src]="fileItemData.url"
-                      [previewSrc]="fileItemData.url"
-                      class="w-40px h-40px backdrop-fit"
-                      [ngClass]="{ 'opacity-50': isError }"
-                    />
+                  <div class="flex items-center cursor-pointer relative overflow-hidden group">
+                    <div class="relative w-40px h-40px backdrop-fit">
+                      @if (isImage(fileItemData.url)) {
+                        <img
+                          hs-image-preview
+                          [src]="fileItemData.url"
+                          [previewSrc]="fileItemData.url"
+                          class="wh-full backdrop-fit"
+                          [ngClass]="{ 'opacity-50': isError }"
+                        />
+                      }
+
+                      @if (isVideo(fileItemData.url)) {
+                        <video class="wh-full bg-#000" [ngClass]="{ 'opacity-50': isError }">
+                          <source [src]="fileItemData.url" />
+                        </video>
+                        <div class="flex-center absolute-center bg-#000/30 rounded-20px">
+                          <mat-icon class="color-#fff">play_arrow</mat-icon>
+                        </div>
+                      }
+                    </div>
 
                     <!-- 文件名称 -->
                     <span
@@ -48,15 +60,13 @@ import { Component, input, OnInit } from '@angular/core';
                         [fileItemData]="fileItemData"
                         [download]="download()"
                         [preview]="preview()"
-                        [delete]="delete()"
+                        [remove]="remove()"
                       ></hs-file-handle>
                     </div>
 
                     <!-- 上传过程中文件的进程 -->
                     @if (!isError && !isSuccess && fileItemData.status) {
-                      <div
-                        class="absolute wh-full top-0 left-0 qy-file-shade-30"
-                      ></div>
+                      <div class="absolute wh-full top-0 left-0 qy-file-shade-30"></div>
                       <style>
                         mat-progress-bar {
                           width: calc(100% - 12px);
@@ -92,7 +102,10 @@ export class HsFileDetailListComponent implements OnInit {
 
   download = input<boolean>(false);
   preview = input<boolean>(false);
-  delete = input<boolean>(true);
+  remove = input<boolean>(true);
+
+  isVideo = isVideo;
+  isImage = isImage;
 
   ngOnInit(): void {}
 }

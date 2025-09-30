@@ -34,7 +34,7 @@ import { FILE_BROADCAST_TOKEN } from '@src/app/shared/tokens/app.token';
             >download</mat-icon
           >
         </button>
-        @if (delete) {
+        @if (remove) {
           <mat-divider
             [vertical]="true"
             class="h-16px"
@@ -42,7 +42,7 @@ import { FILE_BROADCAST_TOKEN } from '@src/app/shared/tokens/app.token';
         }
       }
 
-      @if (delete) {
+      @if (remove) {
         <button
           mat-icon-button
           color="#fff"
@@ -61,7 +61,7 @@ import { FILE_BROADCAST_TOKEN } from '@src/app/shared/tokens/app.token';
 export class HsFileHandleComponent implements OnInit {
   @Input() preview: boolean = true;
   @Input() download: boolean = true;
-  @Input() delete: boolean = true;
+  @Input() remove: boolean = true;
   @Input() fileItemData: IFileData;
 
   constructor(

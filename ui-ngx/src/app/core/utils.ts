@@ -12,13 +12,10 @@ export function isObject(
   mode: 'typeof' | 'instanceof' | 'toString' | 'comprehensive' = 'toString',
 ): boolean {
   const modeConfig = {
-    typeof:
-      typeof value === 'object' && value !== null && !Array.isArray(value),
-    instanceof:
-      value instanceof Object && value !== null && !Array.isArray(value),
+    typeof: typeof value === 'object' && value !== null && !Array.isArray(value),
+    instanceof: value instanceof Object && value !== null && !Array.isArray(value),
     toString: Object.prototype.toString.call(value) === '[object Object]',
-    comprehensive:
-      typeof value === 'object' && value !== null && !Array.isArray(value),
+    comprehensive: typeof value === 'object' && value !== null && !Array.isArray(value),
   };
 
   return modeConfig[mode];
@@ -72,12 +69,7 @@ export function getRecursivePosition<T>(
     } else {
       const originChildren = origin[i][childrenName];
       if (originChildren && originChildren.length) {
-        const res = getRecursivePosition(
-          originChildren,
-          value,
-          attributes,
-          offset,
-        );
+        const res = getRecursivePosition(originChildren, value, attributes, offset);
         if (res) return res;
       }
     }
@@ -207,10 +199,7 @@ export function extractProperties<T extends Record<string, any> | any[]>(
    * @param config - 当前层级的提取配置。
    * @returns 返回提取后的对象。
    */
-  function pick(
-    o: Record<string, any>,
-    config: PickConfig,
-  ): Record<string, any> {
+  function pick(o: Record<string, any>, config: PickConfig): Record<string, any> {
     if (typeof o !== 'object' || o === null) {
       // 如果当前值不是对象或为 null，直接返回
       return o;
@@ -235,17 +224,14 @@ export function extractProperties<T extends Record<string, any> | any[]>(
 
   if (Array.isArray(obj)) {
     // 如果目标是数组，递归处理每个元素
-    return obj.map((item) =>
-      extractProperties(item, pickConfig, childName),
-    ) as T;
+    return obj.map((item) => extractProperties(item, pickConfig, childName)) as T;
   } else if (typeof obj === 'object' && obj !== null) {
     // 提取当前对象的指定属性
     const currentPick: Record<string, any> = pick(obj, pickConfig);
     // 如果配置中包含嵌套属性，递归处理
     if (pickConfig[childName] && Array.isArray(obj[childName])) {
-      currentPick[childName] = obj[childName].map(
-        (child: Record<string, any>) =>
-          extractProperties(child, pickConfig, childName),
+      currentPick[childName] = obj[childName].map((child: Record<string, any>) =>
+        extractProperties(child, pickConfig, childName),
       );
     }
     return currentPick as T;
@@ -302,8 +288,7 @@ export function isNotEmpty(value: any): boolean {
 
 export function isMobile() {
   // 使用正则表达式匹配常见的移动设备浏览器的用户代理字符串
-  const regex =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+  const regex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
   return regex.test(navigator.userAgent);
 }
 
@@ -329,10 +314,7 @@ export function pick(obj: IAnyPropObj, keys: Array<string>) {
   return result;
 }
 
-export function getParamFromRoute(
-  paramName: string,
-  route: ActivatedRoute,
-): string | null {
+export function getParamFromRoute(paramName: string, route: ActivatedRoute): string | null {
   let currentRoute: ActivatedRoute | null = route;
 
   while (currentRoute) {
@@ -413,18 +395,11 @@ export function findParentById(
 ): IAnyPropObj | null {
   for (let node of treeData) {
     if (node[childrenName]) {
-      const isInParent = node[childrenName].some(
-        (item: IAnyPropObj) => item[key] === targetValue,
-      );
+      const isInParent = node[childrenName].some((item: IAnyPropObj) => item[key] === targetValue);
       if (isInParent) {
         return node; // 找到目标节点的父节点
       }
-      const parent = findParentById(
-        node[childrenName],
-        targetValue,
-        childrenName,
-        key,
-      ); // 递归搜索子节点
+      const parent = findParentById(node[childrenName], targetValue, childrenName, key); // 递归搜索子节点
       if (parent) {
         return parent; // 如果在子节点中找到父节点，返回结果
       }
@@ -509,10 +484,7 @@ export async function download(url: string, fileName: string) {
     }
 
     // 如果是网络URL（包括转换后的绝对路径），发起请求获取Blob
-    if (
-      absoluteUrl.startsWith('http://') ||
-      absoluteUrl.startsWith('https://')
-    ) {
+    if (absoluteUrl.startsWith('http://') || absoluteUrl.startsWith('https://')) {
       const response = await fetch(absoluteUrl, {
         mode: 'cors',
         cache: 'no-store',
@@ -531,4 +503,31 @@ export async function download(url: string, fileName: string) {
     console.error('下载出错：', error);
     throw error; // 抛出错误让调用方处理
   }
+}
+
+export function isImage(path: string, obj?:any) {
+  console.log("%c Line:509 🥕 path", "color:#6ec1c2", path,obj);
+  if (!path) return false;
+  // 1. 先判断是否为 base64 格式的图片（data URI）
+  const isBase64Image = /^data:image\/(jpg|jpeg|png|gif|webp);base64,/i.test(path);
+  if (isBase64Image) {
+    return true;
+  }
+
+  // 2. 再判断传统文件路径（原有逻辑）
+  const fileName = path.split('?')[0].split('#')[0]; // 去掉查询参数和锚点
+  return /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+}
+
+export function isVideo(path: string) {
+  if (!path) return false;
+  // 1. 先判断是否为 base64 格式的视频（data URI）
+  const isBase64Video = /^data:video\/(mp4|mov|avi|flv|mkv);base64,/i.test(path);
+  if (isBase64Video) {
+    return true;
+  }
+
+  // 2. 再判断传统文件路径（原有逻辑）
+  const fileName = path.split('?')[0].split('#')[0]; // 去掉查询参数和锚点
+  return /\.(mp4|mov|avi|flv|mkv)$/i.test(fileName);
 }

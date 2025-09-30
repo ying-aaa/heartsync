@@ -1,16 +1,10 @@
 <div mat-dialog-title>新增记录</div>
 <mat-divider></mat-divider>
 <mat-dialog-content class="h-0 flex-1 max-h-none!">
-  <content
-    class="wh-full flex hs-density--5"
-    [formGroup]="recordForm"
-  >
+  <content class="wh-full flex hs-density--5" [formGroup]="recordForm">
     <main class="w-65% h-full pr-8px flex flex-col">
       <div class="w-full flex-1 min-h-200px">
-        <mat-form-field
-          class="wh-full min-h-200px"
-          appearance="outline"
-        >
+        <mat-form-field class="wh-full min-h-200px" appearance="outline">
           <textarea
             matInput
             placeholder="记录生活事"
@@ -28,13 +22,13 @@
         <!-- </div> -->
         <hs-file-upload
           [fold]="true"
-          [isFile]="true"
-          fileShowType="form"
+          fileShowType="grid"
           [(fileData)]="filesData"
-          [uploadUrl]="
-            '/api/files/upload?bucket=' + bucket + '&path=' + folderName
-          "
+          [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
           (delItemFile)="delItemFile($event)"
+          [maxCount]="30"
+          [cols]="1"
+          class="flex-1 w-120px h-120px block"
         ></hs-file-upload>
       </div>
     </main>
@@ -43,42 +37,19 @@
       vertical="true"
     ></mat-divider> -->
     <aside class="w-35% pl-8px">
-      <mat-form-field
-        class="w-full mb-4px"
-        appearance="outline"
-      >
+      <mat-form-field class="w-full mb-4px" appearance="outline">
         <mat-label>标题</mat-label>
-        <input
-          matInput
-          style="resize: none"
-          formControlName="title"
-        />
+        <input matInput style="resize: none" formControlName="title" />
       </mat-form-field>
       <mat-list>
-        <mat-list-item
-          class="h-64px!"
-          matRipple
-          [matRippleColor]="matRippleColor()"
-        >
-          <mat-icon
-            matListItemIcon
-            class="mt-22px!"
-            >my_location</mat-icon
-          >
+        <mat-list-item class="h-64px!" matRipple [matRippleColor]="matRippleColor()">
+          <mat-icon matListItemIcon class="mt-22px!">my_location</mat-icon>
           <span matListItemTitle>所在位置</span>
           <span>福建省福州市仓山区</span>
         </mat-list-item>
         <mat-divider></mat-divider>
-        <mat-list-item
-          class="h-64px!"
-          matRipple
-          [matRippleColor]="matRippleColor()"
-        >
-          <mat-icon
-            matListItemIcon
-            class="mt-22px!"
-            >remove_red_eye</mat-icon
-          >
+        <mat-list-item class="h-64px!" matRipple [matRippleColor]="matRippleColor()">
+          <mat-icon matListItemIcon class="mt-22px!">remove_red_eye</mat-icon>
           <span matListItemTitle>查看范围</span>
           <span>所有人</span>
         </mat-list-item>
@@ -89,16 +60,6 @@
 </mat-dialog-content>
 <mat-divider>location</mat-divider>
 <mat-dialog-actions align="end">
-  <button
-    mat-button
-    mat-dialog-close
-  >
-    取消
-  </button>
-  <button
-    mat-flat-button
-    (click)="submit()"
-  >
-    确定
-  </button>
+  <button mat-button mat-dialog-close>取消</button>
+  <button mat-flat-button (click)="submit()">确定</button>
 </mat-dialog-actions>

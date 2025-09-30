@@ -10,7 +10,6 @@ import { MatListModule } from '@angular/material/list';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { HsFileDialogComponent } from './file-dialog/file-dialog.component';
 import { HsFileHandleComponent } from './file-handle/file-handle.component';
-import { HsFileListComponent } from './file-list/file-list.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HsFlieUploadComponent } from './file-upload.component';
@@ -25,7 +24,6 @@ const uploadFileComponents: Type<any>[] = [
   HsFlieUploadComponent,
   HsFileHandleComponent,
   HsFileDialogComponent,
-  HsFileListComponent,
   HsFileGridListComponent,
   HsFileDetailListComponent,
   HsFileRouterComponent,

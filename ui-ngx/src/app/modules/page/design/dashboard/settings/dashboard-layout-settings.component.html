@@ -6,13 +6,12 @@
     appearance="outline"
     class="hs-density--5 flex flex-col gap-12px mb-12px!"
   >
-
     <!-- gridType -->
     <mat-form-field appearance="outline">
       <mat-label>网格类型</mat-label>
       <mat-select formControlName="gridType">
         @for (t of gridTypes; track t) {
-        <mat-option [value]="t">{{ t }}</mat-option>
+          <mat-option [value]="t">{{ t }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -20,11 +19,7 @@
     <!-- margin -->
     <mat-form-field appearance="outline">
       <mat-label>间距(px)</mat-label>
-      <input
-        matInput
-        type="number"
-        formControlName="margin"
-      />
+      <input matInput type="number" formControlName="margin" />
     </mat-form-field>
 
     <!-- displayGrid -->
@@ -32,32 +27,22 @@
       <mat-label>网格线显示</mat-label>
       <mat-select formControlName="displayGrid">
         @for (d of displayGrid; track d) {
-        <mat-option [value]="d">{{ d }}</mat-option>
+          <mat-option [value]="d">{{ d }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
 
     <!-- enableOccupiedCellDrop -->
-    <mat-slide-toggle formControlName="enableOccupiedCellDrop">
-      允许覆盖已有格子
-    </mat-slide-toggle>
+    <mat-slide-toggle formControlName="enableOccupiedCellDrop"> 允许覆盖已有格子 </mat-slide-toggle>
 
     <mat-form-field appearance="outline">
       <mat-label>最小行数</mat-label>
-      <input
-        matInput
-        type="number"
-        formControlName="minRows"
-      />
+      <input matInput type="number" formControlName="minRows" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>最小列数</mat-label>
-      <input
-        matInput
-        type="number"
-        formControlName="minCols"
-      />
+      <input matInput type="number" formControlName="minCols" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -90,13 +75,15 @@
       <label class="mb-8px">背景图片：</label>
       <hs-file-upload
         [fold]="true"
-        [isFile]="false"
+        fileShowType="grid"
         [multiple]="false"
-        fileShowType="form"
         [(fileData)]="fileData"
         [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
         (delItemFile)="delItemFile($event)"
         class="flex-1"
+        [maxCount]="1"
+        [cols]="1"
+        class="flex-1 w-120px h-120px block"
       ></hs-file-upload>
     </div>
 
@@ -104,26 +91,14 @@
       <mat-label>背景模式大小</mat-label>
       <mat-select formControlName="backgroundSize">
         @for (t of backgroundModeTypes; track t) {
-        <mat-option [value]="t.value">{{ t.label }}</mat-option>
+          <mat-option [value]="t.value">{{ t.label }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
-
   </form>
 </mat-dialog-content>
 <mat-divider></mat-divider>
 <mat-dialog-actions align="end">
-  <button
-    mat-button
-    mat-dialog-close
-    (click)="cancel()"
-  >
-    取消
-  </button>
-  <button
-    mat-flat-button
-    (click)="saveConfig()"
-  >
-    确定
-  </button>
+  <button mat-button mat-dialog-close (click)="cancel()">取消</button>
+  <button mat-flat-button (click)="saveConfig()">确定</button>
 </mat-dialog-actions>

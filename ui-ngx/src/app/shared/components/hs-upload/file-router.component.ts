@@ -1,4 +1,4 @@
-import { input, Component, computed, OnInit } from '@angular/core';
+import { input, Component, OnInit } from '@angular/core';
 import { IFileShowType } from '@src/app/shared/models/common-component';
 
 @Component({
@@ -7,10 +7,7 @@ import { IFileShowType } from '@src/app/shared/models/common-component';
     <content>
       @switch (fileShowType()) {
         @case ('grid') {
-          <hs-file-grid-list
-            [fileData]="fileData()"
-            [cols]="cols()"
-          >
+          <hs-file-grid-list [fileData]="fileData()" [cols]="cols()">
             <ng-content select="'.grid-content'"></ng-content>
           </hs-file-grid-list>
         }
@@ -20,15 +17,17 @@ import { IFileShowType } from '@src/app/shared/models/common-component';
           </hs-file-detail-list>
         }
         @case ('fold-detail') {
-          <hs-file-fold-detail-list
-            [fileData]="fileData()"
-            [foldStartIndex]="foldStartIndex()"
-          >
+          <hs-file-fold-detail-list [fileData]="fileData()" [foldStartIndex]="foldStartIndex()">
             <ng-content select="fold-detail-content"></ng-content>
           </hs-file-fold-detail-list>
         }
-        @case ('more') {
-          <hs-file-more-list [fileData]="fileData()">
+        @case ('more-detail') {
+          <hs-file-more-list [fileData]="fileData()" [type]="'more-detail'">
+            <ng-content select="more-content"></ng-content>
+          </hs-file-more-list>
+        }
+        @case ('more-grid') {
+          <hs-file-more-list [fileData]="fileData()" [type]="'more-grid'">
             <ng-content select="more-content"></ng-content>
           </hs-file-more-list>
         }
@@ -40,8 +39,7 @@ import { IFileShowType } from '@src/app/shared/models/common-component';
 })
 export class HsFileRouterComponent implements OnInit {
   fileData = input<any[]>([]);
-  isFile = input<boolean>(false);
-  fileShowType = input<IFileShowType>('form');
+  fileShowType = input<IFileShowType>('detail');
   foldStartIndex = input<number>(3);
   cols = input<number>(3);
 

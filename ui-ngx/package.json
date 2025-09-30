@@ -10,7 +10,8 @@
     "test": "ng test",
     "serve:ssr:heartsync": "node dist/heartsync/server/server.mjs",
     "uno": "unocss --watch",
-    "build:css": "unocss"
+    "build:css": "unocss",
+    "format": "prettier --write \"src/**/*.{ts,html,css,scss}\""
   },
   "private": true,
   "dependencies": {
@@ -32,6 +33,7 @@
     "@types/jstree": "^3.3.46",
     "@wangeditor/editor": "^5.1.23",
     "ace-builds": "^1.39.1",
+    "angular-eslint": "^20.3.0",
     "angular-gridster2": "^19.0.0",
     "angular-split": "^19.0.0",
     "cesium": "^1.128.0",
