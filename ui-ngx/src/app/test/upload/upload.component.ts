@@ -13,18 +13,19 @@ import { ToastrService } from 'ngx-toastr';
       [multiple]="true"
       fileShowType="detail"
       [(fileData)]="fileData"
-      [uploadUrl]="'/api1/files/upload?bucket=' + bucket + '&path=' + folderName"
+      [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
       (delItemFile)="delItemFile($event)"
       [cols]="3"
       [maxCount]="3"
       class="flex-1"
     ></hs-file-upload>
     <div class="h-200px"></div>
+
     <hs-file-upload
       [multiple]="true"
       fileShowType="more-detail"
       [(fileData)]="fileData1"
-      [uploadUrl]="'/api1/files/upload?bucket=' + bucket + '&path=' + folderName"
+      [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
       (delItemFile)="delItemFile($event)"
       [cols]="3"
       class="flex-1"

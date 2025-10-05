@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  computed,
-  effect,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, computed, effect, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -24,7 +17,7 @@ import {
   PushDirections,
   Resizable,
 } from 'angular-gridster2';
-import { WidgetContainerComponent } from '../widget/widget-container.component';
+import { WidgetContainerComponent } from '@src/app/modules/components/widget-container/widget-container.component';
 import { IDashboardWidgetContext } from '@src/app/core/http/dashboard.service';
 import { DashboardConfigService } from '@src/app/core/services/dashboard-config.service';
 import { CommonModule } from '@angular/common';
@@ -86,9 +79,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   isRuntime = computed(() => !this.dashboardEditorService.isRuntime());
 
-  selectWidgetId = computed(() =>
-    this.dashboardEditorService.currentSelectWidgetId(),
-  );
+  selectWidgetId = computed(() => this.dashboardEditorService.currentSelectWidgetId());
 
   gridsterItemContextMenu: IContextMenu = {
     rename: {
@@ -116,13 +107,13 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
       // 取自定义配置，即后端保存的
       ...gridsterOption,
       compactType: 'none', // 防止自动压缩
-      pushItems: false,    // 禁止推动其他 item
-      swap: false,         // 禁止交换
+      pushItems: false, // 禁止推动其他 item
+      swap: false, // 禁止交换
       disableWindowResize: false,
-      allowMultiLayer: true,  // ✅ 允许多层重叠
-      defaultLayerIndex: 2,   // 默认层级
-      baseLayerIndex: 2,      // 最底层
-      maxLayerIndex: 2,      // 最大层级
+      allowMultiLayer: true, // ✅ 允许多层重叠
+      defaultLayerIndex: 2, // 默认层级
+      baseLayerIndex: 2, // 最底层
+      maxLayerIndex: 2, // 最大层级
       /**
        * 下面为编辑时的配置，不会进行保存的
        *  */
@@ -151,7 +142,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   ) {}
 
   test() {
-    console.log("%c Line:155 🍺", "color:#7f2b82");
+    console.log('%c Line:155 🍺', 'color:#7f2b82');
   }
 
   // 部件右键的菜单功能
@@ -175,10 +166,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   }
 
   // 变动网格item
-  itemChangeCallback(
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface,
-  ): void {
+  itemChangeCallback(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
     console.log('%c Line:173 🌭', 'color:#93c0a4', '变动网格item');
     // this.dashboardConfigService.updateWidgets(this.widgets);
   }

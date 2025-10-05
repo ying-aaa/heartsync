@@ -505,8 +505,7 @@ export async function download(url: string, fileName: string) {
   }
 }
 
-export function isImage(path: string, obj?:any) {
-  console.log("%c Line:509 🥕 path", "color:#6ec1c2", path,obj);
+export function isImage(path: string) {
   if (!path) return false;
   // 1. 先判断是否为 base64 格式的图片（data URI）
   const isBase64Image = /^data:image\/(jpg|jpeg|png|gif|webp);base64,/i.test(path);

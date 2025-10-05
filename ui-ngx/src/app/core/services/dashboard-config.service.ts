@@ -99,16 +99,14 @@ export class DashboardConfigService {
     // 更新仪表板配置
     this.updateDashboardWidgets();
     this.updateDashboardGridsterOption();
-    
+
     // 调用接口保存
-    this.dashboardService
-      .updateDashboard(id!, this.dashboardConfig())
-      .subscribe({
-        next: () => {
-          this.toastr.success('仪表板配置已保存', '', {
-            positionClass: 'toast-top-center',
-          });
-        },
-      });
+    this.dashboardService.updateDashboard(id!, this.dashboardConfig()).subscribe({
+      next: () => {
+        this.toastr.success('仪表板配置已保存', '', {
+          positionClass: 'toast-top-center',
+        });
+      },
+    });
   }
 }

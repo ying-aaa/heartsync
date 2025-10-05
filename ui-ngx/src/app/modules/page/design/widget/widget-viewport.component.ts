@@ -7,7 +7,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';
-import { WidgetContainerComponent } from './widget-container.component';
+import { WidgetContainerComponent } from '@src/app/modules/components/widget-container/widget-container.component';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'hs-widget-viewport',
@@ -27,13 +27,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class WidgetViewportComponent {
   zoomControl = viewChild.required<WidgetZoomComponent>('ZoomControl');
 
-  widgetId = computed(() =>
-    this.widgetEditorService.currentWidgetId(),
-  );
-  
-  widgetType = computed(() =>
-    this.widgetEditorService.currentWidgetType(),
-  );
+  widgetId = computed(() => this.widgetEditorService.currentWidgetId());
+
+  widgetType = computed(() => this.widgetEditorService.currentWidgetType());
 
   constructor(
     private widgetEditorService: WidgetEditorService,
@@ -41,9 +37,7 @@ export class WidgetViewportComponent {
     private route: ActivatedRoute,
   ) {}
 
-  workSizeConfig = computed(
-    () => this.widgetEditorService.currentWidgetConfig().workSizeConfig,
-  );
+  workSizeConfig = computed(() => this.widgetEditorService.currentWidgetConfig().workSizeConfig);
 
   toWidgetDesign() {
     const widgetId = this.widgetEditorService.currentWidgetId();

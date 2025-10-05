@@ -37,7 +37,7 @@ import { isImage, isVideo } from '@src/app/core/utils';
                     <mat-icon class="color-#fff">play_arrow</mat-icon>
                   </div>
                 }
-                @if (isError || (!isReady && !isImage(url, fileItemData) && !isVideo(url))) {
+                @if (isError || (!isReady && !isImage(url) && !isVideo(url))) {
                   <mat-icon class="absolute-center color-#ff4d4f">error_outline </mat-icon>
                 }
 

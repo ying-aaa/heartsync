@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTreeModule } from '@angular/material/tree';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -23,7 +18,7 @@ import { IMenuNode } from '@src/app/shared/models/app-menu.model';
         matrixParams: 'ignored',
         fragment: 'ignored',
       }"
-      routerLink="{{ 'dashboard/' + section.id }}"
+      routerLink="{{ 'dashboard/' + section.dashboardId }}"
       [style.paddingLeft.px]="level * 30 || 8"
       (click)="onMenuClick()"
     >

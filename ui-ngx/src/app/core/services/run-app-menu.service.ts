@@ -12,20 +12,20 @@ export class RunAppMenuService {
 
   constructor(
     private router: Router,
-    private menuHttpService: MenuHttpService,    
+    private menuHttpService: MenuHttpService,
   ) {}
 
   loadMenuData(appId: string): Observable<IMenuNode[]> {
     return this.menuHttpService.getMenusByAppId(appId).pipe(
       tap((res: IMenuNode[]) => {
         this.menuData.set(res);
-      })
+      }),
     );
   }
 
   navigateToDefaultDashboard(appId: string, menuData: IMenuNode[]): void {
     const selectedMenuId = sessionStorage.getItem('selectedMenuId');
-    if(selectedMenuId) return;
+    if (selectedMenuId) return;
     const dashboardId = findDashboardId(menuData);
     if (dashboardId) {
       sessionStorage.setItem('selectedMenuId', dashboardId);
@@ -37,18 +37,17 @@ export class RunAppMenuService {
   }
 }
 
-
 // 递归查找第一个 type 为 'dashboard' 的节点的 id
 function findDashboardId(menuData: IMenuNode[]): string | null {
   for (const item of menuData) {
     if (item.menuType === 'dashboard') {
-      return item.id;
+      return item.dashboardId;
     } else if (item.children && item.children.length > 0) {
       const foundId = findDashboardId(item.children); // 递归查找子节点
       if (foundId) {
-        return foundId; 
+        return foundId;
       }
     }
   }
-  return null; 
+  return null;
 }

@@ -6,12 +6,12 @@ export const routes: Routes = [
   {
     path: '',
     data: { preload: true },
-    loadChildren: () => import('./test/test.routing'),
+    loadChildren: () => import('./modules/page/workbench/workbench.routing'),
   },
   {
-    path: 'workbench',
+    path: 'test',
     data: { preload: true },
-    loadChildren: () => import('./modules/page/workbench/workbench.routing'),
+    loadChildren: () => import('./test/test.routing'),
   },
   {
     path: 'design/:appId',
