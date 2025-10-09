@@ -1,9 +1,4 @@
-import {
-  defineConfig,
-  toEscapedSelector as e,
-  presetUno,
-  transformerDirectives,
-} from 'unocss';
+import { defineConfig, toEscapedSelector as e, presetUno, transformerDirectives } from 'unocss';
 // import transformerVariantGroup from '@unocss/transformer-variant-group'
 
 export default defineConfig({
@@ -112,8 +107,9 @@ export default defineConfig({
   shortcuts: {
     'wh-full': 'w-full h-full',
     'flex-center': 'flex justify-center items-center',
-    "absolute-center": 'absolute top-50% left-50% -translate-x-50% -translate-y-50%',
+    'absolute-center': 'absolute top-50% left-50% -translate-x-50% -translate-y-50%',
     'backdrop-fit': 'bg-center bg-cover object-cover object-center',
+    'border-line': 'border-1px border-solid border-color-[var(--base-divider-color)]',
   },
   cli: {
     entry: {

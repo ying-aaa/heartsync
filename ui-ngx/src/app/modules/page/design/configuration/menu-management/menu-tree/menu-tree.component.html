@@ -11,17 +11,11 @@
           <mat-icon matChipAvatar>view_list</mat-icon>
           新增目录
         </mat-chip>
-        <mat-chip
-          [disabled]="isMenu"
-          (click)="addChildNode(IMenuType.Dashboard, clickedRows)"
-        >
+        <mat-chip [disabled]="isMenu" (click)="addChildNode(IMenuType.Dashboard, clickedRows)">
           <mat-icon matChipAvatar>account_tree</mat-icon>
           新增子级菜单
         </mat-chip>
-        <mat-chip
-          [disabled]="isMenu"
-          (click)="addChildNode(IMenuType.Parent, clickedRows)"
-        >
+        <mat-chip [disabled]="isMenu" (click)="addChildNode(IMenuType.Parent, clickedRows)">
           <mat-icon matChipAvatar>account_tree</mat-icon>
           新增子级目录
         </mat-chip>
@@ -95,11 +89,7 @@
       hs-loading
       [isLoading]="loadingStatus"
     >
-      <section
-        tabindex="0"
-        scrollViewport
-        class="wh-full"
-      >
+      <section tabindex="0" scrollViewport class="wh-full">
         <table
           mat-table
           [dataSource]="flattenedNodes()"
@@ -107,27 +97,18 @@
           class="mat-elevation-z8"
         >
           <ng-container matColumnDef="menuType">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-            >
-              菜单类型
-            </th>
-            <td
-              mat-cell
-              *matCellDef="let node"
-              [style.width]="'100px'"
-            >
+            <th mat-header-cell *matHeaderCellDef>菜单类型</th>
+            <td mat-cell *matCellDef="let node" [style.width]="'100px'">
               <div class="w-100px">
                 <hs-inline-editor
                   type="select"
                   [value]="node.menuType"
                   [selectOptions]="[
-                { value: 'parent', label: '目录', disabled: true },
-                { value: 'dashboard', label: '菜单' },
-                { value: 'urlRedirect', label: 'url跳转' },
-                { value: 'appRedirect', label: '应用跳转' },
-              ]"
+                    { value: 'parent', label: '目录', disabled: true },
+                    { value: 'dashboard', label: '菜单' },
+                    { value: 'urlRedirect', label: 'url跳转' },
+                    { value: 'appRedirect', label: '应用跳转' },
+                  ]"
                   selectLabelField="label"
                   [showButton]="false"
                   [highlight]="true"
@@ -139,46 +120,26 @@
           </ng-container>
 
           <ng-container matColumnDef="name">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              [style.width]="'320px'"
-            >
-              菜单
-            </th>
-            <td
-              mat-cell
-              *matCellDef="let node"
-            >
-              <div
-                class="tree-node flex"
-                [style.padding-left]="node.level * 24 + 'px'"
-              >
+            <th mat-header-cell *matHeaderCellDef [style.width]="'320px'">菜单</th>
+            <td mat-cell *matCellDef="let node">
+              <div class="tree-node flex" [style.padding-left]="node.level * 24 + 'px'">
                 @if (node.expandable) {
-                <button
-                  mat-icon-button
-                  (click)="toggleNode(node)"
-                  class="tree-toggle"
-                >
-                  <mat-icon>
-                    {{
-                    node.isExpanded
-                    ? 'keyboard_arrow_down'
-                    : 'keyboard_arrow_right'
-                    }}
-                  </mat-icon>
-                </button>
+                  <button mat-icon-button (click)="toggleNode(node)" class="tree-toggle">
+                    <mat-icon>
+                      {{ node.isExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }}
+                    </mat-icon>
+                  </button>
                 } @else {
-                <div class="w-48px"></div>
+                  <div class="w-48px"></div>
                 }
 
                 <mat-icon class="tree-icon">
                   {{
-                  node.menuType === 'parent'
-                  ? node.isExpanded
-                  ? 'folder_open'
-                  : 'folder'
-                  : 'description'
+                    node.menuType === 'parent'
+                      ? node.isExpanded
+                        ? 'folder_open'
+                        : 'folder'
+                      : 'description'
                   }}
                 </mat-icon>
                 <div class="flex-1 w-0">
@@ -195,17 +156,8 @@
           </ng-container>
 
           <ng-container matColumnDef="dashboardId">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              [style.width]="'320px'"
-            >
-              关联仪表版
-            </th>
-            <td
-              mat-cell
-              *matCellDef="let node"
-            >
+            <th mat-header-cell *matHeaderCellDef [style.width]="'320px'">关联仪表版</th>
+            <td mat-cell *matCellDef="let node">
               <hs-tree-select
                 class="w-320px"
                 [value]="node.dashboardId"
@@ -216,16 +168,8 @@
           </ng-container>
 
           <ng-container matColumnDef="isFullscreen">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-            >
-              是否全屏
-            </th>
-            <td
-              mat-cell
-              *matCellDef="let node"
-            >
+            <th mat-header-cell *matHeaderCellDef>是否全屏</th>
+            <td mat-cell *matCellDef="let node">
               <div class="w-84px">
                 <hs-inline-editor
                   type="switch"
@@ -241,16 +185,8 @@
           </ng-container>
 
           <ng-container matColumnDef="actions">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-            >
-              操作
-            </th>
-            <td
-              mat-cell
-              *matCellDef="let node"
-            >
+            <th mat-header-cell *matHeaderCellDef>操作</th>
+            <td mat-cell *matCellDef="let node">
               <button
                 mat-icon-button
                 color="warn"
@@ -262,43 +198,27 @@
               </button>
 
               <mat-menu #menu="matMenu">
-                <button
-                  mat-menu-item
-                  (click)="deleteMenu(node)"
-                >
-                  确认删除
-                </button>
+                <button mat-menu-item (click)="deleteMenu(node)">确认删除</button>
               </mat-menu>
             </td>
           </ng-container>
 
-          <tr
-            mat-header-row
-            *matHeaderRowDef="displayedColumns; sticky: true"
-          ></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
           <tr
             mat-row
             *matRowDef="let row; columns: displayedColumns"
-            [cdkContextMenuTriggerFor]="
-          row.menuType === 'parent' ? ContentMenu : null
-        "
+            [cdkContextMenuTriggerFor]="row.menuType === 'parent' ? ContentMenu : null"
             [cdkContextMenuTriggerData]="{ context: row }"
             [class.bg-color-05]="clickedRows?.id === row.id"
             (click)="rowClicked(row)"
           ></tr>
 
           <tr *matNoDataRow>
-            <td
-              class="mat-cell text-center p-0!"
-              [attr.colspan]="displayedColumns.length"
-            >
+            <td class="mat-cell text-center p-0!" [attr.colspan]="displayedColumns.length">
               @if (!loadingStatus) {
-              <div class="absolute absolute-center text-18px">
-                <hs-svg
-                  name="empty"
-                  title="暂无数据"
-                ></hs-svg>
-              </div>
+                <div class="absolute absolute-center text-18px">
+                  <hs-svg name="empty" title="暂无数据"></hs-svg>
+                </div>
               }
             </td>
           </tr>
@@ -308,10 +228,7 @@
   </main>
 </div>
 
-<ng-template
-  #ContentMenu
-  let-row="context"
->
+<ng-template #ContentMenu let-row="context">
   <style>
     #hs-context-menu {
       background-color: var(--base-bg-color);
@@ -331,24 +248,19 @@
     class="absolute z-10 min-w-[180px] overflow-auto rounded-lg border border-slate-200 p-1.5 shadow-lg shadow-sm focus:outline-none"
   >
     @for (menu of contextMenu; track $index) {
-    <li
-      cdkMenuItem
-      role="menuitem"
-      (click)="menu.action(row)"
-      class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
-    >
-      <hs-svg
-        [name]="menu.icon"
-        width="16px"
-        height="16px"
-        containerClass="p-2px"
-      ></hs-svg>
+      <li
+        cdkMenuItem
+        role="menuitem"
+        (click)="menu.action(row)"
+        class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
+      >
+        <hs-svg [name]="menu.icon" width="16px" height="16px" containerClass="p-2px"></hs-svg>
 
-      <p class="font-medium ml-2">{{ menu.label }}</p>
-    </li>
-    @if ($index !== contextMenu.length - 1) {
-    <mat-divider class="my-3px!"></mat-divider>
-    }
+        <p class="font-medium ml-2">{{ menu.label }}</p>
+      </li>
+      @if ($index !== contextMenu.length - 1) {
+        <mat-divider class="my-3px!"></mat-divider>
+      }
     }
   </ul>
 </ng-template>

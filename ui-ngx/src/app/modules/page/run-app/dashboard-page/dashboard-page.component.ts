@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DashboardRuntimeComponent } from '@src/app/modules/components/dashboard-runtime/dashboard-runtime.component';
@@ -9,7 +9,7 @@ import { DashboardRuntimeComponent } from '@src/app/modules/components/dashboard
   styleUrls: ['./dashboard-page.component.less'],
   imports: [RouterModule, DashboardRuntimeComponent],
 })
-export class DashboardPageComponent implements OnInit {
+export class DashboardPageComponent implements OnInit, OnDestroy {
   dashboardId: string;
   private routeSub: Subscription | null = null;
 
@@ -28,4 +28,9 @@ export class DashboardPageComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  // 组件注销
+  ngOnDestroy() {
+    this.routeSub?.unsubscribe();
+  }
 }

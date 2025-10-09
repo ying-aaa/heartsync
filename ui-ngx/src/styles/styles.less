@@ -18,142 +18,141 @@ body {
 }
 
 // 滚动条
-.themeMixin( {
-    --base-color-05: @base-color-05;
-    --base-color-10: @base-color-10;
-    --base-color-20: @base-color-20;
-    --base-color-30: @base-color-30;
-    --base-color-50: @base-color-50;
-    --base-color-80: @base-color-80;
-    --base-color-100: @base-color-100;
+.themeMixin({
+  --base-color-05: @base-color-05;
+  --base-color-10: @base-color-10;
+  --base-color-20: @base-color-20;
+  --base-color-30: @base-color-30;
+  --base-color-50: @base-color-50;
+  --base-color-70: @base-color-70;
+  --base-color-80: @base-color-80;
+  --base-color-100: @base-color-100;
 
-    --base-text-color: @base-text-color;
+  --base-text-color: @base-text-color;
 
-    --bg-color: @bg-color;
-    --base-bg-color: @base-bg-color;
-    --editor-bg-color: @editor-bg-color;
+  --bg-color: @bg-color;
+  --base-bg-color: @base-bg-color;
+  --editor-bg-color: @editor-bg-color;
 
 
-    --editor-round-color: @editor-round-color;
-    --code-toolbar-bg-color: @code-toolbar-bg-color;
+  --editor-round-color: @editor-round-color;
+  --code-toolbar-bg-color: @code-toolbar-bg-color;
 
-    --base-line-color: @base-line-color;
-    --base-hover-line-color: @base-hover-line-color;
-    --base-divider-color: @base-divider-color;
-    --base-placeholder-text-color: @base-placeholder-text-color;
-    --base-placeholder-bg-color: @base-placeholder-bg-color;
+  --base-line-color: @base-line-color;
+  --base-hover-line-color: @base-hover-line-color;
+  --base-divider-color: @base-divider-color;
+  --base-placeholder-text-color: @base-placeholder-text-color;
+  --base-placeholder-bg-color: @base-placeholder-bg-color;
 
-    --gridster-bg-color: @gridster-bg-color;
-    --gridster-line-color: @gridster-line-color;
-    --gridster-item-bg-color: @gridster-item-bg-color;
+  --gridster-bg-color: @gridster-bg-color;
+  --gridster-line-color: @gridster-line-color;
+  --gridster-item-bg-color: @gridster-item-bg-color;
 
-    --table-header-bg-color: @table-header-bg-color;
+  --table-header-bg-color: @table-header-bg-color;
 
-    // 指定组件
-    --mdc-outlined-text-field-outline-color: @base-line-color;
-    --mdc-outlined-text-field-hover-outline-color: @base-hover-line-color;
-    --mat-divider-color: @base-divider-color;
-    // 表格背景
-    --mat-table-background-color: @base-bg-color;
-    // 表格线条
-    --mat-table-row-item-outline-color: @base-line-color;
-    // 弹出层背景
-    --mdc-dialog-container-color: @base-bg-color;
+  // 指定组件
+  --mdc-outlined-text-field-outline-color: @base-line-color;
+  --mdc-outlined-text-field-hover-outline-color: @base-hover-line-color;
+  --mat-divider-color: @base-divider-color;
+  // 表格背景
+  --mat-table-background-color: @base-bg-color;
+  // 表格线条
+  --mat-table-row-item-outline-color: @base-line-color;
+  // 弹出层背景
+  --mdc-dialog-container-color: @base-bg-color;
 
-    // 滚动组件样式
-    ng-scrollbar {
-      --scrollbar-thickness: 7;
-      --scrollbar-hover-thickness: 7;
-      --scrollbar-thumb-color: @base-color-20;
-      --scrollbar-thumb-hover-color: @base-color-30;
-      --scrollbar-border-radius: 7px;
-    }
-
-    *::-webkit-scrollbar {
-      width: 8px;
-      background: transparent;
-    }
-
-    *::-webkit-scrollbar-corner,
-    /* Scroll bar corner */
-    *::-webkit-scrollbar-thumb,
-    *::-webkit-scrollbar-track {
-      border-radius: 5px;
-    }
-
-    *::-webkit-scrollbar-corner,
-    *::-webkit-scrollbar-track {
-      /* Scroll bar track */
-      background-color: rgba(180, 160, 120, 0.1);
-      // box-shadow: inset 0 0 1px rgba(180, 160, 120, 0.5);
-    }
-
-    *::-webkit-scrollbar-thumb {
-      /* Scroll bar handle */
-      background-color: @base-color-30;
-    }
-
-    // ace 编辑器滚动条
-    .ace_scrollbar.ace_scrollbar-h {
-      height: 8px !important;
-    }
-
-    /* 自定义滚动条样式示例 */
-    .editor ::-webkit-scrollbar {
-      width: 8px;
-      /* 滚动条的宽度 */
-    }
-
-    .editor ::-webkit-scrollbar-track {
-      background: transparent;
-      /* 滚动条轨道的背景色 */
-    }
-
-    .editor ::-webkit-scrollbar-thumb {
-      background: @base-color-20;
-      /* 滚动条的背景色 */
-      border-radius: 0px;
-      /* 滚动条的圆角 */
-    }
-
-    .editor ::-webkit-scrollbar-thumb:hover {
-      background: @base-color-30;
-      /* 滚动条悬停时的背景色 */
-    }
-
-    // 分割线背景色
-    .as-split-gutter {
-      background-color: @split-gutter-color  !important;
-    }
-
-    // fullscreen 时的背景色
-    .hs-fullscreen-parent {
-      height: 100%;
-      background: @base-bg-color;
-      z-index: 0;
-    }
-
-    // 输入框的背景颜色
-    .mat-mdc-form-field {
-      background-color: @base-bg-color;
-    }
-
-    .text-bg-color {
-      color: @base-text-color;
-      background-color: @base-bg-color;
-    }
-
-    body {
-      .text-bg-color();
-      --mat-sys-corner-full: 8px;
-    }
-
-    ul.ui-widget-content {
-      .text-bg-color();
-    }
+  // 滚动组件样式
+  ng-scrollbar {
+    --scrollbar-thickness: 7;
+    --scrollbar-hover-thickness: 7;
+    --scrollbar-thumb-color: @base-color-20;
+    --scrollbar-thumb-hover-color: @base-color-30;
+    --scrollbar-border-radius: 7px;
   }
 
-);
+  *::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-corner,
+  /* Scroll bar corner */
+  *::-webkit-scrollbar-thumb,
+  *::-webkit-scrollbar-track {
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-corner,
+  *::-webkit-scrollbar-track {
+    /* Scroll bar track */
+    background-color: rgba(180, 160, 120, 0.1);
+    // box-shadow: inset 0 0 1px rgba(180, 160, 120, 0.5);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    /* Scroll bar handle */
+    background-color: @base-color-30;
+  }
+
+  // ace 编辑器滚动条
+  .ace_scrollbar.ace_scrollbar-h {
+    height: 8px !important;
+  }
+
+  /* 自定义滚动条样式示例 */
+  .editor ::-webkit-scrollbar {
+    width: 8px;
+    /* 滚动条的宽度 */
+  }
+
+  .editor ::-webkit-scrollbar-track {
+    background: transparent;
+    /* 滚动条轨道的背景色 */
+  }
+
+  .editor ::-webkit-scrollbar-thumb {
+    background: @base-color-20;
+    /* 滚动条的背景色 */
+    border-radius: 0px;
+    /* 滚动条的圆角 */
+  }
+
+  .editor ::-webkit-scrollbar-thumb:hover {
+    background: @base-color-30;
+    /* 滚动条悬停时的背景色 */
+  }
+
+  // 分割线背景色
+  .as-split-gutter {
+    background-color: @split-gutter-color !important;
+  }
+
+  // fullscreen 时的背景色
+  .hs-fullscreen-parent {
+    height: 100%;
+    background: @base-bg-color;
+    z-index: 0;
+  }
+
+  // 输入框的背景颜色
+  .mat-mdc-form-field {
+    background-color: @base-bg-color;
+  }
+
+  .text-bg-color {
+    color: @base-text-color;
+    background-color: @base-bg-color;
+  }
+
+  body {
+    .text-bg-color();
+    --mat-sys-corner-full: 8px;
+  }
+
+  ul.ui-widget-content {
+    .text-bg-color();
+  }
+});
 
 .cdk-drag-preview {
   opacity: .6;

@@ -1,32 +1,30 @@
 @import 'themeMixin';
 
-.themeMixin ( {
-    :host {
-      display: block;
-      width: 100%;
-      height: 100%;
+.themeMixin ({
+  :host {
+    display: block;
+    width: 100%;
+    height: 100%;
 
-      content {
-        background-color: @gridster-bg-color;
+    content {
+      background-color: @gridster-bg-color;
 
-        ::ng-deep {
-          gridster {
-            padding: 0px;
-            background-color: transparent;
+      ::ng-deep {
+        gridster {
+          padding: 0px;
+          background-color: transparent;
 
-            .gridster-item-resizable-handler {
-              z-index: 1000;
-            }
+          .gridster-item-resizable-handler {
+            z-index: 1000;
+          }
 
-            gridster-item {
-              background-color: @gridster-item-bg-color;
-            }
+          gridster-item {
+            background-color: @gridster-item-bg-color;
           }
         }
       }
-
     }
-  }
 
-);
+  }
+});
 ;

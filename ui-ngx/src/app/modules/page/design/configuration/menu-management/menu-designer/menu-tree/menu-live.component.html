@@ -1,0 +1,76 @@
+<style>
+  :host {
+    display: block;
+  }
+</style>
+<div
+  [id]="parentNode()?.id || 'scope'"
+  cdkDropList
+  [cdkDropListData]="nodes()"
+  (cdkDropListDropped)="drop($event)"
+  [cdkDropListConnectedTo]="connectedTo()"
+  [cdkDropListEnterPredicate]="canEnter"
+>
+  @for (node of nodes(); track $index) {
+    <style>
+      .drag-box:not(.cdk-drag-placeholder) {
+        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+      }
+    </style>
+    <div class="drag-box" [cdkDragDisabled]="!parentNode()" cdkDrag>
+      <style>
+        .menu-item-active {
+          border-left-width: 4px;
+          --tw-border-opacity: 1;
+          border-color: rgb(22 93 255 / var(--tw-border-opacity, 1));
+          background-color: rgb(22 93 255 / 0.1);
+          --tw-text-opacity: 1;
+          color: rgb(22 93 255 / var(--tw-text-opacity, 1));
+          border-style: solid;
+
+          mat-icon {
+            color: rgb(22 93 255 / var(--tw-text-opacity, 1));
+          }
+        }
+      </style>
+      <div
+        class="p-3 mb-1 rounded-md hover:bg-#eff0f3 cursor-pointer flex items-center"
+        [class.menu-item-active]="node.id == 1"
+        [style.paddingLeft.px]="level() * 20"
+        [style.width]="'calc(100%-' + node.level * 20 + 'px) !important'"
+      >
+        <mat-icon class="mx-8px color-#0e46ff"> app_registration </mat-icon>
+        <span class="text-16px w-0 flex-1">{{ node.name }}</span>
+        @if (node.children) {
+          <mat-icon class="text-18px w-18px! h-18px! color-#999">
+            {{ node.children && node.children.length ? 'expand_more' : 'expand_less' }}
+          </mat-icon>
+        }
+      </div>
+
+      <div
+        class="border-line box-border border-color-#0e46ff p-3 mb-1 rounded-md hover:bg-light-1 cursor-pointer flex items-center transition-colors"
+        [style.width]="'calc(100% - ' + level() * 20 + 'px) !important'"
+        [style.marginLeft.px]="level() * 20"
+        *cdkDragPlaceholder
+      >
+        <mat-icon class="mr-8px color-#0e46ff"> app_registration </mat-icon>
+        <span class="text-16px w-0 flex-1">{{ node.name }}</span>
+        @if (node.children) {
+          <mat-icon>
+            {{ node.children && node.children.length ? 'expand_more' : 'expand_less' }}
+          </mat-icon>
+        }
+      </div>
+
+      @if (node.children) {
+        <hs-menu-live
+          [parentNode]="node"
+          [nodes]="node.children"
+          [connectedTo]="connectedTo()"
+          [level]="level() + 1"
+        ></hs-menu-live>
+      }
+    </div>
+  }
+</div>

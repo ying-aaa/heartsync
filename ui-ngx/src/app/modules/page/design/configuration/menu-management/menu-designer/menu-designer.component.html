@@ -1,0 +1,79 @@
+<content class="text-14px wh-full">
+  <header class="h-60px p-20px flex flex-row-reverse items-center">
+    <button mat-flat-button>保存</button>
+  </header>
+
+  <mat-divider class="w-full"></mat-divider>
+
+  <div class="flex h-[calc(100%-60px)]">
+    <aside class="w-280px h-100% p-15px">
+      @for (item of presetComps; track $index) {
+        <div class="mb-16px">
+          <div class="text-13px mb-12px ml-5px color-[var(--base-color-80)]">{{ item.name }}</div>
+
+          @for (comp of item.comps; track $index) {
+            <div class="flex-center rounded-8px border-line px-10px py-14px mb-10px">
+              <mat-icon class="mr-12px color-#2c7eac">{{ comp.icon }}</mat-icon>
+              <div class="flex-1">
+                <div class="mb-5px">{{ comp.name }}</div>
+                <div class="text-12px color-[var(--base-color-70)]">{{ comp.desc }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </aside>
+
+    <mat-divider class="h-full" [vertical]="true"></mat-divider>
+
+    <main class="flex-1 h-full">
+      <header class="h-60px p-20px flex justify-between">
+        <div class="flex">
+          <div class="h-full flex items-center gap-10px">
+            <button mat-flat-button>侧边栏</button>
+            <button mat-button>顶部栏</button>
+          </div>
+          <mat-divider [vertical]="true" class="ml-10px! mr-16px!"></mat-divider>
+          <div class="h-full flex items-center">
+            <span class="color-[var(--base-color-70)]">预览设备：</span>
+            <mat-form-field class="hs-density--5 w-120px">
+              <select matNativeControl>
+                <option value="">手机</option>
+                <option value="">平板</option>
+                <option value="">PC</option>
+              </select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- 放大和缩小按钮，中间是百分比 -->
+        <div class="flex items-center">
+          <button mat-icon-button class="hs-icon-button-32">
+            <mat-icon>zoom_out</mat-icon>
+          </button>
+          <span class="px-8px">80%</span>
+          <button mat-icon-button class="hs-icon-button-32">
+            <mat-icon> zoom_in </mat-icon>
+          </button>
+        </div>
+      </header>
+      <mat-divider class="w-full"></mat-divider>
+
+      <div
+        class="relative w-full h-[calc(100%-60px)] bg-#f0f1f4 bg-[radial-gradient(rgba(12,12,12,0.171)_2px,transparent_0)] bg-[length:30px_30px]"
+      >
+        <div class="absolute-center w-[calc(100%-60px)] h-[calc(100%-60px)] flex bg-#fff">
+          <div class="w-225px p-8px">
+            <hs-menu-live [nodes]="menuData()" [connectedTo]="connectedTo()"></hs-menu-live>
+          </div>
+          <mat-divider [vertical]="true" class="h-full"></mat-divider>
+          <div class="w-0 flex-1"></div>
+        </div>
+      </div>
+    </main>
+
+    <mat-divider class="h-full" [vertical]="true"></mat-divider>
+
+    <aside class="w-280px h-100%"></aside>
+  </div>
+</content>
