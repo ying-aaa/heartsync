@@ -1,3 +1,11 @@
+<style>
+  :host {
+    .wp > .cdk-drag-placeholder {
+      display: none;
+    }
+  }
+</style>
+
 <content class="text-14px wh-full">
   <header class="h-60px p-20px flex flex-row-reverse items-center">
     <button mat-flat-button>保存</button>
@@ -7,17 +15,35 @@
 
   <div class="flex h-[calc(100%-60px)]">
     <aside class="w-280px h-100% p-15px">
-      @for (item of presetComps; track $index) {
-        <div class="mb-16px">
+      @for (item of presetComps(); track $index) {
+        <div
+          class="mb-16px wp"
+          cdkDropList
+          [cdkDropListConnectedTo]="connectedTo()"
+          [cdkDropListData]="item.comps"
+          cdkDropListSortingDisabled
+        >
           <div class="text-13px mb-12px ml-5px color-[var(--base-color-80)]">{{ item.name }}</div>
 
           @for (comp of item.comps; track $index) {
-            <div class="flex-center rounded-8px border-line px-10px py-14px mb-10px">
-              <mat-icon class="mr-12px color-#2c7eac">{{ comp.icon }}</mat-icon>
-              <div class="flex-1">
-                <div class="mb-5px">{{ comp.name }}</div>
-                <div class="text-12px color-[var(--base-color-70)]">{{ comp.desc }}</div>
+            <div
+              cdkDrag
+              (cdkDragStarted)="onDragStart(comp, item)"
+              (cdkDragEnded)="onDragEnd()"
+              [cdkDragData]="comp"
+              cdkDragPreviewContainer="parent"
+            >
+              <div class="flex-center rounded-8px border-line px-10px py-14px mb-10px">
+                <mat-icon class="mr-12px color-#2c7eac">{{ comp.icon }}</mat-icon>
+                <div class="flex-1">
+                  <div class="mb-5px">{{ comp.name }}</div>
+                  <div class="text-12px color-[var(--base-color-70)]">{{ comp.desc }}</div>
+                </div>
               </div>
+
+              @if(comp.type === 'divider'){
+                <mat-divider class="w-full my-6px!" *cdkDragPlaceholder></mat-divider>
+              }
             </div>
           }
         </div>

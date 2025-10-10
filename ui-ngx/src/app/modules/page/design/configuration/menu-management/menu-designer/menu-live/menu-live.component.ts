@@ -1,18 +1,20 @@
 import {
   CdkDrag,
   CdkDragDrop,
-  CdkDragPlaceholder,
   CdkDropList,
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { Component, HostListener, input, OnInit, ViewChild } from '@angular/core';
+import { Component, computed, HostListener, input, OnInit, ViewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
+import { MenuDesignerService } from '../../menu-deisgner.sevice';
+import { generateUUID } from '@src/app/core/utils';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'hs-menu-live',
   templateUrl: './menu-live.component.html',
-  imports: [CdkDropList, CdkDrag, CdkDragPlaceholder, MatIcon],
+  imports: [CdkDropList, CdkDrag, MatIcon, MatDivider],
 })
 export class MenuLiveComponent implements OnInit {
   @ViewChild(CdkDropList) dropList!: CdkDropList;
@@ -23,14 +25,17 @@ export class MenuLiveComponent implements OnInit {
   // 层级
   level = input<number>(0);
 
-  mousePosition = { x: 0, y: 0 };
+  isDragging = computed(() => this.menuDeSignerService.isDragging());
 
-  constructor() {}
+  constructor(private menuDeSignerService: MenuDesignerService) {}
 
   @HostListener('mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {
-    this.mousePosition.x = event.clientX;
-    this.mousePosition.y = event.clientY;
+    this.menuDeSignerService.onMouseMove(event);
+  }
+
+  toggleDragging(isDragging: boolean): void {
+    this.menuDeSignerService.toggleDragging(isDragging);
   }
 
   canEnter = (drag: CdkDrag) => {
@@ -43,13 +48,29 @@ export class MenuLiveComponent implements OnInit {
 
   private _isMouseInElement(droplistElement: HTMLElement): boolean {
     const rect: DOMRect = droplistElement.getBoundingClientRect();
-    const { x, y } = this.mousePosition;
+    const { x, y } = this.menuDeSignerService.mousePosition;
     const isInWidth = x >= rect.left && x <= rect.right;
     const isInHeight = y >= rect.top && y <= rect.bottom;
     return isInWidth && isInHeight;
   }
 
   drop(event: CdkDragDrop<string[]>) {
+    const fromData = event.item.data;
+
+    if (fromData) {
+      const assignId = (data: any) => {
+        fromData.id = generateUUID();
+        if (data.children) {
+          data.children.forEach(assignId);
+        }
+      };
+
+      const { currentIndex: toIndex } = event;
+      const toParent = event.container.data;
+      toParent.splice(toIndex, 0, fromData);
+      return;
+    }
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {

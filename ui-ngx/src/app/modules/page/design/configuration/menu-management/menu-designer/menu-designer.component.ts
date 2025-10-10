@@ -1,13 +1,21 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
-import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { getParamFromRoute } from '@src/app/core/utils';
 import { ActivatedRoute } from '@angular/router';
-import { RunAppComponent } from '@src/app/modules/page/run-app/run-app.component';
-import { MatFormField, MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatFormField, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { MenuLiveComponent } from './menu-tree/menu-live.component';
+import { MenuLiveComponent } from './menu-live/menu-live.component';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragPlaceholder,
+  CdkDropList,
+  copyArrayItem,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
+import { MenuDesignerService } from '../menu-deisgner.sevice';
 
 @Component({
   selector: 'hs-menu-designer',
@@ -16,41 +24,48 @@ import { MenuLiveComponent } from './menu-tree/menu-live.component';
     MatIcon,
     MatDivider,
     MatButtonModule,
-    RunAppComponent,
     MatFormField,
     MatSelectModule,
     MatInputModule,
     MenuLiveComponent,
+    CdkDrag,
+    CdkDropList,
+    CdkDragPlaceholder,
   ],
 })
 export class MenuDesignerComponent implements OnInit {
   appId: string = getParamFromRoute('appId', this.route)!;
 
-  presetComps = [
+  presetComps = signal([
     {
       type: 'title',
       name: '基础菜单',
       icon: 'menu',
       comps: [
         {
-          type: 'comp',
+          type: 'menu',
           name: '菜单项',
           icon: 'insert_drive_file',
-          key: 'menu',
           desc: '基础导航项',
         },
         {
-          type: 'comp',
+          type: 'submenu',
           name: '子菜单',
           icon: 'folder',
-          key: 'submenu',
           desc: '包含子项的菜单',
+          children: [
+            {
+              type: 'menu',
+              name: '菜单项',
+              icon: 'insert_drive_file',
+              desc: '基础导航项',
+            },
+          ],
         },
         {
-          type: 'comp',
+          type: 'divider',
           name: '分割线',
           icon: 'horizontal_rule',
-          key: 'divider',
           desc: '分隔不同菜单项',
         },
       ],
@@ -61,22 +76,20 @@ export class MenuDesignerComponent implements OnInit {
       icon: 'menu',
       comps: [
         {
-          type: 'comp',
+          type: 'search',
           name: '搜索框',
           icon: 'search',
-          key: 'search',
           desc: '菜单内搜索功能',
         },
         {
-          type: 'comp',
+          type: 'user',
           name: '用户信息',
           icon: 'face',
-          key: 'user',
           desc: '显示用户资料',
         },
       ],
     },
-  ];
+  ]);
 
   menuData = signal<any>([
     {
@@ -127,6 +140,7 @@ export class MenuDesignerComponent implements OnInit {
       ],
     },
   ]);
+
   connectedTo = computed(() => {
     function traverse(nodes: any = [], ids: string[] = ['scope']) {
       nodes.forEach((node: any) => {
@@ -139,7 +153,47 @@ export class MenuDesignerComponent implements OnInit {
     }
     return traverse(this.menuData());
   });
-  constructor(private route: ActivatedRoute) {}
+
+  constructor(
+    private route: ActivatedRoute,
+    private menuDeSignerService: MenuDesignerService,
+  ) {}
+
+  toggleDragging(isDragging: boolean): void {
+    this.menuDeSignerService.toggleDragging(isDragging);
+  }
+
+  onDragStart(preset: any, group: any) {
+    this.toggleDragging(true);
+
+    const groupIndex = this.presetComps().findIndex((item: any) => item.name === group.name);
+    const groupChildIndex = this.presetComps()[groupIndex].comps!.findIndex(
+      (item: any) => item.name === preset.name,
+    );
+
+    // 创建一个临时占位元素
+    const placeholder = { ...preset, isPlaceholder: true };
+
+    this.presetComps.update((value: any) => {
+      const newValue = [...value];
+      newValue[groupIndex].comps.splice(groupChildIndex, 0, placeholder);
+      return newValue;
+    });
+  }
+
+  onDragEnd() {
+    this.toggleDragging(false);
+
+    this.presetComps.update((value: any) => {
+      const newValue = [...value];
+
+      newValue.forEach((group: any) => {
+        group.comps = group.comps.filter((item: any) => !item.isPlaceholder);
+      });
+
+      return newValue;
+    });
+  }
 
   ngOnInit() {}
 }

@@ -1,0 +1,72 @@
+<style>
+  :host {
+    display: block;
+    margin-left: 20px;
+
+    .menu-item-active {
+      border-left-width: 4px;
+      border-color: rgb(22 93 255);
+      background-color: rgb(22 93 255 / 0.1);
+      color: rgb(22 93 255);
+      border-style: solid;
+
+      mat-icon {
+        color: rgb(22 93 255);
+      }
+    }
+
+    .drag-box:not(.cdk-drag-placeholder) {
+      /* transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); */
+    }
+
+    .drag-box .cdk-drag-placeholder {
+      border: 1px solid #0e46ff;
+      border-radius: 8px;
+    }
+  }
+</style>
+<div
+  [id]="parentNode()?.id || 'scope'"
+  cdkDropList
+  [cdkDropListData]="nodes()"
+  (cdkDropListDropped)="drop($event)"
+  [cdkDropListConnectedTo]="connectedTo()"
+  [cdkDropListEnterPredicate]="canEnter"
+>
+  @for (node of nodes(); track $index) {
+    <div
+      cdkDrag
+      class="drag-box"
+      [cdkDragDisabled]="!parentNode()"
+      (cdkDragStarted)="toggleDragging(true)"
+      (cdkDragEnded)="toggleDragging(false)"
+    >
+      @if (node.type !== 'divider') {
+        <div
+          class="p-12px rounded-md cursor-pointer flex items-center"
+          [class.menu-item-active]="node.id == '1-1'"
+          [class]="!isDragging() && 'hover:bg-#eff0f3'"
+        >
+          <mat-icon class="mx-8px color-#0e46ff"> app_registration </mat-icon>
+          <span class="text-16px w-0 flex-1">{{ node.name }}</span>
+          @if (node.children) {
+            <mat-icon class="text-18px w-18px! h-18px! color-#999">
+              {{ node.children && node.children.length ? 'expand_more' : 'expand_less' }}
+            </mat-icon>
+          }
+        </div>
+      }
+      @if(node.type === 'divider') {
+        <mat-divider class="w-full my-6px!"></mat-divider>
+      }
+      @if (node.children) {
+        <hs-menu-live
+          [parentNode]="node"
+          [nodes]="node.children"
+          [connectedTo]="connectedTo()"
+          [level]="level() + 1"
+        ></hs-menu-live>
+      }
+    </div>
+  }
+</div>
