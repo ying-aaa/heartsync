@@ -91,55 +91,11 @@ export class MenuDesignerComponent implements OnInit {
     },
   ]);
 
-  menuData = signal<any>([
-    {
-      id: '1',
-      name: '仪表板',
-      type: 'parent',
-      children: [
-        {
-          id: '1-1',
-          name: '首页大屏',
-          type: 'child',
-          children: [
-            {
-              id: '1-1-1',
-              name: '风机大屏',
-              type: 'child',
-            },
-            {
-              id: '1-1-2',
-              name: '火电大屏',
-              type: 'child',
-            },
-          ],
-        },
-        {
-          id: '1-2',
-          name: '燃油机状态',
-          type: 'child',
-        },
-      ],
-    },
-    {
-      id: '2',
-      name: '内容管理',
-      type: 'parent',
-      children: [
-        {
-          id: '2-1',
-          name: '文章列表',
-          type: 'child',
-          children: [],
-        },
-        {
-          id: '2-2',
-          name: '图片库',
-          type: 'child',
-        },
-      ],
-    },
-  ]);
+  menuData = signal<any>([]);
+
+  onDrop() {
+    this.menuData.set([...this.menuData()]);
+  }
 
   connectedTo = computed(() => {
     function traverse(nodes: any = [], ids: string[] = ['scope']) {
@@ -149,6 +105,7 @@ export class MenuDesignerComponent implements OnInit {
           traverse(node.children, ids);
         }
       });
+
       return ids;
     }
     return traverse(this.menuData());
@@ -195,5 +152,61 @@ export class MenuDesignerComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  loadMenuData() {
+    this.menuData.set([
+      {
+        id: '1',
+        name: '仪表板',
+        type: 'parent',
+        children: [
+          {
+            id: '1-1',
+            name: '首页大屏',
+            type: 'child',
+            children: [
+              {
+                id: '1-1-1',
+                name: '风机大屏',
+                type: 'child',
+              },
+              {
+                id: '1-1-2',
+                name: '火电大屏',
+                type: 'child',
+              },
+            ],
+          },
+          {
+            id: '1-2',
+            name: '燃油机状态',
+            type: 'child',
+          },
+        ],
+      },
+      {
+        id: '2',
+        name: '内容管理',
+        type: 'parent',
+        children: [
+          {
+            id: '2-1',
+            name: '文章列表',
+            type: 'child',
+            children: [],
+          },
+          {
+            id: '2-2',
+            name: '图片库',
+            type: 'child',
+          },
+        ],
+      },
+    ]);
+
+    this.menuDeSignerService.selectNode(this.menuData()[0]);
+  }
+
+  ngOnInit() {
+    this.loadMenuData();
+  }
 }

@@ -1,7 +1,6 @@
 <style>
   :host {
     display: block;
-    margin-left: 20px;
 
     .menu-item-active {
       border-left-width: 4px;
@@ -19,7 +18,7 @@
       /* transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); */
     }
 
-    .drag-box .cdk-drag-placeholder {
+    .drag-box.cdk-drag-placeholder {
       border: 1px solid #0e46ff;
       border-radius: 8px;
     }
@@ -37,15 +36,17 @@
     <div
       cdkDrag
       class="drag-box"
-      [cdkDragDisabled]="!parentNode()"
       (cdkDragStarted)="toggleDragging(true)"
       (cdkDragEnded)="toggleDragging(false)"
     >
       @if (node.type !== 'divider') {
         <div
-          class="p-12px rounded-md cursor-pointer flex items-center"
-          [class.menu-item-active]="node.id == '1-1'"
-          [class]="!isDragging() && 'hover:bg-#eff0f3'"
+          class="my-6px p-12px rounded-md cursor-pointer flex items-center"
+          [class]="{
+            'hover:bg-#eff0f3': !isDragging(),
+            'menu-item-active': node.id == selectedNode().id,
+          }"
+          (click)="selectNode(node)"
         >
           <mat-icon class="mx-8px color-#0e46ff"> app_registration </mat-icon>
           <span class="text-16px w-0 flex-1">{{ node.name }}</span>
@@ -56,8 +57,10 @@
           }
         </div>
       }
-      @if(node.type === 'divider') {
-        <mat-divider class="w-full my-6px!"></mat-divider>
+      @if (node.type === 'divider') {
+        <div class="w-full my-6px">
+          <mat-divider class="w-full"></mat-divider>
+        </div>
       }
       @if (node.children) {
         <hs-menu-live
@@ -65,6 +68,7 @@
           [nodes]="node.children"
           [connectedTo]="connectedTo()"
           [level]="level() + 1"
+          (onDrop)="onDrop.emit()"
         ></hs-menu-live>
       }
     </div>

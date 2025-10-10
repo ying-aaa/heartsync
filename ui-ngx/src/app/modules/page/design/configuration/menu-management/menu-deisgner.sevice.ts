@@ -7,6 +7,9 @@ export class MenuDesignerService {
   // 是否在拖拽中
   isDragging = signal<boolean>(false);
 
+  // 选中的菜单节点
+  selectedNode = signal<any>({});
+
   constructor() {}
 
   onMouseMove(event: MouseEvent): void {
@@ -15,5 +18,9 @@ export class MenuDesignerService {
 
   toggleDragging(isDragging: boolean): void {
     this.isDragging.set(isDragging);
+  }
+
+  selectNode(node: any) {
+    this.selectedNode.set(node);
   }
 }

@@ -41,8 +41,10 @@
                 </div>
               </div>
 
-              @if(comp.type === 'divider'){
-                <mat-divider class="w-full my-6px!" *cdkDragPlaceholder></mat-divider>
+              @if (comp.type === 'divider') {
+                <div class="w-full my-6px!" *cdkDragPlaceholder>
+                  <mat-divider class="w-full"></mat-divider>
+                </div>
               }
             </div>
           }
@@ -90,7 +92,11 @@
       >
         <div class="absolute-center w-[calc(100%-60px)] h-[calc(100%-60px)] flex bg-#fff">
           <div class="w-225px p-8px">
-            <hs-menu-live [nodes]="menuData()" [connectedTo]="connectedTo()"></hs-menu-live>
+            <hs-menu-live
+              [nodes]="menuData()"
+              [connectedTo]="connectedTo()"
+              (onDrop)="onDrop()"
+            ></hs-menu-live>
           </div>
           <mat-divider [vertical]="true" class="h-full"></mat-divider>
           <div class="w-0 flex-1"></div>

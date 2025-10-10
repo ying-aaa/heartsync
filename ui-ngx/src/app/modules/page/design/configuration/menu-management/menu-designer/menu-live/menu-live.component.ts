@@ -5,10 +5,21 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { Component, computed, HostListener, input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  input,
+  OnInit,
+  Output,
+  output,
+  ViewChild,
+} from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MenuDesignerService } from '../../menu-deisgner.sevice';
-import { generateUUID } from '@src/app/core/utils';
+import { deepClone, generateUUID } from '@src/app/core/utils';
 import { MatDivider } from '@angular/material/divider';
 
 @Component({
@@ -18,6 +29,8 @@ import { MatDivider } from '@angular/material/divider';
 })
 export class MenuLiveComponent implements OnInit {
   @ViewChild(CdkDropList) dropList!: CdkDropList;
+  // 向父元素输出
+  @Output() onDrop = new EventEmitter<any>();
 
   parentNode = input<any>();
   nodes = input<any>();
@@ -27,7 +40,14 @@ export class MenuLiveComponent implements OnInit {
 
   isDragging = computed(() => this.menuDeSignerService.isDragging());
 
+  selectedNode = computed(() => this.menuDeSignerService.selectedNode());
+
   constructor(private menuDeSignerService: MenuDesignerService) {}
+
+  @HostBinding('style.margin-left')
+  get isTopLayer(): string {
+    return this.level() ? '20px' : '0';
+  }
 
   @HostListener('mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {
@@ -36,6 +56,11 @@ export class MenuLiveComponent implements OnInit {
 
   toggleDragging(isDragging: boolean): void {
     this.menuDeSignerService.toggleDragging(isDragging);
+  }
+
+  // 选择菜单事件
+  selectNode(node: any) {
+    this.menuDeSignerService.selectNode(node);
   }
 
   canEnter = (drag: CdkDrag) => {
@@ -55,32 +80,34 @@ export class MenuLiveComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    const fromData = event.item.data;
+    const fromData = deepClone(event.item.data);
+
+    const formParentData = event.previousContainer.data;
+    const toParentData = event.container.data;
+    const formIndex = event.previousIndex;
+    const toIndex = event.currentIndex;
 
     if (fromData) {
       const assignId = (data: any) => {
-        fromData.id = generateUUID();
+        data.id = data.id || generateUUID();
         if (data.children) {
           data.children.forEach(assignId);
         }
       };
+      assignId(fromData);
 
-      const { currentIndex: toIndex } = event;
-      const toParent = event.container.data;
-      toParent.splice(toIndex, 0, fromData);
-      return;
+      toParentData.splice(toIndex, 0, fromData);
+
+      return this.onDrop.emit();
     }
 
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      moveItemInArray(toParentData, formIndex, toIndex);
     } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
+      transferArrayItem(formParentData, toParentData, formIndex, toIndex);
     }
+
+    this.onDrop.emit();
   }
 
   ngOnInit() {}
