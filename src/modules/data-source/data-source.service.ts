@@ -70,6 +70,7 @@ export class HsDataSourceService {
   async findOne(id: string) {
     try {
       const dataSource = await this.dataSourceRepo.findOneBy({ id });
+      if (!dataSource) throw '';
       return dataSource;
     } catch (error) {
       throw new NotFoundException(`数据源ID=${id}不存在`);
@@ -93,7 +94,6 @@ export class HsDataSourceService {
    */
   async testConnectionById(id: string) {
     const dataSource = await this.findOne(id);
-    console.log('%c Line:95 🍅 dataSource', 'color:#7f2b82', dataSource);
     const testRes = await DriverManager.testConnection(dataSource);
     // 同步更新数据源状态
     if (testRes.success !== (dataSource.status === 'online')) {
@@ -122,6 +122,6 @@ export class HsDataSourceService {
   async remove(id: string) {
     await this.findOne(id); // 先校验是否存在
     await this.dataSourceRepo.delete(id);
-    return { success: true, message: '数据源删除成功' };
+    // return { success: true, message: '数据源删除成功' };
   }
 }
