@@ -9,13 +9,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MenuLiveComponent } from './menu-live/menu-live.component';
 import {
   CdkDrag,
-  CdkDragDrop,
   CdkDragPlaceholder,
   CdkDropList,
-  copyArrayItem,
-  moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { MenuDesignerService } from '../menu-deisgner.sevice';
+import { MenuGlobalConfigComponent } from "./menu-global-config/menu-global-config.component";
+import { MenuSingleConfigComponent } from "./menu-single-config/menu-single-config.component";
 
 @Component({
   selector: 'hs-menu-designer',
@@ -31,7 +30,9 @@ import { MenuDesignerService } from '../menu-deisgner.sevice';
     CdkDrag,
     CdkDropList,
     CdkDragPlaceholder,
-  ],
+    MenuGlobalConfigComponent,
+    MenuSingleConfigComponent
+],
 })
 export class MenuDesignerComponent implements OnInit {
   appId: string = getParamFromRoute('appId', this.route)!;

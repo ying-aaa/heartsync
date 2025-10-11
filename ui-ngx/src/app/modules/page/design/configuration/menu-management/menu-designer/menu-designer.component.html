@@ -14,7 +14,7 @@
   <mat-divider class="w-full"></mat-divider>
 
   <div class="flex h-[calc(100%-60px)]">
-    <aside class="w-280px h-100% p-15px">
+    <aside class="w-280px h-100% p-15px hidden">
       @for (item of presetComps(); track $index) {
         <div
           class="mb-16px wp"
@@ -54,7 +54,7 @@
 
     <mat-divider class="h-full" [vertical]="true"></mat-divider>
 
-    <main class="flex-1 h-full">
+    <main class="flex-1 h-full hidden">
       <header class="h-60px p-20px flex justify-between">
         <div class="flex">
           <div class="h-full flex items-center gap-10px">
@@ -106,6 +106,12 @@
 
     <mat-divider class="h-full" [vertical]="true"></mat-divider>
 
-    <aside class="w-280px h-100%"></aside>
+    <aside class="w-280px h-100% relative">
+      <hs-menu-global-config></hs-menu-global-config>
+
+      <hs-menu-single-config class="absolute wh-full top-0 left-0 bg-#fff"></hs-menu-single-config>
+    </aside>
+
+    <mat-divider class="h-full" [vertical]="true"></mat-divider>
   </div>
 </content>
