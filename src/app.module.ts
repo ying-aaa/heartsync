@@ -11,6 +11,7 @@ import { HsUploadModule } from './modules/upload/upload.module';
 import { WidgetsModule } from './modules/widget/widgets.module';
 import { HsDashboardModule } from './modules/dashboard/dashboard.module';
 import { HsMenuModule } from './modules/menu/hs-menu.module';
+import { HsDataSourceModule } from './modules/data-source/data-source.module';
 
 @Module({
   providers: [HsPaginationService],
@@ -23,6 +24,7 @@ import { HsMenuModule } from './modules/menu/hs-menu.module';
     HsDashboardModule,
     HsFileTreeModule,
     HsApplicationModule,
+    HsDataSourceModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
