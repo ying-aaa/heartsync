@@ -29,6 +29,7 @@ export class DriverManager {
   static async testConnection(dataSource: HsDataSourceEntity) {
     const config = this.getConnConfig(dataSource);
     let connection: any = null;
+    const { host, port, database, username: user, password } = config;
 
     try {
       // 动态加载对应数据库驱动（避免打包冗余依赖）
@@ -37,17 +38,23 @@ export class DriverManager {
         driver = await import('mysql2/promise');
         // 创建MySQL连接并测试
         connection = await driver.createConnection({
-          host: config.host,
-          port: config.port,
-          user: config.username,
-          password: config.password,
-          database: config.database,
+          host,
+          port,
+          user,
+          password,
+          database,
         });
         await connection.query('SELECT 1'); // 测试查询
       } else if (config.type === 'postgres') {
         driver = await import('pg');
         // 创建PostgreSQL连接并测试
-        connection = new driver.Client(config);
+        connection = new driver.Client({
+          host,
+          port,
+          user,
+          password,
+          database,
+        });
         await connection.connect();
         await connection.query('SELECT 1');
       } else {
@@ -65,7 +72,7 @@ export class DriverManager {
       if (connection) {
         config.type === 'mysql'
           ? await connection.end()
-          : await connection.disconnect();
+          : await connection.end();
       }
     }
   }

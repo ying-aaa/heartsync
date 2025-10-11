@@ -11,6 +11,12 @@ import {
   MaxLength,
 } from 'class-validator';
 
+export enum DB_TYPES {
+  Mysql = 'mysql',
+  Postgres = 'postgres',
+  Sqlserver = 'sqlserver',
+}
+
 export class CreateDataSourceDto {
   @ApiProperty({ description: '数据源名称（唯一）', example: 'prod-mysql' })
   @IsString()
@@ -21,10 +27,10 @@ export class CreateDataSourceDto {
 
   @ApiProperty({
     description: '数据库类型',
-    enum: ['mysql', 'postgres', 'sqlserver'],
+    enum: DB_TYPES,
     example: 'mysql',
   })
-  @IsEnum(['mysql', 'postgres', 'sqlserver'])
+  @IsEnum(DB_TYPES)
   type: 'mysql' | 'postgres' | 'sqlserver';
 
   @ApiProperty({ description: '数据库主机', example: '192.168.1.100' })

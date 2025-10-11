@@ -1,4 +1,12 @@
-import { Controller, Post, Get, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Delete,
+  Body,
+  Param,
+  BadRequestException,
+} from '@nestjs/common';
 import { HsDataSourceService } from './data-source.service';
 import { CreateDataSourceDto } from './dto/create-data-source.dto';
 
@@ -20,6 +28,15 @@ export class HsDataSourceController {
   }
 
   /**
+   * 测试数据源连接
+   * GET /api/data-sources/test
+   */
+  @Post('/test')
+  testConnection(@Body() data: CreateDataSourceDto) {
+    return this.service.testConnection(data);
+  }
+
+  /**
    * 获取所有数据源
    * GET /api/data-sources
    */
@@ -29,7 +46,7 @@ export class HsDataSourceController {
   }
 
   /**
-   * 获取单个数据源详情
+   * 获取单个数据源详情, id必填
    * GET /api/data-sources/:id
    */
   @Get(':id')
@@ -38,12 +55,12 @@ export class HsDataSourceController {
   }
 
   /**
-   * 测试数据源连接
+   * 根据已有的测试数据源连接
    * GET /api/data-sources/:id/test
    */
   @Get(':id/test')
-  testConnection(@Param('id') id: string) {
-    return this.service.testConnection(id);
+  testConnectionById(@Param('id') id: string) {
+    return this.service.testConnectionById(id);
   }
 
   /**

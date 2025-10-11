@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CryptoUtil } from 'src/common/utils/crypto.util';
 import { DriverManager } from 'src/common/utils/driver-manager.util';
@@ -22,23 +26,30 @@ export class HsDataSourceService {
    * @returns 创建后的数据源实体
    */
   async create(data: Partial<HsDataSourceEntity>) {
-    // 1. 加密密码
-    const encryptedPwd = CryptoUtil.encrypt(data.password || '');
-    // 2. 构建实体
-    const dataSource = this.dataSourceRepo.create({
-      ...data,
-      password: encryptedPwd, // 存储加密后的密码
-      status: 'offline', // 初始状态离线
-    });
-    // 3. 保存到元数据库
-    const saved = await this.dataSourceRepo.save(dataSource);
-    // 4. 自动测试连接并更新状态
-    const testRes = await DriverManager.testConnection(saved);
-    if (testRes.success) {
-      saved.status = 'online';
-      await this.dataSourceRepo.update(saved.id, { status: 'online' });
+    try {
+      // 1. 加密密码
+      const encryptedPwd = CryptoUtil.encrypt(data.password || '');
+      // 2. 构建实体
+      const dataSource = this.dataSourceRepo.create({
+        ...data,
+        password: encryptedPwd, // 存储加密后的密码
+        status: 'offline', // 初始状态离线
+      });
+      // 3. 保存到元数据库
+      const saved = await this.dataSourceRepo.save(dataSource);
+      // 4. 自动测试连接并更新状态
+      const testRes = await DriverManager.testConnection(saved);
+      if (testRes.success) {
+        saved.status = 'online';
+        await this.dataSourceRepo.update(saved.id, { status: 'online' });
+      }
+      return saved;
+    } catch (e) {
+      if (e.code === '23505') {
+        throw new BadRequestException(e.detail);
+      }
+      throw e; // 其它异常继续向上抛，框架会转 500
     }
-    return saved;
   }
 
   /**
@@ -57,11 +68,22 @@ export class HsDataSourceService {
    * @returns 数据源实体
    */
   async findOne(id: string) {
-    const dataSource = await this.dataSourceRepo.findOneBy({ id });
-    if (!dataSource) {
+    try {
+      const dataSource = await this.dataSourceRepo.findOneBy({ id });
+      return dataSource;
+    } catch (error) {
       throw new NotFoundException(`数据源ID=${id}不存在`);
     }
-    return dataSource;
+  }
+
+  // 根据请求源信息测试🔗
+  async testConnection(data: Partial<HsDataSourceEntity>) {
+    const encryptedPwd = CryptoUtil.encrypt(data.password || '');
+    const dataSource = this.dataSourceRepo.create({
+      ...data,
+      password: encryptedPwd,
+    });
+    return DriverManager.testConnection(dataSource);
   }
 
   /**
@@ -69,8 +91,9 @@ export class HsDataSourceService {
    * @param id 数据源ID
    * @returns 连接结果
    */
-  async testConnection(id: string) {
+  async testConnectionById(id: string) {
     const dataSource = await this.findOne(id);
+    console.log('%c Line:95 🍅 dataSource', 'color:#7f2b82', dataSource);
     const testRes = await DriverManager.testConnection(dataSource);
     // 同步更新数据源状态
     if (testRes.success !== (dataSource.status === 'online')) {
