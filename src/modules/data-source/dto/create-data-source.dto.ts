@@ -9,6 +9,7 @@ import {
   Min,
   MinLength,
   MaxLength,
+  IsOptional,
 } from 'class-validator';
 
 export enum DB_TYPES {
@@ -67,4 +68,26 @@ export class CreateDataSourceDto {
   @IsString()
   @MinLength(6)
   password: string;
+
+  @ApiProperty({ description: '客户端字符集', example: 'utf8' })
+  @IsString()
+  @IsOptional()
+  clientCharset?: string;
+
+  @ApiProperty({ description: '数据库字符集', example: 'utf8' })
+  @IsString()
+  @IsOptional()
+  dataBaseCharset?: string;
+
+  @ApiProperty({ description: '最小连接数', example: 1 })
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  minPoolCount?: number;
+
+  @ApiProperty({ description: '最大连接数', example: 10 })
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  maxPoolCount?: number;
 }

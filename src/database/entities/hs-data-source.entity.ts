@@ -38,6 +38,24 @@ export class HsDataSourceEntity {
   @Column({ comment: '加密后的数据库密码' })
   password: string;
 
+  // 客户端字符集
+  @Column({ name: 'client_charset', comment: '客户端字符集', default: 'utf8' })
+  clientCharset: string;
+  // 服务器字符集
+  @Column({
+    name: 'data_base_charset',
+    comment: '服务器字符集',
+    default: 'al32utf8',
+  })
+  dataBaseCharset: string;
+
+  // 连接池最大连接数
+  @Column({ name: 'max_pool_count', comment: '连接池最大连接数', default: 50 })
+  maxPoolCount: number;
+
+  @Column({ name: 'min_pool_count', comment: '连接池最小连接数', default: 10 })
+  minPoolCount: number;
+
   @Column({
     comment: '数据源连接状态',
     enum: ['online', 'offline'],
@@ -45,6 +63,6 @@ export class HsDataSourceEntity {
   })
   status: string;
 
-  @CreateDateColumn({ comment: '数据源创建时间' })
+  @CreateDateColumn({ name: 'created_at', comment: '数据源创建时间' })
   createdAt: Date;
 }
