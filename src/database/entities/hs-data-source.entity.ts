@@ -12,37 +12,48 @@ export class HsDataSourceEntity {
 
   @Column({
     unique: true,
+    type: 'varchar',
     comment: '数据源名称（用户自定义，需唯一）',
   })
   name: string;
 
   @Column({
     comment: '数据库类型',
+    type: 'varchar',
     enum: ['mysql', 'postgres', 'sqlserver'], // 支持的数据库类型
     default: 'mysql',
   })
   type: string;
 
-  @Column({ comment: '数据库主机地址（如localhost、192.168.1.100）' })
+  @Column({
+    type: 'varchar',
+    comment: '数据库主机地址（如localhost、192.168.1.100）',
+  })
   host: string;
 
-  @Column({ comment: '数据库端口' })
+  @Column({ type: 'int', comment: '数据库端口' })
   port: number;
 
-  @Column({ comment: '目标数据库名称（要连接的具体库名）' })
+  @Column({ type: 'varchar', comment: '目标数据库名称（要连接的具体库名）' })
   database: string;
 
-  @Column({ comment: '数据库登录用户名' })
+  @Column({ type: 'varchar', comment: '数据库登录用户名' })
   username: string;
 
-  @Column({ comment: '加密后的数据库密码' })
+  @Column({ type: 'varchar', comment: '加密后的数据库密码' })
   password: string;
 
   // 客户端字符集
-  @Column({ name: 'client_charset', comment: '客户端字符集', default: 'utf8' })
+  @Column({
+    type: 'varchar',
+    name: 'client_charset',
+    comment: '客户端字符集',
+    default: 'utf8',
+  })
   clientCharset: string;
   // 服务器字符集
   @Column({
+    type: 'varchar',
     name: 'data_base_charset',
     comment: '服务器字符集',
     default: 'al32utf8',
@@ -50,13 +61,24 @@ export class HsDataSourceEntity {
   dataBaseCharset: string;
 
   // 连接池最大连接数
-  @Column({ name: 'max_pool_count', comment: '连接池最大连接数', default: 50 })
+  @Column({
+    type: 'int',
+    name: 'max_pool_count',
+    comment: '连接池最大连接数',
+    default: 50,
+  })
   maxPoolCount: number;
 
-  @Column({ name: 'min_pool_count', comment: '连接池最小连接数', default: 10 })
+  @Column({
+    type: 'int',
+    name: 'min_pool_count',
+    comment: '连接池最小连接数',
+    default: 10,
+  })
   minPoolCount: number;
 
   @Column({
+    type: 'varchar',
     comment: '数据源连接状态',
     enum: ['online', 'offline'],
     default: 'offline', // 初始状态为离线

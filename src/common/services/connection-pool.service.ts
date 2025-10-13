@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import mysql, { Pool as mySqlPool } from 'mysql2/promise';
+import mysql from 'mysql2/promise';
 import { Pool } from 'pg';
 import { HsDataSourceEntity } from 'src/database/entities/hs-data-source.entity';
 import { CryptoUtil } from '../utils/crypto.util';
@@ -23,7 +23,9 @@ export class HsConnectionPoolService implements OnModuleInit {
   // LRU队列：按最近使用顺序存储数据源ID（队尾是最近使用的）
   private lruQueue: string[] = [];
 
-  constructor(private logger: HsLoggerService) {}
+  constructor(private logger: HsLoggerService) {
+    this.logger.setContext(HsConnectionPoolService.name);
+  }
 
   // 模块初始化时启动长期闲置连接池清理任务
   onModuleInit() {
@@ -34,7 +36,7 @@ export class HsConnectionPoolService implements OnModuleInit {
    * 获取数据源的连接池（LRU策略管理）
    */
   async getPool(dataSource: HsDataSourceEntity) {
-    const { id: dataSourceId, type } = dataSource;
+    const { id: dataSourceId } = dataSource;
     const now = Date.now();
 
     // 1. 若连接池已存在，更新其最后使用时间并移到LRU队尾

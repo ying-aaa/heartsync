@@ -20,6 +20,10 @@ export class HsLoggerService implements LoggerService {
     });
   }
 
+  setContext(context: string) {
+    this.defaultContext = context;
+  }
+
   /**
    * 基础日志方法（内部使用）
    */

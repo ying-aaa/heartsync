@@ -12,7 +12,7 @@ import { WidgetsModule } from './modules/widget/widgets.module';
 import { HsDashboardModule } from './modules/dashboard/dashboard.module';
 import { HsMenuModule } from './modules/menu/hs-menu.module';
 import { HsDataSourceModule } from './modules/data-source/data-source.module';
-import { HsLoggerService } from './common/services/logger.service';
+import { HsAssetModule } from './modules/asset/asset.module';
 
 @Module({
   providers: [HsPaginationService],
@@ -26,6 +26,7 @@ import { HsLoggerService } from './common/services/logger.service';
     HsFileTreeModule,
     HsApplicationModule,
     HsDataSourceModule,
+    HsAssetModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
