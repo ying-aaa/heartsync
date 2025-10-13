@@ -38,7 +38,11 @@ export class HsAssetSyncService {
    * @param tableName 要同步的表名
    * @returns 同步结果（新增/更新/删除的数量）
    */
-  async syncTableFields(dataSourceId: string, tableName: string) {
+  async syncTableFields(
+    dataSourceId: string,
+    tableName: string,
+    assetId: string,
+  ) {
     // 1. 获取数据源配置（数据库类型、数据库名等）
     const dataSource = await this.dataSourceService.findOne(dataSourceId);
 
@@ -77,7 +81,6 @@ export class HsAssetSyncService {
 
       // 5. 处理新增和更新
       for (const dbField of dbFields) {
-        console.log('%c Line:80 🍢 dbField', 'color:#42b983', dbField);
         // 查找已存在的记录（通过 dataSourceId + tableName + name 唯一匹配）
         const existingField = existingFields.find(
           (f) => f.name === dbField.fieldName && !f.isDeleted,
@@ -87,6 +90,7 @@ export class HsAssetSyncService {
           // 5.1 新增：数据库有，本地无
           const newField = new HsAssetFieldEntity();
           newField.dataSourceId = dataSourceId;
+          newField.assetId = assetId;
           newField.tableName = tableName;
           newField.name = dbField.fieldName;
           newField.type = dbField.fieldType; // 数据库原生类型

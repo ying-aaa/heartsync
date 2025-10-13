@@ -30,6 +30,14 @@ export class HsAssetFieldEntity {
   dataSourceId: string;
 
   @Column({
+    name: 'asset_id',
+    type: 'varchar',
+    length: 100,
+    comment: '资产ID（关联资产）',
+  })
+  assetId: string;
+
+  @Column({
     name: 'table_name',
     type: 'varchar',
     length: 100,

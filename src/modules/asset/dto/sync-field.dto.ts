@@ -7,5 +7,5 @@ export class SyncFieldDto {
 
   @IsString()
   @IsNotEmpty()
-  tableName: string;
+  asset_id: string;
 }

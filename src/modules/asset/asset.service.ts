@@ -1,8 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HsAssetFieldEntity } from 'src/database/entities/hs-asset-field.entity';
 import { Repository } from 'typeorm';
 import { HsAssetSyncService } from './asset-sync.service';
+import { HsAssetTableEntity } from 'src/database/entities/hs-asset-table.entity';
+import { CreateAssetDto } from './dto/create-asset.dto';
 
 /**
  * 根据前端传入的参数，生成数据库表结构
@@ -16,15 +22,37 @@ import { HsAssetSyncService } from './asset-sync.service';
 @Injectable()
 export class HsAssetService {
   constructor(
+    @InjectRepository(HsAssetTableEntity)
+    private assetTableRepo: Repository<HsAssetTableEntity>,
     @InjectRepository(HsAssetFieldEntity)
     private assetFieldRepo: Repository<HsAssetFieldEntity>,
     private hsAssetSyncService: HsAssetSyncService,
   ) {}
 
-  async syncAssetFields(dataSourceId: string, tableName: string) {
+  async create(assetData: CreateAssetDto) {
+    try {
+      const newData = this.assetTableRepo.create(assetData);
+      const result = await this.assetTableRepo.save(newData);
+      return result;
+    } catch (e) {
+      throw new BadRequestException(e.detail);
+    }
+  }
+
+  async syncAssetFields(assetId: string) {
+    let assetData: HsAssetTableEntity;
+    try {
+      // 查询资产数据
+      assetData = await this.assetTableRepo.findOneBy({ id: assetId });
+    } catch (error) {
+      throw new NotFoundException(`资产ID=${assetId}不存在`);
+    }
+    const { dataSourceId, tableName } = assetData;
+    // 根据资产id查询
     return await this.hsAssetSyncService.syncTableFields(
       dataSourceId,
       tableName,
+      assetId,
     );
   }
 

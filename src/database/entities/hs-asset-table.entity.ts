@@ -30,15 +30,18 @@ export class HsAssetTableEntity {
   @Column({
     name: 'app_id',
     type: 'varchar',
+    nullable: true,
     length: 100,
     comment: '应用ID',
   })
-  appId: string;
+  // 可以为空
+  appId?: string;
 
   @Column({
     name: 'table_name',
     type: 'varchar',
     length: 100,
+    unique: true,
     comment: '表名别名（系统展示的表名）',
   })
   tableName: string;
@@ -54,6 +57,7 @@ export class HsAssetTableEntity {
   @Column({
     name: 'is_deleted',
     type: 'boolean',
+    nullable: true,
     default: false,
     comment: '是否逻辑删除',
   })

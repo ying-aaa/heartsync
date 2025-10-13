@@ -1,9 +1,29 @@
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+
 export class CreateAssetDto {
   id?: string;
+
+  @IsString()
+  @IsNotEmpty()
   name: string;
-  appId: string;
+
+  @IsString()
+  @IsOptional()
+  appId?: string;
+
+  @IsString()
+  @IsNotEmpty()
   dataSourceId: string;
+
+  @IsString()
+  @IsNotEmpty()
   tableName: string;
-  catalogId: string;
+
+  @IsString()
+  @IsOptional()
+  catalogId?: string;
+
+  @IsString()
+  @IsOptional()
   comment?: string;
 }

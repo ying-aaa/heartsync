@@ -1,16 +1,21 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { HsAssetService } from './asset.service';
-import { SyncFieldDto } from './dto/sync-field.dto';
+import { CreateAssetDto } from './dto/create-asset.dto';
 
 @Controller('asset')
 export class HsAssetController {
   constructor(private readonly assetService: HsAssetService) {}
 
+  // 创建资产
+  @Post('')
+  async create(@Body() assetData: CreateAssetDto) {
+    return await this.assetService.create(assetData);
+  }
+
   // 根据数据库中表字段信息生成并同步资产字段
-  @Post('/sync-field')
-  async syncAssetFields(@Body() syncInfo: SyncFieldDto) {
-    const { dataSourceId, tableName } = syncInfo;
-    return await this.assetService.syncAssetFields(dataSourceId, tableName);
+  @Post('/sync-field/:assetId')
+  async syncAssetFields(@Param('assetId') assetId: string) {
+    return await this.assetService.syncAssetFields(assetId);
   }
 
   // 查询指定资产下的字段
