@@ -1,9 +1,10 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import mysql from 'mysql2/promise';
-import { Pool } from 'pg';
+import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import mysql, { Pool as MysqlPool } from 'mysql2/promise';
+import { Pool as PgPool, Client as PgClient } from 'pg';
 import { HsDataSourceEntity } from 'src/database/entities/hs-data-source.entity';
-import { CryptoUtil } from '../utils/crypto.util';
-import { HsLoggerService } from './logger.service';
+import { HsDataSourceService } from './data-source.service';
+import { HsLoggerService } from 'src/common/services/logger.service';
+import { CryptoUtil } from 'src/common/utils/crypto.util';
 
 // 连接池配置（可通过环境变量动态调整）
 const CONFIG = {
@@ -18,18 +19,87 @@ export class HsConnectionPoolService implements OnModuleInit {
   // 存储连接池：key=数据源ID，value={ pool: 连接池实例, lastUsed: 最后使用时间 }
   private poolMap = new Map<
     string,
-    { pool: mysql.Pool | Pool; lastUsed: number }
+    { pool: MysqlPool | PgPool; lastUsed: number }
   >();
   // LRU队列：按最近使用顺序存储数据源ID（队尾是最近使用的）
   private lruQueue: string[] = [];
 
-  constructor(private logger: HsLoggerService) {
+  constructor(
+    @Inject(forwardRef(() => HsDataSourceService))
+    private dataSourceService: HsDataSourceService,
+    private logger: HsLoggerService,
+  ) {
     this.logger.setContext(HsConnectionPoolService.name);
   }
 
   // 模块初始化时启动长期闲置连接池清理任务
   onModuleInit() {
     this.startLongIdleCleanupTask();
+  }
+
+  /**
+   * 测试数据源是否能成功建立连接（核心分离的连接测试功能）
+   * @param dataSource 数据源配置实体
+   * @returns 连接成功返回true，失败抛出错误
+   */
+  async testConnection(
+    dataSource: HsDataSourceEntity,
+  ): Promise<{ success: boolean; message: string }> {
+    const { type, host, port, database, username, password } = dataSource;
+    const decryptedPassword = CryptoUtil.decrypt(password);
+    let connection: any = null;
+
+    try {
+      // 根据数据库类型创建临时连接
+      if (type === 'mysql') {
+        // MySQL临时连接
+        connection = await mysql.createConnection({
+          host,
+          port,
+          database,
+          user: username,
+          password: decryptedPassword,
+        });
+        // 执行测试查询
+        await connection.execute('SELECT 1');
+      } else if (type === 'postgres') {
+        // PostgreSQL临时连接
+        connection = new PgClient({
+          host,
+          port,
+          database,
+          user: username,
+          password: decryptedPassword,
+        });
+        await connection.connect();
+        // 执行测试查询
+        await connection.query('SELECT 1');
+      } else {
+        throw new Error(`不支持的数据库类型：${type}`);
+      }
+
+      this.logger.debug(`数据源${dataSource.id}连接测试成功`);
+      return { success: true, message: '连接成功' };
+    } catch (error) {
+      this.logger.error(`数据源${dataSource.id}连接测试失败：${error.message}`);
+      return {
+        success: false,
+        message: `连接失败：${error.message || '未知错误'}`,
+      };
+    } finally {
+      // 确保临时连接关闭，避免资源泄漏
+      if (connection) {
+        try {
+          if (type === 'mysql') {
+            await connection.end(); // 关闭MySQL连接
+          } else if (type === 'postgres') {
+            await connection.end(); // 关闭PostgreSQL连接
+          }
+        } catch (closeError) {
+          this.logger.warn(`关闭测试连接失败：${closeError.message}`);
+        }
+      }
+    }
   }
 
   /**
@@ -62,7 +132,11 @@ export class HsConnectionPoolService implements OnModuleInit {
       }
     }
 
-    // 3. 创建新连接池
+    // 3. 先测试连接是否可用，再创建连接池
+    const testRes = await this.testConnection(dataSource); // 使用分离的测试功能
+    if (!testRes.success) {
+      throw new Error(`数据源${dataSourceId}连接测试失败：${testRes.message}`);
+    }
     const newPool = await this.createPool(dataSource);
 
     // 4. 加入映射和LRU队尾
@@ -84,16 +158,18 @@ export class HsConnectionPoolService implements OnModuleInit {
   async getConnection(dataSourceId: string, type: string) {
     const poolInfo = this.poolMap.get(dataSourceId);
     if (!poolInfo) {
-      throw new Error(`数据源${dataSourceId}的连接池未初始化，请先调用getPool`);
+      this.logger.error(`数据源${dataSourceId}未初始化`);
+      const dataSource = await this.dataSourceService.findOne(dataSourceId);
+      await this.getPool(dataSource);
     }
 
     // 获取连接
     const connection =
       type === 'mysql'
-        ? await (poolInfo.pool as mysql.Pool).getConnection()
-        : await (poolInfo.pool as Pool).connect();
+        ? await (poolInfo.pool as MysqlPool).getConnection()
+        : await (poolInfo.pool as PgPool).connect();
 
-    // 检测连接有效性
+    // 检测连接有效性（复用测试逻辑的核心查询）
     try {
       if (type === 'mysql') {
         await connection.execute('SELECT 1'); // MySQL测试语句
@@ -129,12 +205,7 @@ export class HsConnectionPoolService implements OnModuleInit {
     if (!poolInfo) return;
 
     try {
-      // 关闭连接池
-      // if (poolInfo.pool instanceof mySqlPool) {
-      //   await poolInfo.pool.end();
-      // } else {
       await poolInfo.pool.end();
-      // }
       this.logger.debug(`销毁连接池：${dataSourceId}`);
     } catch (error) {
       this.logger.error(`销毁连接池${dataSourceId}失败：${error.message}`);
@@ -152,64 +223,45 @@ export class HsConnectionPoolService implements OnModuleInit {
    * 创建连接池（内部方法）
    */
   private async createPool(dataSource: HsDataSourceEntity) {
-    const { type, host, port, database, username, password } = dataSource;
+    const {
+      type,
+      host,
+      port,
+      database,
+      username,
+      password,
+      maxPoolCount,
+      minPoolCount,
+    } = dataSource;
     const decryptedPassword = CryptoUtil.decrypt(password);
 
-    let pool;
-    try {
-      if (type === 'mysql') {
-        pool = mysql.createPool({
-          host,
-          port,
-          database,
-          user: username,
-          password: decryptedPassword,
-          waitForConnections: true, // 连接耗尽时等待
-          connectionLimit: CONFIG.SINGLE_POOL_MAX_CONNECTIONS, // 单池最大连接数
-          queueLimit: 0, // 等待队列无限制
-          idleTimeout: CONFIG.IDLE_TIMEOUT, // 连接闲置超时
-        });
-      } else if (type === 'postgres') {
-        pool = new Pool({
-          host,
-          port,
-          database,
-          user: username,
-          password: decryptedPassword,
-          max: CONFIG.SINGLE_POOL_MAX_CONNECTIONS, // 单池最大连接数
-          idleTimeoutMillis: CONFIG.IDLE_TIMEOUT, // 闲置超时
-          connectionTimeoutMillis: 5000, // 连接超时
-        });
-      } else {
-        throw new Error(`不支持的数据库类型：${type}`);
-      }
-
-      // 测试连接池有效性（创建后立即验证）
-      await this.testPool(pool, type);
-      return pool;
-    } catch (error) {
-      this.logger.error(`创建连接池失败（${dataSource.id}）：${error.message}`);
-      throw error;
-    }
-  }
-
-  /**
-   * 测试连接池是否可用
-   */
-  private async testPool(pool: any, type: string) {
-    let connection;
-    try {
-      connection =
-        type === 'mysql'
-          ? await (pool as mysql.Pool).getConnection()
-          : await (pool as Pool).connect();
-      await (type === 'mysql'
-        ? connection.execute('SELECT 1')
-        : connection.query('SELECT 1'));
-    } finally {
-      if (connection) {
-        this.closeConnection(connection, type);
-      }
+    if (type === 'mysql') {
+      return mysql.createPool({
+        host,
+        port,
+        database,
+        user: username,
+        password: decryptedPassword,
+        waitForConnections: true, // 连接耗尽时等待
+        connectionLimit: CONFIG.SINGLE_POOL_MAX_CONNECTIONS, // 单池最大连接数
+        queueLimit: 0, // 等待队列无限制
+        idleTimeout: CONFIG.IDLE_TIMEOUT, // 连接闲置超时
+      });
+    } else if (type === 'postgres') {
+      return new PgPool({
+        host,
+        port,
+        database,
+        user: username,
+        password: decryptedPassword,
+        // max: CONFIG.SINGLE_POOL_MAX_CONNECTIONS, // 单池最大连接数
+        max: maxPoolCount,
+        min: minPoolCount,
+        idleTimeoutMillis: CONFIG.IDLE_TIMEOUT, // 闲置超时
+        connectionTimeoutMillis: 5000, // 连接超时
+      });
+    } else {
+      throw new Error(`不支持的数据库类型：${type}`);
     }
   }
 

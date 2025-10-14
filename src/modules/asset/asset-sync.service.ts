@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Connection } from 'mysql2/promise';
 import { PoolClient } from 'pg';
-import { HsConnectionPoolService } from '../../common/services/connection-pool.service'; // 连接池服务
 import { HsAssetFieldEntity } from 'src/database/entities/hs-asset-field.entity';
 import { HsDataSourceService } from '../data-source/data-source.service';
 import { HsLoggerService } from 'src/common/services/logger.service';
+import { HsConnectionPoolService } from '../data-source/connection-pool.service';
 
 // 数据库查询返回的字段原始信息（统一格式）
 interface DbFieldRaw {

@@ -7,7 +7,6 @@ import { HsAssetTableEntity } from 'src/database/entities/hs-asset-table.entity'
 import { HsAssetRelationEntity } from 'src/database/entities/hs-asset-relation.entity';
 import { HsAssetFieldEntity } from 'src/database/entities/hs-asset-field.entity';
 import { HsAssetSyncService } from './asset-sync.service';
-import { HsConnectionPoolService } from 'src/common/services/connection-pool.service';
 import { HsDataSourceModule } from '../data-source/data-source.module';
 import { HsLoggerService } from 'src/common/services/logger.service';
 
@@ -22,12 +21,7 @@ import { HsLoggerService } from 'src/common/services/logger.service';
     HsDataSourceModule,
   ],
   controllers: [HsAssetController],
-  providers: [
-    HsAssetService,
-    HsAssetSyncService,
-    HsConnectionPoolService,
-    HsLoggerService,
-  ],
+  providers: [HsAssetService, HsAssetSyncService, HsLoggerService],
   exports: [HsAssetService, HsAssetSyncService],
 })
 export class HsAssetModule {}

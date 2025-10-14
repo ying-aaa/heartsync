@@ -1,13 +1,16 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CryptoUtil } from 'src/common/utils/crypto.util';
-import { DriverManager } from 'src/common/utils/driver-manager.util';
+// import { DriverManager } from 'src/common/utils/driver-manager.util';
 import { HsDataSourceEntity } from 'src/database/entities/hs-data-source.entity';
 import { Repository } from 'typeorm';
+import { HsConnectionPoolService } from './connection-pool.service';
 
 /**
  * 数据源服务：处理数据源的CRUD、连接测试、表列表查询
@@ -18,6 +21,8 @@ export class HsDataSourceService {
     // 注入数据源实体的Repository（TypeORM自动生成）
     @InjectRepository(HsDataSourceEntity)
     private dataSourceRepo: Repository<HsDataSourceEntity>,
+    @Inject(forwardRef(() => HsConnectionPoolService))
+    private poolService: HsConnectionPoolService,
   ) {}
 
   /**
@@ -38,7 +43,7 @@ export class HsDataSourceService {
       // 3. 保存到元数据库
       const saved = await this.dataSourceRepo.save(dataSource);
       // 4. 自动测试连接并更新状态
-      const testRes = await DriverManager.testConnection(saved);
+      const testRes = await this.poolService.testConnection(saved);
       if (testRes.success) {
         saved.status = 'online';
         await this.dataSourceRepo.update(saved.id, { status: 'online' });
@@ -84,7 +89,7 @@ export class HsDataSourceService {
       ...data,
       password: encryptedPwd,
     });
-    return DriverManager.testConnection(dataSource);
+    return this.poolService.testConnection(dataSource);
   }
 
   /**
@@ -94,7 +99,7 @@ export class HsDataSourceService {
    */
   async testConnectionById(id: string) {
     const dataSource = await this.findOne(id);
-    const testRes = await DriverManager.testConnection(dataSource);
+    const testRes = await this.poolService.testConnection(dataSource);
     // 同步更新数据源状态
     if (testRes.success !== (dataSource.status === 'online')) {
       await this.dataSourceRepo.update(id, {
@@ -111,7 +116,8 @@ export class HsDataSourceService {
    */
   async getTableList(id: string) {
     const dataSource = await this.findOne(id);
-    return DriverManager.getTableList(dataSource);
+    console.log('%c Line:119 🥪 dataSource', 'color:#2eafb0', dataSource);
+    // return DriverManager.getTableList(dataSource);
   }
 
   /**

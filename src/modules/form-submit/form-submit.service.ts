@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { HsConnectionPoolService } from 'src/common/services/connection-pool.service';
 import { HsDataSourceService } from '../data-source/data-source.service';
+import { HsConnectionPoolService } from '../data-source/connection-pool.service';
 
 @Injectable()
 export class HsFormSubmitService {
