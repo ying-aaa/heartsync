@@ -13,6 +13,7 @@ import { HsDashboardModule } from './modules/dashboard/dashboard.module';
 import { HsMenuModule } from './modules/menu/hs-menu.module';
 import { HsDataSourceModule } from './modules/data-source/data-source.module';
 import { HsAssetModule } from './modules/asset/asset.module';
+import { HsDynamicTableModule } from './modules/dynamic-table/dynamic-table.module';
 
 @Module({
   providers: [HsPaginationService],
@@ -27,6 +28,7 @@ import { HsAssetModule } from './modules/asset/asset.module';
     HsApplicationModule,
     HsDataSourceModule,
     HsAssetModule,
+    HsDynamicTableModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',

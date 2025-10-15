@@ -12,8 +12,8 @@ export enum IFieldType {
   NUMBER = 'number', // 数字
   BOOLEAN = 'boolean', // 布尔值
   DATE = 'date', // 日期
-  OBJECT = 'object', // 对象（JSON）
   TEXT = 'text', // 长文本
+  JSON = 'json',
 }
 
 @Entity('hs_asset_fields', { comment: '库表和资产关联字段' })
