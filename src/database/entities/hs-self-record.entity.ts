@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-@Entity('hs-self-record') // 指定表名为 hs-self-record
+@Entity('hs_self_record') // 指定表名为 hs-self-record
 export class HsSelfRecord {
   @PrimaryGeneratedColumn()
   id: number;

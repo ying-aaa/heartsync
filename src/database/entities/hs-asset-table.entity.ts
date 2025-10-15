@@ -7,7 +7,7 @@ import {
   Unique,
 } from 'typeorm';
 
-@Entity('hs-asset_tables', { comment: '系统存入的数据库表' })
+@Entity('hs_asset_tables', { comment: '系统存入的数据库表' })
 @Unique(['appId', 'name'])
 export class HsAssetTableEntity {
   @PrimaryGeneratedColumn('uuid')
