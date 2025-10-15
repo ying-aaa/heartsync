@@ -24,17 +24,6 @@ export class HsDynamicTableService {
   async createTable(dto: CreateTableDto) {
     const { dataSourceId, tableName, tableComment, fields } = dto;
 
-    // 1. 基础校验：表名/字段名合法性
-    this.validateTableName(tableName);
-    fields.forEach((field) => this.validateFieldName(field.name));
-
-    // 2. 校验主键唯一性（一张表只能有一个主键）
-    const primaryFields = fields.filter((f) => f.isPrimaryKey);
-    if (primaryFields.length > 1) {
-      throw new BadRequestException('一张表只能设置一个主键字段');
-    }
-
-    // 3. 获取数据源配置（确定数据库类型：mysql/postgres）
     const dataSource = await this.dataSourceService.findOne(dataSourceId);
     if (!dataSource) {
       throw new BadRequestException(`数据源不存在：${dataSourceId}`);
@@ -42,7 +31,6 @@ export class HsDynamicTableService {
     const dbType = dataSource.type; // 数据库类型
     const dbName = dataSource.database; // 数据库名
 
-    // 4. 检查目标数据库中表是否已存在
     const tableExists = await this.checkTableExists(
       dataSourceId,
       dbType,
@@ -84,30 +72,6 @@ export class HsDynamicTableService {
   }
 
   /**
-   * 校验表名合法性（符合数据库命名规范）
-   */
-  private validateTableName(tableName: string): void {
-    // 规则：仅包含字母、数字、下划线，不能以数字开头，长度≤64（多数数据库表名长度限制）
-    const regex = /^[a-zA-Z_][a-zA-Z0-9_]{0,63}$/;
-    if (!regex.test(tableName)) {
-      throw new BadRequestException(
-        `表名不合法（只能包含字母、数字、下划线，不能以数字开头，长度≤64）：${tableName}`,
-      );
-    }
-  }
-
-  /**
-   * 校验字段名合法性
-   */
-  private validateFieldName(fieldName: string): void {
-    // 规则：同表名，长度≤64
-    const regex = /^[a-zA-Z_][a-zA-Z0-9_]{0,63}$/;
-    if (!regex.test(fieldName)) {
-      throw new BadRequestException(`字段名不合法：${fieldName}`);
-    }
-  }
-
-  /**
    * 检查数据库中表是否已存在
    */
   private async checkTableExists(
@@ -127,22 +91,42 @@ export class HsDynamicTableService {
           SELECT 1 FROM information_schema.tables 
           WHERE table_schema = ? AND table_name = ?
         `;
-        params = [dbName, tableName];
+        params = [tableName];
       } else if (dbType === 'postgres') {
         // PostgreSQL：查询pg_catalog.pg_tables
         existsSql = `
           SELECT 1 FROM pg_catalog.pg_tables 
-          WHERE schemaname = $1 AND tablename = $2
+          WHERE tablename = $1
         `;
-        params = [dbName, tableName];
+        params = [tableName];
       } else {
         throw new BadRequestException(`不支持的数据库类型：${dbType}`);
       }
+      const result = await connection.query(existsSql, params);
+      const rows = result.rows;
 
-      const [rows] = await connection.query(existsSql, params);
-      return (rows as any[]).length > 0; // 有记录则表示表已存在
+      return (rows as any[]).length > 0;
     } finally {
       await this.poolService.closeConnection(dataSourceId);
+    }
+  }
+
+  /**
+   * 获取数据库对应的标识符分隔符（表名、字段名包裹符号）
+   * @param dbType 数据库类型
+   * @returns [开始符号, 结束符号]
+   */
+  private getIdentifierQuotes(dbType: string): [string, string] {
+    switch (dbType.toLowerCase()) {
+      case 'mysql':
+        return ['`', '`']; // MySQL用反引号
+      case 'postgresql':
+      case 'oracle':
+        return ['"', '"']; // PostgreSQL/Oracle用双引号
+      case 'sqlserver':
+        return ['[', ']']; // SQL Server用方括号
+      default:
+        return ['', '']; // 其他数据库默认不包裹（或根据需求调整）
     }
   }
 
@@ -155,40 +139,38 @@ export class HsDynamicTableService {
     fields: CreateTableDto['fields'],
     dbType: string,
   ): string {
-    // 字段SQL片段（如`id int NOT NULL PRIMARY KEY COMMENT '主键'`）
+    // 获取当前数据库的标识符分隔符
+    const [quoteStart, quoteEnd] = this.getIdentifierQuotes(dbType);
+
+    // 字段SQL片段
     const fieldSqls: string[] = fields.map((field) => {
-      // 1. 映射前端类型到数据库类型
       const dbFieldType = this.mapFieldType(
         field.fieldType,
         dbType,
         field.length,
       );
 
-      // 2. 处理约束（非空、主键）
       const constraints: string[] = [];
       if (field.notNull) constraints.push('NOT NULL');
       if (field.isPrimaryKey) constraints.push('PRIMARY KEY');
 
-      // 3. 处理注释（不同数据库注释语法）
+      // 处理注释（保持不变，大部分数据库兼容）
       const comment = field.comment
-        ? dbType === 'mysql'
-          ? `COMMENT '${this.escapeComment(field.comment)}'`
-          : `COMMENT '${this.escapeComment(field.comment)}'`
+        ? `COMMENT '${this.escapeComment(field.comment)}'`
         : '';
 
-      // 拼接字段定义（字段名用反引号包裹，避免关键字冲突）
-      return `\`${field.name}\` ${dbFieldType} ${constraints.join(' ')} ${comment}`.trim();
+      // 用动态分隔符包裹字段名
+      return `${quoteStart}${field.name}${quoteEnd} ${dbFieldType} ${constraints.join(' ')} ${comment}`.trim();
     });
 
-    // 拼接表SQL（表名用反引号包裹，添加表注释）
+    // 表注释（保持不变）
     const tableCommentSql = tableComment
-      ? dbType === 'mysql'
-        ? `COMMENT '${this.escapeComment(tableComment)}'`
-        : `COMMENT '${this.escapeComment(tableComment)}'`
+      ? `COMMENT '${this.escapeComment(tableComment)}'`
       : '';
 
+    // 用动态分隔符包裹表名
     return `
-      CREATE TABLE \`${tableName}\` (
+      CREATE TABLE ${quoteStart}${tableName}${quoteEnd} (
         ${fieldSqls.join(', \n  ')}
       ) ${tableCommentSql}
     `.trim();

@@ -13,15 +13,15 @@ async function bootstrap() {
       whitelist: true, // 忽略 DTO 中未定义的属性
       forbidNonWhitelisted: true, // 禁止未定义的属性
       transform: true, // 自动转换请求体为 DTO 类型
-      exceptionFactory: (errors) => {
-        const errorMessages = errors.map((err) => {
-          return {
-            field: err.property,
-            message: Object.values(err.constraints)[0], // 取第一个错误信息
-          };
-        });
-        return new BadRequestException(errorMessages);
-      },
+      // exceptionFactory: (errors) => {
+      //   const errorMessages = errors.map((err) => {
+      //     return {
+      //       field: err.property,
+      //       message: Object.values(err.constraints)[0], // 取第一个错误信息
+      //     };
+      //   });
+      //   return new BadRequestException(errorMessages);
+      // },
     }),
   );
 
