@@ -3,15 +3,26 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  Unique,
 } from 'typeorm';
 
 @Entity('hs-data-source') // 对应元数据库中的表名
+@Unique(['appId', 'name', 'type'])
 export class HsDataSourceEntity {
   @PrimaryGeneratedColumn('uuid') // 唯一ID（UUID格式）
   id: string;
 
   @Column({
-    unique: true,
+    name: 'app_id',
+    type: 'varchar',
+    nullable: true,
+    length: 100,
+    default: 'system',
+    comment: '应用ID',
+  })
+  appId?: string;
+
+  @Column({
     type: 'varchar',
     comment: '数据源名称（用户自定义，需唯一）',
   })

@@ -19,7 +19,7 @@ export class HsConnectionPoolService implements OnModuleInit {
   // 存储连接池：key=数据源ID，value={ pool: 连接池实例, lastUsed: 最后使用时间 }
   private poolMap = new Map<
     string,
-    { pool: MysqlPool | PgPool; lastUsed: number }
+    { pool: MysqlPool | PgPool; lastUsed: number; dbType: string }
   >();
   // LRU队列：按最近使用顺序存储数据源ID（队尾是最近使用的）
   private lruQueue: string[] = [];
@@ -106,7 +106,7 @@ export class HsConnectionPoolService implements OnModuleInit {
    * 获取数据源的连接池（LRU策略管理）
    */
   async getPool(dataSource: HsDataSourceEntity) {
-    const { id: dataSourceId } = dataSource;
+    const { id: dataSourceId, type } = dataSource;
     const now = Date.now();
 
     // 1. 若连接池已存在，更新其最后使用时间并移到LRU队尾
@@ -142,6 +142,7 @@ export class HsConnectionPoolService implements OnModuleInit {
     // 4. 加入映射和LRU队尾
     this.poolMap.set(dataSourceId, {
       pool: newPool,
+      dbType: type,
       lastUsed: now,
     });
     this.lruQueue.push(dataSourceId);
@@ -149,19 +150,21 @@ export class HsConnectionPoolService implements OnModuleInit {
     this.logger.debug(
       `创建新连接池：${dataSourceId}，当前LRU队列：${this.lruQueue}`,
     );
-    return newPool;
+    return this.poolMap.get(dataSourceId);
   }
 
   /**
    * 从连接池获取可用连接（带有效性检测）
    */
-  async getConnection(dataSourceId: string, type: string) {
-    const poolInfo = this.poolMap.get(dataSourceId);
+  async getConnection(dataSourceId: string) {
+    let poolInfo = this.poolMap.get(dataSourceId);
     if (!poolInfo) {
       this.logger.error(`数据源${dataSourceId}未初始化`);
       const dataSource = await this.dataSourceService.findOne(dataSourceId);
-      await this.getPool(dataSource);
+      poolInfo = await this.getPool(dataSource);
     }
+
+    const type = poolInfo.dbType;
 
     // 获取连接
     const connection =
@@ -180,7 +183,7 @@ export class HsConnectionPoolService implements OnModuleInit {
       return connection;
     } catch (error) {
       // 连接无效，关闭并抛出错误
-      await this.closeConnection(connection, type);
+      await this.closeConnection(dataSourceId);
       this.logger.error(`连接池${dataSourceId}的连接无效：${error.message}`);
       throw new Error(`连接无效：${error.message}`);
     }
@@ -189,11 +192,16 @@ export class HsConnectionPoolService implements OnModuleInit {
   /**
    * 关闭连接（放回连接池，而非真正关闭）
    */
-  async closeConnection(connection: any, type: string) {
-    if (type === 'mysql') {
-      connection.release(); // mysql2连接放回池
-    } else {
-      connection.release(); // pg连接放回池
+  async closeConnection(connectionId: string) {
+    if (this.poolMap.has(connectionId)) {
+      const poolInfo = this.poolMap.get(connectionId);
+      const type = poolInfo.dbType;
+
+      if (type === 'mysql') {
+        (poolInfo.pool as MysqlPool).releaseConnection(poolInfo.pool);
+      } else {
+        // (poolInfo.pool as PgPool).release();
+      }
     }
   }
 

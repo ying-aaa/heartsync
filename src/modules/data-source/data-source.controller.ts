@@ -56,15 +56,6 @@ export class HsDataSourceController {
   }
 
   /**
-   * 获取数据源表列表
-   * GET /api/data-sources/:id/tables
-   */
-  @Get(':id/tables')
-  getTableList(@Param('id') id: string) {
-    return this.service.getTableList(id);
-  }
-
-  /**
    * 删除数据源
    * DELETE /api/data-sources/:id
    */

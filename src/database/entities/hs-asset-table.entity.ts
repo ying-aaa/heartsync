@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity('hs-asset_tables', { comment: '系统存入的数据库表' })
-@Unique(['appId', 'tableName'])
+@Unique(['appId', 'name'])
 export class HsAssetTableEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -25,7 +25,7 @@ export class HsAssetTableEntity {
     name: 'name',
     type: 'varchar',
     length: 100,
-    comment: '表名',
+    comment: '表名别名（系统展示的表名）',
   })
   name: string;
 
@@ -37,14 +37,13 @@ export class HsAssetTableEntity {
     default: 'system',
     comment: '应用ID',
   })
-  // 可以为空
   appId?: string;
 
   @Column({
     name: 'table_name',
     type: 'varchar',
     length: 100,
-    comment: '表名别名（系统展示的表名）',
+    comment: '表名',
   })
   tableName: string;
 

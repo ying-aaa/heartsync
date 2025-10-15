@@ -13,14 +13,26 @@ export class HsAssetController {
   }
 
   // 根据数据库中表字段信息生成并同步资产字段
-  @Post('/sync-field/:assetId')
-  async syncAssetFields(@Param('assetId') assetId: string) {
+  @Post('/:id/sync-field')
+  async syncAssetFields(@Param('id') assetId: string) {
     return await this.assetService.syncAssetFields(assetId);
   }
 
-  // 查询指定资产下的字段
-  @Get('/find-field/:id')
+  // 根据资产id查询资产字段
+  @Get('/:id/find-field')
   async getAssetFieldsById(@Param('id') assetId: string) {
     return await this.assetService.getAssetFieldsById(assetId);
+  }
+
+  // 查询指定应用下的资产
+  @Get('/app/:appId')
+  async findAllByAppId(@Param('appId') appId: string) {
+    return await this.assetService.findAllByAppId(appId);
+  }
+
+  // 查询资产数据
+  @Get('/:id/find')
+  async findAssetData(@Param('id') assetId: string) {
+    return await this.assetService.findAssetData(assetId);
   }
 }

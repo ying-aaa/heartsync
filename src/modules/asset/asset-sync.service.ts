@@ -46,8 +46,6 @@ export class HsAssetSyncService {
     // 1. 获取数据源配置（数据库类型、数据库名等）
     const dataSource = await this.dataSourceService.findOne(dataSourceId);
 
-    await this.poolService.getPool(dataSource);
-
     // 2. 查询数据库表的最新字段信息（从系统表查询）
     const dbFields = await this.queryDbTableFields(
       dataSourceId,
@@ -160,10 +158,7 @@ export class HsAssetSyncService {
     dbName: string,
     tableName: string,
   ): Promise<DbFieldRaw[]> {
-    const connection = await this.poolService.getConnection(
-      dataSourceId,
-      dbType,
-    );
+    const connection = await this.poolService.getConnection(dataSourceId);
     try {
       if (dbType === 'mysql') {
         return this.queryMysqlFields(
@@ -176,12 +171,13 @@ export class HsAssetSyncService {
           connection as PoolClient,
           dbName,
           tableName,
+          dataSourceId,
         );
       } else {
         throw new Error(`不支持的数据库类型：${dbType}`);
       }
     } finally {
-      await this.poolService.closeConnection(connection, dbType);
+      await this.poolService.closeConnection(dataSourceId);
     }
   }
 
@@ -223,6 +219,7 @@ export class HsAssetSyncService {
     connection: PoolClient,
     dbName: string,
     tableName: string,
+    dataSourceId: string,
   ): Promise<DbFieldRaw[]> {
     const sql = `
       SELECT
@@ -263,8 +260,12 @@ export class HsAssetSyncService {
     const result = await connection.query(sql);
 
     if (!result.rows?.length) {
-      this.logger.error(`表${tableName}不存在`);
-      throw new NotFoundException(`表${tableName}不存在`);
+      this.logger.error(
+        `同步资产失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
+      );
+      throw new NotFoundException(
+        `同步资产失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
+      );
     }
 
     return result.rows.map((row) => ({

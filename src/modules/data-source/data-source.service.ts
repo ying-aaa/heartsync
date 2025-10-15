@@ -31,9 +31,22 @@ export class HsDataSourceService {
    * @returns 创建后的数据源实体
    */
   async create(data: Partial<HsDataSourceEntity>) {
+    const { appId, name, type, password } = data;
+    // 查询相同appId和相同name的是否已存在
+    const existing = await this.dataSourceRepo.findOneBy({
+      appId,
+      name,
+      type,
+    });
+    if (existing) {
+      throw new BadRequestException(
+        `该应用下已有名称为 '${name}' 的 ${type} 数据源，换一个名称吧`,
+      ); // 抛出异常，框架会转 400
+    }
+
     try {
       // 1. 加密密码
-      const encryptedPwd = CryptoUtil.encrypt(data.password || '');
+      const encryptedPwd = CryptoUtil.encrypt(password || '');
       // 2. 构建实体
       const dataSource = this.dataSourceRepo.create({
         ...data,
@@ -107,17 +120,6 @@ export class HsDataSourceService {
       });
     }
     return testRes;
-  }
-
-  /**
-   * 获取数据源下的表列表
-   * @param id 数据源ID
-   * @returns 表列表数据
-   */
-  async getTableList(id: string) {
-    const dataSource = await this.findOne(id);
-    console.log('%c Line:119 🥪 dataSource', 'color:#2eafb0', dataSource);
-    // return DriverManager.getTableList(dataSource);
   }
 
   /**

@@ -27,10 +27,7 @@ export class HsFormSubmitService {
     await this.poolService.getPool(dataSource);
 
     // 3. 从连接池获取连接
-    const connection = await this.poolService.getConnection(
-      dataSourceId,
-      dataSource.type,
-    );
+    const connection = await this.poolService.getConnection(dataSourceId);
 
     try {
       // 4. 执行参数化插入（防SQL注入）
@@ -52,7 +49,7 @@ export class HsFormSubmitService {
       return { success: true, data: result };
     } finally {
       // 5. 释放连接（放回连接池）
-      await this.poolService.closeConnection(connection, dataSource.type);
+      await this.poolService.closeConnection(dataSourceId);
     }
   }
 }

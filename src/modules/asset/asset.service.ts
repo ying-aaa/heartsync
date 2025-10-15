@@ -5,10 +5,12 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HsAssetFieldEntity } from 'src/database/entities/hs-asset-field.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { HsAssetSyncService } from './asset-sync.service';
 import { HsAssetTableEntity } from 'src/database/entities/hs-asset-table.entity';
 import { CreateAssetDto } from './dto/create-asset.dto';
+import { HsLoggerService } from 'src/common/services/logger.service';
+import { HsConnectionPoolService } from '../data-source/connection-pool.service';
 
 /**
  * 根据前端传入的参数，生成数据库表结构
@@ -27,18 +29,39 @@ export class HsAssetService {
     @InjectRepository(HsAssetFieldEntity)
     private assetFieldRepo: Repository<HsAssetFieldEntity>,
     private hsAssetSyncService: HsAssetSyncService,
+    private dataSource: DataSource,
+    private logger: HsLoggerService,
+    private poolServcice: HsConnectionPoolService,
   ) {}
 
+  // 创建资产
   async create(assetData: CreateAssetDto) {
-    try {
-      const newData = this.assetTableRepo.create(assetData);
-      const result = await this.assetTableRepo.save(newData);
-      return result;
-    } catch (e) {
-      throw new BadRequestException(e.detail);
+    const { appId, name, dataSourceId, tableName } = assetData;
+    // 查重
+    const exist = await this.assetTableRepo.findOneBy({
+      appId,
+      name,
+    });
+    if (exist) {
+      throw new BadRequestException(
+        `该应用下已有名称为 '${name}' 的资产，换一个名称吧`,
+      );
     }
+    return this.dataSource.transaction(async (em) => {
+      const newAsset = em.create(HsAssetTableEntity, assetData);
+      const saved = await em.save(HsAssetTableEntity, newAsset);
+
+      // 同步字段；这里如果抛 404，事务会整体回滚
+      await this.hsAssetSyncService.syncTableFields(
+        dataSourceId,
+        tableName,
+        saved.id,
+      );
+      return saved;
+    });
   }
 
+  // 同步资产字段
   async syncAssetFields(assetId: string) {
     let assetData: HsAssetTableEntity;
     try {
@@ -56,9 +79,49 @@ export class HsAssetService {
     );
   }
 
+  // 根据资产id查询资产字段
   async getAssetFieldsById(assetId: string) {
     return this.assetFieldRepo.find({
-      where: { id: assetId },
+      where: { assetId },
     });
+  }
+
+  // 根据appId查询资产列表
+  async findAllByAppId(appId: string) {
+    return this.assetTableRepo.find({
+      where: { appId },
+    });
+  }
+
+  // 根据资产id查询资产数据
+  async findAssetData(assetId: string) {
+    // 先查询数据源 id
+    const assetMeta: HsAssetTableEntity = await this.assetTableRepo.findOneBy({
+      id: assetId,
+    });
+
+    if (!assetMeta) {
+      this.logger.warn(`资产元数据不存在，assetId=${assetId}`);
+      throw new NotFoundException(`资产 ${assetId} 不存在`);
+    }
+
+    const { dataSourceId, tableName } = assetMeta;
+    const connection = await this.poolServcice.getConnection(dataSourceId);
+    const result = await connection.query(`select * from ${tableName}`);
+
+    this.poolServcice.closeConnection(dataSourceId);
+
+    if (!result.rows?.length) {
+      this.logger.error(
+        `查询资产数据失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
+      );
+      throw new NotFoundException(
+        `同步资产失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
+      );
+    }
+
+    this.logger.log(`查询资产数据：${JSON.stringify(result.rows)}`);
+
+    return result.rows;
   }
 }
