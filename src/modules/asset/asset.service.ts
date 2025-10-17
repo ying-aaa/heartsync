@@ -11,6 +11,7 @@ import { HsAssetTableEntity } from 'src/database/entities/hs-asset-table.entity'
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { HsLoggerService } from 'src/common/services/logger.service';
 import { HsConnectionPoolService } from '../data-source/connection-pool.service';
+import { HsDbFactoryService } from 'src/common/services/db-factory.service';
 
 /**
  * 根据前端传入的参数，生成数据库表结构
@@ -32,6 +33,7 @@ export class HsAssetService {
     private dataSource: DataSource,
     private logger: HsLoggerService,
     private poolServcice: HsConnectionPoolService,
+    private dbFactoryService: HsDbFactoryService,
   ) {}
 
   // 创建资产
@@ -106,22 +108,45 @@ export class HsAssetService {
     }
 
     const { dataSourceId, tableName } = assetMeta;
-    const connection = await this.poolServcice.getConnection(dataSourceId);
-    const result = await connection.query(`select * from ${tableName}`);
 
-    this.poolServcice.closeConnection(dataSourceId);
+    const factory = this.dbFactoryService;
+    const poolService = factory.getPoolService();
+    const strategy = await factory.getDbStrategy(dataSourceId); // 获取二合一策略
+    const conn = await poolService.getConnection(dataSourceId);
+    try {
+      // 2. 调用策略的操作方法（建表）
+      const result = await strategy.query(conn, `select * from ${tableName}`);
+      if (!result.rows?.length) {
+        this.logger.error(
+          `查询资产数据失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
+        );
+        throw new NotFoundException(
+          `查询资产数据失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
+        );
+      }
+      this.logger.log(`查询资产数据：${JSON.stringify(result.rows)}`);
 
-    if (!result.rows?.length) {
-      this.logger.error(
-        `查询资产数据失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
-      );
-      throw new NotFoundException(
-        `同步资产失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
-      );
+      return result.rows;
+    } finally {
+      await poolService.closeConnection(dataSourceId);
     }
 
-    this.logger.log(`查询资产数据：${JSON.stringify(result.rows)}`);
+    // const connection = await this.poolServcice.getConnection(dataSourceId);
+    // const result = await connection.query(`select * from ${tableName}`);
 
-    return result.rows;
+    // this.poolServcice.closeConnection(dataSourceId);
+
+    // if (!result.rows?.length) {
+    //   this.logger.error(
+    //     `查询资产数据失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
+    //   );
+    //   throw new NotFoundException(
+    //     `查询资产失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
+    //   );
+    // }
+
+    // this.logger.log(`查询资产数据：${JSON.stringify(result.rows)}`);
+
+    // return result.rows;
   }
 }

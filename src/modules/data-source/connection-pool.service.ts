@@ -5,6 +5,9 @@ import { HsDataSourceEntity } from 'src/database/entities/hs-data-source.entity'
 import { HsDataSourceService } from './data-source.service';
 import { HsLoggerService } from 'src/common/services/logger.service';
 import { CryptoUtil } from 'src/common/utils/crypto.util';
+import { initDbStrategies } from 'src/common/database/factory/db-registry.init';
+import { DbRegistry } from 'src/common/database/factory/db-registry';
+import { DbConfig } from 'src/common/database/abstract/unified-db-strategy.interface';
 
 // 连接池配置（可通过环境变量动态调整）
 const CONFIG = {
@@ -34,6 +37,7 @@ export class HsConnectionPoolService implements OnModuleInit {
 
   // 模块初始化时启动长期闲置连接池清理任务
   onModuleInit() {
+    initDbStrategies(); // 初始化注册所有二合一策略
     this.startLongIdleCleanupTask();
   }
 
@@ -42,71 +46,16 @@ export class HsConnectionPoolService implements OnModuleInit {
    * @param dataSource 数据源配置实体
    * @returns 连接成功返回true，失败抛出错误
    */
-  async testConnection(
-    dataSource: HsDataSourceEntity,
-  ): Promise<{ success: boolean; message: string }> {
-    const { type, host, port, database, username, password } = dataSource;
-    const decryptedPassword = CryptoUtil.decrypt(password);
-    let connection: any = null;
-
-    try {
-      // 根据数据库类型创建临时连接
-      if (type === 'mysql') {
-        // MySQL临时连接
-        connection = await mysql.createConnection({
-          host,
-          port,
-          database,
-          user: username,
-          password: decryptedPassword,
-        });
-        // 执行测试查询
-        await connection.execute('SELECT 1');
-      } else if (type === 'postgres') {
-        // PostgreSQL临时连接
-        connection = new PgClient({
-          host,
-          port,
-          database,
-          user: username,
-          password: decryptedPassword,
-        });
-        await connection.connect();
-        // 执行测试查询
-        await connection.query('SELECT 1');
-      } else {
-        throw new Error(`不支持的数据库类型：${type}`);
-      }
-
-      this.logger.debug(`数据源${dataSource.id}连接测试成功`);
-      return { success: true, message: '连接成功' };
-    } catch (error) {
-      this.logger.error(`数据源${dataSource.id}连接测试失败：${error.message}`);
-      return {
-        success: false,
-        message: `连接失败：${error.message || '未知错误'}`,
-      };
-    } finally {
-      // 确保临时连接关闭，避免资源泄漏
-      if (connection) {
-        try {
-          if (type === 'mysql') {
-            await connection.end(); // 关闭MySQL连接
-          } else if (type === 'postgres') {
-            await connection.end(); // 关闭PostgreSQL连接
-          }
-        } catch (closeError) {
-          this.logger.warn(`关闭测试连接失败：${closeError.message}`);
-        }
-      }
-    }
+  async testConnection(dataSource: HsDataSourceEntity) {
+    const strategy = DbRegistry.getStrategy(dataSource.type);
+    const config = this.buildDbConfig(dataSource);
+    return strategy.testConnection(config);
   }
 
   /**
    * 获取数据源的连接池（LRU策略管理）
    */
-  async getPool(dataSource: HsDataSourceEntity) {
-    const { id: dataSourceId, type } = dataSource;
+  async createPool(dataSourceId: string) {
     const now = Date.now();
 
     // 1. 若连接池已存在，更新其最后使用时间并移到LRU队尾
@@ -120,9 +69,11 @@ export class HsConnectionPoolService implements OnModuleInit {
       this.logger.debug(
         `复用连接池：${dataSourceId}，当前LRU队列：${this.lruQueue}`,
       );
-      return poolInfo.pool;
+      return poolInfo;
     }
 
+    const dataSource = await this.dataSourceService.findOne(dataSourceId);
+    const { type } = dataSource;
     // 2. 连接池不存在，检查是否超过最大数量，需要淘汰最少使用的
     if (this.lruQueue.length >= CONFIG.MAX_POOL_COUNT) {
       const lruDataSourceId = this.lruQueue.shift(); // 淘汰队首（最少使用）
@@ -137,7 +88,10 @@ export class HsConnectionPoolService implements OnModuleInit {
     if (!testRes.success) {
       throw new Error(`数据源${dataSourceId}连接测试失败：${testRes.message}`);
     }
-    const newPool = await this.createPool(dataSource);
+
+    const strategy = DbRegistry.getStrategy(type);
+    const config = this.buildDbConfig(dataSource);
+    const newPool = await strategy.createPool(config);
 
     // 4. 加入映射和LRU队尾
     this.poolMap.set(dataSourceId, {
@@ -153,56 +107,34 @@ export class HsConnectionPoolService implements OnModuleInit {
     return this.poolMap.get(dataSourceId);
   }
 
+  async getDbType(dataSourceId: string) {
+    const poolInfo = await this.createPool(dataSourceId);
+
+    return poolInfo?.dbType;
+  }
+
   /**
    * 从连接池获取可用连接（带有效性检测）
    */
   async getConnection(dataSourceId: string) {
-    let poolInfo = this.poolMap.get(dataSourceId);
-    if (!poolInfo) {
-      this.logger.error(`数据源${dataSourceId}未初始化`);
-      const dataSource = await this.dataSourceService.findOne(dataSourceId);
-      poolInfo = await this.getPool(dataSource);
-    }
+    const poolInfo = await this.createPool(dataSourceId);
 
-    const type = poolInfo.dbType;
-
-    // 获取连接
-    const connection =
-      type === 'mysql'
-        ? await (poolInfo.pool as MysqlPool).getConnection()
-        : await (poolInfo.pool as PgPool).connect();
-
-    // 检测连接有效性（复用测试逻辑的核心查询）
-    try {
-      if (type === 'mysql') {
-        await connection.execute('SELECT 1'); // MySQL测试语句
-      } else {
-        await connection.query('SELECT 1'); // PostgreSQL测试语句
-      }
-      this.logger.debug(`从连接池${dataSourceId}获取有效连接`);
-      return connection;
-    } catch (error) {
-      // 连接无效，关闭并抛出错误
-      await this.closeConnection(dataSourceId);
-      this.logger.error(`连接池${dataSourceId}的连接无效：${error.message}`);
-      throw new Error(`连接无效：${error.message}`);
-    }
+    const strategy = DbRegistry.getStrategy(poolInfo.dbType);
+    const conn = await strategy.getConnection(poolInfo.pool);
+    await strategy.executeTestQuery(conn);
+    return conn;
   }
+
+  // 检查连接是否存在，不存在则创建
+  async checkConnection(connectionId: string) {}
 
   /**
    * 关闭连接（放回连接池，而非真正关闭）
    */
   async closeConnection(connectionId: string) {
-    if (this.poolMap.has(connectionId)) {
-      const poolInfo = this.poolMap.get(connectionId);
-      const type = poolInfo.dbType;
-
-      if (type === 'mysql') {
-        (poolInfo.pool as MysqlPool).releaseConnection(poolInfo.pool);
-      } else {
-        // (poolInfo.pool as PgPool).release();
-      }
-    }
+    const poolInfo = await this.poolMap.get(connectionId);
+    const strategy = DbRegistry.getStrategy(poolInfo.dbType);
+    await strategy.releaseConnection(poolInfo.pool);
   }
 
   /**
@@ -228,52 +160,6 @@ export class HsConnectionPoolService implements OnModuleInit {
   }
 
   /**
-   * 创建连接池（内部方法）
-   */
-  private async createPool(dataSource: HsDataSourceEntity) {
-    const {
-      type,
-      host,
-      port,
-      database,
-      username,
-      password,
-      maxPoolCount,
-      minPoolCount,
-    } = dataSource;
-    const decryptedPassword = CryptoUtil.decrypt(password);
-
-    if (type === 'mysql') {
-      return mysql.createPool({
-        host,
-        port,
-        database,
-        user: username,
-        password: decryptedPassword,
-        waitForConnections: true, // 连接耗尽时等待
-        connectionLimit: CONFIG.SINGLE_POOL_MAX_CONNECTIONS, // 单池最大连接数
-        queueLimit: 0, // 等待队列无限制
-        idleTimeout: CONFIG.IDLE_TIMEOUT, // 连接闲置超时
-      });
-    } else if (type === 'postgres') {
-      return new PgPool({
-        host,
-        port,
-        database,
-        user: username,
-        password: decryptedPassword,
-        // max: CONFIG.SINGLE_POOL_MAX_CONNECTIONS, // 单池最大连接数
-        max: maxPoolCount,
-        min: minPoolCount,
-        idleTimeoutMillis: CONFIG.IDLE_TIMEOUT, // 闲置超时
-        connectionTimeoutMillis: 5000, // 连接超时
-      });
-    } else {
-      throw new Error(`不支持的数据库类型：${type}`);
-    }
-  }
-
-  /**
    * 更新LRU队列：将数据源ID移到队尾（标记为最近使用）
    */
   private updateLruQueue(dataSourceId: string) {
@@ -282,6 +168,23 @@ export class HsConnectionPoolService implements OnModuleInit {
       this.lruQueue.splice(index, 1); // 移除当前位置
     }
     this.lruQueue.push(dataSourceId); // 移到队尾
+  }
+
+  private buildDbConfig(dataSource: HsDataSourceEntity): DbConfig {
+    return {
+      // 1. 直接映射核心连接字段（过滤业务字段如id/name/description）
+      host: dataSource.host,
+      port: dataSource.port,
+      database: dataSource.database,
+      username: dataSource.username,
+
+      // 2. 密码解密（核心安全步骤）
+      password: CryptoUtil.decrypt(dataSource.password),
+
+      // 3. 补全默认值（避免空值）
+      maxPoolCount: dataSource.maxPoolCount || 5, // 没配置就用5
+      minPoolCount: dataSource.minPoolCount || 0, // 没配置就用0
+    };
   }
 
   /**

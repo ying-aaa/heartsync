@@ -24,7 +24,7 @@ export class HsFormSubmitService {
     }
 
     // 2. 获取连接池（自动触发LRU管理）
-    await this.poolService.getPool(dataSource);
+    await this.poolService.createPool(dataSourceId);
 
     // 3. 从连接池获取连接
     const connection = await this.poolService.getConnection(dataSourceId);

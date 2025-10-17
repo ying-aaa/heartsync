@@ -9,6 +9,7 @@ import { HsAssetFieldEntity } from 'src/database/entities/hs-asset-field.entity'
 import { HsAssetSyncService } from './asset-sync.service';
 import { HsDataSourceModule } from '../data-source/data-source.module';
 import { HsLoggerService } from 'src/common/services/logger.service';
+import { HsDbFactoryService } from 'src/common/services/db-factory.service';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { HsLoggerService } from 'src/common/services/logger.service';
     HsDataSourceModule,
   ],
   controllers: [HsAssetController],
-  providers: [HsAssetService, HsAssetSyncService, HsLoggerService],
+  providers: [HsAssetService, HsAssetSyncService, HsLoggerService, HsDbFactoryService],
   exports: [HsAssetService, HsAssetSyncService],
 })
 export class HsAssetModule {}
