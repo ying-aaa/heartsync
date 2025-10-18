@@ -4,6 +4,8 @@ import { MatDivider } from '@angular/material/divider';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { ColorPickerDirective } from 'ngx-color-picker';
+import { MatIcon } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'hs-menu-global-config',
@@ -16,6 +18,7 @@ import { ColorPickerDirective } from 'ngx-color-picker';
     FormsModule,
     ReactiveFormsModule,
     ColorPickerDirective,
+    MatButtonModule,
   ],
 })
 export class MenuGlobalConfigComponent implements OnInit {

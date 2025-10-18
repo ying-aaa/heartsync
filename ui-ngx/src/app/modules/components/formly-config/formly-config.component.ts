@@ -1,10 +1,10 @@
 import { Component, effect, input, OnInit } from '@angular/core';
 import { FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
-import { CONFIT_RESOURCE } from '../../page/design/widget/config/public-api';
 import { FormGroup } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { FormlyEditorModule } from '@src/app/modules/formly/formly-editor.module';
+import { CONFIT_RESOURCE } from './configs/public-api';
 @Component({
   selector: 'hs-formly-config',
   templateUrl: './formly-config.component.html',

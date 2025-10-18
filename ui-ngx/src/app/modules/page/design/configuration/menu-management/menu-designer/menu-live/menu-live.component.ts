@@ -98,6 +98,7 @@ export class MenuLiveComponent implements OnInit {
 
       toParentData.splice(toIndex, 0, fromData);
 
+      this.menuDeSignerService.selectNode(fromData);
       return this.onDrop.emit();
     }
 

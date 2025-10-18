@@ -6,6 +6,9 @@ export class MenuDesignerService {
   // 是否在拖拽中
   isDragging = signal<boolean>(false);
 
+  // 显示单个菜单配置
+  showSignleConfig = signal<boolean>(false);
+
   // 选中的菜单节点
   selectedNode = signal<any>({});
 
@@ -20,6 +23,11 @@ export class MenuDesignerService {
   }
 
   selectNode(node: any) {
-    this.selectedNode.set(node);
+    this.selectedNode.set(node || {});
+    this.showSignleConfig.set(true);
+  }
+
+  toggleShowSignleConfig(showSignleConfig: boolean): void {
+    this.showSignleConfig.set(showSignleConfig);
   }
 }
