@@ -3,6 +3,7 @@ import { IRouterUse } from '@src/app/shared/models/route.model';
 import configurationRoutes from './configuration.routing';
 import dashboardRoutes from './dashboard.routing';
 import widgetRoutes from './widget.routing';
+import dataAssetRoutes from './data.routing';
 
 const designPageRoutes = [
   { path: '', redirectTo: 'configuration', pathMatch: 'full' },
@@ -22,6 +23,18 @@ const designPageRoutes = [
     children: configurationRoutes,
   },
   {
+    title: '数据资产',
+    path: 'data',
+    data: {
+      preload: true,
+      key: 'data',
+      use: IRouterUse.MENU,
+      icon: 'storage',
+    },
+    loadComponent: () => import('./data/data-router.component').then((m) => m.DataRouterComponent),
+    children: dataAssetRoutes,
+  },
+  {
     title: '仪表版',
     path: 'dashboard',
     data: {
@@ -31,9 +44,7 @@ const designPageRoutes = [
       icon: 'lens_blur',
     },
     loadComponent: () =>
-      import('./dashboard/dashboard-editor.component').then(
-        (m) => m.DashboardEditorComponent,
-      ),
+      import('./dashboard/dashboard-editor.component').then((m) => m.DashboardEditorComponent),
     children: dashboardRoutes,
   },
   {
@@ -46,17 +57,14 @@ const designPageRoutes = [
       icon: 'send_time_extension',
     },
     loadComponent: () =>
-      import('./widget/widget-editor.component').then(
-        (m) => m.WidgetEditorComponent,
-      ),
+      import('./widget/widget-editor.component').then((m) => m.WidgetEditorComponent),
     children: widgetRoutes,
   },
   // 测试页
   {
     title: '测试',
     path: 'test',
-    loadComponent: () =>
-      import('./test/multi-layer.component').then((m) => m.MultiLayerComponent),
+    loadComponent: () => import('./test/multi-layer.component').then((m) => m.MultiLayerComponent),
   },
 ];
 
@@ -65,8 +73,7 @@ export default [
     title: '搭建页',
     path: '',
     data: { preload: true, key: 'design', use: IRouterUse.MENU },
-    loadComponent: () =>
-      import('./design.component').then((m) => m.DesignComponent),
+    loadComponent: () => import('./design.component').then((m) => m.DesignComponent),
     children: designPageRoutes,
   },
 ] as Routes;

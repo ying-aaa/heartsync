@@ -12,6 +12,9 @@ export class MenuDesignerService {
   // 选中的菜单节点
   selectedNode = signal<any>({});
 
+  // 显示模式
+  showMode = signal<'tree' | 'page'>('tree');
+
   constructor() {}
 
   onMouseMove(event: MouseEvent): void {
