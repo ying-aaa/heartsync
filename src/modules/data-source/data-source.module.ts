@@ -5,11 +5,17 @@ import { HsDataSourceController } from './data-source.controller';
 import { HsDataSourceService } from './data-source.service';
 import { HsConnectionPoolService } from './connection-pool.service';
 import { HsLoggerService } from 'src/common/services/logger.service';
+import { HsPaginationService } from 'src/common/services/pagination.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([HsDataSourceEntity])],
   controllers: [HsDataSourceController],
-  providers: [HsDataSourceService, HsConnectionPoolService, HsLoggerService],
+  providers: [
+    HsDataSourceService,
+    HsConnectionPoolService,
+    HsLoggerService,
+    HsPaginationService,
+  ],
   exports: [HsDataSourceService, HsConnectionPoolService],
 })
 export class HsDataSourceModule {}

@@ -11,6 +11,9 @@ import { CryptoUtil } from 'src/common/utils/crypto.util';
 import { HsDataSourceEntity } from 'src/database/entities/hs-data-source.entity';
 import { Repository } from 'typeorm';
 import { HsConnectionPoolService } from './connection-pool.service';
+import { PageDto } from 'src/common/dtos/page.dto';
+import { QueryDataSourceDto } from './dto/query-data-source.dto';
+import { HsPaginationService } from 'src/common/services/pagination.service';
 
 /**
  * 数据源服务：处理数据源的CRUD、连接测试、表列表查询
@@ -23,6 +26,7 @@ export class HsDataSourceService {
     private dataSourceRepo: Repository<HsDataSourceEntity>,
     @Inject(forwardRef(() => HsConnectionPoolService))
     private poolService: HsConnectionPoolService,
+    private paginationService: HsPaginationService,
   ) {}
 
   /**
@@ -74,10 +78,13 @@ export class HsDataSourceService {
    * 获取所有数据源列表
    * @returns 数据源实体数组
    */
-  async findAll() {
-    return this.dataSourceRepo.find({
-      order: { createdAt: 'DESC' }, // 按创建时间倒序
-    });
+  async findAll(
+    queryApplicationDto: QueryDataSourceDto,
+  ): Promise<PageDto<HsDataSourceEntity>> {
+    return this.paginationService.paginate(
+      this.dataSourceRepo,
+      queryApplicationDto,
+    );
   }
 
   /**

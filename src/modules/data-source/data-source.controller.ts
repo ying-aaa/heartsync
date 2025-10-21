@@ -1,6 +1,17 @@
-import { Controller, Post, Get, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Delete,
+  Body,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { HsDataSourceService } from './data-source.service';
 import { CreateDataSourceDto } from './dto/create-data-source.dto';
+import { HsDataSourceEntity } from 'src/database/entities/hs-data-source.entity';
+import { PageDto } from 'src/common/dtos/page.dto';
+import { QueryDataSourceDto } from './dto/query-data-source.dto';
 
 /**
  * 数据源控制器：提供RESTful API接口
@@ -33,8 +44,10 @@ export class HsDataSourceController {
    * GET /api/data-sources
    */
   @Get()
-  findAll() {
-    return this.service.findAll();
+  async findAll(
+    @Query() queryDataSourceDto: QueryDataSourceDto,
+  ): Promise<PageDto<HsDataSourceEntity>> {
+    return this.service.findAll(queryDataSourceDto);
   }
 
   /**
