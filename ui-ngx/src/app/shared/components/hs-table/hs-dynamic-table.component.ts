@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  input,
-  OnDestroy,
-  OnInit,
-  viewChild,
-} from '@angular/core';
+import { Component, computed, input, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ColumnType, IDynamicTable, ISortType } from './table.model';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -74,9 +67,7 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
     const endIndex =
-      startIndex < length
-        ? Math.min(startIndex + pageSize, length)
-        : startIndex + pageSize;
+      startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
     return `第${startIndex + 1} - ${endIndex}项，共${length}项`;
   };
 
@@ -113,10 +104,17 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe({
-        next: ({ data, total }) => {
-          this.dataSource.data = data;
-          total = total || data.length;
-          this.pageLink().updateTotal(total);
+        next: (res) => {
+          if (Array.isArray(res)) {
+            this.dataSource.data = res;
+            this.pageLink().updateTotal(res.length);
+          } else {
+            let { data, total } = res;
+            this.dataSource.data = data;
+            total = total || data.length;
+            this.pageLink().updateTotal(total);
+          }
+
           this.loadingStatus = false;
         },
         error: () => {

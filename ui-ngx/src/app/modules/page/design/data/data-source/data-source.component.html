@@ -1,3 +1,85 @@
-<p>
-  data-source works!
-</p>
+<style>
+  :host {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+<!-- 左侧 -->
+<div class="w-284px h-100% px-16px pt-12px pb-24px flex flex-col">
+  <!-- 标题 -->
+  <div class="flex gap-10px items-center h-48px">
+    <div class="w-32px h-32px flex-center">
+      <img class="w-24px h-24px" src="/assets/manage/classfile.png" />
+    </div>
+    <div class="font-roboto text-18px font-bold leading-24px tracking-0">分类目录</div>
+  </div>
+
+  <!-- 分割线 -->
+  <mat-divider class="mt-10px! mb-8px!"></mat-divider>
+  <!-- 目录 -->
+  <main class="h-0 flex-1 mb-18px">
+    <hs-tree
+      #HsTreeRef
+      [businessId]="appId"
+      [businessKey]="'data-source'"
+      [treeConfig]="treeConfig()"
+      class="flex-1"
+    ></hs-tree>
+  </main>
+  <!-- 新增 -->
+  <footer
+    (click)="HsTreeRef.createNode('folder')"
+    class="w-100% h-36px border-1px border-dashed border border-#2f90b960 hover:border-#2f90b9 rounded-8px cursor-pointer flex-center"
+  >
+    <mat-icon class="mat-icon-rtl-mirror"> add </mat-icon>
+    <div class="ml-12px leading-16px">新增</div>
+  </footer>
+</div>
+<mat-divider [vertical]="true" class="h-full"></mat-divider>
+<!-- 右侧 -->
+<div class="w-0 flex-1 h-100% flex flex-col">
+  <div class="h-56px flex flex-row justify-end items-center px-24px gap-10px">
+    <div>
+      <mat-button-toggle-group
+        [(ngModel)]="displayMode"
+        hideSingleSelectionIndicator
+        class="hs-density--3 rounded-8px!"
+        (change)="displayModeChange()"
+      >
+        <mat-button-toggle value="card">
+          <mat-icon>view_module</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="list">
+          <mat-icon>view_list</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <mat-form-field appearance="outline" class="w-252px hs-density--5">
+      <input matInput type="text" placeholder="搜索应用" [formControl]="appName" />
+      @if (appName.getRawValue()) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="appName.setValue('')"
+          class="mr-5px"
+        >
+          <mat-icon aria-hidden="false">close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+    <button mat-flat-button (click)="createRecord()">新增</button>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="h-0 flex-1">
+    @if (displayMode === 'list') {
+      <hs-dynamic-table
+        class="app-manage-table h-full"
+        [tableConfig]="tableConfig()"
+      ></hs-dynamic-table>
+    } @else {
+      <hs-app-card-list [tableConfig]="tableConfig()"></hs-app-card-list>
+    }
+  </div>
+</div>
