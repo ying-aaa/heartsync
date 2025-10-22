@@ -11,8 +11,8 @@ export enum WidgetType {
   DETAIL = 'detail',
 }
 
-@Entity()
-export class HsWidget extends HsBaseEntity {
+@Entity('hs_widget', { comment: '部件表' })
+export class HsWidgetEntity extends HsBaseEntity {
   @Column({ length: 255 })
   name: string;
 

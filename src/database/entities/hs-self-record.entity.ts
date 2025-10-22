@@ -5,8 +5,8 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-@Entity('hs_self_record') // 指定表名为 hs-self-record
-export class HsSelfRecord {
+@Entity('hs_self_record', { comment: '自记录表' }) // 指定表名为 hs-self-record
+export class HsSelfRecordEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

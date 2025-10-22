@@ -6,7 +6,7 @@ import {
   Unique,
 } from 'typeorm';
 
-@Entity('hs_data_source') // 对应元数据库中的表名
+@Entity('hs_data_source', { comment: '数据源表' }) // 对应元数据库中的表名
 @Unique(['appId', 'name', 'type'])
 export class HsDataSourceEntity {
   @PrimaryGeneratedColumn('uuid') // 唯一ID（UUID格式）

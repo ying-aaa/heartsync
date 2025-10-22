@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HsDashboard } from 'src/database/entities/hs-dashboard.entity';
+import { HsDashboardEntity } from 'src/database/entities/hs-dashboard.entity';
 import { Repository } from 'typeorm';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
 import { HsFileTreeService } from '../file-tree/file-tree.service';
 @Injectable()
 export class HsDashboardService {
   constructor(
-    @InjectRepository(HsDashboard)
-    private dashboardRepository: Repository<HsDashboard>,
+    @InjectRepository(HsDashboardEntity)
+    private dashboardRepository: Repository<HsDashboardEntity>,
     private readonly fileTreeService: HsFileTreeService,
   ) {}
 
-  async create(createDashboardDto: CreateDashboardDto): Promise<HsDashboard> {
+  async create(createDashboardDto: CreateDashboardDto): Promise<HsDashboardEntity> {
     const data = {
       ...createDashboardDto,
       version: 1, // 初始版本
@@ -34,8 +34,8 @@ export class HsDashboardService {
 
   async update(
     id: string,
-    updateData: Partial<HsDashboard>,
-  ): Promise<HsDashboard> {
+    updateData: Partial<HsDashboardEntity>,
+  ): Promise<HsDashboardEntity> {
     await this.dashboardRepository.update(id, {
       ...updateData,
       version: () => 'version + 1',
@@ -43,11 +43,11 @@ export class HsDashboardService {
     return this.dashboardRepository.findOneBy({ id });
   }
 
-  async findById(id: string): Promise<HsDashboard> {
+  async findById(id: string): Promise<HsDashboardEntity> {
     return this.dashboardRepository.findOneBy({ id });
   }
 
-  async findAll(): Promise<HsDashboard[]> {
+  async findAll(): Promise<HsDashboardEntity[]> {
     return this.dashboardRepository.find();
   }
 

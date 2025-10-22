@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, EntityManager, IsNull, Repository } from 'typeorm';
 import {
-  HsFileNode,
+  HsFileNodeEntity,
   NodeType,
 } from '../../database/entities/hs-file-node.entity';
 import { CreateNodeDto } from './dto/create-node.dto';
@@ -18,15 +18,15 @@ import { MoveNodeDto } from './dto/move-node.dto';
 export class HsFileTreeService {
   constructor(
     private dataSource: DataSource,
-    @InjectRepository(HsFileNode)
-    private repo: Repository<HsFileNode>,
+    @InjectRepository(HsFileNodeEntity)
+    private repo: Repository<HsFileNodeEntity>,
   ) {}
 
-  async create(dto: CreateNodeDto): Promise<HsFileNode> {
+  async create(dto: CreateNodeDto): Promise<HsFileNodeEntity> {
     return this.dataSource.transaction(async (manager) => {
       // 查询目标父目录
       if (dto.parentId) {
-        const parentData = await manager.findOne(HsFileNode, {
+        const parentData = await manager.findOne(HsFileNodeEntity, {
           where: {
             id: dto.parentId,
           },
@@ -42,7 +42,7 @@ export class HsFileTreeService {
       }
 
       // 检查同级节点名称唯一性
-      const existing = await manager.findOne(HsFileNode, {
+      const existing = await manager.findOne(HsFileNodeEntity, {
         where: {
           businessId: dto.businessId,
           businessKey: dto.businessKey ?? IsNull(),
@@ -57,7 +57,7 @@ export class HsFileTreeService {
       }
 
       // 创建新节点
-      const node = manager.create(HsFileNode, {
+      const node = manager.create(HsFileNodeEntity, {
         ...dto,
         hasChildren: false,
       });
@@ -73,7 +73,7 @@ export class HsFileTreeService {
     });
   }
 
-  async getNodeById(id: string): Promise<HsFileNode> {
+  async getNodeById(id: string): Promise<HsFileNodeEntity> {
     const nodeData = await this.repo.findOneBy({ id });
     if (!nodeData) {
       throw new NotFoundException(`没有找到相关节点 ${id}`);
@@ -81,14 +81,14 @@ export class HsFileTreeService {
     return nodeData;
   }
 
-  async update(id: string, dto: UpdateNodeDto): Promise<HsFileNode> {
+  async update(id: string, dto: UpdateNodeDto): Promise<HsFileNodeEntity> {
     return this.dataSource.transaction(async (manager) => {
-      const node = await manager.findOneBy(HsFileNode, { id });
+      const node = await manager.findOneBy(HsFileNodeEntity, { id });
       if (!node) throw new NotFoundException();
 
       // 重命名时检查同名
       if (dto.name && dto.name !== node.name) {
-        const existing = await manager.findOne(HsFileNode, {
+        const existing = await manager.findOne(HsFileNodeEntity, {
           where: {
             businessId: node.businessId,
             businessKey: node.businessKey || IsNull(),
@@ -99,18 +99,18 @@ export class HsFileTreeService {
         if (existing) throw new ConflictException('重复名称');
       }
 
-      return manager.save(HsFileNode, { ...node, ...dto });
+      return manager.save(HsFileNodeEntity, { ...node, ...dto });
     });
   }
 
   async move(id: string, dto: MoveNodeDto): Promise<void> {
     await this.dataSource.transaction(async (manager) => {
-      const node = await manager.findOneBy(HsFileNode, { id });
+      const node = await manager.findOneBy(HsFileNodeEntity, { id });
       if (!node) throw new NotFoundException();
 
       if (dto.newParentId) {
         // 查询目标父目录
-        const newParent = await manager.findOne(HsFileNode, {
+        const newParent = await manager.findOne(HsFileNodeEntity, {
           where: {
             id: dto.newParentId,
           },
@@ -126,7 +126,7 @@ export class HsFileTreeService {
       }
 
       // 检查目标位置是否存在同名
-      const existing = await manager.findOne(HsFileNode, {
+      const existing = await manager.findOne(HsFileNodeEntity, {
         where: {
           businessId: dto.businessId,
           businessKey: dto.businessKey || IsNull(),
@@ -151,7 +151,7 @@ export class HsFileTreeService {
 
   async delete(id: string): Promise<void> {
     await this.dataSource.transaction(async (manager) => {
-      const node = await manager.findOne(HsFileNode, {
+      const node = await manager.findOne(HsFileNodeEntity, {
         where: { id },
       });
 
@@ -196,7 +196,7 @@ export class HsFileTreeService {
   async getChildren(
     parentId: string | null,
     BusinessParams: object,
-  ): Promise<HsFileNode[]> {
+  ): Promise<HsFileNodeEntity[]> {
     return this.repo.find({
       where: {
         ...BusinessParams,
@@ -215,11 +215,11 @@ export class HsFileTreeService {
   ): Promise<void> {
     if (!parentId) return;
 
-    const count = await manager.count(HsFileNode, {
+    const count = await manager.count(HsFileNodeEntity, {
       where: { parentId },
     });
 
-    await manager.update(HsFileNode, parentId, {
+    await manager.update(HsFileNodeEntity, parentId, {
       hasChildren: count > 0,
     });
   }

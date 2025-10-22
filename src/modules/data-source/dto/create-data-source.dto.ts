@@ -19,6 +19,10 @@ export enum DB_TYPES {
 }
 
 export class CreateDataSourceDto {
+  @IsString()
+  @IsOptional()
+  appId: string;
+
   @ApiProperty({ description: '数据源名称（唯一）', example: 'prod-mysql' })
   @IsString()
   @MinLength(2)

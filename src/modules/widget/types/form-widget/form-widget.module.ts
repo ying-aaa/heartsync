@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HsFormWidget } from '../../../../database/entities/hs-form-widget.entity';
+import { HsFormWidgetEntity } from '../../../../database/entities/hs-form-widget.entity';
 import { HsFormWidgetsController } from './form-widget.controller';
 import { HsFormWidgetsService } from './form-widget.service';
 @Module({
-  imports: [TypeOrmModule.forFeature([HsFormWidget])],
+  imports: [TypeOrmModule.forFeature([HsFormWidgetEntity])],
   controllers: [HsFormWidgetsController],
   providers: [HsFormWidgetsService],
   exports: [HsFormWidgetsService],

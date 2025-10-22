@@ -7,7 +7,7 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
-import { HsFormWidget } from '../../../../database/entities/hs-form-widget.entity';
+import { HsFormWidgetEntity } from '../../../../database/entities/hs-form-widget.entity';
 import { HsFormWidgetsService } from './form-widget.service';
 // import { UpdateFormWidgetDto } from './dto/update-form-widget.dto';
 import { CreateFormWidgetDto } from './dto/create-form-widget.dto';
@@ -19,7 +19,7 @@ export class HsFormWidgetsController {
   @Post()
   async createFormWidget(
     @Body() createFormWidgetDto: CreateFormWidgetDto,
-  ): Promise<HsFormWidget> {
+  ): Promise<HsFormWidgetEntity> {
     return await this.formWidgetsService.createWidget(
       createFormWidgetDto.widgetId,
       createFormWidgetDto,
@@ -27,21 +27,21 @@ export class HsFormWidgetsController {
   }
 
   @Get()
-  async getAllFormWidgets(): Promise<HsFormWidget[]> {
+  async getAllFormWidgets(): Promise<HsFormWidgetEntity[]> {
     return await this.formWidgetsService.getAllFormWidgets();
   }
 
   @Get(':widgetId')
   async getFormWidgetById(
     @Param('widgetId') widgetId: string,
-  ): Promise<HsFormWidget> {
+  ): Promise<HsFormWidgetEntity> {
     return await this.formWidgetsService.getFormWidgetByWidgetId(widgetId);
   }
 
   // @Get('widget/:widgetId')
   // async getFormWidgetByWidgetId(
   //   @Param('widgetId') widgetId: string,
-  // ): Promise<HsFormWidget> {
+  // ): Promise<HsFormWidgetEntity> {
   //   return await this.formWidgetsService.getFormWidgetByWidgetId(widgetId);
   // }
 
@@ -49,7 +49,7 @@ export class HsFormWidgetsController {
   async updateFormWidget(
     @Param('widgetId') widgetId: string,
     @Body() updateFormWidgetDto: any,
-  ): Promise<HsFormWidget> {
+  ): Promise<HsFormWidgetEntity> {
     return await this.formWidgetsService.updateWidget(
       widgetId,
       updateFormWidgetDto,

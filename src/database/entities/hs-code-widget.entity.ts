@@ -14,8 +14,8 @@ export interface ICodeWidgetConfig {
   resourceScript: Array<IResourceScript>;
 }
 
-@Entity()
-export class HsCodeWidget extends HsBaseEntity {
+@Entity('hs_code_widget', { comment: '代码部件表' })
+export class HsCodeWidgetEntity extends HsBaseEntity {
   @Column({ name: 'widget_id', type: 'varchar', nullable: false })
   widgetId;
 

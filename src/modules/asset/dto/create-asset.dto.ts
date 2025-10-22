@@ -21,7 +21,7 @@ export class CreateAssetDto {
 
   @IsString()
   @IsOptional()
-  catalogId?: string;
+  directoryId?: string;
 
   @IsString()
   @IsOptional()

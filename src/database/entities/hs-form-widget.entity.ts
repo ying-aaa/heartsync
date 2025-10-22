@@ -33,8 +33,8 @@ export interface IFormLogicConfig {}
 
 export interface IFormButtonConfig {}
 
-@Entity()
-export class HsFormWidget extends HsBaseEntity {
+@Entity('hs_form_widget', { comment: '表单部件表' })
+export class HsFormWidgetEntity extends HsBaseEntity {
   @Column({ name: 'widget_id', type: 'varchar', nullable: false })
   widgetId: string;
 

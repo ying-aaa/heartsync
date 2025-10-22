@@ -15,7 +15,7 @@ export enum IMenuType {
   AppRedirect = 'appRedirect',
 }
 
-@Entity('hs_menu')
+@Entity('hs_menu', { comment: '菜单表' })
 @Tree('materialized-path')
 export class HsMenuEntity extends HsBaseEntity {
   @PrimaryColumn('uuid', { name: 'id' })

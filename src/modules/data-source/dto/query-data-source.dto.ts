@@ -11,10 +11,6 @@ export class QueryDataSourceDto extends PageOptionsDto {
   @IsOptional()
   name?: string;
 
-  // @IsString()
-  // @IsOptional()
-  // directoryId?: string;
-
   @IsEnum(DataSourceStatus)
   @IsOptional()
   status?: DataSourceStatus;
