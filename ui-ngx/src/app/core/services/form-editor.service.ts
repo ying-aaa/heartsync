@@ -10,15 +10,9 @@ import {
   isBoolean,
   PickConfig,
 } from '@src/app/core/utils';
-import {
-  IEditorFormlyField,
-  IFieldType,
-} from '@src/app/shared/models/widget.model';
+import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-  IFormSubTypes,
-  IFormWidgetConfig,
-} from '@src/app/shared/models/form-widget.model';
+import { IFormSubTypes, IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 import { FormWidgetService } from '@src/app/core/http/form-widget.service';
 import { FormlyFormOptions } from '@ngx-formly/core';
 
@@ -94,9 +88,7 @@ export class FormEditorService {
   }
 
   getSpecifyFields(fieldId: string) {
-    return this.getFlatField(this.fields()).find(
-      (item: any) => item.fieldId === fieldId,
-    );
+    return this.getFlatField(this.fields()).find((item: any) => item.fieldId === fieldId);
   }
 
   isActiveField(fieldId: string) {
@@ -220,11 +212,7 @@ export class FormEditorService {
     this.flatField$.next(this.getFlatField());
   }
 
-  removeField(
-    toParentField: IEditorFormlyField[],
-    toIndex: number,
-    clearSelected = true,
-  ) {
+  removeField(toParentField: IEditorFormlyField[], toIndex: number, clearSelected = true) {
     toParentField.splice(toIndex, 1);
     this.formGroup = new FormGroup({});
     this.options.build && this.options.build();
@@ -232,11 +220,7 @@ export class FormEditorService {
     this.flatField$.next(this.getFlatField());
   }
 
-  moveField(
-    toParent: IEditorFormlyField[],
-    fromIndex: number,
-    toIndex: number,
-  ) {
+  moveField(toParent: IEditorFormlyField[], fromIndex: number, toIndex: number) {
     moveItemInArray(toParent, fromIndex, toIndex);
     this.formGroup = new FormGroup({});
     this.options.build && this.options.build();
@@ -272,15 +256,13 @@ export class FormEditorService {
     };
 
     // @ts-ignore
-    return this.isEditMode()
-      ? findSameField(this.fields(), options)[type]
-      : options;
+    return this.isEditMode() ? findSameField(this.fields(), options)[type] : options;
   }
 
   getJsonField() {
     // 提取配置
     const pickConfig: PickConfig = {
-      // key: true,
+      key: true,
       type: true,
       fieldId: true,
       props: true,
@@ -289,12 +271,16 @@ export class FormEditorService {
       fieldArray: true,
     };
 
+    //
+    const fields = updateField(deepClone(this.fields()), (field) => {
+      field.fieldArray = {
+        fieldGroup: field.fieldGroup,
+      };
+      Reflect.deleteProperty(field, 'fieldGroup');
+    });
+
     return JSON.stringify(
-      extractProperties<IEditorFormlyField[]>(
-        this.fields(),
-        pickConfig,
-        'fieldGroup',
-      ),
+      extractProperties<IEditorFormlyField[]>(fields, pickConfig, 'fieldGroup'),
       null,
       2,
     );
@@ -324,10 +310,7 @@ function findSameField(
 ): { [key in IFieldType]: string[] } {
   for (let i = 0; i < fields.length; i++) {
     const type = fields[i].type as IFieldType;
-    if (
-      (type === 'column' || type === 'flex' || type === 'subtable') &&
-      options[type]
-    ) {
+    if ((type === 'column' || type === 'flex' || type === 'subtable') && options[type]) {
       // 暂时都用column进行连接，后面可改为 new Map 来存储 ！
       options['column']!.unshift(fields[i].fieldId as string);
     } else if (type && options[type]) {
@@ -335,10 +318,7 @@ function findSameField(
     }
 
     if (fields[i].fieldGroup) {
-      options = findSameField(
-        fields[i].fieldGroup as IEditorFormlyField[],
-        options,
-      );
+      options = findSameField(fields[i].fieldGroup as IEditorFormlyField[], options);
     }
   }
   // @ts-ignore

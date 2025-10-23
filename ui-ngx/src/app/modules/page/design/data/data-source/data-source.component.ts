@@ -20,13 +20,13 @@ import {
   ActionColumn,
 } from '@src/app/shared/components/hs-table/table.model';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
-import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
-import { AppCardListComponent } from '../../../workbench/page/app-manage/app-card-list/app-card-list.component';
-import { CreateAppComponent } from '../../../workbench/page/app-manage/create-app/create-app.component';
-import { delay, lastValueFrom, map } from 'rxjs';
+import { delay } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { getParamFromRoute, isMobile } from '@src/app/core/utils';
 import { DataSourceHttpService } from '@src/app/core/http/data-source.http.service';
+import { SourceCardListComponent } from './source-card-list/source-card-list.component';
+import { CreateDataSourceComponent } from './create-data-source/create-data-source.component';
+import { DataSourceSharedModule } from './data-source-shared.module';
 
 @Component({
   selector: 'hs-data-source',
@@ -37,13 +37,13 @@ import { DataSourceHttpService } from '@src/app/core/http/data-source.http.servi
     MatInputModule,
     MatInputModule,
     MatButtonModule,
-    HsTreeComponent,
     MatDividerModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     HsDynamicTableModule,
     MatButtonToggleModule,
-    AppCardListComponent,
+    SourceCardListComponent,
+    DataSourceSharedModule,
   ],
 })
 export class DataSourceComponent implements OnInit {
@@ -53,66 +53,26 @@ export class DataSourceComponent implements OnInit {
 
   appName = new FormControl('');
 
-  displayMode: 'list' | 'card' = 'list';
+  displayMode: 'list' | 'card' = 'card';
 
   directoryId = '';
 
   pageLink = new PageLink(
     0,
     20,
-    [
-      // { prop: 'directoryId' },
-      { prop: 'name' },
-    ],
+    [{ prop: 'name' }],
     [{ sortBy: 'name' }, { sortBy: 'description' }, { sortBy: 'createdAt', order: 'DESC' }],
   );
 
-  treeConfig = signal<IFileTreeConfig>({
-    featureList: ['createFolder', 'rename', 'remove', 'blank', 'search'],
-    deleteEvent: async (node, jsTree) => {
-      const hasData$ = this.applicationService
-        .checkDataExists(node.id)
-        .pipe(map((res) => res.hasData));
-      let value;
-      try {
-        value = await lastValueFrom(hasData$);
-        if (value) {
-          this._snackBar.open('该目录下有应用，无法删除!', '', {
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            duration: 1 * 1000,
-          });
-        }
-      } catch (error) {}
-      return !value;
-    },
-    selectEvent: (node, jsTree) => {
-      if (node) {
-        this.directoryId = node.id;
-        // this.pageLink.changeSearch('directoryId', this.directoryId);
-        this.pageLink.getData();
-      }
-    },
-    createNodeSuccess: (node, jsTree) => {
-      if (node) {
-        this.directoryId = node.id;
-        this.pageLink.changeSearch('directoryId', this.directoryId);
-        this.pageLink.getData();
-      }
-    },
-  });
-
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
-      initExec: false,
+      initExec: true,
       tableStyle: { padding: '0 24px' },
       pageLink: this.pageLink,
       tableColumn: [
         new TextColumn('name', '数据源名称', {}, 300),
-        new TextColumn('type', '数据库类型', {}, 300),
+        new TextColumn('type', '数据源类型', {}, 300),
         new TextColumn('host', '主机地址', {}, 300),
-        // new TextColumn('port', '端口号', {}, 200),
-        // new TextColumn('database', '数据库名称', {}, 300),
         new TextColumn('username', '用户名', {}, 300),
 
         new TagColumn(
@@ -143,6 +103,7 @@ export class DataSourceComponent implements OnInit {
               icon: 'border_color',
               action: (row, event) => {
                 event.stopPropagation();
+                this.openDataSourceDialog('edit', row.id);
               },
             },
             {
@@ -177,19 +138,23 @@ export class DataSourceComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private applicationService: ApplicationService,
     private dataSourceHttpService: DataSourceHttpService,
-  ) {}
+  ) {
+    this.pageLink.changeSearch('appId', this.appId);
+  }
 
-  createRecord() {
+  // 处理编辑和创建
+
+  openDataSourceDialog(type: 'create' | 'edit', id?: string) {
     const width = isMobile() ? '100vw' : '800px';
     const height = isMobile() ? '100vh' : '600px';
-    const dialogRef = this.dialog.open(CreateAppComponent, {
+    const dialogRef = this.dialog.open(CreateDataSourceComponent, {
       data: {
-        directoryId: this.directoryId,
+        appId: this.appId,
+        type,
+        id,
       },
       width,
       height,
@@ -198,6 +163,7 @@ export class DataSourceComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      dialogRef.componentInstance?.resetForm();
       if (result) this.pageLink.getData();
     });
   }

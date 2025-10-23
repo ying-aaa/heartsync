@@ -1,0 +1,27 @@
+@import "themeMixin";
+@import 'media';
+
+.themeMixin({
+  :host {
+    display: block;
+    height: 100%;
+
+    .app-card {
+      @media screen and (min-width: 1496px) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      @media screen and (max-width: 1496px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      @media screen and (max-width: 1116px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      @media screen and (max-width: 736px) {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+    }
+  }
+});

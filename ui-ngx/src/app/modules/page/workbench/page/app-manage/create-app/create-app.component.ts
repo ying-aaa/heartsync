@@ -16,10 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-  ApplicationService,
-  CreateApplicationDto,
-} from '@src/app/core/http/application.service';
+import { ApplicationService, CreateApplicationDto } from '@src/app/core/http/application.service';
 import { UploadFileService } from '@src/app/core/http/upload-file.service';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-file.module';
@@ -76,8 +73,7 @@ export class CreateAppComponent implements OnInit {
       });
   }
 
-  matRippleColor = () =>
-    this.hsThemeService.getCurrentThemeConfig(['#00000010', '#ffffff10']);
+  matRippleColor = () => this.hsThemeService.getCurrentThemeConfig(['#00000010', '#ffffff10']);
 
   submit(): void {
     if (this.appForm.valid) {
@@ -90,16 +86,14 @@ export class CreateAppComponent implements OnInit {
         createApplicationData.imageUrl = this.filesData[0].url;
       }
 
-      this.applicationService
-        .createApplication(createApplicationData)
-        .subscribe((appData) => {
-          this._snackBar.open('新增应用成功!!!', '确定', {
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            duration: 3 * 1000,
-          });
-          this.dialogRef.close(appData);
+      this.applicationService.createApplication(createApplicationData).subscribe((appData) => {
+        this._snackBar.open('新增应用成功!!!', '确定', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 3 * 1000,
         });
+        this.dialogRef.close(appData);
+      });
     } else {
       // 如果表单无效，显示错误提示
     }

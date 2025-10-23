@@ -13,7 +13,7 @@ export class MenuDesignerService {
   selectedNode = signal<any>({});
 
   // 显示模式
-  showMode = signal<'tree' | 'page'>('tree');
+  showMode = signal<'tree' | 'page'>('page');
 
   constructor() {}
 

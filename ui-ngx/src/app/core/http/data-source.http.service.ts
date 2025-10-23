@@ -5,29 +5,8 @@ import { Observable } from 'rxjs';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import { IBaseResponseData, IResponseStructure } from './request.model';
 
-/* 与后端 DTO 保持一致 */
-export interface CreateDataSourceDto {
-  name: string;
-  type: 'mysql' | 'postgres' | 'oracle' | 'sqlserver' | 'mongodb' | 'redis';
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-  database?: string;
-  options?: Record<string, any>;
-}
-
-export interface UpdateDataSourceDto {
-  name?: string;
-  host?: string;
-  port?: number;
-  username?: string;
-  password?: string;
-  database?: string;
-  options?: Record<string, any>;
-}
-
 export interface IDataSource extends IBaseResponseData {
+  appId: string;
   name: string;
   type: string;
   host: string;
@@ -46,12 +25,12 @@ export class DataSourceHttpService {
   constructor(private http: HttpClient) {}
 
   /* 创建数据源 */
-  create(data: CreateDataSourceDto): Observable<IDataSource> {
+  create(data: IDataSource): Observable<IDataSource> {
     return this.http.post<IDataSource>(this.apiUrl, data);
   }
 
   /* 测试数据源连接（未保存） */
-  testConnection(data: CreateDataSourceDto): Observable<{ success: boolean; message?: string }> {
+  testConnection(data: IDataSource): Observable<{ success: boolean; message?: string }> {
     return this.http.post<{ success: boolean; message?: string }>(`${this.apiUrl}/test`, data);
   }
 
@@ -72,7 +51,7 @@ export class DataSourceHttpService {
   }
 
   /* 更新数据源 */
-  update(id: string, dto: UpdateDataSourceDto): Observable<IDataSource> {
+  update(id: string, dto: IDataSource): Observable<IDataSource> {
     return this.http.put<IDataSource>(`${this.apiUrl}/${id}`, dto);
   }
 
