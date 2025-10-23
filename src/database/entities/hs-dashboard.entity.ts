@@ -5,8 +5,8 @@ export enum DashboardType {
   GRIDSTER = 'gridster',
 }
 
-@Entity()
-export class HsDashboard extends HsBaseEntity {
+@Entity('hs_dashboard', { comment: '仪表盘表' })
+export class HsDashboardEntity extends HsBaseEntity {
   @Column({ length: 255 })
   name: string;
 

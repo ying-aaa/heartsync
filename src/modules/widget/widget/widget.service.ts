@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { HsWidget } from '../../../database/entities/hs-widget.entity';
+import { HsWidgetEntity } from '../../../database/entities/hs-widget.entity';
 import { CreateWidgetDto } from './dto/create-widget.dto';
 import { UpdateWidgetDto } from './dto/update-widget.dto';
 import { HsWidgetServiceFactory } from '../widget-service.factory';
@@ -9,15 +9,15 @@ import { HsFileTreeService } from 'src/modules/file-tree/file-tree.service';
 @Injectable()
 export class HsWidgetService {
   constructor(
-    @InjectRepository(HsWidget)
-    private readonly widgetRepository: Repository<HsWidget>,
+    @InjectRepository(HsWidgetEntity)
+    private readonly widgetRepository: Repository<HsWidgetEntity>,
     private widgetServiceFactory: HsWidgetServiceFactory,
     private readonly fileTreeService: HsFileTreeService,
   ) {}
 
   async create(
     createDto: CreateWidgetDto,
-  ): Promise<HsWidget & { widgetTypeData: any }> {
+  ): Promise<HsWidgetEntity & { widgetTypeData: any }> {
     const data = {
       ...createDto,
       version: 1, // 初始版本
@@ -47,11 +47,11 @@ export class HsWidgetService {
     };
   }
 
-  async findAll(): Promise<HsWidget[]> {
+  async findAll(): Promise<HsWidgetEntity[]> {
     return this.widgetRepository.find();
   }
 
-  async findOne(id: string): Promise<HsWidget> {
+  async findOne(id: string): Promise<HsWidgetEntity> {
     const widget = await this.widgetRepository.findOneBy({ id });
     if (!widget) {
       throw new NotFoundException(`没有找到小部件 ${id}`);
@@ -59,7 +59,7 @@ export class HsWidgetService {
     return widget;
   }
 
-  async update(id: string, updateDto: UpdateWidgetDto): Promise<HsWidget> {
+  async update(id: string, updateDto: UpdateWidgetDto): Promise<HsWidgetEntity> {
     const widget = await this.findOne(id);
     const updated = this.widgetRepository.merge(widget, updateDto);
     return this.widgetRepository.save(updated);

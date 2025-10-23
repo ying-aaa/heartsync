@@ -1,32 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { HsSelfRecord } from '../../../database/entities/hs-self-record.entity';
+import { HsSelfRecordEntity } from '../../../database/entities/hs-self-record.entity';
 
 @Injectable()
 export class HsSelfRecordService {
   constructor(
-    @InjectRepository(HsSelfRecord)
-    private hsSelfRecordRepository: Repository<HsSelfRecord>,
+    @InjectRepository(HsSelfRecordEntity)
+    private hsSelfRecordRepository: Repository<HsSelfRecordEntity>,
   ) {}
 
-  async create(record: Partial<HsSelfRecord>): Promise<HsSelfRecord> {
+  async create(record: Partial<HsSelfRecordEntity>): Promise<HsSelfRecordEntity> {
     const newRecord = this.hsSelfRecordRepository.create(record);
     return this.hsSelfRecordRepository.save(newRecord);
   }
 
-  async findAll(): Promise<HsSelfRecord[]> {
+  async findAll(): Promise<HsSelfRecordEntity[]> {
     return this.hsSelfRecordRepository.find();
   }
 
-  async findOne(id: number): Promise<HsSelfRecord> {
+  async findOne(id: number): Promise<HsSelfRecordEntity> {
     return this.hsSelfRecordRepository.findOneBy({ id });
   }
 
   async update(
     id: number,
-    record: Partial<HsSelfRecord>,
-  ): Promise<HsSelfRecord> {
+    record: Partial<HsSelfRecordEntity>,
+  ): Promise<HsSelfRecordEntity> {
     await this.hsSelfRecordRepository.update(id, record);
     return this.hsSelfRecordRepository.findOneBy({ id });
   }

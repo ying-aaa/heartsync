@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { HsApplication } from '../../database/entities/hs-application.entity';
+import { HsApplicationEntity } from '../../database/entities/hs-application.entity';
 import { HsPaginationService } from 'src/common/services/pagination.service';
 import { PageDto } from 'src/common/dtos/page.dto';
 import { QueryApplicationDto } from './dto/query-application.dto';
@@ -9,19 +9,19 @@ import { QueryApplicationDto } from './dto/query-application.dto';
 @Injectable()
 export class HsApplicationService {
   constructor(
-    @InjectRepository(HsApplication)
-    private applicationRepository: Repository<HsApplication>,
+    @InjectRepository(HsApplicationEntity)
+    private applicationRepository: Repository<HsApplicationEntity>,
     private readonly paginationService: HsPaginationService,
   ) {}
 
-  async create(createApplicationDto: any): Promise<HsApplication> {
+  async create(createApplicationDto: any): Promise<HsApplicationEntity> {
     const application = this.applicationRepository.create(createApplicationDto);
     return this.applicationRepository.save(application) as any;
   }
 
   async findAll(
     queryApplicationDto: QueryApplicationDto,
-  ): Promise<PageDto<HsApplication>> {
+  ): Promise<PageDto<HsApplicationEntity>> {
     return this.paginationService.paginate(
       this.applicationRepository,
       queryApplicationDto,
@@ -34,11 +34,11 @@ export class HsApplicationService {
     return count > 0;
   }
 
-  async findOne(id: string): Promise<HsApplication> {
+  async findOne(id: string): Promise<HsApplicationEntity> {
     return this.applicationRepository.findOneBy({ id });
   }
 
-  async update(id: string, updateApplicationDto: any): Promise<HsApplication> {
+  async update(id: string, updateApplicationDto: any): Promise<HsApplicationEntity> {
     await this.applicationRepository.update(id, updateApplicationDto);
     return this.applicationRepository.findOneBy({ id });
   }

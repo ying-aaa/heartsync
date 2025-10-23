@@ -14,6 +14,16 @@ export class HsAssetTableEntity {
   id: string;
 
   @Column({
+    name: 'directory_id',
+    type: 'varchar',
+    nullable: true,
+    length: 100,
+    comment: '目录ID',
+    default: 'system',
+  })
+  directoryId: string;
+
+  @Column({
     name: 'data_source_id',
     type: 'varchar',
     length: 100,

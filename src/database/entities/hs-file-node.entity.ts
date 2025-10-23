@@ -6,8 +6,8 @@ export enum NodeType {
   FOLDER = 'folder',
 }
 
-@Entity()
-export class HsFileNode extends HsBaseEntity {
+@Entity('hs_file_node', { comment: '文件节点表' })
+export class HsFileNodeEntity extends HsBaseEntity {
   @Column({ length: 50 })
   businessId: string;
 

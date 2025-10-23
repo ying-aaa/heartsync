@@ -12,7 +12,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { HsApplicationService } from './application.service';
-import { HsApplication } from '../../database/entities/hs-application.entity';
+import { HsApplicationEntity } from '../../database/entities/hs-application.entity';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
 import { PageDto } from 'src/common/dtos/page.dto';
@@ -26,14 +26,14 @@ export class ApplicationController {
   @UsePipes(new ValidationPipe())
   async create(
     @Body() createApplicationDto: CreateApplicationDto,
-  ): Promise<HsApplication> {
+  ): Promise<HsApplicationEntity> {
     return this.applicationService.create(createApplicationDto);
   }
 
   @Get()
   async findAll(
     @Query() queryApplicationDto: QueryApplicationDto,
-  ): Promise<PageDto<HsApplication>> {
+  ): Promise<PageDto<HsApplicationEntity>> {
     return this.applicationService.findAll(queryApplicationDto);
   }
 
@@ -49,7 +49,7 @@ export class ApplicationController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<HsApplication> {
+  async findOne(@Param('id') id: string): Promise<HsApplicationEntity> {
     return this.applicationService.findOne(id);
   }
 
@@ -58,7 +58,7 @@ export class ApplicationController {
   async update(
     @Param('id') id: string,
     @Body() updateApplicationDto: UpdateApplicationDto,
-  ): Promise<HsApplication> {
+  ): Promise<HsApplicationEntity> {
     return this.applicationService.update(id, updateApplicationDto);
   }
 

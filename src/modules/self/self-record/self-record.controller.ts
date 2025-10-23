@@ -7,7 +7,7 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
-import { HsSelfRecord } from '../../../database/entities/hs-self-record.entity';
+import { HsSelfRecordEntity } from '../../../database/entities/hs-self-record.entity';
 import { HsSelfRecordService } from './self-record.service';
 
 @Controller('/self-records')
@@ -15,7 +15,7 @@ export class HsSelfRecordController {
   constructor(private readonly hsSelfRecordService: HsSelfRecordService) {}
 
   @Post()
-  create(@Body() record: Partial<HsSelfRecord>) {
+  create(@Body() record: Partial<HsSelfRecordEntity>) {
     return this.hsSelfRecordService.create(record);
   }
 
@@ -30,7 +30,7 @@ export class HsSelfRecordController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() record: Partial<HsSelfRecord>) {
+  update(@Param('id') id: number, @Body() record: Partial<HsSelfRecordEntity>) {
     return this.hsSelfRecordService.update(id, record);
   }
 

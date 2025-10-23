@@ -1,8 +1,8 @@
 import { HsBaseEntity } from 'src/database/entities/hs-base.entity';
 import { Entity, Column } from 'typeorm';
 
-@Entity()
-export class HsApplication extends HsBaseEntity {
+@Entity('hs_applications', { comment: '系统应用表' })
+export class HsApplicationEntity extends HsBaseEntity {
   @Column()
   directoryId: string;
 
