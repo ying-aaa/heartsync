@@ -1,4 +1,11 @@
-import { UnifiedDbStrategy, DbConfig, DbPool, DbConnection, DbQueryResult, FieldConfig } from '../abstract/unified-db-strategy.interface';
+import {
+  UnifiedDbStrategy,
+  DbConfig,
+  DbPool,
+  DbConnection,
+  DbQueryResult,
+  FieldConfig,
+} from '../abstract/unified-db-strategy.interface';
 import type { Pool as PgPool, PoolClient } from 'pg'; // 仅导入类型，不加载库
 
 export class PostgresDb implements UnifiedDbStrategy {
@@ -13,7 +20,9 @@ export class PostgresDb implements UnifiedDbStrategy {
 
   // 3. 连接管理方法（原Strategy职责）
   /** 测试PostgreSQL连接有效性 */
-  async testConnection(config: DbConfig): Promise<{ success: boolean; message: string }> {
+  async testConnection(
+    config: DbConfig,
+  ): Promise<{ success: boolean; message: string }> {
     const { Client } = await this.importPg();
     const client = new Client({
       host: config.host,
@@ -28,7 +37,10 @@ export class PostgresDb implements UnifiedDbStrategy {
       await this.executeTestQuery(client); // 执行测试查询
       return { success: true, message: 'PostgreSQL连接测试成功' };
     } catch (error) {
-      return { success: false, message: `PostgreSQL连接失败：${(error as Error).message}` };
+      return {
+        success: false,
+        message: `PostgreSQL连接失败：${(error as Error).message}`,
+      };
     } finally {
       await client.end(); // 确保连接关闭
     }
@@ -72,7 +84,11 @@ export class PostgresDb implements UnifiedDbStrategy {
 
   // 4. 操作实现方法（原DbService职责）
   /** 执行查询（SELECT/UPDATE/DELETE） */
-  async query(conn: DbConnection, sql: string, params?: any[]): Promise<DbQueryResult> {
+  async query(
+    conn: DbConnection,
+    sql: string,
+    params?: any[],
+  ): Promise<DbQueryResult> {
     const result = await (conn as PoolClient).query(sql, params || []);
     return {
       rows: result.rows, // 查询结果行
@@ -81,14 +97,18 @@ export class PostgresDb implements UnifiedDbStrategy {
   }
 
   /** 插入数据（INSERT） */
-  async insert(conn: DbConnection, tableName: string, data: Record<string, any>): Promise<DbQueryResult> {
+  async insert(
+    conn: DbConnection,
+    tableName: string,
+    data: Record<string, any>,
+  ): Promise<DbQueryResult> {
     const keys = Object.keys(data);
     const values = Object.values(data);
     // PostgreSQL占位符用$1, $2...（索引从1开始）
     const placeholders = keys.map((_, index) => `$${index + 1}`).join(',');
     // 字段名用双引号包裹（避免关键字冲突，PostgreSQL区分大小写）
     const sql = `
-      INSERT INTO "${tableName}" (${keys.map(key => `"${key}"`).join(',')}) 
+      INSERT INTO "${tableName}" (${keys.map((key) => `"${key}"`).join(',')}) 
       VALUES (${placeholders})
       RETURNING *  -- PostgreSQL通过RETURNING返回插入的行
     `;
@@ -100,8 +120,12 @@ export class PostgresDb implements UnifiedDbStrategy {
   }
 
   /** 创建表（CREATE TABLE） */
-  async createTable(conn: DbConnection, tableName: string, fields: FieldConfig[]): Promise<void> {
-    const fieldSqls = fields.map(field => {
+  async createTable(
+    conn: DbConnection,
+    tableName: string,
+    fields: FieldConfig[],
+  ): Promise<void> {
+    const fieldSqls = fields.map((field) => {
       // 处理约束（非空、主键）
       const constraints = [
         field.notNull ? 'NOT NULL' : '',
@@ -109,8 +133,8 @@ export class PostgresDb implements UnifiedDbStrategy {
       ].filter(Boolean); // 过滤空字符串
 
       // 处理字段类型（如varchar(255)、jsonb等）
-      const fieldType = field.length 
-        ? `${field.dbType}(${field.length})` 
+      const fieldType = field.length
+        ? `${field.dbType}(${field.length})`
         : field.dbType;
 
       // PostgreSQL字段名用双引号，注释语法与MySQL一致
@@ -127,7 +151,11 @@ export class PostgresDb implements UnifiedDbStrategy {
   }
 
   /** 查询表字段信息（适配PostgreSQL系统表） */
-  async getTableFields(conn: DbConnection, dbName: string, tableName: string): Promise<FieldConfig[]> {
+  async getTableFields(
+    conn: DbConnection,
+    dbName: string,
+    tableName: string,
+  ): Promise<FieldConfig[]> {
     // 查询PostgreSQL系统表获取字段信息
     const sql = `
       SELECT 
