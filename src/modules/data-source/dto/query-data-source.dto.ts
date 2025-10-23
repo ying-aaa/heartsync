@@ -9,6 +9,10 @@ export enum DataSourceStatus {
 export class QueryDataSourceDto extends PageOptionsDto {
   @IsString()
   @IsOptional()
+  appId?: string;
+
+  @IsString()
+  @IsOptional()
   name?: string;
 
   // @IsString()
