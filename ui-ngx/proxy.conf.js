@@ -20,7 +20,7 @@ const PROXY_CONFIG = {
     secure: false,
   },
   '/heartsync-files': {
-    target: filesUrl,
+    target: forwardUrl,
     changeOrigin: true,
   },
 };
