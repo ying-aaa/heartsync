@@ -129,7 +129,7 @@ export class DataSourceComponent implements OnInit {
       ],
       getData: () => {
         // 模拟数据请求REQUES
-        return this.dataSourceHttpService.findAll(this.pageLink).pipe(delay(0));
+        return this.dataSourceHttpService.findAll(this.pageLink);
       },
       layouts: ['paginator', 'total', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],

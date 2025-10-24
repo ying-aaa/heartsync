@@ -10,6 +10,7 @@ import { HsAssetSyncService } from './asset-sync.service';
 import { HsDataSourceModule } from '../data-source/data-source.module';
 import { HsLoggerService } from 'src/common/services/logger.service';
 import { HsDbFactoryService } from 'src/common/services/db-factory.service';
+import { HsPaginationService } from 'src/common/services/pagination.service';
 
 @Module({
   imports: [
@@ -22,7 +23,13 @@ import { HsDbFactoryService } from 'src/common/services/db-factory.service';
     HsDataSourceModule,
   ],
   controllers: [HsAssetController],
-  providers: [HsAssetService, HsAssetSyncService, HsLoggerService, HsDbFactoryService],
+  providers: [
+    HsAssetService,
+    HsAssetSyncService,
+    HsLoggerService,
+    HsDbFactoryService,
+    HsPaginationService,
+  ],
   exports: [HsAssetService, HsAssetSyncService],
 })
 export class HsAssetModule {}

@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { HsAssetService } from './asset.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
+import { HsAssetTableEntity } from 'src/database/entities/hs-asset-table.entity';
+import { PageDto } from 'src/common/dtos/page.dto';
 
 @Controller('asset')
 export class HsAssetController {
@@ -28,6 +30,17 @@ export class HsAssetController {
   @Get('/app/:appId')
   async findAllByAppId(@Param('appId') appId: string) {
     return await this.assetService.findAllByAppId(appId);
+  }
+
+  /**
+   * 获取所有资产
+   * GET /api/data-sources
+   */
+  @Get()
+  async findAll(
+    @Query() queryAssetDto: any,
+  ): Promise<PageDto<HsAssetTableEntity>> {
+    return this.assetService.findAll(queryAssetDto);
   }
 
   // 查询资产数据

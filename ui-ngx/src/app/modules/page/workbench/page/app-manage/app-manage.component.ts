@@ -58,11 +58,7 @@ export class AppManageComponent implements OnInit {
     0,
     20,
     [{ prop: 'directoryId' }, { prop: 'name' }],
-    [
-      { sortBy: 'name' },
-      { sortBy: 'description' },
-      { sortBy: 'createdAt', order: 'DESC' },
-    ],
+    [{ sortBy: 'name' }, { sortBy: 'description' }, { sortBy: 'createdAt', order: 'DESC' }],
   );
 
   treeConfig = signal<IFileTreeConfig>({
@@ -153,16 +149,14 @@ export class AppManageComponent implements OnInit {
               moreName: '确认删除',
               action: (row, event) => {
                 console.log('删除', row, event);
-                this.applicationService
-                  .deleteApplication(row.id)
-                  .subscribe((res) => {
-                    this.pageLink.getData();
-                    this._snackBar.open('删除应用成功!!!', '', {
-                      horizontalPosition: 'center',
-                      verticalPosition: 'top',
-                      duration: 1 * 1000,
-                    });
+                this.applicationService.deleteApplication(row.id).subscribe((res) => {
+                  this.pageLink.getData();
+                  this._snackBar.open('删除应用成功!!!', '', {
+                    horizontalPosition: 'center',
+                    verticalPosition: 'top',
+                    duration: 1 * 1000,
                   });
+                });
               },
             },
           ],
@@ -172,9 +166,7 @@ export class AppManageComponent implements OnInit {
       ],
       getData: () => {
         // 模拟数据请求REQUES
-        return this.applicationService
-          .findAllApplications(this.pageLink)
-          .pipe(delay(0));
+        return this.applicationService.findAllApplications(this.pageLink).pipe(delay(0));
       },
       layouts: ['paginator', 'total', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],

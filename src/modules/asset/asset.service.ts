@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HsAssetFieldEntity } from 'src/database/entities/hs-asset-field.entity';
@@ -12,6 +13,7 @@ import { CreateAssetDto } from './dto/create-asset.dto';
 import { HsLoggerService } from 'src/common/services/logger.service';
 import { HsConnectionPoolService } from '../data-source/connection-pool.service';
 import { HsDbFactoryService } from 'src/common/services/db-factory.service';
+import { HsPaginationService } from 'src/common/services/pagination.service';
 
 /**
  * 根据前端传入的参数，生成数据库表结构
@@ -32,8 +34,9 @@ export class HsAssetService {
     private hsAssetSyncService: HsAssetSyncService,
     private dataSource: DataSource,
     private logger: HsLoggerService,
-    private poolServcice: HsConnectionPoolService,
     private dbFactoryService: HsDbFactoryService,
+    private poolService: HsConnectionPoolService,
+    private paginationService: HsPaginationService,
   ) {}
 
   // 创建资产
@@ -61,6 +64,10 @@ export class HsAssetService {
       );
       return saved;
     });
+  }
+
+  async findAll(@Query() queryAssetDto: any) {
+    return this.paginationService.paginate(this.assetTableRepo, queryAssetDto);
   }
 
   // 同步资产字段

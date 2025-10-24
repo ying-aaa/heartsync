@@ -10,14 +10,9 @@
   <!-- 标题 -->
   <div class="flex gap-10px items-center h-48px">
     <div class="w-32px h-32px flex-center">
-      <img
-        class="w-24px h-24px"
-        src="/assets/manage/classfile.png"
-      />
+      <img class="w-24px h-24px" src="/assets/manage/classfile.png" />
     </div>
-    <div class="font-roboto text-18px font-bold leading-24px tracking-0">
-      分类目录
-    </div>
+    <div class="font-roboto text-18px font-bold leading-24px tracking-0">分类目录</div>
   </div>
 
   <!-- 分割线 -->
@@ -40,10 +35,7 @@
     <div class="ml-12px leading-16px">新增</div>
   </footer>
 </div>
-<mat-divider
-  [vertical]="true"
-  class="h-full"
-></mat-divider>
+<mat-divider [vertical]="true" class="h-full"></mat-divider>
 <!-- 右侧 -->
 <div class="w-0 flex-1 h-100% flex flex-col">
   <div class="h-56px flex flex-row justify-end items-center px-24px gap-10px">
@@ -62,16 +54,8 @@
         </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
-    <mat-form-field
-      appearance="outline"
-      class="w-252px hs-density--5"
-    >
-      <input
-        matInput
-        type="text"
-        placeholder="搜索应用"
-        [formControl]="appName"
-      />
+    <mat-form-field appearance="outline" class="w-252px hs-density--5">
+      <input matInput type="text" placeholder="搜索应用" [formControl]="appName" />
       @if (appName.getRawValue()) {
         <button
           matSuffix
@@ -84,12 +68,7 @@
         </button>
       }
     </mat-form-field>
-    <button
-      mat-flat-button
-      (click)="createRecord()"
-    >
-      新增
-    </button>
+    <button mat-flat-button (click)="createRecord()">新增</button>
   </div>
   <mat-divider></mat-divider>
   <div class="h-0 flex-1">
