@@ -69,7 +69,7 @@
         </button>
       }
     </mat-form-field>
-    <button mat-flat-button (click)="createRecord()">新增</button>
+    <button mat-flat-button (click)="openAssetDialog('create')">新增</button>
   </div>
   <mat-divider></mat-divider>
   <div class="h-0 flex-1">
@@ -79,7 +79,7 @@
         [tableConfig]="tableConfig()"
       ></hs-dynamic-table>
     } @else {
-      <hs-app-card-list [tableConfig]="tableConfig()"></hs-app-card-list>
+      <!-- <hs-app-card-list [tableConfig]="tableConfig()"></hs-app-card-list> -->
     }
   </div>
 </div>

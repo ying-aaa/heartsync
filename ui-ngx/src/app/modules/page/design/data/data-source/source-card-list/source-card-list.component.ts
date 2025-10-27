@@ -30,7 +30,7 @@ export class SourceCardListComponent implements OnInit, OnDestroy {
 
   tableColumn = computed(() => this.tableConfig().tableColumn);
 
-  actionColumn = computed(() => this.tableColumn().at(-1).config);
+  actionColumn = computed(() => this.tableColumn().at(-1).config || []);
 
   displayedColumns = computed(() => this.tableConfig().displayedColumns);
 

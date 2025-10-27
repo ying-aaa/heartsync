@@ -14,20 +14,19 @@ import {
   PageLink,
   IDynamicTable,
   TextColumn,
-  ImgColumn,
   TagColumn,
   DateColumn,
   ActionColumn,
 } from '@src/app/shared/components/hs-table/table.model';
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
 import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
-import { map, lastValueFrom, delay } from 'rxjs';
-import { AppCardListComponent } from '../../../workbench/page/app-manage/app-card-list/app-card-list.component';
-import { CreateAppComponent } from '../../../workbench/page/app-manage/create-app/create-app.component';
+import { map, lastValueFrom } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { getParamFromRoute, isMobile } from '@src/app/core/utils';
 import { AssetHttpService } from '@src/app/core/http/asset.http.service';
 import { DataSourceHttpService } from '@src/app/core/http/data-source.http.service';
+import { DataAssetSharedModule } from './data-source-asset.module';
+import { CreateDataAssetComponent } from './create-data-asset/create-data-asset.component';
 
 @Component({
   selector: 'hs-data-asset',
@@ -44,7 +43,7 @@ import { DataSourceHttpService } from '@src/app/core/http/data-source.http.servi
     ReactiveFormsModule,
     HsDynamicTableModule,
     MatButtonToggleModule,
-    AppCardListComponent,
+    DataAssetSharedModule,
   ],
 })
 export class DataAssetComponent implements OnInit {
@@ -186,12 +185,15 @@ export class DataAssetComponent implements OnInit {
     private dataSourceHttpService: DataSourceHttpService,
   ) {}
 
-  createRecord() {
-    const width = isMobile() ? '100vw' : '800px';
-    const height = isMobile() ? '100vh' : '600px';
-    const dialogRef = this.dialog.open(CreateAppComponent, {
+  openAssetDialog(type: 'create' | 'edit', id?: string) {
+    const width = isMobile() ? '100vw' : '1600px';
+    const height = isMobile() ? '100vh' : '800px';
+    const dialogRef = this.dialog.open(CreateDataAssetComponent, {
       data: {
+        appId: this.appId,
         directoryId: this.directoryId,
+        type,
+        id,
       },
       width,
       height,
