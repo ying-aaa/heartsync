@@ -1,8 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { HsConnectionPoolService } from '../data-source/connection-pool.service';
 import { HsDataSourceService } from '../data-source/data-source.service';
-import { HsAssetSyncService } from '../asset/asset-sync.service';
-import { HsAssetService } from '../asset/asset.service';
 import { IFieldType } from 'src/database/entities/hs-asset-field.entity';
 import { HsLoggerService } from 'src/common/services/logger.service';
 import { CreateTableDto } from './dto/creae-table.dto';
@@ -12,10 +10,10 @@ export class HsDynamicTableService {
   constructor(
     private poolService: HsConnectionPoolService,
     private dataSourceService: HsDataSourceService,
-    private assetService: HsAssetService,
-    private assetSyncService: HsAssetSyncService,
     private logger: HsLoggerService,
-  ) {}
+  ) {
+    this.logger.setContext(HsDynamicTableService.name);
+  }
 
   /**
    * 仅创建数据库物理表，不涉及元数据存储

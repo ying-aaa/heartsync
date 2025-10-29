@@ -7,6 +7,7 @@ import { HsAssetFieldEntity } from 'src/database/entities/hs-asset-field.entity'
 import { HsDataSourceService } from '../data-source/data-source.service';
 import { HsLoggerService } from 'src/common/services/logger.service';
 import { HsConnectionPoolService } from '../data-source/connection-pool.service';
+import { HsDbFactoryService } from 'src/common/services/db-factory.service';
 
 // 数据库查询返回的字段原始信息（统一格式）
 interface DbFieldRaw {
@@ -26,7 +27,7 @@ export class HsAssetSyncService {
     @InjectRepository(HsAssetFieldEntity)
     private assetFieldRepo: Repository<HsAssetFieldEntity>,
     private dataSourceService: HsDataSourceService,
-    private poolService: HsConnectionPoolService,
+    private dbFactoryService: HsDbFactoryService,
     private logger: HsLoggerService,
   ) {
     this.logger.setContext(HsAssetSyncService.name);
@@ -158,108 +159,13 @@ export class HsAssetSyncService {
     dbName: string,
     tableName: string,
   ): Promise<DbFieldRaw[]> {
-    const connection = await this.poolService.getConnection(dataSourceId);
-    try {
-      if (dbType === 'mysql') {
-        return this.queryMysqlFields(
-          connection as Connection,
-          dbName,
-          tableName,
-        );
-      } else if (dbType === 'postgres') {
-        return this.queryPostgresFields(
-          connection as PoolClient,
-          dbName,
-          tableName,
-          dataSourceId,
-        );
-      } else {
-        throw new Error(`不支持的数据库类型：${dbType}`);
-      }
-    } finally {
-      await this.poolService.closeConnection(dataSourceId);
-    }
-  }
+    const poolService = this.dbFactoryService.getPoolService();
+    const strategy = await this.dbFactoryService.getDbStrategy(dataSourceId); // 获取二合一策略
+    const conn = await poolService.getConnection(dataSourceId);
 
-  /**
-   * MySQL查询字段信息（从information_schema.columns）
-   */
-  private async queryMysqlFields(
-    connection: Connection,
-    dbName: string,
-    tableName: string,
-  ): Promise<DbFieldRaw[]> {
-    const sql = `
-      SELECT
-        COLUMN_NAME AS fieldName,
-        CONCAT(DATA_TYPE, IF(CHARACTER_MAXIMUM_LENGTH IS NOT NULL, CONCAT('(', CHARACTER_MAXIMUM_LENGTH, ')'), '')) AS fieldType,
-        CHARACTER_MAXIMUM_LENGTH AS length,
-        (COLUMN_KEY = 'PRI') AS isPrimary,
-        (IS_NULLABLE = 'NO') AS notNull,
-        COLUMN_COMMENT AS comment
-      FROM information_schema.COLUMNS
-      WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?
-      ORDER BY ORDINAL_POSITION
-    `;
-    const [rows] = await connection.execute(sql, [dbName, tableName]);
-    return (rows as any[]).map((row) => ({
-      fieldName: row.fieldName,
-      fieldType: row.fieldType,
-      length: row.length,
-      isPrimary: row.isPrimary,
-      notNull: row.notNull,
-      comment: row.comment,
-    }));
-  }
+    const rows = await strategy.getTableFields(conn, dbName, tableName);
 
-  /**
-   * PostgreSQL查询字段信息（从pg_catalog系统表）
-   */
-  private async queryPostgresFields(
-    connection: PoolClient,
-    dbName: string,
-    tableName: string,
-    dataSourceId: string,
-  ): Promise<DbFieldRaw[]> {
-    const sql = `
-      SELECT
-          a.attname                                       AS "fieldName",
-          regexp_replace(
-              pg_catalog.format_type(a.atttypid, a.atttypmod),
-              'character varying', 'varchar', 'i')        AS "fieldType",
-          CASE WHEN a.atttypmod > 0 THEN a.atttypmod - 4 END AS "length",
-          pg_catalog.col_description(c.oid, a.attnum)     AS "comment",
-          regexp_replace(pg_get_expr(d.adbin, d.adrelid),
-                        '::character varying', '', 'g')  AS "defaultValue",
-          CASE WHEN a.attnotnull THEN 'YES' ELSE 'NO' END AS "notNull",
-          CASE WHEN pk.attnum IS NOT NULL THEN 'YES' ELSE 'NO' END AS "isPrimary",
-          CASE
-              WHEN EXISTS (
-                  SELECT 1
-                  FROM pg_constraint
-                  WHERE conrelid = a.attrelid
-                    AND a.attnum = ANY(conkey)
-                    AND contype IN ('p', 'u') 
-              ) THEN 'YES'
-              ELSE 'NO'
-          END                                             AS "unique",
-          CASE WHEN a.attidentity = 'd' THEN 'YES' ELSE 'NO' END AS "addSelf"
-      FROM pg_attribute a
-      JOIN pg_class c ON c.oid = a.attrelid
-      LEFT JOIN pg_attrdef d ON d.adrelid = a.attrelid AND d.adnum = a.attnum
-      LEFT JOIN (
-          SELECT conrelid, unnest(conkey) AS attnum
-          FROM pg_constraint
-          WHERE contype = 'p'
-      ) pk ON pk.conrelid = a.attrelid AND pk.attnum = a.attnum
-      WHERE c.relname = '${tableName}'
-        AND a.attnum > 0
-        AND NOT a.attisdropped
-      ORDER BY a.attnum;
-    `;
-    const result = await connection.query(sql);
-
-    if (!result.rows?.length) {
+    if (!rows?.length) {
       this.logger.error(
         `同步资产失败，数据源: ${dataSourceId} 下不存在表: ${tableName}`,
       );
@@ -268,7 +174,7 @@ export class HsAssetSyncService {
       );
     }
 
-    return result.rows.map((row) => ({
+    return rows.map((row) => ({
       fieldName: row.fieldName,
       fieldType: row.fieldType,
       length: row.length,

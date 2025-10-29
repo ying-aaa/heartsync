@@ -76,4 +76,19 @@ export class HsDataSourceController {
   remove(@Param('id') id: string) {
     return this.service.remove(id);
   }
+
+  // 获取数据源下的数据库模式
+  @Get(':id/schemas')
+  async getSchemas(@Param('id') id: string) {
+    return await this.service.getSchemas(id);
+  }
+
+  // 获取数据源下的数据库模式下的表
+  @Get(':id/tables')
+  async getTables(
+    @Param('id') id: string,
+    @Query('schemaName') schemaName: string,
+  ) {
+    return await this.service.getTables(id, schemaName);
+  }
 }

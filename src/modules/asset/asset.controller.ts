@@ -43,9 +43,9 @@ export class HsAssetController {
     return this.assetService.findAll(queryAssetDto);
   }
 
-  // 查询资产数据
+  // 根据资产id查询资产数据
   @Get('/:id/find')
-  async findAssetData(@Param('id') assetId: string) {
-    return await this.assetService.findAssetData(assetId);
+  async findAssetDataById(@Param('id') assetId: string) {
+    return await this.assetService.findAssetDataById(assetId);
   }
 }

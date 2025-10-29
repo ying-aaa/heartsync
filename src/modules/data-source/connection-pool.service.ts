@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import mysql, { Pool as MysqlPool } from 'mysql2/promise';
-import { Pool as PgPool, Client as PgClient } from 'pg';
+import { Pool as MysqlPool } from 'mysql2/promise';
+import { Pool as PgPool } from 'pg';
 import { HsDataSourceEntity } from 'src/database/entities/hs-data-source.entity';
 import { HsDataSourceService } from './data-source.service';
 import { HsLoggerService } from 'src/common/services/logger.service';
@@ -124,9 +124,6 @@ export class HsConnectionPoolService implements OnModuleInit {
     await strategy.executeTestQuery(conn);
     return conn;
   }
-
-  // 检查连接是否存在，不存在则创建
-  async checkConnection(connectionId: string) {}
 
   /**
    * 关闭连接（放回连接池，而非真正关闭）

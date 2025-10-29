@@ -6,6 +6,7 @@ import { HsDataSourceService } from './data-source.service';
 import { HsConnectionPoolService } from './connection-pool.service';
 import { HsLoggerService } from 'src/common/services/logger.service';
 import { HsPaginationService } from 'src/common/services/pagination.service';
+import { HsDbFactoryService } from 'src/common/services/db-factory.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([HsDataSourceEntity])],
@@ -15,6 +16,7 @@ import { HsPaginationService } from 'src/common/services/pagination.service';
     HsConnectionPoolService,
     HsLoggerService,
     HsPaginationService,
+    HsDbFactoryService,
   ],
   exports: [HsDataSourceService, HsConnectionPoolService],
 })

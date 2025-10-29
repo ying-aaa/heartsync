@@ -1,4 +1,11 @@
-import { UnifiedDbStrategy, DbConfig, DbPool, DbConnection, DbQueryResult, FieldConfig } from '../abstract/unified-db-strategy.interface';
+import {
+  UnifiedDbStrategy,
+  DbConfig,
+  DbPool,
+  DbConnection,
+  DbQueryResult,
+  FieldConfig,
+} from '../abstract/unified-db-strategy.interface';
 import type { Pool as MysqlPool, PoolConnection } from 'mysql2/promise'; // 仅类型导入
 
 export class MysqlDb implements UnifiedDbStrategy {
@@ -12,7 +19,9 @@ export class MysqlDb implements UnifiedDbStrategy {
   }
 
   // 3. 连接管理方法（原Strategy职责）
-  async testConnection(config: DbConfig): Promise<{ success: boolean; message: string }> {
+  async testConnection(
+    config: DbConfig,
+  ): Promise<{ success: boolean; message: string }> {
     const mysql = await this.importMysql();
     let conn: PoolConnection | any | null = null;
     try {
@@ -26,7 +35,10 @@ export class MysqlDb implements UnifiedDbStrategy {
       await this.executeTestQuery(conn);
       return { success: true, message: 'MySQL连接测试成功' };
     } catch (error) {
-      return { success: false, message: `MySQL连接失败：${(error as Error).message}` };
+      return {
+        success: false,
+        message: `MySQL连接失败：${(error as Error).message}`,
+      };
     } finally {
       if (conn) await conn.end();
     }
@@ -62,7 +74,11 @@ export class MysqlDb implements UnifiedDbStrategy {
   }
 
   // 4. 操作实现方法（原DbService职责）
-  async query(conn: DbConnection, sql: string, params?: any[]): Promise<DbQueryResult> {
+  async query(
+    conn: DbConnection,
+    sql: string,
+    params?: any[],
+  ): Promise<DbQueryResult> {
     const [rows, _] = await (conn as PoolConnection).execute(sql, params || []);
     return {
       rows: rows as any[],
@@ -71,25 +87,40 @@ export class MysqlDb implements UnifiedDbStrategy {
     };
   }
 
-  async insert(conn: DbConnection, tableName: string, data: Record<string, any>): Promise<DbQueryResult> {
+  async insert(
+    conn: DbConnection,
+    tableName: string,
+    data: Record<string, any>,
+  ): Promise<DbQueryResult> {
     const keys = Object.keys(data);
     const values = Object.values(data);
     const placeholders = keys.map(() => '?').join(',');
-    const sql = `INSERT INTO \`${tableName}\` (${keys.map(k => `\`${k}\``).join(',')}) VALUES (${placeholders})`;
+    const sql = `INSERT INTO \`${tableName}\` (${keys.map((k) => `\`${k}\``).join(',')}) VALUES (${placeholders})`;
     return this.query(conn, sql, values);
   }
 
-  async createTable(conn: DbConnection, tableName: string, fields: FieldConfig[]): Promise<void> {
-    const fieldSqls = fields.map(f => {
-      const constraints = [f.notNull ? 'NOT NULL' : '', f.isPrimaryKey ? 'PRIMARY KEY' : ''].filter(Boolean);
+  async createTable(
+    conn: DbConnection,
+    tableName: string,
+    fields: FieldConfig[],
+  ): Promise<void> {
+    const fieldSqls = fields.map((f) => {
+      const constraints = [
+        f.notNull ? 'NOT NULL' : '',
+        f.isPrimary ? 'PRIMARY KEY' : '',
+      ].filter(Boolean);
       const fieldType = f.length ? `${f.dbType}(${f.length})` : f.dbType;
-      return `\`${f.name}\` ${fieldType} ${constraints.join(' ')} COMMENT '${f.comment || ''}'`;
+      return `\`${f.fieldName}\` ${fieldType} ${constraints.join(' ')} COMMENT '${f.comment || ''}'`;
     });
     const sql = `CREATE TABLE IF NOT EXISTS \`${tableName}\` (${fieldSqls.join(', ')})`;
     await this.query(conn, sql);
   }
 
-  async getTableFields(conn: DbConnection, dbName: string, tableName: string): Promise<FieldConfig[]> {
+  async getTableFields(
+    conn: DbConnection,
+    dbName: string,
+    tableName: string,
+  ): Promise<FieldConfig[]> {
     const sql = `
       SELECT COLUMN_NAME as name, DATA_TYPE as dbType, CHARACTER_MAXIMUM_LENGTH as length,
              (IS_NULLABLE = 'NO') as notNull, (COLUMN_KEY = 'PRI') as isPrimaryKey, COLUMN_COMMENT as comment

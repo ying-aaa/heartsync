@@ -14,6 +14,8 @@ import { HsConnectionPoolService } from './connection-pool.service';
 import { PageDto } from 'src/common/dtos/page.dto';
 import { QueryDataSourceDto } from './dto/query-data-source.dto';
 import { HsPaginationService } from 'src/common/services/pagination.service';
+import { HsDbFactoryService } from 'src/common/services/db-factory.service';
+import { HsLoggerService } from 'src/common/services/logger.service';
 
 /**
  * 数据源服务：处理数据源的CRUD、连接测试、表列表查询
@@ -27,7 +29,11 @@ export class HsDataSourceService {
     @Inject(forwardRef(() => HsConnectionPoolService))
     private poolService: HsConnectionPoolService,
     private paginationService: HsPaginationService,
-  ) {}
+    private dbFactoryService: HsDbFactoryService,
+    private logger: HsLoggerService,
+  ) {
+    this.logger.setContext(HsDataSourceService.name);
+  }
 
   /**
    * 创建数据源（密码加密存储）
@@ -138,5 +144,73 @@ export class HsDataSourceService {
     await this.findOne(id); // 先校验是否存在
     await this.dataSourceRepo.delete(id);
     // return { success: true, message: '数据源删除成功' };
+  }
+
+  /**
+   * 获取数据源下的数据库模式
+   * @param id 数据源ID
+   * @returns 表列表
+   */
+  async getSchemas(dataSourceId: string) {
+    const factory = this.dbFactoryService;
+    const poolService = factory.getPoolService();
+    const strategy = await factory.getDbStrategy(dataSourceId); // 获取二合一策略
+    const conn = await poolService.getConnection(dataSourceId);
+    const sql = `
+      SELECT schema_name 
+      FROM information_schema.schemata 
+      WHERE schema_name NOT IN ('information_schema', 'pg_catalog')
+    `;
+    try {
+      // 2. 调用策略的操作方法（建表）
+      const result = await strategy.query(conn, sql);
+      if (!result.rows?.length) {
+        this.logger.error(`查询数据源${dataSourceId}下的数据库模式失败`);
+        throw new NotFoundException(
+          `查询数据源${dataSourceId}下的数据库模式失败`,
+        );
+      }
+      this.logger.log(
+        `查询数据源${dataSourceId}下的数据库模式：${JSON.stringify(result.rows)}`,
+      );
+
+      return result.rows;
+    } finally {
+      await poolService.closeConnection(dataSourceId);
+    }
+  }
+
+  /**
+   * 获取数据源下的表列表
+   * @param id 数据源ID
+   * @returns 表列表
+   */
+  async getTables(dataSourceId: string, schemaName: string) {
+    const factory = this.dbFactoryService;
+    const poolService = factory.getPoolService();
+    const strategy = await factory.getDbStrategy(dataSourceId);
+    const conn = await poolService.getConnection(dataSourceId);
+    const sql = `
+      SELECT table_name 
+      FROM information_schema.tables 
+      WHERE table_schema = $1 AND table_type = 'BASE TABLE'
+    `;
+
+    try {
+      const result = await strategy.query(conn, sql, [schemaName]);
+      if (!result.rows?.length) {
+        this.logger.error(`查询数据源${dataSourceId}下的数据库表失败`);
+        throw new NotFoundException(
+          `查询数据源${dataSourceId}下的数据库表失败`,
+        );
+      }
+      this.logger.log(
+        `查询数据源${dataSourceId}下的数据库表：${JSON.stringify(result.rows)}`,
+      );
+
+      return result.rows;
+    } finally {
+      await poolService.closeConnection(dataSourceId);
+    }
   }
 }

@@ -129,7 +129,7 @@ export class PostgresDb implements UnifiedDbStrategy {
       // 处理约束（非空、主键）
       const constraints = [
         field.notNull ? 'NOT NULL' : '',
-        field.isPrimaryKey ? 'PRIMARY KEY' : '',
+        field.isPrimary ? 'PRIMARY KEY' : '',
       ].filter(Boolean); // 过滤空字符串
 
       // 处理字段类型（如varchar(255)、jsonb等）
@@ -138,7 +138,7 @@ export class PostgresDb implements UnifiedDbStrategy {
         : field.dbType;
 
       // PostgreSQL字段名用双引号，注释语法与MySQL一致
-      return `"${field.name}" ${fieldType} ${constraints.join(' ')} COMMENT '${field.comment || ''}'`;
+      return `"${field.fieldName}" ${fieldType} ${constraints.join(' ')} COMMENT '${field.comment || ''}'`;
     });
 
     // 拼接建表SQL（表名用双引号）
@@ -156,33 +156,53 @@ export class PostgresDb implements UnifiedDbStrategy {
     dbName: string,
     tableName: string,
   ): Promise<FieldConfig[]> {
+    const pgResult = await this.query(
+      conn,
+      'SELECT EXISTS(SELECT 1 FROM information_schema.tables WHERE table_name = $1)',
+      [tableName],
+    );
+
+    console.log('%c Line:166 🥛', 'color:#3f7cff', pgResult);
+
     // 查询PostgreSQL系统表获取字段信息
     const sql = `
-      SELECT 
-        a.attname as name,  -- 字段名
-        t.typname as dbType,  -- 数据库类型（如varchar、int4）
-        -- 处理长度（varchar类型的长度需要计算：atttypmod - 4）
-        CASE WHEN t.typname = 'varchar' THEN (a.atttypmod - 4) ELSE NULL END as length,
-        a.attnotnull as notNull,  -- 是否非空
-        -- 判断是否为主键
-        EXISTS (
-          SELECT 1 FROM pg_constraint c
-          WHERE c.conrelid = a.attrelid AND c.contype = 'p' AND a.attnum = ANY(c.conkey)
-        ) as isPrimaryKey,
-        col_description(a.attrelid, a.attnum) as comment  -- 字段注释
+      SELECT
+          a.attname                                       AS "fieldName",
+          regexp_replace(
+              pg_catalog.format_type(a.atttypid, a.atttypmod),
+              'character varying', 'varchar', 'i')        AS "fieldType",
+          CASE WHEN a.atttypmod > 0 THEN a.atttypmod - 4 END AS "length",
+          pg_catalog.col_description(c.oid, a.attnum)     AS "comment",
+          regexp_replace(pg_get_expr(d.adbin, d.adrelid),
+                        '::character varying', '', 'g')  AS "defaultValue",
+          CASE WHEN a.attnotnull THEN 'YES' ELSE 'NO' END AS "notNull",
+          CASE WHEN pk.attnum IS NOT NULL THEN 'YES' ELSE 'NO' END AS "isPrimary",
+          CASE
+              WHEN EXISTS (
+                  SELECT 1
+                  FROM pg_constraint
+                  WHERE conrelid = a.attrelid
+                    AND a.attnum = ANY(conkey)
+                    AND contype IN ('p', 'u') 
+              ) THEN 'YES'
+              ELSE 'NO'
+          END                                             AS "unique",
+          CASE WHEN a.attidentity = 'd' THEN 'YES' ELSE 'NO' END AS "addSelf"
       FROM pg_attribute a
-      JOIN pg_type t ON a.atttypid = t.oid
-      WHERE 
-        -- 关联表（pg_class存储表信息，relname是表名）
-        a.attrelid = (SELECT oid FROM pg_class WHERE relname = $1)
-        -- 关联 schema（pg_namespace存储命名空间，nspname是库名）
-        AND pg_get_userbyid(a.attrelid::regclass::pg_namespace.oid) = $2
-        AND a.attnum > 0  -- 排除系统字段（attnum <= 0是系统字段）
-        AND NOT a.attisdropped  -- 排除已删除的字段
-      ORDER BY a.attnum  -- 按字段创建顺序排序
+      JOIN pg_class c ON c.oid = a.attrelid
+      LEFT JOIN pg_attrdef d ON d.adrelid = a.attrelid AND d.adnum = a.attnum
+      LEFT JOIN (
+          SELECT conrelid, unnest(conkey) AS attnum
+          FROM pg_constraint
+          WHERE contype = 'p'
+      ) pk ON pk.conrelid = a.attrelid AND pk.attnum = a.attnum
+      WHERE c.relname = '${tableName}'
+        AND a.attnum > 0
+        AND NOT a.attisdropped
+      ORDER BY a.attnum;
     `;
 
-    const { rows } = await this.query(conn, sql, [tableName, dbName]);
-    return rows as FieldConfig[];
+    const result = await this.query(conn, sql);
+    return result.rows;
   }
 }

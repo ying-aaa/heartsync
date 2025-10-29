@@ -35,9 +35,10 @@ export class HsAssetService {
     private dataSource: DataSource,
     private logger: HsLoggerService,
     private dbFactoryService: HsDbFactoryService,
-    private poolService: HsConnectionPoolService,
     private paginationService: HsPaginationService,
-  ) {}
+  ) {
+    this.logger.setContext(HsAssetService.name);
+  }
 
   // 创建资产
   async create(assetData: CreateAssetDto) {
@@ -76,6 +77,9 @@ export class HsAssetService {
     try {
       // 查询资产数据
       assetData = await this.assetTableRepo.findOneBy({ id: assetId });
+      if (!assetData) {
+        throw new NotFoundException(`资产ID=${assetId}不存在`);
+      }
     } catch (error) {
       throw new NotFoundException(`资产ID=${assetId}不存在`);
     }
@@ -103,7 +107,7 @@ export class HsAssetService {
   }
 
   // 根据资产id查询资产数据
-  async findAssetData(assetId: string) {
+  async findAssetDataById(assetId: string) {
     // 先查询数据源 id
     const assetMeta: HsAssetTableEntity = await this.assetTableRepo.findOneBy({
       id: assetId,
