@@ -59,4 +59,15 @@ export class DataSourceHttpService {
   remove(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  // 获取数据源下的数据库模式
+  getSchemas(id: string): Observable<{ schema_name: string }[]> {
+    return this.http.get<{ schema_name: string }[]>(`${this.apiUrl}/${id}/schemas`);
+  }
+
+  // // 获取数据源下的数据库模式下的表
+  getTables(id: string, schemaName: string): Observable<{ table_name: string }[]> {
+    const params = new HttpParams().set('schemaName', schemaName);
+    return this.http.get<{ table_name: string }[]>(`${this.apiUrl}/${id}/tables`, { params });
+  }
 }

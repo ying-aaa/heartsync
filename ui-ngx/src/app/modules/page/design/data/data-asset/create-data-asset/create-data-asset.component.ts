@@ -6,6 +6,77 @@ import { HsThemeService } from '@src/app/core/services/theme.service';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { ToastrService } from 'ngx-toastr';
+import {
+  Subject,
+  combineLatest,
+  filter,
+  debounceTime,
+  tap,
+  switchMap,
+  catchError,
+  of,
+  takeUntil,
+} from 'rxjs';
+
+/**
+ * 通用钩子：根据 dashboardId + schemaName 拉取表列表
+ * @param ds  真实的数据服务（含 getTables 方法）
+ * @param debounce 防抖 ms，默认 300
+ */
+export function resolveTables(
+  ds: CreateDataAssetComponent,
+  debounce = 300,
+): (field: IEditorFormlyField) => void {
+  return (field: IEditorFormlyField) => {
+    // @ts-ignore
+    const destroy$ = (field.hooks!.onDestroy$ ||= new Subject<void>());
+
+    /* 显式指明加载状态 */
+    /* 显式指明加载状态 */
+    field.props!['loading'] = false;
+
+    const dashboardCtrl = field.form!.get('dashboardId');
+    const schemaCtrl = field.form!.get('schemaName');
+
+    if (!dashboardCtrl || !schemaCtrl) {
+      console.warn('[Formly] 找不到 dashboardId 或 schemaName 控件');
+      return;
+    }
+
+    /* 监听双字段变化 */
+    combineLatest([
+      dashboardCtrl.valueChanges.pipe(filter((v) => !!v)),
+      schemaCtrl.valueChanges.pipe(filter((v) => !!v)),
+    ])
+      .pipe(
+        debounceTime(debounce),
+        tap(() => {
+          field.props!['loading'] = true;
+          field.formControl!.setValue(null); // 先清空旧选项
+        }),
+        switchMap(([dashboardId, schemaName]) =>
+          ds.dataSourceHttpService.getTables(dashboardId as string, schemaName as string).pipe(
+            tap(
+              (tables) =>
+                (field.props!.options = tables.map((t) => ({
+                  value: t.table_name,
+                  label: t.table_name,
+                }))),
+            ),
+            /* 异常时兜底 */
+            catchError(() => {
+              field.props!.options = [];
+              return of([]);
+            }),
+            tap(() => (field.props!['loading'] = false)),
+          ),
+        ),
+        takeUntil(destroy$),
+      )
+      .subscribe();
+  };
+}
+
 const assetFields = (that: CreateDataAssetComponent) => [
   {
     key: '',
@@ -245,6 +316,54 @@ const assetFields = (that: CreateDataAssetComponent) => [
         className: 'hs-density--1 ',
         fieldGroup: [
           {
+            key: 'schemaName',
+            type: 'select',
+            fieldId: 'select_key_6864436218623751',
+            props: {
+              label: '数据库模式',
+              typeName: '下拉单选',
+              icon: 'playlist_add_check',
+              row: 1,
+              placeholder: '',
+              disabled: false,
+              appearance: 'outline',
+              density: 0,
+              description: '',
+              required: false,
+              readonly: false,
+              options: [],
+            },
+            className: 'hs-density--0 ',
+            expressionProperties: {
+              'props.disabled': '!model.dashboardId',
+            },
+            hooks: {
+              onInit: (field: IEditorFormlyField) => {
+                const dataSourceControl = field.form!.get('dashboardId');
+                if (dataSourceControl) {
+                  dataSourceControl.valueChanges.subscribe((value) => {
+                    if (value) {
+                      that.dataSourceHttpService
+                        .getSchemas(value)
+                        .pipe(
+                          catchError(() => {
+                            field.props!.options = [];
+                            return of([]);
+                          }),
+                        )
+                        .subscribe((res) => {
+                          field.props!.options = res.map((item) => ({
+                            label: item.schema_name,
+                            value: item.schema_name,
+                          }));
+                        });
+                    }
+                  });
+                }
+              },
+            },
+          },
+          {
             key: 'tableName',
             type: 'select',
             fieldId: 'select_key_2824822303130628',
@@ -260,26 +379,15 @@ const assetFields = (that: CreateDataAssetComponent) => [
               description: '',
               required: false,
               readonly: false,
-              options: [
-                {
-                  value: 1,
-                  label: '选项 1',
-                },
-                {
-                  value: 2,
-                  label: '选项 2',
-                },
-                {
-                  value: 3,
-                  label: '选项 3',
-                },
-                {
-                  value: 4,
-                  label: '选项 4',
-                },
-              ],
+              options: [],
             },
             className: 'hs-density--0 ',
+            expressionProperties: {
+              'props.disabled': '!model.dashboardId || !model.schemaName', // 禁用直到 category 被选择
+            },
+            hooks: {
+              onInit: resolveTables(that),
+            },
           },
         ],
       },

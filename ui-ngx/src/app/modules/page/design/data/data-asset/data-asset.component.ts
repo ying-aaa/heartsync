@@ -186,7 +186,7 @@ export class DataAssetComponent implements OnInit {
   ) {}
 
   openAssetDialog(type: 'create' | 'edit', id?: string) {
-    const width = isMobile() ? '100vw' : '1600px';
+    const width = isMobile() ? '100vw' : '1080px';
     const height = isMobile() ? '100vh' : '800px';
     const dialogRef = this.dialog.open(CreateDataAssetComponent, {
       data: {
