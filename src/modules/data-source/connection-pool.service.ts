@@ -1,4 +1,10 @@
-import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common';
 import { Pool as MysqlPool } from 'mysql2/promise';
 import { Pool as PgPool } from 'pg';
 import { HsDataSourceEntity } from 'src/database/entities/hs-data-source.entity';
@@ -86,7 +92,13 @@ export class HsConnectionPoolService implements OnModuleInit {
     // 3. 先测试连接是否可用，再创建连接池
     const testRes = await this.testConnection(dataSource); // 使用分离的测试功能
     if (!testRes.success) {
-      throw new Error(`数据源${dataSourceId}连接测试失败：${testRes.message}`);
+      // throw new Error(`数据源${dataSourceId}连接测试失败：${testRes.message}`);
+      this.logger.error(
+        `数据源${dataSource.id}连接测试失败：${testRes.message}`,
+      );
+      throw new BadRequestException(
+        `数据源${dataSource.id}连接测试失败：${testRes.message}`,
+      );
     }
 
     const strategy = DbRegistry.getStrategy(type);

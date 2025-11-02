@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { HsAssetService } from './asset.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { HsAssetTableEntity } from 'src/database/entities/hs-asset-table.entity';
@@ -47,5 +55,16 @@ export class HsAssetController {
   @Get('/:id/find')
   async findAssetDataById(@Param('id') assetId: string) {
     return await this.assetService.findAssetDataById(assetId);
+  }
+
+  @Get('check-data')
+  async checkData(@Query('directoryId') directoryId: string) {
+    // 检查 directoryId 是否必传且为字符串
+    if (!directoryId || typeof directoryId !== 'string') {
+      throw new BadRequestException('directoryId是必需的，并且必须是字符串');
+    }
+
+    const hasData = await this.assetService.hasData({ directoryId });
+    return { hasData };
   }
 }

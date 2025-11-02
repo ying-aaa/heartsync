@@ -160,4 +160,9 @@ export class HsAssetService {
 
     // return result.rows;
   }
+
+  async hasData(condition: { [key: string]: any }): Promise<boolean> {
+    const count = await this.assetTableRepo.count({ where: condition });
+    return count > 0;
+  }
 }

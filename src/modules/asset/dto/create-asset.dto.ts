@@ -16,6 +16,9 @@ export class CreateAssetDto {
   dataSourceId: string;
 
   @IsString()
+  schemaName: string;
+
+  @IsString()
   @IsNotEmpty()
   tableName: string;
 
