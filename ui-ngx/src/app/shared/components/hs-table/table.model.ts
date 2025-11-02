@@ -139,9 +139,7 @@ export class TagColumn extends BaseColumn<TagConfigType> {
     }
   }
 
-  getChips(
-    value: string | number | Array<string | number>,
-  ): Array<string | number> {
+  getChips(value: string | number | Array<string | number>): Array<string | number> {
     if (Array.isArray(value)) {
       return value;
     } else if (typeof value === 'string') {
@@ -345,9 +343,7 @@ export class PageLink extends QueryParams {
   }
 
   get fieldMultipleSelection(): any[] {
-    return this.multipleSelection
-      .map((item) => item[this.multipleFiled])
-      .filter(Boolean);
+    return this.multipleSelection.map((item) => item[this.multipleFiled]).filter(Boolean);
   }
 
   public get getQueryParams(): IAnyPropObj {
@@ -443,12 +439,11 @@ type ConfigBase = {
   pageLink: PageLink;
   tableColumn: Array<TableColumn>;
   initExec?: boolean;
+  getColumns?: () => Observable<TableColumn[]>;
   getData: () => Observable<DataType>;
 };
 
-type ITableConfig =
-  | (ConfigWithSelection & ConfigBase)
-  | (ConfigWithoutSelection & ConfigBase);
+type ITableConfig = (ConfigWithSelection & ConfigBase) | (ConfigWithoutSelection & ConfigBase);
 
 export class IDynamicTable {
   public tableStyle: IAnyPropObj;
@@ -457,13 +452,19 @@ export class IDynamicTable {
   public pageSizes: number[];
   public pageDislabled?: boolean;
   public pageLink: PageLink;
-  public tableColumn: TableColumn[];
+  public tableColumn: TableColumn[] = [];
   public displayedColumns: string[] = []; // 显示的列
-  public initExec: boolean = true; // 显示的列
+  public initExec: boolean = true; // 初始化时请求数据
 
   public matchLayout = (layout: ILayoutType) => {
     return this.layouts.includes(layout);
   };
+
+  getColumns?: () => Observable<TableColumn[]>;
+  setColumns(columns: TableColumn[]) {
+    this.tableColumn = columns;
+    this.displayedColumns = columns.map((column) => column.prop);
+  }
 
   getData: () => Observable<DataType>;
 
@@ -475,15 +476,15 @@ export class IDynamicTable {
     this.pageDislabled = config.pageDislabled ?? false;
     this.pageLink = config.pageLink;
     this.tableColumn = config.tableColumn;
+    this.getColumns = config.getColumns;
     this.getData = config.getData;
     this.initExec = config.initExec ?? true;
 
     if (this.selection) {
-      this.tableColumn.unshift(
-        new SelectionColumn(ColumnType.SELECTION, '选择'),
-      );
+      this.tableColumn.unshift(new SelectionColumn(ColumnType.SELECTION, '选择'));
       this.pageLink.setMultipleFiled(config.multipleFiled || '');
     }
+
     this.displayedColumns = this.tableColumn.map((item) => item.prop);
   }
 }

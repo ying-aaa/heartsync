@@ -15,8 +15,14 @@ export interface IAsset extends IBaseResponseData {
 export interface IAssetField extends IBaseResponseData {
   id: string;
   assetId: string;
-  fieldName: string;
-  fieldType: string;
+  name: string;
+  notNull: boolean;
+  tableName: string;
+  textType: string;
+  type: string;
+  length: number;
+  isPrimary: boolean;
+  comment: string;
   /* 其余字段 */
 }
 
@@ -55,5 +61,13 @@ export class AssetHttpService {
   /* 查询资产业务数据 */
   findAssetData(assetId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${assetId}/find`);
+  }
+
+  // 判断某个目录下是否有资产
+  checkDataExists(directoryId: string): Observable<{ hasData: boolean }> {
+    const params = { directoryId };
+    return this.http.get<{ hasData: boolean }>(`${this.apiUrl}/check-data`, {
+      params,
+    });
   }
 }

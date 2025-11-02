@@ -8,24 +8,15 @@
     hs-loading
     [isLoading]="loadingStatus"
   >
-    <section
-      tabindex="0"
-      scrollViewport
-      [style]="tableStyle()"
-    >
-      <table
-        mat-table
-        matSort
-        [dataSource]="dataSource"
-        (matSortChange)="onSortChange($event)"
-      >
+    <section tabindex="0" scrollViewport [style]="tableStyle()">
+      <table mat-table matSort [dataSource]="dataSource" (matSortChange)="onSortChange($event)">
+        1111{{
+          tableColumn() | json
+        }}
         @for (column of tableColumn(); track $index) {
           @if (column.type === ColumnType.SELECTION) {
             <ng-container matColumnDef="selection">
-              <th
-                mat-header-cell
-                *matHeaderCellDef
-              >
+              <th mat-header-cell *matHeaderCellDef>
                 <mat-checkbox
                   [aria-label]="checkboxLabel()"
                   (change)="$event ? toggleAllRows() : null"
@@ -34,10 +25,7 @@
                 >
                 </mat-checkbox>
               </th>
-              <td
-                mat-cell
-                *matCellDef="let row"
-              >
+              <td mat-cell *matCellDef="let row">
                 <mat-checkbox
                   (click)="$event.stopPropagation()"
                   (change)="$event ? selection.toggle(row) : null"
@@ -70,11 +58,7 @@
                     <b>{{ column.label }}</b>
                   </th>
                 }
-                <td
-                  mat-cell
-                  *matCellDef="let data"
-                  [style.textAlign]="column.align"
-                >
+                <td mat-cell *matCellDef="let data" [style.textAlign]="column.align">
                   @let styles = column.config?.styles;
                   @let click = column.config?.click;
                   <div
@@ -101,32 +85,21 @@
                         <img
                           hs-image-preview
                           class="w-40px h-40px"
-                          [src]="
-                            data[column.prop] ?? column.config?.defaultValue
-                          "
-                          [previewSrc]="
-                            data[column.prop] ?? column.config?.defaultValue
-                          "
+                          [src]="data[column.prop] ?? column.config?.defaultValue"
+                          [previewSrc]="data[column.prop] ?? column.config?.defaultValue"
                         />
                       }
                       @case (ColumnType.TAG) {
                         <mat-chip-set aria-label="Dog selection">
                           <!-- {{data[column.prop]}} -->
-                          @for (
-                            chip of column.getChips(data[column.prop]);
-                            track $index
-                          ) {
+                          @for (chip of column.getChips(data[column.prop]); track $index) {
                             <mat-chip
                               [color]="column.getColor(chip)"
                               [disabled]="chip.disabled"
                               [removable]="chip.removable"
                             >
                               {{ column.getLabel(chip) }}
-                              <mat-icon
-                                *ngIf="chip.removable"
-                                matChipRemove
-                                >cancel</mat-icon
-                              >
+                              <mat-icon *ngIf="chip.removable" matChipRemove>cancel</mat-icon>
                             </mat-chip>
                           }
                         </mat-chip-set>
@@ -137,19 +110,14 @@
                             mat-button
                             #menuTrigger
                             [matMenuTriggerFor]="action.moreName && menu"
-                            (click)="
-                              !action.moreName && action.action(data, $event)
-                            "
+                            (click)="!action.moreName && action.action(data, $event)"
                           >
-                            {{ action.name }}
+                            {{ action?.name }}
                           </button>
 
                           <mat-menu #menu="matMenu">
-                            <button
-                              mat-menu-item
-                              (click)="action.action(data, $event)"
-                            >
-                              {{ action.moreName }}
+                            <button mat-menu-item (click)="action.action(data, $event)">
+                              {{ action?.moreName }}
                             </button>
                           </mat-menu>
                         }
@@ -162,10 +130,7 @@
           }
         }
 
-        <tr
-          mat-header-row
-          *matHeaderRowDef="displayedColumns()  "
-        ></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns()"
@@ -173,20 +138,11 @@
           class="cursor-pointer"
         ></tr>
 
-        <tr
-          class="mat-row"
-          *matNoDataRow
-        >
-          <td
-            class="mat-cell text-center"
-            [attr.colspan]="displayedColumns().length"
-          >
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell text-center" [attr.colspan]="displayedColumns().length">
             @if (!loadingStatus) {
               <div class="absolute absolute-center text-18px">
-                <hs-svg
-                  name="empty"
-                  title="暂无数据"
-                ></hs-svg>
+                <hs-svg name="empty" title="暂无数据"></hs-svg>
               </div>
             }
           </td>

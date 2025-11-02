@@ -1,8 +1,8 @@
-const forwardUrl = 'http://localhost:3000';
-const wsForwardUrl = 'http://localhost:3000';
-// const forwardUrl = 'https://wjy.apihub.net';
-// const wsForwardUrl = 'https://wjy.apihub.net';
-const filesUrl = 'http://10.168.1.100:9000/';
+// const forwardUrl = 'http://localhost:3000';
+// const wsForwardUrl = 'http://localhost:3000';
+const forwardUrl = 'https://wjy.apihub.net';
+const wsForwardUrl = 'https://wjy.apihub.net';
+const filesUrl = 'https://wjy.apihub.net';
 
 const PROXY_CONFIG = {
   '/api': {
@@ -20,7 +20,7 @@ const PROXY_CONFIG = {
     secure: false,
   },
   '/heartsync-files': {
-    target: forwardUrl,
+    target: filesUrl,
     changeOrigin: true,
   },
 };

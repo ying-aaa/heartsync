@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AssetHttpService } from '@src/app/core/http/asset.http.service';
 import { DataSourceHttpService, IDataSource } from '@src/app/core/http/data-source.http.service';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
@@ -19,7 +20,7 @@ import {
 } from 'rxjs';
 
 /**
- * 通用钩子：根据 dashboardId + schemaName 拉取表列表
+ * 通用钩子：根据 dataSourceId + schemaName 拉取表列表
  * @param ds  真实的数据服务（含 getTables 方法）
  * @param debounce 防抖 ms，默认 300
  */
@@ -35,11 +36,11 @@ export function resolveTables(
     /* 显式指明加载状态 */
     field.props!['loading'] = false;
 
-    const dashboardCtrl = field.form!.get('dashboardId');
+    const dashboardCtrl = field.form!.get('dataSourceId');
     const schemaCtrl = field.form!.get('schemaName');
 
     if (!dashboardCtrl || !schemaCtrl) {
-      console.warn('[Formly] 找不到 dashboardId 或 schemaName 控件');
+      console.warn('[Formly] 找不到 dataSourceId 或 schemaName 控件');
       return;
     }
 
@@ -54,8 +55,8 @@ export function resolveTables(
           field.props!['loading'] = true;
           field.formControl!.setValue(null); // 先清空旧选项
         }),
-        switchMap(([dashboardId, schemaName]) =>
-          ds.dataSourceHttpService.getTables(dashboardId as string, schemaName as string).pipe(
+        switchMap(([dataSourceId, schemaName]) =>
+          ds.dataSourceHttpService.getTables(dataSourceId as string, schemaName as string).pipe(
             tap(
               (tables) =>
                 (field.props!.options = tables.map((t) => ({
@@ -226,7 +227,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
                     className: 'hs-density--0 ',
                   },
                   {
-                    key: 'dashboardId',
+                    key: 'dataSourceId',
                     type: 'select',
                     fieldId: 'select_key_5976806875245755',
                     props: {
@@ -246,14 +247,14 @@ const assetFields = (that: CreateDataAssetComponent) => [
                     className: 'hs-density--0 ',
                     hooks: {
                       onInit: (field: IEditorFormlyField) => {
-                        that.dataSourceHttpService
-                          .findAll(new PageLink(0, 9999))
-                          .subscribe((res) => {
-                            field.props!.options = res.data.map((item) => ({
-                              label: item.name,
-                              value: item.id,
-                            }));
-                          });
+                        const pageLink = new PageLink(0, 9999, [{ prop: 'appId' }]);
+                        pageLink.changeSearch('appId', that.sourceModel.appId);
+                        that.dataSourceHttpService.findAll(pageLink).subscribe((res) => {
+                          field.props!.options = res.data.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                          }));
+                        });
                       },
                     },
                   },
@@ -335,11 +336,11 @@ const assetFields = (that: CreateDataAssetComponent) => [
             },
             className: 'hs-density--0 ',
             expressionProperties: {
-              'props.disabled': '!model.dashboardId',
+              'props.disabled': '!model.dataSourceId',
             },
             hooks: {
               onInit: (field: IEditorFormlyField) => {
-                const dataSourceControl = field.form!.get('dashboardId');
+                const dataSourceControl = field.form!.get('dataSourceId');
                 if (dataSourceControl) {
                   dataSourceControl.valueChanges.subscribe((value) => {
                     if (value) {
@@ -383,7 +384,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
             },
             className: 'hs-density--0 ',
             expressionProperties: {
-              'props.disabled': '!model.dashboardId || !model.schemaName', // 禁用直到 category 被选择
+              'props.disabled': '!model.dataSourceId || !model.schemaName', // 禁用直到 category 被选择
             },
             hooks: {
               onInit: resolveTables(that),
@@ -427,7 +428,7 @@ export class CreateDataAssetComponent implements OnInit {
 
   loadingStatus = signal<boolean>(false);
 
-  title = this.data.type === 'create' ? '创建资产' : '编辑资产';
+  title = this.data.type === 'create' ? '创建数据资产' : '创建数据资产';
   // 完成按钮
   confirmText = this.data.type === 'create' ? '创建' : '保存';
 
@@ -436,6 +437,7 @@ export class CreateDataAssetComponent implements OnInit {
     public data: { appId: string; directoryId: string; type: 'create' | 'edit'; id?: string },
     private hsThemeService: HsThemeService,
     public dataSourceHttpService: DataSourceHttpService,
+    private assetHttpService: AssetHttpService,
     private toastr: ToastrService,
     private dialogRef: MatDialogRef<CreateDataAssetComponent>,
   ) {
@@ -460,17 +462,14 @@ export class CreateDataAssetComponent implements OnInit {
     this.sourceForm.markAllAsTouched();
     if (!this.sourceForm.valid) return;
     const { type, id } = this.data;
-    const observable =
-      type === 'create'
-        ? this.dataSourceHttpService.create(this.sourceForm.value as IDataSource)
-        : this.dataSourceHttpService.update(id!, this.sourceForm.value as IDataSource);
+    const observable = this.assetHttpService.create(this.sourceForm.value as IDataSource);
 
     this.loadingStatus.set(true);
 
     observable.subscribe(
       (appData) => {
         this.loadingStatus.set(false);
-        this.toastr.success(`${this.confirmText}}数据源成功!!!`, '', {
+        this.toastr.success(`${this.confirmText}}数据资产成功!!!`, '', {
           positionClass: 'toast-top-center',
         });
         this.dialogRef.close(appData);

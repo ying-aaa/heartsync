@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ApplicationService } from '@src/app/core/http/application.service';
 import { HsDynamicTableModule } from '@src/app/shared/components/hs-table/hs-dynamic-table.module';
 import {
   PageLink,
@@ -53,7 +52,8 @@ export class DataAssetComponent implements OnInit {
 
   appName = new FormControl('');
 
-  displayMode: 'list' | 'card' = 'list';
+  displayMode: 'list' | 'card' | 'edit' = 'list';
+  assetId = '';
 
   directoryId = '';
 
@@ -67,14 +67,14 @@ export class DataAssetComponent implements OnInit {
   treeConfig = signal<IFileTreeConfig>({
     featureList: ['createFolder', 'rename', 'remove', 'blank', 'search'],
     deleteEvent: async (node, jsTree) => {
-      const hasData$ = this.applicationService
+      const hasData$ = this.assetHttpService
         .checkDataExists(node.id)
         .pipe(map((res) => res.hasData));
       let value;
       try {
         value = await lastValueFrom(hasData$);
         if (value) {
-          this._snackBar.open('该目录下有应用，无法删除!', '', {
+          this._snackBar.open('该目录下有资产，无法删除!', '', {
             horizontalPosition: 'center',
             verticalPosition: 'top',
             duration: 1 * 1000,
@@ -88,6 +88,7 @@ export class DataAssetComponent implements OnInit {
         this.directoryId = node.id;
         this.pageLink.changeSearch('directoryId', this.directoryId);
         this.pageLink.getData();
+        this.displayMode = 'list';
       }
     },
     createNodeSuccess: (node, jsTree) => {
@@ -143,6 +144,8 @@ export class DataAssetComponent implements OnInit {
               icon: 'border_color',
               action: (row, event) => {
                 event.stopPropagation();
+                this.assetId = row.id;
+                this.displayMode = 'edit';
               },
             },
             // {
@@ -180,7 +183,6 @@ export class DataAssetComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private applicationService: ApplicationService,
     private assetHttpService: AssetHttpService,
     private dataSourceHttpService: DataSourceHttpService,
   ) {}
@@ -202,6 +204,7 @@ export class DataAssetComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      dialogRef.componentInstance?.resetForm();
       if (result) this.pageLink.getData();
     });
   }

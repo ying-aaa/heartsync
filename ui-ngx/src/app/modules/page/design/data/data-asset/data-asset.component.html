@@ -38,48 +38,65 @@
 </div>
 <mat-divider [vertical]="true" class="h-full"></mat-divider>
 <!-- 右侧 -->
-<div class="w-0 flex-1 h-100% flex flex-col">
-  <div class="h-56px flex flex-row justify-end items-center px-24px gap-10px">
-    <div>
-      <mat-button-toggle-group
-        [(ngModel)]="displayMode"
-        hideSingleSelectionIndicator
-        class="hs-density--3 rounded-8px!"
-        (change)="displayModeChange()"
-      >
-        <mat-button-toggle value="card">
-          <mat-icon>view_module</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle value="list">
-          <mat-icon>view_list</mat-icon>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-    <mat-form-field appearance="outline" class="w-252px hs-density--5">
-      <input matInput type="text" placeholder="搜索资产" [formControl]="appName" />
-      @if (appName.getRawValue()) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="appName.setValue('')"
-          class="mr-5px"
-        >
-          <mat-icon aria-hidden="false">close</mat-icon>
-        </button>
-      }
-    </mat-form-field>
-    <button mat-flat-button (click)="openAssetDialog('create')">新增</button>
-  </div>
-  <mat-divider></mat-divider>
-  <div class="h-0 flex-1">
-    @if (displayMode === 'list') {
-      <hs-dynamic-table
-        class="app-manage-table h-full"
-        [tableConfig]="tableConfig()"
-      ></hs-dynamic-table>
-    } @else {
-      <!-- <hs-app-card-list [tableConfig]="tableConfig()"></hs-app-card-list> -->
-    }
-  </div>
+<div class="w-0 flex-1 h-100% flex flex-col relative">
+  @if (displayMode !== 'edit') {
+    <ng-content>
+      <div class="h-56px flex flex-row justify-end items-center px-24px gap-10px">
+        <div>
+          <mat-button-toggle-group
+            [(ngModel)]="displayMode"
+            hideSingleSelectionIndicator
+            class="hs-density--3 rounded-8px!"
+            (change)="displayModeChange()"
+          >
+            <mat-button-toggle value="card">
+              <mat-icon>view_module</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle value="list">
+              <mat-icon>view_list</mat-icon>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <mat-form-field appearance="outline" class="w-252px hs-density--5">
+          <input matInput type="text" placeholder="搜索资产" [formControl]="appName" />
+          @if (appName.getRawValue()) {
+            <button
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              (click)="appName.setValue('')"
+              class="mr-5px"
+            >
+              <mat-icon aria-hidden="false">close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+        <button mat-flat-button (click)="openAssetDialog('create')">新增</button>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="h-0 flex-1">
+        @if (displayMode === 'list') {
+          <hs-dynamic-table
+            class="app-manage-table h-full"
+            [tableConfig]="tableConfig()"
+          ></hs-dynamic-table>
+        } @else {
+          <div class="wh-full flex-center text-32px color-#999">卡片没做</div>
+          <!-- <hs-app-card-list [tableConfig]="tableConfig()"></hs-app-card-list> -->
+        }
+      </div>
+    </ng-content>
+  }
+
+  @if (displayMode === 'edit') {
+    <button
+      class="absolute! top-4px left-8px z-999!"
+      mat-icon-button
+      (click)="displayMode = 'list'; displayModeChange()"
+    >
+      <mat-icon class="material-icons">arrow_back</mat-icon>
+    </button>
+
+    <hs-edit-data-asset [assetId]="assetId"></hs-edit-data-asset>
+  }
 </div>

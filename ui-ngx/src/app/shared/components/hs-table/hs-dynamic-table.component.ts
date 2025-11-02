@@ -1,4 +1,4 @@
-import { Component, computed, input, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { Component, computed, input, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ColumnType, IDynamicTable, ISortType } from './table.model';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -19,9 +19,15 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
 
   pageLink = computed(() => this.tableConfig().pageLink);
 
-  tableColumn = computed(() => this.tableConfig().tableColumn);
+  tableColumn = computed(() => {
+    this._pulse();
+    return this.tableConfig().tableColumn;
+  });
 
-  displayedColumns = computed(() => this.tableConfig().displayedColumns);
+  displayedColumns = computed(() => {
+    this._pulse();
+    return this.tableConfig().displayedColumns;
+  });
 
   tableStyle = computed(() => this.tableConfig().tableStyle);
 
@@ -30,6 +36,8 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
   ColumnType = ColumnType;
 
   loadingStatus = false;
+
+  private readonly _pulse = signal(0);
 
   constructor(private paginatorIntl: MatPaginatorIntl) {
     this.selection.changed.subscribe((event) => {
@@ -88,6 +96,19 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
   // 获取表格数据
   async getTableData() {
     this.request$.next();
+  }
+
+  handlerTableColumn() {
+    if (this.tableConfig().getColumns) {
+      this.tableConfig()
+        .getColumns?.()
+        .subscribe((res) => {
+          this.tableConfig().setColumns(res);
+          setTimeout(() => {
+            this._pulse.set(1);
+          }, 1000);
+        });
+    }
   }
 
   handleTableData() {
@@ -152,6 +173,8 @@ export class HsDynamicTableComponent implements OnInit, OnDestroy {
     this.customizePaginatorIntl();
 
     this.setDefaultSort();
+
+    this.handlerTableColumn();
 
     this.handleTableData();
 
