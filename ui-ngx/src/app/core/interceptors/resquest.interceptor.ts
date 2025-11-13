@@ -19,7 +19,7 @@ const modifyRequest = (
   let headers = req.headers;
 
   // 添加认证令牌
-  const token = auth.getToken();
+  const token = localStorage.getItem('token');
   if (token) {
     headers = headers.set('Authorization', `Bearer ${token}`);
   }

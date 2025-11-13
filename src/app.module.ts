@@ -14,6 +14,9 @@ import { HsMenuModule } from './modules/menu/hs-menu.module';
 import { HsDataSourceModule } from './modules/data-source/data-source.module';
 import { HsAssetModule } from './modules/asset/asset.module';
 import { HsDynamicTableModule } from './modules/dynamic-table/dynamic-table.module';
+import { KeycloakConfigService } from './keycloak/keycloak-config.service';
+import { KeycloakConnectModule } from 'nest-keycloak-connect';
+import { KeycloakModule } from './keycloak/keycloak.module';
 
 @Module({
   providers: [HsPaginationService],
@@ -46,6 +49,10 @@ import { HsDynamicTableModule } from './modules/dynamic-table/dynamic-table.modu
         synchronize: true,
       }),
       inject: [ConfigService],
+    }),
+    KeycloakConnectModule.registerAsync({
+      useExisting: KeycloakConfigService,
+      imports: [KeycloakModule],
     }),
   ],
 })
