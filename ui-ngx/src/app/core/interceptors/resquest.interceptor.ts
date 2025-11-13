@@ -12,14 +12,12 @@ export const RequestInterceptor: HttpInterceptorFn = (req, next) => {
 };
 
 // 请求修改函数
-const modifyRequest = (
-  req: HttpRequest<unknown>,
-  auth: AuthService,
-): HttpRequest<unknown> => {
+const modifyRequest = (req: HttpRequest<unknown>, auth: AuthService): HttpRequest<unknown> => {
   let headers = req.headers;
 
   // 添加认证令牌
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
+  const token = auth.getToken();
   if (token) {
     headers = headers.set('Authorization', `Bearer ${token}`);
   }

@@ -9,11 +9,13 @@ import {
   IUserRequiredAction,
 } from '@src/app/shared/models/user.model';
 
+import { environment as env } from '@env/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 export class UserHttpService {
-  private realm = 'keycloak-angular-sandbox';
+  private realm = env.keycloak.realm;
 
   constructor(private http: HttpClient) {}
   // ----------------- 用户管理 -----------------
@@ -35,20 +37,15 @@ export class UserHttpService {
 
   // 创建用户时选择的用户必需操作
   getUserRequiredCtions() {
-    return this.http.get<Array<any>>(
-      `/uc/admin/realms/master/authentication/required-actions`,
-    );
+    return this.http.get<Array<any>>(`/uc/admin/realms/master/authentication/required-actions`);
   }
 
   // ----------------- 群组管理 -----------------
   // 获取群组列表
   getGroups(params: any = {}) {
-    return this.http.get<Array<IGroupInfo>>(
-      `/uc/admin/realms/${this.realm}/groups`,
-      {
-        params,
-      },
-    );
+    return this.http.get<Array<IGroupInfo>>(`/uc/admin/realms/${this.realm}/groups`, {
+      params,
+    });
   }
 
   // 获取子群组
@@ -69,10 +66,9 @@ export class UserHttpService {
 
   // 获取群组属性
   getGroupAttributes(groupId: string, params: any = {}) {
-    return this.http.get<IGroupInfo>(
-      `/uc/admin/realms/${this.realm}/groups/${groupId}`,
-      { params },
-    );
+    return this.http.get<IGroupInfo>(`/uc/admin/realms/${this.realm}/groups/${groupId}`, {
+      params,
+    });
   }
 
   // 获取群组角色映射
@@ -97,9 +93,7 @@ export class UserHttpService {
 
   // 根据角色id获取领域角色详情
   getRealmRoleById(id: string) {
-    return this.http.get<IRoleMapping>(
-      `/uc/admin/realms/${this.realm}/roles-by-id/${id}`,
-    );
+    return this.http.get<IRoleMapping>(`/uc/admin/realms/${this.realm}/roles-by-id/${id}`);
   }
 
   // 根据角色id获取角色关联的角色
@@ -117,18 +111,13 @@ export class UserHttpService {
   getRealmRoleUsers(roleName: string, pageLink: PageLink) {
     const params = pageLink.toQueryHttp();
 
-    return this.http.get<Array<any>>(
-      `/uc/admin/realms/${this.realm}/roles/${roleName}/users`,
-      {
-        params,
-      },
-    );
+    return this.http.get<Array<any>>(`/uc/admin/realms/${this.realm}/roles/${roleName}/users`, {
+      params,
+    });
   }
 
   // 获取领域角色的属性
   getRealmRoleAttributes(roleName: string) {
-    return this.http.get<IRoleMapping>(
-      `/uc/admin/realms/${this.realm}/roles/${roleName}`,
-    );
+    return this.http.get<IRoleMapping>(`/uc/admin/realms/${this.realm}/roles/${roleName}`);
   }
 }

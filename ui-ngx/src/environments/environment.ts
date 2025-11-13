@@ -4,7 +4,7 @@ export const environment = {
   apiUrl: 'http://localhost',
   keycloak: {
     authUrl: 'https://wjy.apihub.net/uc',
-    realm: 'keycloak-angular-sandbox',
-    clientId: 'keycloak-angular',
+    realm: 'heartsync',
+    clientId: 'heartsync',
   },
 };

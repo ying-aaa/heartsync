@@ -1,10 +1,4 @@
-import {
-  computed,
-  DestroyRef,
-  inject,
-  Injectable,
-  signal,
-} from '@angular/core';
+import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import Keycloak, { KeycloakProfile, KeycloakTokenParsed } from 'keycloak-js';
 import { debounceTime, Subject, switchMap } from 'rxjs';
@@ -29,13 +23,9 @@ export class UserService {
   readonly username = computed(() => {
     const firstName = this.userProfile()?.firstName;
     const lastName = this.userProfile()?.lastName;
-    return (
-      (firstName || '') + (lastName || '') || this.userProfile()?.username || ''
-    );
+    return (firstName || '') + (lastName || '') || this.userProfile()?.username || '';
   });
-  readonly roles = computed(
-    () => this.tokenParsed()?.realm_access?.roles || [],
-  );
+  readonly roles = computed(() => this.tokenParsed()?.realm_access?.roles || []);
   public loadProfileTrigger = new Subject<void>();
 
   constructor() {
@@ -47,6 +37,7 @@ export class UserService {
       )
       .subscribe((profile: any) => {
         if (profile) {
+          console.log('%c Line:50 🥪 profile', 'color:#b03734', profile);
           // 使用用户服务更新信息
           this.updateUser(profile, this.keycloak.tokenParsed);
         }
@@ -67,10 +58,7 @@ export class UserService {
   }
 
   // 更新用户信息
-  updateUser(
-    profile: KeycloakProfile | undefined,
-    tokenParsed: KeycloakTokenParsed | undefined,
-  ) {
+  updateUser(profile: KeycloakProfile | undefined, tokenParsed: KeycloakTokenParsed | undefined) {
     this.state.update((s) => ({ ...s, userProfile: profile, tokenParsed }));
   }
 
