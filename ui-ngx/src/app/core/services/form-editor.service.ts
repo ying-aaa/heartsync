@@ -7,7 +7,6 @@ import {
   deepClone,
   extractProperties,
   generateUUID,
-  isBoolean,
   PickConfig,
 } from '@src/app/core/utils';
 import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.model';
@@ -47,6 +46,7 @@ export class FormEditorService {
   fields = signal<IEditorFormlyField[]>([]);
   formGroup = new FormGroup({});
   model = {};
+
   options: FormlyFormOptions = {
     formState: {
       fieldsId: 'workspace', // 自定义参数
@@ -61,12 +61,13 @@ export class FormEditorService {
       () => {
         if (this.fieldsId()) {
           this.fields.set([]);
+          // 请求form配置
           this.formWidgetService.getFormWidgetById(this.fieldsId()!).subscribe({
             next: (widget: IFormWidgetConfig) => {
               this.widgetConfig.set(widget);
               const fieldConfig = widget.flatTypeField as IEditorFormlyField[];
               if (widget.subType === IFormSubTypes.FLAT) {
-                // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置
+                // 获取时转换fieldGroup和fieldArray的配置，因为运行需要fieldArray， 开发需要fieldGroup
                 const fields = updateField(fieldConfig, (field) => {
                   field.fieldGroup = field.fieldArray.fieldGroup;
                   Reflect.deleteProperty(field, 'fieldArray');
@@ -87,60 +88,12 @@ export class FormEditorService {
     );
   }
 
-  getSpecifyFields(fieldId: string) {
-    return this.getFlatField(this.fields()).find((item: any) => item.fieldId === fieldId);
-  }
-
   isActiveField(fieldId: string) {
     return this.activeField()?.fieldId === fieldId;
   }
 
+  
   updateFields() {
-    // const pickConfig = {
-    //   key: true,
-    //   type: true,
-    //   fieldId: true,
-    //   props: {
-    //     appearance: true,
-    //     dateFormat: true,
-    //     datepickerOptions: true,
-    //     density: true,
-    //     description: true,
-    //     disabled: true,
-    //     icon: true,
-    //     label: true,
-    //     max: true,
-    //     maxLength: true,
-    //     min: true,
-    //     minLength: true,
-    //     pattern: true,
-    //     placeholder: true,
-    //     prefix: true,
-    //     readonly: true,
-    //     required: true,
-    //     textPrefix: true,
-    //     textSuffix: true,
-    //     styles: true,
-    //   },
-    //   className: true,
-    //   fieldGroup: true,
-    //   fieldArray: true,
-    // };
-    // // 数据清洗，仅仅保存自己需要的
-    // let fields = extractProperties<IEditorFormlyField[]>(
-    //   this.fields(),
-    //   pickConfig,
-    //   'fieldGroup',
-    // );
-
-    // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置
-    // fields = updateField(deepClone(fields), (field) => {
-    //   field.fieldArray = {
-    //     fieldGroup: field.fieldGroup,
-    //   };
-    //   Reflect.deleteProperty(field, 'fieldGroup');
-    // });
-
     // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置
     const fields = updateField(deepClone(this.fields()), (field) => {
       field.fieldArray = {
@@ -174,11 +127,6 @@ export class FormEditorService {
     this._fieldSelected$.next(field);
   }
 
-  checkEditModeState(is?: boolean): void {
-    if (isBoolean(is)) return this.isEditMode.set(is);
-    this.isEditMode.set(!this.isEditMode());
-  }
-
   addField(
     field: IEditorFormlyField,
     toParentField: IEditorFormlyField[],
@@ -186,32 +134,42 @@ export class FormEditorService {
     selected = true,
   ) {
     field = deepClone(field);
+
     // 递归新的field为其添加id属性
     function addFieldId(field: IEditorFormlyField) {
       const key = generateUUID();
-
       // 有一些外层容器不需要绑定key
       field.key = field._bindKey ? key : '';
-
       field.fieldId = `${field.type}_key_${key}`;
+
       if (field.fieldGroup) {
         field.fieldGroup.forEach(addFieldId);
       }
     }
+
+    // 执行递归
     addFieldId(field);
 
+    // 新增 field 的默认row为1
     if (field.props) {
       field.props['row'] = 1;
     }
 
     // 插入
     toParentField.splice(toIndex, 0, field);
+
+    // 更新
     this.formGroup = new FormGroup({});
     this.options.build && this.options.build();
+
+    // 如果传入了选中，则需要选中
     selected && this.selectField(field);
+
+    // 大纲更新
     this.flatField$.next(this.getFlatField());
   }
 
+  // 删除字段
   removeField(toParentField: IEditorFormlyField[], toIndex: number, clearSelected = true) {
     toParentField.splice(toIndex, 1);
     this.formGroup = new FormGroup({});
@@ -220,6 +178,7 @@ export class FormEditorService {
     this.flatField$.next(this.getFlatField());
   }
 
+  // 移动字段
   moveField(toParent: IEditorFormlyField[], fromIndex: number, toIndex: number) {
     moveItemInArray(toParent, fromIndex, toIndex);
     this.formGroup = new FormGroup({});
@@ -227,21 +186,24 @@ export class FormEditorService {
     this.flatField$.next(this.getFlatField());
   }
 
+  // 容器内的field移动到另一个容器
   transferField(
     formParent: IEditorFormlyField[],
     toParent: IEditorFormlyField[],
     formIndex: number,
     toIndex: number,
   ) {
-    // 子表的默认列数
+    // 如果是移动到子表容器，设置子表的默认列数
     if (toParent[0]?.parent?.type === IFieldType.SUBTABLE) {
       if (formParent[formIndex].props) {
         formParent[formIndex].props['row'] = 1;
       }
     }
+    // 执行移动
     transferArrayItem(formParent, toParent, formIndex, toIndex);
     this.formGroup = new FormGroup({});
     this.options.build && this.options.build();
+    // 更新大纲
     this.flatField$.next(this.getFlatField());
   }
 
@@ -259,6 +221,7 @@ export class FormEditorService {
     return this.isEditMode() ? findSameField(this.fields(), options)[type] : options;
   }
 
+  // 用于代码展示
   getJsonField() {
     // 提取配置
     const pickConfig: PickConfig = {
@@ -271,7 +234,7 @@ export class FormEditorService {
       fieldArray: true,
     };
 
-    //
+    // 运行用的，需要转换
     const fields = updateField(deepClone(this.fields()), (field) => {
       field.fieldArray = {
         fieldGroup: field.fieldGroup,
@@ -286,6 +249,7 @@ export class FormEditorService {
     );
   }
 
+  // 获取拉平fields，用于大纲展示
   getFlatField(field?: IEditorFormlyField[], level: number = 0) {
     field = field || this.fields();
     return field.reduce((acc, field) => {
