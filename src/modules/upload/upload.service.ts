@@ -3,6 +3,7 @@ import * as Minio from 'minio';
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorException } from '@nestjs/common';
 import { MinioService } from 'nestjs-minio-client';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class HsUploadService {
@@ -45,10 +46,17 @@ export class HsUploadService {
     path?: string;
     access: 'public' | 'private';
   }) {
+    const originalname = Buffer.from(
+      params.file.originalname,
+      'latin1',
+    ).toString('utf8');
+    const extensionName = originalname.split('.').pop();
+    const pathFileName = `${uuidv4()}.${extensionName}`;
+
     try {
       const path = params.path
-        ? `${params.path}/${params.file.originalname}`
-        : params.file.originalname;
+        ? `${params.path}/${pathFileName}`
+        : 'common/' + pathFileName;
 
       // 设置正确的 Content-Type
       const metaData = {
@@ -70,7 +78,7 @@ export class HsUploadService {
 
       return {
         url, // 如果文件是公开的，返回公共 URL
-        name: params.file.originalname,
+        name: originalname,
         // path,
         // size: params.file.size,
         // mimetype: params.file.mimetype,
