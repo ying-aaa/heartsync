@@ -1,5 +1,9 @@
 <section class="wh-full">
-  <mat-tree #tree [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
+  <mat-tree
+    #tree
+    [dataSource]="dataSource"
+    [childrenAccessor]="childrenAccessor"
+  >
     <mat-tree-node
       *matTreeNodeDef="let node"
       matTreeNodePadding
@@ -11,11 +15,15 @@
       }"
       routerLinkActive="hs-menu-active"
       routerLink="{{ node.path }}"
+      #rla="routerLinkActive"
       class="hs-menu-item cursor-pointer"
     >
-      <button mat-icon-button disabled></button>
+      <button
+        mat-icon-button
+        disabled
+      ></button>
       <hs-svg
-        [name]="node.data.icon"
+        [name]="rla.isActive ? node.data.activeIcon : node.data.icon"
         width="18px"
         height="18px"
         color="red"
@@ -30,7 +38,11 @@
       [cdkTreeNodeTypeaheadLabel]="node.title"
       class="cursor-pointer"
     >
-      <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.title">
+      <button
+        mat-icon-button
+        matTreeNodeToggle
+        [attr.aria-label]="'Toggle ' + node.title"
+      >
         <mat-icon class="mat-icon-rtl-mirror">
           {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
         </mat-icon>

@@ -3,12 +3,7 @@ import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 
-import {
-  deepClone,
-  extractProperties,
-  generateUUID,
-  PickConfig,
-} from '@src/app/core/utils';
+import { deepClone, extractProperties, generateUUID, PickConfig } from '@src/app/core/utils';
 import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IFormSubTypes, IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
@@ -92,7 +87,6 @@ export class FormEditorService {
     return this.activeField()?.fieldId === fieldId;
   }
 
-  
   updateFields() {
     // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置
     const fields = updateField(deepClone(this.fields()), (field) => {
@@ -221,8 +215,8 @@ export class FormEditorService {
     return this.isEditMode() ? findSameField(this.fields(), options)[type] : options;
   }
 
-  // 用于代码展示
-  getJsonField() {
+  // get有效字段
+  getEffectField() {
     // 提取配置
     const pickConfig: PickConfig = {
       key: true,
@@ -233,7 +227,6 @@ export class FormEditorService {
       fieldGroup: true,
       fieldArray: true,
     };
-
     // 运行用的，需要转换
     const fields = updateField(deepClone(this.fields()), (field) => {
       field.fieldArray = {
@@ -242,11 +235,12 @@ export class FormEditorService {
       Reflect.deleteProperty(field, 'fieldGroup');
     });
 
-    return JSON.stringify(
-      extractProperties<IEditorFormlyField[]>(fields, pickConfig, 'fieldGroup'),
-      null,
-      2,
-    );
+    return extractProperties<IEditorFormlyField[]>(fields, pickConfig, 'fieldGroup');
+  }
+
+  // 用于代码展示
+  getJsonField() {
+    return JSON.stringify(this.getEffectField(), null, 2);
   }
 
   // 获取拉平fields，用于大纲展示

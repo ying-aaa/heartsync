@@ -22,7 +22,6 @@ export class SystemOptionComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {
     this.dataSource = this.route.routeConfig!.children!.filter((item) => item.title);
-    console.log('%c Line:25 🍊 this.dataSource', 'color:#465975', this.dataSource);
   }
 
   ngOnInit() {}

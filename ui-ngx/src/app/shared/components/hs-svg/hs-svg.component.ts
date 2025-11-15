@@ -6,29 +6,23 @@ import { SvgService } from '@src/app/core/http/svg.service';
 @Component({
   selector: 'hs-svg',
   template: `
-    <div
-      [class]="containerClass"
-      [style]="containerStyle"
-    >
+    <div [class]="containerClass" [style]="containerStyle">
       @if (!svgContent && !error) {
-        <div
-          [ngStyle]="{ width, height }"
-          class="loading"
-        >
-          ...
-        </div>
+        <div [ngStyle]="{ width, height }" class="loading">...</div>
       }
 
       @if (error) {
         <div class="error">无</div>
       }
+      @if (!error && svgContent) {
+        <div
+          [ngStyle]="{ width, height }"
+          [innerHTML]="svgContent"
+          [class]="svgClass"
+          [style]="svgStyle"
+        ></div>
+      }
 
-      <div
-        [ngStyle]="{ width, height }"
-        [innerHTML]="svgContent"
-        [class]="svgClass"
-        [style]="svgStyle"
-      ></div>
       @if (title) {
         <div class="text-center">{{ title }}</div>
       } @else {
@@ -60,6 +54,8 @@ export class SvgComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['name']) {
       this.loadSvg();
+    } else {
+      this.svgContent = '';
     }
   }
 

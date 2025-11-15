@@ -6,13 +6,19 @@ import {
   HttpErrorResponse,
   HttpResponse,
 } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
 
 export function ResponentInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
+  const toastrService: ToastrService = inject(ToastrService);
+  const authService: AuthService = inject(AuthService);
+
   console.log(`[${req.method}] ${req.urlWithParams}`);
 
   return next(req).pipe(
@@ -43,15 +49,13 @@ export function ResponentInterceptor(
     }),
     catchError((error: HttpErrorResponse) => {
       // 统一错误处理
-      return handleError(error);
+      return handleError(error, { toastrService, authService });
     }),
   );
 }
 
 // 成功响应处理
-function handleSuccessResponse(
-  response: HttpResponse<unknown>,
-): HttpResponse<unknown> {
+function handleSuccessResponse(response: HttpResponse<unknown>): HttpResponse<unknown> {
   // 示例：处理标准化响应结构
   const body = response.body as { data?: unknown; message?: string };
 
@@ -64,19 +68,26 @@ function handleSuccessResponse(
   if (body?.message) {
     const url = response.url || '';
     const startIndex = url.indexOf('/api') + 1; // 找到指定字符的索引，并加1跳过该字符
-    console.log(
-      `%c 🍑 ${url.substring(startIndex)}`,
-      'color:#6ec1c2',
-      body.message,
-    );
+    console.log(`%c 🍑 ${url.substring(startIndex)}`, 'color:#6ec1c2', body.message);
   }
 
   return newResponse;
 }
 
 // 增强的错误处理
-function handleError(error: HttpErrorResponse): Observable<never> {
-  const errorMessage = error.error?.message || error.message;
+function handleError(
+  error: HttpErrorResponse,
+  {
+    toastrService,
+    authService,
+  }: {
+    toastrService: ToastrService;
+    authService: AuthService;
+  },
+): Observable<never> {
+  const errorMessage = error.error?.error || error.message;
+
+  toastrService.error(errorMessage);
 
   switch (error.status) {
     case 400: // Bad Request
@@ -87,6 +98,8 @@ function handleError(error: HttpErrorResponse): Observable<never> {
       console.warn('Authentication expired, redirecting...');
       // 这里可以加入重定向逻辑
       // router.navigate(['/login']);
+      toastrService.error("当前登录已过期，请重新登录。");
+      authService.login();
       break;
 
     case 403: // Forbidden

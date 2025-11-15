@@ -5,7 +5,7 @@ export default [
   {
     title: '用户管理',
     path: 'user',
-    data: { icon: 'user' },
+    data: { icon: 'user', activeIcon: "user" },
     loadComponent: () =>
       import('./system-user/system-user.component').then(
         (m) => m.SystemUserComponent,
