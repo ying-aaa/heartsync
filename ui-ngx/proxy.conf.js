@@ -11,16 +11,16 @@ const PROXY_CONFIG = {
     changeOrigin: true, // 支持跨域
   },
   '/uc': {
-    target: forwardUrl,
+    target: on_line_url,
     changeOrigin: true,
   },
   '/api/ws': {
-    target: forwardUrl,
+    target: on_line_url,
     ws: true,
     secure: false,
   },
   '/heartsync-files': {
-    target: forwardUrl,
+    target: on_line_url,
     changeOrigin: true,
   },
 };

@@ -98,8 +98,11 @@ function handleError(
       console.warn('Authentication expired, redirecting...');
       // 这里可以加入重定向逻辑
       // router.navigate(['/login']);
-      toastrService.error("当前登录已过期，请重新登录。");
-      authService.login();
+      toastrService.error('当前登录已过期，请重新登录。');
+
+      setTimeout(() => {
+        authService.login();
+      }, 800);
       break;
 
     case 403: // Forbidden

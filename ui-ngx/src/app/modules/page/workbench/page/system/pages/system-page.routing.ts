@@ -5,28 +5,22 @@ export default [
   {
     title: '用户管理',
     path: 'user',
-    data: { icon: 'user', activeIcon: "user" },
+    data: { icon: 'user', activeIcon: 'user' },
     loadComponent: () =>
-      import('./system-user/system-user.component').then(
-        (m) => m.SystemUserComponent,
-      ),
+      import('./system-user/system-user.component').then((m) => m.SystemUserComponent),
   },
   {
     title: '角色管理',
     path: 'role',
     data: { icon: 'role' },
     loadComponent: () =>
-      import('./system-role/role-manage.component').then(
-        (m) => m.SystemRoleComponent,
-      ),
+      import('./system-role/role-manage.component').then((m) => m.SystemRoleComponent),
     children: [
       {
         title: '角色列表',
         path: '',
         loadComponent: () =>
-          import('./system-role/role-list/role-list.component').then(
-            (m) => m.RoleListComponent,
-          ),
+          import('./system-role/role-list/role-list.component').then((m) => m.RoleListComponent),
       },
       {
         title: '角色详情',
@@ -48,6 +42,13 @@ export default [
       ),
   },
   {
+    title: '逻辑节点编辑器',
+    path: 'node',
+    data: { icon: 'node' },
+    loadComponent: () =>
+      import('./node-editor/node-editor.component').then((m) => m.NodeEditorComponent),
+  },
+  {
     title: '数据管理',
     path: '',
     data: { icon: 'datasource', expand: true },
@@ -57,9 +58,7 @@ export default [
         path: 'dict',
         data: { icon: 'dict' },
         loadComponent: () =>
-          import('./system-dict/system-dict.component').then(
-            (m) => m.SystemDictComponent,
-          ),
+          import('./system-dict/system-dict.component').then((m) => m.SystemDictComponent),
       },
     ],
   },
