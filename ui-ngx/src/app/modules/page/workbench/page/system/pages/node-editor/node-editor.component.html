@@ -1,7 +1,43 @@
-<main class="flex">
-  <div #stencilContainer id="stencil-container" class="relative w-225px"></div>
-  <content class="flex">
-    <div #x6Container id="x6-container"></div>
-    <div #minimapContainer id="minimap-container" class="border-line"></div>
+<style>
+  ::ng-deep .mat-expansion-panel-body {
+    padding: 0 16px 16px;
+  }
+</style>
+
+<main class="flex h-full">
+  <div #stencilContainer id="stencil-container" class="relative w-240px bg-#eee">
+    <div class="example-action-buttons">
+      <button mat-button (click)="accordion().openAll()">展开</button>
+      <button mat-button (click)="accordion().closeAll()">收缩</button>
+    </div>
+    <mat-accordion class="example-headers-align" multi>
+      @for (group of nodeConfigs; track $index) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon class="mr-5px">account_circle</mat-icon>
+              <span class="text-14px">{{ group.title }}</span></mat-panel-title
+            >
+          </mat-expansion-panel-header>
+
+          <div class="grid grid-cols-2 gap-12px">
+            @for (node of group.nodes; track $index) {
+              <div
+                [attr.node-key]="node.key"
+                class="bg-#fff text-center line-height-32px rounded-8px cursor-move text-14px flex-center"
+                (mousedown)="startDrag($event)"
+              >
+                <mat-icon class="mr-3px text-20px! w-20px! h-20px!">account_circle</mat-icon>
+                {{ node.title }}
+              </div>
+            }
+          </div>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </div>
+  <content class="flex relative w-0 flex-1 h-full">
+    <div #x6Container id="x6-container" class="w-full"></div>
+    <div #minimapContainer id="minimap-container" class="absolute right-0 bottom-0"></div>
   </content>
 </main>

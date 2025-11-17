@@ -6,7 +6,7 @@ const on_line_url = 'https://wjy.apihub.net';
 
 const PROXY_CONFIG = {
   '/api': {
-    target: forwardUrl,
+    target: on_line_url,
     // secure: false, // 表示后端服务使用了有效的 SSL 证书
     changeOrigin: true, // 支持跨域
   },

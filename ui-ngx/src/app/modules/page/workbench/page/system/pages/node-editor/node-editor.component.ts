@@ -1,64 +1,70 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnInit,
+  viewChild,
+  ViewChild,
+} from '@angular/core';
 import { Graph, Shape } from '@antv/x6';
 import { Scroller } from '@antv/x6-plugin-scroller';
 import { MiniMap } from '@antv/x6-plugin-minimap';
 import '@antv/x6-plugin-dnd';
 import { Stencil } from '@antv/x6-plugin-stencil';
 import { Rect, Circle } from '@antv/x6/lib/shape';
+import { nodeConfigs } from './nodes.config';
+import { MatButtonModule } from '@angular/material/button';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { Dnd } from '@antv/x6-plugin-dnd';
 
 @Component({
   selector: 'hs-node-editor',
   templateUrl: './node-editor.component.html',
+  providers: [provideNativeDateAdapter()],
+  imports: [
+    MatButtonModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NodeEditorComponent implements OnInit, AfterViewInit {
   @ViewChild('x6Container') x6Container!: ElementRef;
   @ViewChild('stencilContainer') stencilContainer!: ElementRef;
   @ViewChild('minimapContainer') minimapContainer!: ElementRef;
 
-  data = {
-    // 节点
-    nodes: [
-      {
-        id: 'node1', // String，可选，节点的唯一标识
-        shape: 'rect', // 使用 rect 渲染
-        x: 40, // Number，必选，节点位置的 x 值
-        y: 40, // Number，必选，节点位置的 y 值
-        width: 80, // Number，可选，节点大小的 width 值
-        height: 40, // Number，可选，节点大小的 height 值
-        label: 'hello', // String，节点标签
-      },
-      {
-        id: 'node2', // String，节点的唯一标识
-        shape: 'ellipse', // 使用 ellipse 渲染
-        x: 160, // Number，必选，节点位置的 x 值
-        y: 180, // Number，必选，节点位置的 y 值
-        width: 80, // Number，可选，节点大小的 width 值
-        height: 40, // Number，可选，节点大小的 height 值
-        label: 'world', // String，节点标签
-      },
-    ],
-    // 边
-    edges: [
-      {
-        source: 'node1', // String，必须，起始节点 id
-        target: 'node2', // String，必须，目标节点 id
-      },
-    ],
-  };
+  accordion = viewChild.required(MatAccordion);
+
+  nodeConfigs = nodeConfigs;
+
+  graph: Graph;
+  dnd: Dnd;
 
   constructor() {}
 
   ngAfterViewInit(): void {
-    const graph = new Graph({
+    setTimeout(() => {
+      this.accordion().openAll();
+    }, 200);
+    this.graph = new Graph({
       container: this.x6Container.nativeElement,
-      width: 800,
-      height: 600,
+      // width: 800,
+      // height: "100%",
       panning: {
         enabled: true,
         modifiers: 'shift',
       },
       background: {
-        color: '#fffbe6', // 设置画布背景颜色
+        // color: '#fffbe6', // 设置画布背景颜色
       },
       grid: {
         size: 10, // 网格大小 10px
@@ -66,17 +72,17 @@ export class NodeEditorComponent implements OnInit, AfterViewInit {
       },
     });
 
-    graph.use(
+    this.graph.use(
       new Scroller({
-        enabled: true,
+        // enabled: true,
         pannable: true, // 允许拖拽空白处平移
       }),
     );
 
-    graph.use(
+    this.graph.use(
       new MiniMap({
         container: document.getElementById('minimap-container')!, // 你的缩略图 DOM
-        width: 400,
+        width: 300,
         height: 200,
       }),
     );
@@ -84,8 +90,8 @@ export class NodeEditorComponent implements OnInit, AfterViewInit {
     // -------------------------------------------------------------------------------------
 
     const stencil = new Stencil({
-      title: 'Components',
-      target: graph, // 绑定目标画布
+      // title: 'Components',
+      target: this.graph, // 绑定目标画布
       search(cell, keyword) {
         return cell.shape.indexOf(keyword) !== -1;
       },
@@ -94,80 +100,62 @@ export class NodeEditorComponent implements OnInit, AfterViewInit {
       collapsable: true,
       stencilGraphWidth: 200,
       stencilGraphHeight: 0,
-      groups: [
-        { name: 'group1', title: 'Group(Collapsable)' },
-        { name: 'group2', title: 'Group', collapsable: false },
-      ],
+      groups: nodeConfigs.map((group) => ({
+        name: group.key,
+        title: group.title,
+        key: group.key,
+      })),
     });
 
-    this.stencilContainer.nativeElement.appendChild(stencil.container);
-
-    const r = graph.createNode({
-      shape: 'rect',
-      width: 70,
-      height: 40,
-      attrs: {
-        rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 6 },
-        text: { text: 'rect', fill: 'white' },
-      },
+    this.dnd = new Dnd({
+      target: this.graph,
+      scaled: false,
+      dndContainer: this.stencilContainer.nativeElement,
     });
 
-    const c = graph.createNode({
-      shape: 'circle',
-      width: 60,
-      height: 60,
-      attrs: {
-        circle: { fill: '#FE854F', strokeWidth: 6, stroke: '#4B4A67' },
-        text: { text: 'ellipse', fill: 'white' },
-      },
+    // this.stencilContainer.nativeElement.appendChild(stencil.container);
+
+    nodeConfigs.forEach((group) => {
+      const nodes = group.nodes.map((node) =>
+        this.graph.createNode({
+          shape: 'rect',
+          width: 70,
+          height: 40,
+          key: node.key,
+          attrs: {
+            rect: { fill: '#fff', stroke: '#4B4A67', strokeWidth: 1 },
+            text: { text: 'rect', fill: '#000' },
+          },
+        }),
+      );
+      stencil.load(nodes, group.key);
     });
 
-    const c2 = graph.createNode({
-      shape: 'circle',
-      width: 60,
-      height: 60,
-      attrs: {
-        circle: { fill: '#4B4A67', 'stroke-width': 6, stroke: '#FE854F' },
-        text: { text: 'ellipse', fill: 'white' },
-      },
-    });
-
-    const r2 = graph.createNode({
-      shape: 'rect',
-      width: 70,
-      height: 40,
-      attrs: {
-        rect: { fill: '#4B4A67', stroke: '#31D0C6', strokeWidth: 6 },
-        text: { text: 'rect', fill: 'white' },
-      },
-    });
-
-    const r3 = graph.createNode({
-      shape: 'rect',
-      width: 70,
-      height: 40,
-      attrs: {
-        rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 6 },
-        text: { text: 'rect', fill: 'white' },
-      },
-    });
-
-    const c3 = graph.createNode({
-      shape: 'circle',
-      width: 60,
-      height: 60,
-      attrs: {
-        circle: { fill: '#FE854F', strokeWidth: 6, stroke: '#4B4A67' },
-        text: { text: 'ellipse', fill: 'white' },
-      },
-    });
-
-    stencil.load([r, c, c2, r2.clone()], 'group1');
-    stencil.load([c2.clone(), r2, r3, c3], 'group2');
-
-    graph.zoom(0.8);
-    graph.translate(80, 40);
+    // graph.zoom(0.8);
+    this.graph.translate(80, 40);
   }
+
+  startDrag = (e: any) => {
+    const target = e.currentTarget;
+    const nodeKey = target.getAttribute('node-key');
+    console.log('%c Line:138 🍉 key', 'color:#7f2b82', nodeKey);
+    const node = this.graph.createNode({
+      width: 100,
+      height: 40,
+      label: 'Rect',
+      attrs: {
+        body: {
+          stroke: '#8f8f8f',
+          strokeWidth: 1,
+          fill: '#fff',
+          rx: 6,
+          ry: 6,
+        },
+      },
+    });
+
+    this.dnd.start(node, e);
+  };
 
   ngOnInit() {}
 }

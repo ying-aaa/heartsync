@@ -25,6 +25,7 @@
 .container{max-width:1536px;}
 }
 /* layer: default */
+.visible{visibility:visible;}
 .absolute{position:absolute;}
 .absolute\!{position:absolute !important;}
 .fixed{position:fixed;}
@@ -33,6 +34,7 @@
 .static{position:static;}
 .-right-22px{right:-22px;}
 .-top-16px{top:-16px;}
+.bottom-0{bottom:0;}
 .bottom-3px{bottom:3px;}
 .bottom-50px{bottom:50px;}
 .left-0{left:0;}
@@ -63,6 +65,7 @@
 .z-999\!{z-index:999 !important;}
 .grid{display:grid;}
 .cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}
 .grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr));}
 .grid-cols-6{grid-template-columns:repeat(6,minmax(0,1fr));}
 .m-0{margin:0;}
@@ -423,6 +426,7 @@
 .text-18px{font-size:18px;}
 .text-18px\!{font-size:18px !important;}
 .text-20px{font-size:20px;}
+.text-20px\!{font-size:20px !important;}
 .text-22px{font-size:22px;}
 .text-24px{font-size:24px;}
 .text-24px\!{font-size:24px !important;}

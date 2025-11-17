@@ -92,6 +92,8 @@ html {
   --mdc-dialog-subhead-size: 1.1rem;
   --mat-dialog-actions-padding: 6px 24px;
   --mat-dialog-headline-padding: 6px 24px;
+
+  --mat-expansion-container-shape: 0;
 }
 
 .mdc-button {
@@ -153,4 +155,8 @@ html {
 
 div.mat-mdc-dialog-title::before {
   height: 28px;
+}
+
+.mat-expansion-panel-spacing {
+  margin: 0 !important;
 }
