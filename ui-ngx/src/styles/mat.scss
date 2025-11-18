@@ -1,28 +1,52 @@
-@use '@angular/material'as mat;
+@use '@angular/material' as mat;
 $base-radius: 8px;
 
 .hs-density--5 {
-  @include mat.theme((density: -5));
+  @include mat.theme(
+    (
+      density: -5,
+    )
+  );
 }
 
 .hs-density--4 {
-  @include mat.theme((density: -4));
+  @include mat.theme(
+    (
+      density: -4,
+    )
+  );
 }
 
 .hs-density--3 {
-  @include mat.theme((density: -3));
+  @include mat.theme(
+    (
+      density: -3,
+    )
+  );
 }
 
 .hs-density--2 {
-  @include mat.theme((density: -2));
+  @include mat.theme(
+    (
+      density: -2,
+    )
+  );
 }
 
 .hs-density--1 {
-  @include mat.theme((density: -1));
+  @include mat.theme(
+    (
+      density: -1,
+    )
+  );
 }
 
 .hs-density--0 {
-  @include mat.theme((density: 0));
+  @include mat.theme(
+    (
+      density: 0,
+    )
+  );
 }
 
 .hs-icon-button-24 {
@@ -56,7 +80,6 @@ $base-radius: 8px;
 }
 
 html {
-
   // 按钮
   .mdc-button {
     --mat-sys-corner-full: 8px;
@@ -88,18 +111,22 @@ html {
   --mat-sidenav-content-background-color: none;
   --mat-sidenav-container-background-color: none;
 
-
   --mdc-dialog-subhead-size: 1.1rem;
   --mat-dialog-actions-padding: 6px 24px;
   --mat-dialog-headline-padding: 6px 24px;
 
   --mat-expansion-container-shape: 0;
+  --mat-expansion-header-expanded-state-height: 48px;
 }
 
 .mdc-button {
   // --mat-sys-corner-full: 8px;
 
-  @include mat.theme((density: -1));
+  @include mat.theme(
+    (
+      density: -1,
+    )
+  );
 }
 
 .mat-mdc-option {
@@ -157,6 +184,19 @@ div.mat-mdc-dialog-title::before {
   height: 28px;
 }
 
-.mat-expansion-panel-spacing {
-  margin: 0 !important;
+.mat-accordion {
+  .mat-expansion-panel-spacing {
+    margin: 0;
+  }
+
+  .mat-expansion-panel:not([class*='mat-elevation-z']) {
+    box-shadow:
+      0px 0px 1px 0px rgba(0, 0, 0, 0.1),
+      0px 2px 2px 0px rgba(0, 0, 0, 0.05),
+      0px 1px 0px 0px rgba(0, 0, 0, 0.05);
+  }
+
+  .mat-expansion-panel-body {
+    padding: 8px 16px 16px;
+  }
 }

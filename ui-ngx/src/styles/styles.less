@@ -1,6 +1,6 @@
 @import 'material-icons/iconfont/material-icons.css';
-@import "jstree/dist/themes/default/style.css";
-@import "themeMixin";
+@import 'jstree/dist/themes/default/style.css';
+@import 'themeMixin';
 
 html,
 body {
@@ -135,9 +135,9 @@ body {
   }
 
   // 输入框的背景颜色
-  .mat-mdc-form-field {
-    background-color: @base-bg-color;
-  }
+  // .mat-mdc-form-field {
+  //   background-color: @base-bg-color;
+  // }
 
   .text-bg-color {
     color: @base-text-color;
@@ -152,10 +152,17 @@ body {
   ul.ui-widget-content {
     .text-bg-color();
   }
+
+  .x6-widget-minimap {
+    background-color: @base-bg-color;
+    .x6-graph {
+      box-shadow: none;
+    }
+  }
 });
 
 .cdk-drag-preview {
-  opacity: .6;
+  opacity: 0.6;
 }
 
 // 拖拽时隐藏头部按钮
@@ -183,3 +190,5 @@ ul.ui-widget-content {
 .color-picker {
   visibility: visible !important;
 }
+
+

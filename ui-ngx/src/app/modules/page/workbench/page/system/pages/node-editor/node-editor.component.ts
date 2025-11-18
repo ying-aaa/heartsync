@@ -7,12 +7,11 @@ import {
   viewChild,
   ViewChild,
 } from '@angular/core';
-import { Graph, Shape } from '@antv/x6';
+import { Graph } from '@antv/x6';
 import { Scroller } from '@antv/x6-plugin-scroller';
 import { MiniMap } from '@antv/x6-plugin-minimap';
 import '@antv/x6-plugin-dnd';
 import { Stencil } from '@antv/x6-plugin-stencil';
-import { Rect, Circle } from '@antv/x6/lib/shape';
 import { nodeConfigs } from './nodes.config';
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -22,6 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Dnd } from '@antv/x6-plugin-dnd';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'hs-node-editor',
@@ -34,6 +34,7 @@ import { Dnd } from '@antv/x6-plugin-dnd';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
+    CommonModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -135,14 +136,11 @@ export class NodeEditorComponent implements OnInit, AfterViewInit {
     this.graph.translate(80, 40);
   }
 
-  startDrag = (e: any) => {
-    const target = e.currentTarget;
-    const nodeKey = target.getAttribute('node-key');
-    console.log('%c Line:138 🍉 key', 'color:#7f2b82', nodeKey);
+  startDrag = (e: any, nodeConfig: any) => {
     const node = this.graph.createNode({
       width: 100,
       height: 40,
-      label: 'Rect',
+      label: nodeConfig.title,
       attrs: {
         body: {
           stroke: '#8f8f8f',
