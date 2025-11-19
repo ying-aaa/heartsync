@@ -22,6 +22,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Dnd } from '@antv/x6-plugin-dnd';
 import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
 
 @Component({
   selector: 'hs-node-editor',
@@ -34,7 +36,7 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    CommonModule
+    CommonModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,7 +52,7 @@ export class NodeEditorComponent implements OnInit, AfterViewInit {
   graph: Graph;
   dnd: Dnd;
 
-  constructor() {}
+  constructor(public dialog: MatDialog) {}
 
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -154,6 +156,25 @@ export class NodeEditorComponent implements OnInit, AfterViewInit {
 
     this.dnd.start(node, e);
   };
+
+  viewCode(): void {
+    const dialogRef = this.dialog.open(HsCodeComponent, {
+      data: {
+        code: this.getJson.bind(this),
+        minHeight: '80vh',
+      },
+      minWidth: '1200px',
+      height: '80vh',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  getJson() {
+    return JSON.stringify(this.graph.toJSON(), null, 2);
+  }
 
   ngOnInit() {}
 }
