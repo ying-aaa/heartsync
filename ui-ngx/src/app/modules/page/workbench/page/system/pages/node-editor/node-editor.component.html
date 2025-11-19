@@ -1,61 +1,39 @@
 <main class="flex h-full">
-  <div
-    #stencilContainer
-    id="stencil-container"
-    class="relative w-240px"
-  >
+  <div #stencilContainer id="stencil-container" class="relative w-240px">
     <div class="example-action-buttons">
-      <button
-        mat-button
-        (click)="accordion().openAll()"
-      >展开</button>
-      <button
-        mat-button
-        (click)="accordion().closeAll()"
-      >收缩</button>
-      <button
-        mat-button
-        (click)="viewCode()"
-      >查看代码</button>
+      <button mat-button (click)="accordion().openAll()">展开</button>
+      <button mat-button (click)="accordion().closeAll()">收缩</button>
+      <button mat-button (click)="viewCode()">查看代码</button>
     </div>
-    <mat-accordion
-      class="example-headers-align"
-      multi
-    >
+    <mat-accordion class="example-headers-align" multi>
       @for (group of nodeConfigs; track $index) {
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <mat-icon class="mr-5px text-18px! w-18px! h-18px! color-[var(--base-color-70)]">{{group.icon}}</mat-icon>
-            <span class="text-14px color-[var(--base-color-70)]">{{ group.title }}</span>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon class="mr-5px text-18px! w-18px! h-18px! color-[var(--base-color-70)]">{{
+                group.icon
+              }}</mat-icon>
+              <span class="text-14px color-[var(--base-color-70)]">{{ group.title }}</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-        <div class="grid grid-cols-2 gap-12px">
-          @for (node of group.nodes; track $index) {
-          <div
-            class="bg-[var(--base-bg-color)] border-line text-center line-height-32px rounded-8px cursor-move flex-center text-12px color-[var(--base-color-80)]"
-            (mousedown)="startDrag($event, node)"
-          >
-            <mat-icon class="mr-5px text-16px! w-16px! h-16px!">{{node.icon}}</mat-icon>
-            {{ node.title }}
+          <div class="grid grid-cols-2 gap-12px">
+            @for (node of group.nodes; track $index) {
+              <div
+                class="bg-[var(--base-bg-color)] border-line text-center line-height-32px rounded-8px cursor-move flex-center text-13px color-[var(--base-color-80)]"
+                (mousedown)="startDrag($event, node)"
+              >
+                <mat-icon class="mr-5px text-16px! w-16px! h-16px!">{{ node.icon }}</mat-icon>
+                {{ node.title }}
+              </div>
+            }
           </div>
-          }
-        </div>
-      </mat-expansion-panel>
+        </mat-expansion-panel>
       }
     </mat-accordion>
   </div>
   <content class="flex relative w-0 flex-1 h-full">
-    <div
-      #x6Container
-      id="x6-container"
-      class="w-full"
-    ></div>
-    <div
-      #minimapContainer
-      id="minimap-container"
-      class="absolute right-0 bottom-0"
-    ></div>
+    <div #x6Container id="x6-container" class="w-full"></div>
+    <div #minimapContainer id="minimap-container" class="absolute right-0 bottom-0"></div>
   </content>
 </main>
