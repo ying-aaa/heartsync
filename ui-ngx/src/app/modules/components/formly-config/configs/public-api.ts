@@ -11,6 +11,7 @@ import { select_config } from './select.config';
 import { widget_config } from './widget.config';
 import { radio_config } from './radio.config';
 import { menu_signle_config } from './menu-signle.config';
+import { component_action_config } from './component-action.config';
 
 export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   input: input_config,
@@ -26,4 +27,6 @@ export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   widget: widget_config,
   // 单个菜单配置
   menuSingle: menu_signle_config,
+  // 组件动作配置
+  componentAction: component_action_config,
 };

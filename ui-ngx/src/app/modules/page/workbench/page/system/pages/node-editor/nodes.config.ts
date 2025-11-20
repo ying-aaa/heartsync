@@ -47,7 +47,7 @@ export const nodeConfigs = [
       // 组件动作
       {
         title: '组件动作',
-        key: 'component',
+        key: 'component-action',
         description: '执行组件动作',
         icon: 'widgets',
       },

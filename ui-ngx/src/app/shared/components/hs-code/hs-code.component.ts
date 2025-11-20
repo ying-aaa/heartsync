@@ -24,7 +24,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     <button
       mat-mini-fab
       color="primary"
-      aria-label="Example icon button with a menu icon"
+      aria-label="复制"
       class="right-16px top-16px absolute! w-32px! h-32px! z-999"
       [cdkCopyToClipboard]="code() || data.code()"
       (click)="sendCopyTips()"

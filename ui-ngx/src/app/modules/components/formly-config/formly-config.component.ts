@@ -14,6 +14,7 @@ import { CONFIT_RESOURCE } from './configs/public-api';
 export class FormlyConfigComponent implements OnInit {
   type = input();
   model = input<any>();
+  options = input<any>();
   fields: IEditorFormlyField[] = [];
   formGroup = new FormGroup({});
 

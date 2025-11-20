@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  input,
   OnDestroy,
   OnInit,
   viewChild,
@@ -26,6 +27,8 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
 import { PortManager } from '@antv/x6/lib/model/port';
+import { FormlyConfigComponent } from '@src/app/modules/components/formly-config/formly-config.component';
+import { FormlyFormOptions } from '@ngx-formly/core';
 
 Graph.registerNode(
   'custom-node-with-port',
@@ -102,6 +105,7 @@ Graph.registerNode(
     MatInputModule,
     MatDatepickerModule,
     CommonModule,
+    FormlyConfigComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -110,12 +114,93 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('stencilContainer') stencilContainer!: ElementRef;
   @ViewChild('minimapContainer') minimapContainer!: ElementRef;
 
+  context = input({
+    variable: {},
+    formilyFields: [[]],
+  });
+
   accordion = viewChild.required(MatAccordion);
 
   nodeConfigs = nodeConfigs;
 
   graph: Graph;
   dnd: Dnd;
+
+  configType = 'componentAction';
+  model = {};
+  options: FormlyFormOptions = {
+    formState: {
+      variable: {},
+      formilyFields: [
+        {
+          name: '所属应用ID',
+          key: 'appId',
+          id: 'input_key_2579558739748954',
+          type: 'input',
+        },
+        {
+          name: '数据源名称',
+          key: 'name',
+          id: 'input_key_4363196823490257',
+          type: 'input',
+        },
+        {
+          name: '主机地址',
+          key: 'host',
+          id: 'input_key_0293012594679814',
+          type: 'input',
+        },
+        {
+          name: '用户名',
+          key: 'username',
+          id: 'input_key_0398187333438150',
+          type: 'input',
+        },
+        {
+          name: '数据库名称',
+          key: 'database',
+          id: 'input_key_8308507291481975',
+          type: 'input',
+        },
+        {
+          name: '连接池最大连接数',
+          key: 'maxPoolCount',
+          id: 'input_key_4025131062342067',
+          type: 'input',
+        },
+        {
+          name: '数据源类型',
+          key: 'type',
+          id: 'select_key_4564575816260138',
+          type: 'select',
+        },
+        {
+          name: '端口',
+          key: 'port',
+          id: 'input_key_1962228540476969',
+          type: 'input',
+        },
+        {
+          name: '密码',
+          key: 'password',
+          id: 'input_key_9100159250090693',
+          type: 'input',
+        },
+        {
+          name: '连接超时时间（秒）',
+          key: 'timeout',
+          id: 'input_key_1418836004434089',
+          type: 'input',
+        },
+        {
+          name: '连接池最大连接数',
+          key: 'minPoolCount',
+          id: 'input_key_6091916310062948',
+          type: 'input',
+        },
+      ].map((item) => ({ ...item, label: item.name, value: item.key })),
+    },
+  };
 
   constructor(public dialog: MatDialog) {}
 
@@ -247,6 +332,7 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
               fill: '#fff',
               stroke: '#31d0c6',
               strokeWidth: 1,
+              r: 10,
             },
           },
         },
@@ -331,7 +417,7 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     });
 
-    this.graph.on('edge:mouseup', () => {
+    this.graph.on('edge:mouseup', (e) => {
       // 隐藏所有节点的连接桩
       this.graph.getNodes().forEach((node) => {
         this.toggleNodePorts({ node }, 'hidden');
@@ -351,11 +437,17 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   scalePort(e: any, circleR: number) {
     const { node, port } = e;
     node.portProp(port, 'attrs/circle/r', circleR);
+    // 设置颜色
+    node.portProp(port, 'attrs/circle/stroke', circleR > 5 ? '#31d0c6' : '#8f8f8f');
+    // 填充颜色
+    node.portProp(port, 'attrs/circle/fill', circleR > 5 ? '#31d0c6' : '#fff');
   }
 
   ngOnInit() {}
 
   ngOnDestroy() {
+    // 注销所用监听
+    this.graph.off();
     this.graph.dispose();
   }
 }
