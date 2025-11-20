@@ -20,7 +20,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     FormlyConfigComponent,
     MatIconModule,
     MatButtonModule,
-    NgScrollbarModule
+    NgScrollbarModule,
   ],
 })
 export class FormDesignComponent implements OnInit {

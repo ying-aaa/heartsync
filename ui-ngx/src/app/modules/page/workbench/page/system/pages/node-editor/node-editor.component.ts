@@ -48,7 +48,7 @@ Graph.registerNode(
     ports: {
       groups: {
         top: {
-          position: 'top',
+          position: { name: 'top' },
           attrs: {
             circle: {
               magnet: true,
@@ -58,7 +58,7 @@ Graph.registerNode(
           },
         },
         right: {
-          position: 'right',
+          position: { name: 'right' },
           attrs: {
             circle: {
               magnet: true,
@@ -68,7 +68,7 @@ Graph.registerNode(
           },
         },
         bottom: {
-          position: 'bottom',
+          position: { name: 'bottom' },
           attrs: {
             circle: {
               magnet: true,
@@ -78,7 +78,7 @@ Graph.registerNode(
           },
         },
         left: {
-          position: 'left',
+          position: { name: 'left' },
           attrs: {
             circle: {
               magnet: true,
@@ -288,12 +288,11 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
         visible: true, // 渲染网格背景
       },
       connecting: {
+        snap: true,
         allowBlank: false,
-        allowMulti: false,
         allowLoop: false,
         allowNode: false,
-        allowEdge: false,
-        allowPort: true,
+        highlight: true,
         createEdge() {
           return this.createEdge({
             attrs: {
@@ -317,10 +316,10 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
         magnetAvailable: {
           name: 'stroke',
           args: {
+            padding: 7,
             attrs: {
-              fill: '#fff',
-              stroke: '#A4DEB1',
-              strokeWidth: 12,
+              stroke: '#31d0c6',
+              fill: '#31d0c6',
             },
           },
         },
@@ -329,7 +328,7 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
           name: 'stroke',
           args: {
             attrs: {
-              fill: '#fff',
+              fill: '#31d0c6',
               stroke: '#31d0c6',
               strokeWidth: 1,
               r: 10,
@@ -356,46 +355,10 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // -------------------------------------------------------------------------------------
 
-    const stencil = new Stencil({
-      // title: 'Components',
-      target: this.graph, // 绑定目标画布
-      search(cell, keyword) {
-        return cell.shape.indexOf(keyword) !== -1;
-      },
-      placeholder: 'Search by shape name',
-      notFoundText: 'Not Found',
-      collapsable: true,
-      stencilGraphWidth: 200,
-      stencilGraphHeight: 0,
-      groups: nodeConfigs.map((group) => ({
-        name: group.key,
-        title: group.title,
-        key: group.key,
-      })),
-    });
-
     this.dnd = new Dnd({
       target: this.graph,
       scaled: false,
       dndContainer: this.stencilContainer.nativeElement,
-    });
-
-    // this.stencilContainer.nativeElement.appendChild(stencil.container);
-
-    nodeConfigs.forEach((group) => {
-      const nodes = group.nodes.map((node) =>
-        this.graph.createNode({
-          shape: 'rect',
-          width: 70,
-          height: 40,
-          key: node.key,
-          attrs: {
-            rect: { fill: '#fff', stroke: '#4B4A67', strokeWidth: 1 },
-            text: { text: 'rect', fill: '#000' },
-          },
-        }),
-      );
-      stencil.load(nodes, group.key);
     });
 
     // -------------------------------------------------------------------------------------

@@ -1,26 +1,19 @@
 <content class="flex h-full">
-  <!-- <aside class="w-284px px-12px pt-12px pb-6px">
+  <aside class="w-284px px-12px pt-12px pb-6px">
     <hs-workspace-contorl></hs-workspace-contorl>
-  </aside> -->
+  </aside>
 
-  <mat-divider
-    [vertical]="true"
-    class="h-full"
-  ></mat-divider>
+  <mat-divider [vertical]="true" class="h-full"></mat-divider>
 
   <main class="w-0 flex-1">
     <hs-workspace-viewport></hs-workspace-viewport>
   </main>
 
-  <mat-divider
-    [vertical]="true"
-    class="h-full"
-  ></mat-divider>
+  <mat-divider [vertical]="true" class="h-full"></mat-divider>
 
-  <!-- <aside class="flex flex-col h-full w-312px py-12px pl-12px relative">
+  <aside class="flex flex-col h-full w-312px py-12px pl-12px relative">
     <header>
-      @let activeFieldTypeName =
-      formEditorService.activeField()?.props?.['typeName'];
+      @let activeFieldTypeName = formEditorService.activeField()?.props?.['typeName'];
       <div class="relative mb-12px flex justify-between items-center line-height-24px pr-12px">
         {{ activeFieldTypeName || '选择组件后进行配置' }}
       </div>
@@ -39,5 +32,5 @@
         </hs-formly-config>
       </div>
     </ng-scrollbar>
-  </aside> -->
+  </aside>
 </content>
