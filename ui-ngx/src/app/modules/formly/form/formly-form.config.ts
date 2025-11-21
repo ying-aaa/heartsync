@@ -3,6 +3,7 @@ import { FormlyFieldSubTable } from './subtable/formly-field-subtable.component'
 import { FormlyFieldColorPicker } from './color/color-picker.type';
 import { FormlyFieldRichtext } from './richtext/richtext-eidtor.type';
 import { FormlyFieldDraw } from './draw/draw.type';
+import { FormlyFieldArray } from './array/array.type';
 
 const appearance = 'outline';
 const density = 5;
@@ -199,6 +200,20 @@ export const formlyFormTypes = [
   {
     name: 'run-subtable',
     component: FormlyFieldSubTable,
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        typeName: '普通输入子表',
+        label: '普通输入子表',
+      },
+      expressions: {
+        ...densityExpressions,
+      },
+    },
+  },
+  {
+    name: 'array',
+    component: FormlyFieldArray,
     defaultOptions: {
       props: {
         ...baseProps,

@@ -1,3 +1,5 @@
+@let isHorizontal = field.props?.["direction"] === 'horizontal'; @let hideDrag =
+field.props?.['hideDrag'];
 <div
   cdkDropList
   (cdkDropListDropped)="cdkDropListDropped($event)"
@@ -9,16 +11,31 @@
     cdkDrag
     class="flex-center mb-8px content-box"
     [style]="field.props?.['itemStyles'] | concatUnits"
-    [cdkDragDisabled]="field.props!['hideDrag']"
+    [class]="isHorizontal && 'flex-col gap-12px'"
+    [cdkDragDisabled]="hideDrag"
   >
     <div *cdkDragPlaceholder class="content-custom-placeholder"></div>
-    @if(!field.props!['hideDrag']) {
-    <mat-icon class="cursor-move text-20px w-20px! h-20px! pr-5px" cdkDragHandle
-      >drag_indicator</mat-icon
+    <div
+      class="flex justify-end"
+      [class]="{
+      'w-full': isHorizontal,
+      'justify-between': !hideDrag
+    }"
     >
-    }
+      @if(!hideDrag) {
+      <mat-icon class="cursor-move text-20px w-20px! h-20px! pr-5px" cdkDragHandle
+        >drag_indicator</mat-icon
+      >
+      } @if(isHorizontal){
+      <mat-icon
+        (click)="remove($index)"
+        class="cursor-pointer text-20px w-20px! h-20px! color-red-5"
+        >delete</mat-icon
+      >
+      }
+    </div>
     <!-- @let fieldGroupLength = f.fieldGroup?.length || 1; -->
-    <div class="flex-1 w-0 flex gap-5px items-center">
+    <div class="flex-1 flex gap-5px items-center" [class]="isHorizontal ? 'w-full' : 'w-0'">
       @for (fc of f.fieldGroup; track $index) {
       <formly-field
         [style.width]="getColumnItemWidth(field.fieldArray.fieldGroup!, fc)"
@@ -27,19 +44,16 @@
       </formly-field>
       }
     </div>
+    @if(!isHorizontal){
     <mat-icon
-      (click)="removeField($index)"
+      (click)="remove($index)"
       class="cursor-pointer text-20px w-20px! h-20px! pl-5px ml-5px color-red-5"
       >delete</mat-icon
     >
+    }
   </div>
   } @let canAdd = this.field.props?.['canAdd'] ?? true; @if(canAdd) {
-  <button
-    class="w-full mb-5px bg-transparent"
-    mat-button
-    mat-raised-button
-    (click)="addField(field.fieldGroup!.length)"
-  >
+  <button class="w-full mb-5px bg-transparent" mat-button mat-raised-button (click)="add()">
     <mat-icon matChipAvatar>add</mat-icon> 新增
   </button>
   }

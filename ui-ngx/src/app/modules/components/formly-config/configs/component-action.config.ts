@@ -11,15 +11,24 @@ export const component_action_config: IEditorFormlyField[] = [
       defaultAddValue: {
         variables: [],
       },
-      canRemoveLast: false,
-      direction: 'column',
+      direction: 'horizontal',
       styles: {
         display: 'flex',
         flexDirection: 'column',
-        rowGap: 16,
+        rowGap: 12,
         rowGapUnits: 'px',
       },
-      hideDrag: true
+      itemStyles: {
+        padding: 16,
+        paddingUnits: 'px',
+        paddingTop: 12,
+        paddingTopUnits: 'px',
+        borderRadius: 6,
+        borderRadiusUnits: 'px',
+        boxShadow: '0px 0px 10px 2px var(--base-color-20)',
+        border: '1px solid var(--base-color-05)',
+      },
+      // hideDrag: true,
     },
     className: 'hs-density--5',
     fieldArray: {
@@ -82,7 +91,7 @@ export const component_action_config: IEditorFormlyField[] = [
                 // 监听 'componentId' 的变化，动态计算当前字段的值
                 'model.componentType': (model: any, formState: any) => {
                   const selectedComponent = formState.formilyFields?.find(
-                    (item: any) => item.key === model.componentId,
+                    (item: any) => item.key === model?.componentId,
                   );
                   return selectedComponent?.type || '';
                 },
@@ -105,7 +114,7 @@ export const component_action_config: IEditorFormlyField[] = [
                 required: false,
                 readonly: false,
                 // options: 'formState.formilyFields',
-                allOptions: [
+                usableOptions: [
                   {
                     label: '取值',
                     value: 'getValue',
@@ -197,7 +206,7 @@ export const component_action_config: IEditorFormlyField[] = [
                   const componentType = field.model?.componentType;
 
                   return componentType
-                    ? field.props!['allOptions'].filter((option: any) =>
+                    ? field.props!['usableOptions'].filter((option: any) =>
                         option.usableType.includes(componentType),
                       )
                     : [];
@@ -234,7 +243,6 @@ export const component_action_config: IEditorFormlyField[] = [
                     defaultAddValue: {
                       variable: {},
                     },
-                    canRemoveLast: false,
                   },
                   className: 'hs-density--5',
                   fieldArray: {
@@ -255,7 +263,7 @@ export const component_action_config: IEditorFormlyField[] = [
                           type: 'string',
                           label: '取值类型',
                           row: 1,
-                          allOptions: [
+                          usableOptions: [
                             {
                               label: '值',
                               value: 'value',
@@ -286,7 +294,7 @@ export const component_action_config: IEditorFormlyField[] = [
                               }
                             }
                             return componentType
-                              ? field.props!['allOptions'].filter((option: any) =>
+                              ? field.props!['usableOptions'].filter((option: any) =>
                                   option.usableType.includes(componentType),
                                 )
                               : [];
