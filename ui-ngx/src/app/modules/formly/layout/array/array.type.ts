@@ -8,13 +8,11 @@ import {
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import {
-  FieldArrayType,
-  FormlyModule,
-} from '@ngx-formly/core';
+import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
 import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { deepClone } from '@src/app/core/utils';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
+import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -29,12 +27,10 @@ import { ToastrService } from 'ngx-toastr';
     CdkDragHandle,
     MatButtonModule,
     CdkDragPlaceholder,
+    ConcatUnitsPipe,
   ],
 })
-export class FormlyFieldArray
-  extends FieldArrayType<IEditorFormlyField>
-  implements OnInit
-{
+export class FormlyFieldArray extends FieldArrayType<IEditorFormlyField> implements OnInit {
   constructor(
     private toastr: ToastrService,
     private formEditorService: FormEditorService,
@@ -43,11 +39,7 @@ export class FormlyFieldArray
   }
 
   cdkDropListDropped(event: CdkDragDrop<string[]>) {
-    this.formEditorService.moveField(
-      this.model,
-      event.previousIndex,
-      event.currentIndex,
-    );
+    this.formEditorService.moveField(this.model, event.previousIndex, event.currentIndex);
     this.options.build!();
   }
 
@@ -57,12 +49,7 @@ export class FormlyFieldArray
 
     const value = deepClone(this.model.at(-1) || {});
 
-    this.formEditorService.addField(
-      defaultAddValue || value,
-      this.model,
-      toIndex,
-      false,
-    );
+    this.formEditorService.addField(defaultAddValue || value, this.model, toIndex, false);
     this.options.build!();
   }
 
@@ -80,13 +67,9 @@ export class FormlyFieldArray
     this.options.build!();
   }
 
-  getColumnItemWidth(
-    fieldGroup: IEditorFormlyField[],
-    itemField: IEditorFormlyField,
-  ): string {
+  getColumnItemWidth(fieldGroup: IEditorFormlyField[], itemField: IEditorFormlyField): string {
     const itemRow = itemField.props?.['row'] ?? 1;
-    const totalRow =
-      fieldGroup.reduce((acc, ori) => acc + (ori.props?.['row'] ?? 0), 0) || 1;
+    const totalRow = fieldGroup.reduce((acc, ori) => acc + (ori.props?.['row'] ?? 0), 0) || 1;
     return `calc(100% * ${itemRow / totalRow}) `;
   }
 

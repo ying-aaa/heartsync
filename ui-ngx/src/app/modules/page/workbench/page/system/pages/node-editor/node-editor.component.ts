@@ -127,7 +127,7 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   dnd: Dnd;
 
   configType = 'componentAction';
-  model = {};
+  model = { componentaAction: [] };
   options: FormlyFormOptions = {
     formState: {
       variable: {},
@@ -142,7 +142,7 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
           name: '数据源名称',
           key: 'name',
           id: 'input_key_4363196823490257',
-          type: 'input',
+          type: 'dateRange',
         },
         {
           name: '主机地址',
@@ -199,6 +199,7 @@ export class NodeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
           type: 'input',
         },
       ].map((item) => ({ ...item, label: item.name, value: item.key })),
+      model: this.model,
     },
   };
 

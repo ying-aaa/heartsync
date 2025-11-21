@@ -2,21 +2,25 @@
   cdkDropList
   (cdkDropListDropped)="cdkDropListDropped($event)"
   class="content-list"
+  [style]="field.props?.['styles'] | concatUnits"
 >
+{{field.props?.['styles'].flexDirection}}
   @for (f of field.fieldGroup; track $index) {
   <div
     class="flex-center mb-8px content-box"
-    [style]="f.props!['style']"
+    [style]="f.props?.['styles'] | concatUnits"
     cdkDrag
   >
     <div
       *cdkDragPlaceholder
       class="content-custom-placeholder"
     ></div>
-    <mat-icon
-      class="cursor-move text-20px w-20px! h-20px! pr-5px"
-      cdkDragHandle
-    >drag_indicator</mat-icon>
+    @if(!field.props!['hideDrag']) {
+      <mat-icon
+        class="cursor-move text-20px w-20px! h-20px! pr-5px"
+        cdkDragHandle
+      >drag_indicator</mat-icon>
+    }
     <!-- @let fieldGroupLength = f.fieldGroup?.length || 1; -->
     <div class="flex-1 w-0 flex gap-5px items-center">
       @for (fc of f.fieldGroup; track $index) {

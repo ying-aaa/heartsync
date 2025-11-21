@@ -4,7 +4,7 @@ import { WorkspaceContorlComponent } from './workspace-contorl/workspace-contorl
 import { MatDividerModule } from '@angular/material/divider';
 import { WorkspaceViewportComponent } from './workspace-viewport/workspace-viewport.component';
 import { ActivatedRoute } from '@angular/router';
-import { FormlyConfigComponent } from '@src/app/modules/components/formly-config/formly-config.component';
+import { FormlyConfigEditorComponent } from '@src/app/modules/components/formly-config/formly-config-editor.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NgScrollbarModule } from 'ngx-scrollbar';
@@ -17,7 +17,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     WorkspaceContorlComponent,
     WorkspaceViewportComponent,
     MatDividerModule,
-    FormlyConfigComponent,
+    FormlyConfigEditorComponent,
     MatIconModule,
     MatButtonModule,
     NgScrollbarModule,

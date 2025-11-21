@@ -1,9 +1,10 @@
 import { Component, effect, input, OnInit } from '@angular/core';
+import { FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { FormGroup } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
+import { FormlyEditorModule } from '@src/app/modules/formly/formly-editor.module';
 import { CONFIT_RESOURCE } from './configs/public-api';
-import { FormlyRunModule } from '../../formly/formly-run.module';
 @Component({
   selector: 'hs-formly-config',
   template: `
@@ -24,9 +25,9 @@ import { FormlyRunModule } from '../../formly/formly-run.module';
       }
     `,
   ],
-  imports: [FormlyRunModule, MatDividerModule],
+  imports: [FormlyEditorModule, MatDividerModule],
 })
-export class FormlyConfigComponent implements OnInit {
+export class FormlyConfigEditorComponent implements OnInit {
   type = input();
   model = input<any>();
   options = input<any>();
