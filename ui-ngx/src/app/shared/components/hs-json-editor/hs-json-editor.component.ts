@@ -8,6 +8,7 @@ import {
   Output,
   forwardRef,
   effect,
+  signal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { HsThemeService } from '@src/app/core/services/theme.service';
@@ -21,25 +22,20 @@ import { FullscreenDirective } from '../../directive/fullscreen.directive';
 import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
-  selector: 'hs-ace-editor',
-  templateUrl: './ace-editor.component.html',
+  selector: 'hs-json-object-editor',
+  templateUrl: './hs-json-editor.component.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AceEditorComponent),
+      useExisting: forwardRef(() => JsonObjectEditorComponent),
       multi: true,
     },
   ],
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    FullscreenDirective,
-    MatDividerModule,
-  ],
+  imports: [MatButtonModule, MatIconModule, FullscreenDirective, MatDividerModule],
 })
-export class AceEditorComponent
-  implements OnInit, AfterViewInit, ControlValueAccessor
-{
+export class JsonObjectEditorComponent implements OnInit, AfterViewInit, ControlValueAccessor {
+  @Input() placeholder = '请划动区域...';
+  @Input() disabled = false;
   @Input() toolbar: boolean = true;
   @Input() inline: boolean = false;
   @Input() title: string = '编辑器';
@@ -61,7 +57,10 @@ export class AceEditorComponent
     mergeUndoDeltas: 'always',
     tasSize: 2,
   };
+
   @Output() onChange = new EventEmitter<string>();
+
+  isDisabled = signal<boolean>(false);
 
   editor: any;
 
@@ -105,10 +104,7 @@ export class AceEditorComponent
   }
 
   loadTheme(): void {
-    const theme =
-      this.HsThemeService.currentTheme() === 'dark'
-        ? 'cloud_editor_dark'
-        : 'chrome';
+    const theme = this.HsThemeService.currentTheme() === 'dark' ? 'cloud_editor_dark' : 'chrome';
     if (!this.editor) return;
     this.editor.setTheme(`ace/theme/${theme}`);
   }

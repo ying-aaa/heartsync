@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AceEditorComponent } from '@src/app/shared/components/ace-editor/ace-editor.component';
+import { JsonObjectEditorComponent } from '@src/app/shared/components/hs-json-editor/hs-json-editor.component';
 import { SplitAreaComponent, SplitComponent } from 'angular-split';
 import { CodeToolbarComponent } from './code-toolbar/code-toolbar.component';
 import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
@@ -24,7 +24,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './code-design.component.html',
   styleUrls: ['./code-design.component.less'],
   imports: [
-    AceEditorComponent,
+    JsonObjectEditorComponent,
     FormsModule,
     ReactiveFormsModule,
     SplitAreaComponent,

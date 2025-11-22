@@ -75,7 +75,6 @@ export const component_action_config: IEditorFormlyField[] = [
               key: 'componentType',
               type: 'input',
               fieldId: 'input_key_2579558739748954',
-              defaultValue: 'xxx',
               hide: true,
               props: {
                 label: '组件ID',

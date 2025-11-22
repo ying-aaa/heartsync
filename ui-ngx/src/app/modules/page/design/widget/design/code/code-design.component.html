@@ -19,29 +19,29 @@
         >
           @if (action.isPresentA) {
             <as-split-area [visible]="action.isVisibleA">
-              <hs-ace-editor
+              <hs-json-object-editor
                 title="css"
                 [type]="'css'"
                 [(ngModel)]="widgetInfo().templateCss"
-              ></hs-ace-editor>
+              ></hs-json-object-editor>
             </as-split-area>
           }
           @if (action.isPresentB) {
             <as-split-area [visible]="action.isVisibleB">
-              <hs-ace-editor
+              <hs-json-object-editor
                 title="html"
                 [type]="'html'"
                 [(ngModel)]="widgetInfo().templateHtml"
-              ></hs-ace-editor>
+              ></hs-json-object-editor>
             </as-split-area>
           }
           @if (action.isPresentC) {
             <as-split-area [visible]="action.isVisibleC">
-              <hs-ace-editor
+              <hs-json-object-editor
                 title="javascript"
                 [type]="'javascript'"
                 [(ngModel)]="widgetInfo().templateJs"
-              ></hs-ace-editor>
+              ></hs-json-object-editor>
             </as-split-area>
           }
         </as-split>

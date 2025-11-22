@@ -4,6 +4,7 @@ import { FormlyFieldColorPicker } from './color/color-picker.type';
 import { FormlyFieldRichtext } from './richtext/richtext-eidtor.type';
 import { FormlyFieldDraw } from './draw/draw.type';
 import { FormlyFieldArray } from './array/array.type';
+import { FormlyFieldJsonObject } from './json-object/json-object.type';
 
 const appearance = 'outline';
 const density = 5;
@@ -263,6 +264,20 @@ export const formlyFormTypes = [
         ...baseProps,
         typeName: '签名',
         label: '签名',
+      },
+      expressions: {
+        ...densityExpressions,
+      },
+    },
+  },
+  {
+    name: 'json-object',
+    component: FormlyFieldJsonObject,
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        typeName: 'json编辑器',
+        label: 'json编辑器',
       },
       expressions: {
         ...densityExpressions,

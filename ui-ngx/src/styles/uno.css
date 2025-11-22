@@ -175,6 +175,7 @@
 .max-w-xl{max-width:36rem;}
 .max-w-xs{max-width:20rem;}
 .min-h-100px{min-height:100px;}
+.min-h-120px{min-height:120px;}
 .min-h-200px{min-height:200px;}
 .min-h-300px{min-height:300px;}
 .min-h-30px{min-height:30px;}
@@ -401,7 +402,6 @@
 .pl-12px{padding-left:12px;}
 .pl-24px{padding-left:24px;}
 .pl-50px{padding-left:50px;}
-.pl-5px{padding-left:5px;}
 .pl-8px{padding-left:8px;}
 .pr-12px{padding-right:12px;}
 .pr-30\%{padding-right:30%;}
