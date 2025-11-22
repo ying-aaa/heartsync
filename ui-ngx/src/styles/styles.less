@@ -29,6 +29,7 @@ body {
   --base-color-100: @base-color-100;
 
   --base-text-color: @base-text-color;
+  --base-title-color: @base-title-color;
 
   --bg-color: @bg-color;
   --base-bg-color: @base-bg-color;
@@ -159,6 +160,12 @@ body {
     .x6-graph {
       box-shadow: none;
     }
+  }
+
+  mat-label,.mdc-label{
+    font-size: 14px;
+    line-height: 16px;
+    color: @base-title-color;
   }
 });
 

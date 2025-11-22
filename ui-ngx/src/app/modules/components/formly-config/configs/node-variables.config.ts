@@ -84,7 +84,6 @@ export const variables_config: IEditorFormlyField[] = [
                 paddingTopUnits: 'px',
                 borderRadius: 6,
                 borderRadiusUnits: 'px',
-                boxShadow: '0px 0px 10px 2px var(--base-color-20)',
                 border: '1px solid var(--base-color-05)',
               },
               // hideDrag: true,
@@ -99,6 +98,7 @@ export const variables_config: IEditorFormlyField[] = [
                     styles: {
                       rowGap: 12,
                       rowGapUnits: 'px',
+                      gridTemplateColumns: "minmax(0, 1fr)"
                     },
                   },
                   fieldGroup: [
