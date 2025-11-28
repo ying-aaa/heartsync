@@ -13,6 +13,7 @@ import { radio_config } from './radio.config';
 import { menu_signle_config } from './menu-signle.config';
 import { component_action_config } from './node-component-action.config';
 import { variables_config } from './node-variables.config';
+import { menu_global_config } from './menu-global.config';
 
 export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   input: input_config,
@@ -28,6 +29,8 @@ export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   widget: widget_config,
   // 单个菜单配置
   menuSingle: menu_signle_config,
+  // 全局菜单配置
+  menuGlobal: menu_global_config,
   // 组件动作配置
   componentAction: component_action_config,
   variables: variables_config,

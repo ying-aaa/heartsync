@@ -34,7 +34,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
             padding: 0;
           }
 
-          .ng-scroll-content{
+          .ng-scroll-content {
             --_scrollbar-content-width: 100%;
           }
         }
@@ -45,8 +45,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 })
 export class FormlyConfigComponent implements OnInit {
   type = input();
-  model = input<any>();
-  options = input<any>();
+  model = input<any>({});
+  options = input<any>({ formState: { model: this.model() } });
   fields: IEditorFormlyField[] = [];
   formGroup = new FormGroup({});
 

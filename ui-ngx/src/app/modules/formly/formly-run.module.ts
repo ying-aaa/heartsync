@@ -38,8 +38,8 @@ export function runExtension(field: IEditorFormlyField) {
       styles: {
         rowGap: 8,
         rowGapUnits: 'px',
-        padding: 16,
-        paddingUnits: 'px',
+        // padding: 16,
+        // paddingUnits: 'px',
       },
     };
   }

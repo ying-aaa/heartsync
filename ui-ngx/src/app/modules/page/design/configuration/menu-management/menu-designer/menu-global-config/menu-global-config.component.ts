@@ -1,30 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDivider } from '@angular/material/divider';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { ColorPickerDirective } from 'ngx-color-picker';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { FormlyConfigComponent } from '@src/app/modules/components/formly-config/formly-config.component';
+import { MenuDesignerService } from '../../menu-deisgner.sevice';
 
 @Component({
   selector: 'hs-menu-global-config',
   templateUrl: './menu-global-config.component.html',
   imports: [
     MatDivider,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    // MatFormField,
+    // MatLabel,
+    // MatInput,
     FormsModule,
     ReactiveFormsModule,
-    ColorPickerDirective,
+    // ColorPickerDirective,
     MatButtonModule,
+    FormlyConfigComponent,
   ],
 })
 export class MenuGlobalConfigComponent implements OnInit {
   avtiveTheme = '1';
 
-  formControl = new FormControl<any>(null);
+  formGroup = new FormGroup({});
 
   menuThemes = [
     {
@@ -85,7 +88,9 @@ export class MenuGlobalConfigComponent implements OnInit {
     },
   ];
 
-  constructor() {}
+  globalMenuConfig = this.menuDesignerService.globalMenuConfig;
+
+  constructor(private menuDesignerService: MenuDesignerService) {}
 
   ngOnInit() {}
 }

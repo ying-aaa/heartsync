@@ -31,6 +31,7 @@
   (cdkDropListDropped)="drop($event)"
   [cdkDropListConnectedTo]="connectedTo()"
   [cdkDropListEnterPredicate]="canEnter"
+  [cdkDropListDisabled]="nodes().length <= 1"
 >
   @for (node of nodes(); track $index) {
     <div

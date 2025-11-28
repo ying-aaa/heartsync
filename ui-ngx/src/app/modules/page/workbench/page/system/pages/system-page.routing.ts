@@ -44,7 +44,7 @@ export default [
   {
     title: '逻辑节点编辑器',
     path: 'node',
-    data: { icon: 'node' },
+    data: { icon: 'department' },
     loadComponent: () =>
       import('./node-editor/node-editor.component').then((m) => m.NodeEditorComponent),
   },
