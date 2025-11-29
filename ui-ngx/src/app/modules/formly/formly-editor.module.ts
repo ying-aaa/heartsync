@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { FormlyMatSliderModule } from '@ngx-formly/material/slider';
 import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
+import { FormlyWrapperLayout } from './layout/layout/layout.wrapper';
 
 export function editorExtension(field: IEditorFormlyField) {
   // 如果是最外层 formly-group，则转为 COLUMN 类型，不再向下走
@@ -78,6 +79,7 @@ export function editorExtension(field: IEditorFormlyField) {
           name: 'subtableitem',
           component: FormlyFieldSubTableItem,
         },
+        { name: 'layout', component: FormlyWrapperLayout },
       ],
       extensions: [
         {

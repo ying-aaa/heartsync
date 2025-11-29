@@ -4,15 +4,9 @@ import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormWidgetService } from '@src/app/core/http/form-widget.service';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
-import {
-  IFancyTreeConfig,
-  IWidgetType,
-} from '@src/app/shared/models/public-api';
+import { IFancyTreeConfig, IWidgetType } from '@src/app/shared/models/public-api';
 import { IFormSubTypes } from '@src/app/shared/models/form-widget.model';
-import {
-  WidgetEditorService,
-  widgetTypesList,
-} from '@app/core/services/widget-editor.service';
+import { WidgetEditorService, widgetTypesList } from '@app/core/services/widget-editor.service';
 import { FormEditorService } from '@app/core/services/form-editor.service';
 import { getParamFromRoute } from '@src/app/core/utils';
 import { ActivatedRoute } from '@angular/router';
@@ -72,6 +66,16 @@ export class WidgetFolderComponent implements OnInit {
           name,
           appId: this.appId!,
           type: this.widgetType(),
+        })
+        .subscribe({
+          next: () => this.updateWidgetId(nodeId),
+        });
+    },
+    renameNodeSuccess: (node, jsTree) => {
+      const { id: nodeId, text: name } = node;
+      this.widgetService
+        .updateWidget(nodeId, {
+          name,
         })
         .subscribe({
           next: () => this.updateWidgetId(nodeId),

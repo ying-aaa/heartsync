@@ -47,7 +47,7 @@ export class WidgetEditorService {
   }
 
   setWidgetId(widgetId: string) {
-    if (widgetId === this.currentWidgetId()) return;
+    // if (widgetId === this.currentWidgetId()) return;
     this.currentWidgetId.set(widgetId);
     this.loadWidgetInfo();
   }

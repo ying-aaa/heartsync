@@ -15,10 +15,8 @@ import { formlyDisplayTypes } from '@src/app/modules/formly/display/formly-displ
 import { formlyFormTypes } from '@src/app/modules/formly/form/formly-form.config';
 import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout.config';
 import { FormlyFieldScroll } from '@src/app/modules/formly/layout/scroll/scroll.type';
-import {
-  IEditorFormlyField,
-  IFieldType,
-} from '@src/app/shared/models/public-api';
+import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/public-api';
+import { FormlyWrapperLayout } from './layout/layout/layout.wrapper';
 
 export function runExtension(field: IEditorFormlyField) {
   // 关闭设计模式
@@ -47,7 +45,7 @@ export function runExtension(field: IEditorFormlyField) {
   // 去掉多余的外层包装
   if (field.wrappers?.length) {
     field.wrappers = field.wrappers.filter(
-      (wrapper) => wrapper !== 'contorl' && wrapper !== 'subtableitem'
+      (wrapper) => wrapper !== 'contorl' && wrapper !== 'subtableitem',
     );
   }
 }
@@ -68,7 +66,10 @@ export function runExtension(field: IEditorFormlyField) {
     FormlyModule.forRoot({
       types: [...formlyLayoutTypes, ...formlyFormTypes, ...formlyDisplayTypes],
       validationMessages: [{ name: 'required', message: '这个字段是必填的！' }],
-      wrappers: [{ name: 'scroll', component: FormlyFieldScroll }],
+      wrappers: [
+        { name: 'scroll', component: FormlyFieldScroll },
+        { name: 'layout', component: FormlyWrapperLayout },
+      ],
       extensions: [
         {
           name: 'run',

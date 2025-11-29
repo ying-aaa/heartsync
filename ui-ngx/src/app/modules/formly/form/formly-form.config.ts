@@ -9,6 +9,10 @@ import { FormlyFieldJsonObject } from './json-object/json-object.type';
 const appearance = 'outline';
 const density = 5;
 
+const baseConfig = {
+  wrappers: ['layout', 'form-field'],
+};
+
 const baseProps = {
   appearance, // 输入类型
   density, // 密度
@@ -17,6 +21,8 @@ const baseProps = {
   disabled: false,
   required: false,
   readonly: false,
+  layout: 'top',
+  hideLabel: false,
 };
 
 const densityExpressions = {
@@ -25,6 +31,10 @@ const densityExpressions = {
     return field.className
       ? field.className.replace(/hs-density.*?\s/, densityClassName)
       : densityClassName;
+  },
+  'props.hideLabel': (field: IEditorFormlyField) => {
+    const shouldHide = field.props?.['layout'] !== 'float';
+    return shouldHide;
   },
 };
 
@@ -42,6 +52,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'textarea',
@@ -57,6 +68,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'input',
@@ -73,6 +85,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'input',
@@ -87,6 +100,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'datepicker',
@@ -101,6 +115,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'radio',
@@ -116,8 +131,19 @@ export const formlyFormTypes = [
       },
       expressions: {
         ...densityExpressions,
+        wrappers: (field: IEditorFormlyField) => {
+          const shouldHide = field.props?.['layout'] !== 'float';
+          if (shouldHide) {
+            return field.wrappers?.filter((wrapper) => wrapper !== 'form-field');
+          }
+          if (field.wrappers?.includes('form-field')) {
+            return field.wrappers;
+          }
+          return [...field.wrappers!, 'form-field'];
+        },
       },
     },
+    ...baseConfig,
   },
   {
     name: 'checkbox',
@@ -137,6 +163,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'toggle',
@@ -150,6 +177,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'slider',
@@ -163,6 +191,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'select',
@@ -183,6 +212,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'subtable',
@@ -197,6 +227,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'run-subtable',
@@ -211,6 +242,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'array',
@@ -229,7 +261,6 @@ export const formlyFormTypes = [
   {
     name: 'color-picker',
     component: FormlyFieldColorPicker,
-    wrappers: ['form-field'],
     defaultOptions: {
       props: {
         ...baseProps,
@@ -240,6 +271,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'richtext',
@@ -255,6 +287,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'draw',
@@ -269,6 +302,7 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
   {
     name: 'json-object',
@@ -283,5 +317,6 @@ export const formlyFormTypes = [
         ...densityExpressions,
       },
     },
+    ...baseConfig,
   },
 ];

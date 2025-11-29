@@ -122,6 +122,7 @@
 .mt-5px{margin-top:5px;}
 .mt-6{margin-top:1.5rem;}
 .mt-8{margin-top:2rem;}
+.mt-8px{margin-top:8px;}
 .box-border{box-sizing:border-box;}
 .inline{display:inline;}
 .block,
@@ -190,6 +191,7 @@
 .min-w-320px{min-width:320px;}
 .min-w-40px\!{min-width:40px !important;}
 .min-w-72px\!{min-width:72px !important;}
+.min-w-80px{min-width:80px;}
 .min-w-full{min-width:100%;}
 .min-w-inherit{min-width:inherit;}
 .w-\[calc\(100\%-60px\)\]{width:calc(100% - 60px);}
@@ -249,6 +251,7 @@
 .flex-row{flex-direction:row;}
 .flex-row-reverse{flex-direction:row-reverse;}
 .flex-col{flex-direction:column;}
+.flex-col-reverse{flex-direction:column-reverse;}
 .flex-wrap{flex-wrap:wrap;}
 .table{display:table;}
 .-translate-x-50\%{--un-translate-x:-50%;transform:translateX(var(--un-translate-x)) translateY(var(--un-translate-y)) translateZ(var(--un-translate-z)) rotate(var(--un-rotate)) rotateX(var(--un-rotate-x)) rotateY(var(--un-rotate-y)) rotateZ(var(--un-rotate-z)) skewX(var(--un-skew-x)) skewY(var(--un-skew-y)) scaleX(var(--un-scale-x)) scaleY(var(--un-scale-y)) scaleZ(var(--un-scale-z));}
@@ -418,6 +421,8 @@
 .pt-48px{padding-top:48px;}
 .pt-6px{padding-top:6px;}
 .text-center{text-align:center;}
+.text-left{text-align:left;}
+.text-right{text-align:right;}
 .text-12px{font-size:12px;}
 .text-13px{font-size:13px;}
 .text-14px{font-size:14px;}

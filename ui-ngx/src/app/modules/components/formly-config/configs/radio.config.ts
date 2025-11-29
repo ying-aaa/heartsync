@@ -39,6 +39,29 @@ export const radio_config: IEditorFormlyField[] = [
             className: 'hs-density--5',
           },
           {
+            key: 'props.layout',
+            type: 'radio',
+            props: {
+              type: 'radio',
+              label: '对齐方式',
+              placeholder: '',
+              disabled: false,
+              appearance: 'outline',
+              density: 5,
+              description: '',
+              required: false,
+              readonly: false,
+              options: [
+                { value: 'float', label: '浮动' },
+                { value: 'left', label: '左对齐' },
+                { value: 'right', label: '右对齐' },
+                { value: 'top', label: '顶部对齐' },
+                { value: 'bottom', label: '底部对齐' },
+              ],
+            },
+            className: 'hs-density--5',
+          },
+          {
             key: 'props.density',
             type: 'number',
             props: {
