@@ -10,7 +10,7 @@ import {
 import { FormlyRunModule } from '../../formly/formly-run.module';
 import {
   IEditorFormlyField,
-  IWidgetSizeStyle,
+  IEditSizeConfig,
 } from '@src/app/shared/models/public-api';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
@@ -28,7 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class WidgetFormComponent implements OnInit {
   widgetId = input.required<string>();
-  sizeStyle = input<IWidgetSizeStyle | undefined>();
+  sizeStyle = input<IEditSizeConfig | undefined>();
 
   widgetConfig = signal<IFormWidgetConfig>({} as IFormWidgetConfig);
 
@@ -77,7 +77,7 @@ export class WidgetFormComponent implements OnInit {
     const hostElement = this.viewContainerRef.element.nativeElement;
     const targetElement = hostElement.querySelector('.outermost-layer-field');
     if (!hostElement || !targetElement) return;
-    const { width, height } = this.sizeStyle() as IWidgetSizeStyle;
+    const { width, height } = this.sizeStyle() as IEditSizeConfig;
     this.renderer.setStyle(targetElement, 'width', width);
     this.renderer.setStyle(targetElement, 'height', height);
   }

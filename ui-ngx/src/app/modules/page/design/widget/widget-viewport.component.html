@@ -1,4 +1,3 @@
-@let workSizeConfigStyle = workSizeConfig()?.size! || {};
 <content
   #ContainerElement
   class="wh-full"
@@ -7,7 +6,7 @@
     <div
       cdkDrag
       [cdkDragDisabled]="!zoomControl().isMovable()"
-      [style]="workSizeConfigStyle | concatUnits"
+      [style]="workSizeConfig() | concatUnits"
       [style.transform]="zoomControl().transformScale()"
       class="widget-viewport-container"
     >
@@ -32,7 +31,7 @@
                 class="widget-container"
                 [widgetId]="widgetId()"
                 [widgetType]="widgetType()"
-                [workSizeConfigStyle]="getWdigetSize() | concatUnits"
+                [workSizeConfigStyle]="workSizeConfig() | concatUnits"
               ></hs-widget-container>
             </div>
           </div>
@@ -56,7 +55,7 @@
   <hs-widget-zoom
     #ZoomControl
     [containerElement]="ContainerElement"
-    [workSizeConfigStyle]="workSizeConfigStyle"
+    [workSizeConfigStyle]="workSizeConfig()"
     class="absolute left-50% -translate-x-50% bottom-50px"
   ></hs-widget-zoom>
 </content>

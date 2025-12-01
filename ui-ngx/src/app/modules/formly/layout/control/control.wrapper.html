@@ -1,40 +1,40 @@
 @if (isEditMode) {
-  @if (isHoverField) {
-    <div class="title-name">{{ field.props?.['typeName'] }}</div>
-  }
-  <div class="flex absolute right-3px -top-16px z-10 hs-widget-toolbar">
-    <button mat-mini-fab>
-      <mat-icon>menu</mat-icon>
-    </button>
-    <mat-divider
-      [vertical]="true"
-      class="h-full"
-    ></mat-divider>
-    <button
-      mat-mini-fab
-      (click)="
+@if (isHoverField) {
+<div class="title-name">{{ field.props?.['typeName'] }}</div>
+}
+<div class="flex absolute right-3px -top-16px z-10 hs-widget-toolbar">
+  <button mat-mini-fab>
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-divider
+    [vertical]="true"
+    class="h-full"
+  ></mat-divider>
+  <button
+    mat-mini-fab
+    (click)="
         formEditorService.addField(
           field,
           field.parent!.fieldGroup!,
           field.index! + 1
         )
       "
-    >
-      <mat-icon>content_copy</mat-icon>
-    </button>
-    <mat-divider
-      [vertical]="true"
-      class="h-full"
-    ></mat-divider>
-    <button
-      mat-mini-fab
-      (click)="
+  >
+    <mat-icon>content_copy</mat-icon>
+  </button>
+  <mat-divider
+    [vertical]="true"
+    class="h-full"
+  ></mat-divider>
+  <button
+    mat-mini-fab
+    (click)="
         formEditorService.removeField(field.parent!.fieldGroup!, field.index!)
       "
-    >
-      <mat-icon>delete</mat-icon>
-    </button>
-  </div>
+  >
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
 }
 <!-- {{ field.props?.['wrapperAttr']?.backgroundColor }} -->
 <ng-container #fieldComponent></ng-container>

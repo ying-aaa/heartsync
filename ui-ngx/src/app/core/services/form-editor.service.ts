@@ -8,7 +8,7 @@ import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.mo
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IFormSubTypes, IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 import { FormWidgetService } from '@src/app/core/http/form-widget.service';
-import { FormlyFormOptions } from '@ngx-formly/core';
+import { FieldArrayType, FormlyFormOptions } from '@ngx-formly/core';
 
 @Injectable({
   providedIn: 'root',
@@ -126,6 +126,7 @@ export class FormEditorService {
     toParentField: IEditorFormlyField[],
     toIndex: number,
     selected = true,
+    add?: FieldArrayType['add'],
   ) {
     field = deepClone(field);
 
@@ -150,7 +151,7 @@ export class FormEditorService {
     }
 
     // 插入
-    toParentField.splice(toIndex, 0, field);
+    add ? add(toIndex, field) : toParentField.splice(toIndex, 0, field);
 
     // 更新
     this.formGroup = new FormGroup({});

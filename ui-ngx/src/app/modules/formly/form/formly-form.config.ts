@@ -3,7 +3,6 @@ import { FormlyFieldSubTable } from './subtable/formly-field-subtable.component'
 import { FormlyFieldColorPicker } from './color/color-picker.type';
 import { FormlyFieldRichtext } from './richtext/richtext-eidtor.type';
 import { FormlyFieldDraw } from './draw/draw.type';
-import { FormlyFieldArray } from './array/array.type';
 import { FormlyFieldJsonObject } from './json-object/json-object.type';
 
 const appearance = 'outline';
@@ -25,7 +24,7 @@ const baseProps = {
   hideLabel: false,
 };
 
-const densityExpressions = {
+const baseExpressions = {
   className: (field: IEditorFormlyField) => {
     const densityClassName = `hs-density--${field.props?.['density']} `;
     return field.className
@@ -49,7 +48,7 @@ export const formlyFormTypes = [
         maxLength: undefined,
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
     ...baseConfig,
@@ -65,7 +64,7 @@ export const formlyFormTypes = [
         ...baseProps,
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
     ...baseConfig,
@@ -82,7 +81,7 @@ export const formlyFormTypes = [
         max: undefined,
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
     ...baseConfig,
@@ -97,7 +96,7 @@ export const formlyFormTypes = [
         label: '密码',
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
     ...baseConfig,
@@ -112,7 +111,7 @@ export const formlyFormTypes = [
         dateFormat: 'yyyy-MM-dd', // 设置日期格式
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
     ...baseConfig,
@@ -130,7 +129,7 @@ export const formlyFormTypes = [
         ],
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
         wrappers: (field: IEditorFormlyField) => {
           const shouldHide = field.props?.['layout'] !== 'float';
           if (shouldHide) {
@@ -160,7 +159,17 @@ export const formlyFormTypes = [
         ],
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
+        wrappers: (field: IEditorFormlyField) => {
+          const shouldHide = field.props?.['layout'] !== 'float';
+          if (shouldHide) {
+            return field.wrappers?.filter((wrapper) => wrapper !== 'form-field');
+          }
+          if (field.wrappers?.includes('form-field')) {
+            return field.wrappers;
+          }
+          return [...field.wrappers!, 'form-field'];
+        },
       },
     },
     ...baseConfig,
@@ -172,12 +181,15 @@ export const formlyFormTypes = [
         ...baseProps,
         typeName: '开关',
         label: '开关',
+        layout: 'left',
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
+        'props.hideLabel': 'true',
+        wrappers: "['layout']",
       },
     },
-    ...baseConfig,
+    className: 'hide-toggle-label',
   },
   {
     name: 'slider',
@@ -188,7 +200,7 @@ export const formlyFormTypes = [
         label: '滑块',
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
     ...baseConfig,
@@ -209,7 +221,7 @@ export const formlyFormTypes = [
         ],
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
     ...baseConfig,
@@ -224,10 +236,9 @@ export const formlyFormTypes = [
         label: '普通输入子表',
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
-    ...baseConfig,
   },
   {
     name: 'run-subtable',
@@ -239,22 +250,7 @@ export const formlyFormTypes = [
         label: '普通输入子表',
       },
       expressions: {
-        ...densityExpressions,
-      },
-    },
-    ...baseConfig,
-  },
-  {
-    name: 'array',
-    component: FormlyFieldArray,
-    defaultOptions: {
-      props: {
-        ...baseProps,
-        typeName: '普通输入子表',
-        label: '普通输入子表',
-      },
-      expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
   },
@@ -268,7 +264,7 @@ export const formlyFormTypes = [
         label: '颜色选择器',
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
     ...baseConfig,
@@ -280,14 +276,14 @@ export const formlyFormTypes = [
     defaultOptions: {
       props: {
         ...baseProps,
-        typeName: '颜色选择器',
-        label: '颜色选择器',
+        typeName: '富文本',
+        label: '富文本',
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
-    ...baseConfig,
+    wrappers: ['layout'],
   },
   {
     name: 'draw',
@@ -299,10 +295,10 @@ export const formlyFormTypes = [
         label: '签名',
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
-    ...baseConfig,
+    wrappers: ['layout'],
   },
   {
     name: 'json-object',
@@ -314,9 +310,9 @@ export const formlyFormTypes = [
         label: 'json编辑器',
       },
       expressions: {
-        ...densityExpressions,
+        ...baseExpressions,
       },
     },
-    ...baseConfig,
+    wrappers: ['layout'],
   },
 ];

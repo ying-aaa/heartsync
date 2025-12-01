@@ -19,18 +19,8 @@
       </div>
       <mat-divider class="w-full"></mat-divider>
     </header>
-    <ng-scrollbar
-      class="flex-1 h-0"
-      #scrollbarRef="ngScrollbar"
-      externalViewport
-      visibility="hover"
-      appearance="compact"
-      orientation="auto"
-    >
-      <div scrollViewport>
-        <hs-formly-config class="pr-12px pt-10px!" [model]="formEditorService.activeField()">
-        </hs-formly-config>
-      </div>
-    </ng-scrollbar>
+
+    <hs-formly-config class="w-full pt-10px!" [model]="formEditorService.activeField()">
+    </hs-formly-config>
   </aside>
 </content>

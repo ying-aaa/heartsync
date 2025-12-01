@@ -34,10 +34,21 @@ export class WidgetViewportComponent {
   constructor(
     private widgetEditorService: WidgetEditorService,
     private router: Router,
-    private route: ActivatedRoute,
   ) {}
 
-  workSizeConfig = computed(() => this.widgetEditorService.currentWidgetConfig().workSizeConfig);
+  workSizeConfig = computed(() => {
+    const workSizeConfig = this.widgetEditorService.currentWidgetConfig().workSizeConfig || {
+      width: 100,
+      height: 100,
+      widthUnits: '%',
+    };
+    let { width, height, widthUnits } = workSizeConfig;
+    if (widthUnits === 'px') {
+      width = width - 40;
+      height = height - 40;
+    }
+    return { ...workSizeConfig, width, height };
+  });
 
   toWidgetDesign() {
     const widgetId = this.widgetEditorService.currentWidgetId();
@@ -47,20 +58,5 @@ export class WidgetViewportComponent {
     this.router.navigate([`${currentUrl}/${widgetType}`], {
       queryParams: { widgetId },
     });
-  }
-
-  // 边距处理
-  getWdigetSize() {
-    const size = this.workSizeConfig()?.size || {
-      width: 100,
-      height: 100,
-      widthUnits: '%',
-    };
-    let { width, height, widthUnits } = size;
-    if (widthUnits === 'px') {
-      width = width - 40;
-      height = height - 40;
-    }
-    return { ...size, width, height };
   }
 }

@@ -2,38 +2,38 @@ import { IEditorFormlyField } from '@src/app/shared/models/public-api';
 
 const variableType = [
   {
-    label: "字符串",
-    value: "string"
+    label: '字符串',
+    value: 'string',
   },
   {
-    label: "数值",
-    value: "number"
+    label: '数值',
+    value: 'number',
   },
   {
-    label: "布尔",
-    value: "boolean"
+    label: '布尔',
+    value: 'boolean',
   },
   {
-    label: "日期",
-    value: "date"
+    label: '日期',
+    value: 'date',
   },
   {
-    label: "日期时间",
-    value: "datetime"
+    label: '日期时间',
+    value: 'datetime',
   },
   {
-    label: "对象",
-    value: "object"
+    label: '对象',
+    value: 'object',
   },
   {
-    label: "单值数组",
-    value: "singleArray"
+    label: '单值数组',
+    value: 'singleArray',
   },
   {
-    label: "对象数组",
-    value: "objectArray"
-  }
-]
+    label: '对象数组',
+    value: 'objectArray',
+  },
+];
 
 export const variables_config: IEditorFormlyField[] = [
   {
@@ -58,7 +58,7 @@ export const variables_config: IEditorFormlyField[] = [
         className: 'hs-density--1',
         fieldGroup: [
           {
-            template: `<div>变量配置</div>`
+            template: `<div>变量配置</div>`,
           },
           {
             key: 'variableDefine',
@@ -80,11 +80,12 @@ export const variables_config: IEditorFormlyField[] = [
               itemStyles: {
                 padding: 16,
                 paddingUnits: 'px',
-                paddingTop: 12,
+                paddingTop: 8,
                 paddingTopUnits: 'px',
                 borderRadius: 6,
                 borderRadiusUnits: 'px',
                 border: '1px solid var(--base-color-05)',
+                boxShadow: '0px 0px 10px 2px var(--base-color-20)',
               },
               // hideDrag: true,
             },
@@ -98,7 +99,7 @@ export const variables_config: IEditorFormlyField[] = [
                     styles: {
                       rowGap: 12,
                       rowGapUnits: 'px',
-                      gridTemplateColumns: "minmax(0, 1fr)"
+                      gridTemplateColumns: 'minmax(0, 1fr)',
                     },
                   },
                   fieldGroup: [
@@ -130,21 +131,21 @@ export const variables_config: IEditorFormlyField[] = [
                         appearance: 'outline',
                         options: [
                           {
-                            label: "自定义",
-                            value: "custom"
+                            label: '自定义',
+                            value: 'custom',
                           },
                           {
-                            label: "系统",
-                            value: "system"
+                            label: '系统',
+                            value: 'system',
                           },
                           {
-                            label: "资产",
-                            value: "assets"
+                            label: '资产',
+                            value: 'assets',
                           },
                           {
-                            label: "路由",
-                            value: "route"
-                          }
+                            label: '路由',
+                            value: 'route',
+                          },
                         ],
                       },
                       className: 'hs-density--5',
@@ -179,7 +180,7 @@ export const variables_config: IEditorFormlyField[] = [
                         appearance: 'outline',
                       },
                       className: 'hs-density--5',
-                      hideExpression: "!['string', 'number'].includes(model.variableType)"
+                      hideExpression: "!['string', 'number'].includes(model.variableType)",
                     },
                     {
                       key: 'variableValue',
@@ -194,14 +195,14 @@ export const variables_config: IEditorFormlyField[] = [
                         appearance: 'outline',
                         styles: {
                           height: 200,
-                          heightUnits: "px",
+                          heightUnits: 'px',
                           border: '1px solid var(--base-color-10)',
                           borderRadius: 8,
                           borderRadiusUnits: 'px',
-                          overflow: "hidden"
+                          overflow: 'hidden',
                         },
-                        title: "值",
-                        type: "json"
+                        title: '值',
+                        type: 'json',
                       },
                       className: 'hs-density--5',
                       // expressions: {
@@ -210,13 +211,14 @@ export const variables_config: IEditorFormlyField[] = [
                       //     return componentType + "值";
                       //   },
                       // },
-                      hideExpression: "!['singleArray', 'objectArray', 'object'].includes(model.variableType)"
+                      hideExpression:
+                        "!['singleArray', 'objectArray', 'object'].includes(model.variableType)",
                     },
-                  ]
-                }
-              ]
-            }
-          }
+                  ],
+                },
+              ],
+            },
+          },
         ],
       },
       {

@@ -85,7 +85,7 @@ function handleError(
     authService: AuthService;
   },
 ): Observable<never> {
-  const errorMessage = error.error?.error || error.message;
+  const errorMessage = error.error?.message || error.error?.error || error.message;
 
   toastrService.error(errorMessage);
 
