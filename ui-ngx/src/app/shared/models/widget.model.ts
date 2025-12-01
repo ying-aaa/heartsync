@@ -54,17 +54,13 @@ export enum IEditSizeType {
   CUSTOM = 'custom', // 自定义
 }
 
-export interface IWidgetSizeStyle {
+// 编辑尺寸配置接口
+export interface IEditSizeConfig {
+  type: IEditSizeType; // 设备类型
   width: number;
   widthUnits: string;
   height: number;
   heightUnits: string;
-}
-
-// 编辑尺寸配置接口
-export interface IEditSizeConfig {
-  type: IEditSizeType; // 设备类型
-  size: IWidgetSizeStyle;
 }
 
 // 组件样式配置接口

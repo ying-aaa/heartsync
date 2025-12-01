@@ -47,9 +47,15 @@ export class FormlyFieldArray extends FieldArrayType<IEditorFormlyField> impleme
     let defaultAddValue = this.field.props?.['defaultAddValue'];
     defaultAddValue && (defaultAddValue = deepClone(defaultAddValue));
 
-    const value = deepClone(this.model.at(-1) || {});
+    const value = deepClone(this.model?.at(-1) || {});
 
-    this.formEditorService.addField(defaultAddValue || value, this.model, toIndex, false);
+    this.formEditorService.addField(
+      defaultAddValue || value,
+      this.model,
+      toIndex,
+      false,
+      this.add.bind(this),
+    );
     this.options.build!();
   }
 

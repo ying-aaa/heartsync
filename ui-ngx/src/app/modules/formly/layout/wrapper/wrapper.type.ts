@@ -15,7 +15,7 @@ import {
 } from '@src/app/shared/models/widget.model';
 import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { CommonModule } from '@angular/common';
-import { ConcatUnitsPipe } from '../../../../shared/pipes/units.pipe';
+import { ConcatUnitsPipe } from '@shared/pipes/units.pipe';
 
 @Component({
   selector: 'formly-field-wrapper',

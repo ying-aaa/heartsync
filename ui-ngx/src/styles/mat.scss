@@ -228,3 +228,9 @@ div.mat-mdc-dialog-title::before {
     padding: 8px 16px 16px;
   }
 }
+
+.hide-toggle-label {
+  .mdc-label {
+    display: none !important;
+  }
+}

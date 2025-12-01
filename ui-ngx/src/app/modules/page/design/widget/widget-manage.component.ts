@@ -18,9 +18,12 @@ import { FormlyConfigEditorComponent } from '@src/app/modules/components/formly-
 export class WidgetManageComponent implements OnInit {
   constructor(private widgetEditorService: WidgetEditorService) {}
 
-  get widgetConfig() {
-    return this.widgetEditorService.currentWidgetConfig();
-  }
+  currentWidgetConfig = this.widgetEditorService.currentWidgetConfig;
+  options = {
+    formState: {
+      widgetConfig: this.currentWidgetConfig,
+    },
+  };
 
   ngOnInit() {}
 }

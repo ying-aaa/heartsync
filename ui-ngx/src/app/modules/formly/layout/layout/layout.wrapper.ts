@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,11 +14,14 @@ import { MatDividerModule } from '@angular/material/divider';
     @let right = props['layout'] === 'right';
     @let top = props['layout'] === 'top';
     @let bottom = props['layout'] === 'bottom';
+    @let lableWidth = props['labelWidth'] || '80px';
+    @let hideColon = props['hideColon'];
+    @let leftOrRright = left || right;
 
     <div
       class="flex"
       [class]="{
-        'items-center': left || right,
+        'items-center': leftOrRright,
         'flex-col': top,
         'flex-col-reverse': bottom,
       }"
@@ -35,17 +32,22 @@ import { MatDividerModule } from '@angular/material/divider';
           [class]="{
             'mb-8px': top,
             'mt-8px': bottom,
+            'mr-8px': leftOrRright,
             'text-left': left,
             'text-right': right,
-            'w-80px': left || right,
-            'min-w-80px': left || right,
           }"
+          [style]="
+            leftOrRright ? { width: lableWidth, 'min-width': lableWidth, 'max-width': '90%' } : {}
+          "
         >
           {{ props.label }}
+          @if (leftOrRright && !hideColon) {
+            <span>:</span>
+          }
         </div>
       }
       <!-- {{ field.props?.['wrapperAttr']?.backgroundColor }} -->
-      <div class="flex-1">
+      <div [class]="leftOrRright ? 'flex-1 w-0' : ''">
         <ng-container #fieldComponent></ng-container>
       </div>
     </div>
@@ -62,9 +64,7 @@ export class FormlyWrapperLayout
     super();
   }
 
-  ngOnInit(): void {
-    console.log('FormlyWrapperLayout', this.field);
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {}
 }

@@ -19,7 +19,8 @@
   <aside class="w-282px h-full p-8px">
     <hs-formly-config
       type="widget"
-      [model]="widgetConfig"
+      [model]="currentWidgetConfig()"
+      [options]="options"
     ></hs-formly-config>
   </aside>
 </div>

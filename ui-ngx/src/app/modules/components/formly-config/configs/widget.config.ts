@@ -1,12 +1,54 @@
-import {
-  IEditorFormlyField,
-  IEditSizeType,
-} from '@src/app/shared/models/public-api';
+import { deepClone } from '@src/app/core/utils';
+import { IEditorFormlyField, IEditSizeType } from '@src/app/shared/models/public-api';
+
+const mobileSizeOptions = [
+  {
+    value: IEditSizeType.FILL,
+    label: '撑满',
+    width: 100,
+    widthUnits: '%',
+    height: 100,
+    heightUnits: '%',
+  },
+  {
+    value: IEditSizeType.MOBILE,
+    label: '手机',
+    width: 375,
+    widthUnits: 'px',
+    height: 667,
+    heightUnits: 'px',
+  },
+  {
+    value: IEditSizeType.IPAD,
+    label: '平板',
+    width: 1024,
+    widthUnits: 'px',
+    height: 768,
+    heightUnits: 'px',
+  },
+  {
+    value: IEditSizeType.PC,
+    label: '电脑',
+    width: 1980,
+    widthUnits: 'px',
+    height: 1020,
+    heightUnits: 'px',
+  },
+  {
+    value: IEditSizeType.CUSTOM,
+    label: '自定义',
+    width: 400,
+    widthUnits: 'px',
+    height: 400,
+    heightUnits: 'px',
+  },
+];
 
 export const widget_config: IEditorFormlyField[] = [
   {
     key: 'workSizeConfig.type',
     type: 'radio',
+    defaultValue: IEditSizeType.FILL,
     props: {
       label: '预览设备尺寸',
       typeName: '单选',
@@ -17,60 +59,18 @@ export const widget_config: IEditorFormlyField[] = [
       description: '',
       required: false,
       readonly: false,
-      options: [
-        {
-          value: IEditSizeType.FILL,
-          label: '撑满',
-          width: 100,
-          widthUnits: '%',
-          height: 100,
-          heightUnits: '%',
-        },
-        {
-          value: IEditSizeType.MOBILE,
-          label: '手机',
-          width: 375,
-          widthUnits: 'px',
-          height: 667,
-          heightUnits: 'px',
-        },
-        {
-          value: IEditSizeType.IPAD,
-          label: '平板',
-          width: 1024,
-          widthUnits: 'px',
-          height: 768,
-          heightUnits: 'px',
-        },
-        {
-          value: IEditSizeType.PC,
-          label: '电脑',
-          width: 1980,
-          widthUnits: 'px',
-          height: 1020,
-          heightUnits: 'px',
-        },
-        {
-          value: IEditSizeType.CUSTOM,
-          label: '自定义',
-          width: 400,
-          widthUnits: 'px',
-          height: 400,
-          heightUnits: 'px',
-        },
-      ],
+      options: mobileSizeOptions,
       hideFieldUnderline: true,
       floatLabel: 'always',
       tabindex: -1,
     },
     hooks: {
       onInit: (field) => {
-        // 监听 fieldA 的变化
-        field.formControl?.valueChanges.subscribe((value) => {
-          const options = field.props!.options as any[];
-          const size = options?.find((item: any) => item.value === value);
-          field.model.workSizeConfig.size = size;
-          field.options?.build && field.options.build();
+        field.formControl?.valueChanges.subscribe((type: any) => {
+          const size = deepClone(mobileSizeOptions?.find((item: any) => item.value === type) || {});
+          field.options?.formState.widgetConfig.update((value: any) => {
+            return { ...value, workSizeConfig: { ...size, type } };
+          });
         });
       },
     },
@@ -90,18 +90,14 @@ export const widget_config: IEditorFormlyField[] = [
         fontSize: 14,
         fontSizeUnits: 'px',
         fontWeight: 400,
-        paddingLeft: 8,
-        paddingLeftUnits: 'px',
         paddingTop: 8,
         paddingTopUnits: 'px',
-        paddingRight: 8,
-        paddingRightUnits: 'px',
         paddingBottom: 8,
         paddingBottomUnits: 'px',
-        borderRadius: 4,
+        borderRadius: 0,
         borderRadiusUnits: 'px',
-        borderColor: 'var(--mdc-outlined-text-field-outline-color)',
-        borderWidth: 1,
+        borderColor: '',
+        borderWidth: 0,
         borderWidthUnits: 'px',
         borderStyle: 'groove',
       },
@@ -169,8 +165,9 @@ export const widget_config: IEditorFormlyField[] = [
                     className: 'hs-density--1 ',
                     fieldGroup: [
                       {
-                        key: 'workSizeConfig.size.width',
+                        key: 'workSizeConfig.width',
                         type: 'input',
+                        defaultValue: 100,
                         props: {
                           type: 'number',
                           label: '宽度',
@@ -207,8 +204,9 @@ export const widget_config: IEditorFormlyField[] = [
                     className: 'hs-density--1 ',
                     fieldGroup: [
                       {
-                        key: 'workSizeConfig.size.widthUnits',
+                        key: 'workSizeConfig.widthUnits',
                         type: 'select',
+                        defaultValue: '%',
                         props: {
                           label: '单位',
                           placeholder: '',
@@ -271,8 +269,9 @@ export const widget_config: IEditorFormlyField[] = [
                     className: 'hs-density--1 ',
                     fieldGroup: [
                       {
-                        key: 'workSizeConfig.size.height',
+                        key: 'workSizeConfig.height',
                         type: 'input',
+                        defaultValue: 100,
                         props: {
                           type: 'number',
                           label: '高度',
@@ -309,8 +308,9 @@ export const widget_config: IEditorFormlyField[] = [
                     className: 'hs-density--1 ',
                     fieldGroup: [
                       {
-                        key: 'workSizeConfig.size.heightUnits',
+                        key: 'workSizeConfig.heightUnits',
                         type: 'select',
+                        defaultValue: '%',
                         props: {
                           label: '单位',
                           placeholder: '',
@@ -343,148 +343,6 @@ export const widget_config: IEditorFormlyField[] = [
                 ],
               },
             ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    type: 'tabs',
-    props: {
-      label: '页签',
-      icon: 'tab',
-      placeholder: '',
-      disabled: false,
-      density: 1,
-    },
-    className: 'hs-density--1 mat-tab-item3-full',
-    fieldGroup: [
-      {
-        type: 'column',
-        props: {
-          label: '外观',
-          placeholder: '',
-          disabled: false,
-          density: 1,
-        },
-        className: 'hs-density--1',
-        fieldGroup: [
-          {
-            key: 'props.density',
-            type: 'number',
-            props: {
-              label: '密度',
-              appearance: 'outline',
-              min: 0,
-              max: 5,
-            },
-            className: 'hs-density--5',
-          },
-          {
-            key: 'props.appearance',
-            type: 'radio',
-            props: {
-              appearance: 'outline',
-              label: '样式类型',
-              options: [
-                { value: 'fill', label: '填满' },
-                { value: 'outline', label: '线条' },
-              ],
-            },
-            className: 'hs-density--5',
-          },
-        ],
-      },
-      {
-        type: 'column',
-        props: {
-          label: '数据',
-          placeholder: '',
-          disabled: false,
-          density: 1,
-        },
-        className: 'hs-density--1',
-        fieldGroup: [
-          {
-            key: 'id',
-            type: 'input',
-            props: {
-              type: 'text',
-              label: '表单id',
-              placeholder: '',
-              disabled: true,
-              appearance: 'outline',
-              density: 5,
-              description: '',
-              required: false,
-              readonly: false,
-            },
-            className: 'hs-density--5',
-          },
-        ],
-      },
-      {
-        type: 'column',
-        props: {
-          label: '交互',
-          placeholder: '',
-          disabled: false,
-          density: 1,
-        },
-        className: 'hs-density--1',
-        fieldGroup: [
-          {
-            type: 'input',
-            props: {
-              label: '第三个文本',
-              placeholder: '',
-              disabled: false,
-              appearance: 'outline',
-              density: 5,
-              description: '',
-              required: false,
-              readonly: false,
-              type: 'password',
-            },
-            className: 'hs-density--5',
-          },
-          {
-            type: 'checkbox',
-            props: {
-              label: '多选',
-              placeholder: '',
-              disabled: false,
-              appearance: 'outline',
-              density: 5,
-              description: '',
-              required: false,
-              readonly: false,
-              options: [
-                {
-                  value: 1,
-                  label: '选项 1',
-                },
-                {
-                  value: 2,
-                  label: '选项 2',
-                },
-                {
-                  value: 3,
-                  label: '选项 3',
-                },
-                {
-                  value: 4,
-                  label: '选项 4',
-                  disabled: true,
-                },
-              ],
-              hideFieldUnderline: true,
-              indeterminate: true,
-              floatLabel: 'always',
-              hideLabel: true,
-              color: 'accent',
-            },
-            className: 'hs-density--5',
           },
         ],
       },

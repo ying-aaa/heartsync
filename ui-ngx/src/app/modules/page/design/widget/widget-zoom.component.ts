@@ -15,7 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
-import { IWidgetSizeStyle } from '@src/app/shared/models/public-api';
+import { IEditSizeConfig } from '@src/app/shared/models/public-api';
 import { IRadioConfig } from '@src/app/shared/models/system.model';
 
 @Component({
@@ -33,7 +33,7 @@ import { IRadioConfig } from '@src/app/shared/models/system.model';
 })
 export class WidgetZoomComponent implements OnInit, AfterViewInit {
   containerElement = input.required<HTMLElement>();
-  workSizeConfigStyle = input.required<IWidgetSizeStyle>();
+  workSizeConfigStyle = input.required<IEditSizeConfig>();
 
   containerWidth = 0;
 
