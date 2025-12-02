@@ -12,14 +12,6 @@ export class MenuDesignerService {
   // 选中的菜单节点
   selectedNode = signal<any>({});
 
-  // 显示模式
-  showMode = signal<'tree' | 'page'>('page');
-
-  // 全局菜单配置数据
-  globalMenuConfig = signal<any>({
-    themeId: '2',
-  });
-
   constructor() {}
 
   onMouseMove(event: MouseEvent): void {

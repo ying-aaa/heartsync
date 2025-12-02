@@ -18,7 +18,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { MenuDesignerService } from '../../menu-deisgner.sevice';
+import { MenuDesignerService } from '../menu-deisgner.sevice';
 import { deepClone, generateUUID } from '@src/app/core/utils';
 import { MatDivider } from '@angular/material/divider';
 

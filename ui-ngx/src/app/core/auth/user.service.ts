@@ -21,6 +21,7 @@ export class UserService {
   readonly userProfile = computed(() => this.state().userProfile);
   readonly tokenParsed = computed(() => this.state().tokenParsed);
   readonly username = computed(() => {
+    console.log('this.userProfile()', this.userProfile());
     const firstName = this.userProfile()?.firstName;
     const lastName = this.userProfile()?.lastName;
     return (firstName || '') + (lastName || '') || this.userProfile()?.username || '';
@@ -36,8 +37,8 @@ export class UserService {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((profile: any) => {
+        console.log('profile', profile);
         if (profile) {
-          console.log('%c Line:50 🥪 profile', 'color:#b03734', profile);
           // 使用用户服务更新信息
           this.updateUser(profile, this.keycloak.tokenParsed);
         }

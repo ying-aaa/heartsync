@@ -8,11 +8,12 @@ import { MatFormField, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MenuLiveComponent } from './menu-live/menu-live.component';
 import { CdkDrag, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
-import { MenuDesignerService } from '../menu-deisgner.sevice';
+import { MenuDesignerService } from './menu-deisgner.sevice';
 import { MenuGlobalConfigComponent } from './menu-global-config/menu-global-config.component';
 import { MenuSingleConfigComponent } from './menu-single-config/menu-single-config.component';
 import { MenuHttpService } from '@src/app/core/http/menu.service';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
+import { MenuManagementService } from '../menu-management.sevice';
 
 @Component({
   selector: 'hs-menu-designer',
@@ -90,7 +91,7 @@ export class MenuDesignerComponent implements OnInit {
     },
   ]);
 
-  menuData = signal<any>([]);
+  menuData = this.menuManagementService.menuData;
 
   onDrop() {
     this.menuData.set([...this.menuData()]);
@@ -113,6 +114,7 @@ export class MenuDesignerComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private menuDeSignerService: MenuDesignerService,
+    private menuManagementService: MenuManagementService,
     private menuHttpService: MenuHttpService,
   ) {}
 

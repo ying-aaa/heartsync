@@ -22,6 +22,7 @@ import { delay } from 'rxjs';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MenuManagementService } from '../menu-management.sevice';
 
 interface FlatIMenuNode extends IMenuNode {
   level: number;
@@ -69,7 +70,7 @@ export class MenuTreeComponent implements OnInit {
   clickedRows: IMenuNode | null = null;
 
   // 使用信号管理树数据
-  treeData = signal<IMenuNode[]>([]);
+  menuData = this.menuManagementService.menuData;
 
   dashboardData = signal<IMenuNode[]>([]);
 
@@ -97,7 +98,7 @@ export class MenuTreeComponent implements OnInit {
       }
     };
 
-    this.treeData().forEach((node) => processNode(node, 0));
+    this.menuData().forEach((node) => processNode(node, 0));
     return result;
   });
 
@@ -105,6 +106,7 @@ export class MenuTreeComponent implements OnInit {
     private route: ActivatedRoute,
     private menuHttpService: MenuHttpService,
     private fileTreeService: FileTreeService,
+    private menuManagementService: MenuManagementService,
   ) {
     this.initMenuFilter();
   }
@@ -126,7 +128,7 @@ export class MenuTreeComponent implements OnInit {
         return node;
       });
     };
-    this.treeData.update((currentData) => updateNodeValue(currentData));
+    this.menuData.update((currentData) => updateNodeValue(currentData));
 
     if (isChanged && matchedNode) {
       const updateData = { id: matchedNode.id, [field]: value } as IMenuNode;
@@ -150,7 +152,7 @@ export class MenuTreeComponent implements OnInit {
         }
       });
     };
-    collectNodeIds(this.treeData());
+    collectNodeIds(this.menuData());
     this.expandedNodes.set(allNodeIds);
   }
 
@@ -173,7 +175,7 @@ export class MenuTreeComponent implements OnInit {
 
   // 查找节点（优化性能）
   private findNode(id: string, nodes?: IMenuNode[]): IMenuNode | null {
-    const searchNodes = nodes || this.treeData();
+    const searchNodes = nodes || this.menuData();
     for (const node of searchNodes) {
       if (node.id === id) return node;
       if (node.children) {
@@ -205,7 +207,7 @@ export class MenuTreeComponent implements OnInit {
       nodeOriginData.children = [newNode];
     }
 
-    this.treeData.update((currentData) => [...currentData]);
+    this.menuData.update((currentData) => [...currentData]);
 
     // 触发展开状态更新
     this.expandedNodes.update((expanded) => {
@@ -238,9 +240,9 @@ export class MenuTreeComponent implements OnInit {
       } else {
         parentNode.children = [newNode];
       }
-      this.treeData.update((currentData) => [...currentData]);
+      this.menuData.update((currentData) => [...currentData]);
     } else {
-      this.treeData.update((currentData) => [...currentData, newNode]);
+      this.menuData.update((currentData) => [...currentData, newNode]);
     }
 
     this.menuHttpService.createMenu(newNode).subscribe((res) => {});
@@ -263,7 +265,7 @@ export class MenuTreeComponent implements OnInit {
         .filter((n) => n !== null);
     };
 
-    this.treeData.update((currentData) => removeNodeRecursively(currentData, node.id));
+    this.menuData.update((currentData) => removeNodeRecursively(currentData, node.id));
     this.expandedNodes.update((expanded) => {
       const newSet = new Set(expanded);
       newSet.delete(node.id);
@@ -322,7 +324,7 @@ export class MenuTreeComponent implements OnInit {
     this.menuHttpService.getMenusByAppId(this.appId).subscribe(
       (res: IMenuNode[]) => {
         this.expandedNodes.set(new Set());
-        this.treeData.set(res);
+        this.menuData.set(res);
         this.loadingStatus = false;
         this.expandAll();
       },
@@ -339,7 +341,6 @@ export class MenuTreeComponent implements OnInit {
       .subscribe({
         next: async (responseData) => {
           this.dashboardData.set(responseData);
-          console.log('%c Line:353 🍷 responseData', 'color:#42b983', responseData);
         },
         error() {},
       });

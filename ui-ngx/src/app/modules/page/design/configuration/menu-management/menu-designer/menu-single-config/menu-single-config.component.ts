@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, HostBinding, OnInit } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
-import { MenuDesignerService } from '../../menu-deisgner.sevice';
+import { MenuDesignerService } from '../menu-deisgner.sevice';
 import { FormlyConfigComponent } from '@src/app/modules/components/formly-config/formly-config.component';
 
 @Component({
@@ -20,7 +20,9 @@ import { FormlyConfigComponent } from '@src/app/modules/components/formly-config
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuSingleConfigComponent implements OnInit {
-  constructor(private menuDesignerService: MenuDesignerService) {}
+  constructor(
+    private menuDesignerService: MenuDesignerService,
+  ) {}
 
   selectedNode = this.menuDesignerService.selectedNode;
   showSignleConfig = computed(() => this.menuDesignerService.showSignleConfig());
