@@ -1,4 +1,14 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  OnInit,
+  Renderer2,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -12,17 +22,204 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
-import { generateUUID, getParamFromRoute } from '@src/app/core/utils';
+import { generateUUID, getParamFromRoute, handlerNgElStyle } from '@src/app/core/utils';
 import { MenuHttpService } from '@src/app/core/http/menu.service';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { TreeSelectComponent } from '@src/app/shared/components/hs-tree-select/hs-tree-select.component';
 import { FileTreeService } from '@src/app/core/http/file-tree.service';
-import { delay } from 'rxjs';
+import { BehaviorSubject, delay, Subject, Subscription } from 'rxjs';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MenuManagementService } from '../menu-management.sevice';
+import { IEventsType } from '@src/app/shared/models/public-api';
+import { AsyncPipe } from '@angular/common';
+
+function getDraggableEl(el: HTMLElement): HTMLElement | null {
+  let node = el;
+  while (node) {
+    if (node.getAttribute('aria-draggable') === 'true') return node;
+    node = node.parentElement as HTMLElement;
+  }
+  return null;
+}
+
+function getFolderEl(el: HTMLElement): HTMLElement | null {
+  const elLevel = +el.getAttribute('aria-level')!;
+  if (!elLevel) return null;
+  let node = el;
+  while (node) {
+    node = node.previousElementSibling as HTMLElement;
+    // 获取当前元素的父元素，因为数据是平铺的，只需要找当前level的小一级
+    if (+node?.getAttribute('aria-level')! === elLevel - 1) return node;
+  }
+  return null;
+}
+
+class CustomDragTable {
+  // 事件委托
+  tableEl!: HTMLElement;
+
+  // 跟随元素
+  followEl!: HTMLElement;
+
+  // 表格组件实例
+  tableThis!: MenuTreeComponent;
+
+  // 实体元素
+  entityEl: HTMLElement | null = null;
+
+  // 实体元素层级
+  entityLevel: number | null = null;
+
+  // 实体所在目录
+  entityFolderEl: HTMLElement | null = null;
+
+  // 划过的实体元素
+  overEl: HTMLElement | null = null;
+
+  // 是否移动
+  isMove$ = new BehaviorSubject(false);
+
+  // 订阅者
+  subscribetions: Subscription[] = [];
+
+  event = new Map<
+    HTMLElement,
+    {
+      [key in IEventsType]?: Function;
+    }
+  >();
+
+  private renderer: Renderer2;
+
+  constructor(el: HTMLElement, tableThis: MenuTreeComponent) {
+    this.tableEl = el;
+    this.tableThis = tableThis;
+    this.renderer = tableThis.renderer;
+    this.generataFollow();
+    this.init();
+  }
+
+  generataFollow() {
+    this.followEl = this.renderer.createElement('div');
+    console.log('this.followEl', this.followEl);
+    this.renderer.appendChild(document.body, this.followEl);
+    handlerNgElStyle(this.renderer, this.followEl, {
+      width: '300px',
+      height: '4px',
+      'font-size': '16px',
+      position: 'absolute',
+      top: '0',
+      left: '0',
+      'background-color': '#3090b9',
+      'border-radius': '8px',
+      opacity: '.8',
+      display: 'block',
+      'z-index': '9999',
+    });
+  }
+
+  init() {
+    // 事件总线
+    this.event
+      .set(this.tableEl, {
+        // 鼠标按下事件
+        [IEventsType.MouseDown]: this.mouseDown.bind(this),
+      })
+      // @ts-ignore
+      .set(document, {
+        [IEventsType.MouseMove]: this.mouseMove.bind(this),
+        [IEventsType.MouseUp]: this.mouseUp.bind(this),
+      });
+
+    for (const [el, evnets] of this.event) {
+      for (const [eventName, eventFun] of Object.entries(evnets)) {
+        // @ts-ignore
+        el.addEventListener(eventName, eventFun);
+      }
+    }
+
+    const sub = this.isMove$.subscribe((value) => {
+      if (value) {
+        this.renderer.setStyle(this.tableEl, 'cursor', 'alias');
+        this.renderer.setStyle(this.followEl, 'display', 'block');
+      }
+      if (!value) {
+        this.renderer.removeStyle(this.tableEl, 'cursor');
+        this.renderer.setStyle(this.followEl, 'display', 'none');
+      }
+    });
+
+    this.subscribetions.push(sub);
+  }
+
+  // 鼠标按下触发
+  mouseDown(e: MouseEvent) {
+    e.preventDefault();
+    this.entityEl = getDraggableEl(e.target as HTMLElement);
+    if (this.entityEl) {
+      this.entityLevel = Number(this.entityEl.getAttribute('aria-level'));
+    }
+
+    console.log('this.entityEl', this.entityEl);
+  }
+
+  // 鼠标按下移动
+  mouseMove(e: MouseEvent) {
+    e.preventDefault();
+    // 如果不是触发tr拖动
+    if (!this.entityEl) return;
+
+    const target = e.target as HTMLElement;
+
+    // 划过的元素
+    this.overEl = getDraggableEl(target);
+    if (!this.overEl) return;
+    if (this.overEl === this.entityEl) return;
+
+    const rect = this.overEl.getBoundingClientRect();
+    console.log('rect', rect);
+    const level = this.overEl.getAttribute('aria-level');
+    let levelNum = Number(level);
+    let levelMargin = levelNum * 24 + 56;
+
+    const { left, bottom } = rect;
+    const moveX = e.clientX - left;
+
+    this.entityFolderEl = getFolderEl(this.overEl);
+    console.log('this.entityFolderEl', this.entityFolderEl);
+    while (levelNum) {
+      if (moveX < levelMargin) {
+        levelMargin -= 24;
+        levelNum -= 1;
+      } else {
+        break;
+      }
+    }
+
+    // 触发拖拽的鼠标样式
+    !this.isMove$.value && this.isMove$.next(true);
+    console.log('levelMargin', levelMargin);
+
+    handlerNgElStyle(this.renderer, this.followEl, {
+      marginLeft: levelMargin + 'px',
+      transform: `translateX(${left}px) translateY(${bottom}px)`,
+    });
+
+    // this.entityFolderEl = getFolderEl(this.entityEl)
+  }
+
+  // 鼠标按下抬起触发
+  mouseUp(e: MouseEvent) {
+    // 触发拖拽的鼠标样式
+    this.isMove$.next(false);
+    this.entityEl = null;
+    this.entityFolderEl = null;
+    this.overEl = null;
+  }
+}
 
 interface FlatIMenuNode extends IMenuNode {
   level: number;
@@ -55,9 +252,12 @@ interface FlatIMenuNode extends IMenuNode {
     NgScrollbarModule,
     MatSelectModule,
     MatFormFieldModule,
+    AsyncPipe,
   ],
 })
-export class MenuTreeComponent implements OnInit {
+export class MenuTreeComponent implements OnInit, AfterViewInit {
+  @ViewChild('MatTable', { read: ElementRef }) matTableElement!: ElementRef<HTMLTableElement>;
+
   IMenuType = IMenuType;
   appId: string = getParamFromRoute('appId', this.route)!;
 
@@ -102,13 +302,19 @@ export class MenuTreeComponent implements OnInit {
     return result;
   });
 
+  customDragTable: CustomDragTable;
+
   constructor(
     private route: ActivatedRoute,
     private menuHttpService: MenuHttpService,
     private fileTreeService: FileTreeService,
     private menuManagementService: MenuManagementService,
+    public renderer: Renderer2,
   ) {
     this.initMenuFilter();
+    setTimeout(() => {
+      console.log('flattenedNodes', this.flattenedNodes());
+    }, 2000);
   }
 
   // 根据nodeId查找节点并更新节点值
@@ -349,5 +555,10 @@ export class MenuTreeComponent implements OnInit {
   ngOnInit(): void {
     this.loadMenuData();
     this.loadDashboardData();
+  }
+
+  ngAfterViewInit(): void {
+    const tableElement = this.matTableElement.nativeElement;
+    this.customDragTable = new CustomDragTable(tableElement, this);
   }
 }

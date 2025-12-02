@@ -21,14 +21,15 @@ import { Subscription } from 'rxjs';
       <mat-sidenav
         #snav
         position="end"
-        [style.width.px]="1000"
+        [style.width.%]="100"
         [mode]="isMobile() ? 'over' : 'side'"
         [fixedInViewport]="isMobile()"
-      >
-        <div class="wh-full bg-[var(--base-bg-color)] p-20px">
+        [opened]="true"
+      > 
+        <div class="wh-full bg-[var(--base-bg-color)] p-20px box-sizing-border">
           <button mat-icon-button (click)="snav.toggle()"><mat-icon> close </mat-icon></button>
           @if (isMenuModuleLoaded) {
-            <hs-menu-tree></hs-menu-tree>
+            <hs-menu-tree class="h-[calc(100%-40px)]!"></hs-menu-tree>
           }
         </div>
       </mat-sidenav>
