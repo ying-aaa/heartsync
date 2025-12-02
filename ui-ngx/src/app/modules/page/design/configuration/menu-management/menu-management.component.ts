@@ -21,11 +21,11 @@ import { Subscription } from 'rxjs';
       <mat-sidenav
         #snav
         position="end"
-        [style.width.%]="100"
+        [style.width.px]="1200"
         [mode]="isMobile() ? 'over' : 'side'"
         [fixedInViewport]="isMobile()"
         [opened]="true"
-      > 
+      >
         <div class="wh-full bg-[var(--base-bg-color)] p-20px box-sizing-border">
           <button mat-icon-button (click)="snav.toggle()"><mat-icon> close </mat-icon></button>
           @if (isMenuModuleLoaded) {

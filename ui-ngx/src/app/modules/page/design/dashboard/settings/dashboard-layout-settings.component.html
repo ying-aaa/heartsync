@@ -7,8 +7,8 @@
     class="hs-density--5 flex flex-col gap-12px mb-12px!"
   >
     <!-- gridType -->
+    <mat-label>网格类型</mat-label>
     <mat-form-field appearance="outline">
-      <mat-label>网格类型</mat-label>
       <mat-select formControlName="gridType">
         @for (t of gridTypes; track t) {
           <mat-option [value]="t">{{ t }}</mat-option>
@@ -17,14 +17,14 @@
     </mat-form-field>
 
     <!-- margin -->
+    <mat-label>间距(px)</mat-label>
     <mat-form-field appearance="outline">
-      <mat-label>间距(px)</mat-label>
       <input matInput type="number" formControlName="margin" />
     </mat-form-field>
 
     <!-- displayGrid -->
+    <mat-label>网格线显示</mat-label>
     <mat-form-field appearance="outline">
-      <mat-label>网格线显示</mat-label>
       <mat-select formControlName="displayGrid">
         @for (d of displayGrid; track d) {
           <mat-option [value]="d">{{ d }}</mat-option>
@@ -32,22 +32,23 @@
       </mat-select>
     </mat-form-field>
 
-    <!-- enableOccupiedCellDrop -->
-    <mat-slide-toggle formControlName="enableOccupiedCellDrop"> 允许覆盖已有格子 </mat-slide-toggle>
+    <mat-label>允许覆盖已有格子</mat-label>
+    <mat-slide-toggle formControlName="enableOccupiedCellDrop" labelPosition="before">
+    </mat-slide-toggle>
 
+    <mat-label>最小行数</mat-label>
     <mat-form-field appearance="outline">
-      <mat-label>最小行数</mat-label>
       <input matInput type="number" formControlName="minRows" />
     </mat-form-field>
 
+    <mat-label>最小列数</mat-label>
     <mat-form-field appearance="outline">
-      <mat-label>最小列数</mat-label>
       <input matInput type="number" formControlName="minCols" />
     </mat-form-field>
 
+    <mat-label>背景颜色</mat-label>
     <mat-form-field appearance="outline">
       <!-- <div> -->
-      <mat-label>背景颜色</mat-label>
       <!-- @let backgroundColor = form.get('backgroundColor')?.value || 'transparent'; -->
       <input
         matInput
@@ -72,7 +73,7 @@
     </mat-form-field>
 
     <div class="my-8px">
-      <label class="mb-8px">背景图片：</label>
+      <mat-label class="block mb-12px">背景图片：</mat-label>
       <hs-file-upload
         [fold]="true"
         fileShowType="grid"
@@ -87,8 +88,8 @@
       ></hs-file-upload>
     </div>
 
+    <mat-label>背景模式大小</mat-label>
     <mat-form-field appearance="outline">
-      <mat-label>背景模式大小</mat-label>
       <mat-select formControlName="backgroundSize">
         @for (t of backgroundModeTypes; track t) {
           <mat-option [value]="t.value">{{ t.label }}</mat-option>

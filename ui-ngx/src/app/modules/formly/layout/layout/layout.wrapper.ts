@@ -19,8 +19,8 @@ import { MatDividerModule } from '@angular/material/divider';
     @let leftOrRright = left || right;
 
     <div
-      class="flex"
       [class]="{
+        flex: leftOrRright,
         'items-center': leftOrRright,
         'flex-col': top,
         'flex-col-reverse': bottom,
