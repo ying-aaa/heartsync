@@ -215,6 +215,8 @@
             [attr.aria-draggable]="true"
             [attr.aria-level]="row.level"
             [attr.aria-folder]="row.menuType === 'parent'"
+            [attr.aria-data-id]="row.id"
+            [id]="row.id"
             *matRowDef="let row; columns: displayedColumns"
             [cdkContextMenuTriggerFor]="row.menuType === 'parent' ? ContentMenu : null"
             [cdkContextMenuTriggerData]="{ context: row }"

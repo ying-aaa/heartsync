@@ -22,7 +22,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
-import { generateUUID, getParamFromRoute, handlerNgElStyle } from '@src/app/core/utils';
+import {
+  generateUUID,
+  getParamFromRoute,
+  handlerNgElStyle,
+  isUndefined,
+} from '@src/app/core/utils';
 import { MenuHttpService } from '@src/app/core/http/menu.service';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { MatMenuModule } from '@angular/material/menu';
@@ -35,7 +40,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MenuManagementService } from '../menu-management.sevice';
 import { IEventsType } from '@src/app/shared/models/public-api';
 import { AsyncPipe } from '@angular/common';
-import { get } from 'lodash';
 
 function getDraggableEl(el: HTMLElement): HTMLElement | null {
   let node = el;
@@ -65,7 +69,7 @@ function getFolderEl(el: HTMLElement, level = 1): HTMLElement | null {
   return null;
 }
 
-// 获取指定元素是父目录下的第几个子元素
+// 获取指定元素是顶层元素下的第几个子元素
 function getEleChildIndex(folderEl: HTMLElement, childEl: HTMLElement): number | null {
   const children = folderEl.children;
   const toIndex = Array.from(children)
@@ -86,6 +90,34 @@ function getFolderChildIndex(folderEl: HTMLElement, childEl: HTMLElement): numbe
   return null;
 }
 
+/**
+ * 判断划过的元素是不是拖拽元素的子孙元素
+ * @param overEl
+ * @param childEl
+ * @returns boolean
+ */
+function isChildEl(overEl: HTMLElement, dragEl: HTMLElement) {
+  const dragLevel = +dragEl.getAttribute('aria-level')!;
+  const overLevel = +overEl.getAttribute('aria-level')!;
+  // 在子元素往上查找父元素过程中，父元素层级是否出现过，如果出现过则代表不是 拖拽
+  const levelRecord = [overLevel];
+  let node = overEl;
+  while (node) {
+    const prevLevel = +node.getAttribute('aria-level')!;
+
+    // 如果拖拽的父级在
+    // if()
+
+    // 如果是拖拽元素，等级不一样，已有的不，第一次滑入该等级，则为子级元素
+    if (node === dragEl && overLevel > dragLevel && !levelRecord.includes(prevLevel)) return true;
+    if (prevLevel + 1 === levelRecord.at(-1)!) {
+      levelRecord.push(prevLevel);
+    }
+    node = node.previousElementSibling as HTMLElement;
+  }
+
+  return false;
+}
 class CustomDragTable {
   // 事件委托
   containerEl!: HTMLElement;
@@ -107,8 +139,8 @@ class CustomDragTable {
 
   // 最后落点位置
   lastDropInfo: {
-    entityEl?: HTMLElement | null;
-    folderEl: HTMLElement | null;
+    entityEl: HTMLElement | null;
+    folderEl?: HTMLElement | null;
     toIndex: number | null;
   } = {
     entityEl: null,
@@ -117,8 +149,8 @@ class CustomDragTable {
   };
   // 发布
   lastDropInfo$ = new Subject<{
-    entityEl?: HTMLElement | null;
-    folderEl: HTMLElement | null;
+    entityEl: HTMLElement | null;
+    folderEl?: HTMLElement | null;
     toIndex: number | null;
   }>();
 
@@ -220,9 +252,10 @@ class CustomDragTable {
     const overEl = getDraggableEl(target);
     if (!overEl) return;
 
+    // 不能划过自己的子孙元素
+    if (isChildEl(overEl, this.entityEl)) return;
+
     // 拖拽元素是目录的话不能在当前目录下滑动
-
-
     const rect = overEl.getBoundingClientRect();
     const overLevel = Number(overEl.getAttribute('aria-level'));
     const overFolder = overEl.getAttribute('aria-folder') === 'true';
@@ -258,7 +291,7 @@ class CustomDragTable {
           const toIndex = folderEl
             ? getFolderChildIndex(folderEl, overEl)
             : getEleChildIndex(this.containerEl, overEl);
-          this.lastDropInfo = { folderEl, entityEl: this.entityEl, toIndex };
+          this.lastDropInfo = { folderEl, entityEl: this.entityEl, toIndex: toIndex! + 1 };
           break;
         }
       }
@@ -278,7 +311,7 @@ class CustomDragTable {
           const toIndex = folderEl
             ? getFolderChildIndex(folderEl, overEl)
             : getEleChildIndex(this.containerEl, prevFolderEl);
-          this.lastDropInfo = { folderEl, entityEl: this.entityEl, toIndex };
+          this.lastDropInfo = { folderEl, entityEl: this.entityEl, toIndex: toIndex! + 1 };
         }
         // 最多到和下一级同级
         if (overLevelNum === overNextLevel) {
@@ -307,10 +340,30 @@ class CustomDragTable {
   // 鼠标按下抬起触发
   mouseUp(e: MouseEvent) {
     e.preventDefault();
-    this.lastDropInfo$.next(this.lastDropInfo);
     // 触发拖拽的鼠标样式
     this.isMove$.next(false);
     this.entityEl = null;
+
+    // 如果落点和抬点在一个位置
+    const { folderEl, entityEl, toIndex } = this.lastDropInfo;
+    const folderLevel = folderEl ? Number(folderEl.getAttribute('aria-level')) : null;
+    const entityLevel = entityEl ? Number(entityEl.getAttribute('aria-level')) : null;
+    if (isUndefined(toIndex)) return;
+
+    // 在目录自身移动
+    if (folderEl === entityEl) return;
+    // 最顶层同级移动
+    if (!folderEl) {
+      const index = getEleChildIndex(this.containerEl, entityEl!);
+      if (toIndex === index) return;
+    }
+    // 如果父级目录下同级移动
+    if (folderEl && folderEl === getFolderEl(entityEl!)) {
+      const index = getFolderChildIndex(folderEl, entityEl!)!;
+      if (toIndex === index) return;
+      if (toIndex! - 1 === index) return;
+    }
+    this.lastDropInfo$.next(this.lastDropInfo);
   }
 
   destroy() {
@@ -662,7 +715,22 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     const tbody = tableElement.querySelector('tbody')!;
     this.customDragTable = new CustomDragTable(tbody, this);
     const lastDropInfoSub = this.customDragTable.lastDropInfo$.subscribe((res) => {
-      console.log('%c Line:612 🍺 res', 'color:#33a5ff', res);
+      const { folderEl, entityEl, toIndex } = res;
+      const folderData = folderEl ? this.findNode(folderEl.id) : null;
+      const entityData = this.findNode(entityEl!.id)!;
+      const entityFolderData = entityData.parentMenuId
+        ? this.findNode(entityData.parentMenuId)
+        : null;
+      this.menuData.update((currentData) => {
+        folderData?.children?.splice(toIndex!, 0, entityData);
+        entityFolderData?.children?.splice(
+          entityFolderData.children.findIndex((item: any) => item.id === entityData.id)!,
+          1,
+        );
+        entityData!.parentMenuId = folderData?.id as string | null;
+        console.log('%c Line:736 🍒', 'color:#f5ce50', [...currentData]);
+        return [...currentData];
+      });
     });
     this.customDragTable.subscribetions.push(lastDropInfoSub);
   }
