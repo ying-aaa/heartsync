@@ -219,7 +219,7 @@
             [cdkContextMenuTriggerFor]="row.menuType === 'parent' ? ContentMenu : null"
             [cdkContextMenuTriggerData]="{ context: row }"
             [class.bg-color-05]="clickedRows?.id === row.id"
-            [style.backgroundColor]="(customDragTable.isMove$ | async) ? 'transparent' : ''"
+            [style.backgroundColor]="(customDragTable?.isMove$ | async) ? 'transparent' : ''"
             (click)="rowClicked(row)"
           ></tr>
 

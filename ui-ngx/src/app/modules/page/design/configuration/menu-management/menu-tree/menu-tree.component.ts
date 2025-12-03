@@ -3,7 +3,7 @@ import {
   Component,
   computed,
   ElementRef,
-  inject,
+  OnDestroy,
   OnInit,
   Renderer2,
   signal,
@@ -35,6 +35,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MenuManagementService } from '../menu-management.sevice';
 import { IEventsType } from '@src/app/shared/models/public-api';
 import { AsyncPipe } from '@angular/common';
+import { get } from 'lodash';
 
 function getDraggableEl(el: HTMLElement): HTMLElement | null {
   let node = el;
@@ -45,24 +46,49 @@ function getDraggableEl(el: HTMLElement): HTMLElement | null {
   return null;
 }
 
-function getFolderEl(el: HTMLElement): { folderEl: HTMLElement; toIndex: number } | null {
-  let toIndex = 0;
+/**
+ *
+ * 获取当前元素的父目录元素
+ * @param el 当前元素
+ * @param level 层级，默认1级 -> 父目录, 2级 -> 爷爷目录
+ * @returns 父目录元素
+ */
+function getFolderEl(el: HTMLElement, level = 1): HTMLElement | null {
   const elLevel = +el.getAttribute('aria-level')!;
   if (!elLevel) return null;
   let node = el;
   while (node) {
     node = node.previousElementSibling as HTMLElement;
     // 获取当前元素的父元素，因为数据是平铺的，只需要找当前level的小一级
-    if (+node?.getAttribute('aria-level')! === elLevel - 1) return { folderEl: node, toIndex };
+    if (+node?.getAttribute('aria-level')! === elLevel - level) return node;
+  }
+  return null;
+}
 
-    toIndex += 1;
+// 获取指定元素是父目录下的第几个子元素
+function getEleChildIndex(folderEl: HTMLElement, childEl: HTMLElement): number | null {
+  const children = folderEl.children;
+  const toIndex = Array.from(children)
+    .filter((child) => child.getAttribute('aria-level') === '0')
+    .findIndex((child) => child === childEl);
+  return toIndex !== -1 ? toIndex : null;
+}
+
+// 获取指定元素是父目录下的第几个子元素
+function getFolderChildIndex(folderEl: HTMLElement, childEl: HTMLElement): number | null {
+  let node = childEl;
+  let toIndex = 0;
+  while (node) {
+    node = node.previousElementSibling as HTMLElement;
+    if (node === folderEl) return toIndex;
+    if (+node.getAttribute('aria-level')! === +folderEl.getAttribute('aria-level')! + 1) toIndex++;
   }
   return null;
 }
 
 class CustomDragTable {
   // 事件委托
-  tableEl!: HTMLElement;
+  containerEl!: HTMLElement;
 
   // 跟随元素
   followEl!: HTMLElement;
@@ -76,13 +102,7 @@ class CustomDragTable {
   // 实体元素层级
   entityLevel: number;
 
-  // 实体所在目录
-  entityFolderEl: HTMLElement | null = null;
-
-  // 划过的实体元素
-  overEl: HTMLElement | null = null;
-
-  // 是否移动
+  // 是否移动中
   isMove$ = new BehaviorSubject(false);
 
   // 最后落点位置
@@ -115,7 +135,7 @@ class CustomDragTable {
   private renderer: Renderer2;
 
   constructor(el: HTMLElement, tableThis: MenuTreeComponent) {
-    this.tableEl = el;
+    this.containerEl = el;
     this.tableThis = tableThis;
     this.renderer = tableThis.renderer;
     this.generataFollow();
@@ -143,7 +163,7 @@ class CustomDragTable {
   init() {
     // 事件总线
     this.event
-      .set(this.tableEl, {
+      .set(this.containerEl, {
         // 鼠标按下事件
         [IEventsType.MouseDown]: this.mouseDown.bind(this),
       })
@@ -162,11 +182,11 @@ class CustomDragTable {
 
     const sub = this.isMove$.subscribe((value) => {
       if (value) {
-        this.renderer.setStyle(this.tableEl, 'cursor', 'alias');
+        this.renderer.setStyle(this.containerEl, 'cursor', 'alias');
         this.renderer.setStyle(this.followEl, 'display', 'block');
       }
       if (!value) {
-        this.renderer.removeStyle(this.tableEl, 'cursor');
+        this.renderer.removeStyle(this.containerEl, 'cursor');
         this.renderer.setStyle(this.followEl, 'display', 'none');
       }
     });
@@ -197,17 +217,19 @@ class CustomDragTable {
     const target = e.target as HTMLElement;
 
     // 划过的元素
-    this.overEl = getDraggableEl(target);
-    if (!this.overEl) return;
-    // if (this.overEl === this.entityEl) return;
+    const overEl = getDraggableEl(target);
+    if (!overEl) return;
 
-    const rect = this.overEl.getBoundingClientRect();
-    const overLevel = Number(this.overEl.getAttribute('aria-level'));
-    const overFolder = this.overEl.getAttribute('aria-folder') === 'true';
+    // 拖拽元素是目录的话不能在当前目录下滑动
+
+
+    const rect = overEl.getBoundingClientRect();
+    const overLevel = Number(overEl.getAttribute('aria-level'));
+    const overFolder = overEl.getAttribute('aria-folder') === 'true';
     // 目录可以多延伸一级
     let overLevelNum = overFolder ? overLevel + 1 : overLevel;
 
-    const overNextEl = this.overEl.nextElementSibling;
+    const overNextEl = overEl.nextElementSibling;
     const overNextLevel = Number(overNextEl?.getAttribute('aria-level'));
 
     let levelMargin = overLevelNum * 32 + 44;
@@ -215,35 +237,55 @@ class CustomDragTable {
     const { left, bottom } = rect;
     const moveX = e.clientX - left;
 
-    while (overLevelNum) {
-      // 如果移动到了目录，而且目录下有子元素，则不能超过当前目录
+    while (overLevelNum >= 0) {
+      // 如果下一个元素是当前的子级，则不能向前移动
       if (overFolder && overLevel === overNextLevel - 1) {
         // 等于当前父目录向后一级就终止
         if (overLevelNum === overLevel + 1) {
           this.lastDropInfo = {
-            folderEl: this.overEl,
+            folderEl: overEl,
             toIndex: 0,
             entityEl: this.entityEl,
           };
           break;
         }
       }
-      // 如果下一个元素和当前是平级，则不能向前移动
-      if (overLevel === overNextLevel) {
+      // 如果下一个元素和当前是平级或者没有下一个元素，则不能向前移动
+      if (overLevel === overNextLevel || Number.isNaN(overNextLevel)) {
         // 同级时终止
         if (overLevelNum === overLevel) {
-          const res = getFolderEl(this.overEl) || ({} as any);
-
-          // const toIndex = Array.from(folderEl).indexOf(this.overEl);
-          this.lastDropInfo = { ...res, entityEl: this.entityEl };
+          const folderEl = getFolderEl(overEl);
+          const toIndex = folderEl
+            ? getFolderChildIndex(folderEl, overEl)
+            : getEleChildIndex(this.containerEl, overEl);
+          this.lastDropInfo = { folderEl, entityEl: this.entityEl, toIndex };
           break;
         }
       }
-      // 如果下一个元素是不是子集也不是同级，那么便是其他组的
+      // 如果下一个元素不是子集也不是同级，那么便是其他组的
       if (overLevel > overNextLevel) {
+        // 移入目录下
+        if (overLevelNum > overLevel) {
+          this.lastDropInfo = {
+            folderEl: overEl,
+            toIndex: 0,
+            entityEl: this.entityEl,
+          };
+        } else {
+          // 推算是到了哪一层overLevel - overLevelNum + 1
+          const folderEl = getFolderEl(overEl, overLevel - overLevelNum + 1);
+          const prevFolderEl = getFolderEl(overEl, overLevel - overLevelNum)!;
+          const toIndex = folderEl
+            ? getFolderChildIndex(folderEl, overEl)
+            : getEleChildIndex(this.containerEl, prevFolderEl);
+          this.lastDropInfo = { folderEl, entityEl: this.entityEl, toIndex };
+        }
         // 最多到和下一级同级
-        if (overLevelNum === overNextLevel) break;
+        if (overLevelNum === overNextLevel) {
+          break;
+        }
       }
+      // 如果没有下一个元素，
 
       if (moveX < levelMargin) {
         levelMargin -= 32;
@@ -269,8 +311,16 @@ class CustomDragTable {
     // 触发拖拽的鼠标样式
     this.isMove$.next(false);
     this.entityEl = null;
-    this.entityFolderEl = null;
-    this.overEl = null;
+  }
+
+  destroy() {
+    this.subscribetions.forEach((sub) => sub.unsubscribe());
+    for (const [el, evnets] of this.event) {
+      for (const [eventName, eventFun] of Object.entries(evnets)) {
+        // @ts-ignore
+        el.removeEventListener(eventName, eventFun);
+      }
+    }
   }
 }
 
@@ -308,7 +358,7 @@ interface FlatIMenuNode extends IMenuNode {
     AsyncPipe,
   ],
 })
-export class MenuTreeComponent implements OnInit, AfterViewInit {
+export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('MatTable', { read: ElementRef }) matTableElement!: ElementRef<HTMLTableElement>;
 
   IMenuType = IMenuType;
@@ -355,7 +405,7 @@ export class MenuTreeComponent implements OnInit, AfterViewInit {
     return result;
   });
 
-  customDragTable: CustomDragTable;
+  customDragTable: CustomDragTable | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -609,9 +659,15 @@ export class MenuTreeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     const tableElement = this.matTableElement.nativeElement;
-    this.customDragTable = new CustomDragTable(tableElement, this);
-    this.customDragTable.lastDropInfo$.subscribe((res) => {
+    const tbody = tableElement.querySelector('tbody')!;
+    this.customDragTable = new CustomDragTable(tbody, this);
+    const lastDropInfoSub = this.customDragTable.lastDropInfo$.subscribe((res) => {
       console.log('%c Line:612 🍺 res', 'color:#33a5ff', res);
     });
+    this.customDragTable.subscribetions.push(lastDropInfoSub);
+  }
+
+  ngOnDestroy(): void {
+    this.customDragTable?.destroy();
   }
 }

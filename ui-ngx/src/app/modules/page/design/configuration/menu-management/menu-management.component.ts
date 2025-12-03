@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
       <mat-sidenav
         #snav
         position="end"
-        [style.width.px]="1200"
+        [style.width.%]="100"
         [mode]="isMobile() ? 'over' : 'side'"
         [fixedInViewport]="isMobile()"
         [opened]="true"
