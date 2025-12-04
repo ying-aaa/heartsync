@@ -40,7 +40,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MenuManagementService } from '../menu-management.sevice';
 import { IEventsType } from '@src/app/shared/models/public-api';
 import { AsyncPipe } from '@angular/common';
-import { transferArrayItem } from '@angular/cdk/drag-drop';
+import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 interface IDropInfo {
   entityEl: HTMLElement;
@@ -113,10 +113,6 @@ function isChildEl(overEl: HTMLElement, dragEl: HTMLElement) {
   let node = overEl;
   while (node) {
     const prevLevel = +node.getAttribute('aria-level')!;
-
-    // 如果拖拽的父级在
-    // if()
-
     // 如果是拖拽元素，等级不一样，已有的不，第一次滑入该等级，则为子级元素
     if (node === dragEl && overLevel > dragLevel && !levelRecord.includes(prevLevel)) return true;
     if (prevLevel + 1 === levelRecord.at(-1)!) {
@@ -270,7 +266,7 @@ class CustomDragTable {
     let overLevelNum = overFolder ? overLevel + 1 : overLevel;
 
     const overNextEl = overEl.nextElementSibling;
-    const overNextLevel = Number(overNextEl?.getAttribute('aria-level'));
+    const overNextLevel = Number(overNextEl?.getAttribute('aria-level')) || 0;
 
     let levelMargin = overLevelNum * 32 + 44;
 
@@ -291,7 +287,15 @@ class CustomDragTable {
         }
       }
       // 如果下一个元素和当前是平级或者没有下一个元素，则不能向前移动
-      if (overLevel === overNextLevel || Number.isNaN(overNextLevel)) {
+      if (overLevel === overNextLevel) {
+        // 移入目录下
+        if (overFolder) {
+          this.lastDropInfo = {
+            ...this.lastDropInfo,
+            toEl: overEl,
+            toIndex: 0,
+          };
+        }
         // 同级时终止
         if (overLevelNum === overLevel) {
           const folderEl = getFolderEl(overEl);
@@ -307,7 +311,7 @@ class CustomDragTable {
         }
       }
       // 如果下一个元素不是子集也不是同级，那么便是其他组的
-      if (overLevel > overNextLevel) {
+      if (overLevel > overNextLevel || Number.isNaN(overNextLevel)) {
         // 移入目录下
         if (overLevelNum > overLevel) {
           this.lastDropInfo = {
@@ -318,14 +322,15 @@ class CustomDragTable {
         } else {
           // 推算是到了哪一层overLevel - overLevelNum + 1
           const folderEl = getFolderEl(overEl, overLevel - overLevelNum + 1);
-          const prevFolderEl = getFolderEl(overEl, overLevel - overLevelNum)!;
+          const prevFolderEl =
+            overLevel === overLevelNum ? overEl : getFolderEl(overEl, overLevel - overLevelNum)!;
           const toIndex = folderEl
-            ? getFolderChildIndex(folderEl, overEl)
-            : getEleChildIndex(this.containerEl, prevFolderEl);
+            ? getFolderChildIndex(folderEl, prevFolderEl)! + 1
+            : getEleChildIndex(this.containerEl, prevFolderEl)! + 1;
           this.lastDropInfo = {
             ...this.lastDropInfo,
             toEl: folderEl,
-            toIndex: toIndex! + 1,
+            toIndex: toIndex!,
           };
         }
         // 最多到和下一级同级
@@ -360,7 +365,7 @@ class CustomDragTable {
     this.entityEl = null;
 
     // 如果落点和抬点在一个位置
-    const { toEl, entityEl, toIndex } = this.lastDropInfo;
+    const { entityEl, entityFolderEl, entityIndex, toEl, toIndex } = this.lastDropInfo;
     if (isUndefined(toIndex)) return;
 
     // 在目录自身移动
@@ -371,11 +376,17 @@ class CustomDragTable {
       if (toIndex === index) return;
     }
     // 如果父级目录下同级移动
-    if (toEl && toEl === getFolderEl(entityEl)) {
-      const index = getFolderChildIndex(toEl, entityEl)!;
-      if (toIndex === index) return;
-      if (toIndex - 1 === index) return;
+    if (toEl === entityFolderEl) {
+      if (toIndex === entityIndex) return;
+      if (toIndex - 1 === entityIndex) return;
     }
+
+    if (entityFolderEl === toEl) {
+      if (entityIndex < toIndex) {
+        this.lastDropInfo.toIndex--;
+      }
+    }
+
     this.lastDropInfo$.next(this.lastDropInfo);
 
     this.lastDropInfo = {} as any;
@@ -561,6 +572,11 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addChildNode(type: IMenuType, node: any) {
+    this.loadingStatus = true;
+    const nodeOriginData = this.findNode(node.id)!;
+    const nodeChildrenLength = nodeOriginData.children?.length || 0;
+
+    // 计算sort
     const newNode: IMenuNode = {
       id: generateUUID(),
       appId: this.appId!,
@@ -569,31 +585,40 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       menuType: type,
       parentMenuId: node.id,
       isFullscreen: false,
-      sort: 1,
+      sort: nodeChildrenLength + 1,
       dashboardId: null,
     };
+    this.menuHttpService.createMenu(newNode).subscribe((res) => {
+      if (type === IMenuType.Parent) {
+        newNode.children = [];
+      }
+      if (nodeOriginData.children) {
+        nodeOriginData.children.push(newNode);
+      } else {
+        nodeOriginData.children = [newNode];
+      }
 
-    const nodeOriginData = this.findNode(node.id)!;
+      this.menuData.update((currentData) => [...currentData]);
 
-    if (nodeOriginData.children) {
-      nodeOriginData.children.push(newNode);
-    } else {
-      nodeOriginData.children = [newNode];
-    }
+      // 触发展开状态更新
+      this.expandedNodes.update((expanded) => {
+        const newSet = new Set(expanded);
+        newSet.add(node.id);
+        return newSet;
+      });
 
-    this.menuData.update((currentData) => [...currentData]);
-
-    // 触发展开状态更新
-    this.expandedNodes.update((expanded) => {
-      const newSet = new Set(expanded);
-      newSet.add(node.id);
-      return newSet;
+      this.loadingStatus = false;
     });
-
-    this.menuHttpService.createMenu(newNode).subscribe((res) => {});
   }
 
   addSameNode(type: IMenuType, node: any) {
+    this.loadingStatus = true;
+
+    const parentNode = this.findNode(node?.parentMenuId);
+    const nodeChildrenLength = parentNode
+      ? parentNode.children?.length || 0
+      : this.menuData().length;
+
     const newNode: IMenuNode = {
       id: generateUUID(),
       appId: this.appId!,
@@ -602,51 +627,57 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       menuType: type,
       parentMenuId: node && node.parentMenuId,
       isFullscreen: false,
-      sort: 1,
+      sort: nodeChildrenLength + 1,
       dashboardId: null,
     };
 
-    const parentNode = this.findNode(node?.parentMenuId);
-
-    if (parentNode) {
-      if (parentNode.children) {
-        parentNode.children.push(newNode);
-      } else {
-        parentNode.children = [newNode];
+    this.menuHttpService.createMenu(newNode).subscribe((res) => {
+      if (type === IMenuType.Parent) {
+        newNode.children = [];
       }
-      this.menuData.update((currentData) => [...currentData]);
-    } else {
-      this.menuData.update((currentData) => [...currentData, newNode]);
-    }
 
-    this.menuHttpService.createMenu(newNode).subscribe((res) => {});
+      if (parentNode) {
+        if (parentNode.children) {
+          parentNode.children.push(newNode);
+        } else {
+          parentNode.children = [newNode];
+        }
+        this.menuData.update((currentData) => [...currentData]);
+      } else {
+        this.menuData.update((currentData) => [...currentData, newNode]);
+      }
+
+      this.loadingStatus = false;
+    });
   }
 
   deleteMenu(node: IMenuNode) {
+    this.loadingStatus = true;
     if (node.id === this.clickedRows?.id) this.clickedRows = null;
 
-    const removeNodeRecursively = (nodes: IMenuNode[], id: string): IMenuNode[] => {
-      return nodes
-        .map((n) => {
-          if (n.id === id) {
-            return null; // 标记为删除
-          }
-          if (n.children) {
-            n.children = removeNodeRecursively(n.children, id);
-          }
-          return n;
-        })
-        .filter((n) => n !== null);
-    };
+    this.menuHttpService.deleteMenu(node.id).subscribe((res) => {
+      const removeNodeRecursively = (nodes: IMenuNode[], id: string): IMenuNode[] => {
+        return nodes
+          .map((n) => {
+            if (n.id === id) {
+              return null; // 标记为删除
+            }
+            if (n.children) {
+              n.children = removeNodeRecursively(n.children, id);
+            }
+            return n;
+          })
+          .filter((n) => n !== null);
+      };
 
-    this.menuData.update((currentData) => removeNodeRecursively(currentData, node.id));
-    this.expandedNodes.update((expanded) => {
-      const newSet = new Set(expanded);
-      newSet.delete(node.id);
-      return newSet;
+      this.menuData.update((currentData) => removeNodeRecursively(currentData, node.id));
+      this.expandedNodes.update((expanded) => {
+        const newSet = new Set(expanded);
+        newSet.delete(node.id);
+        return newSet;
+      });
+      this.loadingStatus = false;
     });
-
-    this.menuHttpService.deleteMenu(node.id).subscribe((res) => {});
   }
 
   // 切换节点展开状态
@@ -732,12 +763,19 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     const lastDropInfoSub = this.customDragTable.lastDropInfo$.subscribe((dropInfo: IDropInfo) => {
       const { entityEl, entityFolderEl, entityIndex: formIndex, toEl, toIndex } = dropInfo;
       const toData = toEl ? this.findNode(toEl.id)!.children : this.menuData();
+      console.log('%c Line:752 🥑 toData', 'color:#33a5ff', toData);
+      const entityData = this.findNode(entityEl.id)!;
+      entityData.parentMenuId = toEl ? toEl.id : null;
       const formData = entityFolderEl
         ? this.findNode(entityFolderEl.id)!.children
         : this.menuData();
-      const entityData = this.findNode(entityEl.id)!;
+      console.log('%c Line:758 🥃', 'color:#6ec1c2', formData);
       this.menuData.update((currentData) => {
-        transferArrayItem(formData!, toData!, formIndex, toIndex);
+        if (entityFolderEl === toEl) {
+          moveItemInArray(toData!, formIndex, toIndex);
+        } else {
+          transferArrayItem(formData!, toData!, formIndex, toIndex);
+        }
         return [...currentData];
       });
     });
