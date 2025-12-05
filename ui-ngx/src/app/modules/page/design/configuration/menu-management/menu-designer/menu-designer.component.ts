@@ -2,7 +2,7 @@ import { Component, computed, OnInit, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { getParamFromRoute } from '@src/app/core/utils';
+import { getParamFromRoute, isMobile } from '@src/app/core/utils';
 import { ActivatedRoute } from '@angular/router';
 import { MatFormField, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -14,6 +14,10 @@ import { MenuSingleConfigComponent } from './menu-single-config/menu-single-conf
 import { MenuHttpService } from '@src/app/core/http/menu.service';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { MenuManagementService } from '../menu-management.sevice';
+import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatDialog } from '@angular/material/dialog';
+import { HsIconSelectComponent } from '@src/app/modules/components/icon-select/icon-select.component';
 
 @Component({
   selector: 'hs-menu-designer',
@@ -31,11 +35,13 @@ import { MenuManagementService } from '../menu-management.sevice';
     CdkDragPlaceholder,
     MenuGlobalConfigComponent,
     MenuSingleConfigComponent,
+    NgScrollbarModule,
+    HsLoadingModule,
   ],
 })
 export class MenuDesignerComponent implements OnInit {
   appId: string = getParamFromRoute('appId', this.route)!;
-
+  loadingStatus = false;
   presetComps = signal([
     {
       type: 'title',
@@ -116,6 +122,7 @@ export class MenuDesignerComponent implements OnInit {
     private menuDeSignerService: MenuDesignerService,
     private menuManagementService: MenuManagementService,
     private menuHttpService: MenuHttpService,
+    private dialog: MatDialog,
   ) {}
 
   toggleDragging(isDragging: boolean): void {
@@ -164,7 +171,25 @@ export class MenuDesignerComponent implements OnInit {
     );
   }
 
+  openIconSelectDialog() {
+    const width = isMobile() ? '100vw' : '800px';
+    const height = isMobile() ? '100vh' : '600px';
+    const dialogRef = this.dialog.open(HsIconSelectComponent, {
+      data: {},
+      width,
+      height,
+      minWidth: width,
+      minHeight: height,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
   ngOnInit() {
     this.loadMenuData();
+
+    setTimeout(() => {
+      this.openIconSelectDialog();
+    }, 500);
   }
 }

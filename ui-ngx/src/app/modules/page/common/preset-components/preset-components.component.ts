@@ -18,6 +18,7 @@ import {
   IFieldType,
 } from '@src/app/shared/models/widget.model';
 import { FormEditorService } from '../../../../core/services/form-editor.service';
+import { MatDialogModule } from '@angular/material/dialog';
 @Component({
   selector: 'hs-preset-components',
   templateUrl: './preset-components.component.html',
@@ -29,6 +30,7 @@ import { FormEditorService } from '../../../../core/services/form-editor.service
     CdkDropList,
     CdkDrag,
     CdkDragPlaceholder,
+    MatDialogModule,
   ],
 })
 export class PresetComponentsComponent implements OnInit {
@@ -62,16 +64,13 @@ export class PresetComponentsComponent implements OnInit {
   }
 
   getConnectedTo(group: any) {
-    const connectedTo = this.formEditorService.getConnectedTo(
-      IFieldType.COLUMN,
-    );
+    const connectedTo = this.formEditorService.getConnectedTo(IFieldType.COLUMN);
     return group._form
       ? connectedTo
       : connectedTo.filter((id: string) => !id.startsWith(IFieldType.SUBTABLE));
   }
 
-  matRippleColor = () =>
-    this.hsThemeService.getCurrentThemeConfig(['#00000010', '#ffffff10']);
+  matRippleColor = () => this.hsThemeService.getCurrentThemeConfig(['#00000010', '#ffffff10']);
 
   getDragFieldData = (field: IEditorFormlyField) => ({
     action: ICdkDrapActionType.COPY,
@@ -106,17 +105,13 @@ export class PresetComponentsComponent implements OnInit {
   }
 
   onDragEnd(event: CdkDragEnd<any>) {
-    const configIndex = this.presetResource().findIndex(
-      (item) => item.key === this.activeValue(),
-    );
+    const configIndex = this.presetResource().findIndex((item) => item.key === this.activeValue());
 
     this.presetResource.update((value: any) => {
       const newValue = [...value];
 
       newValue[configIndex].fieldGroup.forEach((group: any) => {
-        group.fieldGroup = group.fieldGroup.filter(
-          (item: any) => !item.isPlaceholder,
-        );
+        group.fieldGroup = group.fieldGroup.filter((item: any) => !item.isPlaceholder);
       });
 
       return newValue;
