@@ -28,7 +28,11 @@ export class DashboardRuntimeComponent implements OnInit {
   constructor(private dashboardService: DashboardService) {
     effect(() => {
       const dashboardId = this.dashboardId();
-      dashboardId && this.loadGridsterOption(dashboardId);
+      if (dashboardId) {
+        this.loadGridsterOption(dashboardId);
+      } else {
+        this.dashboardConfig.set({} as IDashboardContext);
+      }
     });
   }
 

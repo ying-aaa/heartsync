@@ -19,12 +19,12 @@ import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.comp
         matrixParams: 'ignored',
         fragment: 'ignored',
       }"
-      routerLink="{{ 'dashboard/' + section.dashboardId }}"
+      routerLink="{{ 'dashboard/' + section.id }}"
       [style.paddingLeft.px]="level * 30 || 8"
       (click)="onMenuClick()"
     >
       @if (section.icon !== null) {
-        <hs-icon [iconConfig]="section.icon"></hs-icon>
+        <hs-icon [iconConfig]="section.icon" [isDesign]="false"></hs-icon>
       }
       <span>{{ section.name }}</span>
     </a>

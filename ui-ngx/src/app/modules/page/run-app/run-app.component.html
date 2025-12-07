@@ -1,12 +1,13 @@
-<content class="wh-full flex">
-  <aside class="w-252px">
-    <hs-side-menu></hs-side-menu>
-  </aside>
-  <mat-divider
-    [vertical]="true"
-    class="h-full"
-  ></mat-divider>
-  <main class="w-0 flex-1">
-    <router-outlet></router-outlet>
+<content class="wh-full">
+  <hs-app-header></hs-app-header>
+  <mat-divider></mat-divider>
+  <main class="flex h-[calc(100vh-54px)]">
+    <aside class="w-252px">
+      <hs-side-menu></hs-side-menu>
+    </aside>
+    <mat-divider [vertical]="true" class="h-full"></mat-divider>
+    <main class="w-0 flex-1">
+      <router-outlet></router-outlet>
+    </main>
   </main>
 </content>

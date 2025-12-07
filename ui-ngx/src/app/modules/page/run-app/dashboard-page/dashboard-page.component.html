@@ -2,5 +2,10 @@
   <!-- <verse-theme></verse-theme>
 
   仪表板ID -> {{ dashboardId }} -->
-  <hs-dashboard-runtime [dashboardId]="dashboardId" class="wh-full"></hs-dashboard-runtime>
+  @if (dashboardId) {
+    <hs-dashboard-runtime [dashboardId]="dashboardId" class="wh-full"></hs-dashboard-runtime>
+  } @else {
+    <!-- 仪表板不存在 -->
+    <div class="wh-full flex-center text-32px color-#999 ng-star-inserted">菜单未开发</div>
+  }
 </content>

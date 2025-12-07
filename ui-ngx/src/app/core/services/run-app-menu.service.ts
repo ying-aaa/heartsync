@@ -1,24 +1,47 @@
 import { Injectable, signal } from '@angular/core';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { MenuHttpService } from '../http/menu.service';
-import { Observable, tap } from 'rxjs';
+import { forkJoin, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { ApplicationService, IAppConfig } from '@core/http/application.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RunAppMenuService {
+  appConfig = signal<IAppConfig>({} as IAppConfig);
   menuData = signal<IMenuNode[]>([]);
 
   constructor(
     private router: Router,
     private menuHttpService: MenuHttpService,
+    private applicationService: ApplicationService,
   ) {}
+
+  // loadAppConfig(appId: string) {
+  //   return this.applicationService.findApplicationById(appId).pipe(
+  //     tap((res: IAppConfig) => {
+  //       this.appConfig.set(res);
+  //     }),
+  //   );
+  // }
 
   loadMenuData(appId: string): Observable<IMenuNode[]> {
     return this.menuHttpService.getMenusByAppId(appId).pipe(
       tap((res: IMenuNode[]) => {
         this.menuData.set(res);
+      }),
+    );
+  }
+
+  loadAppAndMenu(appId: string): Observable<[IAppConfig, IMenuNode[]]> {
+    return forkJoin([
+      this.applicationService.findApplicationById(appId),
+      this.menuHttpService.getMenusByAppId(appId),
+    ]).pipe(
+      tap(([config, menus]) => {
+        this.appConfig.set(config); // 写入信号/状态
+        this.menuData.set(menus);
       }),
     );
   }
@@ -34,6 +57,18 @@ export class RunAppMenuService {
     } else {
       console.error('未找到 type 为 dashboard 的节点');
     }
+  }
+
+  findNode(id: string, nodes?: IMenuNode[]): IMenuNode | null {
+    const searchNodes = nodes || this.menuData();
+    for (const node of searchNodes) {
+      if (node.id === id) return node;
+      if (node.children) {
+        const found = this.findNode(id, node.children);
+        if (found) return found;
+      }
+    }
+    return null;
   }
 }
 

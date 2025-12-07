@@ -148,6 +148,7 @@
 .h-60px{height:60px;}
 .h-\[calc\(100\%-40px\)\]\!{height:calc(100% - 40px) !important;}
 .h-\[calc\(100\%-60px\)\]{height:calc(100% - 60px);}
+.h-\[calc\(100vh-54px\)\]{height:calc(100vh - 54px);}
 .h-0{height:0;}
 .h-100\%,
 .h-full{height:100%;}
@@ -174,6 +175,7 @@
 .h-48px{height:48px;}
 .h-50px{height:50px;}
 .h-52px{height:52px;}
+.h-54px{height:54px;}
 .h-56px{height:56px;}
 .h-6{height:1.5rem;}
 .h-64px{height:64px;}

@@ -8,6 +8,11 @@
     ::ng-deep {
       .hs-menu-item {
         display: block;
+        user-select: none;
+        /* 现代浏览器 */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
 
         .hs-menu-link {
           // height: 18px;
@@ -16,7 +21,7 @@
           // line-height: 18px;
           position: relative;
           font-weight: 500 !important;
-          padding: 8px 8px;
+          padding: 4px 8px;
           box-shadow: none !important;
           cursor: pointer;
           box-sizing: content-box;
@@ -24,8 +29,9 @@
         }
 
         .hs-menu-active {
-          background-color: @base-color-20;
+          background-color: @base-primary-color;
           border-radius: 8px;
+          color: #fff;
         }
 
         .hs-menu-icon {

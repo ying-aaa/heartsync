@@ -15,10 +15,7 @@ import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.comp
       (click)="onMenuClick()"
     >
       @if (section.icon !== null) {
-        <!-- <mat-icon class="hs-menu-icon">
-          {{ isExpanded ? 'folder_open' : 'folder_close' }}
-        </mat-icon> -->
-        <hs-icon [iconConfig]="section.icon"></hs-icon>
+        <hs-icon [iconConfig]="section.icon" [isDesign]="false"></hs-icon>
       }
       <span>{{ section.name }}</span>
     </a>
@@ -44,7 +41,7 @@ export class MenuToggleComponent implements OnInit {
   toggleSection(event: Event) {}
 
   onMenuClick() {
-    localStorage.setItem('selectedMenuId', this.section.dashboardId || 'not-found');
+    localStorage.setItem('selectedMenuId', this.section.id || 'not-found');
   }
 
   ngOnInit(): void {}

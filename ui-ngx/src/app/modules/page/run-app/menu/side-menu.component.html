@@ -1,31 +1,17 @@
-<mat-tree 
-  #tree
-  [dataSource]="dataSource" 
-  [treeControl]="treeControl"
-  class="example-tree">
+<mat-tree #tree [dataSource]="dataSource" [treeControl]="treeControl">
   <mat-nested-tree-node class="hs-menu-item" *matTreeNodeDef="let node">
     @let level = tree._getLevel(node) || 0;
     <hs-menu-link [section]="node" [level]="level"></hs-menu-link>
   </mat-nested-tree-node>
-  
-  <mat-nested-tree-node
-    *matTreeNodeDef="let node; when: hasChild"
-    class="hs-menu-item">
+
+  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild" class="hs-menu-item">
     @let level = tree._getLevel(node) || 0;
     @let isExpanded = treeControl.isExpanded(node);
-    <hs-menu-toggle
-      matTreeNodeToggle 
-      [section]="node" 
-      [level]="level"
-      [isExpanded]="isExpanded"
-    >
+    <hs-menu-toggle matTreeNodeToggle [section]="node" [level]="level" [isExpanded]="isExpanded">
     </hs-menu-toggle>
-    
-    <div 
-      [class.hs-tree-invisible]="!isExpanded"
-      role="group">
+
+    <div [class.hs-tree-invisible]="!isExpanded" role="group">
       <ng-container matTreeNodeOutlet></ng-container>
     </div>
   </mat-nested-tree-node>
 </mat-tree>
-
