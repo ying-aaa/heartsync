@@ -124,6 +124,7 @@
                       : 'description'
                   }}
                 </mat-icon>
+
                 <div class="flex-1 w-0">
                   <hs-inline-editor
                     type="text"
@@ -133,6 +134,18 @@
                     [highlight]="true"
                   ></hs-inline-editor>
                 </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="icon">
+            <th mat-header-cell *matHeaderCellDef class="p-0!">图标</th>
+            <td mat-cell *matCellDef="let node" class="p-0!" [style.width]="'48px'">
+              <div class="w-100%">
+                <hs-icon
+                  [iconConfig]="node.icon"
+                  (iconChange)="changeNodeValue(node.id, 'icon', $event)"
+                ></hs-icon>
               </div>
             </td>
           </ng-container>

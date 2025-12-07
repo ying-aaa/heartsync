@@ -21,11 +21,12 @@ import { MatIcon } from '@angular/material/icon';
 import { MenuDesignerService } from '../menu-deisgner.sevice';
 import { deepClone, generateUUID } from '@src/app/core/utils';
 import { MatDivider } from '@angular/material/divider';
+import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
 
 @Component({
   selector: 'hs-menu-live',
   templateUrl: './menu-live.component.html',
-  imports: [CdkDropList, CdkDrag, MatIcon, MatDivider],
+  imports: [CdkDropList, CdkDrag, MatIcon, MatDivider, HsIconComponent],
 })
 export class MenuLiveComponent implements OnInit {
   @ViewChild(CdkDropList) dropList!: CdkDropList;

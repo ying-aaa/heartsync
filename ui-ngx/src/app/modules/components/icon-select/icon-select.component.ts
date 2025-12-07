@@ -6,6 +6,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
 import { HsThemeService } from '@src/app/core/services/theme.service';
+import { MatFormField, MatInputModule } from '@angular/material/input';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  ICustomIconConfig,
+  IIconConfig,
+  IIconType,
+  IMatIconConfig,
+} from '@src/app/shared/components/hs-icon/hs-icon.model';
 
 // 图标类型定义
 export type IconType = 'filled' | 'outlined' | 'round' | 'sharp' | 'two-tone';
@@ -19,14 +27,22 @@ export interface IconData {
 @Component({
   selector: 'app-hs-icon-select',
   standalone: true,
-  imports: [MatDialogModule, MatIconModule, MatButtonModule, MatDividerModule, HsRadioComponent],
   templateUrl: './icon-select.component.html',
+  imports: [
+    MatDialogModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDividerModule,
+    HsRadioComponent,
+    MatInputModule,
+    MatFormField,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
 export class HsIconSelectComponent implements OnInit {
-  // 使用 output() 函数创建输出属性
-  iconSelected = output<{ name: string; color: string; type: IconType }>();
+  iconSelected = output<IIconConfig>();
 
-  // 图标类型配置 - 用于 HsRadioComponent
   iconTypes = signal([
     { label: '实心', value: 'filled' },
     { label: '轮廓', value: 'outlined' },
@@ -35,7 +51,6 @@ export class HsIconSelectComponent implements OnInit {
     { label: '双色', value: 'two-tone' },
   ]);
 
-  // 预设颜色列表
   colors = signal([
     {
       value: this.themeService.getCurrentThemeConfig(['#000000', '#ffffff']),
@@ -54,26 +69,26 @@ export class HsIconSelectComponent implements OnInit {
     { value: '#607d8b', textColor: '#ffffff' },
   ]);
 
-  // 不同类型的图标列表（避免切换时的卡顿）
   filledIcons = signal<IconData[]>([]);
   outlinedIcons = signal<IconData[]>([]);
   roundIcons = signal<IconData[]>([]);
   sharpIcons = signal<IconData[]>([]);
   twoToneIcons = signal<IconData[]>([]);
 
-  // 当前选中的图标
   selectedIcon = signal<string | null>('home');
 
-  // 当前选中的颜色
   selectedColor = signal<string>(this.themeService.getCurrentThemeConfig(['#000000', '#ffffff']));
 
-  // 当前选中的图标类型
-  selectedIconType = signal<IconType>('filled');
+  iconConfig = new FormGroup({
+    iconSize: new FormControl(24),
+    bgSize: new FormControl(32),
+    backgroundColor: new FormControl('transparent'),
+  });
 
-  // 当前显示自定义页面
+  selectedIconType = signal<IIconType>('filled');
+
   showCustomPage = signal<boolean>(false);
 
-  // 当前显示的图标列表（根据类型动态切换）
   currentIconList = computed(() => {
     const type = this.selectedIconType();
     switch (type) {
@@ -92,7 +107,6 @@ export class HsIconSelectComponent implements OnInit {
     }
   });
 
-  // 计算属性：获取当前图标字体集
   currentFontSet = computed(() => {
     const type = this.selectedIconType();
     switch (type) {
@@ -111,10 +125,20 @@ export class HsIconSelectComponent implements OnInit {
     }
   });
 
-  constructor(private themeService: HsThemeService) {}
+  constructor(
+    private themeService: HsThemeService,
+    private dialogRef: MatDialogRef<HsIconSelectComponent>,
+  ) {
+    this.iconConfig.valueChanges.subscribe(({ iconSize, bgSize }) => {
+      if (iconSize! > bgSize!) {
+        this.iconConfig.patchValue({
+          bgSize: iconSize,
+        });
+      }
+    });
+  }
 
   ngOnInit(): void {
-    // 初始化所有类型的图标列表（相同的图标，不同的类型）
     const commonIcons = this.generateCommonIcons();
     this.filledIcons.set(commonIcons);
     this.outlinedIcons.set(this.cloneIcons(commonIcons));
@@ -123,7 +147,6 @@ export class HsIconSelectComponent implements OnInit {
     this.twoToneIcons.set(this.cloneIcons(commonIcons));
   }
 
-  // 生成常用图标
   private generateCommonIcons(): IconData[] {
     return [
       { name: 'home', selected: true },
@@ -179,14 +202,11 @@ export class HsIconSelectComponent implements OnInit {
     ];
   }
 
-  // 克隆图标列表（重置选中状态）
   private cloneIcons(icons: IconData[]): IconData[] {
     return icons.map((icon) => ({ ...icon, selected: false }));
   }
 
-  // 选择图标
   selectIcon(iconName: string): void {
-    // 重置当前类型所有图标的选中状态
     const type = this.selectedIconType();
     const updateFn = (icons: IconData[]) =>
       icons.map((icon) => ({
@@ -215,7 +235,6 @@ export class HsIconSelectComponent implements OnInit {
     this.selectedIcon.set(iconName);
   }
 
-  // 选择颜色
   selectColor(event: string | Event): void {
     if (typeof event === 'string') {
       this.selectedColor.set(event);
@@ -225,22 +244,17 @@ export class HsIconSelectComponent implements OnInit {
     this.selectedColor.set(color);
   }
 
-  // 切换到自定义图标页面
   goToCustomPage(): void {
     this.showCustomPage.set(true);
   }
 
-  // 返回图标选择页面
   backToIconSelect(): void {
     this.showCustomPage.set(false);
   }
 
-  // 加载所有图标（示例方法）
   loadAllIcons(): void {
-    // 这里可以添加加载所有图标的逻辑
     console.log('加载所有图标...');
 
-    // 示例：模拟加载更多图标
     const additionalIcons = [
       { name: 'add_circle', selected: false },
       { name: 'arrow_drop_down', selected: false },
@@ -254,7 +268,6 @@ export class HsIconSelectComponent implements OnInit {
       { name: 'event', selected: false },
     ];
 
-    // 添加到每种类型的图标列表中
     this.filledIcons.update((icons) => [...icons, ...this.cloneIcons(additionalIcons)]);
     this.outlinedIcons.update((icons) => [...icons, ...this.cloneIcons(additionalIcons)]);
     this.roundIcons.update((icons) => [...icons, ...this.cloneIcons(additionalIcons)]);
@@ -262,24 +275,26 @@ export class HsIconSelectComponent implements OnInit {
     this.twoToneIcons.update((icons) => [...icons, ...this.cloneIcons(additionalIcons)]);
   }
 
-  // 提交选择
   submit(): void {
-    if (this.selectedIcon()) {
-      this.iconSelected.emit({
-        name: this.selectedIcon()!,
-        color: this.selectedColor(),
-        type: this.selectedIconType(),
-      });
-    }
-
-    // 关闭弹窗
-    const dialogRef = inject(MatDialogRef<HsIconSelectComponent>, { optional: true });
-    if (dialogRef) {
-      dialogRef.close({
-        name: this.selectedIcon(),
-        color: this.selectedColor(),
-        type: this.selectedIconType(),
-      });
+    const showCustomPage = this.showCustomPage();
+    const iconConfig = (() => {
+      if (!showCustomPage) {
+        return {
+          name: this.selectedIcon(),
+          type: this.selectedIconType(),
+          color: this.selectedColor(),
+          ...this.iconConfig.value,
+        } as IMatIconConfig;
+      } else {
+        return {
+          url: this.selectedIcon(),
+          ...this.iconConfig.value,
+        } as ICustomIconConfig;
+      }
+    })();
+    this.iconSelected.emit(iconConfig);
+    if (this.dialogRef) {
+      this.dialogRef.close(iconConfig);
     }
   }
 }

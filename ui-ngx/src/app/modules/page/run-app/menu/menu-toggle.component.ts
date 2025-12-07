@@ -1,13 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { IMenuNode, IMenuType } from '@src/app/shared/models/app-menu.model';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { VerseTreeTogglerSwitchComponent } from '@shared/components/ui-verse/verse-tree-toggler-switch/verse-tree-toggler-switch.component';
+import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
 @Component({
   selector: 'hs-menu-toggle',
   template: `
@@ -19,9 +15,10 @@ import { VerseTreeTogglerSwitchComponent } from '@shared/components/ui-verse/ver
       (click)="onMenuClick()"
     >
       @if (section.icon !== null) {
-        <mat-icon class="hs-menu-icon">
+        <!-- <mat-icon class="hs-menu-icon">
           {{ isExpanded ? 'folder_open' : 'folder_close' }}
-        </mat-icon>
+        </mat-icon> -->
+        <hs-icon [iconConfig]="section.icon"></hs-icon>
       }
       <span>{{ section.name }}</span>
     </a>
@@ -32,7 +29,7 @@ import { VerseTreeTogglerSwitchComponent } from '@shared/components/ui-verse/ver
     ></verse-tree-toggler-switch>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIconModule, RouterModule, VerseTreeTogglerSwitchComponent],
+  imports: [MatIconModule, RouterModule, VerseTreeTogglerSwitchComponent, HsIconComponent],
   host: {
     class: 'block relative',
   },
@@ -47,10 +44,7 @@ export class MenuToggleComponent implements OnInit {
   toggleSection(event: Event) {}
 
   onMenuClick() {
-    localStorage.setItem(
-      'selectedMenuId',
-      this.section.dashboardId || 'not-found',
-    );
+    localStorage.setItem('selectedMenuId', this.section.dashboardId || 'not-found');
   }
 
   ngOnInit(): void {}

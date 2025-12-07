@@ -63,7 +63,6 @@
 <mat-divider></mat-divider>
 
 <mat-dialog-content class="h-0 flex-1 max-h-none! p-0!">
-  <!-- 返回按钮（在自定义图标页面显示） -->
   @if (showCustomPage()) {
     <div class="p-[16px] border-b">
       <button mat-button (click)="backToIconSelect()" class="flex items-center gap-[8px]">
@@ -72,7 +71,6 @@
       </button>
     </div>
 
-    <!-- 自定义图标页面（留空） -->
     <div class="flex flex-col items-center justify-center min-h-[384px] p-[32px]">
       <mat-icon class="text-[48px] text-gray-400 mb-[16px]">add_circle_outline</mat-icon>
       <h3 class="text-xl font-medium color-[var(--base-title-color)] mb-[8px]">自定义图标</h3>
@@ -88,9 +86,7 @@
       </div>
     </div>
   } @else {
-    <!-- 三列布局容器 -->
     <div class="flex flex-row h-full">
-      <!-- 第一列：图标类型选择 -->
       <div class="w-[120px] border-r p-20px flex flex-col justify-between">
         <div>
           <h3 class="text-sm text-center font-medium color-[var(--base-title-color)] mb-[12px]">
@@ -106,10 +102,9 @@
       </div>
       <mat-divider vertical></mat-divider>
 
-      <!-- 第二列：图标列表 -->
       <div class="flex-1 border-r overflow-y-auto">
         <!-- 当前选中信息 -->
-        @if (selectedIcon()) {
+        <!-- @if (selectedIcon()) {
           <div class="p-[16px] border-b">
             <div class="flex items-center gap-[12px]">
               <div
@@ -130,7 +125,7 @@
               </div>
             </div>
           </div>
-        }
+        } -->
 
         <!-- 图标网格 -->
         <div class="p-[16px]">
@@ -156,11 +151,9 @@
 
       <mat-divider vertical></mat-divider>
 
-      <!-- 第三列：颜色选择 -->
-      <div class="w-[200px] p-[16px]">
+      <div class="w-[200px] p-[16px]" [formGroup]="iconConfig">
         <h3 class="text-sm font-medium color-[var(--base-title-color)] mb-[12px]">图标颜色</h3>
 
-        <!-- 预设颜色网格 -->
         <div class="grid grid-cols-6 gap-[8px] mb-[16px]">
           @for (color of colors(); track color.value) {
             <div
@@ -181,10 +174,9 @@
           }
         </div>
 
-        <!-- 自定义颜色选择器 -->
-        <div class="mt-[16px] pt-[16px] border-t">
+        <div class="mb-12px border-t">
           <div class="flex items-center gap-[8px] mb-[8px]">
-            <label class="text-13px color-[var(--base-title-color)]">自定义：</label>
+            <label class="text-13px color-[var(--base-title-color)]">自定义颜色：</label>
             <span class="text-13px font-mono">{{ selectedColor() }}</span>
           </div>
           <input
@@ -195,20 +187,79 @@
           />
         </div>
 
+        <div class="mb-12px border-t">
+          <div class="flex items-center gap-[8px] mb-[8px]">
+            <label class="text-13px color-[var(--base-title-color)]">背景颜色：</label>
+            <span class="text-13px font-mono">{{ iconConfig.get('backgroundColor')?.value }}</span>
+          </div>
+          <input
+            matInput
+            type="color"
+            class="w-full h-[32px] cursor-pointer rounded"
+            formControlName="backgroundColor"
+          />
+        </div>
+
+        <div class="border-t flex-center mb-12px">
+          <div class="flex items-center gap-[8px]">
+            <label class="text-13px color-[var(--base-title-color)]">图标大小：</label>
+          </div>
+          <mat-form-field class="w-0 flex-1 hs-density--5 mr-4px" appearance="outline">
+            <input
+              type="number"
+              matInput
+              class="w-full h-[32px] rounded"
+              placeholder="请输入"
+              formControlName="iconSize"
+              min="12"
+            />
+          </mat-form-field>
+          px
+        </div>
+
+        <div class="border-t flex-center mb-12px">
+          <div class="flex items-center gap-[8px]">
+            <label class="text-13px color-[var(--base-title-color)]">背景大小：</label>
+          </div>
+          <mat-form-field class="w-0 flex-1 hs-density--5 mr-4px" appearance="outline">
+            <input
+              type="number"
+              matInput
+              class="w-full h-[32px] rounded"
+              placeholder="请输入"
+              formControlName="bgSize"
+              min="12"
+            />
+          </mat-form-field>
+          px
+        </div>
+
         <!-- 颜色预览 -->
-        <div class="mt-[16px] pt-[16px] border-t">
+        <div class="border-t">
           <p class="text-14px color-[var(--base-title-color)] mb-[8px]">预览：</p>
           <div
-            class="flex items-center justify-center w-full h-[60px] rounded"
+            class="flex-center w-full h-[60px] rounded"
             [style.background-color]="selectedColor() + '10'"
           >
-            <mat-icon
-              class="scale-150"
-              [fontSet]="currentFontSet()"
-              [style.color]="selectedColor()"
+            @let iconSize = iconConfig.value.iconSize + 'px';
+            @let bgSize = iconConfig.value.bgSize + 'px';
+            @let backgroundColor = iconConfig.value.backgroundColor;
+            <div
+              class="flex-center border-line"
+              [style.width]="bgSize"
+              [style.height]="bgSize"
+              [style.backgroundColor]="backgroundColor"
             >
-              {{ selectedIcon() || 'palette' }}
-            </mat-icon>
+              <mat-icon
+                [fontSet]="currentFontSet()"
+                [style.color]="selectedColor()"
+                [style.fontSize]="iconSize"
+                [style.width]="iconSize"
+                [style.height]="iconSize"
+              >
+                {{ selectedIcon() || 'palette' }}
+              </mat-icon>
+            </div>
           </div>
         </div>
       </div>

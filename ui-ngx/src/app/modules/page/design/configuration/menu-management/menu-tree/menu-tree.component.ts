@@ -41,6 +41,8 @@ import { MenuManagementService } from '../menu-management.sevice';
 import { IEventsType } from '@src/app/shared/models/public-api';
 import { AsyncPipe } from '@angular/common';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
+import { IMatIconConfig } from '@src/app/shared/components/hs-icon/hs-icon.model';
 
 interface IDropInfo {
   entityEl: HTMLElement;
@@ -142,6 +144,12 @@ class CustomDragTable {
   // 是否移动中
   isMove$ = new BehaviorSubject(false);
 
+  // 是否按下
+  isDragging = false;
+
+  // 按下定时器
+  pressTimer: any = null;
+
   // 最后落点位置
   lastDropInfo: IDropInfo = {} as IDropInfo;
   // 发布
@@ -221,35 +229,41 @@ class CustomDragTable {
 
   // 鼠标按下触发
   mouseDown(e: MouseEvent) {
-    e.preventDefault();
-    this.entityEl = getDraggableEl(e.target as HTMLElement);
+    this.pressTimer = setTimeout(() => {
+      this.isDragging = true;
+      this.entityEl = getDraggableEl(e.target as HTMLElement);
 
-    if (this.entityEl) {
-      this.entityLevel = Number(this.entityEl.getAttribute('aria-level')!);
+      if (this.entityEl) {
+        this.entityLevel = Number(this.entityEl.getAttribute('aria-level')!);
 
-      // 目录信息
-      const entityFolderEl = getFolderEl(this.entityEl);
-      const entityIndex = entityFolderEl
-        ? getFolderChildIndex(entityFolderEl, this.entityEl)!
-        : getEleChildIndex(this.containerEl, this.entityEl)!;
+        // 目录信息
+        const entityFolderEl = getFolderEl(this.entityEl);
+        const entityIndex = entityFolderEl
+          ? getFolderChildIndex(entityFolderEl, this.entityEl)!
+          : getEleChildIndex(this.containerEl, this.entityEl)!;
 
-      this.lastDropInfo = {
-        ...this.lastDropInfo,
-        entityFolderEl,
-        entityIndex,
-        entityEl: this.entityEl,
-      };
-    }
+        this.lastDropInfo = {
+          ...this.lastDropInfo,
+          entityFolderEl,
+          entityIndex,
+          entityEl: this.entityEl,
+        };
+      }
+    }, 300);
   }
 
   // 鼠标按下移动
   mouseMove(e: MouseEvent) {
     e.preventDefault();
 
+    if (!this.isDragging) return;
     // 如果不是触发tr拖动
     if (!this.entityEl) return;
 
     const target = e.target as HTMLElement;
+
+    // this.renderer.setStyle(target, 'cursor', `pointer`);
+    // this.renderer.setStyle(target, 'border', `none`);
 
     // 划过的元素
     const overEl = getDraggableEl(target);
@@ -359,7 +373,8 @@ class CustomDragTable {
 
   // 鼠标按下抬起触发
   mouseUp(e: MouseEvent) {
-    e.preventDefault();
+    clearTimeout(this.pressTimer);
+
     // 触发拖拽的鼠标样式
     this.isMove$.next(false);
     this.entityEl = null;
@@ -435,19 +450,28 @@ interface FlatIMenuNode extends IMenuNode {
     MatSelectModule,
     MatFormFieldModule,
     AsyncPipe,
+    HsIconComponent,
   ],
 })
 export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('MatTable', { read: ElementRef }) matTableElement!: ElementRef<HTMLTableElement>;
 
   IMenuType = IMenuType;
+
   appId: string = getParamFromRoute('appId', this.route)!;
 
   searchControl = new FormControl('');
 
   loadingStatus = false;
 
-  displayedColumns: string[] = ['name', 'menuType', 'dashboardId', 'isFullscreen', 'actions'];
+  displayedColumns: string[] = [
+    'name',
+    'icon',
+    'menuType',
+    'dashboardId',
+    'isFullscreen',
+    'actions',
+  ];
 
   clickedRows: IMenuNode | null = null;
 
@@ -485,6 +509,30 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   });
 
   customDragTable: CustomDragTable | null = null;
+
+  defaultIconConfig: { [key: string]: IMatIconConfig } = {
+    folder_open: {
+      type: 'two-tone',
+      name: 'folder_open',
+      color: 'var(--base-primary-color)',
+      iconSize: 24,
+      bgSize: 32,
+    },
+    folder: {
+      type: 'two-tone',
+      name: 'folder',
+      color: 'var(--base-primary-color)',
+      iconSize: 24,
+      bgSize: 32,
+    },
+    description: {
+      type: 'two-tone',
+      name: 'description',
+      color: 'var(--base-primary-color)',
+      iconSize: 24,
+      bgSize: 32,
+    },
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -571,17 +619,30 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     return null;
   }
 
+  getNodeIconConfig(type: string) {
+    const name = type === 'parent' ? 'folder' : 'description';
+
+    return JSON.stringify({
+      name,
+      type: 'two-tone',
+      color: 'var(--base-primary-color)',
+      iconSize: 24,
+      bgSize: 32,
+    });
+  }
+
   addChildNode(type: IMenuType, node: any) {
     this.loadingStatus = true;
     const nodeOriginData = this.findNode(node.id)!;
     const nodeChildrenLength = nodeOriginData.children?.length || 0;
+    const icon = this.getNodeIconConfig(type);
 
     // 计算sort
     const newNode: IMenuNode = {
       id: generateUUID(),
       appId: this.appId!,
       name: `新${type === IMenuType.Parent ? '目录' : '菜单'}`,
-      icon: 'system-icon',
+      icon,
       menuType: type,
       parentMenuId: node.id,
       isFullscreen: false,
@@ -619,11 +680,13 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
       ? parentNode.children?.length || 0
       : this.menuData().length;
 
+    const icon = this.getNodeIconConfig(type);
+
     const newNode: IMenuNode = {
       id: generateUUID(),
       appId: this.appId!,
       name: `新${type === IMenuType.Parent ? '目录' : '菜单'}`,
-      icon: 'system-icon',
+      icon,
       menuType: type,
       parentMenuId: node && node.parentMenuId,
       isFullscreen: false,
@@ -763,13 +826,11 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     const lastDropInfoSub = this.customDragTable.lastDropInfo$.subscribe((dropInfo: IDropInfo) => {
       const { entityEl, entityFolderEl, entityIndex: formIndex, toEl, toIndex } = dropInfo;
       const toData = toEl ? this.findNode(toEl.id)!.children : this.menuData();
-      console.log('%c Line:752 🥑 toData', 'color:#33a5ff', toData);
       const entityData = this.findNode(entityEl.id)!;
       entityData.parentMenuId = toEl ? toEl.id : null;
       const formData = entityFolderEl
         ? this.findNode(entityFolderEl.id)!.children
         : this.menuData();
-      console.log('%c Line:758 🥃', 'color:#6ec1c2', formData);
       this.menuData.update((currentData) => {
         if (entityFolderEl === toEl) {
           moveItemInArray(toData!, formIndex, toIndex);

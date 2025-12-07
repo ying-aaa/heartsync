@@ -4,6 +4,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { getParamFromRoute } from '@src/app/core/utils';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
+import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
 
 @Component({
   selector: 'hs-menu-link',
@@ -23,12 +24,12 @@ import { IMenuNode } from '@src/app/shared/models/app-menu.model';
       (click)="onMenuClick()"
     >
       @if (section.icon !== null) {
-        <mat-icon class="hs-menu-icon"> description </mat-icon>
+        <hs-icon [iconConfig]="section.icon"></hs-icon>
       }
       <span>{{ section.name }}</span>
     </a>
   `,
-  imports: [MatTreeModule, MatIconModule, RouterModule],
+  imports: [MatTreeModule, MatIconModule, RouterModule, HsIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuLinkComponent implements OnInit {

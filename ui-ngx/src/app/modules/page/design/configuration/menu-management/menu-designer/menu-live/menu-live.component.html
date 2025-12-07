@@ -49,7 +49,7 @@
           }"
           (click)="selectNode(node)"
         >
-          <mat-icon class="mx-8px color-#0e46ff"> app_registration </mat-icon>
+          <hs-icon [iconConfig]="node.icon" [isDesign]="false"></hs-icon>
           <span class="text-16px w-0 flex-1">{{ node.name }}</span>
           @if (node.children) {
             <mat-icon class="text-18px w-18px! h-18px! color-#999">
