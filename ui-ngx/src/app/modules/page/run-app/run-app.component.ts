@@ -26,16 +26,8 @@ export class RunAppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // this.runAppMenuService.loadMenuData(this.appId!).subscribe({
-    //   next: (menuData: IMenuNode[]) => {
-    //     this.runAppMenuService.navigateToDefaultDashboard(this.appId!, menuData);
-    //   },
-    //   error: (err) => {},
-    // });
     this.runAppMenuService.loadAppAndMenu(this.appId!).subscribe({
-      next: ([appConfig, menuData]: [IAppConfig, IMenuNode[]]) => {
-        this.runAppMenuService.navigateToDefaultDashboard(this.appId!, menuData);
-      },
+      next: ([appConfig, menuData]: [IAppConfig, IMenuNode[]]) => {},
       error: (err) => {},
     });
   }

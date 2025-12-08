@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { MenuHttpService } from '../http/menu.service';
 import { forkJoin, Observable, tap } from 'rxjs';
@@ -9,8 +9,17 @@ import { ApplicationService, IAppConfig } from '@core/http/application.service';
   providedIn: 'root',
 })
 export class RunAppMenuService {
+  appId = signal<string | null>(null);
   appConfig = signal<IAppConfig>({} as IAppConfig);
   menuData = signal<IMenuNode[]>([]);
+
+  selectedMenuId = signal<string | null>(null);
+  selectedMenuNode = computed(() => {
+    const menuData = this.menuData();
+    const menuId = this.selectedMenuId();
+    return menuId ? this.findNode(menuId, menuData) : null;
+  });
+  selectedDashboardId = computed(() => this.selectedMenuNode()?.dashboardId);
 
   constructor(
     private router: Router,
@@ -18,23 +27,8 @@ export class RunAppMenuService {
     private applicationService: ApplicationService,
   ) {}
 
-  // loadAppConfig(appId: string) {
-  //   return this.applicationService.findApplicationById(appId).pipe(
-  //     tap((res: IAppConfig) => {
-  //       this.appConfig.set(res);
-  //     }),
-  //   );
-  // }
-
-  loadMenuData(appId: string): Observable<IMenuNode[]> {
-    return this.menuHttpService.getMenusByAppId(appId).pipe(
-      tap((res: IMenuNode[]) => {
-        this.menuData.set(res);
-      }),
-    );
-  }
-
   loadAppAndMenu(appId: string): Observable<[IAppConfig, IMenuNode[]]> {
+    this.appId.set(appId);
     return forkJoin([
       this.applicationService.findApplicationById(appId),
       this.menuHttpService.getMenusByAppId(appId),
@@ -42,20 +36,29 @@ export class RunAppMenuService {
       tap(([config, menus]) => {
         this.appConfig.set(config); // 写入信号/状态
         this.menuData.set(menus);
+
+        this.navigateToDefaultDashboard();
       }),
     );
   }
 
-  navigateToDefaultDashboard(appId: string, menuData: IMenuNode[]): void {
-    const selectedMenuId = sessionStorage.getItem('selectedMenuId');
-    if (selectedMenuId) return;
-    const dashboardId = findDashboardId(menuData);
-    if (dashboardId) {
-      sessionStorage.setItem('selectedMenuId', dashboardId);
-      const url = `/run-app/${appId}/dashboard/${dashboardId}`;
-      this.router.navigate([url]);
+  navigateMenuById(menuId: string): void {
+    this.selectedMenuId.set(menuId);
+    sessionStorage.setItem('selectedMenuId', menuId);
+    const url = `/run-app/${this.appId()}/dashboard/${menuId}`;
+    this.router.navigate([url]);
+  }
+
+  navigateToDefaultDashboard(menuData?: IMenuNode[]): void {
+    menuData = menuData || this.menuData();
+    let menuId = sessionStorage.getItem('selectedMenuId');
+    if (!menuId) {
+      menuId = findDefaultMenuId(menuData);
+    }
+    if (menuId) {
+      this.navigateMenuById(menuId);
     } else {
-      console.error('未找到 type 为 dashboard 的节点');
+      console.error('未找到默认菜单！');
     }
   }
 
@@ -73,12 +76,12 @@ export class RunAppMenuService {
 }
 
 // 递归查找第一个 type 为 'dashboard' 的节点的 id
-function findDashboardId(menuData: IMenuNode[]): string | null {
+function findDefaultMenuId(menuData: IMenuNode[]): string | null {
   for (const item of menuData) {
-    if (item.menuType === 'dashboard') {
-      return item.dashboardId;
+    if (item.menuType !== 'parent') {
+      return item.id;
     } else if (item.children && item.children.length > 0) {
-      const foundId = findDashboardId(item.children); // 递归查找子节点
+      const foundId = findDefaultMenuId(item.children); // 递归查找子节点
       if (foundId) {
         return foundId;
       }
