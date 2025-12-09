@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 
     <mat-divider class="w-full"></mat-divider>
 
-    <mat-sidenav-container class="h-[calc(100%-60px)] sidenav-fullscreen-backdrop">
+    <mat-sidenav-container class="h-[calc(100%-61px)] sidenav-fullscreen-backdrop">
       <mat-sidenav
         #snav
         position="end"
@@ -34,7 +34,7 @@ import { Subscription } from 'rxjs';
         </div>
       </mat-sidenav>
 
-      <mat-sidenav-content>
+      <mat-sidenav-content class="overflow-hidden!">
         <hs-menu-designer></hs-menu-designer>
       </mat-sidenav-content>
     </mat-sidenav-container>

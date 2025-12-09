@@ -147,9 +147,12 @@
 .h-\[60px\],
 .h-60px{height:60px;}
 .h-\[calc\(100\%-40px\)\]\!{height:calc(100% - 40px) !important;}
+.h-\[calc\(100\%-59px\)\]{height:calc(100% - 59px);}
 .h-\[calc\(100\%-60px\)\]{height:calc(100% - 60px);}
+.h-\[calc\(100\%-61px\)\]{height:calc(100% - 61px);}
 .h-\[calc\(100vh-54px\)\]{height:calc(100vh - 54px);}
 .h-0{height:0;}
+.h-0\!{height:0 !important;}
 .h-100\%,
 .h-full{height:100%;}
 .h-100px{height:100px;}
@@ -201,7 +204,6 @@
 .min-w-180px{min-width:180px;}
 .min-w-100px{min-width:100px;}
 .min-w-250px{min-width:250px;}
-.min-w-280px{min-width:280px;}
 .min-w-300px{min-width:300px;}
 .min-w-320px{min-width:320px;}
 .min-w-40px\!{min-width:40px !important;}
@@ -300,6 +302,7 @@
 .gap-5px{gap:5px;}
 .overflow-auto{overflow:auto;}
 .overflow-hidden{overflow:hidden;}
+.overflow-hidden\!{overflow:hidden !important;}
 .overflow-x-hidden{overflow-x:hidden;}
 .overflow-y-auto{overflow-y:auto;}
 .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -531,6 +534,7 @@
 .tracking-0{letter-spacing:0;}
 .tracking-wide{letter-spacing:0.025em;}
 .font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;}
+.italic{font-style:italic;}
 .line-through\!{text-decoration-line:line-through !important;}
 .underline{text-decoration-line:underline;}
 .hover-underline:hover{text-decoration-line:underline;}
