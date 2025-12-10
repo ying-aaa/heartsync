@@ -8,7 +8,7 @@
 
 <content class="text-14px wh-full">
   <div class="flex h-full">
-    <aside class="w-280px h-100% p-15px">
+    <!-- <aside class="w-280px h-100% p-15px">
       @for (item of presetComps(); track $index) {
         <div
           class="mb-16px wp"
@@ -46,7 +46,7 @@
       }
     </aside>
 
-    <mat-divider class="h-full" [vertical]="true"></mat-divider>
+    <mat-divider class="h-full" [vertical]="true"></mat-divider> -->
 
     <main class="flex-1 h-full">
       <header class="h-60px p-20px flex justify-between">
@@ -68,7 +68,6 @@
           </div>
         </div>
 
-        <!-- 放大和缩小按钮，中间是百分比 -->
         <div class="flex items-center">
           <button mat-icon-button class="hs-icon-button-32">
             <mat-icon>zoom_out</mat-icon>
@@ -97,7 +96,7 @@
             >
               <div scrollViewport class="wh-full">
                 <hs-menu-live
-                  class="pr-8px"
+                  class="pr-8px block relative"
                   [nodes]="menuData()"
                   [connectedTo]="connectedTo()"
                   (onDrop)="onDrop()"

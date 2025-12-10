@@ -24,7 +24,7 @@ export class MenuDesignerService {
 
   selectNode(node: any) {
     this.selectedNode.set(node || {});
-    this.showSignleConfig.set(true);
+    this.showSignleConfig.set(false);
   }
 
   toggleShowSignleConfig(showSignleConfig: boolean): void {

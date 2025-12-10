@@ -1,6 +1,11 @@
 <style>
   :host {
     display: block;
+    user-select: none;
+    /* 现代浏览器 */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 
     .menu-item-active {
       border-left-width: 4px;
@@ -24,7 +29,10 @@
     }
   }
 </style>
-<div
+@if(this.isRoot()) {
+{{parentDefaultStyle() | json}}
+}
+<ul
   [id]="parentNode()?.id || 'scope'"
   cdkDropList
   [cdkDropListData]="nodes()"
@@ -34,44 +42,51 @@
   [cdkDropListDisabled]="nodes().length <= 1"
 >
   @for (node of nodes(); track $index) {
+  <li
+    cdkDrag
+    class="drag-box"
+    (cdkDragStarted)="toggleDragging(true)"
+    (cdkDragEnded)="toggleDragging(false)"
+  >
+    @if (node.type !== 'divider') {
     <div
-      cdkDrag
-      class="drag-box"
-      (cdkDragStarted)="toggleDragging(true)"
-      (cdkDragEnded)="toggleDragging(false)"
+      class="cursor-pointer flex items-center"
+      (click)="selectNode(node)"
     >
-      @if (node.type !== 'divider') {
-        <div
-          class="my-6px p-12px rounded-md cursor-pointer flex items-center"
-          [class]="{
-            'hover:bg-#eff0f3': !isDragging(),
-            'menu-item-active': node.id == selectedNode().id,
-          }"
-          (click)="selectNode(node)"
-        >
-          <hs-icon [iconConfig]="node.icon" [isDesign]="false"></hs-icon>
-          <span class="text-16px w-0 flex-1">{{ node.name }}</span>
-          @if (node.children) {
-            <mat-icon class="text-18px w-18px! h-18px! color-#999">
-              {{ node.children && node.children.length ? 'expand_more' : 'expand_less' }}
-            </mat-icon>
-          }
-        </div>
-      }
-      @if (node.type === 'divider') {
-        <div class="w-full my-6px">
-          <mat-divider class="w-full"></mat-divider>
-        </div>
-      }
+      <!-- [class]="{
+        'hover:bg-[#eff0f3]': !isDragging(),
+        'menu-item-active': node.id == selectedNode().id,
+      }" -->
+      <div
+        class="w-full absolute left-0 min-h-30px -z-1"
+        [style]="node.menuType === 'parent' ? parentDefaultStyle() : {}"
+      ></div>
+      <hs-icon
+        [iconConfig]="node.icon"
+        [isDesign]="false"
+      ></hs-icon>
+      <span class="w-0 flex-1">{{ node.name }}</span>
       @if (node.children) {
-        <hs-menu-live
-          [parentNode]="node"
-          [nodes]="node.children"
-          [connectedTo]="connectedTo()"
-          [level]="level() + 1"
-          (onDrop)="onDrop.emit()"
-        ></hs-menu-live>
+      <mat-icon class="text-18px w-18px! h-18px! color-#999">
+        {{ node.children && node.children.length ? 'expand_more' : 'expand_less' }}
+      </mat-icon>
       }
     </div>
+    }
+    @if (node.type === 'divider') {
+    <div class="w-full my-6px">
+      <mat-divider class="w-full"></mat-divider>
+    </div>
+    }
+    @if (node.children) {
+    <hs-menu-live
+      [parentNode]="node"
+      [nodes]="node.children"
+      [connectedTo]="connectedTo()"
+      [level]="level() + 1"
+      (onDrop)="onDrop.emit()"
+    ></hs-menu-live>
+    }
+  </li>
   }
-</div>
+</ul>

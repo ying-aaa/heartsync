@@ -1,4 +1,4 @@
-import { Component, effect, input, OnInit } from '@angular/core';
+import { Component, effect, input, OnInit, output } from '@angular/core';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { FormGroup } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
@@ -9,14 +9,10 @@ import { MatButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'hs-formly-config',
   template: `
-    <ng-content></ng-content>
-    <button mat-button (click)="openFormModelDialog()">
-      <mat-icon matChipAvatar>settings_ethernet</mat-icon>
-      查看填写信息
-    </button>
     <ng-scrollbar
       class="h-0 flex-1"
       #scrollbarRef="ngScrollbar"
@@ -26,6 +22,11 @@ import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.comp
     >
       <div scrollViewport>
         <div class="pr-12px">
+          <button mat-button (click)="openFormModelDialog()">
+            <mat-icon matChipAvatar>settings_ethernet</mat-icon>
+            查看填写信息
+          </button>
+          <ng-content></ng-content>
           <formly-form [form]="formGroup" [fields]="fields" [options]="options()" [model]="model()">
           </formly-form>
         </div>
@@ -60,11 +61,20 @@ export class FormlyConfigComponent implements OnInit {
   fields: IEditorFormlyField[] = [];
   formGroup = new FormGroup({});
 
+  modelChange = output<any>();
+
+  private valueChangeSub!: Subscription;
+
   constructor(private dialog: MatDialog) {
     effect(() => {
       const type: string = this.type() || this.model()?.type;
       this.fields = this.getFieldConfig(type);
+
+      this.valueChangeSub?.unsubscribe();
       this.formGroup = new FormGroup({});
+      this.valueChangeSub = this.formGroup.valueChanges.subscribe((newModel) => {
+        this.modelChange.emit(newModel);
+      });
     });
   }
 
@@ -92,4 +102,9 @@ export class FormlyConfigComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngOnDestroy() {
+    // 取消订阅
+    this.valueChangeSub?.unsubscribe();
+  }
 }

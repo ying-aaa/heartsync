@@ -10,12 +10,8 @@ import { MenuManagementService } from '../../menu-management.sevice';
   templateUrl: './menu-global-config.component.html',
   imports: [
     MatDivider,
-    // MatFormField,
-    // MatLabel,
-    // MatInput,
     FormsModule,
     ReactiveFormsModule,
-    // ColorPickerDirective,
     MatButtonModule,
     FormlyConfigComponent,
   ],
@@ -87,6 +83,10 @@ export class MenuGlobalConfigComponent implements OnInit {
   globalMenuConfig = this.menuManagementService.globalMenuConfig;
 
   constructor(private menuManagementService: MenuManagementService) {}
+
+  modelChange(newModel: any) {
+    this.globalMenuConfig.set({ ...this.globalMenuConfig() });
+  }
 
   ngOnInit() {}
 }
