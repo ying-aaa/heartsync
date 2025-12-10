@@ -9,6 +9,7 @@ import {
   AfterViewInit,
   Component,
   computed,
+  effect,
   ElementRef,
   EventEmitter,
   HostBinding,
@@ -20,17 +21,26 @@ import {
 } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MenuDesignerService } from '../menu-deisgner.sevice';
-import { deepClone, generateUUID } from '@src/app/core/utils';
+import { camelToKebabCase, deepClone, generateUUID } from '@src/app/core/utils';
 import { MatDivider } from '@angular/material/divider';
 import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
 import { MenuManagementService } from '../../menu-management.sevice';
 import { IEventsType } from '@src/app/shared/models/public-api';
 import { CommonModule } from '@angular/common';
+import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 
 @Component({
   selector: 'hs-menu-live',
   templateUrl: './menu-live.component.html',
-  imports: [CdkDropList, CdkDrag, MatIcon, MatDivider, HsIconComponent, CommonModule],
+  imports: [
+    CdkDropList,
+    CdkDrag,
+    MatIcon,
+    MatDivider,
+    HsIconComponent,
+    CommonModule,
+    ConcatUnitsPipe,
+  ],
 })
 export class MenuLiveComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(CdkDropList) dropList!: CdkDropList;
@@ -49,10 +59,18 @@ export class MenuLiveComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isRoot = computed(() => this.level() === 0);
 
+  styleTag: any;
+
   parentDefaultStyle = computed(() => {
-    const globalMenuConfig = this.menuManagementService.globalMenuConfig();
-    const defaultStyle = globalMenuConfig.parent?.default || {};
-    return { ...defaultStyle };
+    // const globalMenuConfig = this.menuManagementService.globalMenuConfig();
+    // const defaultStyle = globalMenuConfig.parent?.default || {};
+    return {};
+  });
+
+  childrenDefaultStyle = computed(() => {
+    // const globalMenuConfig = this.menuManagementService.globalMenuConfig();
+    // const defaultStyle = globalMenuConfig.children?.default || {};
+    return {};
   });
 
   event = new Map<
@@ -62,11 +80,75 @@ export class MenuLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   >();
 
+  concatUnitsPipe = new ConcatUnitsPipe();
+
   constructor(
     private menuDeSignerService: MenuDesignerService,
     private menuManagementService: MenuManagementService,
     private rootEl: ElementRef,
-  ) {}
+  ) {
+    effect(() => {
+      this.drawCss();
+    });
+  }
+
+  transform(value: any): string {
+    let styleStr = '';
+
+    Object.keys(value).forEach((key) => {
+      const unitKey = `${key}Units`;
+      // 将驼峰转为-线+大写的第一个字母，比如backgroundColor转为background-color
+      // if (!key.endsWith('Units')) {
+      //   key = camelToKebabCase(key);
+      // }
+      const hyphenKey = camelToKebabCase(key);
+      if (value.hasOwnProperty(unitKey)) {
+        styleStr += `${hyphenKey}: ${value[key]}${value[unitKey]};`;
+      } else if (!key.endsWith('Units')) {
+        styleStr += `${hyphenKey}: ${value[key]};`;
+      }
+    });
+    return styleStr;
+  }
+
+  drawCss() {
+    const globalMenuConfig = this.menuManagementService.globalMenuConfig();
+    const childrenDefault = this.transform(globalMenuConfig.children?.default || {});
+    const childrenHover = this.transform(globalMenuConfig.children?.hover || {});
+    const childrenActive = this.transform(globalMenuConfig.children?.active || {});
+    const parentDefault = this.transform(globalMenuConfig.parent?.default || {});
+    const parentHover = this.transform(globalMenuConfig.parent?.hover || {});
+    const parentActive = this.transform(globalMenuConfig.parent?.active || {});
+
+    this.styleTag = this.styleTag || document.querySelector('style[id="menu-dynamic-style"]');
+
+    if (!this.styleTag) {
+      this.styleTag = document.createElement('style');
+      this.styleTag.id = 'menu-dynamic-style';
+      document.head.appendChild(this.styleTag);
+    }
+
+    this.styleTag.textContent = `
+      .hs-menu-item-parent {
+        ${parentDefault}
+      }
+      .hs-menu-item-parent:hover {
+        ${parentHover}
+      }
+      .hs-menu-item-parent.active {
+        ${parentActive}
+      }
+      .hs-menu-item-children {
+        ${childrenDefault}
+      }
+      .hs-menu-item-children:hover {
+        ${childrenHover}
+      }
+      .hs-menu-item-children.active {
+        ${childrenActive}
+      }
+    `;
+  }
 
   initEvent() {
     if (this.isRoot()) {

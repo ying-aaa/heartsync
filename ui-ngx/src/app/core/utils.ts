@@ -530,3 +530,27 @@ export function isVideo(path: string) {
   const fileName = path.split('?')[0].split('#')[0]; // 去掉查询参数和锚点
   return /\.(mp4|mov|avi|flv|mkv)$/i.test(fileName);
 }
+
+/**
+ * 将驼峰命名法转换为横线分隔命名法（kebab-case）
+ * @param str 待转换的驼峰字符串（如 backgroundColor、BackgroundColor）
+ * @returns 横线分隔的字符串（如 background-color）
+ */
+export function camelToKebabCase(str: string): string {
+  // 处理非字符串、空字符串的情况
+  if (typeof str !== 'string' || str.trim() === '') {
+    return '';
+  }
+
+  // 核心正则：匹配大写字母，在其前加横线；处理连续大写（如 API → api）
+  const kebabStr = str
+    // 匹配大写字母（排除开头），在前面加横线
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    // 处理开头大写的情况（如 BackgroundColor → -background-color）
+    .replace(/^([A-Z])/, '$1')
+    // 统一转为小写
+    .toLowerCase();
+
+  // 移除可能的开头横线（如原字符串首字母大写时产生的）
+  return kebabStr.startsWith('-') ? kebabStr.slice(1) : kebabStr;
+}

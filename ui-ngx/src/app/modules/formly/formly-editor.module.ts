@@ -6,10 +6,7 @@ import { formlyDisplayTypes } from '@src/app/modules/formly/display/formly-displ
 import { formlyFormTypes } from '@src/app/modules/formly/form/formly-form.config';
 import { formlyLayoutTypes } from '@src/app/modules/formly/layout/formly-layout.config';
 import { FormlyFieldScroll } from '@src/app/modules/formly/layout/scroll/scroll.type';
-import {
-  IEditorFormlyField,
-  IFieldType,
-} from '@src/app/shared/models/public-api';
+import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/public-api';
 import { FormlyWrapperContorl } from './layout/control/control.wrapper';
 import { FormlyFieldSubTableItem } from './layout/subtable-item/subtable-item.type';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,6 +25,12 @@ export function editorExtension(field: IEditorFormlyField) {
   if (field.type === 'formly-group') {
     field.type = IFieldType.COLUMN;
     return;
+  }
+
+  if (field.props?.type === 'number') {
+    field.className = field.className
+      ? 'mat-field-type-number ' + field.className
+      : 'mat-field-type-number ';
   }
 
   // 如果是 COLUMN 类型且没有父级且有样式，则设置 rowGap

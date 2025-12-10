@@ -231,3 +231,10 @@ div.mat-mdc-dialog-title::before {
     display: none !important;
   }
 }
+
+.mat-field-type-number {
+  .mat-mdc-text-field-wrapper {
+    padding-right: 4px;
+
+  }
+}

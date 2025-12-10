@@ -26,10 +26,24 @@ const baseProps = {
 
 const baseExpressions = {
   className: (field: IEditorFormlyField) => {
-    const densityClassName = `hs-density--${field.props?.['density']} `;
-    return field.className
-      ? field.className.replace(/hs-density.*?\s/, densityClassName)
-      : densityClassName;
+    // 1. 定义密度类名的正则（精准匹配 hs-density--xxx 格式，忽略前后空格）
+    const densityRegex = /\bhs-density--[^\s]+\b/g;
+    // 2. 获取新的密度类名（确保有值，避免空类名）
+    const newDensityClassName = field.props?.['density']
+      ? `hs-density--${field.props['density']}`
+      : '';
+
+    // 3. 处理原有 className：移除所有旧的密度类名
+    const cleanedClassName = field.className
+      ? field.className.replace(densityRegex, '').trim()
+      : '';
+
+    // 4. 拼接最终类名（避免多余空格）
+    const finalClassNames = [cleanedClassName, newDensityClassName]
+      .filter(Boolean) // 过滤空字符串
+      .join(' ');
+
+    return finalClassNames;
   },
   'props.hideLabel': (field: IEditorFormlyField) => {
     const shouldHide = field.props?.['layout'] !== 'float';
@@ -83,6 +97,7 @@ export const formlyFormTypes = [
       expressions: {
         ...baseExpressions,
       },
+      className: 'mat-field-number ',
     },
     ...baseConfig,
   },

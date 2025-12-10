@@ -27,6 +27,12 @@ export function runExtension(field: IEditorFormlyField) {
     field.type = IFieldType.COLUMN;
   }
 
+  if (field.props?.type === 'number') {
+    field.className = field.className
+      ? 'mat-field-type-number ' + field.className
+      : 'mat-field-type-number ';
+  }
+
   // 为顶级COLUMN字段设置默认样式
   const isColumn = field.type === IFieldType.COLUMN;
   const isTopLevel = !field.parent;
