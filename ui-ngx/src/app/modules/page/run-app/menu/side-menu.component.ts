@@ -34,6 +34,9 @@ import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.modul
     NgScrollbarModule,
     HsLoadingModule,
   ],
+  host: {
+    class: 'hs-menu-container wh-full block',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SideMenuComponent implements OnInit {

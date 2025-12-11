@@ -36,6 +36,7 @@ export function editorExtension(field: IEditorFormlyField) {
   // 如果是 COLUMN 类型且没有父级且有样式，则设置 rowGap
   if (field.type === IFieldType.COLUMN && !field.parent && field.props?.['styles']) {
     field.props['styles'].rowGap = 8;
+    field.props['styles'].rowGapUnits = 'px';
   }
 
   // 跳过无需处理的情况

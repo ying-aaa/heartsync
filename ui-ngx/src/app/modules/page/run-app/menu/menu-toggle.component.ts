@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { VerseTreeTogglerSwitchComponent } from '@shared/components/ui-verse/verse-tree-toggler-switch/verse-tree-toggler-switch.component';
 import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
+import { MenuManagementService } from '../../design/configuration/menu-management/menu-management.sevice';
 @Component({
   selector: 'hs-menu-toggle',
   template: `
@@ -12,7 +13,7 @@ import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
       mat-button
       class="hs-menu-link hs-menu-item-parent"
       [class.hs-menu-active]="selectedMenuId() === section.id"
-      [style.paddingLeft.px]="level * 30 || 8"
+      [style.paddingLeft.px]="leftPadding()"
       (click)="onMenuClick()"
     >
       @if (section.icon !== null) {
@@ -41,7 +42,15 @@ export class MenuToggleComponent implements OnInit {
 
   selectedMenuId = computed(() => this.runAppMenuService.selectedMenuId());
 
-  constructor(private runAppMenuService: RunAppMenuService) {}
+  leftPadding = computed(() => {
+    const globalMenuConfig = this.menuManagementService.globalMenuConfig();
+    return this.level * globalMenuConfig.menuContainer?.levelPadding || 8;
+  });
+
+  constructor(
+    private runAppMenuService: RunAppMenuService,
+    private menuManagementService: MenuManagementService,
+  ) {}
 
   toggleSection(event: Event) {}
 

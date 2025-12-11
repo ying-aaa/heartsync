@@ -131,7 +131,19 @@ export class MenuManagementService {
     },
     menuContainer: {
       backgroundColor: 'rgb(44,53,76)',
+      width: 225,
+      paddingTopUnits: 'px',
+      paddingRightUnits: 'px',
+      paddingBottomUnits: 'px',
+      paddingLeftUnits: 'px',
+      widthUnits: 'px',
+      paddingTop: 8,
+      paddingRight: 8,
+      paddingBottom: 8,
+      paddingLeft: 8,
+      levelPadding: 20,
     },
+    showType: 'menuContainer',
   });
 
   // 菜单数据

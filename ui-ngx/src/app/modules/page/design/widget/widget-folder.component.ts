@@ -1,6 +1,6 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { Component, computed, OnInit, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormWidgetService } from '@src/app/core/http/form-widget.service';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
@@ -18,7 +18,7 @@ import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'hs-widget-folder',
   templateUrl: './widget-folder.component.html',
-  imports: [HsRadioComponent, ClipboardModule, HsTreeComponent],
+  imports: [HsRadioComponent, ClipboardModule, HsTreeComponent, FormsModule],
 })
 export class WidgetFolderComponent implements OnInit {
   appId: string | null = getParamFromRoute('appId', this.route);

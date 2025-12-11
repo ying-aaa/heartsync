@@ -1,4 +1,4 @@
-import { Component, effect, input, OnInit, output } from '@angular/core';
+import { Component, effect, input, OnInit, output, signal } from '@angular/core';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { FormGroup } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
@@ -62,6 +62,8 @@ export class FormlyConfigComponent implements OnInit {
   formGroup = new FormGroup({});
 
   modelChange = output<any>();
+
+  _options = signal<any>({});
 
   private valueChangeSub!: Subscription;
 

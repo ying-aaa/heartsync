@@ -17,6 +17,7 @@ export interface IRadioConfig {
   label?: string;
   value: string;
   icon?: string;
+  disabled?: boolean;
 }
 
 export enum IEventsType {

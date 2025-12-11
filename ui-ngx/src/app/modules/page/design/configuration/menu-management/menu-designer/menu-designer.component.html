@@ -1,6 +1,6 @@
 <style>
   :host {
-    .wp>.cdk-drag-placeholder {
+    .wp > .cdk-drag-placeholder {
       display: none;
     }
   }
@@ -55,10 +55,7 @@
             <button mat-flat-button>侧边栏</button>
             <button mat-button>顶部栏</button>
           </div>
-          <mat-divider
-            [vertical]="true"
-            class="ml-10px! mr-16px!"
-          ></mat-divider>
+          <mat-divider [vertical]="true" class="ml-10px! mr-16px!"></mat-divider>
           <div class="h-full flex items-center">
             <span class="color-[var(--base-color-70)]">预览设备：</span>
             <mat-form-field class="hs-density--5 w-120px">
@@ -72,17 +69,11 @@
         </div>
 
         <div class="flex items-center">
-          <button
-            mat-icon-button
-            class="hs-icon-button-32"
-          >
+          <button mat-icon-button class="hs-icon-button-32">
             <mat-icon>zoom_out</mat-icon>
           </button>
           <span class="px-8px">80%</span>
-          <button
-            mat-icon-button
-            class="hs-icon-button-32"
-          >
+          <button mat-icon-button class="hs-icon-button-32">
             <mat-icon> zoom_in </mat-icon>
           </button>
         </div>
@@ -93,29 +84,22 @@
         class="relative w-full h-[calc(100%-60px)] bg-#f0f1f4 bg-[radial-gradient(rgba(12,12,12,0.171)_2px,transparent_0)] bg-[length:30px_30px]"
       >
         <div class="absolute-center w-[calc(100%-60px)] h-[calc(100%-60px)] flex bg-#fff">
-          <div class="w-225px pl-8px h-full">
-            <hs-menu-live
-              class="pr-8px block relative"
-              [nodes]="menuData()"
-            ></hs-menu-live>
+          <div class="h-full">
+            <hs-menu-live class="block relative" [nodes]="menuData()"></hs-menu-live>
           </div>
-          <mat-divider
-            [vertical]="true"
-            class="h-full"
-          ></mat-divider>
+          <mat-divider [vertical]="true" class="h-full"></mat-divider>
           <div class="w-0 flex-1"></div>
         </div>
       </div>
     </main>
-    <mat-divider
-      class="h-full"
-      [vertical]="true"
-    ></mat-divider>
+    <mat-divider class="h-full" [vertical]="true"></mat-divider>
 
     <aside class="w-320px min-w-320px h-100% relative">
       <hs-menu-global-config class="wh-full block"></hs-menu-global-config>
 
-      <hs-menu-single-config class="block absolute wh-full top-0 left-0 z-9"></hs-menu-single-config>
+      <hs-menu-single-config
+        class="block absolute wh-full top-0 left-0 z-9"
+      ></hs-menu-single-config>
     </aside>
   </div>
 </content>

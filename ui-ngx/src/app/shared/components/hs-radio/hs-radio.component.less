@@ -1,20 +1,28 @@
 @import "themeMixin";
 
-.themeMixin( {
-    :host {
-      user-select: none;
-      display: block;
-      color: @base-text-color;
-      padding: 4px;
-      border: 1px solid #2f90b930;
-      border-radius: 8px;
-      font-size: 14px;
+.themeMixin({
+  :host {
+    user-select: none;
+    display: block;
+    color: @base-text-color;
+    padding: 4px;
+    border: 1px solid #2f90b930;
+    border-radius: 8px;
+    font-size: 14px;
 
-      .active-style {
-        background-color: rgba(47, 144, 185);
-        color: #fff;
-      }
+    .active-style {
+      background-color: rgba(47, 144, 185);
+      color: #fff;
+    }
+
+    .disabled-style {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    // 禁用状态下的 hover 效果移除
+    .disabled-style:hover {
+      background-color: transparent;
     }
   }
-
-);
+});

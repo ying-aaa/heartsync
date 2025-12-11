@@ -19,6 +19,7 @@ import {
 } from '@src/app/shared/models/widget.model';
 import { FormEditorService } from '../../../../core/services/form-editor.service';
 import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'hs-preset-components',
   templateUrl: './preset-components.component.html',
@@ -31,6 +32,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     CdkDrag,
     CdkDragPlaceholder,
     MatDialogModule,
+    FormsModule,
   ],
 })
 export class PresetComponentsComponent implements OnInit {

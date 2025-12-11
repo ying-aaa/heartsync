@@ -6,37 +6,38 @@
   <mat-divider class="w-full mb-12px!"></mat-divider>
 
   <div class="px-12px h-[calc(100%-59px)] flex flex-col">
-
-
     <hs-formly-config
       class="h-0! flex-1"
       type="menuGlobal"
       [model]="globalMenuConfig()"
+      [options]="{ formState: { model: globalMenuConfig() } }"
       (modelChange)="modelChange($event)"
     >
-      <div class="mb-16px">
+      <div class="mb-8px">
         <div class="mb-8px color-[var(--base-color-70)]">菜单样式</div>
 
         <div class="flex flex-wrap gap-8px">
           @for (item of menuThemes; track $index) {
-          <div
-            class="flex-basis-[calc((100%-2*8px)/3)] p-2px rounded-5px flex items-center justify-between cursor-pointer border-line box-border border-color-transparent hover:border-color-#eee"
-            [class]="
-              globalMenuConfig().themeId === item.id ? 'border-line border-color-#0e46ff!' : ''
-            "
-            (click)="globalMenuConfig().themeId = item.id"
-          >
             <div
-              class="w-18px h-18px rounded-5px mr-3px"
-              [style.background]="item.background"
-            ></div>
-            <span class="text-12px">{{ item.name }}</span>
-          </div>
+              class="flex-basis-[calc((100%-2*8px)/3)] p-2px rounded-5px flex items-center justify-between cursor-pointer border-line box-border border-color-transparent hover:border-color-#eee"
+              [class]="
+                globalMenuConfig().themeId === item.id ? 'border-line border-color-#0e46ff!' : ''
+              "
+              (click)="globalMenuConfig().themeId = item.id"
+            >
+              <div
+                class="w-18px h-18px rounded-5px mr-3px"
+                [style.background]="item.background"
+              ></div>
+              <span class="text-12px">{{ item.name }}</span>
+            </div>
           }
         </div>
       </div>
 
-      <div class="mb-16px">
+      <mat-divider></mat-divider>
+
+      <!-- <div class="mb-16px">
         <div class="mb-8px color-[var(--base-color-70)]">自定义样式</div>
         <div class="flex items-center gap-12px text-12px mb-12px">
           @let selects =
@@ -49,7 +50,7 @@
           <div class="p-8px bg-#eee rounded-8px cursor-pointer">{{ item.name }}</div>
           }
         </div>
-      </div>
+      </div> -->
     </hs-formly-config>
   </div>
 </content>

@@ -4,6 +4,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
+import { MenuManagementService } from '../../design/configuration/menu-management/menu-management.sevice';
 
 @Component({
   selector: 'hs-menu-link',
@@ -12,7 +13,7 @@ import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
       mat-button
       class="hs-menu-link hs-menu-item-children"
       [class.hs-menu-active]="selectedMenuId() === section.id"
-      [style.paddingLeft.px]="level * 30 || 8"
+      [style.paddingLeft.px]="leftPadding()"
       (click)="onMenuClick()"
     >
       @if (section.icon !== null) {
@@ -30,7 +31,15 @@ export class MenuLinkComponent implements OnInit {
 
   selectedMenuId = computed(() => this.runAppMenuService.selectedMenuId());
 
-  constructor(private runAppMenuService: RunAppMenuService) {}
+  leftPadding = computed(() => {
+    const globalMenuConfig = this.menuManagementService.globalMenuConfig();
+    return this.level * globalMenuConfig.menuContainer?.levelPadding || 8;
+  });
+
+  constructor(
+    private runAppMenuService: RunAppMenuService,
+    private menuManagementService: MenuManagementService,
+  ) {}
 
   onMenuClick() {
     this.runAppMenuService.navigateMenuById(this.section.id);

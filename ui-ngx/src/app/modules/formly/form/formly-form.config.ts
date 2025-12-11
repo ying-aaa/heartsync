@@ -4,6 +4,7 @@ import { FormlyFieldColorPicker } from './color/color-picker.type';
 import { FormlyFieldRichtext } from './richtext/richtext-eidtor.type';
 import { FormlyFieldDraw } from './draw/draw.type';
 import { FormlyFieldJsonObject } from './json-object/json-object.type';
+import { FormlyFieldGridRadio } from './radio/radio.type';
 
 const appearance = 'outline';
 const density = 5;
@@ -158,6 +159,22 @@ export const formlyFormTypes = [
       },
     },
     ...baseConfig,
+  },
+  {
+    name: 'grid-radio',
+    component: FormlyFieldGridRadio,
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        typeName: '单选',
+        label: '单选',
+        options: [
+          { value: 1, label: '选项 1' },
+          { value: 2, label: '选项 2' },
+        ],
+      },
+    },
+    wrappers: ['layout'],
   },
   {
     name: 'checkbox',

@@ -1,36 +1,16 @@
 import { deepClone, generateUUID } from '@src/app/core/utils';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
-// 递归函数，查询对象及子数据fieldGroup下的对象有key属性的，给key值前面添加执行值，
-export function addKeyPrefix(obj: any, prefix: string): any {
-  if (Array.isArray(obj)) {
-    return obj.map((item) => addKeyPrefix(item, prefix));
-  }
-
-  if (typeof obj === 'object' && obj !== null) {
-    if (typeof obj.key === 'string') {
-      obj.key = prefix + obj.key;
-    }
-
-    // 递归处理 fieldGroup，不管有没有 key
-    if (Array.isArray(obj.fieldGroup)) {
-      obj.fieldGroup = addKeyPrefix(obj.fieldGroup, prefix);
-    }
-  }
-
-  return obj;
-}
-
 // 重写fieldId
-export function rewriteFieldId(obj: any): any {
+export function addFieldId(obj: any): any {
   if (Array.isArray(obj)) {
-    return obj.map((item) => rewriteFieldId(item));
+    return obj.map((item) => addFieldId(item));
   }
 
   if (typeof obj === 'object' && obj !== null) {
     obj.fieldId = generateUUID(`${obj.type}_key_`);
 
     if (Array.isArray(obj.fieldGroup)) {
-      obj.fieldGroup = rewriteFieldId(obj.fieldGroup);
+      obj.fieldGroup = addFieldId(obj.fieldGroup);
     }
   }
 
@@ -56,1062 +36,1059 @@ export function addUnitField(obj: any): any {
   return obj;
 }
 
-const baseConfig = () =>
-  addUnitField([
-    {
-      type: 'grid',
-      props: {
-        label: '栅格',
-        icon: 'grid_on',
-        typeName: '栅格',
-        row: 1,
-        density: 1,
-        styles: {
-          columnGap: 8,
-          columnGapUnits: 'px',
-        },
+const baseConfig = () => [
+  {
+    type: 'grid',
+    props: {
+      label: '栅格',
+      icon: 'grid_on',
+      typeName: '栅格',
+      row: 1,
+      density: 1,
+      styles: {
+        columnGap: 8,
+        columnGapUnits: 'px',
       },
+    },
 
-      fieldGroup: [
-        {
-          type: 'column',
+    fieldGroup: [
+      {
+        type: 'column',
 
-          props: {
-            row: 1,
-            label: '列',
-            typeName: '列',
-            icon: 'dehaze',
-            density: 1,
-            styles: {
-              rowGap: 12,
-              rowGapUnits: 'px',
+        props: {
+          row: 1,
+          label: '列',
+          typeName: '列',
+          icon: 'dehaze',
+          density: 1,
+          styles: {
+            rowGap: 12,
+            rowGapUnits: 'px',
+          },
+        },
+        fieldGroup: [
+          {
+            key: 'height',
+            type: 'input',
+            props: {
+              type: 'number',
+              label: '高度',
+              typeName: '单行文本',
+              icon: 'format_color_text',
+              row: 1,
+              placeholder: '',
+              disabled: false,
+              appearance: 'outline',
+              density: 5,
+              description: '',
+              required: false,
+              readonly: false,
+              layout: 'top',
+              hideLabel: true,
+              logicConfig: [],
+              units: 'px',
             },
           },
-          fieldGroup: [
-            {
-              key: 'height',
-              type: 'input',
-              props: {
-                type: 'number',
-                label: '高度',
-                typeName: '单行文本',
-                icon: 'format_color_text',
-                row: 1,
-                placeholder: '',
-                disabled: false,
-                appearance: 'outline',
-                density: 5,
-                description: '',
-                required: false,
-                readonly: false,
-                layout: 'top',
-                hideLabel: true,
-                logicConfig: [],
-                units: 'px',
-              },
-            },
-            {
-              key: 'backgroundColor',
+          {
+            key: 'backgroundColor',
+            type: 'color-picker',
+
+            props: {
               type: 'color-picker',
+              label: '背景颜色',
+              typeName: '颜色选择器',
+              icon: 'color_lens',
+              row: 1,
+              placeholder: '',
+              disabled: false,
+              appearance: 'outline',
+              density: 5,
+              description: '',
+              required: false,
+              readonly: false,
+              layout: 'top',
+              hideLabel: true,
+            },
+          },
+          {
+            type: 'fieldset',
 
-              props: {
-                type: 'color-picker',
-                label: '背景颜色',
-                typeName: '颜色选择器',
-                icon: 'color_lens',
-                row: 1,
-                placeholder: '',
-                disabled: false,
-                appearance: 'outline',
-                density: 5,
-                description: '',
-                required: false,
-                readonly: false,
-                layout: 'top',
-                hideLabel: true,
+            props: {
+              label: '文本',
+              icon: 'subtitles',
+              typeName: '群组',
+              row: 1,
+              density: 1,
+              showBorder: false,
+              styles: {
+                color: '',
+                fontSize: 14,
+                fontSizeUnits: 'px',
+                fontWeight: 400,
+                paddingLeft: 0,
+                paddingLeftUnits: 'px',
+                paddingTop: 8,
+                paddingTopUnits: 'px',
+                paddingRight: 0,
+                paddingRightUnits: 'px',
+                paddingBottom: 0,
+                paddingBottomUnits: 'px',
+                borderRadius: 0,
+                borderRadiusUnits: 'px',
+                borderColor: 'var(--mdc-outlined-text-field-outline-color)',
+                borderWidth: 0,
+                borderWidthUnits: 'px',
+                borderStyle: 'groove',
               },
             },
-            {
-              type: 'fieldset',
 
-              props: {
-                label: '文本',
-                icon: 'subtitles',
-                typeName: '群组',
-                row: 1,
-                density: 1,
-                showBorder: false,
-                styles: {
-                  color: '',
-                  fontSize: 14,
-                  fontSizeUnits: 'px',
-                  fontWeight: 400,
-                  paddingLeft: 0,
-                  paddingLeftUnits: 'px',
-                  paddingTop: 8,
-                  paddingTopUnits: 'px',
-                  paddingRight: 0,
-                  paddingRightUnits: 'px',
-                  paddingBottom: 0,
-                  paddingBottomUnits: 'px',
-                  borderRadius: 0,
-                  borderRadiusUnits: 'px',
-                  borderColor: 'var(--mdc-outlined-text-field-outline-color)',
-                  borderWidth: 0,
-                  borderWidthUnits: 'px',
-                  borderStyle: 'groove',
-                },
-              },
+            fieldGroup: [
+              {
+                type: 'grid',
 
-              fieldGroup: [
-                {
-                  type: 'grid',
-
-                  props: {
-                    label: '栅格',
-                    icon: 'grid_on',
-                    typeName: '栅格',
-                    density: 1,
-                    styles: {
-                      columnGap: 8,
-                      columnGapUnits: 'px',
-                    },
+                props: {
+                  label: '栅格',
+                  icon: 'grid_on',
+                  typeName: '栅格',
+                  density: 1,
+                  styles: {
+                    columnGap: 8,
+                    columnGapUnits: 'px',
                   },
+                },
 
-                  fieldGroup: [
-                    {
-                      type: 'column',
+                fieldGroup: [
+                  {
+                    type: 'column',
 
-                      props: {
-                        row: 1,
-                        label: '列',
-                        typeName: '列',
-                        icon: 'dehaze',
-                        density: 1,
-                        styles: {
-                          rowGap: 0,
-                          rowGapUnits: 'px',
-                        },
+                    props: {
+                      row: 1,
+                      label: '列',
+                      typeName: '列',
+                      icon: 'dehaze',
+                      density: 1,
+                      styles: {
+                        rowGap: 0,
+                        rowGapUnits: 'px',
                       },
+                    },
 
-                      fieldGroup: [
-                        {
-                          type: 'grid',
+                    fieldGroup: [
+                      {
+                        type: 'grid',
 
-                          props: {
-                            label: '栅格',
-                            icon: 'grid_on',
-                            typeName: '栅格',
-                            row: 1,
-                            density: 1,
-                            styles: {
-                              columnGap: 8,
-                              columnGapUnits: 'px',
-                            },
+                        props: {
+                          label: '栅格',
+                          icon: 'grid_on',
+                          typeName: '栅格',
+                          row: 1,
+                          density: 1,
+                          styles: {
+                            columnGap: 8,
+                            columnGapUnits: 'px',
                           },
-
-                          fieldGroup: [
-                            {
-                              type: 'column',
-
-                              props: {
-                                row: 1,
-                                label: '列',
-                                typeName: '列',
-                                icon: 'dehaze',
-                                density: 1,
-                                styles: {
-                                  rowGap: 12,
-                                  rowGapUnits: 'px',
-                                },
-                              },
-
-                              fieldGroup: [
-                                {
-                                  key: 'fontSize',
-                                  type: 'input',
-
-                                  props: {
-                                    type: 'number',
-                                    label: '字号',
-                                    typeName: '数字',
-                                    icon: '123',
-                                    row: 1,
-                                    placeholder: '',
-                                    disabled: false,
-                                    appearance: 'outline',
-                                    density: 5,
-                                    description: '',
-                                    required: false,
-                                    readonly: false,
-                                    layout: 'float',
-                                    hideLabel: false,
-                                    units: 'px',
-                                  },
-                                },
-                              ],
-                            },
-                            {
-                              type: 'column',
-
-                              props: {
-                                row: 1,
-                                density: 1,
-                                typeName: '列',
-                                styles: {
-                                  rowGap: 12,
-                                  rowGapUnits: 'px',
-                                },
-                              },
-
-                              fieldGroup: [
-                                {
-                                  key: 'color',
-                                  type: 'color-picker',
-
-                                  props: {
-                                    type: 'text',
-                                    label: '颜色',
-                                    typeName: '颜色选择器',
-                                    icon: 'format_color_text',
-                                    row: 1,
-                                    placeholder: '',
-                                    disabled: false,
-                                    appearance: 'outline',
-                                    density: 5,
-                                    description: '',
-                                    required: false,
-                                    readonly: false,
-                                    layout: 'float',
-                                    hideLabel: false,
-                                  },
-                                },
-                              ],
-                            },
-                          ],
                         },
-                        {
-                          key: '6343031977104208',
-                          type: 'radio',
 
-                          props: {
-                            label: '修饰',
-                            typeName: '单选',
-                            icon: 'radio_button_checked',
-                            row: 1,
-                            placeholder: '',
-                            disabled: false,
-                            appearance: 'outline',
-                            density: 5,
-                            description: '',
-                            required: false,
-                            readonly: false,
-                            layout: 'float',
-                            hideLabel: false,
-                            options: [
-                              {
-                                value: '1',
-                                label: '无',
+                        fieldGroup: [
+                          {
+                            type: 'column',
+
+                            props: {
+                              row: 1,
+                              label: '列',
+                              typeName: '列',
+                              icon: 'dehaze',
+                              density: 1,
+                              styles: {
+                                rowGap: 12,
+                                rowGapUnits: 'px',
                               },
+                            },
+
+                            fieldGroup: [
                               {
-                                value: 'bold',
-                                label: '加粗',
-                              },
-                              {
-                                value: 'italic',
-                                label: '斜体',
-                              },
-                              {
-                                value: 'underline',
-                                label: '下划线',
+                                key: 'fontSize',
+                                type: 'input',
+
+                                props: {
+                                  type: 'number',
+                                  label: '字号',
+                                  typeName: '数字',
+                                  icon: '123',
+                                  row: 1,
+                                  placeholder: '',
+                                  disabled: false,
+                                  appearance: 'outline',
+                                  density: 5,
+                                  description: '',
+                                  required: false,
+                                  readonly: false,
+                                  layout: 'float',
+                                  hideLabel: false,
+                                  units: 'px',
+                                },
                               },
                             ],
-                            hideFieldUnderline: true,
-                            floatLabel: 'always',
-                            tabindex: -1,
                           },
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              type: 'fieldset',
+                          {
+                            type: 'column',
 
-              props: {
-                label: '边框',
-                icon: 'subtitles',
-                typeName: '群组',
-                row: 1,
-                density: 1,
-                showBorder: false,
-                styles: {
-                  color: '#000000',
-                  fontSize: 14,
-                  fontSizeUnits: 'px',
-                  fontWeight: 400,
-                  paddingLeft: 0,
-                  paddingLeftUnits: 'px',
-                  paddingTop: 8,
-                  paddingTopUnits: 'px',
-                  paddingRight: 0,
-                  paddingRightUnits: 'px',
-                  paddingBottom: 0,
-                  paddingBottomUnits: 'px',
-                  borderRadius: 0,
-                  borderRadiusUnits: 'px',
-                  borderColor: 'var(--mdc-outlined-text-field-outline-color)',
-                  borderWidth: 0,
-                  borderWidthUnits: 'px',
-                  borderStyle: 'groove',
-                },
-              },
+                            props: {
+                              row: 1,
+                              density: 1,
+                              typeName: '列',
+                              styles: {
+                                rowGap: 12,
+                                rowGapUnits: 'px',
+                              },
+                            },
 
-              fieldGroup: [
-                {
-                  type: 'grid',
+                            fieldGroup: [
+                              {
+                                key: 'color',
+                                type: 'color-picker',
 
-                  props: {
-                    label: '栅格',
-                    icon: 'grid_on',
-                    typeName: '栅格',
-                    density: 1,
-                    styles: {
-                      columnGap: 8,
-                      columnGapUnits: 'px',
-                    },
-                  },
-
-                  fieldGroup: [
-                    {
-                      type: 'column',
-
-                      props: {
-                        row: 1,
-                        label: '列',
-                        typeName: '列',
-                        icon: 'dehaze',
-                        density: 1,
-                        styles: {
-                          rowGap: 0,
-                          rowGapUnits: 'px',
-                        },
+                                props: {
+                                  type: 'text',
+                                  label: '颜色',
+                                  typeName: '颜色选择器',
+                                  icon: 'format_color_text',
+                                  row: 1,
+                                  placeholder: '',
+                                  disabled: false,
+                                  appearance: 'outline',
+                                  density: 5,
+                                  description: '',
+                                  required: false,
+                                  readonly: false,
+                                  layout: 'float',
+                                  hideLabel: false,
+                                },
+                              },
+                            ],
+                          },
+                        ],
                       },
+                      {
+                        key: '6343031977104208',
+                        type: 'radio',
 
-                      fieldGroup: [
-                        {
-                          type: 'grid',
-
-                          props: {
-                            label: '栅格',
-                            icon: 'grid_on',
-                            typeName: '栅格',
-                            row: 1,
-                            density: 1,
-                            styles: {
-                              columnGap: 8,
-                              columnGapUnits: 'px',
-                            },
-                          },
-
-                          fieldGroup: [
+                        props: {
+                          label: '修饰',
+                          typeName: '单选',
+                          icon: 'radio_button_checked',
+                          row: 1,
+                          placeholder: '',
+                          disabled: false,
+                          appearance: 'outline',
+                          density: 5,
+                          description: '',
+                          required: false,
+                          readonly: false,
+                          layout: 'float',
+                          hideLabel: false,
+                          options: [
                             {
-                              type: 'column',
-
-                              props: {
-                                row: 1,
-                                label: '列',
-                                typeName: '列',
-                                icon: 'dehaze',
-                                density: 1,
-                                styles: {
-                                  rowGap: 12,
-                                  rowGapUnits: 'px',
-                                },
-                              },
-
-                              fieldGroup: [
-                                {
-                                  key: 'borderTopWidth',
-                                  type: 'input',
-
-                                  props: {
-                                    type: 'number',
-                                    label: '上',
-                                    typeName: '数字',
-                                    icon: '123',
-                                    row: 1,
-                                    placeholder: '',
-                                    disabled: false,
-                                    appearance: 'outline',
-                                    density: 5,
-                                    description: '',
-                                    required: false,
-                                    readonly: false,
-                                    layout: 'float',
-                                    hideLabel: false,
-                                    units: 'px',
-                                  },
-                                },
-                              ],
+                              value: '1',
+                              label: '无',
                             },
                             {
-                              type: 'column',
-
-                              props: {
-                                row: 1,
-                                label: '列',
-                                typeName: '列',
-                                icon: 'dehaze',
-                                density: 1,
-                                styles: {
-                                  rowGap: 12,
-                                  rowGapUnits: 'px',
-                                },
-                              },
-
-                              fieldGroup: [
-                                {
-                                  key: 'borderRightWidth',
-                                  type: 'input',
-
-                                  props: {
-                                    type: 'number',
-                                    label: '右',
-                                    units: 'px',
-                                    typeName: '数字',
-                                    icon: '123',
-                                    row: 1,
-                                    placeholder: '',
-                                    disabled: false,
-                                    appearance: 'outline',
-                                    density: 5,
-                                    description: '',
-                                    required: false,
-                                    readonly: false,
-                                    layout: 'float',
-                                    hideLabel: false,
-                                  },
-                                },
-                              ],
+                              value: 'bold',
+                              label: '加粗',
                             },
                             {
-                              type: 'column',
-
-                              props: {
-                                row: 1,
-                                label: '列',
-                                typeName: '列',
-                                icon: 'dehaze',
-                                density: 1,
-                                styles: {
-                                  rowGap: 12,
-                                  rowGapUnits: 'px',
-                                },
-                              },
-
-                              fieldGroup: [
-                                {
-                                  key: 'borderBottomWidth',
-                                  type: 'input',
-
-                                  props: {
-                                    type: 'number',
-                                    label: '下',
-                                    units: 'px',
-                                    typeName: '数字',
-                                    icon: '123',
-                                    row: 1,
-                                    placeholder: '',
-                                    disabled: false,
-                                    appearance: 'outline',
-                                    density: 5,
-                                    description: '',
-                                    required: false,
-                                    readonly: false,
-                                    layout: 'float',
-                                    hideLabel: false,
-                                  },
-                                },
-                              ],
+                              value: 'italic',
+                              label: '斜体',
                             },
                             {
-                              type: 'column',
-
-                              props: {
-                                row: 1,
-                                density: 1,
-                                typeName: '列',
-                                styles: {
-                                  rowGap: 12,
-                                  rowGapUnits: 'px',
-                                },
-                              },
-
-                              fieldGroup: [
-                                {
-                                  key: 'borderLeftWidth',
-                                  type: 'input',
-                                  props: {
-                                    type: 'number',
-                                    label: '左',
-                                    units: 'px',
-                                    typeName: '数字',
-                                    icon: '123',
-                                    row: 1,
-                                    placeholder: '',
-                                    disabled: false,
-                                    appearance: 'outline',
-                                    density: 5,
-                                    description: '',
-                                    required: false,
-                                    readonly: false,
-                                    layout: 'float',
-                                    hideLabel: false,
-                                  },
-                                },
-                              ],
+                              value: 'underline',
+                              label: '下划线',
                             },
                           ],
+                          hideFieldUnderline: true,
+                          floatLabel: 'always',
+                          tabindex: -1,
                         },
-                        {
-                          type: 'grid',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: 'fieldset',
 
-                          props: {
-                            label: '栅格',
-                            icon: 'grid_on',
-                            typeName: '栅格',
-                            row: 1,
-                            density: 1,
-                            styles: {
-                              columnGap: 8,
-                              columnGapUnits: 'px',
-                            },
+            props: {
+              label: '边框',
+              icon: 'subtitles',
+              typeName: '群组',
+              row: 1,
+              density: 1,
+              showBorder: false,
+              styles: {
+                color: '#000000',
+                fontSize: 14,
+                fontSizeUnits: 'px',
+                fontWeight: 400,
+                paddingLeft: 0,
+                paddingLeftUnits: 'px',
+                paddingTop: 8,
+                paddingTopUnits: 'px',
+                paddingRight: 0,
+                paddingRightUnits: 'px',
+                paddingBottom: 0,
+                paddingBottomUnits: 'px',
+                borderRadius: 0,
+                borderRadiusUnits: 'px',
+                borderColor: 'var(--mdc-outlined-text-field-outline-color)',
+                borderWidth: 0,
+                borderWidthUnits: 'px',
+                borderStyle: 'groove',
+              },
+            },
+
+            fieldGroup: [
+              {
+                type: 'grid',
+
+                props: {
+                  label: '栅格',
+                  icon: 'grid_on',
+                  typeName: '栅格',
+                  density: 1,
+                  styles: {
+                    columnGap: 8,
+                    columnGapUnits: 'px',
+                  },
+                },
+
+                fieldGroup: [
+                  {
+                    type: 'column',
+
+                    props: {
+                      row: 1,
+                      label: '列',
+                      typeName: '列',
+                      icon: 'dehaze',
+                      density: 1,
+                      styles: {
+                        rowGap: 0,
+                        rowGapUnits: 'px',
+                      },
+                    },
+
+                    fieldGroup: [
+                      {
+                        type: 'grid',
+
+                        props: {
+                          label: '栅格',
+                          icon: 'grid_on',
+                          typeName: '栅格',
+                          row: 1,
+                          density: 1,
+                          styles: {
+                            columnGap: 8,
+                            columnGapUnits: 'px',
                           },
+                        },
 
-                          fieldGroup: [
-                            {
-                              type: 'column',
+                        fieldGroup: [
+                          {
+                            type: 'column',
 
-                              props: {
-                                row: 1,
-                                label: '列',
-                                typeName: '列',
-                                icon: 'dehaze',
-                                density: 1,
-                                styles: {
-                                  rowGap: 12,
-                                  rowGapUnits: 'px',
+                            props: {
+                              row: 1,
+                              label: '列',
+                              typeName: '列',
+                              icon: 'dehaze',
+                              density: 1,
+                              styles: {
+                                rowGap: 12,
+                                rowGapUnits: 'px',
+                              },
+                            },
+
+                            fieldGroup: [
+                              {
+                                key: 'borderTopWidth',
+                                type: 'input',
+
+                                props: {
+                                  type: 'number',
+                                  label: '上',
+                                  typeName: '数字',
+                                  icon: '123',
+                                  row: 1,
+                                  placeholder: '',
+                                  disabled: false,
+                                  appearance: 'outline',
+                                  density: 5,
+                                  description: '',
+                                  required: false,
+                                  readonly: false,
+                                  layout: 'float',
+                                  hideLabel: false,
+                                  units: 'px',
                                 },
                               },
+                            ],
+                          },
+                          {
+                            type: 'column',
 
-                              fieldGroup: [
-                                {
-                                  key: 'borderColor',
+                            props: {
+                              row: 1,
+                              label: '列',
+                              typeName: '列',
+                              icon: 'dehaze',
+                              density: 1,
+                              styles: {
+                                rowGap: 12,
+                                rowGapUnits: 'px',
+                              },
+                            },
+
+                            fieldGroup: [
+                              {
+                                key: 'borderRightWidth',
+                                type: 'input',
+
+                                props: {
+                                  type: 'number',
+                                  label: '右',
+                                  units: 'px',
+                                  typeName: '数字',
+                                  icon: '123',
+                                  row: 1,
+                                  placeholder: '',
+                                  disabled: false,
+                                  appearance: 'outline',
+                                  density: 5,
+                                  description: '',
+                                  required: false,
+                                  readonly: false,
+                                  layout: 'float',
+                                  hideLabel: false,
+                                },
+                              },
+                            ],
+                          },
+                          {
+                            type: 'column',
+
+                            props: {
+                              row: 1,
+                              label: '列',
+                              typeName: '列',
+                              icon: 'dehaze',
+                              density: 1,
+                              styles: {
+                                rowGap: 12,
+                                rowGapUnits: 'px',
+                              },
+                            },
+
+                            fieldGroup: [
+                              {
+                                key: 'borderBottomWidth',
+                                type: 'input',
+
+                                props: {
+                                  type: 'number',
+                                  label: '下',
+                                  units: 'px',
+                                  typeName: '数字',
+                                  icon: '123',
+                                  row: 1,
+                                  placeholder: '',
+                                  disabled: false,
+                                  appearance: 'outline',
+                                  density: 5,
+                                  description: '',
+                                  required: false,
+                                  readonly: false,
+                                  layout: 'float',
+                                  hideLabel: false,
+                                },
+                              },
+                            ],
+                          },
+                          {
+                            type: 'column',
+
+                            props: {
+                              row: 1,
+                              density: 1,
+                              typeName: '列',
+                              styles: {
+                                rowGap: 12,
+                                rowGapUnits: 'px',
+                              },
+                            },
+
+                            fieldGroup: [
+                              {
+                                key: 'borderLeftWidth',
+                                type: 'input',
+                                props: {
+                                  type: 'number',
+                                  label: '左',
+                                  units: 'px',
+                                  typeName: '数字',
+                                  icon: '123',
+                                  row: 1,
+                                  placeholder: '',
+                                  disabled: false,
+                                  appearance: 'outline',
+                                  density: 5,
+                                  description: '',
+                                  required: false,
+                                  readonly: false,
+                                  layout: 'float',
+                                  hideLabel: false,
+                                },
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      {
+                        type: 'grid',
+
+                        props: {
+                          label: '栅格',
+                          icon: 'grid_on',
+                          typeName: '栅格',
+                          row: 1,
+                          density: 1,
+                          styles: {
+                            columnGap: 8,
+                            columnGapUnits: 'px',
+                          },
+                        },
+
+                        fieldGroup: [
+                          {
+                            type: 'column',
+
+                            props: {
+                              row: 1,
+                              label: '列',
+                              typeName: '列',
+                              icon: 'dehaze',
+                              density: 1,
+                              styles: {
+                                rowGap: 12,
+                                rowGapUnits: 'px',
+                              },
+                            },
+
+                            fieldGroup: [
+                              {
+                                key: 'borderColor',
+                                type: 'color-picker',
+
+                                props: {
                                   type: 'color-picker',
-
-                                  props: {
-                                    type: 'color-picker',
-                                    label: '边框颜色',
-                                    typeName: '颜色选择器',
-                                    icon: 'color_lens',
-                                    row: 1,
-                                    placeholder: '',
-                                    disabled: false,
-                                    appearance: 'outline',
-                                    density: 5,
-                                    description: '',
-                                    required: false,
-                                    readonly: false,
-                                    layout: 'float',
-                                    hideLabel: false,
-                                  },
-                                },
-                              ],
-                            },
-                            {
-                              type: 'column',
-
-                              props: {
-                                row: 1,
-                                label: '列',
-                                typeName: '列',
-                                icon: 'dehaze',
-                                density: 1,
-                                styles: {
-                                  rowGap: 12,
-                                  rowGapUnits: 'px',
+                                  label: '边框颜色',
+                                  typeName: '颜色选择器',
+                                  icon: 'color_lens',
+                                  row: 1,
+                                  placeholder: '',
+                                  disabled: false,
+                                  appearance: 'outline',
+                                  density: 5,
+                                  description: '',
+                                  required: false,
+                                  readonly: false,
+                                  layout: 'float',
+                                  hideLabel: false,
                                 },
                               },
+                            ],
+                          },
+                          {
+                            type: 'column',
 
-                              fieldGroup: [
-                                {
-                                  key: 'borderStyle',
-                                  type: 'select',
-
-                                  props: {
-                                    label: '边框样式',
-                                    typeName: '下拉单选',
-                                    icon: 'playlist_add_check',
-                                    row: 1,
-                                    placeholder: '',
-                                    disabled: false,
-                                    appearance: 'outline',
-                                    density: 5,
-                                    description: '',
-                                    required: false,
-                                    readonly: false,
-                                    layout: 'float',
-                                    hideLabel: false,
-                                    options: [
-                                      {
-                                        value: 'solid',
-                                        label: '―――――――',
-                                      },
-                                      {
-                                        value: 'dashed',
-                                        label: '------------',
-                                      },
-                                    ],
-                                  },
-                                },
-                              ],
+                            props: {
+                              row: 1,
+                              label: '列',
+                              typeName: '列',
+                              icon: 'dehaze',
+                              density: 1,
+                              styles: {
+                                rowGap: 12,
+                                rowGapUnits: 'px',
+                              },
                             },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              type: 'fieldset',
 
-              props: {
-                label: '内边距',
-                icon: 'subtitles',
-                typeName: '群组',
-                row: 1,
-                density: 1,
-                showBorder: false,
-                styles: {
-                  color: '#000000',
-                  fontSize: 14,
-                  fontSizeUnits: 'px',
-                  fontWeight: 400,
-                  paddingLeft: 0,
-                  paddingLeftUnits: 'px',
-                  paddingTop: 8,
-                  paddingTopUnits: 'px',
-                  paddingRight: 0,
-                  paddingRightUnits: 'px',
-                  paddingBottom: 0,
-                  paddingBottomUnits: 'px',
-                  borderRadius: 0,
-                  borderRadiusUnits: 'px',
-                  borderColor: 'var(--mdc-outlined-text-field-outline-color)',
-                  borderWidth: 0,
-                  borderWidthUnits: 'px',
-                  borderStyle: 'groove',
-                },
-              },
+                            fieldGroup: [
+                              {
+                                key: 'borderStyle',
+                                type: 'select',
 
-              fieldGroup: [
-                {
-                  type: 'grid',
-
-                  props: {
-                    label: '栅格',
-                    icon: 'grid_on',
-                    typeName: '栅格',
-                    density: 1,
-                    styles: {
-                      columnGap: 8,
-                      columnGapUnits: 'px',
-                    },
+                                props: {
+                                  label: '边框样式',
+                                  typeName: '下拉单选',
+                                  icon: 'playlist_add_check',
+                                  row: 1,
+                                  placeholder: '',
+                                  disabled: false,
+                                  appearance: 'outline',
+                                  density: 5,
+                                  description: '',
+                                  required: false,
+                                  readonly: false,
+                                  layout: 'float',
+                                  hideLabel: false,
+                                  options: [
+                                    {
+                                      value: 'solid',
+                                      label: '―――――――',
+                                    },
+                                    {
+                                      value: 'dashed',
+                                      label: '------------',
+                                    },
+                                  ],
+                                },
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
                   },
-
-                  fieldGroup: [
-                    {
-                      type: 'column',
-
-                      props: {
-                        row: 1,
-                        label: '列',
-                        typeName: '列',
-                        icon: 'dehaze',
-                        density: 1,
-                        styles: {
-                          rowGap: 0,
-                          rowGapUnits: 'px',
-                        },
-                      },
-
-                      fieldGroup: [
-                        {
-                          key: 'paddingTop',
-                          type: 'input',
-
-                          props: {
-                            type: 'number',
-                            label: '上',
-                            typeName: '数字',
-                            icon: '123',
-                            row: 1,
-                            placeholder: '',
-                            disabled: false,
-                            appearance: 'outline',
-                            density: 5,
-                            description: '',
-                            required: false,
-                            readonly: false,
-                            layout: 'float',
-                            hideLabel: false,
-                            units: 'px',
-                          },
-                        },
-                      ],
-                    },
-                    {
-                      type: 'column',
-
-                      props: {
-                        row: 1,
-                        styles: {
-                          rowGap: 0,
-                          rowGapUnits: 'px',
-                        },
-                        density: 1,
-                        typeName: '列',
-                      },
-
-                      fieldGroup: [
-                        {
-                          key: 'paddingRight',
-                          type: 'input',
-
-                          props: {
-                            type: 'number',
-                            label: '右',
-                            units: 'px',
-                            typeName: '数字',
-                            icon: '123',
-                            row: 1,
-                            placeholder: '',
-                            disabled: false,
-                            appearance: 'outline',
-                            density: 5,
-                            description: '',
-                            required: false,
-                            readonly: false,
-                            layout: 'float',
-                            hideLabel: false,
-                          },
-                        },
-                      ],
-                    },
-                    {
-                      type: 'column',
-
-                      props: {
-                        row: 1,
-                        styles: {
-                          rowGap: 0,
-                          rowGapUnits: 'px',
-                        },
-                        density: 1,
-                        typeName: '列',
-                      },
-
-                      fieldGroup: [
-                        {
-                          key: 'paddingBottom',
-                          type: 'input',
-
-                          props: {
-                            type: 'number',
-                            label: '下',
-                            units: 'px',
-                            typeName: '数字',
-                            icon: '123',
-                            row: 1,
-                            placeholder: '',
-                            disabled: false,
-                            appearance: 'outline',
-                            density: 5,
-                            description: '',
-                            required: false,
-                            readonly: false,
-                            layout: 'float',
-                            hideLabel: false,
-                          },
-                        },
-                      ],
-                    },
-                    {
-                      type: 'column',
-
-                      props: {
-                        row: 1,
-                        density: 1,
-                        typeName: '列',
-                        styles: {
-                          rowGap: 0,
-                          rowGapUnits: 'px',
-                        },
-                      },
-
-                      fieldGroup: [
-                        {
-                          key: 'paddingLeft',
-                          type: 'input',
-
-                          props: {
-                            type: 'number',
-                            label: '左',
-                            units: 'px',
-                            typeName: '数字',
-                            icon: '123',
-                            row: 1,
-                            placeholder: '',
-                            disabled: false,
-                            appearance: 'outline',
-                            density: 5,
-                            description: '',
-                            required: false,
-                            readonly: false,
-                            layout: 'float',
-                            hideLabel: false,
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              type: 'fieldset',
-
-              props: {
-                label: '圆角',
-                icon: 'subtitles',
-                typeName: '群组',
-                row: 1,
-                density: 1,
-                showBorder: false,
-                styles: {
-                  color: '',
-                  fontSize: 14,
-                  fontSizeUnits: 'px',
-                  fontWeight: 400,
-                  paddingLeft: 0,
-                  paddingLeftUnits: 'px',
-                  paddingTop: 8,
-                  paddingTopUnits: 'px',
-                  paddingRight: 0,
-                  paddingRightUnits: 'px',
-                  paddingBottom: 0,
-                  paddingBottomUnits: 'px',
-                  borderRadius: 0,
-                  borderRadiusUnits: 'px',
-                  borderColor: 'var(--mdc-outlined-text-field-outline-color)',
-                  borderWidth: 0,
-                  borderWidthUnits: 'px',
-                  borderStyle: 'groove',
-                },
+                ],
               },
-
-              fieldGroup: [
-                {
-                  type: 'grid',
-
-                  props: {
-                    label: '栅格',
-                    icon: 'grid_on',
-                    typeName: '栅格',
-                    density: 1,
-                    styles: {
-                      columnGap: 8,
-                      columnGapUnits: 'px',
-                    },
-                  },
-
-                  fieldGroup: [
-                    {
-                      type: 'column',
-
-                      props: {
-                        row: 1,
-                        label: '列',
-                        typeName: '列',
-                        icon: 'dehaze',
-                        density: 1,
-                        styles: {
-                          rowGap: 0,
-                          rowGapUnits: 'px',
-                        },
-                      },
-
-                      fieldGroup: [
-                        {
-                          key: 'borderTopLeftRadius',
-                          type: 'input',
-
-                          props: {
-                            type: 'number',
-                            label: '左上',
-                            typeName: '数字',
-                            icon: '123',
-                            row: 1,
-                            placeholder: '',
-                            disabled: false,
-                            appearance: 'outline',
-                            density: 5,
-                            description: '',
-                            required: false,
-                            readonly: false,
-                            layout: 'float',
-                            hideLabel: false,
-                            units: 'px',
-                          },
-                        },
-                      ],
-                    },
-                    {
-                      type: 'column',
-
-                      props: {
-                        row: 1,
-                        styles: {
-                          rowGap: 0,
-                          rowGapUnits: 'px',
-                        },
-                        density: 1,
-                        typeName: '列',
-                      },
-
-                      fieldGroup: [
-                        {
-                          key: 'borderTopRightRadius',
-                          type: 'input',
-
-                          props: {
-                            type: 'number',
-                            label: '右上',
-                            units: 'px',
-                            typeName: '数字',
-                            icon: '123',
-                            row: 1,
-                            placeholder: '',
-                            disabled: false,
-                            appearance: 'outline',
-                            density: 5,
-                            description: '',
-                            required: false,
-                            readonly: false,
-                            layout: 'float',
-                            hideLabel: false,
-                          },
-                        },
-                      ],
-                    },
-                    {
-                      type: 'column',
-
-                      props: {
-                        row: 1,
-                        styles: {
-                          rowGap: 0,
-                          rowGapUnits: 'px',
-                        },
-                        density: 1,
-                        typeName: '列',
-                      },
-
-                      fieldGroup: [
-                        {
-                          key: 'borderBottomRightRadius',
-                          type: 'input',
-
-                          props: {
-                            type: 'number',
-                            label: '右下',
-                            units: 'px',
-                            typeName: '数字',
-                            icon: '123',
-                            row: 1,
-                            placeholder: '',
-                            disabled: false,
-                            appearance: 'outline',
-                            density: 5,
-                            description: '',
-                            required: false,
-                            readonly: false,
-                            layout: 'float',
-                            hideLabel: false,
-                          },
-                        },
-                      ],
-                    },
-                    {
-                      type: 'column',
-
-                      props: {
-                        row: 1,
-                        density: 1,
-                        typeName: '列',
-                        styles: {
-                          rowGap: 0,
-                          rowGapUnits: 'px',
-                        },
-                      },
-
-                      fieldGroup: [
-                        {
-                          key: 'borderBottomLeftRadius',
-                          type: 'input',
-
-                          props: {
-                            type: 'number',
-                            label: '左下',
-                            units: 'px',
-                            typeName: '数字',
-                            icon: '123',
-                            row: 1,
-                            placeholder: '',
-                            disabled: false,
-                            appearance: 'outline',
-                            density: 5,
-                            description: '',
-                            required: false,
-                            readonly: false,
-                            layout: 'float',
-                            hideLabel: false,
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
+            ],
+          },
+          {
+            type: 'fieldset',
+            props: {
+              label: '内边距',
+              icon: 'subtitles',
+              typeName: '群组',
+              row: 1,
+              density: 1,
+              showBorder: false,
+              styles: {
+                color: '#000000',
+                fontSize: 14,
+                fontSizeUnits: 'px',
+                fontWeight: 400,
+                paddingLeft: 0,
+                paddingLeftUnits: 'px',
+                paddingTop: 8,
+                paddingTopUnits: 'px',
+                paddingRight: 0,
+                paddingRightUnits: 'px',
+                paddingBottom: 0,
+                paddingBottomUnits: 'px',
+                borderRadius: 0,
+                borderRadiusUnits: 'px',
+                borderColor: 'var(--mdc-outlined-text-field-outline-color)',
+                borderWidth: 0,
+                borderWidthUnits: 'px',
+                borderStyle: 'groove',
+              },
             },
-          ],
-        },
-      ],
-    },
-  ]);
 
-console.log('%c Line:1115 🥚', 'color:#7f2b82', baseConfig());
+            fieldGroup: [
+              {
+                type: 'grid',
+
+                props: {
+                  label: '栅格',
+                  icon: 'grid_on',
+                  typeName: '栅格',
+                  density: 1,
+                  styles: {
+                    columnGap: 8,
+                    columnGapUnits: 'px',
+                  },
+                },
+
+                fieldGroup: [
+                  {
+                    type: 'column',
+
+                    props: {
+                      row: 1,
+                      label: '列',
+                      typeName: '列',
+                      icon: 'dehaze',
+                      density: 1,
+                      styles: {
+                        rowGap: 0,
+                        rowGapUnits: 'px',
+                      },
+                    },
+
+                    fieldGroup: [
+                      {
+                        key: 'paddingTop',
+                        type: 'input',
+
+                        props: {
+                          type: 'number',
+                          label: '上',
+                          typeName: '数字',
+                          icon: '123',
+                          row: 1,
+                          placeholder: '',
+                          disabled: false,
+                          appearance: 'outline',
+                          density: 5,
+                          description: '',
+                          required: false,
+                          readonly: false,
+                          layout: 'float',
+                          hideLabel: false,
+                          units: 'px',
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'column',
+
+                    props: {
+                      row: 1,
+                      styles: {
+                        rowGap: 0,
+                        rowGapUnits: 'px',
+                      },
+                      density: 1,
+                      typeName: '列',
+                    },
+
+                    fieldGroup: [
+                      {
+                        key: 'paddingRight',
+                        type: 'input',
+
+                        props: {
+                          type: 'number',
+                          label: '右',
+                          units: 'px',
+                          typeName: '数字',
+                          icon: '123',
+                          row: 1,
+                          placeholder: '',
+                          disabled: false,
+                          appearance: 'outline',
+                          density: 5,
+                          description: '',
+                          required: false,
+                          readonly: false,
+                          layout: 'float',
+                          hideLabel: false,
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'column',
+
+                    props: {
+                      row: 1,
+                      styles: {
+                        rowGap: 0,
+                        rowGapUnits: 'px',
+                      },
+                      density: 1,
+                      typeName: '列',
+                    },
+
+                    fieldGroup: [
+                      {
+                        key: 'paddingBottom',
+                        type: 'input',
+
+                        props: {
+                          type: 'number',
+                          label: '下',
+                          units: 'px',
+                          typeName: '数字',
+                          icon: '123',
+                          row: 1,
+                          placeholder: '',
+                          disabled: false,
+                          appearance: 'outline',
+                          density: 5,
+                          description: '',
+                          required: false,
+                          readonly: false,
+                          layout: 'float',
+                          hideLabel: false,
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'column',
+
+                    props: {
+                      row: 1,
+                      density: 1,
+                      typeName: '列',
+                      styles: {
+                        rowGap: 0,
+                        rowGapUnits: 'px',
+                      },
+                    },
+
+                    fieldGroup: [
+                      {
+                        key: 'paddingLeft',
+                        type: 'input',
+
+                        props: {
+                          type: 'number',
+                          label: '左',
+                          units: 'px',
+                          typeName: '数字',
+                          icon: '123',
+                          row: 1,
+                          placeholder: '',
+                          disabled: false,
+                          appearance: 'outline',
+                          density: 5,
+                          description: '',
+                          required: false,
+                          readonly: false,
+                          layout: 'float',
+                          hideLabel: false,
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: 'fieldset',
+
+            props: {
+              label: '圆角',
+              icon: 'subtitles',
+              typeName: '群组',
+              row: 1,
+              density: 1,
+              showBorder: false,
+              styles: {
+                color: '',
+                fontSize: 14,
+                fontSizeUnits: 'px',
+                fontWeight: 400,
+                paddingLeft: 0,
+                paddingLeftUnits: 'px',
+                paddingTop: 8,
+                paddingTopUnits: 'px',
+                paddingRight: 0,
+                paddingRightUnits: 'px',
+                paddingBottom: 0,
+                paddingBottomUnits: 'px',
+                borderRadius: 0,
+                borderRadiusUnits: 'px',
+                borderColor: 'var(--mdc-outlined-text-field-outline-color)',
+                borderWidth: 0,
+                borderWidthUnits: 'px',
+                borderStyle: 'groove',
+              },
+            },
+
+            fieldGroup: [
+              {
+                type: 'grid',
+
+                props: {
+                  label: '栅格',
+                  icon: 'grid_on',
+                  typeName: '栅格',
+                  density: 1,
+                  styles: {
+                    columnGap: 8,
+                    columnGapUnits: 'px',
+                  },
+                },
+
+                fieldGroup: [
+                  {
+                    type: 'column',
+
+                    props: {
+                      row: 1,
+                      label: '列',
+                      typeName: '列',
+                      icon: 'dehaze',
+                      density: 1,
+                      styles: {
+                        rowGap: 0,
+                        rowGapUnits: 'px',
+                      },
+                    },
+
+                    fieldGroup: [
+                      {
+                        key: 'borderTopLeftRadius',
+                        type: 'input',
+
+                        props: {
+                          type: 'number',
+                          label: '左上',
+                          typeName: '数字',
+                          icon: '123',
+                          row: 1,
+                          placeholder: '',
+                          disabled: false,
+                          appearance: 'outline',
+                          density: 5,
+                          description: '',
+                          required: false,
+                          readonly: false,
+                          layout: 'float',
+                          hideLabel: false,
+                          units: 'px',
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'column',
+
+                    props: {
+                      row: 1,
+                      styles: {
+                        rowGap: 0,
+                        rowGapUnits: 'px',
+                      },
+                      density: 1,
+                      typeName: '列',
+                    },
+
+                    fieldGroup: [
+                      {
+                        key: 'borderTopRightRadius',
+                        type: 'input',
+
+                        props: {
+                          type: 'number',
+                          label: '右上',
+                          units: 'px',
+                          typeName: '数字',
+                          icon: '123',
+                          row: 1,
+                          placeholder: '',
+                          disabled: false,
+                          appearance: 'outline',
+                          density: 5,
+                          description: '',
+                          required: false,
+                          readonly: false,
+                          layout: 'float',
+                          hideLabel: false,
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'column',
+
+                    props: {
+                      row: 1,
+                      styles: {
+                        rowGap: 0,
+                        rowGapUnits: 'px',
+                      },
+                      density: 1,
+                      typeName: '列',
+                    },
+
+                    fieldGroup: [
+                      {
+                        key: 'borderBottomRightRadius',
+                        type: 'input',
+
+                        props: {
+                          type: 'number',
+                          label: '右下',
+                          units: 'px',
+                          typeName: '数字',
+                          icon: '123',
+                          row: 1,
+                          placeholder: '',
+                          disabled: false,
+                          appearance: 'outline',
+                          density: 5,
+                          description: '',
+                          required: false,
+                          readonly: false,
+                          layout: 'float',
+                          hideLabel: false,
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'column',
+
+                    props: {
+                      row: 1,
+                      density: 1,
+                      typeName: '列',
+                      styles: {
+                        rowGap: 0,
+                        rowGapUnits: 'px',
+                      },
+                    },
+
+                    fieldGroup: [
+                      {
+                        key: 'borderBottomLeftRadius',
+                        type: 'input',
+
+                        props: {
+                          type: 'number',
+                          label: '左下',
+                          units: 'px',
+                          typeName: '数字',
+                          icon: '123',
+                          row: 1,
+                          placeholder: '',
+                          disabled: false,
+                          appearance: 'outline',
+                          density: 5,
+                          description: '',
+                          required: false,
+                          readonly: false,
+                          layout: 'float',
+                          hideLabel: false,
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
 const tabConfig = (fieldGroup: IEditorFormlyField[]) => {
-  return {
+  const config: IEditorFormlyField = {
     type: 'tabs',
-
     fieldGroup,
   };
+  return config;
 };
 
 const columnConfig = (label: string, key: string, fieldGroup: IEditorFormlyField[]) => {
@@ -1149,6 +1126,29 @@ const menuTabConfig = () =>
 
 const menuContainerConfig = columnConfig('菜单容器', 'menuContainer', [
   {
+    key: 'width',
+    type: 'input',
+    defaultValue: 225,
+    props: {
+      type: 'number',
+      label: '宽度',
+      layout: 'top',
+      hideLabel: true,
+      units: 'px',
+    },
+  },
+  {
+    key: 'levelPadding',
+    type: 'input',
+    defaultValue: 30,
+    props: {
+      type: 'number',
+      label: '菜单每级缩紧',
+      layout: 'top',
+      hideLabel: true,
+    },
+  },
+  {
     key: 'backgroundColor',
     type: 'color-picker',
     props: {
@@ -1158,33 +1158,221 @@ const menuContainerConfig = columnConfig('菜单容器', 'menuContainer', [
       hideLabel: true,
     },
   },
+  {
+    type: 'fieldset',
+    props: {
+      label: '内边距',
+      row: 1,
+      showBorder: false,
+      styles: {
+        color: '#000000',
+        fontSize: 14,
+        fontSizeUnits: 'px',
+        fontWeight: 400,
+        paddingLeft: 0,
+        paddingLeftUnits: 'px',
+        paddingTop: 8,
+        paddingTopUnits: 'px',
+        paddingRight: 0,
+        paddingRightUnits: 'px',
+        paddingBottom: 0,
+        paddingBottomUnits: 'px',
+        borderRadius: 0,
+        borderRadiusUnits: 'px',
+        borderColor: 'var(--mdc-outlined-text-field-outline-color)',
+        borderWidth: 0,
+        borderWidthUnits: 'px',
+      },
+    },
+
+    fieldGroup: [
+      {
+        type: 'grid',
+        props: {
+          label: '栅格',
+          icon: 'grid_on',
+          typeName: '栅格',
+          density: 1,
+          styles: {
+            columnGap: 8,
+            columnGapUnits: 'px',
+          },
+        },
+        fieldGroup: [
+          {
+            type: 'column',
+            props: {
+              row: 1,
+              label: '列',
+              typeName: '列',
+              density: 1,
+              styles: {
+                rowGap: 0,
+                rowGapUnits: 'px',
+              },
+            },
+            fieldGroup: [
+              {
+                key: 'paddingTop',
+                type: 'input',
+                props: {
+                  type: 'number',
+                  label: '上',
+                  icon: '123',
+                  row: 1,
+                  appearance: 'outline',
+                  density: 5,
+                  layout: 'float',
+                  hideLabel: false,
+                  units: 'px',
+                },
+              },
+            ],
+          },
+          {
+            type: 'column',
+            props: {
+              row: 1,
+              styles: {
+                rowGap: 0,
+                rowGapUnits: 'px',
+              },
+              density: 1,
+              typeName: '列',
+            },
+            fieldGroup: [
+              {
+                key: 'paddingRight',
+                type: 'input',
+                props: {
+                  type: 'number',
+                  label: '右',
+                  units: 'px',
+                  row: 1,
+                  appearance: 'outline',
+                  density: 5,
+                  required: false,
+                  readonly: false,
+                  layout: 'float',
+                  hideLabel: false,
+                },
+              },
+            ],
+          },
+          {
+            type: 'column',
+
+            props: {
+              row: 1,
+              styles: {
+                rowGap: 0,
+                rowGapUnits: 'px',
+              },
+              density: 1,
+              typeName: '列',
+            },
+            fieldGroup: [
+              {
+                key: 'paddingBottom',
+                type: 'input',
+                props: {
+                  type: 'number',
+                  label: '下',
+                  units: 'px',
+                  row: 1,
+                  appearance: 'outline',
+                  density: 5,
+                  layout: 'float',
+                  hideLabel: false,
+                },
+              },
+            ],
+          },
+          {
+            type: 'column',
+            props: {
+              row: 1,
+              density: 1,
+              typeName: '列',
+              styles: {
+                rowGap: 0,
+                rowGapUnits: 'px',
+              },
+            },
+            fieldGroup: [
+              {
+                key: 'paddingLeft',
+                type: 'input',
+                props: {
+                  type: 'number',
+                  label: '左',
+                  units: 'px',
+                  row: 1,
+                  appearance: 'outline',
+                  density: 5,
+                  layout: 'float',
+                  hideLabel: false,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ]);
 
-console.log('%c menuTabConfig 🥛', 'color:#2eafb0', rewriteFieldId(tabConfig(menuTabConfig())));
-
-export const menu_global_config: IEditorFormlyField[] = [
-  menuContainerConfig,
-  rewriteFieldId(tabConfig(menuTabConfig())),
-  {
-    key: 'customStyle',
-    type: 'json-object',
-    fieldId: 'input_key_2579558739748954',
-    props: {
-      type: 'css',
-      label: '在线css样式编辑',
-      typeName: 'json编辑器',
-      icon: 'text_fields',
-      disabled: false,
-      appearance: 'outline',
-      styles: {
-        height: 200,
-        heightUnits: 'px',
-        border: '1px solid var(--base-color-10)',
-        borderRadius: 8,
-        borderRadiusUnits: 'px',
-        overflow: 'hidden',
+export const menu_global_config: IEditorFormlyField[] = addFieldId(
+  addUnitField([
+    {
+      key: 'customStyle',
+      type: 'json-object',
+      fieldId: 'input_key_2579558739748954',
+      props: {
+        type: 'css',
+        label: '在线css样式编辑',
+        typeName: 'json编辑器',
+        icon: 'text_fields',
+        disabled: false,
+        appearance: 'outline',
+        styles: {
+          height: 200,
+          heightUnits: 'px',
+          border: '1px solid var(--base-color-10)',
+          borderRadius: 8,
+          borderRadiusUnits: 'px',
+          overflow: 'hidden',
+        },
+        title: '在线css样式编辑',
+        layout: 'float',
       },
-      title: '值',
     },
-  },
-];
+    {
+      key: 'showType',
+      type: 'grid-radio',
+      defaultValue: 'menuContainer',
+      props: {
+        label: '自定义样式',
+        options: [
+          { label: '容器', value: 'menuContainer' },
+          { label: '菜单项', value: 'menuItem' },
+        ],
+      },
+    },
+    {
+      ...menuContainerConfig,
+      expressions: {
+        hide: (field: IEditorFormlyField) =>
+          field.options?.formState.model.showType !== 'menuContainer',
+      },
+    },
+    {
+      ...tabConfig(menuTabConfig()),
+      expressions: {
+        hide: (field: IEditorFormlyField) => field.options?.formState.model.showType !== 'menuItem',
+      },
+    },
+  ]),
+);
+
+console.log('%c Line:1195 🍆', 'color:#f5ce50', deepClone(menu_global_config));

@@ -87,7 +87,7 @@ export class MenuLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.styleTag.textContent = `
-      hs-side-menu{
+      .hs-menu-container{
         ${menuContainer}
       }
       .hs-menu-item-parent {
