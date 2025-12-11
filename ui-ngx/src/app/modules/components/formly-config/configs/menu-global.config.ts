@@ -60,7 +60,6 @@ const baseConfig = () =>
   addUnitField([
     {
       type: 'grid',
-
       props: {
         label: '栅格',
         icon: 'grid_on',
@@ -959,12 +958,12 @@ const baseConfig = () =>
 
                       fieldGroup: [
                         {
-                          key: 'borderRadiusTop',
+                          key: 'borderTopLeftRadius',
                           type: 'input',
 
                           props: {
                             type: 'number',
-                            label: '上',
+                            label: '左上',
                             typeName: '数字',
                             icon: '123',
                             row: 1,
@@ -997,12 +996,12 @@ const baseConfig = () =>
 
                       fieldGroup: [
                         {
-                          key: 'borderRadiusRight',
+                          key: 'borderTopRightRadius',
                           type: 'input',
 
                           props: {
                             type: 'number',
-                            label: '右',
+                            label: '右上',
                             units: 'px',
                             typeName: '数字',
                             icon: '123',
@@ -1035,12 +1034,12 @@ const baseConfig = () =>
 
                       fieldGroup: [
                         {
-                          key: 'borderRadiusBottom',
+                          key: 'borderBottomRightRadius',
                           type: 'input',
 
                           props: {
                             type: 'number',
-                            label: '下',
+                            label: '右下',
                             units: 'px',
                             typeName: '数字',
                             icon: '123',
@@ -1073,12 +1072,12 @@ const baseConfig = () =>
 
                       fieldGroup: [
                         {
-                          key: 'borderRadiusLeft',
+                          key: 'borderBottomLeftRadius',
                           type: 'input',
 
                           props: {
                             type: 'number',
-                            label: '左',
+                            label: '左下',
                             units: 'px',
                             typeName: '数字',
                             icon: '123',
@@ -1148,8 +1147,44 @@ const menuTabConfig = () =>
     { label: '子菜单', value: 'children' },
   ].map(({ label, value }) => columnConfig(label, value, [tabConfig(menuTabColumnConfig())]));
 
+const menuContainerConfig = columnConfig('菜单容器', 'menuContainer', [
+  {
+    key: 'backgroundColor',
+    type: 'color-picker',
+    props: {
+      type: 'color-picker',
+      label: '背景颜色',
+      layout: 'top',
+      hideLabel: true,
+    },
+  },
+]);
+
 console.log('%c menuTabConfig 🥛', 'color:#2eafb0', rewriteFieldId(tabConfig(menuTabConfig())));
 
 export const menu_global_config: IEditorFormlyField[] = [
+  menuContainerConfig,
   rewriteFieldId(tabConfig(menuTabConfig())),
+  {
+    key: 'customStyle',
+    type: 'json-object',
+    fieldId: 'input_key_2579558739748954',
+    props: {
+      type: 'css',
+      label: '在线css样式编辑',
+      typeName: 'json编辑器',
+      icon: 'text_fields',
+      disabled: false,
+      appearance: 'outline',
+      styles: {
+        height: 200,
+        heightUnits: 'px',
+        border: '1px solid var(--base-color-10)',
+        borderRadius: 8,
+        borderRadiusUnits: 'px',
+        overflow: 'hidden',
+      },
+      title: '值',
+    },
+  },
 ];

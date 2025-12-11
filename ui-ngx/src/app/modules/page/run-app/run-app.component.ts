@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { SideMenuComponent } from './menu/side-menu.component';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
 import { getParamFromRoute } from '@src/app/core/utils';
@@ -18,6 +18,8 @@ import { HsThemeService } from '@src/app/core/services/theme.service';
 export class RunAppComponent implements OnInit {
   appId: string | null = getParamFromRoute('appId', this.route);
   loadingState = signal<boolean>(false);
+
+  menuData = computed(() => this.runAppMenuService.menuData());
 
   constructor(
     private runAppMenuService: RunAppMenuService,

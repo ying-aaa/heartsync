@@ -13,6 +13,8 @@ export class RunAppMenuService {
   appConfig = signal<IAppConfig>({} as IAppConfig);
   menuData = signal<IMenuNode[]>([]);
 
+  isDesigner = signal(false);
+
   selectedMenuId = signal<string | null>(null);
   selectedMenuNode = computed(() => {
     const menuData = this.menuData();
@@ -44,6 +46,7 @@ export class RunAppMenuService {
 
   navigateMenuById(menuId: string): void {
     this.selectedMenuId.set(menuId);
+    if (this.isDesigner()) return;
     sessionStorage.setItem('selectedMenuId', menuId);
     const url = `/run-app/${this.appId()}/dashboard/${menuId}`;
     this.router.navigate([url]);
@@ -72,6 +75,10 @@ export class RunAppMenuService {
       }
     }
     return null;
+  }
+
+  setDesignMode() {
+    this.isDesigner.set(true);
   }
 }
 

@@ -5,6 +5,8 @@ import {
   OnInit,
   effect,
   inject,
+  input,
+  signal,
 } from '@angular/core';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
 import { IMenuNode, IMenuType } from '@src/app/shared/models/app-menu.model';
@@ -15,22 +17,36 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MenuToggleComponent } from './menu-toggle.component';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 
 @Component({
   selector: 'hs-side-menu',
   templateUrl: './side-menu.component.html',
   styleUrls: ['./side-menu.component.less'],
   standalone: true,
-  imports: [MatTreeModule, MatIconModule, MatButtonModule, MenuLinkComponent, MenuToggleComponent],
+  imports: [
+    MatTreeModule,
+    MatIconModule,
+    MatButtonModule,
+    MenuLinkComponent,
+    MenuToggleComponent,
+    NgScrollbarModule,
+    HsLoadingModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SideMenuComponent implements OnInit {
+  menuData = input<IMenuNode[]>([]);
+
+  loadingStatus = signal<boolean>(false);
+
   IMenuType = IMenuType;
 
   treeControl = new NestedTreeControl<IMenuNode>((node) => node.children);
   dataSource = new MatTreeNestedDataSource<IMenuNode>();
 
-  menuData = computed(() => this.runAppMenuService.menuData());
+  // menuData = computed(() => this.runAppMenuService.menuData());
   private runAppMenuService = inject(RunAppMenuService);
 
   constructor() {

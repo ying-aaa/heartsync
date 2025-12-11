@@ -1,16 +1,17 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Input, OnInit } from '@angular/core';
 import { IMenuNode, IMenuType } from '@src/app/shared/models/app-menu.model';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { VerseTreeTogglerSwitchComponent } from '@shared/components/ui-verse/verse-tree-toggler-switch/verse-tree-toggler-switch.component';
 import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
+import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
 @Component({
   selector: 'hs-menu-toggle',
   template: `
     <a
       mat-button
-      class="hs-menu-link"
-      routerLinkActive="hs-menu-active"
+      class="hs-menu-link hs-menu-item-parent"
+      [class.hs-menu-active]="selectedMenuId() === section.id"
       [style.paddingLeft.px]="level * 30 || 8"
       (click)="onMenuClick()"
     >
@@ -37,6 +38,10 @@ export class MenuToggleComponent implements OnInit {
   @Input() isExpanded: boolean;
 
   IMenuType = IMenuType;
+
+  selectedMenuId = computed(() => this.runAppMenuService.selectedMenuId());
+
+  constructor(private runAppMenuService: RunAppMenuService) {}
 
   toggleSection(event: Event) {}
 

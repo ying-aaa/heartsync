@@ -1,8 +1,6 @@
 <style>
   :host {
     display: block;
-    width: 100%;
-    height: 100%;
     user-select: none;
     /* 现代浏览器 */
     -webkit-user-select: none;
@@ -31,14 +29,12 @@
     }
   }
 </style>
-<hs-side-menu [menuData]="nodes()"></hs-side-menu>
-
-<!-- <ul
+<ul
   [id]="parentNode()?.id || 'scope'"
   cdkDropList
   [cdkDropListData]="nodes()"
   (cdkDropListDropped)="drop($event)"
-  [DcdkDropListConnectedTo]="connectedTo()"
+  [cdkDropListConnectedTo]="connectedTo()"
   [cdkDropListEnterPredicate]="canEnter"
   [cdkDropListDisabled]="nodes().length <= 1"
 >
@@ -92,4 +88,4 @@
     }
   </li>
   }
-</ul> -->
+</ul>

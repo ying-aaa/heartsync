@@ -10,7 +10,7 @@ import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
   template: `
     <a
       mat-button
-      class="hs-menu-link"
+      class="hs-menu-link hs-menu-item-children"
       [class.hs-menu-active]="selectedMenuId() === section.id"
       [style.paddingLeft.px]="level * 30 || 8"
       (click)="onMenuClick()"

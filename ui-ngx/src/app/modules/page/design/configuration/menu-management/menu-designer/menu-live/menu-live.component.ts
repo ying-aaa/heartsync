@@ -1,77 +1,32 @@
 import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDropList,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
-import {
   AfterViewInit,
   Component,
-  computed,
   effect,
   ElementRef,
-  EventEmitter,
-  HostBinding,
+  inject,
   input,
   OnDestroy,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
+import { DOCUMENT } from '@angular/common';
 import { MenuDesignerService } from '../menu-deisgner.sevice';
-import { camelToKebabCase, deepClone, generateUUID } from '@src/app/core/utils';
-import { MatDivider } from '@angular/material/divider';
-import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
+import { camelToKebabCase } from '@src/app/core/utils';
 import { MenuManagementService } from '../../menu-management.sevice';
 import { IEventsType } from '@src/app/shared/models/public-api';
 import { CommonModule } from '@angular/common';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
+import { SideMenuComponent } from '@src/app/modules/page/run-app/menu/side-menu.component';
+import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
 
 @Component({
   selector: 'hs-menu-live',
   templateUrl: './menu-live.component.html',
-  imports: [
-    CdkDropList,
-    CdkDrag,
-    MatIcon,
-    MatDivider,
-    HsIconComponent,
-    CommonModule,
-    ConcatUnitsPipe,
-  ],
+  imports: [CommonModule, SideMenuComponent],
 })
 export class MenuLiveComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(CdkDropList) dropList!: CdkDropList;
-  // 向父元素输出
-  @Output() onDrop = new EventEmitter<any>();
-
-  parentNode = input<any>();
   nodes = input<any>();
-  connectedTo = input<string[]>([]);
-  // 层级
-  level = input<number>(0);
-
-  isDragging = computed(() => this.menuDeSignerService.isDragging());
-
-  selectedNode = computed(() => this.menuDeSignerService.selectedNode());
-
-  isRoot = computed(() => this.level() === 0);
 
   styleTag: any;
-
-  parentDefaultStyle = computed(() => {
-    // const globalMenuConfig = this.menuManagementService.globalMenuConfig();
-    // const defaultStyle = globalMenuConfig.parent?.default || {};
-    return {};
-  });
-
-  childrenDefaultStyle = computed(() => {
-    // const globalMenuConfig = this.menuManagementService.globalMenuConfig();
-    // const defaultStyle = globalMenuConfig.children?.default || {};
-    return {};
-  });
 
   event = new Map<
     HTMLElement,
@@ -82,11 +37,15 @@ export class MenuLiveComponent implements OnInit, AfterViewInit, OnDestroy {
 
   concatUnitsPipe = new ConcatUnitsPipe();
 
+  private readonly doc = inject(DOCUMENT);
+
   constructor(
     private menuDeSignerService: MenuDesignerService,
     private menuManagementService: MenuManagementService,
     private rootEl: ElementRef,
+    private runappMenuService: RunAppMenuService,
   ) {
+    this.runappMenuService.setDesignMode();
     effect(() => {
       this.drawCss();
     });
@@ -97,10 +56,6 @@ export class MenuLiveComponent implements OnInit, AfterViewInit, OnDestroy {
 
     Object.keys(value).forEach((key) => {
       const unitKey = `${key}Units`;
-      // 将驼峰转为-线+大写的第一个字母，比如backgroundColor转为background-color
-      // if (!key.endsWith('Units')) {
-      //   key = camelToKebabCase(key);
-      // }
       const hyphenKey = camelToKebabCase(key);
       if (value.hasOwnProperty(unitKey)) {
         styleStr += `${hyphenKey}: ${value[key]}${value[unitKey]};`;
@@ -119,23 +74,29 @@ export class MenuLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     const parentDefault = this.transform(globalMenuConfig.parent?.default || {});
     const parentHover = this.transform(globalMenuConfig.parent?.hover || {});
     const parentActive = this.transform(globalMenuConfig.parent?.active || {});
+    const menuContainer = this.transform(globalMenuConfig.menuContainer || {});
 
-    this.styleTag = this.styleTag || document.querySelector('style[id="menu-dynamic-style"]');
+    const customStyle = globalMenuConfig.customStyle;
+
+    this.styleTag = this.styleTag || this.doc.querySelector('style[id="menu-dynamic-style"]');
 
     if (!this.styleTag) {
-      this.styleTag = document.createElement('style');
+      this.styleTag = this.doc.createElement('style');
       this.styleTag.id = 'menu-dynamic-style';
-      document.head.appendChild(this.styleTag);
+      this.doc.head.appendChild(this.styleTag);
     }
 
     this.styleTag.textContent = `
+      hs-side-menu{
+        ${menuContainer}
+      }
       .hs-menu-item-parent {
         ${parentDefault}
       }
       .hs-menu-item-parent:hover {
         ${parentHover}
       }
-      .hs-menu-item-parent.active {
+      .hs-menu-item-parent.hs-menu-active {
         ${parentActive}
       }
       .hs-menu-item-children {
@@ -144,92 +105,28 @@ export class MenuLiveComponent implements OnInit, AfterViewInit, OnDestroy {
       .hs-menu-item-children:hover {
         ${childrenHover}
       }
-      .hs-menu-item-children.active {
+      .hs-menu-item-children.hs-menu-active {
         ${childrenActive}
       }
+      ${customStyle}
     `;
   }
 
   initEvent() {
-    if (this.isRoot()) {
-      // 事件总线
-      this.event.set(this.rootEl.nativeElement, {
-        [IEventsType.MouseMove]: this.onMouseMove.bind(this),
-      });
+    this.event.set(this.rootEl.nativeElement, {
+      [IEventsType.MouseMove]: this.onMouseMove.bind(this),
+    });
 
-      for (const [el, evnets] of this.event) {
-        for (const [eventName, eventFun] of Object.entries(evnets)) {
-          // @ts-ignore
-          el.addEventListener(eventName, eventFun);
-        }
+    for (const [el, evnets] of this.event) {
+      for (const [eventName, eventFun] of Object.entries(evnets)) {
+        // @ts-ignore
+        el.addEventListener(eventName, eventFun);
       }
     }
   }
 
   onMouseMove(event: MouseEvent): void {
     this.menuDeSignerService.onMouseMove(event);
-  }
-
-  @HostBinding('style.margin-left')
-  get isTopLayer(): string {
-    return this.level() ? '20px' : '0';
-  }
-
-  toggleDragging(isDragging: boolean): void {
-    this.menuDeSignerService.toggleDragging(isDragging);
-  }
-
-  // 选择菜单事件
-  selectNode(node: any) {
-    this.menuDeSignerService.selectNode(node);
-  }
-
-  canEnter = (drag: CdkDrag) => {
-    const isInDropContainer = this._isMouseInElement(drag.dropContainer.element.nativeElement);
-    const index = this.connectedTo().indexOf(this.dropList.id);
-
-    const dropContainerIndex = this.connectedTo().indexOf(drag.dropContainer.id);
-    return !(isInDropContainer && dropContainerIndex < index);
-  };
-
-  private _isMouseInElement(droplistElement: HTMLElement): boolean {
-    const rect: DOMRect = droplistElement.getBoundingClientRect();
-    const { x, y } = this.menuDeSignerService.mousePosition;
-    const isInWidth = x >= rect.left && x <= rect.right;
-    const isInHeight = y >= rect.top && y <= rect.bottom;
-    return isInWidth && isInHeight;
-  }
-
-  drop(event: CdkDragDrop<string[]>) {
-    const fromData = deepClone(event.item.data);
-
-    const formParentData = event.previousContainer.data;
-    const toParentData = event.container.data;
-    const formIndex = event.previousIndex;
-    const toIndex = event.currentIndex;
-
-    if (fromData) {
-      const assignId = (data: any) => {
-        data.id = data.id || generateUUID();
-        if (data.children) {
-          data.children.forEach(assignId);
-        }
-      };
-      assignId(fromData);
-
-      toParentData.splice(toIndex, 0, fromData);
-
-      this.menuDeSignerService.selectNode(fromData);
-      return this.onDrop.emit();
-    }
-
-    if (event.previousContainer === event.container) {
-      moveItemInArray(toParentData, formIndex, toIndex);
-    } else {
-      transferArrayItem(formParentData, toParentData, formIndex, toIndex);
-    }
-
-    this.onDrop.emit();
   }
 
   ngOnInit() {}

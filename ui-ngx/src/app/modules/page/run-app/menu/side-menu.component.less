@@ -1,9 +1,10 @@
-@import "themeMixin";
+@import 'themeMixin';
 
 .themeMixin({
   :host {
     display: block;
-    padding: 10px 20px;
+    padding: 10px 12px;
+    font-size: 14px;
 
     ::ng-deep {
       .hs-menu-item {
@@ -17,28 +18,15 @@
         .hs-menu-link {
           // height: 18px;
           display: flex;
-          font-size: 14px;
+          // font-size: 14px;
           // line-height: 18px;
           position: relative;
-          font-weight: 500 !important;
-          padding: 4px 8px;
+          // font-weight: 500 !important;
+          // padding: 4px 8px;
           box-shadow: none !important;
           cursor: pointer;
           box-sizing: content-box;
           align-items: center;
-        }
-
-        .hs-menu-active {
-          background-color: @base-primary-color;
-          border-radius: 8px;
-          color: #fff;
-        }
-
-        .hs-menu-icon {
-          height: 18px;
-          width: 18px;
-          font-size: 18px;
-          margin-right: 7px;
         }
       }
 

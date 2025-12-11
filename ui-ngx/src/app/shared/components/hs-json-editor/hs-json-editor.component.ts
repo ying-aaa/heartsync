@@ -34,7 +34,7 @@ import { MatDividerModule } from '@angular/material/divider';
   imports: [MatButtonModule, MatIconModule, FullscreenDirective, MatDividerModule],
 })
 export class JsonObjectEditorComponent implements OnInit, AfterViewInit, ControlValueAccessor {
-  @Input() placeholder = '请划动区域...';
+  @Input() placeholder = '请输入...';
   @Input() disabled = false;
   @Input() toolbar: boolean = true;
   @Input() inline: boolean = false;

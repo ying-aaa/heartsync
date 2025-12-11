@@ -22,10 +22,9 @@ export const appConfig: ApplicationConfig = {
     provideKeycloakAngular(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([RequestInterceptor, ResponentInterceptor])),
+    provideHttpClient(withInterceptors([includeBearerTokenInterceptor, RequestInterceptor, ResponentInterceptor])),
     provideHighlightOptions({
       lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
       coreLibraryLoader: () => import('highlight.js/lib/core'),

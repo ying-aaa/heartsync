@@ -188,7 +188,7 @@ export const variables_config: IEditorFormlyField[] = [
                       fieldId: 'input_key_2579558739748954',
                       props: {
                         label: '变量值',
-                        typeName: '单行文本',
+                        typeName: 'json编辑器',
                         icon: 'text_fields',
                         placeholder: '变量值',
                         disabled: false,
