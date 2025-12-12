@@ -43,7 +43,7 @@ export class MenuToggleComponent implements OnInit {
   selectedMenuId = computed(() => this.runAppMenuService.selectedMenuId());
 
   leftPadding = computed(() => {
-    const menuConfig = this.runAppGlobalService.menuConfig();
+    const menuConfig = this.runAppGlobalService.appMenuConfig();
     return this.level * menuConfig.menuContainer?.levelPadding || 8;
   });
 

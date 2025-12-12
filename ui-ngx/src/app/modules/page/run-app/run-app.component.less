@@ -1,0 +1,21 @@
+// :host 表示组件自身，确保样式作用域在组件内
+:host {
+
+  // 修复：选择器与 HTML 类名完全匹配
+  .hs-app-header,
+  .hs-app-aside-menu,
+  .hs-app-content {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    outline: 2px dashed transparent;
+    border-radius: 3px;
+
+    &.design:hover {
+      outline-color: var(--base-primary-color);
+    }
+
+    &.active {
+      outline-color: var(--base-primary-color);
+    }
+  }
+}

@@ -466,10 +466,10 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = [
     'name',
+    'icon',
     'menuType',
     'dashboardId',
     'isFullscreen',
-    'icon',
     'actions',
   ];
 

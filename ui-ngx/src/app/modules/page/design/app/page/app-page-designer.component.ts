@@ -1,12 +1,18 @@
-import { AfterViewInit, Component, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { MatDivider } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { getParamFromRoute } from '@src/app/core/utils';
+import { getParamFromRoute, handlerNgElStyle } from '@src/app/core/utils';
 import { ActivatedRoute } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { MenuGlobalConfigComponent } from './menu-global-config/menu-global-config.component';
-import { MenuSingleConfigComponent } from './menu-single-config/menu-single-config.component';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { RunAppComponent } from '@src/app/modules/page/run-app/run-app.component';
@@ -15,6 +21,9 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MenuTreeComponent } from './menu-tree/menu-tree.component';
+import { IEventsType } from '@src/app/shared/models/public-api';
+import { AppConfigComponent } from './app-config/app-config.component';
+
 @Component({
   selector: 'hs-app-page-designer',
   templateUrl: './app-page-designer.component.html',
@@ -31,12 +40,13 @@ import { MenuTreeComponent } from './menu-tree/menu-tree.component';
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MenuGlobalConfigComponent,
-    MenuSingleConfigComponent,
+    AppConfigComponent,
   ],
 })
 export class AppPageDesignerComponent implements OnInit, AfterViewInit {
   @ViewChild('snav') snav!: MatSidenav;
+  @ViewChild('RunApp', { read: ElementRef }) runApp!: ElementRef<RunAppComponent>;
+
   protected readonly isMobile = signal(true);
 
   appId: string = getParamFromRoute('appId', this.route)!;
@@ -103,6 +113,7 @@ export class AppPageDesignerComponent implements OnInit, AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private runappMenuService: RunAppMenuService,
+    public renderer: Renderer2,
   ) {
     this.runappMenuService.setDesignMode();
   }
@@ -116,4 +127,6 @@ export class AppPageDesignerComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  initDesignApp() {}
 }

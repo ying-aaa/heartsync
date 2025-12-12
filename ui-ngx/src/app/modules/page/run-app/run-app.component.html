@@ -1,16 +1,34 @@
-<content class="wh-full">
+<header
+  class="hs-app-header"
+  [class]="{
+    design: isDesigner(),
+    active: selectedConfigType() === 'appHeader',
+  }"
+  (click)="selectConfigType('appHeader')"
+>
   <hs-app-header></hs-app-header>
-  <mat-divider></mat-divider>
-  <main class="flex h-[calc(100vh-54px)]">
-    <aside class="w-252px h-full">
-      <hs-side-menu [menuData]="menuData()"></hs-side-menu>
-    </aside>
-    <mat-divider
-      [vertical]="true"
-      class="h-full"
-    ></mat-divider>
-    <main class="w-0 flex-1">
-      <router-outlet></router-outlet>
-    </main>
-  </main>
-</content>
+</header>
+<mat-divider></mat-divider>
+<main class="flex h-[calc(100%-54px)]">
+  <aside
+    class="hs-app-aside-menu h-full"
+    [class]="{
+      design: isDesigner(),
+      active: selectedConfigType() === 'menuGlobal',
+    }"
+    (click)="selectConfigType('menuGlobal')"
+  >
+    <hs-side-menu [menuData]="menuData()"></hs-side-menu>
+  </aside>
+  <mat-divider [vertical]="true" class="h-full"></mat-divider>
+  <content
+    class="hs-app-content w-0 flex-1"
+    [class]="{
+      design: isDesigner(),
+      active: selectedConfigType() === 'menuSingle',
+    }"
+    (click)="selectConfigType('menuSingle')"
+  >
+    <router-outlet></router-outlet>
+  </content>
+</main>

@@ -1,10 +1,6 @@
 <header class="h-60px p-20px flex flex-row-reverse items-center">
   <button mat-flat-button>保存</button>
-  <button
-    mat-button
-    class="mr-12px"
-    (click)="snav.toggle()"
-  >高级设置</button>
+  <button mat-button class="mr-12px" (click)="snav.toggle()">高级设置</button>
 </header>
 
 <mat-divider class="w-full"></mat-divider>
@@ -19,12 +15,9 @@
     [opened]="false"
   >
     <div class="wh-full bg-[var(--base-bg-color)] p-20px box-sizing-border">
-      <button
-        mat-icon-button
-        (click)="snav.toggle()"
-      ><mat-icon> close </mat-icon></button>
+      <button mat-icon-button (click)="snav.toggle()"><mat-icon> close </mat-icon></button>
       @if (isMenuModuleLoaded) {
-      <hs-menu-tree class="h-[calc(100%-40px)]!"></hs-menu-tree>
+        <hs-menu-tree class="h-[calc(100%-40px)]!"></hs-menu-tree>
       }
     </div>
   </mat-sidenav>
@@ -32,58 +25,86 @@
   <mat-sidenav-content class="overflow-hidden!">
     <content class="text-14px wh-full">
       <div class="flex h-full">
-        <!-- <aside class="w-280px h-100% p-15px">
-      @for (item of presetComps(); track $index) {
-        <div
-          class="mb-16px wp"
-          cdkDropList
-          [cdkDropListConnectedTo]="connectedTo()"
-          [cdkDropListData]="item.comps"
-          cdkDropListSortingDisabled
-        >
-          <div class="text-13px mb-12px ml-5px color-[var(--base-color-80)]">{{ item.name }}</div>
-
-          @for (comp of item.comps; track $index) {
-            <div
-              cdkDrag
-              (cdkDragStarted)="onDragStart(comp, item)"
-              (cdkDragEnded)="onDragEnd()"
-              [cdkDragData]="comp"
-              cdkDragPreviewContainer="parent"
-            >
-              <div class="flex-center rounded-8px border-line px-10px py-14px mb-10px">
-                <mat-icon class="mr-12px color-#2c7eac">{{ comp.icon }}</mat-icon>
-                <div class="flex-1">
-                  <div class="mb-5px">{{ comp.name }}</div>
-                  <div class="text-12px color-[var(--base-color-70)]">{{ comp.desc }}</div>
-                </div>
+        <aside class="w-280px h-100% p-15px">
+          @for (item of presetComps(); track $index) {
+            <div class="mb-16px wp">
+              <div class="text-13px mb-12px ml-5px color-[var(--base-color-80)]">
+                {{ item.name }}
               </div>
 
-              @if (comp.type === 'divider') {
-                <div class="w-full my-6px!" *cdkDragPlaceholder>
-                  <mat-divider class="w-full"></mat-divider>
+              @for (comp of item.comps; track $index) {
+                <div cdkDragPreviewContainer="parent">
+                  <div class="flex-center rounded-8px border-line px-10px py-14px mb-10px">
+                    <mat-icon class="mr-12px color-#2c7eac">{{ comp.icon }}</mat-icon>
+                    <div class="flex-1">
+                      <div class="mb-5px">{{ comp.name }}</div>
+                      <div class="text-12px color-[var(--base-color-70)]">{{ comp.desc }}</div>
+                    </div>
+                  </div>
+
+                  @if (comp.type === 'divider') {
+                    <div class="w-full my-6px!" *cdkDragPlaceholder>
+                      <mat-divider class="w-full"></mat-divider>
+                    </div>
+                  }
                 </div>
               }
             </div>
           }
-        </div>
-      }
-    </aside>
+        </aside>
 
-    <mat-divider class="h-full" [vertical]="true"></mat-divider> -->
+        <mat-divider class="h-full" [vertical]="true"></mat-divider>
 
         <main class="flex-1 h-full">
-          <hs-run-app></hs-run-app>
+          <header class="h-60px p-20px flex justify-between">
+            <div class="flex">
+              <div class="h-full flex items-center gap-10px">
+                <button mat-flat-button>侧边栏</button>
+                <button mat-button>顶部栏</button>
+              </div>
+              <mat-divider [vertical]="true" class="ml-10px! mr-16px!"></mat-divider>
+              <div class="h-full flex items-center">
+                <span class="color-[var(--base-color-70)]">预览设备：</span>
+                <mat-form-field class="hs-density--5 w-120px">
+                  <select matNativeControl>
+                    <option value="">手机</option>
+                    <option value="">平板</option>
+                    <option value="">PC</option>
+                  </select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="flex items-center">
+              <button mat-icon-button class="hs-icon-button-32">
+                <mat-icon>zoom_out</mat-icon>
+              </button>
+              <span class="px-8px">80%</span>
+              <button mat-icon-button class="hs-icon-button-32">
+                <mat-icon> zoom_in </mat-icon>
+              </button>
+            </div>
+          </header>
+          <mat-divider class="w-full"></mat-divider>
+
+          <div
+            class="relative w-full h-[calc(100%-60px)] bg-#f0f1f4 bg-[radial-gradient(rgba(12,12,12,0.171)_2px,transparent_0)] bg-[length:30px_30px]"
+          >
+            <div class="absolute-center w-[calc(100%-60px)] h-[calc(100%-60px)] flex bg-#fff">
+              <div class="wh-full">
+                <hs-run-app #RunApp></hs-run-app>
+              </div>
+              <mat-divider [vertical]="true" class="h-full"></mat-divider>
+              <div class="w-0 flex-1"></div>
+            </div>
+          </div>
         </main>
 
-        <mat-divider
-          class="h-full"
-          [vertical]="true"
-        ></mat-divider>
+        <mat-divider class="h-full" [vertical]="true"></mat-divider>
 
         <aside class="w-320px min-w-320px h-100% relative">
-          <hs-menu-global-config class="wh-full block"></hs-menu-global-config>
-
+          <!-- <hs-menu-global-config class="wh-full block"></hs-menu-global-config> -->
+          <hs-app-config class="wh-full block"></hs-app-config>
           <!-- <hs-menu-single-config class="block absolute wh-full top-0 left-0 z-9"></hs-menu-single-config> -->
         </aside>
       </div>

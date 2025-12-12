@@ -1143,7 +1143,7 @@ const menuContainerConfig = columnConfig('菜单容器', 'menuContainer', [
     defaultValue: 30,
     props: {
       type: 'number',
-      label: '菜单每级缩紧',
+      label: '菜单每级缩进',
       layout: 'top',
       hideLabel: true,
     },
@@ -1336,7 +1336,7 @@ export const menu_global_config: IEditorFormlyField[] = addFieldId(
         disabled: false,
         appearance: 'outline',
         styles: {
-          height: 200,
+          height: 320,
           heightUnits: 'px',
           border: '1px solid var(--base-color-10)',
           borderRadius: 8,
@@ -1362,11 +1362,8 @@ export const menu_global_config: IEditorFormlyField[] = addFieldId(
     {
       ...menuContainerConfig,
       expressions: {
-        hide: (field: IEditorFormlyField) =>{
-
-          console.log("%c Line:1366 🥃 field", "color:#ed9ec7", field.options?.formState.model)
-          // field.options?.formState.model.showType !== 'menuContainer',
-        }
+        hide: (field: IEditorFormlyField) =>
+          field.options?.formState.model.showType !== 'menuContainer',
       },
     },
     {

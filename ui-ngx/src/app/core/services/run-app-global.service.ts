@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { camelToKebabCase } from '../utils';
 
 @Injectable({
@@ -11,8 +11,8 @@ export class RunAppGlobalService {
   styleTag: HTMLStyleElement;
 
   appGlobalConfig = signal<any>({
-    themeId: '2',
     menuConfig: {
+      themeId: '2',
       parent: {
         default: {
           fontSizeUnits: 'px',
@@ -153,7 +153,147 @@ export class RunAppGlobalService {
     },
   });
 
-  menuConfig = computed(() => this.appGlobalConfig().menuConfig || {});
+  appMenuConfig = signal({
+    themeId: '2',
+    customStyle: '',
+    parent: {
+      default: {
+        fontSizeUnits: 'px',
+        borderTopWidthUnits: 'px',
+        borderRightWidthUnits: 'px',
+        borderBottomWidthUnits: 'px',
+        borderLeftWidthUnits: 'px',
+        paddingTopUnits: 'px',
+        paddingRightUnits: 'px',
+        paddingBottomUnits: 'px',
+        paddingLeftUnits: 'px',
+        borderTopLeftRadiusUnits: 'px',
+        borderTopRightRadiusUnits: 'px',
+        borderBottomRightRadiusUnits: 'px',
+        borderBottomLeftRadiusUnits: 'px',
+        heightUnits: 'px',
+        fontSize: 14,
+        height: 38,
+        color: 'rgb(255,255,255)',
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8,
+        borderBottomLeftRadius: 8,
+      },
+      hover: {
+        fontSizeUnits: 'px',
+        borderTopWidthUnits: 'px',
+        borderRightWidthUnits: 'px',
+        borderBottomWidthUnits: 'px',
+        borderLeftWidthUnits: 'px',
+        paddingTopUnits: 'px',
+        paddingRightUnits: 'px',
+        paddingBottomUnits: 'px',
+        paddingLeftUnits: 'px',
+        borderTopLeftRadiusUnits: 'px',
+        borderTopRightRadiusUnits: 'px',
+        borderBottomRightRadiusUnits: 'px',
+        borderBottomLeftRadiusUnits: 'px',
+        heightUnits: 'px',
+        backgroundColor: '#3a4560',
+        height: 38,
+      },
+      active: {
+        fontSizeUnits: 'px',
+        borderTopWidthUnits: 'px',
+        borderRightWidthUnits: 'px',
+        borderBottomWidthUnits: 'px',
+        borderLeftWidthUnits: 'px',
+        paddingTopUnits: 'px',
+        paddingRightUnits: 'px',
+        paddingBottomUnits: 'px',
+        paddingLeftUnits: 'px',
+        borderTopLeftRadiusUnits: 'px',
+        borderTopRightRadiusUnits: 'px',
+        borderBottomRightRadiusUnits: 'px',
+        borderBottomLeftRadiusUnits: 'px',
+        heightUnits: 'px',
+        backgroundColor: '#3a4560',
+        height: 38,
+      },
+    },
+    children: {
+      default: {
+        fontSizeUnits: 'px',
+        borderTopWidthUnits: 'px',
+        borderRightWidthUnits: 'px',
+        borderBottomWidthUnits: 'px',
+        borderLeftWidthUnits: 'px',
+        paddingTopUnits: 'px',
+        paddingRightUnits: 'px',
+        paddingBottomUnits: 'px',
+        paddingLeftUnits: 'px',
+        borderTopLeftRadiusUnits: 'px',
+        borderTopRightRadiusUnits: 'px',
+        borderBottomRightRadiusUnits: 'px',
+        borderBottomLeftRadiusUnits: 'px',
+        heightUnits: 'px',
+        fontSize: 14,
+        height: 38,
+        color: 'rgb(255,255,255)',
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8,
+        borderBottomLeftRadius: 8,
+      },
+      hover: {
+        fontSizeUnits: 'px',
+        borderTopWidthUnits: 'px',
+        borderRightWidthUnits: 'px',
+        borderBottomWidthUnits: 'px',
+        borderLeftWidthUnits: 'px',
+        paddingTopUnits: 'px',
+        paddingRightUnits: 'px',
+        paddingBottomUnits: 'px',
+        paddingLeftUnits: 'px',
+        borderTopLeftRadiusUnits: 'px',
+        borderTopRightRadiusUnits: 'px',
+        borderBottomRightRadiusUnits: 'px',
+        borderBottomLeftRadiusUnits: 'px',
+        heightUnits: 'px',
+        backgroundColor: '#3a4560',
+        height: 38,
+      },
+      active: {
+        fontSizeUnits: 'px',
+        borderTopWidthUnits: 'px',
+        borderRightWidthUnits: 'px',
+        borderBottomWidthUnits: 'px',
+        borderLeftWidthUnits: 'px',
+        paddingTopUnits: 'px',
+        paddingRightUnits: 'px',
+        paddingBottomUnits: 'px',
+        paddingLeftUnits: 'px',
+        borderTopLeftRadiusUnits: 'px',
+        borderTopRightRadiusUnits: 'px',
+        borderBottomRightRadiusUnits: 'px',
+        borderBottomLeftRadiusUnits: 'px',
+        heightUnits: 'px',
+        backgroundColor: '#3a4560',
+        height: 38,
+      },
+    },
+    menuContainer: {
+      backgroundColor: 'rgb(44,53,76)',
+      width: 225,
+      paddingTopUnits: 'px',
+      paddingRightUnits: 'px',
+      paddingBottomUnits: 'px',
+      paddingLeftUnits: 'px',
+      widthUnits: 'px',
+      paddingTop: 8,
+      paddingRight: 8,
+      paddingBottom: 8,
+      paddingLeft: 8,
+      levelPadding: 20,
+    },
+    showType: 'menuContainer',
+  });
 
   constructor() {
     effect(() => {
@@ -177,8 +317,7 @@ export class RunAppGlobalService {
   }
 
   drawCss() {
-    console.log("%c Line:180 🥟", "color:#7f2b82");
-    const menuConfig = this.menuConfig();
+    const menuConfig = this.appMenuConfig();
     const childrenDefault = this.transform(menuConfig.children?.default || {});
     const childrenHover = this.transform(menuConfig.children?.hover || {});
     const childrenActive = this.transform(menuConfig.children?.active || {});

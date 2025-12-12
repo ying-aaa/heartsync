@@ -259,7 +259,6 @@ export class HsIconSelectComponent implements OnInit {
 
   loadAllIcons(): void {
     console.log('加载所有图标...');
-
   }
 
   submit(): void {

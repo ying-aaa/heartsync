@@ -1,0 +1,18 @@
+<content class="text-14px h-full flex flex-col">
+  <header class="px-12px py-16px flex items-center relative">
+    <span>{{ selectedConfigType().label }}</span>
+  </header>
+
+  <mat-divider class="w-full mb-12px!"></mat-divider>
+
+  <div class="px-12px h-[calc(100%-59px)] flex flex-col">
+    <hs-formly-config
+      class="h-0! flex-1"
+      [type]="selectedConfigType().value"
+      [model]="model() || {}"
+      [options]="{ formState: { model: model() || {} } }"
+      (modelChange)="modelChange($event)"
+    >
+    </hs-formly-config>
+  </div>
+</content>

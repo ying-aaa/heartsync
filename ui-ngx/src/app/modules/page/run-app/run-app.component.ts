@@ -8,6 +8,7 @@ import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { IAppConfig } from '@src/app/core/http/application.service';
 import { AppHeaderComponent } from './app-header/app-header.component';
 import { HsThemeService } from '@src/app/core/services/theme.service';
+import { AppPageDesignService } from '../design/app/page/app-page-designer.service';
 
 @Component({
   selector: 'hs-run-app',
@@ -21,11 +22,21 @@ export class RunAppComponent implements OnInit {
 
   menuData = computed(() => this.runAppMenuService.menuData());
 
+  selectedConfigType = computed(() => this.appPageDesignService.selectedConfigType().value);
+
+  isDesigner = computed(() => this.runAppMenuService.isDesigner());
+
   constructor(
     private runAppMenuService: RunAppMenuService,
     private hsThemeService: HsThemeService,
+    private appPageDesignService: AppPageDesignService,
     private route: ActivatedRoute,
   ) {}
+
+  selectConfigType(type: string) {
+    if (!this.runAppMenuService.isDesigner()) return;
+    this.appPageDesignService.setConfigType(type);
+  }
 
   ngOnInit() {
     this.runAppMenuService.loadAppAndMenu(this.appId!).subscribe({
