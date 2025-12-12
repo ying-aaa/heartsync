@@ -466,10 +466,10 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = [
     'name',
-    'icon',
     'menuType',
     'dashboardId',
     'isFullscreen',
+    'icon',
     'actions',
   ];
 
@@ -512,21 +512,24 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   defaultIconConfig: { [key: string]: IMatIconConfig } = {
     folder_open: {
-      type: 'two-tone',
+      type: 'mat-icon',
+      matIconType: 'two-tone',
       name: 'folder_open',
       color: 'var(--base-primary-color)',
       iconSize: 24,
       bgSize: 32,
     },
     folder: {
-      type: 'two-tone',
+      type: 'mat-icon',
+      matIconType: 'two-tone',
       name: 'folder',
       color: 'var(--base-primary-color)',
       iconSize: 24,
       bgSize: 32,
     },
     description: {
-      type: 'two-tone',
+      type: 'mat-icon',
+      matIconType: 'two-tone',
       name: 'description',
       color: 'var(--base-primary-color)',
       iconSize: 24,

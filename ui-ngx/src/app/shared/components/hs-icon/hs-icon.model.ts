@@ -1,19 +1,20 @@
-export type IIconType = 'filled' | 'outlined' | 'round' | 'sharp' | 'two-tone';
+export type IMatIconType = 'filled' | 'outlined' | 'round' | 'sharp' | 'two-tone';
+export type IIconType = 'custom' | 'mat-icon';
 
 export interface IBaseIconConfig {
+  type: IIconType;
   iconSize: number;
   bgSize: number;
   backgroundColor?: string;
 }
 
 export interface IMatIconConfig extends IBaseIconConfig {
-  type: IIconType;
+  matIconType: IMatIconType;
   name: string;
   color: string;
 }
 
 export interface ICustomIconConfig extends IBaseIconConfig {
-  type: 'custom';
   url: string;
 }
 

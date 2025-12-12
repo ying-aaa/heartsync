@@ -68,5 +68,7 @@ export class MenuManagementComponent implements OnInit, AfterViewInit {
         this.subscription.unsubscribe();
       }
     });
+
+    this.snav.toggle();
   }
 }

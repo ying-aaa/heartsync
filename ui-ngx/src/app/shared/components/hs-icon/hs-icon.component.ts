@@ -1,10 +1,16 @@
 // hs-icon.component.ts
 import { Component, computed, input, OnInit, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon'; // 若使用Material图标需导入
-import { IIconConfig, IMatIconConfig, ICustomIconConfig, IIconType } from './hs-icon.model';
+import {
+  IIconConfig,
+  IMatIconConfig,
+  ICustomIconConfig,
+  IIconType,
+  IMatIconType,
+} from './hs-icon.model';
 import { isMobile } from '@src/app/core/utils';
 import { MatDialog } from '@angular/material/dialog';
-import { HsIconSelectComponent } from '@src/app/modules/components/icon-select/icon-select.component';
+import { HsIconSelectComponent } from '@src/app/shared/components/hs-icon/icon-select/icon-select.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
@@ -32,7 +38,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
           alt="custom-icon"
         />
       } @else {
-        @let type = config.type === 'filled' ? '' : '-' + config.type;
+        @let type = config.matIconType === 'filled' ? '' : '-' + config.matIconType;
         <mat-icon
           [fontSet]="'material-icons' + type"
           [style.color]="config.color"
@@ -86,7 +92,6 @@ export class HsIconComponent implements OnInit {
     } else {
       resolvedConfig = rawConfig;
     }
-    console.log('%c Line:86 🌰 resolvedConfig', 'color:#7f2b82', resolvedConfig);
 
     // 校验+补全配置（核心：强制size为xxxpx格式）
     return resolvedConfig;
@@ -99,14 +104,14 @@ export class HsIconComponent implements OnInit {
   }
 
   isMatIcon(config: IIconConfig): config is IMatIconConfig {
-    const validTypes: IIconType[] = ['filled', 'outlined', 'round', 'sharp', 'two-tone'];
-    return validTypes.includes(config.type as IIconType);
+    return config.type === 'mat-icon';
   }
 
   private getDefaultMatIconConfig(): IMatIconConfig {
     return {
       name: 'insert_drive_file',
-      type: 'filled' as IIconType,
+      type: 'mat-icon' as IIconType,
+      matIconType: 'filled' as IMatIconType,
       color: '#000',
       iconSize: 24, // 规范xxxpx格式
       bgSize: 32,
@@ -118,7 +123,7 @@ export class HsIconComponent implements OnInit {
     const width = isMobile() ? '100vw' : '800px';
     const height = isMobile() ? '100vh' : '600px';
     const dialogRef = this.dialog.open(HsIconSelectComponent, {
-      data: {},
+      data: { iconContext: this.parsedIconConfig() },
       width,
       height,
       minWidth: width,
