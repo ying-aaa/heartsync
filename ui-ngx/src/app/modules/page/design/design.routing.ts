@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { IRouterUse } from '@src/app/shared/models/route.model';
-import configurationRoutes from './configuration.routing';
+import configurationRoutes from './app.routing';
 import dashboardRoutes from './dashboard.routing';
 import widgetRoutes from './widget.routing';
 import dataAssetRoutes from './data.routing';
@@ -17,8 +17,8 @@ const designPageRoutes = [
       icon: 'app_registration',
     },
     loadComponent: () =>
-      import('./configuration/configuration-editor.component').then(
-        (m) => m.ConfigurationEditorComponent,
+      import('./app/app-design-router.component').then(
+        (m) => m.AppDesignRouterComponent,
       ),
     children: configurationRoutes,
   },
@@ -31,7 +31,7 @@ const designPageRoutes = [
       use: IRouterUse.MENU,
       icon: 'storage',
     },
-    loadComponent: () => import('./data/data-router.component').then((m) => m.DataRouterComponent),
+    loadComponent: () => import('./data/data-design-router.component').then((m) => m.DataAssetDesignRouterComponent),
     children: dataAssetRoutes,
   },
   {
@@ -44,7 +44,7 @@ const designPageRoutes = [
       icon: 'lens_blur',
     },
     loadComponent: () =>
-      import('./dashboard/dashboard-editor.component').then((m) => m.DashboardEditorComponent),
+      import('./dashboard/dashboard-design-router.component').then((m) => m.DashboardDesignRouterComponent),
     children: dashboardRoutes,
   },
   {
@@ -57,7 +57,7 @@ const designPageRoutes = [
       icon: 'send_time_extension',
     },
     loadComponent: () =>
-      import('./widget/widget-editor.component').then((m) => m.WidgetEditorComponent),
+      import('./widget/widget-design-router.component').then((m) => m.WidgetDesignRouterComponent),
     children: widgetRoutes,
   },
   // 测试页
@@ -70,7 +70,7 @@ const designPageRoutes = [
 
 export default [
   {
-    title: '搭建页',
+    title: '设计页',
     path: '',
     data: { preload: true, key: 'design', use: IRouterUse.MENU },
     loadComponent: () => import('./design.component').then((m) => m.DesignComponent),

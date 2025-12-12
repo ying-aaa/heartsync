@@ -4,7 +4,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
-import { MenuManagementService } from '../../design/configuration/menu-management/menu-management.sevice';
+import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
 
 @Component({
   selector: 'hs-menu-link',
@@ -32,13 +32,13 @@ export class MenuLinkComponent implements OnInit {
   selectedMenuId = computed(() => this.runAppMenuService.selectedMenuId());
 
   leftPadding = computed(() => {
-    const globalMenuConfig = this.menuManagementService.globalMenuConfig();
-    return this.level * globalMenuConfig.menuContainer?.levelPadding || 8;
+    const menuConfig = this.runAppGlobalService.menuConfig();
+    return this.level * menuConfig.menuContainer?.levelPadding || 8;
   });
 
   constructor(
     private runAppMenuService: RunAppMenuService,
-    private menuManagementService: MenuManagementService,
+    private runAppGlobalService: RunAppGlobalService,
   ) {}
 
   onMenuClick() {

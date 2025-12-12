@@ -1362,8 +1362,11 @@ export const menu_global_config: IEditorFormlyField[] = addFieldId(
     {
       ...menuContainerConfig,
       expressions: {
-        hide: (field: IEditorFormlyField) =>
-          field.options?.formState.model.showType !== 'menuContainer',
+        hide: (field: IEditorFormlyField) =>{
+
+          console.log("%c Line:1366 🥃 field", "color:#ed9ec7", field.options?.formState.model)
+          // field.options?.formState.model.showType !== 'menuContainer',
+        }
       },
     },
     {
