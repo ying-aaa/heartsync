@@ -31,6 +31,9 @@ export class AppConfigComponent implements OnInit {
       if (value === 'menuSingle') {
         // this.model = this.runAppGlobalService.appGlobalConfig();
       }
+      if (value === 'appHeader') {
+        this.model = this.runAppGlobalService.appHeaderConfig;
+      }
 
       this.options = {
         formState: { model: this.model() },

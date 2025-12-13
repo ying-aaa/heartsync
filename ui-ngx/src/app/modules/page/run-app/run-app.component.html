@@ -2,7 +2,7 @@
   class="hs-app-header"
   [class]="{
     design: isDesigner(),
-    active: selectedConfigType() === 'appHeader',
+    active: isDesigner() && selectedConfigType() === 'appHeader',
   }"
   (click)="selectConfigType('appHeader')"
 >
@@ -14,18 +14,21 @@
     class="hs-app-aside-menu h-full"
     [class]="{
       design: isDesigner(),
-      active: selectedConfigType() === 'menuGlobal',
+      active: isDesigner() && selectedConfigType() === 'menuGlobal',
     }"
     (click)="selectConfigType('menuGlobal')"
   >
     <hs-side-menu [menuData]="menuData()"></hs-side-menu>
   </aside>
-  <mat-divider [vertical]="true" class="h-full"></mat-divider>
+  <mat-divider
+    [vertical]="true"
+    class="h-full"
+  ></mat-divider>
   <content
     class="hs-app-content w-0 flex-1"
     [class]="{
       design: isDesigner(),
-      active: selectedConfigType() === 'menuSingle',
+      active: isDesigner() && selectedConfigType() === 'menuSingle',
     }"
     (click)="selectConfigType('menuSingle')"
   >

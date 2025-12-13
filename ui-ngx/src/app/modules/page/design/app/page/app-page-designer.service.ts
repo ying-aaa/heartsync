@@ -25,10 +25,7 @@ export class AppPageDesignService {
     },
   ];
 
-  selectedConfigType = signal<IAppConfigType>({
-    label: '全局菜单配置',
-    value: 'menuGlobal',
-  });
+  selectedConfigType = signal<IAppConfigType>(this.configTypes[2]);
 
   constructor() {}
 

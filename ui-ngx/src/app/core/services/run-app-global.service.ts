@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
-import { computed, effect, inject, Injectable, linkedSignal, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { camelToKebabCase } from '../utils';
+import { PageNotFoundComponent } from '@src/app/modules/page/page-not-found/page-not-found.component';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class RunAppGlobalService {
   styleTag: HTMLStyleElement;
 
   appGlobalConfig = signal<any>({
+    headerConfig: {},
     menuConfig: {
       themeId: '2',
       parent: {
@@ -295,6 +297,11 @@ export class RunAppGlobalService {
     showType: 'menuContainer',
   });
 
+  appHeaderConfig = signal({
+    headerStyle: {},
+    contentGroups: [],
+  });
+
   constructor() {
     effect(() => {
       this.drawCss();
@@ -326,6 +333,9 @@ export class RunAppGlobalService {
     const parentActive = this.transform(menuConfig.parent?.active || {});
     const menuContainer = this.transform(menuConfig.menuContainer || {});
 
+    const headerConfig = this.appHeaderConfig();
+    const headerStyle = this.transform(headerConfig.headerStyle || {});
+
     const customStyle = menuConfig.customStyle;
 
     this.styleTag = this.styleTag || this.doc.querySelector('style[id="menu-dynamic-style"]');
@@ -337,6 +347,8 @@ export class RunAppGlobalService {
     }
 
     this.styleTag.textContent = `
+        .hs-header-container{
+          ${headerStyle}}
         .hs-menu-container{
           ${menuContainer}
         }
