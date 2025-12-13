@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
-import {
-  IEditorFormlyField,
-  IFieldType,
-} from '@src/app/shared/models/widget.model';
+import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.model';
 import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';
@@ -12,11 +9,7 @@ import { CommonModule } from '@angular/common';
   selector: 'formly-field-grid',
   templateUrl: './grid.type.html',
   styleUrls: ['./grid.type.less'],
-  imports: [
-    FormlyModule,
-    ConcatUnitsPipe,
-    CommonModule,
-  ],
+  imports: [FormlyModule, ConcatUnitsPipe, CommonModule],
 })
 export class FormlyFieldGrid extends FieldType<IEditorFormlyField> {
   IFieldType = IFieldType;
@@ -26,9 +19,8 @@ export class FormlyFieldGrid extends FieldType<IEditorFormlyField> {
   }
 
   getGridTemplateColumns(fieldGroup: IEditorFormlyField[]) {
-    return fieldGroup.reduce(
-      (acc, ori) => acc + ` minmax(0px, ${ori.props?.['row']}fr)`,
-      '',
-    );
+    return fieldGroup
+      .filter((item) => !item.hide)
+      .reduce((acc, ori) => acc + ` minmax(0px, ${ori.props?.['row']}fr)`, '');
   }
 }

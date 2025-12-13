@@ -37,9 +37,10 @@ export class DynamicComponentDirective implements OnInit, OnDestroy {
       }
     });
 
-    this.config.styles && Object.keys(this.config.styles).forEach((key) => {
-      this.componentRef.location.nativeElement.style[key] = this.config.styles[key];
-    });
+    this.config.styles &&
+      Object.keys(this.config.styles).forEach((key) => {
+        this.componentRef.location.nativeElement.style[key] = this.config.styles[key];
+      });
 
     this.componentRef.instance.ngOnInit();
   }

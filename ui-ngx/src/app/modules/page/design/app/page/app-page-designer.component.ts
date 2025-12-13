@@ -21,7 +21,6 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MenuTreeComponent } from './menu-tree/menu-tree.component';
-import { IEventsType } from '@src/app/shared/models/public-api';
 import { AppConfigComponent } from './app-config/app-config.component';
 
 @Component({

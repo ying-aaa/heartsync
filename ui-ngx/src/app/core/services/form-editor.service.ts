@@ -129,21 +129,24 @@ export class FormEditorService {
     add?: FieldArrayType['add'],
   ) {
     field = deepClone(field);
+    console.log('%c Line:132 🍺', 'color:#7f2b82', field, toParentField, toIndex);
 
-    // 递归新的field为其添加id属性
-    function addFieldId(field: IEditorFormlyField) {
-      const key = generateUUID();
-      // 有一些外层容器不需要绑定key
-      field.key = field._bindKey ? key : '';
-      field.fieldId = `${field.type}_key_${key}`;
+    if (field._design) {
+      // 递归新的field为其添加id属性
+      function addFieldId(field: IEditorFormlyField) {
+        const key = generateUUID();
+        // 有一些外层容器不需要绑定key
+        field.key = field._bindKey ? key : '';
+        field.fieldId = `${field.type}_key_${key}`;
 
-      if (field.fieldGroup) {
-        field.fieldGroup.forEach(addFieldId);
+        if (field.fieldGroup) {
+          field.fieldGroup.forEach(addFieldId);
+        }
       }
-    }
 
-    // 执行递归
-    addFieldId(field);
+      // 执行递归
+      addFieldId(field);
+    }
 
     // 新增 field 的默认row为1
     if (field.props) {

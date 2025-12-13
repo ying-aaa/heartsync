@@ -221,16 +221,16 @@ export const app_header_config: IEditorFormlyField[] = enhanceFieldData([
         fieldGroup: [
           {
             template: `<div>内容配置</div>`,
+            type: 'template',
           },
           {
             key: 'contentGroups',
             type: 'array',
             props: {
-              label: '变量',
               appearance: 'outline',
               // 新增时默认添加的数据
               defaultAddValue: {
-                variables: [],
+                type: 'placeholder',
               },
               direction: 'horizontal',
               styles: {
@@ -265,22 +265,12 @@ export const app_header_config: IEditorFormlyField[] = enhanceFieldData([
                   },
                   fieldGroup: [
                     {
-                      key: 'itemStyle',
-                      type: 'input',
-                      props: {
-                        label: '宽度',
-                        placeholder: '请设置宽度',
-                        disabled: false,
-                        appearance: 'outline',
-                      },
-                    },
-                    {
-                      key: 'itemType',
+                      key: 'type',
                       type: 'select',
                       defaultValue: 'placeholder',
                       props: {
-                        label: '请选择内容',
-                        placeholder: '请选择内容类型',
+                        label: '组件类型',
+                        placeholder: '请选择组件类型',
                         disabled: false,
                         appearance: 'outline',
                         options: [
@@ -315,6 +305,99 @@ export const app_header_config: IEditorFormlyField[] = enhanceFieldData([
                         ],
                       },
                       className: 'hs-density--5',
+                    },
+                    {
+                      key: 'style',
+                      type: 'fieldset',
+                      props: {
+                        label: '宽度',
+                        paddingTop: 4,
+                        paddingTopUnits: 'px',
+                      },
+                      fieldGroup: [
+                        {
+                          type: 'grid',
+                          props: {
+                            styles: {
+                              columnGap: 8,
+                              columnGapUnits: 'px',
+                              alignItems: 'center',
+                            },
+                          },
+                          fieldGroup: [
+                            {
+                              key: 'widthType',
+                              type: 'grid-radio',
+                              defaultValue: 'width',
+                              props: {
+                                row: 1,
+                                label: '自定义样式',
+                                options: [
+                                  { label: '宽度', value: 'width' },
+                                  { label: '列', value: 'flex' },
+                                ],
+                                rows: 2,
+                                layout: 'float',
+                              },
+                            },
+                            {
+                              type: 'column',
+                              props: {
+                                row: 2,
+                              },
+                              fieldGroup: [
+                                {
+                                  key: 'width',
+                                  type: 'input',
+                                  props: {
+                                    label: '宽度',
+                                    type: 'number',
+                                    layout: 'float',
+                                    row: 1,
+                                  },
+                                },
+                                {
+                                  key: 'widthUnits',
+                                  type: 'select',
+                                  defaultValue: 'px',
+                                  props: {
+                                    row: 1,
+                                    label: '单位',
+                                    options: [
+                                      { label: 'px', value: 'px' },
+                                      { label: '%', value: '%' },
+                                    ],
+                                    rows: 2,
+                                    layout: 'float',
+                                  },
+                                },
+                              ],
+                              resetOnHide: true,
+                              expressions: {
+                                hide: (field: IEditorFormlyField) => {
+                                  return field.model.widthType !== 'width';
+                                },
+                              },
+                            },
+                            {
+                              key: 'flex',
+                              type: 'input',
+                              props: {
+                                row: 2,
+                                label: 'flex',
+                                type: 'number',
+                                layout: 'float',
+                              },
+                              resetOnHide: true,
+                              expressions: {
+                                hide: (field: IEditorFormlyField) => {
+                                  return field.model.widthType !== 'flex';
+                                },
+                              },
+                            },
+                          ],
+                        },
+                      ],
                     },
                   ],
                 },

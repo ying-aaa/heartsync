@@ -1,17 +1,22 @@
 <div class="flex items-center h-full">
-  @for (item of contentGroups(); track $index) {
-  <ng-container
-    dynamicComponent
-    [config]="item"
-  ></ng-container>
-  <!-- <div>
-    你好世界
-  </div> -->
+  @if (contentGroups().length) {
+    @for (item of contentGroups(); track $index) {
+      <!-- <ng-container dynamicComponent [config]="item"></ng-container> -->
+      <!-- <div>
+      你好世界
+    </div> -->
+      @switch (item.type) {
+        @case ('logo') {
+          <hs-app-logo></hs-app-logo>
+        }
+        @case ('placeholder') {
+          <div></div>
+        }
+      }
+    }
+  } @else {
+    <div class="wh-full flex-center text-18px color-#999 ng-star-inserted">
+      未配置头部内容，点击进行配置！
+    </div>
   }
-  <!-- <div class="flex items-center">
-    <img class="w-40px h-40px mr-8px rounded-8px" [src]="appConfig().imageUrl" />
-    <span class="flex-1 h-full line-height-64px truncate" [matTooltip]="'HeartSync 工作台'">{{
-      appConfig().name
-    }}</span>
-  </div> -->
 </div>
