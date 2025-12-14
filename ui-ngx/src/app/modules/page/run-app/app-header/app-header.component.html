@@ -2,17 +2,21 @@
   @if (contentGroups().length) {
     @for (item of contentGroups(); track $index) {
       <!-- <ng-container dynamicComponent [config]="item"></ng-container> -->
-      <!-- <div>
-      你好世界
-    </div> -->
-      @switch (item.type) {
-        @case ('logo') {
-          <hs-app-logo></hs-app-logo>
+      <div
+        [style]="item.styles | concatUnits"
+        [class]="
+          isDesigner() ? 'h-full border-r-1px border-solid border-color-[var(--base-color-10)]' : ''
+        "
+      >
+        @switch (item.type) {
+          @case ('logo') {
+            <hs-app-logo></hs-app-logo>
+          }
+          @case ('placeholder') {
+            <div></div>
+          }
         }
-        @case ('placeholder') {
-          <div></div>
-        }
-      }
+      </div>
     }
   } @else {
     <div class="wh-full flex-center text-18px color-#999 ng-star-inserted">

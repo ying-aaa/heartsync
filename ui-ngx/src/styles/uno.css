@@ -314,12 +314,14 @@
 .border-2px{border-width:2px;}
 .border-3px{border-width:3px;}
 .border-b{border-bottom-width:1px;}
-.border-r{border-right-width:1px;}
+.border-r,
+.border-r-1px{border-right-width:1px;}
 .border-t{border-top-width:1px;}
 .border-\#2f90b9{--un-border-opacity:1;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .border-\#2f90b94d{--un-border-opacity:0.3;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .border-\#2f90b960{--un-border-opacity:0.38;border-color:rgb(47 144 185 / var(--un-border-opacity));}
 .border-\#ff4d4f\!{--un-border-opacity:1 !important;border-color:rgb(255 77 79 / var(--un-border-opacity)) !important;}
+.border-color-\[var\(--base-color-10\)\]{border-color:var(--base-color-10);}
 .border-color-\#0e46ff\!{--un-border-opacity:1 !important;border-color:rgb(14 70 255 / var(--un-border-opacity)) !important;}
 .border-color-transparent{border-color:transparent;}
 .border-gray-200{--un-border-opacity:1;border-color:rgb(229 231 235 / var(--un-border-opacity));}

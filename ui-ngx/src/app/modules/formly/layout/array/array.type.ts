@@ -69,7 +69,7 @@ export class FormlyFieldArray extends FieldArrayType<IEditorFormlyField> impleme
       return;
     }
 
-    this.formEditorService.removeField(this.model, toIndex, false);
+    this.formEditorService.removeField(this.model, toIndex, false, this.remove.bind(this));
     this.options.build!();
   }
 

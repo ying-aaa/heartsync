@@ -2,19 +2,21 @@ import { Component, computed, OnInit } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
-import { appHeaderComp } from '../common/public-api';
 import { AppLogoComponent } from '../common/app-logo/app-logo.component';
+import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 
 @Component({
   selector: 'hs-app-header',
   templateUrl: './app-header.component.html',
-  imports: [MatTooltipModule, AppLogoComponent],
+  imports: [MatTooltipModule, AppLogoComponent, ConcatUnitsPipe],
   host: {
     class: 'hs-header-container wh-full block',
   },
 })
 export class AppHeaderComponent implements OnInit {
-  appConfig = computed(() => this.RunAppMenuService.appConfig());
+  appConfig = computed(() => this.runAppMenuService.appConfig());
+
+  isDesigner = computed(() => this.runAppMenuService.isDesigner());
 
   contentGroups = computed(() => {
     const contentGroups = this.runAppGlobalService.appHeaderConfig().contentGroups;
@@ -28,7 +30,7 @@ export class AppHeaderComponent implements OnInit {
   });
 
   constructor(
-    private RunAppMenuService: RunAppMenuService,
+    private runAppMenuService: RunAppMenuService,
     private runAppGlobalService: RunAppGlobalService,
   ) {}
 

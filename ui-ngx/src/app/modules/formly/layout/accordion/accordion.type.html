@@ -1,19 +1,20 @@
 <mat-accordion>
   @for (f of field.fieldGroup; track $index) {
   <mat-expansion-panel
-    hideToggle
+    [hideToggle]="f.props?.['hideToggle']"
     (opened)="panelOpenState.set(true)"
     (closed)="panelOpenState.set(false)"
   >
     <mat-expansion-panel-header>
       <mat-panel-title> {{ f.props?.label! }} </mat-panel-title>
-      <mat-panel-description> 自定义副标题 </mat-panel-description>
+      @if(f.props?.description) {
+      <mat-panel-description> {{ f.props?.description! }} </mat-panel-description>
+      } @if(f.props?.['icon']) {
+      <mat-icon> {{ f.props?.['icon'] }} </mat-icon>
+      }
     </mat-expansion-panel-header>
     <formly-field [field]="f">
-      <div
-        class="position-preview w-full border-2px border-dashed"
-        *cdkDragPlaceholder
-      ></div>
+      <div class="position-preview w-full border-2px border-dashed" *cdkDragPlaceholder></div>
     </formly-field>
   </mat-expansion-panel>
   }

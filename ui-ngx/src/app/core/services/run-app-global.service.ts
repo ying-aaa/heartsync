@@ -155,8 +155,57 @@ export class RunAppGlobalService {
   });
 
   appHeaderConfig = signal({
-    headerStyle: {},
-    contentGroups: [],
+    headerStyle: {
+      height: 54,
+      paddingTopUnits: 'px',
+      paddingRightUnits: 'px',
+      paddingBottomUnits: 'px',
+      paddingLeftUnits: 'px',
+      heightUnits: 'px',
+      paddingRight: 10,
+      paddingLeft: 10,
+      backgroundColor: '#eee',
+    },
+    contentGroups: [
+      {
+        type: 'logo',
+        styles: {
+          widthType: 'width',
+          widthUnits: 'fit-content',
+          width: '',
+        },
+      },
+      {
+        type: 'placeholder',
+        styles: {
+          widthType: 'flex',
+          flex: 1,
+        },
+      },
+      {
+        type: 'placeholder',
+        styles: {
+          widthType: 'width',
+          widthUnits: 'px',
+          width: '100',
+        },
+      },
+      {
+        type: 'placeholder',
+        styles: {
+          widthType: 'flex',
+          flex: 1,
+        },
+      },
+      {
+        type: 'logo',
+        styles: {
+          widthType: 'width',
+          widthUnits: 'fit-content',
+          width: '',
+        },
+      },
+    ],
   });
 
   constructor() {

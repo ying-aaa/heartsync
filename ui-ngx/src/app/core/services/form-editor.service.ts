@@ -129,7 +129,6 @@ export class FormEditorService {
     add?: FieldArrayType['add'],
   ) {
     field = deepClone(field);
-    console.log('%c Line:132 🍺', 'color:#7f2b82', field, toParentField, toIndex);
 
     if (field._design) {
       // 递归新的field为其添加id属性
@@ -168,8 +167,13 @@ export class FormEditorService {
   }
 
   // 删除字段
-  removeField(toParentField: IEditorFormlyField[], toIndex: number, clearSelected = true) {
-    toParentField.splice(toIndex, 1);
+  removeField(
+    toParentField: IEditorFormlyField[],
+    toIndex: number,
+    clearSelected = true,
+    remove?: FieldArrayType['remove'],
+  ) {
+    remove ? remove(toIndex) : toParentField.splice(toIndex, 1);
     this.formGroup = new FormGroup({});
     this.options.build && this.options.build();
     clearSelected && this.selectField(null);
