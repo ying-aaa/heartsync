@@ -1311,6 +1311,11 @@
   resolved "https://registry.npmmirror.com/@colors/colors/-/colors-1.5.0.tgz"
   integrity sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==
 
+"@ctrl/tinycolor@^4.1.0":
+  version "4.2.0"
+  resolved "https://registry.npmmirror.com/@ctrl/tinycolor/-/tinycolor-4.2.0.tgz#ba5d0b917303c0b3d3c14c4865cdc6ded25ac05f"
+  integrity sha512-kzyuwOAQnXJNLS9PSyrk0CWk35nWJW/zl/6KvnTBMFK65gm7U1/Z5BqjxeapjZCIhQcM/DsrEmcbRwDyXyXK4A==
+
 "@discoveryjs/json-ext@0.6.3":
   version "0.6.3"
   resolved "https://registry.npmmirror.com/@discoveryjs/json-ext/-/json-ext-0.6.3.tgz"
@@ -6292,6 +6297,11 @@ make-fetch-happen@^14.0.0, make-fetch-happen@^14.0.1, make-fetch-happen@^14.0.3:
     promise-retry "^2.0.1"
     ssri "^12.0.0"
 
+material-colors@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.npmmirror.com/material-colors/-/material-colors-1.2.6.tgz#6d1958871126992ceecc72f4bcc4d8f010865f46"
+  integrity sha512-6qE4B9deFBIa9YSpOc9O0Sgc43zTeVYbgDT5veRKSlB2+ZuHNoVVxA1L/ckMUayV9Ay9y7Z/SZCLcGteW9i7bg==
+
 material-icons@^1.13.13:
   version "1.13.13"
   resolved "https://registry.npmmirror.com/material-icons/-/material-icons-1.13.13.tgz"
@@ -6649,6 +6659,15 @@ ngx-color-picker@^20.1.0:
   resolved "https://registry.npmmirror.com/ngx-color-picker/-/ngx-color-picker-20.1.0.tgz#c2f28d1437b8f7e0171cef78a79a955ed8735a6c"
   integrity sha512-669JqpvSroMt9AZjcyks0zzV0Indqjch0lAGTOvo6AR8RiSH9GPGeFT5Lk0sNFvNIa1cywS1emL4S3Jj+hMLZQ==
   dependencies:
+    tslib "^2.3.0"
+
+ngx-color@^10.1.0:
+  version "10.1.0"
+  resolved "https://registry.npmmirror.com/ngx-color/-/ngx-color-10.1.0.tgz#a3083548fba9fd9e02c2e7e0a954eb6cf17e010f"
+  integrity sha512-yuxlE1LfN+PABIO4hv0Gw5ksq8g9XkMJKrGPn2SWbrre/gsH+kkyyn3rwSCurinnLCnw7czqenwQUtnBJm8yww==
+  dependencies:
+    "@ctrl/tinycolor" "^4.1.0"
+    material-colors "^1.2.6"
     tslib "^2.3.0"
 
 ngx-highlightjs@^14.0.0:

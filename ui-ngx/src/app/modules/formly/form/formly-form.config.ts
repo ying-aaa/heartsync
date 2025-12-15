@@ -299,7 +299,7 @@ export const formlyFormTypes = [
         ...baseExpressions,
       },
     },
-    ...baseConfig,
+    wrappers: ['layout'],
   },
   {
     name: 'richtext',

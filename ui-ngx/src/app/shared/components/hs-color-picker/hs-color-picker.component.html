@@ -1,0 +1,79 @@
+<div class="hs-color-picker-container" [class.disabled]="disabled">
+  <!-- 三种展示样式切换 -->
+  <ng-container [ngSwitch]="displayType">
+    <!-- 样式1：默认色块 -->
+    <ng-container *ngSwitchCase="'block'">
+      <div
+        #colorBlock
+        class="hs-color-block hs-block-style"
+        [style.backgroundColor]="value || 'transparent'"
+        (click)="onClickTrigger()"
+        [attr.title]="title"
+      ></div>
+      <button
+        *ngIf="allowClear && value"
+        mat-icon-button
+        class="hs-clear-btn"
+        (click)="clearColor($event)"
+        [disabled]="disabled"
+      >
+        ✕
+      </button>
+    </ng-container>
+
+    <!-- 样式2：输入框（左侧色块 + mat-input） -->
+    <ng-container *ngSwitchCase="'input'">
+      <div class="hs-input-container">
+        <div
+          #colorBlock
+          class="hs-color-block hs-input-block"
+          [style.backgroundColor]="value || 'transparent'"
+          (click)="onClickTrigger()"
+          [attr.title]="title"
+        ></div>
+        <input
+          #colorInput
+          matInput
+          class="hs-color-input"
+          [value]="value"
+          (input)="onInputChange($event)"
+          (blur)="onTouchedCallback()"
+          [disabled]="disabled"
+          placeholder="请选择颜色"
+        />
+      </div>
+      <button
+        *ngIf="allowClear && value"
+        mat-icon-button
+        class="hs-clear-btn"
+        (click)="clearColor($event)"
+        [disabled]="disabled"
+      >
+        ✕
+      </button>
+    </ng-container>
+
+    <!-- 样式3：只读方块 + 文本 -->
+    <ng-container *ngSwitchCase="'readonly'">
+      <div class="hs-readonly-container">
+        <div
+          #colorBlock
+          class="hs-color-block hs-readonly-block"
+          [style.backgroundColor]="value || 'transparent'"
+          (click)="onClickTrigger()"
+          [attr.title]="title"
+        ></div>
+        <span class="hs-color-text" (click)="onClickTrigger()">{{ value || '未选择' }}</span>
+      </div>
+      <button
+        *ngIf="allowClear && value"
+        mat-icon-button
+        class="hs-clear-btn"
+        (click)="clearColor($event)"
+        [disabled]="disabled"
+      >
+        ✕
+      </button>
+    </ng-container>
+  </ng-container>
+</div>

@@ -2,43 +2,43 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { FieldTypeConfig, FormlyFieldProps } from '@ngx-formly/core';
-import { FieldType } from '@ngx-formly/material/form-field'; // 👈 关键
-import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
-import { ColorPickerDirective } from 'ngx-color-picker';
+import { FieldType } from '@ngx-formly/material/form-field';
+import { HsColorPickerComponent } from '@src/app/shared/components/hs-color-picker/hs-color-picker.component';
+import { ConcatUnitsPipe } from '@shared/pipes/units.pipe';
 
-interface InputProps extends FormlyFieldProps {}
+interface InputProps extends FormlyFieldProps {
+  styles?: Object;
+  disabled?: boolean;
+  title?: string;
+  displayType?: 'block' | 'input' | 'readonly';
+  allowClear?: boolean;
+  open?: boolean;
+  disabledAlpha?: boolean;
+  format?: any;
+  onChange?: (value: string) => void;
+  onFormatChange?: (value: any) => void;
+  onClear?: () => void;
+  onOpenChange?: (value: boolean) => void;
+}
 
 @Component({
   selector: 'formly-field-color-picker',
   template: `
-    <input
-      matInput
-      color-picker
-      [cpOutputFormat]="'rgba'"
+    <hs-color-picker
       [formControl]="formControl"
-      [(colorPicker)]="formControl.value"
-      [style.background]="formControl.value"
-      (colorPickerChange)="formControl.setValue($event)"
-      [cpEyeDropper]="true"
-      [cpSaveClickOutside]="false"
-      [cpPresetColors]="['#fff', '#2889e9']"
-      [cpOKButton]="true"
-      [cpCancelButton]="true"
-      [cpCancelButtonText]="'取消'"
-      [cpOKButtonText]="'确定'"
-      cpCancelButtonClass="cursor-pointer"
-      cpOKButtonClass="cursor-pointer"
-      [cpPosition]="'bottom'"
-      [cpPositionOffset]="'0%'"
-      [cpPositionRelativeToArrow]="true"
+      displayType="readonly"
+      [style]="props.styles | concatUnits"
       [disabled]="props.disabled || false"
-      [placeholder]="props.placeholder || ''"
-      [readonly]="props.readonly"
-      [required]="required"
-    />
+      [displayType]="props.displayType || 'block'"
+      [allowClear]="props.allowClear || false"
+      [disabledAlpha]="props.disabledAlpha || true"
+      [format]="props.format || 'hex'"
+      (onChange)="props.onChange && props.onChange($event)"
+      (onFormatChange)="props.onFormatChange && props.onFormatChange($event)"
+      (onClear)="props.onClear && props.onClear()"
+      (onOpenChange)="props.onOpenChange && props.onOpenChange($event)"
+    ></hs-color-picker>
   `,
-  imports: [MatInputModule, ReactiveFormsModule, ColorPickerDirective],
+  imports: [MatInputModule, ReactiveFormsModule, HsColorPickerComponent, ConcatUnitsPipe],
 })
-export class FormlyFieldColorPicker extends FieldType<
-  FieldTypeConfig<InputProps>
-> {}
+export class FormlyFieldColorPicker extends FieldType<FieldTypeConfig<InputProps>> {}

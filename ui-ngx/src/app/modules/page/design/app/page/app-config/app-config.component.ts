@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormlyConfigComponent } from '@src/app/modules/components/formly-config/formly-config.component';
 import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
 import { AppPageDesignService } from '../app-page-designer.service';
+import { ColorEvent } from 'ngx-color';
 
 @Component({
   selector: 'hs-app-config',
