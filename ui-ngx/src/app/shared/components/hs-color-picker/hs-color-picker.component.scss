@@ -166,3 +166,9 @@
     background: transparent !important;
   }
 }
+
+// 毛玻璃背景
+.hs-glass-bg { 
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
+}

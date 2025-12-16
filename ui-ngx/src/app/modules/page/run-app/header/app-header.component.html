@@ -1,0 +1,75 @@
+<style>
+  :host {
+    .hs-design-header-item {
+      height: 100%;
+      border-right: 1px solid var(--base-color-10);
+      transition: all 0.2s ease;
+
+      &.hs-design-header-item_hover:hover {
+        background-color: var(--base-color-10);
+      }
+    }
+
+    .cdk-drag-animating {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    .header-content-list.cdk-drop-list-dragging .drag-item:not(.cdk-drag-placeholder) {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+    .drag-placeholder {
+      /* width: 100%; */
+      height: 100%;
+      background-color: var(--base-primary-color);
+    }
+  }
+  .drag-preview {
+    width: 200px;
+    height: 54px;
+    background-color: var(--base-primary-color);
+  }
+</style>
+
+<!-- 开始拖拽时触发函数 -->
+<div
+  class="flex items-center h-full header-content-list"
+  cdkDropList
+  cdkDropListOrientation="horizontal"
+  (cdkDropListDropped)="dropEnd($event)"
+>
+  @if (contentGroups().length) {
+    @for (item of contentGroups(); track $index) {
+      <!-- <ng-container dynamicComponent [config]="item"></ng-container> -->
+      <div
+        cdkDrag
+        (cdkDragStarted)="dragStart($event)"
+        [style]="item.styles | concatUnits"
+        class="drag-item"
+        [class.hs-design-header-item]="isDesigner()"
+        [class.hs-design-header-item_hover]="!isMove()"
+      >
+        @if (item.type === 'placeholder') {
+          <div
+            class="drag-placeholder"
+            [style]="item.styles | concatUnits"
+            *cdkDragPlaceholder
+          ></div>
+          <div class="drag-preview" *cdkDragPreview></div>
+        }
+
+        @switch (item.type) {
+          @case ('logo') {
+            <hs-app-logo></hs-app-logo>
+          }
+          @case ('placeholder') {
+            <div></div>
+          }
+        }
+      </div>
+    }
+  } @else {
+    <div class="wh-full flex-center text-18px color-#999 ng-star-inserted">
+      未配置头部内容，点击进行配置！
+    </div>
+  }
+</div>

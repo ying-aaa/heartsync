@@ -25,6 +25,7 @@ import {
   IMatIconConfig,
   IIconType,
 } from '@src/app/shared/components/hs-icon/hs-icon.model';
+import { HsColorPickerComponent } from '@shared/components/hs-color-picker/hs-color-picker.component';
 
 @Component({
   selector: 'app-hs-icon-select',
@@ -40,6 +41,7 @@ import {
     MatFormField,
     FormsModule,
     ReactiveFormsModule,
+    HsColorPickerComponent,
   ],
 })
 export class HsIconSelectComponent implements OnInit {

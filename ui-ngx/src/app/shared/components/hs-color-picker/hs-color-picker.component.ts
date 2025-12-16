@@ -53,7 +53,7 @@ export class HsColorPickerComponent implements ControlValueAccessor, OnInit, OnD
   @Input() defaultValue: string = '#ffffff';
   @Input() allowClear: boolean = false;
   @Input() open: boolean = false;
-  @Input() disabledAlpha: boolean = true;
+  @Input() disabledAlpha: boolean = false;
   @Input() title: string = '选择颜色';
   @Input() displayType: 'block' | 'input' | 'readonly' = 'block';
 

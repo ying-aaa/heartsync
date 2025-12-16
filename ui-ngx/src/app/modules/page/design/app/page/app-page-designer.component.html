@@ -76,6 +76,11 @@
             </div>
 
             <div class="flex items-center">
+              <verse-design-mode-switch
+                [tooltip]="isDesigner() ? '开启设计模式' : '关闭设计模式'"
+                [(ngModel)]="isDesigner"
+                class="mr-8px"
+              ></verse-design-mode-switch>
               <button mat-icon-button class="hs-icon-button-32">
                 <mat-icon>zoom_out</mat-icon>
               </button>

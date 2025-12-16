@@ -31,7 +31,7 @@ interface InputProps extends FormlyFieldProps {
       [disabled]="props.disabled || false"
       [displayType]="props.displayType || 'block'"
       [allowClear]="props.allowClear || false"
-      [disabledAlpha]="props.disabledAlpha || true"
+      [disabledAlpha]="props.disabledAlpha || false"
       [format]="props.format || 'hex'"
       (onChange)="props.onChange && props.onChange($event)"
       (onFormatChange)="props.onFormatChange && props.onFormatChange($event)"

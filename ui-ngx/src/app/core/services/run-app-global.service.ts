@@ -14,7 +14,7 @@ export class RunAppGlobalService {
 
   appMenuConfig = signal({
     themeId: '2',
-    customStyle: '',
+    customStyle: '.hs-menu-container{\n  backdrop-filter: blur(20px);\n}',
     parent: {
       default: {
         fontSizeUnits: 'px',
@@ -138,7 +138,7 @@ export class RunAppGlobalService {
       },
     },
     menuContainer: {
-      backgroundColor: 'rgb(44,53,76)',
+      backgroundColor: 'rgba(44,53,76,.2)',
       width: 225,
       paddingTopUnits: 'px',
       paddingRightUnits: 'px',
@@ -164,7 +164,8 @@ export class RunAppGlobalService {
       heightUnits: 'px',
       paddingRight: 10,
       paddingLeft: 10,
-      backgroundColor: '#eee',
+      backgroundColor: 'rgba(33, 40, 60, .2)',
+      color: 'rgb(255, 255, 255)',
     },
     contentGroups: [
       {
@@ -173,13 +174,6 @@ export class RunAppGlobalService {
           widthType: 'width',
           widthUnits: 'fit-content',
           width: '',
-        },
-      },
-      {
-        type: 'placeholder',
-        styles: {
-          widthType: 'flex',
-          flex: 1,
         },
       },
       {
@@ -195,6 +189,17 @@ export class RunAppGlobalService {
         styles: {
           widthType: 'flex',
           flex: 1,
+          widthUnits: 'px',
+          width: '100',
+        },
+      },
+      {
+        type: 'placeholder',
+        styles: {
+          widthType: 'flex',
+          flex: 1,
+          widthUnits: 'px',
+          width: '100',
         },
       },
       {

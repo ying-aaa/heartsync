@@ -22,6 +22,8 @@ import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MenuTreeComponent } from './menu-tree/menu-tree.component';
 import { AppConfigComponent } from './app-config/app-config.component';
+import { VerseDesignModeSwitchComponent } from '@src/app/shared/components/ui-verse/verse-design-mode-switch/verse-design-mode-switch.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'hs-app-page-designer',
@@ -40,6 +42,8 @@ import { AppConfigComponent } from './app-config/app-config.component';
     MatSidenavModule,
     MatIconModule,
     AppConfigComponent,
+    FormsModule,
+    VerseDesignModeSwitchComponent,
   ],
 })
 export class AppPageDesignerComponent implements OnInit, AfterViewInit {
@@ -51,6 +55,8 @@ export class AppPageDesignerComponent implements OnInit, AfterViewInit {
   appId: string = getParamFromRoute('appId', this.route)!;
   loadingStatus = false;
   isMenuModuleLoaded = false;
+
+  isDesigner = this.runappMenuService.isDesigner;
 
   presetComps = signal([
     {

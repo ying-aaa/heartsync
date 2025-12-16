@@ -1,29 +1,34 @@
 <header
-  class="hs-app-header"
+  class="hs-app-header w-full"
   [class]="{
     design: isDesigner(),
     active: isDesigner() && selectedConfigType() === 'appHeader',
+    absolute: isFullscreen(),
+    'z-10': isFullscreen(),
   }"
   (click)="selectConfigType('appHeader')"
 >
   <hs-app-header></hs-app-header>
 </header>
-<mat-divider></mat-divider>
-<main class="flex h-[calc(100%-54px)]">
+@let mainHeight = isFullscreen() ? '100%' : 'calc(100% - ' + headerHeight() + 'px)';
+@let asideTop = !isFullscreen() ? '0' : headerHeight() + 'px';
+@let asideHeight = !isFullscreen() ? '100%' : 'calc(100% - ' + headerHeight() + 'px)';
+<!-- <mat-divider></mat-divider> -->
+<main class="flex relative" [style]="{ height: mainHeight }">
   <aside
     class="hs-app-aside-menu h-full"
     [class]="{
       design: isDesigner(),
       active: isDesigner() && selectedConfigType() === 'menuGlobal',
+      absolute: isFullscreen(),
+      'z-10': isFullscreen(),
     }"
+    [style]="{ top: asideTop, height: asideHeight }"
     (click)="selectConfigType('menuGlobal')"
   >
     <hs-side-menu [menuData]="menuData()"></hs-side-menu>
   </aside>
-  <mat-divider
-    [vertical]="true"
-    class="h-full"
-  ></mat-divider>
+  <!-- <mat-divider [vertical]="true" class="h-full"></mat-divider> -->
   <content
     class="hs-app-content w-0 flex-1"
     [class]="{

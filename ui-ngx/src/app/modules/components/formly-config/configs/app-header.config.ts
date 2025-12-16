@@ -301,19 +301,6 @@ export const app_header_config: IEditorFormlyField[] = enhanceFieldData([
             },
           },
           {
-            key: 'backgroundColor',
-            type: 'color-picker',
-            props: {
-              type: 'color-picker',
-              label: '背景颜色',
-              layout: 'left',
-              hideLabel: true,
-              labelWidth: 'auto',
-              displayType: 'readonly',
-              format: 'rgb',
-            },
-          },
-          {
             type: 'fieldset',
             props: {
               label: '内边距',
@@ -478,6 +465,32 @@ export const app_header_config: IEditorFormlyField[] = enhanceFieldData([
                 ],
               },
             ],
+          },
+          {
+            key: 'color',
+            type: 'color-picker',
+            props: {
+              type: 'color-picker',
+              label: '文本颜色',
+              layout: 'left',
+              hideLabel: true,
+              labelWidth: 'auto',
+              displayType: 'readonly',
+              format: 'rgb',
+            },
+          },
+          {
+            key: 'backgroundColor',
+            type: 'color-picker',
+            props: {
+              type: 'color-picker',
+              label: '背景颜色',
+              layout: 'left',
+              hideLabel: true,
+              labelWidth: 'auto',
+              displayType: 'readonly',
+              format: 'rgb',
+            },
           },
         ],
       },

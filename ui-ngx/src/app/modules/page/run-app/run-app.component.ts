@@ -6,9 +6,10 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { IAppConfig } from '@src/app/core/http/application.service';
-import { AppHeaderComponent } from './app-header/app-header.component';
+import { AppHeaderComponent } from './header/app-header.component';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { AppPageDesignService } from '../design/app/page/app-page-designer.service';
+import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
 
 @Component({
   selector: 'hs-run-app',
@@ -26,11 +27,18 @@ export class RunAppComponent implements OnInit {
 
   isDesigner = computed(() => this.runAppMenuService.isDesigner());
 
+  menuContainer = computed(() => this.runAppGlobalService.appMenuConfig().menuContainer);
+
+  headerHeight = computed(() => this.runAppGlobalService.appHeaderConfig().headerStyle?.height);
+
+  isFullscreen = computed(() => this.runAppMenuService.selectedMenuNode()?.isFullscreen);
+
   constructor(
-    private runAppMenuService: RunAppMenuService,
-    private hsThemeService: HsThemeService,
-    private appPageDesignService: AppPageDesignService,
     private route: ActivatedRoute,
+    private hsThemeService: HsThemeService,
+    private runAppMenuService: RunAppMenuService,
+    private runAppGlobalService: RunAppGlobalService,
+    private appPageDesignService: AppPageDesignService,
   ) {}
 
   selectConfigType(type: string) {
