@@ -38,7 +38,7 @@
   (cdkDropListDropped)="dropEnd($event)"
 >
   @if (contentGroups().length) {
-    @for (item of contentGroups(); track $index) {
+    @for (item of contentGroups(); track item) {
       <!-- <ng-container dynamicComponent [config]="item"></ng-container> -->
       <div
         cdkDrag

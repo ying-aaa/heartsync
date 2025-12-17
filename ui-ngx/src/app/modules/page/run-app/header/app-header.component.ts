@@ -54,11 +54,9 @@ export class AppHeaderComponent extends BaseDesignComponent implements OnInit {
   }
 
   dropEnd(event: CdkDragDrop<string[]>) {
-    const contentGroups = this.runAppGlobalService.appHeaderConfig().contentGroups;
-    moveItemInArray(contentGroups, event.previousIndex, event.currentIndex);
     this.runAppGlobalService.appHeaderConfig.update((appHeaderConfig) => {
-      appHeaderConfig.contentGroups = contentGroups;
-      return { ...appHeaderConfig };
+      moveItemInArray(appHeaderConfig.contentGroups, event.previousIndex, event.currentIndex);
+      return appHeaderConfig;
     });
     this.isMove.set(false);
   }

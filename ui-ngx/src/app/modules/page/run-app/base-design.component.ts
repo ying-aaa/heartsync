@@ -19,7 +19,7 @@ export abstract class BaseDesignComponent {
 
   @HostBinding('class.active')
   get _isActive() {
-    return this.isDesigner() && this.selectedConfigType().value === this.configTypeKey;
+    return this.isDesigner() && this.selectedConfigType()?.value === this.configTypeKey;
   }
 
   @HostListener('click')

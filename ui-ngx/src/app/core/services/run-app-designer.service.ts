@@ -25,7 +25,7 @@ export class RunAppDesignService {
     },
     {
       label: '应用页面配置',
-      value: 'appContent',
+      value: 'appGlobal',
     },
   ];
 
