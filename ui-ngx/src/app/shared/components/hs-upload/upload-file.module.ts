@@ -12,7 +12,7 @@ import { HsFileDialogComponent } from './file-dialog/file-dialog.component';
 import { HsFileHandleComponent } from './file-handle/file-handle.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { HsFlieUploadComponent } from './file-upload.component';
+import { HsFileUploadComponent } from './file-upload.component';
 import { HsImagePreviewModule } from '@shared/directive/image-preview/image-preview.module';
 import { HsFileGridListComponent } from './file-grid-list/file-grid-list.component';
 import { HsFileDetailListComponent } from './file-detail-list/file-detail-list.component';
@@ -21,14 +21,14 @@ import { HsFileFoldDetailListComponent } from './file-fold-detail-list/file-fold
 import { HsFileMoreListComponent } from './file-more-list/file-more-list.component';
 
 const uploadFileComponents: Type<any>[] = [
-  HsFlieUploadComponent,
+  HsFileUploadComponent,
   HsFileHandleComponent,
   HsFileDialogComponent,
   HsFileGridListComponent,
   HsFileDetailListComponent,
   HsFileRouterComponent,
   HsFileFoldDetailListComponent,
-  HsFileMoreListComponent
+  HsFileMoreListComponent,
 ];
 
 @NgModule({
@@ -48,6 +48,6 @@ const uploadFileComponents: Type<any>[] = [
     MatProgressBarModule,
     HsImagePreviewModule,
   ],
-  exports: [...uploadFileComponents]
+  exports: [...uploadFileComponents],
 })
 export class HsUploadFileModule {}

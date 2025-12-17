@@ -15,30 +15,16 @@ import { FILE_BROADCAST_TOKEN } from '@src/app/shared/tokens/app.token';
           hs-image-preview
           [previewSrc]="fileItemData.url"
         >
-          <mat-icon class="text-18px! w-18px! h-18px! color-#999"
-            >remove_red_eye</mat-icon
-          >
+          <mat-icon class="text-18px! w-18px! h-18px! color-#999">remove_red_eye</mat-icon>
         </button>
-        <mat-divider
-          [vertical]="true"
-          class="h-16px"
-        ></mat-divider>
+        <mat-divider [vertical]="true" class="h-16px"></mat-divider>
       }
       @if (download) {
-        <button
-          class="w-28px! h-28px! p-1px!"
-          mat-icon-button
-          (click)="downloadItemFile()"
-        >
-          <mat-icon class="text-18px! w-18px! h-18px! color-blue"
-            >download</mat-icon
-          >
+        <button class="w-28px! h-28px! p-1px!" mat-icon-button (click)="downloadItemFile()">
+          <mat-icon class="text-18px! w-18px! h-18px! color-blue">download</mat-icon>
         </button>
         @if (remove) {
-          <mat-divider
-            [vertical]="true"
-            class="h-16px"
-          ></mat-divider>
+          <mat-divider [vertical]="true" class="h-16px"></mat-divider>
         }
       }
 
@@ -49,9 +35,7 @@ import { FILE_BROADCAST_TOKEN } from '@src/app/shared/tokens/app.token';
           class="w-28px! h-28px! p-1px!"
           (click)="deleteItemFileEvent()"
         >
-          <mat-icon class="text-18px! w-18px! h-18px! color-#ff0000"
-            >delete</mat-icon
-          >
+          <mat-icon class="text-18px! w-18px! h-18px! color-#ff0000">delete</mat-icon>
         </button>
       }
     </div>
@@ -75,10 +59,7 @@ export class HsFileHandleComponent implements OnInit {
   }
 
   deleteItemFileEvent() {
-    this.broadcastService.broadcast(
-      this.file_broadcast_token,
-      this.fileItemData,
-    );
+    this.broadcastService.broadcast(this.file_broadcast_token, this.fileItemData);
   }
 
   ngOnInit() {}

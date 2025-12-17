@@ -5,8 +5,7 @@ import { isMobile } from '@src/app/core/utils';
 @Component({
   selector: 'hs-file-fold-detail-list',
   template: `
-    <hs-file-detail-list [fileData]="fileData().slice(0, 3)">
-    </hs-file-detail-list>
+    <hs-file-detail-list [fileData]="fileData().slice(0, 3)"> </hs-file-detail-list>
     @if (fileData().length > foldStartIndex()) {
       <div
         class="flex-center p-8px cursor-pointer"
@@ -40,10 +39,7 @@ import { isMobile } from '@src/app/core/utils';
           [style]="{ width: fileOverlayWidth }"
         >
           <div class="flex justify-end">
-            <button
-              mat-icon-button
-              (click)="isOpen = !isOpen"
-            >
+            <button mat-icon-button (click)="isOpen = !isOpen">
               <mat-icon>close</mat-icon>
             </button>
           </div>
@@ -83,8 +79,6 @@ export class HsFileFoldDetailListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    this.fileOverlayWidth = this.isMobileTerminal
-      ? 'calc(100vw - 16px)'
-      : '306px';
+    this.fileOverlayWidth = this.isMobileTerminal ? 'calc(100vw - 16px)' : '306px';
   }
 }

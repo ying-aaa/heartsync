@@ -18,17 +18,17 @@ import { IFileShowType } from '@src/app/shared/models/common-component';
         }
         @case ('fold-detail') {
           <hs-file-fold-detail-list [fileData]="fileData()" [foldStartIndex]="foldStartIndex()">
-            <ng-content select="fold-detail-content"></ng-content>
+            <ng-content select=".fold-detail-content"></ng-content>
           </hs-file-fold-detail-list>
         }
         @case ('more-detail') {
           <hs-file-more-list [fileData]="fileData()" [type]="'more-detail'">
-            <ng-content select="more-content"></ng-content>
+            <ng-content select=".more-content"></ng-content>
           </hs-file-more-list>
         }
         @case ('more-grid') {
           <hs-file-more-list [fileData]="fileData()" [type]="'more-grid'">
-            <ng-content select="more-content"></ng-content>
+            <ng-content select=".more-content"></ng-content>
           </hs-file-more-list>
         }
       }

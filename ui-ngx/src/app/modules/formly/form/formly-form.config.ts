@@ -5,6 +5,8 @@ import { FormlyFieldRichtext } from './richtext/richtext-eidtor.type';
 import { FormlyFieldDraw } from './draw/draw.type';
 import { FormlyFieldJsonObject } from './json-object/json-object.type';
 import { FormlyFieldGridRadio } from './radio/radio.type';
+import { FormlyFieldUpload } from './upload/upload.type';
+import { HS_BUCKET } from '@src/app/shared/models/system.model';
 
 const appearance = 'outline';
 const density = 5;
@@ -340,6 +342,42 @@ export const formlyFormTypes = [
         ...baseProps,
         typeName: 'json编辑器',
         label: 'json编辑器',
+      },
+      expressions: {
+        ...baseExpressions,
+      },
+    },
+    wrappers: ['layout'],
+  },
+  {
+    name: 'image-upload',
+    component: FormlyFieldUpload,
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        fileShowType: 'grid',
+        typeName: '图片上传',
+        label: '图片上传',
+        uploadUrl: `/api/files/upload?bucket=${HS_BUCKET}&path=business-image`,
+        foldStartIndex: 5,
+      },
+      expressions: {
+        ...baseExpressions,
+      },
+    },
+    wrappers: ['layout'],
+  },
+  {
+    name: 'file-upload',
+    component: FormlyFieldUpload,
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        fileShowType: 'fold-detail',
+        typeName: '文件上传',
+        label: '文件上传',
+        uploadUrl: `/api/files/upload?bucket=${HS_BUCKET}&path=business-file`,
+        foldStartIndex: 5,
       },
       expressions: {
         ...baseExpressions,

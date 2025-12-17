@@ -3,6 +3,7 @@ import {
   Component,
   ComponentRef,
   EventEmitter,
+  forwardRef,
   Inject,
   Input,
   OnDestroy,
@@ -17,6 +18,7 @@ import { generateUUID, isMobile } from '@src/app/core/utils';
 import { FileUploader } from 'ng2-file-upload';
 import { Subscription } from 'rxjs';
 import { FILE_BROADCAST_TOKEN } from '@shared/tokens/app.token';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export function getFileStatus(fileItem: any): string {
   if (fileItem.isCancel) {
@@ -44,12 +46,26 @@ export function getFileStatus(fileItem: any): string {
       provide: FILE_BROADCAST_TOKEN,
       useFactory: () => generateUUID('file-broadcast-'),
     },
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => HsFileUploadComponent),
+      multi: true,
+    },
   ],
 })
-export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HsFileUploadComponent
+  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor
+{
   @ViewChild('FilePreview') filePreview: ComponentRef<IFileData>;
 
-  @Input() fileData: any[] = [];
+  // 改造fileData Input为setter，关联writeValue
+  private _fileData: any[] = [];
+  @Input() set fileData(value: any[]) {
+    this.writeValue(value);
+  }
+  get fileData(): any[] {
+    return this._fileData;
+  }
   @Output() fileDataChange = new EventEmitter<IFileData[]>();
 
   @Output() delItemFile = new EventEmitter<IFileData>();
@@ -69,9 +85,9 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   // 自动上传
   @Input() autoUpload = true;
   // 身份token
-  @Input() authToken: string;
+  @Input() authToken: string = '';
   // 允许上传的文件类型
-  @Input() allowedFileType: string[];
+  @Input() allowedFileType: string[] | undefined;
   // 最大上传大小
   @Input() maxFileSize: number;
   // 开启折叠
@@ -86,6 +102,9 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   public uploader: FileUploader;
 
   subscription: Subscription;
+  // ControlValueAccessor 核心回调
+  private onChange: (value: any[]) => void = () => {};
+  private onTouched: () => void = () => {};
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -98,6 +117,8 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onFilesSelected(event: Event): void {
+    // 标记为已触摸
+    this.onTouched();
     if (this.fileData && this.fileData.length > 0) {
       for (let i = 0; i < this.fileData.length; i++) {
         const file = this.fileData[i];
@@ -118,9 +139,13 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deleteItemFile(fileItem: IFileData) {
+    // 标记为已触摸
+    this.onTouched();
     // 删除fileData的
     const fileItemIndex = this.fileData.findIndex((file) => file === fileItem);
     this.fileData.splice(fileItemIndex, 1);
+    // 通知表单系统值变更
+    this.onChange([...this.fileData]);
     // 删除队列的
     const queueItem = this.uploader.queue.find(
       (queueItem) => (queueItem as UploadedFile).id === fileItem.id,
@@ -135,9 +160,11 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.delItemFile.emit(fileItem);
+    this.fileDataChange.emit(this.fileData);
   }
 
   private initializeUploader(): void {
+    console.log('%c Line:167 🍖', 'color:#e41a6a', this.uploadUrl);
     this.uploader = new FileUploader({
       url: this.uploadUrl,
       isHTML5: true,
@@ -161,6 +188,8 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     this.uploader.onAfterAddingFile = (fileItem: UploadedFile) => {
+      // 标记为已触摸
+      this.onTouched();
       if (this.maxFileSize && fileItem._file.size > this.maxFileSize * 1024 * 1024) {
         this.uploader.removeFromQueue(fileItem); // 从队列中移除文件
         this._snackBar.open(
@@ -196,6 +225,8 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     fileItem.id = newFileData.id; // 注意，这样直接扩展 file 对象的属性在实际开发中需要谨慎使用
     this.fileData.push(newFileData);
+    // 通知表单系统值变更
+    this.onChange([...this.fileData]);
     this.fileDataChange.emit(this.fileData);
   }
 
@@ -209,6 +240,8 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
         this.fileData[index].url = fileItem.serverResponse?.url;
         Reflect.deleteProperty(this.fileData[index], 'progress');
       }
+      // 通知表单系统值变更
+      this.onChange([...this.fileData]);
       this.fileDataChange.emit(this.fileData);
     }
   }
@@ -225,6 +258,8 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDrop(event: any) {
+    // 标记为已触摸
+    this.onTouched();
     event.preventDefault();
     event.currentTarget!.classList.remove('dragging-over');
 
@@ -235,15 +270,42 @@ export class HsFlieUploadComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngAfterViewInit(): void {
     this.initializeUploader();
   }
-
-  ngAfterViewInit(): void {}
 
   ngOnDestroy(): void {
     // 销毁 Uploader 实例
     this.uploader?.cancelAll(); // 取消所有未完成的上传任务
     this.subscription?.unsubscribe();
+  }
+
+  // ===== ControlValueAccessor 核心实现 =====
+  writeValue(value: any[]): void {
+    if (value && Array.isArray(value)) {
+      this._fileData = [...value]; // 不可变更新内部状态
+    } else {
+      this._fileData = [];
+    }
+  }
+
+  registerOnChange(fn: (value: any[]) => void): void {
+    this.onChange = (value) => {
+      fn(value); // 通知表单系统
+      this.fileDataChange.emit(value); // 触发双向绑定事件
+    };
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+    if (isDisabled && this.uploader) {
+      this.uploader.cancelAll(); // 禁用时取消所有上传
+    }
   }
 }

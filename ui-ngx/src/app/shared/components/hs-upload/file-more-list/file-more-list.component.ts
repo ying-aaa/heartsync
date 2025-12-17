@@ -34,7 +34,7 @@ import { HsFileDialogComponent } from '../file-dialog/file-dialog.component';
 })
 export class HsFileMoreListComponent implements OnInit {
   fileData = input<any[]>([]);
-  type = input<"more-detail" | "more-grid">('more-detail');
+  type = input<'more-detail' | 'more-grid'>('more-detail');
 
   constructor(private dialog: MatDialog) {}
 

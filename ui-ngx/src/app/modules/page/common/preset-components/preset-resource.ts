@@ -1,8 +1,5 @@
 import { generateUUID } from '@src/app/core/utils';
-import {
-  IEditorFormlyField,
-  IFieldType,
-} from '@src/app/shared/models/widget.model';
+import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.model';
 
 export const presetResource: IEditorFormlyField[] = [
   {
@@ -798,8 +795,8 @@ export const presetResource: IEditorFormlyField[] = [
         },
         fieldGroup: [
           {
-            key: 'photo',
-            type: 'file-upload',
+            key: 'image',
+            type: 'image-upload',
             _design: true,
             _bindKey: true,
             props: {
