@@ -8,7 +8,7 @@ interface IAppConfigType {
 @Injectable({
   providedIn: 'root',
 })
-export class AppPageDesignService {
+export class RunAppDesignService {
   // 'menuGlobal', 'menuSingle', 'appHeader'
   configTypes: IAppConfigType[] = [
     {
@@ -23,13 +23,24 @@ export class AppPageDesignService {
       label: '应用头部配置',
       value: 'appHeader',
     },
+    {
+      label: '应用页面配置',
+      value: 'appContent',
+    },
   ];
+
+  isDesigner = signal(false);
 
   selectedConfigType = signal<IAppConfigType>(this.configTypes[2]);
 
   constructor() {}
 
+  setDesignMode(is: boolean) {
+    this.isDesigner.set(is);
+  }
+
   setConfigType(type: string) {
+    if (!this.isDesigner()) return;
     this.selectedConfigType.set(this.configTypes.find((item) => item.value === type)!);
   }
 }

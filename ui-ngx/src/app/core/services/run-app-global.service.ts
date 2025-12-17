@@ -249,11 +249,11 @@ export class RunAppGlobalService {
 
     const customStyle = menuConfig.customStyle;
 
-    this.styleTag = this.styleTag || this.doc.querySelector('style[id="menu-dynamic-style"]');
+    this.styleTag = this.styleTag || this.doc.querySelector('style[id="hs-app-dynamic-style"]');
 
     if (!this.styleTag) {
       this.styleTag = this.doc.createElement('style');
-      this.styleTag.id = 'menu-dynamic-style';
+      this.styleTag.id = 'hs-app-dynamic-style';
       this.doc.head.appendChild(this.styleTag);
     }
 

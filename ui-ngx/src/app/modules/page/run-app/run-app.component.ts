@@ -8,14 +8,15 @@ import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { IAppConfig } from '@src/app/core/http/application.service';
 import { AppHeaderComponent } from './header/app-header.component';
 import { HsThemeService } from '@src/app/core/services/theme.service';
-import { AppPageDesignService } from '../design/app/page/app-page-designer.service';
+import { RunAppDesignService } from '@src/app/core//services/run-app-designer.service';
 import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
+import { AppContentComponent } from "./content/app-content.component";
 
 @Component({
   selector: 'hs-run-app',
   templateUrl: './run-app.component.html',
   styleUrls: ['./run-app.component.less'],
-  imports: [SideMenuComponent, RouterModule, MatDividerModule, AppHeaderComponent],
+  imports: [SideMenuComponent, RouterModule, MatDividerModule, AppHeaderComponent, AppContentComponent],
 })
 export class RunAppComponent implements OnInit {
   appId: string | null = getParamFromRoute('appId', this.route);
@@ -23,9 +24,9 @@ export class RunAppComponent implements OnInit {
 
   menuData = computed(() => this.runAppMenuService.menuData());
 
-  selectedConfigType = computed(() => this.appPageDesignService.selectedConfigType().value);
+  selectedConfigType = computed(() => this.runAppDesignService.selectedConfigType().value);
 
-  isDesigner = computed(() => this.runAppMenuService.isDesigner());
+  isDesigner = computed(() => this.runAppDesignService.isDesigner());
 
   menuContainer = computed(() => this.runAppGlobalService.appMenuConfig().menuContainer);
 
@@ -38,13 +39,8 @@ export class RunAppComponent implements OnInit {
     private hsThemeService: HsThemeService,
     private runAppMenuService: RunAppMenuService,
     private runAppGlobalService: RunAppGlobalService,
-    private appPageDesignService: AppPageDesignService,
+    private runAppDesignService: RunAppDesignService,
   ) {}
-
-  selectConfigType(type: string) {
-    if (!this.runAppMenuService.isDesigner()) return;
-    this.appPageDesignService.setConfigType(type);
-  }
 
   ngOnInit() {
     this.runAppMenuService.loadAppAndMenu(this.appId!).subscribe({

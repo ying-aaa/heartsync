@@ -4,6 +4,7 @@ import { MenuHttpService } from '../http/menu.service';
 import { forkJoin, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApplicationService, IAppConfig } from '@core/http/application.service';
+import { RunAppDesignService } from './run-app-designer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,6 @@ export class RunAppMenuService {
   appId = signal<string | null>(null);
   appConfig = signal<IAppConfig>({} as IAppConfig);
   menuData = signal<IMenuNode[]>([]);
-
-  isDesigner = signal(false);
 
   selectedMenuId = signal<string | null>(null);
   selectedMenuNode = computed(() => {
@@ -27,6 +26,7 @@ export class RunAppMenuService {
     private router: Router,
     private menuHttpService: MenuHttpService,
     private applicationService: ApplicationService,
+    private runAppDesignService: RunAppDesignService,
   ) {}
 
   loadAppAndMenu(appId: string): Observable<[IAppConfig, IMenuNode[]]> {
@@ -46,7 +46,7 @@ export class RunAppMenuService {
 
   navigateMenuById(menuId: string): void {
     this.selectedMenuId.set(menuId);
-    if (this.isDesigner()) return;
+    if (this.runAppDesignService.isDesigner()) return;
     sessionStorage.setItem('selectedMenuId', menuId);
     const url = `/run-app/${this.appId()}/dashboard/${menuId}`;
     this.router.navigate([url]);
@@ -75,10 +75,6 @@ export class RunAppMenuService {
       }
     }
     return null;
-  }
-
-  setDesignMode() {
-    this.isDesigner.set(true);
   }
 }
 

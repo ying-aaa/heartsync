@@ -4,8 +4,7 @@ import { MatDivider } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { FormlyConfigComponent } from '@src/app/modules/components/formly-config/formly-config.component';
 import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
-import { AppPageDesignService } from '../app-page-designer.service';
-import { ColorEvent } from 'ngx-color';
+import { RunAppDesignService } from '@core/services/run-app-designer.service';
 
 @Component({
   selector: 'hs-app-config',
@@ -18,11 +17,11 @@ export class AppConfigComponent implements OnInit {
     formState: {},
   };
 
-  selectedConfigType = computed(() => this.appPageDesignService.selectedConfigType());
+  selectedConfigType = computed(() => this.runAppDesignService.selectedConfigType());
 
   constructor(
     private runAppGlobalService: RunAppGlobalService,
-    private appPageDesignService: AppPageDesignService,
+    private runAppDesignService: RunAppDesignService,
   ) {
     effect(() => {
       const { value } = this.selectedConfigType();
@@ -43,7 +42,6 @@ export class AppConfigComponent implements OnInit {
   }
 
   modelChange(newModel: any) {
-    // this.appMenuConfig.set({ ...this.appMenuConfig() });
     this.model.set({ ...this.model() });
   }
 

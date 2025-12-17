@@ -24,6 +24,7 @@ import { MenuTreeComponent } from './menu-tree/menu-tree.component';
 import { AppConfigComponent } from './app-config/app-config.component';
 import { VerseDesignModeSwitchComponent } from '@src/app/shared/components/ui-verse/verse-design-mode-switch/verse-design-mode-switch.component';
 import { FormsModule } from '@angular/forms';
+import { RunAppDesignService } from '@src/app/core/services/run-app-designer.service';
 
 @Component({
   selector: 'hs-app-page-designer',
@@ -56,7 +57,7 @@ export class AppPageDesignerComponent implements OnInit, AfterViewInit {
   loadingStatus = false;
   isMenuModuleLoaded = false;
 
-  isDesigner = this.runappMenuService.isDesigner;
+  isDesigner = this.runappDesignService.isDesigner;
 
   presetComps = signal([
     {
@@ -117,10 +118,10 @@ export class AppPageDesignerComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
-    private runappMenuService: RunAppMenuService,
+    private runappDesignService: RunAppDesignService,
     public renderer: Renderer2,
   ) {
-    this.runappMenuService.setDesignMode();
+    this.runappDesignService.setDesignMode(true);
   }
   ngOnInit(): void {}
 

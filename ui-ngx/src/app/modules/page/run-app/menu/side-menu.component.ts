@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
-import { IMenuNode, IMenuType } from '@src/app/shared/models/app-menu.model';
+import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { MenuLinkComponent } from './menu-link.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +19,8 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MenuToggleComponent } from './menu-toggle.component';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
+import { BaseDesignComponent } from '../base-design.component';
+import { RunAppDesignService } from '@src/app/core/services/run-app-designer.service';
 
 @Component({
   selector: 'hs-side-menu',
@@ -39,20 +41,18 @@ import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.modul
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SideMenuComponent implements OnInit {
+export class SideMenuComponent extends BaseDesignComponent implements OnInit {
   menuData = input<IMenuNode[]>([]);
-
   loadingStatus = signal<boolean>(false);
-
-  IMenuType = IMenuType;
 
   treeControl = new NestedTreeControl<IMenuNode>((node) => node.children);
   dataSource = new MatTreeNestedDataSource<IMenuNode>();
 
-  // menuData = computed(() => this.runAppMenuService.menuData());
-  private runAppMenuService = inject(RunAppMenuService);
+  protected configTypeKey = 'menuGlobal';
 
-  constructor() {
+  constructor(override runAppDesignService: RunAppDesignService) {
+    super(runAppDesignService);
+
     // 监听菜单数据变化
     effect(
       () => {
@@ -68,11 +68,6 @@ export class SideMenuComponent implements OnInit {
 
   // 检查节点是否有子节点
   hasChild = (_: number, node: IMenuNode) => !!node.children && node.children.length > 0;
-
-  // 跟踪函数
-  trackByMenuSection(index: number, section: IMenuNode) {
-    return section.id;
-  }
 
   ngOnInit() {}
 

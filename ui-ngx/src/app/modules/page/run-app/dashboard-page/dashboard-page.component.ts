@@ -16,7 +16,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   dashboardId = computed(() => this.runAppMenuService.selectedDashboardId());
 
   constructor(
-    private route: ActivatedRoute,
     private runAppMenuService: RunAppMenuService,
   ) {}
 

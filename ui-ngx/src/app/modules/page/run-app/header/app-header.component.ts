@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, HostBinding, HostListener, OnInit, signal } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
@@ -13,6 +13,8 @@ import {
   CdkDragPreview,
   CdkDragStart,
 } from '@angular/cdk/drag-drop';
+import { RunAppDesignService } from '@core/services/run-app-designer.service';
+import { BaseDesignComponent } from '../base-design.component';
 
 @Component({
   selector: 'hs-app-header',
@@ -30,28 +32,22 @@ import {
     class: 'hs-header-container wh-full block',
   },
 })
-export class AppHeaderComponent implements OnInit {
-  appConfig = computed(() => this.runAppMenuService.appConfig());
-
-  isDesigner = computed(() => this.runAppMenuService.isDesigner());
-
+export class AppHeaderComponent extends BaseDesignComponent implements OnInit {
   isMove = signal(false);
 
   contentGroups = computed(() => {
     const contentGroups = this.runAppGlobalService.appHeaderConfig().contentGroups;
-
-    return contentGroups.map((group: any) => {
-      return {
-        ...group,
-        // component: AppLogoComponent,
-      };
-    });
+    return contentGroups;
   });
 
+  protected configTypeKey = 'appHeader';
+
   constructor(
-    private runAppMenuService: RunAppMenuService,
     private runAppGlobalService: RunAppGlobalService,
-  ) {}
+    override runAppDesignService: RunAppDesignService,
+  ) {
+    super(runAppDesignService);
+  }
 
   dragStart(event: CdkDragStart<any>) {
     this.isMove.set(true);
