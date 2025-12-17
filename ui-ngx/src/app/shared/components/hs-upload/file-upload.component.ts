@@ -145,7 +145,7 @@ export class HsFileUploadComponent
     const fileItemIndex = this.fileData.findIndex((file) => file === fileItem);
     this.fileData.splice(fileItemIndex, 1);
     // 通知表单系统值变更
-    this.onChange([...this.fileData]);
+    // this.onChange([...this.fileData]);
     // 删除队列的
     const queueItem = this.uploader.queue.find(
       (queueItem) => (queueItem as UploadedFile).id === fileItem.id,
@@ -159,7 +159,7 @@ export class HsFileUploadComponent
       console.log('删除文件报错 error ->', error);
     }
 
-    this.delItemFile.emit(fileItem);
+    // this.delItemFile.emit(fileItem);
     this.fileDataChange.emit(this.fileData);
   }
 
@@ -226,7 +226,7 @@ export class HsFileUploadComponent
     fileItem.id = newFileData.id; // 注意，这样直接扩展 file 对象的属性在实际开发中需要谨慎使用
     this.fileData.push(newFileData);
     // 通知表单系统值变更
-    this.onChange([...this.fileData]);
+    // this.onChange([...this.fileData]);
     this.fileDataChange.emit(this.fileData);
   }
 
@@ -241,7 +241,7 @@ export class HsFileUploadComponent
         Reflect.deleteProperty(this.fileData[index], 'progress');
       }
       // 通知表单系统值变更
-      this.onChange([...this.fileData]);
+      // this.onChange([...this.fileData]);
       this.fileDataChange.emit(this.fileData);
     }
   }
@@ -285,7 +285,7 @@ export class HsFileUploadComponent
   // ===== ControlValueAccessor 核心实现 =====
   writeValue(value: any[]): void {
     if (value && Array.isArray(value)) {
-      this._fileData = [...value]; // 不可变更新内部状态
+      this._fileData = value;
     } else {
       this._fileData = [];
     }
