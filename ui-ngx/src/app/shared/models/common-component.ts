@@ -18,6 +18,7 @@ export interface IFileData {
   url: string;
   status?: string;
   progress?: number;
+  path?: string;
 }
 
 export interface IAnyPropObj {

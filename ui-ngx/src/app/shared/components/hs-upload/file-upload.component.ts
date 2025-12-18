@@ -21,19 +21,12 @@ import { FILE_BROADCAST_TOKEN } from '@shared/tokens/app.token';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export function getFileStatus(fileItem: any): string {
-  if (fileItem.isCancel) {
-    return 'canceled'; // 文件被取消上传
-  } else if (fileItem.isError) {
-    return 'error'; // 文件上传失败
-  } else if (fileItem.isSuccess) {
-    return 'done'; // 文件上传成功
-  } else if (fileItem?.isUploading) {
-    return 'uploading'; // 文件正在上传
-  } else if (fileItem.isReady) {
-    return 'ready'; // 文件准备好，等待上传
-  } else {
-    return 'unknown'; // 未知状态
-  }
+  if (fileItem.isCancel) return 'canceled';
+  if (fileItem.isError) return 'error';
+  if (fileItem.isSuccess) return 'done';
+  if (fileItem?.isUploading) return 'uploading';
+  if (fileItem.isReady) return 'ready';
+  return 'unknown';
 }
 
 @Component({
@@ -58,51 +51,41 @@ export class HsFileUploadComponent
 {
   @ViewChild('FilePreview') filePreview: ComponentRef<IFileData>;
 
-  // 改造fileData Input为setter，关联writeValue
+  // 内部维护的数据源
   private _fileData: any[] = [];
+
   @Input() set fileData(value: any[]) {
+    // 🔥 修复点 1：引用比对。如果是内部 onChange 触发的 Formly 回传，则忽略，防止死循环
+    if (value === this._fileData) return;
     this.writeValue(value);
   }
   get fileData(): any[] {
     return this._fileData;
   }
-  @Output() fileDataChange = new EventEmitter<IFileData[]>();
 
+  @Output() fileDataChange = new EventEmitter<IFileData[]>();
   @Output() delItemFile = new EventEmitter<IFileData>();
 
-  // 最大上传数量
+  // 配置项
   @Input() maxCount = 9;
-  // 禁用
   @Input() disabled: boolean;
-  // 上传文件时的文件上传进度信息
   @Input() fileShowType: IFileShowType = 'grid';
-  // url
   @Input() uploadUrl: string;
-  // formData
   @Input() formData: any;
-  // 多选
   @Input() multiple = true;
-  // 自动上传
   @Input() autoUpload = true;
-  // 身份token
   @Input() authToken: string = '';
-  // 允许上传的文件类型
   @Input() allowedFileType: string[] | undefined;
-  // 最大上传大小
   @Input() maxFileSize: number;
-  // 开启折叠
   @Input() fold = false;
-  // 第几个开始折叠
   @Input() foldStartIndex = 3;
-  // 列数，type 为 "grid" 时有效
   @Input() cols = 3;
 
   isMobileTerminal: boolean = isMobile();
-
   public uploader: FileUploader;
-
   subscription: Subscription;
-  // ControlValueAccessor 核心回调
+
+  // ControlValueAccessor 回调
   private onChange: (value: any[]) => void = () => {};
   private onTouched: () => void = () => {};
 
@@ -116,104 +99,97 @@ export class HsFileUploadComponent
     });
   }
 
+  // 🔥 核心修复方法：统一异步通知
+  private notifyValueChange(): void {
+    // 使用副本防止引用问题，使用 setTimeout 避开变更检测周期冲突
+    const valueCopy = [...this._fileData];
+    setTimeout(() => {
+      this.onChange(valueCopy);
+      this.fileDataChange.emit(valueCopy);
+    });
+  }
+
   onFilesSelected(event: Event): void {
-    // 标记为已触摸
     this.onTouched();
-    if (this.fileData && this.fileData.length > 0) {
-      for (let i = 0; i < this.fileData.length; i++) {
-        const file = this.fileData[i];
+    // 预览逻辑优化
+    if (this._fileData && this._fileData.length > 0) {
+      this._fileData.forEach((file) => {
+        if (file.url) return; // 已有url跳过
         const reader = new FileReader();
-        reader.onload = (e: ProgressEvent<FileReader>) => {
-          if (e.target) {
-            file.url = e.target.result as string; // 将 Base64 URL 添加到数组
-          }
+        reader.onload = (e: any) => {
+          file.url = e.target.result;
+          this.notifyValueChange();
         };
-        const fileItem = this.uploader.queue.find(
-          (queueItem) => (queueItem as UploadedFile).id === file.id,
-        );
-        if (fileItem)
-          // 读取文件内容为 Base64 格式
-          reader.readAsDataURL(fileItem._file);
-      }
+        const fileItem = this.uploader.queue.find((q) => (q as UploadedFile).id === file.id);
+        if (fileItem) reader.readAsDataURL(fileItem._file);
+      });
     }
   }
 
   deleteItemFile(fileItem: IFileData) {
-    // 标记为已触摸
     this.onTouched();
-    // 删除fileData的
-    const fileItemIndex = this.fileData.findIndex((file) => file === fileItem);
-    this.fileData.splice(fileItemIndex, 1);
-    // 通知表单系统值变更
-    // this.onChange([...this.fileData]);
-    // 删除队列的
-    const queueItem = this.uploader.queue.find(
-      (queueItem) => (queueItem as UploadedFile).id === fileItem.id,
-    );
-    try {
+    const index = this._fileData.findIndex((file) => file === fileItem || file.id === fileItem.id);
+    if (index !== -1) {
+      this._fileData.splice(index, 1);
+
+      // 同步删除 Uploader 队列
+      const queueItem = this.uploader.queue.find((q) => (q as UploadedFile).id === fileItem.id);
       if (queueItem) {
         this.uploader.cancelItem(queueItem);
         this.uploader.removeFromQueue(queueItem);
       }
-    } catch (error) {
-      console.log('删除文件报错 error ->', error);
-    }
 
-    // this.delItemFile.emit(fileItem);
-    this.fileDataChange.emit(this.fileData);
+      this.notifyValueChange();
+      this.delItemFile.emit(fileItem);
+    }
   }
 
   private initializeUploader(): void {
-    console.log('%c Line:167 🍖', 'color:#e41a6a', this.uploadUrl);
     this.uploader = new FileUploader({
       url: this.uploadUrl,
       isHTML5: true,
       additionalParameter: this.formData,
       authToken: this.authToken,
-      autoUpload: this.autoUpload, // 是否自动上传
-      allowedFileType: this.allowedFileType, // 允许的文件类型
+      autoUpload: this.autoUpload,
+      allowedFileType: this.allowedFileType,
       removeAfterUpload: true,
-
-      // maxFileSize: 5 * 1024 * 1024, // 10MB
     });
-
     this.setupUploaderEvents();
   }
 
   private setupUploaderEvents(): void {
     this.uploader.onSuccessItem = (fileItem: UploadedFile, response: string) => {
-      const serverResponse = JSON.parse(response);
-      fileItem.serverResponse = serverResponse.data;
-      this.updateFileData(fileItem);
+      try {
+        const serverResponse = JSON.parse(response);
+        fileItem.serverResponse = serverResponse.data;
+        this.updateFileData(fileItem);
+      } catch (e) {
+        console.error('解析上传响应失败', e);
+      }
     };
 
     this.uploader.onAfterAddingFile = (fileItem: UploadedFile) => {
-      // 标记为已触摸
       this.onTouched();
+      // 数量限制拦截
+      if (this._fileData.length >= this.maxCount) {
+        this.uploader.removeFromQueue(fileItem);
+        this._snackBar.open(`最多只能上传 ${this.maxCount} 个文件`, '确定', { duration: 2000 });
+        return;
+      }
+
+      // 大小限制拦截
       if (this.maxFileSize && fileItem._file.size > this.maxFileSize * 1024 * 1024) {
-        this.uploader.removeFromQueue(fileItem); // 从队列中移除文件
-        this._snackBar.open(
-          // ${fileItem._file.name}：
-          `超出允许的最大上传大小 ${this.maxFileSize}MB`,
-          '确定',
-          {
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            duration: 3 * 1000,
-          },
-        );
+        this.uploader.removeFromQueue(fileItem);
+        this._snackBar.open(`超出允许的最大上传大小 ${this.maxFileSize}MB`, '确定', {
+          duration: 3000,
+        });
       } else {
         this.addFileToData(fileItem);
       }
     };
 
-    this.uploader.onErrorItem = (fileItem: UploadedFile) => {
-      this.updateFileData(fileItem);
-    };
-
-    this.uploader.onProgressItem = (fileItem: UploadedFile) => {
-      this.updateFileData(fileItem);
-    };
+    this.uploader.onErrorItem = (fileItem: UploadedFile) => this.updateFileData(fileItem);
+    this.uploader.onProgressItem = (fileItem: UploadedFile) => this.updateFileData(fileItem);
   }
 
   addFileToData(fileItem: UploadedFile): void {
@@ -222,52 +198,42 @@ export class HsFileUploadComponent
       name: fileItem.file.name,
       status: getFileStatus(fileItem),
       url: '',
+      progress: 0,
     };
-    fileItem.id = newFileData.id; // 注意，这样直接扩展 file 对象的属性在实际开发中需要谨慎使用
-    this.fileData.push(newFileData);
-    // 通知表单系统值变更
-    // this.onChange([...this.fileData]);
-    this.fileDataChange.emit(this.fileData);
+    fileItem.id = newFileData.id;
+    this._fileData.push(newFileData);
+    this.notifyValueChange();
   }
 
   updateFileData(fileItem: UploadedFile) {
-    const index = this.fileData.findIndex((file) => file.id === fileItem.id);
+    const index = this._fileData.findIndex((file) => file.id === fileItem.id);
     if (index !== -1) {
-      // this.fileData[index].url = fileItem.serverResponse?.url;
-      this.fileData[index].status = getFileStatus(fileItem);
-      this.fileData[index].progress = fileItem.progress;
+      this._fileData[index].status = getFileStatus(fileItem);
+      this._fileData[index].progress = fileItem.progress;
+
       if (fileItem.isSuccess) {
-        this.fileData[index].url = fileItem.serverResponse?.url;
-        Reflect.deleteProperty(this.fileData[index], 'progress');
+        this._fileData[index].url = fileItem.serverResponse?.url || this._fileData[index].url;
+        delete this._fileData[index].progress;
       }
-      // 通知表单系统值变更
-      // this.onChange([...this.fileData]);
-      this.fileDataChange.emit(this.fileData);
+      this.notifyValueChange();
     }
   }
 
-  // 拖拽文件到按钮
+  // 拖拽逻辑保持不变...
   onDragOver(event: any) {
-    event.preventDefault(); // 阻止默认行为，允许文件拖拽
+    event.preventDefault();
     event.currentTarget!.classList.add('dragging-over');
   }
-
   onDragLeave(event: any) {
     event.preventDefault();
     event.currentTarget!.classList.remove('dragging-over');
   }
-
   onDrop(event: any) {
-    // 标记为已触摸
     this.onTouched();
     event.preventDefault();
     event.currentTarget!.classList.remove('dragging-over');
-
-    // 获取拖拽的文件
     const files = event.dataTransfer?.files;
-    if (files && files.length > 0) {
-      this.uploader.addToQueue(files);
-    }
+    if (files && files.length > 0) this.uploader.addToQueue(files);
   }
 
   ngOnInit() {}
@@ -277,35 +243,28 @@ export class HsFileUploadComponent
   }
 
   ngOnDestroy(): void {
-    // 销毁 Uploader 实例
-    this.uploader?.cancelAll(); // 取消所有未完成的上传任务
+    this.uploader?.cancelAll();
     this.subscription?.unsubscribe();
   }
 
-  // ===== ControlValueAccessor 核心实现 =====
+  // ===== ControlValueAccessor 实现 =====
   writeValue(value: any[]): void {
-    if (value && Array.isArray(value)) {
-      this._fileData = value;
-    } else {
-      this._fileData = [];
-    }
+    // 强制转换为新引用，确保内部 UI 刷新
+    this._fileData = Array.isArray(value) ? [...value] : [];
   }
 
-  registerOnChange(fn: (value: any[]) => void): void {
-    this.onChange = (value) => {
-      fn(value); // 通知表单系统
-      this.fileDataChange.emit(value); // 触发双向绑定事件
-    };
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
   }
 
-  registerOnTouched(fn: () => void): void {
+  registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
     if (isDisabled && this.uploader) {
-      this.uploader.cancelAll(); // 禁用时取消所有上传
+      this.uploader.cancelAll();
     }
   }
 }

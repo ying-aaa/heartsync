@@ -2,9 +2,15 @@
   <header class="px-12px py-16px flex items-center relative">
     <span>{{ selectedConfigType().label }}</span>
 
-    <button mat-icon-button class="hs-icon-button-32 absolute! right-12px" (click)="toggleConfig()">
-      <mat-icon>close</mat-icon>
-    </button>
+    @if (selectedConfigType().value !== 'appGlobal') {
+      <button
+        mat-icon-button
+        class="hs-icon-button-32 absolute! right-12px"
+        (click)="toggleConfig()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    }
   </header>
 
   <mat-divider class="w-full mb-12px!"></mat-divider>

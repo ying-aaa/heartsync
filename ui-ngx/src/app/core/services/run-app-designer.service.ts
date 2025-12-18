@@ -12,6 +12,10 @@ export class RunAppDesignService {
   // 'menuGlobal', 'menuSingle', 'appHeader'
   configTypes: IAppConfigType[] = [
     {
+      label: '应用页面配置',
+      value: 'appGlobal',
+    },
+    {
       label: '全局菜单配置',
       value: 'menuGlobal',
     },
@@ -23,15 +27,11 @@ export class RunAppDesignService {
       label: '应用头部配置',
       value: 'appHeader',
     },
-    {
-      label: '应用页面配置',
-      value: 'appGlobal',
-    },
   ];
 
   isDesigner = signal(false);
 
-  selectedConfigType = signal<IAppConfigType>(this.configTypes[2]);
+  selectedConfigType = signal<IAppConfigType>(this.configTypes[0]);
 
   constructor() {}
 
@@ -41,6 +41,7 @@ export class RunAppDesignService {
 
   setConfigType(type: string) {
     if (!this.isDesigner()) return;
-    this.selectedConfigType.set(this.configTypes.find((item) => item.value === type)!);
+    const configType = this.configTypes.find((item) => item.value === type);
+    configType && this.selectedConfigType.set(configType);
   }
 }

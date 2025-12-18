@@ -1471,29 +1471,6 @@ const menuContainerConfig = columnConfig('菜单容器', 'menuContainer', [
 
 export const menu_global_config: IEditorFormlyField[] = enhanceFieldData([
   {
-    key: 'customStyle',
-    type: 'json-object',
-    fieldId: 'input_key_2579558739748954',
-    props: {
-      type: 'css',
-      label: '在线css样式编辑',
-      typeName: 'json编辑器',
-      icon: 'text_fields',
-      disabled: false,
-      appearance: 'outline',
-      styles: {
-        height: 320,
-        heightUnits: 'px',
-        border: '1px solid var(--base-color-10)',
-        borderRadius: 8,
-        borderRadiusUnits: 'px',
-        overflow: 'hidden',
-      },
-      title: '在线css样式编辑',
-      layout: 'float',
-    },
-  },
-  {
     key: 'showType',
     type: 'grid-radio',
     defaultValue: 'menuContainer',

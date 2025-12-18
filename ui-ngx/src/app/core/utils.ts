@@ -1,6 +1,6 @@
 import { Renderer2 } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
-import { IAnyPropObj } from '@shared/models/common-component';
+import { IAnyPropObj, IFileData } from '@shared/models/common-component';
 
 /** 判断一个值是否为 Object
  * @param {any} value
@@ -553,4 +553,30 @@ export function camelToKebabCase(str: string): string {
 
   // 移除可能的开头横线（如原字符串首字母大写时产生的）
   return kebabStr.startsWith('-') ? kebabStr.slice(1) : kebabStr;
+}
+
+/**
+ *  获取图片地址
+ * @param fileData
+ * @returns string
+ */
+export function getImageUrl(fileData: IFileData[] | IFileData | string): string | undefined {
+  if (Array.isArray(fileData)) {
+    const file = fileData[0];
+    return file.url || file.path;
+  }
+  if (typeof fileData === 'object') {
+    fileData = fileData as IFileData;
+    return fileData.url || fileData.path;
+  }
+
+  if (typeof fileData === 'string') {
+    try {
+      const fileDataObj = JSON.parse(fileData) as IFileData;
+      return fileDataObj.url || fileDataObj.path;
+    } catch (error) {
+      return fileData;
+    }
+  }
+  return fileData;
 }

@@ -10,13 +10,20 @@ import { AppHeaderComponent } from './header/app-header.component';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { RunAppDesignService } from '@src/app/core//services/run-app-designer.service';
 import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
-import { AppContentComponent } from "./content/app-content.component";
+import { AppContentComponent } from './content/app-content.component';
 
 @Component({
   selector: 'hs-run-app',
   templateUrl: './run-app.component.html',
   styleUrls: ['./run-app.component.less'],
-  imports: [SideMenuComponent, RouterModule, MatDividerModule, AppHeaderComponent, AppContentComponent],
+  imports: [
+    SideMenuComponent,
+    RouterModule,
+    MatDividerModule,
+    AppHeaderComponent,
+    AppContentComponent,
+  ],
+  host: { class: 'hs-run-app-container block wh-full' },
 })
 export class RunAppComponent implements OnInit {
   appId: string | null = getParamFromRoute('appId', this.route);

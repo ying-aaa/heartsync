@@ -3,9 +3,60 @@ import { enhanceFieldData } from './public-api';
 
 export const app_global_config: IEditorFormlyField[] = enhanceFieldData([
   {
-    key: 'backgroundImage',
+    key: 'layout',
+    type: 'select',
+    defaultValue: 'up-down',
+    props: {
+      label: '布局',
+      typeName: '下拉单选',
+      icon: 'view_column',
+      disabled: false,
+      appearance: 'outline',
+      styles: {
+        heightUnits: 'px',
+        border: '1px solid var(--base-color-10)',
+        borderRadius: 8,
+        borderRadiusUnits: 'px',
+      },
+      options: [
+        {
+          label: '默认布局',
+          value: 'up-down',
+        },
+        {
+          label: '左右布局',
+          value: 'left-right',
+        },
+      ],
+    },
+  },
+  {
+    key: 'globalStyles.backgroundImage',
     type: 'image-upload',
     defaultValue: [],
     props: { label: '背景图片', description: '请上传图片', maxCount: 1 },
+  },
+  {
+    key: 'customStyle',
+    type: 'json-object',
+    fieldId: 'input_key_2579558739748954',
+    props: {
+      type: 'css',
+      label: '在线css样式编辑',
+      typeName: 'json编辑器',
+      icon: 'text_fields',
+      disabled: false,
+      appearance: 'outline',
+      styles: {
+        height: 320,
+        heightUnits: 'px',
+        border: '1px solid var(--base-color-10)',
+        borderRadius: 8,
+        borderRadiusUnits: 'px',
+        overflow: 'hidden',
+      },
+      title: '在线css样式编辑',
+      layout: 'float',
+    },
   },
 ]);

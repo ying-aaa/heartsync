@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { camelToKebabCase } from '../utils';
+import { camelToKebabCase, getImageUrl } from '../utils';
 
 @Injectable({
   providedIn: 'root',
@@ -10,11 +10,23 @@ export class RunAppGlobalService {
 
   styleTag: HTMLStyleElement;
 
-  appGlobalConfig = signal<any>({});
+  appGlobalConfig = signal<any>({
+    globalStyles: {
+      backgroundImage: [
+        {
+          id: '6948379030027798',
+          name: 'image_2024_1_20_910.jpg',
+          status: 'done',
+          url: '/heartsync-files/business-image/64fe7240-fb7d-4cac-87b6-ca0292fdb08f.jpg',
+        },
+      ],
+    },
+    customStyle:
+      '.hs-run-app-container{\n    background-attachment: scroll;\n    background-position: 0% 0%;\n    background-repeat: no-repeat;\n    background-color: transparent;\n    background-size: cover;\n}\n.hs-menu-container{\n  backdrop-filter: blur(20px);\n}',
+  });
 
   appMenuConfig = signal({
     themeId: '2',
-    customStyle: '.hs-menu-container{\n  backdrop-filter: blur(20px);\n}',
     parent: {
       default: {
         fontSizeUnits: 'px',
@@ -164,7 +176,7 @@ export class RunAppGlobalService {
       heightUnits: 'px',
       paddingRight: 10,
       paddingLeft: 10,
-      backgroundColor: 'rgba(33, 40, 60, .2)',
+      backgroundColor: 'rgba(106, 130, 199, 0.2)',
       color: 'rgb(255, 255, 255)',
     },
     contentGroups: [
@@ -219,16 +231,21 @@ export class RunAppGlobalService {
     });
   }
 
-  transform(value: any): string {
+  transform(styles: any): string {
     let styleStr = '';
 
-    Object.keys(value).forEach((key) => {
+    Object.keys(styles).forEach((key) => {
       const unitKey = `${key}Units`;
       const hyphenKey = camelToKebabCase(key);
-      if (value.hasOwnProperty(unitKey)) {
-        styleStr += `${hyphenKey}: ${value[key]}${value[unitKey]};`;
+      const value = styles[key];
+      if (styles.hasOwnProperty(unitKey)) {
+        styleStr += `${hyphenKey}: ${value}${styles[unitKey]};`;
       } else if (!key.endsWith('Units')) {
-        styleStr += `${hyphenKey}: ${value[key]};`;
+        if (key === 'backgroundImage') {
+          styleStr += `${hyphenKey}: url(${getImageUrl(value)});`;
+        } else {
+          styleStr += `${hyphenKey}: ${value};`;
+        }
       }
     });
     return styleStr;
@@ -247,7 +264,10 @@ export class RunAppGlobalService {
     const headerConfig = this.appHeaderConfig();
     const headerStyle = this.transform(headerConfig.headerStyle || {});
 
-    const customStyle = menuConfig.customStyle;
+    const appGlobalConfig = this.appGlobalConfig();
+    const globalStyles = this.transform(appGlobalConfig.globalStyles);
+
+    const customStyle = appGlobalConfig.customStyle;
 
     this.styleTag = this.styleTag || this.doc.querySelector('style[id="hs-app-dynamic-style"]');
 
@@ -258,6 +278,9 @@ export class RunAppGlobalService {
     }
 
     this.styleTag.textContent = `
+        .hs-run-app-container{
+          ${globalStyles}
+        }
         .hs-header-container{
           ${headerStyle}}
         .hs-menu-container{

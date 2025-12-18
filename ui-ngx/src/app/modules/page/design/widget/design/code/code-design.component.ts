@@ -176,12 +176,10 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
 
   loadWidgetInfo() {
     const widgetId = this.route.snapshot.queryParams['widgetId'];
-    this.codeWidgetService
-      .getCodeWidgetById(widgetId)
-      .subscribe((widgetInfo) => {
-        this.widgetInfo.set(widgetInfo);
-        this.WidgetCode.setWidgetInfo(widgetInfo);
-      });
+    this.codeWidgetService.getCodeWidgetById(widgetId).subscribe((widgetInfo) => {
+      this.widgetInfo.set(widgetInfo);
+      this.WidgetCode.setWidgetInfo(widgetInfo);
+    });
   }
 
   saveWidgetInfo() {

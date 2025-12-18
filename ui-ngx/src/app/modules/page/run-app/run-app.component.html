@@ -4,11 +4,7 @@
 <!-- @let asideTop = !isFullscreen() ? '0' : headerHeight() + 'px';
 @let asideHeight = !isFullscreen() ? '100%' : 'calc(100% - ' + headerHeight() + 'px)'; -->
 <!-- <mat-divider></mat-divider> -->
-<main
-  class="flex relative"
-  [style]="{ height: mainHeight }"
->
+<main class="flex relative" [style]="{ height: mainHeight }">
   <hs-side-menu [menuData]="menuData()"></hs-side-menu>
-  <!-- <mat-divider [vertical]="true" class="h-full"></mat-divider> -->
   <hs-app-content></hs-app-content>
 </main>

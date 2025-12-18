@@ -14,7 +14,7 @@ interface InputProps extends FormlyFieldProps {
   inline?: boolean;
   title?: string;
   type?: string;
-  editorStyle?: Object;
+  editorStyle?: Partial<CSSStyleDeclaration>;
   options?: any;
 }
 
@@ -23,7 +23,7 @@ interface InputProps extends FormlyFieldProps {
   template: `
     <div [style]="props!['styles'] | concatUnits">
       <hs-json-object-editor
-        (onChange)="formControl.setValue($event)"
+        [formControl]="formControl"
         [disabled]="props.disabled || false"
         [placeholder]="props.placeholder || ''"
         [toolbar]="props.toolbar || true"
