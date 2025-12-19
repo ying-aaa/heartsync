@@ -7,12 +7,16 @@
     class="h-0 flex-1"
     hs-loading
     [isLoading]="loadingStatus"
+    [style]="tableStyle()"
   >
-    <section tabindex="0" scrollViewport [style]="tableStyle()">
-      <table mat-table matSort [dataSource]="dataSource" (matSortChange)="onSortChange($event)">
-        1111{{
-          tableColumn() | json
-        }}
+    <section tabindex="0" scrollViewport>
+      <table
+        class="wh-full"
+        mat-table
+        matSort
+        [dataSource]="dataSource"
+        (matSortChange)="onSortChange($event)"
+      >
         @for (column of tableColumn(); track $index) {
           @if (column.type === ColumnType.SELECTION) {
             <ng-container matColumnDef="selection">
@@ -130,7 +134,7 @@
           }
         }
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns()"

@@ -10,7 +10,7 @@
             @let src = '/assets/sql/' + item.type + '.png';
             <img [src]="src" class="w-52px h-52px rounded-12px" />
             <div class="w-0 flex-1">
-              <div class="line-height-28px text-18px font-800">
+              <div class="line-height-28px text-18px font-800 truncate">
                 {{ item.name }}
               </div>
               <div class="text-14px line-height-20px color-#6B7280">
@@ -20,7 +20,7 @@
           </div>
           <div class="flex items-center text-14px h-0 flex-1 color-#6B7280">
             <span>创建时间：</span>
-            <div>{{ item.createdAt | date: 'YYYY-MM-dd HH:mm:ss' }}</div>
+            <div>{{ item.createdAt | date: 'YYYY-MM-dd' }}</div>
             &nbsp; &nbsp;
             <span>更新人：</span>
             <div>{{ item.updatedBy || '不读诗意' }}</div>

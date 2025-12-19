@@ -202,8 +202,13 @@ mat-tab-body.mat-mdc-tab-body {
 
 // tab选项外层容器撑满
 .mat-mdc-tab-body-wrapper {
+  width: 100%;
   height: 0;
   flex: 1;
+
+  .mat-mdc-tab-body {
+    width: 100%;
+  }
 }
 
 div.mat-mdc-dialog-title::before {

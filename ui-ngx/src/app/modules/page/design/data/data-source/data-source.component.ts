@@ -90,7 +90,7 @@ export class DataSourceComponent implements OnInit {
           'createdAt',
           '创建时间',
           {
-            dateFormat: 'YYYY-MM-DD HH:mm:ss',
+            dateFormat: 'YYYY-MM-DD',
           },
           300,
         ),
