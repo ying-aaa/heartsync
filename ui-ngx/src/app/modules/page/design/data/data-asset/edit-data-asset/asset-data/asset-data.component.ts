@@ -66,25 +66,7 @@ export class AssetDataComponent implements OnInit {
     }),
   );
 
-  constructor(
-    private assetHttpService: AssetHttpService,
-    private dataSourceHttpService: DataSourceHttpService,
-  ) {}
+  constructor(private assetHttpService: AssetHttpService) {}
 
-  loadAssetFields(assetId: string) {
-    // this.assetHttpService.getFields(assetId).subscribe((fields) => {
-    //   this.tableColumn = fields.map(
-    //     (field) =>
-    //       new TextColumn(field.fieldName, field.fieldName, {
-    //         click: (row) => {
-    //           console.log('%c Line:121 🍻 row', 'color:#42b983', row);
-    //         },
-    //       }),
-    //   ) as TextColumn[];
-    // });
-  }
-
-  ngOnInit() {
-    this.loadAssetFields(this.assetId());
-  }
+  ngOnInit() {}
 }

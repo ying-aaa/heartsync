@@ -11,6 +11,7 @@ import { EditDataAssetComponent } from './edit-data-asset/edit-data-asset.compon
 import { MatTabsModule } from '@angular/material/tabs';
 import { HsDynamicTableModule } from '@src/app/shared/components/hs-table/hs-dynamic-table.module';
 import { AssetDataComponent } from './edit-data-asset/asset-data/asset-data.component';
+import { AssetFieldComponent } from './edit-data-asset/asset-field/asset-field.component';
 // import { AssetFieldComponent } from './edit-data-asset/asset-field/asset-field.component';
 
 @NgModule({
@@ -18,7 +19,7 @@ import { AssetDataComponent } from './edit-data-asset/asset-data/asset-data.comp
     CreateDataAssetComponent,
     EditDataAssetComponent,
     AssetDataComponent,
-    // AssetFieldComponent,
+    AssetFieldComponent,
   ], // 声明弹窗组件
   imports: [
     FormlyRunModule,

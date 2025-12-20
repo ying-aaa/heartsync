@@ -73,7 +73,7 @@ export class DateColumn extends BaseColumn {
   constructor(
     public override prop: string,
     public override label: string,
-    public override config?: { dateFormat: string; click?: () => void },
+    public override config?: { dateFormat?: string; click?: () => void },
     public override width?: number | string,
     public override align?: IColumnAlign,
     public override className?: string,
@@ -232,7 +232,7 @@ export type TableColumn =
 
 export type ISortType = 'ASC' | 'DESC';
 
-export interface DataType {
+export interface IDataType {
   data: any[];
   total?: number;
   page?: number;
@@ -440,7 +440,7 @@ type ConfigBase = {
   tableColumn: Array<TableColumn>;
   initExec?: boolean;
   getColumns?: () => Observable<TableColumn[]>;
-  getData: () => Observable<DataType>;
+  getData: () => Observable<IDataType>;
 };
 
 type ITableConfig = (ConfigWithSelection & ConfigBase) | (ConfigWithoutSelection & ConfigBase);
@@ -466,7 +466,7 @@ export class IDynamicTable {
     this.displayedColumns = columns.map((column) => column.prop);
   }
 
-  getData: () => Observable<DataType>;
+  getData: () => Observable<IDataType>;
 
   constructor(config: ITableConfig) {
     this.tableStyle = config.tableStyle || {};

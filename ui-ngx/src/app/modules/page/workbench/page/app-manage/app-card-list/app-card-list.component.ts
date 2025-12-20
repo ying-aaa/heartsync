@@ -1,20 +1,10 @@
 import { DatePipe } from '@angular/common';
-import {
-  Component,
-  computed,
-  input,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, input, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import {
-  ColumnType,
-  IDynamicTable,
-} from '@src/app/shared/components/hs-table/table.model';
+import { ColumnType, IDynamicTable } from '@src/app/shared/components/hs-table/table.model';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { Subject, Subscription, switchMap, takeUntil } from 'rxjs';
 import { HsSvgModule } from '@shared/components/hs-svg/hs-svg.module';

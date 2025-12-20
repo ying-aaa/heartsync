@@ -1,7 +1,9 @@
 <mat-tab-group class="wh-full" mat-stretch-tabs="false" mat-align-tabs="center">
   <!-- <mat-tab label="基础设置">基础设置</mat-tab> -->
-  <mat-tab label="资产数据"><hs-asset-data [assetId]="assetId()"></hs-asset-data> </mat-tab>
+  <mat-tab label="资产数据">
+    <hs-asset-data [assetId]="assetId()"></hs-asset-data>
+  </mat-tab>
   <mat-tab label="资产字段">
-    <!-- <hs-asset-field></hs-asset-field> -->
+    <hs-asset-field [assetId]="assetId()"></hs-asset-field>
   </mat-tab>
 </mat-tab-group>

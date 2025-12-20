@@ -56,7 +56,7 @@ export class AppManageComponent implements OnInit {
 
   pageLink = new PageLink(
     0,
-    20,
+    10,
     [{ prop: 'directoryId' }, { prop: 'name' }],
     [{ sortBy: 'name' }, { sortBy: 'description' }, { sortBy: 'createdAt', order: 'DESC' }],
   );

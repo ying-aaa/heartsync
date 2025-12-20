@@ -68,16 +68,16 @@ export class HsDynamicTableComponent implements OnInit {
     this.selection.changed.pipe(takeUntilDestroyed()).subscribe(() => {
       this.pageLink().setMultipleSelection(this.selection.selected);
     });
-
-    this.customizePaginatorIntl();
-
-    this.setupDataStreams();
   }
 
   ngOnInit() {
-    this.pageLink().setGetData(() => this.getTableData());
+    this.customizePaginatorIntl();
+
+    this.setupDataStreams();
 
     this.loadColumnData$.next();
+
+    this.pageLink().setGetData(this.getTableData.bind(this));
   }
 
   private setupDataStreams() {
@@ -87,7 +87,7 @@ export class HsDynamicTableComponent implements OnInit {
         switchMap(() => {
           const getColumnsFn = this.tableConfig().getColumns;
           if (!getColumnsFn) return of(null);
-          return getColumnsFn(); // 假设返回 Observable<Column[]>
+          return getColumnsFn();
         }),
         takeUntilDestroyed(this.destroyRef),
       )
@@ -95,9 +95,11 @@ export class HsDynamicTableComponent implements OnInit {
         if (res) {
           this.tableConfig().setColumns?.(res);
           this.loadedColumns.set(res);
-          if (this.tableConfig().initExec) {
-            this.pageLink().getData();
-          }
+        }
+        if (this.tableConfig().initExec) {
+          this.loadTableData$.next();
+        } else {
+          this.loadingStatus.set(false);
         }
       });
 
@@ -121,7 +123,6 @@ export class HsDynamicTableComponent implements OnInit {
           this.dataSource.data = res;
           this.pageLink().updateTotal(res.length);
         } else if (res) {
-          // 兼容 { data: [], total: 0 } 格式
           const data = res.data || [];
           const total = res.total ?? data.length;
           this.dataSource.data = data;
