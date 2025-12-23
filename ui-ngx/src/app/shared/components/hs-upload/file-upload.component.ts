@@ -211,8 +211,8 @@ export class HsFileUploadComponent
       if (fileItem.isSuccess) {
         this._fileList[index].url = fileItem.serverResponse?.url || this._fileList[index].url;
         delete this._fileList[index].progress;
-        // this.notifyValueChange();
-        // return;
+        this.notifyValueChange();
+        return;
       }
       this.fileListChange.emit(this._fileList);
     }

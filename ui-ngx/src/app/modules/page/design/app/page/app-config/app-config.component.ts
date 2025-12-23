@@ -1,4 +1,4 @@
-import { Component, computed, effect, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, OnInit, signal, untracked } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDivider } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,6 +33,8 @@ export class AppConfigComponent implements OnInit {
   ) {
     effect(() => {
       const { value } = this.selectedConfigType();
+      // 不尽兴监听的
+
       if (value === 'menuGlobal') {
         this.model = this.runAppGlobalService.appMenuConfig;
       }
@@ -49,6 +51,8 @@ export class AppConfigComponent implements OnInit {
       this.options = {
         formState: { model: this.model() },
       };
+
+      console.log('%c Line:38 🍪 this.model', 'color:#3f7cff', this.model());
     });
   }
 
@@ -57,7 +61,7 @@ export class AppConfigComponent implements OnInit {
   }
 
   modelChange(newModel: any) {
-    this.model.set(newModel);
+    this.model.set({ ...this.model() });
   }
 
   ngOnInit() {}

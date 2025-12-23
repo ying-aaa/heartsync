@@ -29,13 +29,13 @@ export class AssetFieldComponent implements OnInit {
   );
 
   tableColumn: TableColumn[] = [
-    new TextColumn('name', '字段名称', {}, 300),
-    new TextColumn('textType', '字段类型', {}, 300),
-    new TextColumn('length', '长度', {}, 300),
-    new TextColumn('comment', '注释', {}, 300),
-    new TextColumn('isPrimaryKey', '是否主键', {}, 300),
-    new TextColumn('notNull', 'Not Null', {}, 300),
-    new DateColumn('createAt', '创建时间', {}, 300),
+    new TextColumn('name', '字段名称', {}, 100),
+    new TextColumn('textType', '字段类型', {}, 100),
+    new TextColumn('length', '长度', {}, 100),
+    new TextColumn('comment', '注释', {}, 100),
+    new TextColumn('isPrimaryKey', '是否主键', {}, 100),
+    new TextColumn('notNull', 'Not Null', {}, 100),
+    new DateColumn('createdAt', '创建时间', {}),
   ];
 
   tableConfig = signal<IDynamicTable>(

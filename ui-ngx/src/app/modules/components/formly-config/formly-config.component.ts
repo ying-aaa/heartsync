@@ -9,7 +9,9 @@ import { MatButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
-import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, skip, Subscription } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
+
 @Component({
   selector: 'hs-formly-config',
   template: `
@@ -74,9 +76,11 @@ export class FormlyConfigComponent implements OnInit {
 
       this.valueChangeSub?.unsubscribe();
       this.formGroup = new FormGroup({});
-      this.valueChangeSub = this.formGroup.valueChanges.subscribe((newModel) => {
-        this.modelChange.emit(newModel);
-      });
+      this.valueChangeSub = this.formGroup.valueChanges
+        .pipe(throttleTime(50))
+        .subscribe((newModel) => {
+          this.modelChange.emit(newModel);
+        });
     });
   }
 
