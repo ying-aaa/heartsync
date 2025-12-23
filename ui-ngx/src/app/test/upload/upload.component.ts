@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, effect, OnInit, signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { UploadFileService } from '@src/app/core/http/upload-file.service';
 import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-file.module';
@@ -71,11 +71,10 @@ export class UploadComponent implements OnInit {
 
   fields = [
     {
-      key: 'image',
+      key: 'backgroundImage',
       type: 'image-upload',
-      templateOptions: {
-        label: '文件',
-      },
+      defaultValue: [],
+      props: { label: '背景图片', description: '请上传图片', maxCount: 1 },
     },
   ];
 
@@ -83,15 +82,28 @@ export class UploadComponent implements OnInit {
 
   formGroup = new FormGroup({});
 
-  model = signal<any>({});
+  model = signal<any>({
+    backgroundImage: [
+      {
+        id: '3765574827472950',
+        name: 'images (1).jpg',
+        url: '/heartsync-files/dashboard-background-images/images (1).jpg',
+      },
+    ],
+  });
 
   constructor(
     private toastr: ToastrService,
     private uploadFileService: UploadFileService,
   ) {
     this.formGroup.valueChanges.subscribe((newModel) => {
-      console.log("%c Line:93 🍞 newModel", "color:#ffdd4d", newModel);
+      this.model.set({...this.model()});
     });
+
+    effect(() => {
+
+      console.log("%c Line:106 🥒", "color:#7f2b82", this.model());
+    })
   }
 
   ngOnInit() {}

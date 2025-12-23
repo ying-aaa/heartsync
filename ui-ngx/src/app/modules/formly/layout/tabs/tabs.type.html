@@ -12,17 +12,17 @@
   mat-align-tabs="start"
 >
   @for (f of field.fieldGroup; track $index) {
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <span
-          cdkDrag
-          [cdkDragDisabled]="!f._design"
-          cdkDragPreviewClass="example-drag-tabs-preview"
-          cdkDragRootElement=".mat-mdc-tab"
-          [cdkDragData]="getDragFieldData(f)"
-          >{{ f.props?.label! }}</span
-        >
-      </ng-template>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <span
+        cdkDrag
+        [cdkDragDisabled]="!f._design"
+        cdkDragPreviewClass="example-drag-tabs-preview"
+        cdkDragRootElement=".mat-mdc-tab"
+        [cdkDragData]="getDragFieldData(f)"
+      >{{ f.props?.label! }}</span>
+    </ng-template>
+    <ng-template matTabContent>
       <div class="py-8px">
         <formly-field [field]="f">
           <div
@@ -31,6 +31,8 @@
           ></div>
         </formly-field>
       </div>
-    </mat-tab>
+    </ng-template>
+
+  </mat-tab>
   }
 </mat-tab-group>

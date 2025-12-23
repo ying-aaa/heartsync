@@ -57,7 +57,7 @@ export class AppConfigComponent implements OnInit {
   }
 
   modelChange(newModel: any) {
-    this.model.set({ ...this.model() });
+    this.model.set(newModel);
   }
 
   ngOnInit() {}

@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { camelToKebabCase, getImageUrl } from '../utils';
+import { camelToKebabCase, getImageUrl, transformCss } from '../utils';
 
 @Injectable({
   providedIn: 'root',
@@ -231,41 +231,21 @@ export class RunAppGlobalService {
     });
   }
 
-  transform(styles: any): string {
-    let styleStr = '';
-
-    Object.keys(styles).forEach((key) => {
-      const unitKey = `${key}Units`;
-      const hyphenKey = camelToKebabCase(key);
-      const value = styles[key];
-      if (styles.hasOwnProperty(unitKey)) {
-        styleStr += `${hyphenKey}: ${value}${styles[unitKey]};`;
-      } else if (!key.endsWith('Units')) {
-        if (key === 'backgroundImage') {
-          styleStr += `${hyphenKey}: url(${getImageUrl(value)});`;
-        } else {
-          styleStr += `${hyphenKey}: ${value};`;
-        }
-      }
-    });
-    return styleStr;
-  }
-
   drawCss() {
     const menuConfig = this.appMenuConfig();
-    const childrenDefault = this.transform(menuConfig.children?.default || {});
-    const childrenHover = this.transform(menuConfig.children?.hover || {});
-    const childrenActive = this.transform(menuConfig.children?.active || {});
-    const parentDefault = this.transform(menuConfig.parent?.default || {});
-    const parentHover = this.transform(menuConfig.parent?.hover || {});
-    const parentActive = this.transform(menuConfig.parent?.active || {});
-    const menuContainer = this.transform(menuConfig.menuContainer || {});
+    const childrenDefault = transformCss(menuConfig.children?.default || {});
+    const childrenHover = transformCss(menuConfig.children?.hover || {});
+    const childrenActive = transformCss(menuConfig.children?.active || {});
+    const parentDefault = transformCss(menuConfig.parent?.default || {});
+    const parentHover = transformCss(menuConfig.parent?.hover || {});
+    const parentActive = transformCss(menuConfig.parent?.active || {});
+    const menuContainer = transformCss(menuConfig.menuContainer || {});
 
     const headerConfig = this.appHeaderConfig();
-    const headerStyle = this.transform(headerConfig.headerStyle || {});
+    const headerStyle = transformCss(headerConfig.headerStyle || {});
 
     const appGlobalConfig = this.appGlobalConfig();
-    const globalStyles = this.transform(appGlobalConfig.globalStyles);
+    const globalStyles = transformCss(appGlobalConfig.globalStyles);
 
     const customStyle = appGlobalConfig.customStyle;
 

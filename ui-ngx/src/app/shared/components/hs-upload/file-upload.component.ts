@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ComponentRef,
   EventEmitter,
@@ -51,11 +52,9 @@ export class HsFileUploadComponent
 {
   @ViewChild('FilePreview') filePreview: ComponentRef<IFileData>;
 
-  // 内部维护的数据源
   private _fileList: any[] = [];
 
   @Input() set fileList(value: any[]) {
-    // 🔥 修复点 1：引用比对。如果是内部 onChange 触发的 Formly 回传，则忽略，防止死循环
     if (value === this._fileList) return;
     this.writeValue(value);
   }
@@ -85,7 +84,6 @@ export class HsFileUploadComponent
   public uploader: FileUploader;
   subscription: Subscription;
 
-  // ControlValueAccessor 回调
   private onChange: (value: any[]) => void = () => {};
   private onTouched: () => void = () => {};
 
@@ -93,15 +91,14 @@ export class HsFileUploadComponent
     private _snackBar: MatSnackBar,
     @Inject(FILE_BROADCAST_TOKEN) private file_broadcast_token: string,
     private broadcastService: BroadcastService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.subscription = this.broadcastService.on(this.file_broadcast_token, (name, [fileItem]) => {
       this.deleteItemFile(fileItem);
     });
   }
 
-  // 🔥 核心修复方法：统一异步通知
   private notifyValueChange(): void {
-    // 使用副本防止引用问题，使用 setTimeout 避开变更检测周期冲突
     const valueCopy = [...this._fileList];
     setTimeout(() => {
       this.onChange(valueCopy);
@@ -155,6 +152,8 @@ export class HsFileUploadComponent
       removeAfterUpload: true,
     });
     this.setupUploaderEvents();
+
+    this.cdr.detectChanges();
   }
 
   private setupUploaderEvents(): void {
@@ -170,14 +169,12 @@ export class HsFileUploadComponent
 
     this.uploader.onAfterAddingFile = (fileItem: UploadedFile) => {
       this.onTouched();
-      // 数量限制拦截
       if (this._fileList.length >= this.maxCount) {
         this.uploader.removeFromQueue(fileItem);
         this._snackBar.open(`最多只能上传 ${this.maxCount} 个文件`, '确定', { duration: 2000 });
         return;
       }
 
-      // 大小限制拦截
       if (this.maxFileSize && fileItem._file.size > this.maxFileSize * 1024 * 1024) {
         this.uploader.removeFromQueue(fileItem);
         this._snackBar.open(`超出允许的最大上传大小 ${this.maxFileSize}MB`, '确定', {
@@ -214,12 +211,13 @@ export class HsFileUploadComponent
       if (fileItem.isSuccess) {
         this._fileList[index].url = fileItem.serverResponse?.url || this._fileList[index].url;
         delete this._fileList[index].progress;
+        // this.notifyValueChange();
+        // return;
       }
-      this.notifyValueChange();
+      this.fileListChange.emit(this._fileList);
     }
   }
 
-  // 拖拽逻辑保持不变...
   onDragOver(event: any) {
     event.preventDefault();
     event.currentTarget!.classList.add('dragging-over');

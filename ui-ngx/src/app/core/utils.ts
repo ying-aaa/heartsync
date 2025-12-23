@@ -557,26 +557,51 @@ export function camelToKebabCase(str: string): string {
 
 /**
  *  获取图片地址
- * @param fileList
+ * @param fileData
  * @returns string
  */
 export function getImageUrl(fileData: IFileData[] | IFileData | string): string | undefined {
-  if (Array.isArray(fileData)) {
+  if (Array.isArray(fileData) && fileData.length) {
     const file = fileData[0];
-    return file.url || file.path;
+    return file.url || file.path || 'unset';
   }
   if (typeof fileData === 'object') {
     fileData = fileData as IFileData;
-    return fileData.url || fileData.path;
+    return fileData.url || fileData.path || 'unset';
   }
 
   if (typeof fileData === 'string') {
     try {
       const fileDataObj = JSON.parse(fileData) as IFileData;
-      return fileDataObj.url || fileDataObj.path;
+      return getImageUrl(fileDataObj);
     } catch (error) {
-      return fileData;
+      return fileData || 'unset';
     }
   }
-  return fileData;
+  return 'unset';
+}
+
+/**
+ *  将样式对象转换为 CSS 样式字符串
+ * @param styles 样式对象
+ * @returns CSS 样式字符串
+ * */
+export function transformCss(styles: IAnyPropObj): string {
+  let styleStr = '';
+
+  Object.keys(styles).forEach((key) => {
+    const unitKey = `${key}Units`;
+    const hyphenKey = camelToKebabCase(key);
+    const value = styles[key];
+    if (styles.hasOwnProperty(unitKey)) {
+      styleStr += `${hyphenKey}: ${value}${styles[unitKey]};`;
+    } else if (!key.endsWith('Units')) {
+      if (key === 'backgroundImage') {
+        styleStr += `${hyphenKey}: url(${getImageUrl(value)});`;
+      } else {
+        styleStr += `${hyphenKey}: ${value};`;
+      }
+    }
+  });
+  return styleStr;
 }
