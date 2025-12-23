@@ -50,7 +50,7 @@ export class DashboardLayoutSettingsComponent implements OnInit {
 
   form: FormGroup;
 
-  fileData: IFileData[] = [];
+  fileList: IFileData[] = [];
 
   gridTypes = Object.values(GridType);
   displayGrid = Object.values(DisplayGrid);
@@ -100,7 +100,7 @@ export class DashboardLayoutSettingsComponent implements OnInit {
     const backgroundImageFileData = deepClone(
       gridsterOption?.['backgroundImageFileData'] || [],
     );
-    this.fileData.forEach((fileItem) => {
+    this.fileList.forEach((fileItem) => {
       if (
         !backgroundImageFileData.some(
           (item: IFileData) => item.name === fileItem.name,
@@ -114,8 +114,8 @@ export class DashboardLayoutSettingsComponent implements OnInit {
 
   saveConfig() {
     const config = this.form.value;
-    if (this.fileData[0]?.url) {
-      config.backgroundImageFileData = this.fileData;
+    if (this.fileList[0]?.url) {
+      config.backgroundImageFileData = this.fileList;
     }
     this.dashboardConfigService.updateGridsterOption(config);
     this.dialogRef.close();
@@ -125,7 +125,7 @@ export class DashboardLayoutSettingsComponent implements OnInit {
     // 初始化设置form的值
     const gridsterOption = this.dashboardConfigService.gridsterOption();
     this.form.patchValue(gridsterOption!);
-    this.fileData = deepClone(
+    this.fileList = deepClone(
       gridsterOption?.['backgroundImageFileData'] || [],
     );
   }

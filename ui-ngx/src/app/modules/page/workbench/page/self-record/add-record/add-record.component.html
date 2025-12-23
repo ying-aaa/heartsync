@@ -23,7 +23,7 @@
         <hs-file-upload
           [fold]="true"
           fileShowType="grid"
-          [(fileData)]="filesData"
+          [(fileList)]="fileList"
           [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
           (delItemFile)="delItemFile($event)"
           [maxCount]="30"

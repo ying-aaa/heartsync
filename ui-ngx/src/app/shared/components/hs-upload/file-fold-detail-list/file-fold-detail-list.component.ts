@@ -5,8 +5,8 @@ import { isMobile } from '@src/app/core/utils';
 @Component({
   selector: 'hs-file-fold-detail-list',
   template: `
-    <hs-file-detail-list [fileData]="fileData().slice(0, 3)"> </hs-file-detail-list>
-    @if (fileData().length > foldStartIndex()) {
+    <hs-file-detail-list [fileList]="fileList().slice(0, 3)"> </hs-file-detail-list>
+    @if (fileList().length > foldStartIndex()) {
       <div
         class="flex-center p-8px cursor-pointer"
         cdkOverlayOrigin
@@ -18,7 +18,7 @@ import { isMobile } from '@src/app/core/utils';
           <span
             class="absolute w-16px h-16px top-0 bg-#d1e4ff color-#1a79ff rounded-10px -right-22px line-height-16px text-center text-12px"
             style="width: 16px !important"
-            >{{ fileData().slice(3).length }}</span
+            >{{ fileList().slice(3).length }}</span
           >
         </div>
       </div>
@@ -33,7 +33,7 @@ import { isMobile } from '@src/app/core/utils';
         OverlayKeyboardDispatcher
       >
         <div
-          *ngIf="fileData().length > 1"
+          *ngIf="fileList().length > 1"
           class="w-full flex flex-col relative cursor-pointer min-w-250px rounded-8px p-5px shadow-2xl qy-upload-file-border"
           style="background-color: var(--base-bg-color)"
           [style]="{ width: fileOverlayWidth }"
@@ -46,7 +46,7 @@ import { isMobile } from '@src/app/core/utils';
 
           <mat-divider class="pt-6px"></mat-divider>
           <hs-file-detail-list
-            [fileData]="fileData().slice(3)"
+            [fileList]="fileList().slice(3)"
             [foldStartIndex]="foldStartIndex()"
           ></hs-file-detail-list>
         </div>
@@ -58,7 +58,7 @@ import { isMobile } from '@src/app/core/utils';
   standalone: false,
 })
 export class HsFileFoldDetailListComponent implements OnInit, AfterViewInit {
-  fileData = input<any[]>([]);
+  fileList = input<any[]>([]);
   foldStartIndex = input<number>(3);
 
   isOpen = false;

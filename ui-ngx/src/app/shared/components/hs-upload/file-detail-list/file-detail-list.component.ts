@@ -14,7 +14,7 @@ import { isVideo, isImage } from '@src/app/core/utils';
     >
       <div scrollViewport>
         <div class="flex flex-wrap">
-          @for (fileItemData of fileData(); track $index) {
+          @for (fileItemData of fileList(); track $index) {
             @let isError = fileItemData.status === 'error';
             @let isSuccess = fileItemData.status === 'done';
 
@@ -84,7 +84,7 @@ import { isVideo, isImage } from '@src/app/core/utils';
               </div>
 
               <!-- 分隔线 -->
-              @if ($index < fileData().length - 1) {
+              @if ($index < fileList().length - 1) {
                 <mat-divider class="w-full"></mat-divider>
               }
             </div>
@@ -97,7 +97,7 @@ import { isVideo, isImage } from '@src/app/core/utils';
   standalone: false,
 })
 export class HsFileDetailListComponent implements OnInit {
-  fileData = input<any[]>([]);
+  fileList = input<any[]>([]);
   foldStartIndex = input<number>(0);
 
   download = input<boolean>(false);

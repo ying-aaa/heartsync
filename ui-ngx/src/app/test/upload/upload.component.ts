@@ -1,18 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { UploadFileService } from '@src/app/core/http/upload-file.service';
 import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-file.module';
 import { IFileData } from '@src/app/shared/models/common-component';
 import { HS_BUCKET } from '@src/app/shared/models/system.model';
 import { ToastrService } from 'ngx-toastr';
+import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
 
 @Component({
   selector: 'app-upload',
   template: `<div>
+    <formly-form [form]="formGroup" [fields]="fields" [options]="options()" [model]="model()">
+    </formly-form>
+
+    <div class="h-200px"></div>
+
     <hs-file-upload
       [multiple]="true"
       fileShowType="detail"
-      [(fileData)]="fileData"
+      [(fileList)]="fileList"
       [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
       (delItemFile)="delItemFile($event)"
       [cols]="3"
@@ -21,25 +28,25 @@ import { ToastrService } from 'ngx-toastr';
     ></hs-file-upload>
     <div class="h-200px"></div>
 
-    <hs-file-upload
+    <!-- <hs-file-upload
       [multiple]="true"
       fileShowType="more-detail"
-      [(fileData)]="fileData1"
+      [(fileList)]="fileList1"
       [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
       (delItemFile)="delItemFile($event)"
       [cols]="3"
       class="flex-1"
-    ></hs-file-upload>
+    ></hs-file-upload> -->
   </div>`,
-  imports: [HsUploadFileModule, CommonModule],
+  imports: [HsUploadFileModule, CommonModule, FormlyRunModule],
 })
 export class UploadComponent implements OnInit {
   bucket = HS_BUCKET;
   folderName = 'dashboard-background-images';
 
-  fileData: IFileData[] = [];
+  fileList: IFileData[] = [];
 
-  fileData1: IFileData[] = [
+  fileList1: IFileData[] = [
     {
       id: '3765574827472950',
       name: 'images (1).jpg',
@@ -62,10 +69,30 @@ export class UploadComponent implements OnInit {
     },
   ];
 
+  fields = [
+    {
+      key: 'image',
+      type: 'image-upload',
+      templateOptions: {
+        label: '文件',
+      },
+    },
+  ];
+
+  options = signal<any>({});
+
+  formGroup = new FormGroup({});
+
+  model = signal<any>({});
+
   constructor(
     private toastr: ToastrService,
     private uploadFileService: UploadFileService,
-  ) {}
+  ) {
+    this.formGroup.valueChanges.subscribe((newModel) => {
+      console.log("%c Line:93 🍞 newModel", "color:#ffdd4d", newModel);
+    });
+  }
 
   ngOnInit() {}
 

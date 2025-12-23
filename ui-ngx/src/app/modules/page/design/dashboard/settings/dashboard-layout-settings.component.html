@@ -78,7 +78,7 @@
         [fold]="true"
         fileShowType="grid"
         [multiple]="false"
-        [(fileData)]="fileData"
+        [(fileList)]="fileList"
         [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
         (delItemFile)="delItemFile($event)"
         class="flex-1"

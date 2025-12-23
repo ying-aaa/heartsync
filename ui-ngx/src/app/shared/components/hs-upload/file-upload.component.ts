@@ -52,18 +52,18 @@ export class HsFileUploadComponent
   @ViewChild('FilePreview') filePreview: ComponentRef<IFileData>;
 
   // 内部维护的数据源
-  private _fileData: any[] = [];
+  private _fileList: any[] = [];
 
-  @Input() set fileData(value: any[]) {
+  @Input() set fileList(value: any[]) {
     // 🔥 修复点 1：引用比对。如果是内部 onChange 触发的 Formly 回传，则忽略，防止死循环
-    if (value === this._fileData) return;
+    if (value === this._fileList) return;
     this.writeValue(value);
   }
-  get fileData(): any[] {
-    return this._fileData;
+  get fileList(): any[] {
+    return this._fileList;
   }
 
-  @Output() fileDataChange = new EventEmitter<IFileData[]>();
+  @Output() fileListChange = new EventEmitter<IFileData[]>();
   @Output() delItemFile = new EventEmitter<IFileData>();
 
   // 配置项
@@ -102,18 +102,18 @@ export class HsFileUploadComponent
   // 🔥 核心修复方法：统一异步通知
   private notifyValueChange(): void {
     // 使用副本防止引用问题，使用 setTimeout 避开变更检测周期冲突
-    const valueCopy = [...this._fileData];
+    const valueCopy = [...this._fileList];
     setTimeout(() => {
       this.onChange(valueCopy);
-      this.fileDataChange.emit(valueCopy);
+      this.fileListChange.emit(valueCopy);
     });
   }
 
   onFilesSelected(event: Event): void {
     this.onTouched();
     // 预览逻辑优化
-    if (this._fileData && this._fileData.length > 0) {
-      this._fileData.forEach((file) => {
+    if (this._fileList && this._fileList.length > 0) {
+      this._fileList.forEach((file) => {
         if (file.url) return; // 已有url跳过
         const reader = new FileReader();
         reader.onload = (e: any) => {
@@ -128,9 +128,9 @@ export class HsFileUploadComponent
 
   deleteItemFile(fileItem: IFileData) {
     this.onTouched();
-    const index = this._fileData.findIndex((file) => file === fileItem || file.id === fileItem.id);
+    const index = this._fileList.findIndex((file) => file === fileItem || file.id === fileItem.id);
     if (index !== -1) {
-      this._fileData.splice(index, 1);
+      this._fileList.splice(index, 1);
 
       // 同步删除 Uploader 队列
       const queueItem = this.uploader.queue.find((q) => (q as UploadedFile).id === fileItem.id);
@@ -162,7 +162,7 @@ export class HsFileUploadComponent
       try {
         const serverResponse = JSON.parse(response);
         fileItem.serverResponse = serverResponse.data;
-        this.updateFileData(fileItem);
+        this.updateFileList(fileItem);
       } catch (e) {
         console.error('解析上传响应失败', e);
       }
@@ -171,7 +171,7 @@ export class HsFileUploadComponent
     this.uploader.onAfterAddingFile = (fileItem: UploadedFile) => {
       this.onTouched();
       // 数量限制拦截
-      if (this._fileData.length >= this.maxCount) {
+      if (this._fileList.length >= this.maxCount) {
         this.uploader.removeFromQueue(fileItem);
         this._snackBar.open(`最多只能上传 ${this.maxCount} 个文件`, '确定', { duration: 2000 });
         return;
@@ -188,8 +188,8 @@ export class HsFileUploadComponent
       }
     };
 
-    this.uploader.onErrorItem = (fileItem: UploadedFile) => this.updateFileData(fileItem);
-    this.uploader.onProgressItem = (fileItem: UploadedFile) => this.updateFileData(fileItem);
+    this.uploader.onErrorItem = (fileItem: UploadedFile) => this.updateFileList(fileItem);
+    this.uploader.onProgressItem = (fileItem: UploadedFile) => this.updateFileList(fileItem);
   }
 
   addFileToData(fileItem: UploadedFile): void {
@@ -201,19 +201,19 @@ export class HsFileUploadComponent
       progress: 0,
     };
     fileItem.id = newFileData.id;
-    this._fileData.push(newFileData);
+    this._fileList.push(newFileData);
     this.notifyValueChange();
   }
 
-  updateFileData(fileItem: UploadedFile) {
-    const index = this._fileData.findIndex((file) => file.id === fileItem.id);
+  updateFileList(fileItem: UploadedFile) {
+    const index = this._fileList.findIndex((file) => file.id === fileItem.id);
     if (index !== -1) {
-      this._fileData[index].status = getFileStatus(fileItem);
-      this._fileData[index].progress = fileItem.progress;
+      this._fileList[index].status = getFileStatus(fileItem);
+      this._fileList[index].progress = fileItem.progress;
 
       if (fileItem.isSuccess) {
-        this._fileData[index].url = fileItem.serverResponse?.url || this._fileData[index].url;
-        delete this._fileData[index].progress;
+        this._fileList[index].url = fileItem.serverResponse?.url || this._fileList[index].url;
+        delete this._fileList[index].progress;
       }
       this.notifyValueChange();
     }
@@ -250,7 +250,7 @@ export class HsFileUploadComponent
   // ===== ControlValueAccessor 实现 =====
   writeValue(value: any[]): void {
     // 强制转换为新引用，确保内部 UI 刷新
-    this._fileData = Array.isArray(value) ? [...value] : [];
+    this._fileList = Array.isArray(value) ? [...value] : [];
   }
 
   registerOnChange(fn: any): void {

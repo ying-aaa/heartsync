@@ -557,7 +557,7 @@ export function camelToKebabCase(str: string): string {
 
 /**
  *  获取图片地址
- * @param fileData
+ * @param fileList
  * @returns string
  */
 export function getImageUrl(fileData: IFileData[] | IFileData | string): string | undefined {

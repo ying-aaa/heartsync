@@ -26,7 +26,7 @@ interface InputProps extends FormlyFieldProps {
   fold?: boolean;
   foldStartIndex?: number;
   cols?: number;
-  fileDataChange?: (fileData: IFileData[]) => void;
+  fileListChange?: (fileList: IFileData[]) => void;
   delItemFile?: (fileData: IFileData) => void;
 }
 
@@ -49,7 +49,7 @@ interface InputProps extends FormlyFieldProps {
         [fold]="props.fold || false"
         [foldStartIndex]="props.foldStartIndex || 3"
         [cols]="props.cols || 3"
-        (fileDataChange)="props.fileDataChange && props.fileDataChange($event)"
+        (fileListChange)="props.fileListChange && props.fileListChange($event)"
         (delItemFile)="props.delItemFile && props.delItemFile($event)"
       ></hs-file-upload>
     </div>

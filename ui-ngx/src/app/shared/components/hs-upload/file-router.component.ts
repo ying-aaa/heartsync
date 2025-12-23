@@ -7,27 +7,27 @@ import { IFileShowType } from '@src/app/shared/models/common-component';
     <content>
       @switch (fileShowType()) {
         @case ('grid') {
-          <hs-file-grid-list [fileData]="fileData()" [cols]="cols()">
+          <hs-file-grid-list [fileList]="fileList()" [cols]="cols()">
             <ng-content select="'.grid-content'"></ng-content>
           </hs-file-grid-list>
         }
         @case ('detail') {
-          <hs-file-detail-list [fileData]="fileData()">
+          <hs-file-detail-list [fileList]="fileList()">
             <ng-content select=".detail-content"></ng-content>
           </hs-file-detail-list>
         }
         @case ('fold-detail') {
-          <hs-file-fold-detail-list [fileData]="fileData()" [foldStartIndex]="foldStartIndex()">
+          <hs-file-fold-detail-list [fileList]="fileList()" [foldStartIndex]="foldStartIndex()">
             <ng-content select=".fold-detail-content"></ng-content>
           </hs-file-fold-detail-list>
         }
         @case ('more-detail') {
-          <hs-file-more-list [fileData]="fileData()" [type]="'more-detail'">
+          <hs-file-more-list [fileList]="fileList()" [type]="'more-detail'">
             <ng-content select=".more-content"></ng-content>
           </hs-file-more-list>
         }
         @case ('more-grid') {
-          <hs-file-more-list [fileData]="fileData()" [type]="'more-grid'">
+          <hs-file-more-list [fileList]="fileList()" [type]="'more-grid'">
             <ng-content select=".more-content"></ng-content>
           </hs-file-more-list>
         }
@@ -38,7 +38,7 @@ import { IFileShowType } from '@src/app/shared/models/common-component';
   standalone: false,
 })
 export class HsFileRouterComponent implements OnInit {
-  fileData = input<any[]>([]);
+  fileList = input<any[]>([]);
   fileShowType = input<IFileShowType>('detail');
   foldStartIndex = input<number>(3);
   cols = input<number>(3);

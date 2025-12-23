@@ -49,7 +49,7 @@ export class CreateAppComponent implements OnInit {
     description: new FormControl('', Validators.required),
   });
 
-  filesData: IFileData[] = [];
+  fileList: IFileData[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { directoryId: string },
@@ -81,8 +81,8 @@ export class CreateAppComponent implements OnInit {
         ...this.appForm.value,
       } as CreateApplicationDto;
 
-      if (this.filesData[0]?.url) {
-        createApplicationData.imageUrl = this.filesData[0].url;
+      if (this.fileList[0]?.url) {
+        createApplicationData.imageUrl = this.fileList[0].url;
       }
 
       this.applicationService.createApplication(createApplicationData).subscribe((appData) => {

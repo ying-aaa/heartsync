@@ -1,11 +1,11 @@
 <content
   class="flex gap-8px items-center"
   [ngClass]="{
-    'flex-wrap': isMobileTerminal && fileData.length,
+    'flex-wrap': isMobileTerminal && fileList.length,
   }"
 >
   <hs-file-router
-    [fileData]="fileData"
+    [fileList]="fileList"
     [fileShowType]="fileShowType"
     [foldStartIndex]="foldStartIndex"
     class="w-full"
@@ -36,7 +36,7 @@
   />
 
   <ng-template #btn>
-    @if (fileData.length < maxCount) {
+    @if (fileList.length < maxCount) {
       <button
         mat-button
         class="drag-drop-button"

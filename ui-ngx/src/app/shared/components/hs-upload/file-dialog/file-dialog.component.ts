@@ -14,16 +14,16 @@ import { generateUUID } from '@src/app/core/utils';
         </button>
       </div>
       <mat-divider class="w-full"></mat-divider>
-      <!-- @let scrollHeight = fileData.length > 12 ? '582px' : 'auto'; -->
+      <!-- @let scrollHeight = fileList.length > 12 ? '582px' : 'auto'; -->
       <div class="w-full p-20px">
         <!-- <hs-file-detail-list
-          [fileData]="fileData"
+          [fileList]="fileList"
           [preview]="true"
           [download]="true"
           [delete]="false"
         ></hs-file-detail-list> -->
         <hs-file-grid-list
-          [fileData]="fileData"
+          [fileList]="fileList"
           [cols]="5"
           [preview]="true"
           [download]="true"
@@ -41,7 +41,7 @@ import { generateUUID } from '@src/app/core/utils';
         orientation="auto"
       >
         <ul scrollViewport class="w-full px-20px py-3px">
-          @for (fileItemData of fileData; track $index) {
+          @for (fileItemData of fileList; track $index) {
             <li class="h-56px">
               <div class="wh-full flex-center">
                 <img [src]="fileItemData.url" width="32px" height="32px" />
@@ -55,7 +55,7 @@ import { generateUUID } from '@src/app/core/utils';
                   [delete]="false"
                 ></hs-file-handle>
               </div>
-              @if ($index < fileData.length - 1) {
+              @if ($index < fileList.length - 1) {
                 <mat-divider class="w-full h-1px"></mat-divider>
               }
             </li>
@@ -74,19 +74,19 @@ import { generateUUID } from '@src/app/core/utils';
   ],
 })
 export class HsFileDialogComponent implements OnInit, OnChanges {
-  @Input() fileData: any[] = [];
+  @Input() fileList: any[] = [];
 
   constructor(@Inject(MAT_DIALOG_DATA) public dialogData: any) {}
 
   ngOnInit(): void {
-    if (this.dialogData && this.dialogData.fileData) {
-      this.fileData = this.dialogData.fileData;
+    if (this.dialogData && this.dialogData.fileList) {
+      this.fileList = this.dialogData.fileList;
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['fileData']) {
-      this.fileData = changes['fileData'].currentValue;
+    if (changes['fileList']) {
+      this.fileList = changes['fileList'].currentValue;
     }
   }
 }

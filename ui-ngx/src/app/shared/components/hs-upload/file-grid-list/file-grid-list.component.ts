@@ -13,7 +13,7 @@ import { isImage, isVideo } from '@src/app/core/utils';
     >
       <div scrollViewport>
         <div class="grid gap-8px" [style]="{ gridTemplateColumns: gridTemplateColumns() }">
-          @for (fileItemData of fileData(); track $index) {
+          @for (fileItemData of fileList(); track $index) {
             @let isError = fileItemData.status === 'error';
             @let isSuccess = fileItemData.status === 'done';
             @let isReady = fileItemData.status === 'ready' || fileItemData.status === 'unknown';
@@ -82,7 +82,7 @@ import { isImage, isVideo } from '@src/app/core/utils';
   standalone: false,
 })
 export class HsFileGridListComponent implements OnInit {
-  fileData = input<any[]>([]);
+  fileList = input<any[]>([]);
   // @ts-ignore
   cols = input<number>(3, {
     transform: (value: number) => Math.min(value, 5),

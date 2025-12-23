@@ -52,7 +52,7 @@ export class AddRecordComponent implements OnInit {
     visibility: new FormControl('public'),
   });
 
-  filesData: IFileData[] = [];
+  fileList: IFileData[] = [];
 
   constructor(
     private hsThemeService: HsThemeService,
@@ -82,7 +82,7 @@ export class AddRecordComponent implements OnInit {
       this.selfRecordService
         .create({
           ...this.recordForm.value,
-          filesData: this.filesData,
+          fileList: this.fileList,
         })
         .subscribe((newRecord) => {
           this._snackBar.open('新增记录成功!!!', '确定', {

@@ -24,7 +24,7 @@
       <label class="block text-16px mb-8px">应用图片：</label>
       <hs-file-upload
         fileShowType="grid"
-        [(fileData)]="filesData"
+        [(fileList)]="fileList"
         [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
         (delItemFile)="delItemFile($event)"
         [maxCount]="1"
