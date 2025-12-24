@@ -54,6 +54,7 @@ export class AppWorkbenchComponent implements OnInit {
       .subscribe((value) => {
         this.getAppList(value);
       });
+      
   }
 
   getAppList(value: string | null): void {

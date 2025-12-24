@@ -15,13 +15,21 @@ import { HsDataSourceModule } from './modules/data-source/data-source.module';
 import { HsAssetModule } from './modules/asset/asset.module';
 import { HsDynamicTableModule } from './modules/dynamic-table/dynamic-table.module';
 import { KeycloakConfigService } from './keycloak/keycloak-config.service';
-import { KeycloakConnectModule } from 'nest-keycloak-connect';
 import { KeycloakModule } from './keycloak/keycloak.module';
-
+import { APP_GUARD } from '@nestjs/core';
+import {
+  AuthGuard,
+  KeycloakConnectModule,
+  ResourceGuard,
+  RoleGuard,
+} from 'nest-keycloak-connect';
 @Module({
-  providers: [HsPaginationService],
   exports: [HsPaginationService],
   imports: [
+    KeycloakConnectModule.registerAsync({
+      useExisting: KeycloakConfigService,
+      imports: [KeycloakModule],
+    }),
     SelfModule,
     HsMenuModule,
     WidgetsModule,
@@ -50,10 +58,21 @@ import { KeycloakModule } from './keycloak/keycloak.module';
       }),
       inject: [ConfigService],
     }),
-    KeycloakConnectModule.registerAsync({
-      useExisting: KeycloakConfigService,
-      imports: [KeycloakModule],
-    }),
+  ],
+  providers: [
+    HsPaginationService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ResourceGuard,
+    // },
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    },
   ],
 })
 export class AppModule {

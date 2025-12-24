@@ -17,6 +17,7 @@ import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
 import { PageDto } from 'src/common/dtos/page.dto';
 import { QueryApplicationDto } from './dto/query-application.dto';
+import { Unprotected } from 'nest-keycloak-connect';
 
 @Controller('applications')
 export class ApplicationController {

@@ -5,6 +5,6 @@ export const environment = {
   keycloak: {
     authUrl: 'https://wjy.apihub.net/uc',
     realm: 'heartsync',
-    clientId: 'heartsync',
+    clientId: 'heartsync-client',
   },
 };

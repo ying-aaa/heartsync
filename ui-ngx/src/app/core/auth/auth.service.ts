@@ -1,19 +1,6 @@
-import {
-  computed,
-  DestroyRef,
-  effect,
-  inject,
-  Injectable,
-  signal,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  KEYCLOAK_EVENT_SIGNAL,
-  KeycloakEventType,
-  typeEventArgs,
-} from 'keycloak-angular';
-import Keycloak, { KeycloakProfile } from 'keycloak-js';
-import { debounceTime, Subject, switchMap } from 'rxjs';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType, typeEventArgs } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 import { UserService } from './user.service'; // 导入新的用户服务
 
 interface AuthState {
