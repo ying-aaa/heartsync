@@ -17,7 +17,12 @@ import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
 import { PageDto } from 'src/common/dtos/page.dto';
 import { QueryApplicationDto } from './dto/query-application.dto';
-import { Unprotected } from 'nest-keycloak-connect';
+import {
+  RoleGuard,
+  RoleMatchingMode,
+  Roles,
+  Unprotected,
+} from 'nest-keycloak-connect';
 
 @Controller('applications')
 export class ApplicationController {
@@ -32,6 +37,7 @@ export class ApplicationController {
   }
 
   @Get()
+  @Roles({ roles: ['super-admin'], mode: RoleMatchingMode.ALL })
   async findAll(
     @Query() queryApplicationDto: QueryApplicationDto,
   ): Promise<PageDto<HsApplicationEntity>> {

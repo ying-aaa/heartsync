@@ -228,6 +228,7 @@
 .w-225px{width:225px;}
 .w-240px{width:240px;}
 .w-24px\!{width:24px !important;}
+.w-250px{width:250px;}
 .w-252px{width:252px;}
 .w-280px{width:280px;}
 .w-282px{width:282px;}
@@ -525,7 +526,6 @@
 .italic{font-style:italic;}
 .line-through\!{text-decoration-line:line-through !important;}
 .underline{text-decoration-line:underline;}
-.hover-underline:hover{text-decoration-line:underline;}
 .tab{-moz-tab-size:4;-o-tab-size:4;tab-size:4;}
 .opacity-50{opacity:0.5;}
 .opacity-80{opacity:0.8;}

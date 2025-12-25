@@ -11,13 +11,8 @@ import {
 export class KeycloakConfigService implements KeycloakConnectOptionsFactory {
   constructor(private readonly configService: ConfigService) {}
   createKeycloakConnectOptions(): KeycloakConnectOptions {
-    console.log(
-      '%c Line:14 🥤',
-      'color:#fca650',
-      this.configService.get('KC_CLIENT_SECRET'),
-    );
     return {
-      authServerUrl: this.configService.get('KC_AUTO_SERVER_URL'),
+      authServerUrl: this.configService.get('KC_AUTH_SERVER_URL'),
       realm: this.configService.get('KC_REALM'),
       clientId: this.configService.get('KC_CLIENT_ID'),
       secret: this.configService.get('KC_CLIENT_SECRET'),

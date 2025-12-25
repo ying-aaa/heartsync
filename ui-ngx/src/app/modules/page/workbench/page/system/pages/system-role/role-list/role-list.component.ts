@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, OnDestroy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,17 +8,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { HsDynamicTableModule } from '@shared/components/hs-table/hs-dynamic-table.module';
 import { UserHttpService } from '@src/app/core/http/user.service';
-import {
-  ActionColumn,
-  IDynamicTable,
-  PageLink,
-  TextColumn,
-} from '@src/app/shared/components/hs-table/table.model';
+import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import {} from '@src/app/shared/models/common-component';
-import { map } from 'rxjs';
+import { map, Subject, takeUntil } from 'rxjs';
 import { isMobile } from '@src/app/core/utils';
 import { CreateRoleComponent } from './create-role/create-role.component';
-import { Router } from '@angular/router';
+import { MatListModule } from '@angular/material/list';
+import { debounceTime, switchMap, throttleTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hs-role-list',
@@ -31,91 +27,70 @@ import { Router } from '@angular/router';
     MatDividerModule,
     ReactiveFormsModule,
     MatIconModule,
+    MatListModule,
   ],
 })
-export class RoleListComponent implements OnInit {
+export class RoleListComponent implements OnInit, OnDestroy {
   searchValue = new FormControl('');
-
+  seletedRoleId = signal<string | null>(null);
   pageLink = new PageLink(0, 20, [{ prop: 'search' }], []);
+  roleList = signal<any>([]);
 
-  tableConfig = signal<IDynamicTable>(
-    new IDynamicTable({
-      initExec: true,
-      tableStyle: { padding: '0 24px' },
-      pageLink: this.pageLink,
-      tableColumn: [
-        new TextColumn(
-          'name',
-          '角色名称',
-          {
-            click: (row) => {
-              const roleId = row.id;
-              const currentRouterUrl = this.router.url;
-              this.router.navigate([`${currentRouterUrl}/${roleId}/detail`]);
-            },
-            styles: {
-              color: '#2f90b9',
-              lineHeight: '32px',
-            },
-          },
-          300,
-          'left',
-          'hover-underline',
-        ),
-        new TextColumn('composite', '复合', {}, 300),
-        new TextColumn('description', '描述', {}, 300),
-        new ActionColumn(
-          'actions',
-          '操作',
-          [
-            {
-              name: '重命名',
-              icon: 'border_color',
-              action: (row, event) => {},
-            },
-            {
-              name: '删除',
-              icon: 'delete',
-              moreName: '确认删除',
-              action: (row, event) => {},
-            },
-          ],
-          300,
-          'center',
-        ),
-      ],
-      getData: () => {
-        // 将返回数据包一层data
-        return this.userHttpService
-          .getRealmRoles(this.pageLink)
-          .pipe(map((data) => ({ data })));
-      },
-      layouts: ['paginator', 'total', 'first/last'],
-      pageSizes: [5, 10, 20, 50, 100],
-    }),
-  );
+  private requestTrigger$ = new Subject<void>();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private userHttpService: UserHttpService,
-    private router: Router,
     private dialog: MatDialog,
   ) {
-    this.searchValue.valueChanges.subscribe((value) => {
-      this.pageLink.changeSearch('search', value);
-    });
+    this.pageLink.setGetData(this.triggerRequest.bind(this));
   }
 
-  onQueryData() {
+  ngOnInit(): void {
+    this.initLoadData();
+    this.handleSearchInput();
+    this.triggerRequest();
+  }
+
+  private initLoadData(): void {
+    this.requestTrigger$
+      .pipe(
+        throttleTime(500, undefined, { leading: true, trailing: false }),
+        switchMap(() => this.userHttpService.getRealmRoles(this.pageLink)),
+        map((data) => ({ data })),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((res) => {
+        this.roleList.set(res.data);
+        if (!this.seletedRoleId() && res.data.length) {
+          const roleId = res.data[0]?.id;
+          this.seletedRoleId.set(roleId);
+        }
+      });
+  }
+
+  private handleSearchInput(): void {
+    this.searchValue.valueChanges
+      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.pageLink.changeSearch('search', value);
+        this.triggerRequest();
+      });
+  }
+
+  triggerRequest(): void {
+    this.requestTrigger$.next();
+  }
+
+  onQueryData(): void {
     this.pageLink.getData();
   }
 
-  onResetData() {
+  onResetData(): void {
     this.searchValue.setValue('');
-    this.onQueryData();
   }
 
-  onAddRole() {
-    // 打开用户添加对话框或页面
+  onAddRole(): void {
     const width = isMobile() ? '100vw' : '800px';
     const height = isMobile() ? '100vh' : 'auto';
     const dialogRef = this.dialog.open(CreateRoleComponent, {
@@ -126,9 +101,15 @@ export class RoleListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) this.pageLink.getData();
+      if (result) {
+        this.pageLink.getData();
+      }
     });
   }
 
-  ngOnInit() {}
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.requestTrigger$.complete();
+  }
 }
