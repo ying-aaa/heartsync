@@ -17,11 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-  CreateNodeDto,
-  FileTreeService,
-  MoveNodeDto,
-} from '@src/app/core/http/file-tree.service';
+import { CreateNodeDto, FileTreeService, MoveNodeDto } from '@src/app/core/http/file-tree.service';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { debounceTime, delay } from 'rxjs/operators';
@@ -33,6 +29,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
+import { HsLoadingModule } from '../../directive/loading/loading.module';
 
 declare const $: any;
 
@@ -50,6 +47,7 @@ declare const $: any;
     MatDividerModule,
     NgScrollbarModule,
     ReactiveFormsModule,
+    HsLoadingModule,
   ],
 })
 export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -232,20 +230,13 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       plugins: (() => {
-        const plugins = [
-          'state',
-          'types',
-          'wholerow',
-          'sort',
-          'conditionalselect',
-        ];
+        const plugins = ['state', 'types', 'wholerow', 'sort', 'conditionalselect'];
         if (this.includesFeature('dnd')) plugins.push('dnd');
         if (this.includesFeature('search')) plugins.push('search');
         return plugins;
       })(),
       sort: function (a: any, b: any) {
-        const getNodeText = (node: any) =>
-          this.get_node(node).text.toLowerCase();
+        const getNodeText = (node: any) => this.get_node(node).text.toLowerCase();
         const aText = getNodeText(a);
         const bText = getNodeText(b);
 
@@ -373,38 +364,36 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   initJsTreeFilter() {
-    this.fileName.valueChanges
-      .pipe(debounceTime(300))
-      .subscribe((value: any) => {
-        const match = value.trim();
+    this.fileName.valueChanges.pipe(debounceTime(300)).subscribe((value: any) => {
+      const match = value.trim();
 
-        // 获取 jstree 实例
-        const tree = this.treeInstance.jstree();
+      // 获取 jstree 实例
+      const tree = this.treeInstance.jstree();
 
-        if (match === '') {
-          // 清除搜索并展开所有节点
-          tree.clear_search();
-          tree.open_all();
-          this.filterCount = 0;
-          return;
-        }
+      if (match === '') {
+        // 清除搜索并展开所有节点
+        tree.clear_search();
+        tree.open_all();
+        this.filterCount = 0;
+        return;
+      }
 
-        // 执行搜索并处理结果
-        tree.search(match, false, true);
+      // 执行搜索并处理结果
+      tree.search(match, false, true);
 
-        // 获取匹配节点数量
-        const matches = tree.get_container().find('.jstree-search');
-        this.filterCount = matches.length;
+      // 获取匹配节点数量
+      const matches = tree.get_container().find('.jstree-search');
+      this.filterCount = matches.length;
 
-        // 自动展开匹配节点的父节点
-        matches.each((i: number, el: HTMLElement) => {
-          const nodeId = el.getAttribute('id');
-          const parents = tree.get_path(nodeId);
-          parents.forEach((parentId: string) => {
-            tree.open_node(parentId);
-          });
+      // 自动展开匹配节点的父节点
+      matches.each((i: number, el: HTMLElement) => {
+        const nodeId = el.getAttribute('id');
+        const parents = tree.get_path(nodeId);
+        parents.forEach((parentId: string) => {
+          tree.open_node(parentId);
         });
       });
+    });
   }
 
   defaultSelectorNode() {
@@ -467,12 +456,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
     let menus: any = {};
     if (node) {
       if (node.type === 'file') {
-        menus = pick(this.customContextMenu, [
-          'rename',
-          'remove',
-          'copy',
-          'cut',
-        ]);
+        menus = pick(this.customContextMenu, ['rename', 'remove', 'copy', 'cut']);
       } else {
         menus = pick(this.customContextMenu, [
           'createFile',
@@ -485,11 +469,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
         ]);
       }
     } else {
-      menus = pick(this.customContextMenu, [
-        'createFile',
-        'createFolder',
-        'paste',
-      ]);
+      menus = pick(this.customContextMenu, ['createFile', 'createFolder', 'paste']);
     }
     return Object.values(pick(menus, this.featureList()));
   }
@@ -660,18 +640,16 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.scriptLoaderService
-      .loadScripts(['jquery.min.js', 'jstree.min.js'])
-      .subscribe({
-        next: () => {},
-        error: (error) => console.error('Error loading script:', error),
-        complete: () => {
-          this.initJstree();
-          if (this.contextMenu.length > 0) {
-            this.listenToRightClick();
-          }
-        },
-      });
+    this.scriptLoaderService.loadScripts(['jquery.min.js', 'jstree.min.js']).subscribe({
+      next: () => {},
+      error: (error) => console.error('Error loading script:', error),
+      complete: () => {
+        this.initJstree();
+        if (this.contextMenu.length > 0) {
+          this.listenToRightClick();
+        }
+      },
+    });
     this.initJsTreeFilter();
     setTimeout(() => {
       this.resetJsTreeContainerStyle();

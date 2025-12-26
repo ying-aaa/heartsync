@@ -14,7 +14,10 @@ import { map, Subject, takeUntil } from 'rxjs';
 import { isMobile } from '@src/app/core/utils';
 import { CreateRoleComponent } from './create-role/create-role.component';
 import { MatListModule } from '@angular/material/list';
-import { debounceTime, switchMap, throttleTime } from 'rxjs/operators';
+import { debounceTime, switchMap, tap, throttleTime } from 'rxjs/operators';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
+import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
 
 @Component({
   selector: 'hs-role-list',
@@ -28,6 +31,9 @@ import { debounceTime, switchMap, throttleTime } from 'rxjs/operators';
     ReactiveFormsModule,
     MatIconModule,
     MatListModule,
+    NgScrollbarModule,
+    HsLoadingModule,
+    HsSvgModule,
   ],
 })
 export class RoleListComponent implements OnInit, OnDestroy {
@@ -35,6 +41,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
   seletedRoleId = signal<string | null>(null);
   pageLink = new PageLink(0, 20, [{ prop: 'search' }], []);
   roleList = signal<any>([]);
+  isLoading = signal<boolean>(false);
 
   private requestTrigger$ = new Subject<void>();
   private destroy$ = new Subject<void>();
@@ -55,12 +62,14 @@ export class RoleListComponent implements OnInit, OnDestroy {
   private initLoadData(): void {
     this.requestTrigger$
       .pipe(
+        tap((_) => this.isLoading.set(true)),
         throttleTime(500, undefined, { leading: true, trailing: false }),
         switchMap(() => this.userHttpService.getRealmRoles(this.pageLink)),
         map((data) => ({ data })),
         takeUntil(this.destroy$),
       )
       .subscribe((res) => {
+        this.isLoading.set(false);
         this.roleList.set(res.data);
         if (!this.seletedRoleId() && res.data.length) {
           const roleId = res.data[0]?.id;
