@@ -15,22 +15,6 @@ export default [
     data: { icon: 'role' },
     loadComponent: () =>
       import('./system-role/role-manage.component').then((m) => m.SystemRoleComponent),
-    children: [
-      {
-        title: '角色列表',
-        path: '',
-        loadComponent: () =>
-          import('./system-role/role-list/role-list.component').then((m) => m.RoleListComponent),
-      },
-      {
-        title: '角色详情',
-        path: ':roleId/detail',
-        loadComponent: () =>
-          import('./system-role/role-detail/role-detail.component').then(
-            (m) => m.RoleDetailComponent,
-          ),
-      },
-    ],
   },
   {
     title: '组织管理',

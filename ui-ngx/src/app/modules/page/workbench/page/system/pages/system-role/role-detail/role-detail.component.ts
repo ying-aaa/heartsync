@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, effect, input, OnInit, signal } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { getParamFromRoute } from '@src/app/core/utils';
@@ -21,24 +21,27 @@ import { GroupsAttributesComponent } from './role-attributes/role-attributes.com
   ],
 })
 export class RoleDetailComponent implements OnInit {
-  roleId: string | null = getParamFromRoute('roleId', this.route);
+  roleId = input<string | null>(null);
 
   roleMapping = signal<IRoleMapping | null>(null);
 
   constructor(
     private route: ActivatedRoute,
     private userHttpService: UserHttpService,
-  ) {}
+  ) {
+    effect(() => {
+      const roleId = this.roleId();
+      roleId && this.loadRoleMapping();
+    });
+  }
 
   loadRoleMapping() {
-    this.userHttpService.getRealmRoleById(this.roleId!).subscribe({
+    this.userHttpService.getRealmRoleById(this.roleId()!).subscribe({
       next: (roleMapping: IRoleMapping) => {
         this.roleMapping.set(roleMapping);
       },
     });
   }
 
-  ngOnInit() {
-    this.loadRoleMapping();
-  }
+  ngOnInit() {}
 }

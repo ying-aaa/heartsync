@@ -12,51 +12,71 @@
   }
 </style>
 
-<content class="wh-full flex flex-col">
-  <header class="px-24px h-64px flex items-center justify-between">
+<content class="wh-full flex flex-col overflow-hidden">
+  <header class="h-64px flex items-center justify-center">
     <div class="flex gap-12px">
-      <mat-form-field
-        appearance="outline"
-        class="hs-density--5 w-225px"
-      >
+      <mat-form-field appearance="outline" class="hs-density--5 w-225px">
         <input
           matInput
-          placeholder="请输入用户信息"
+          placeholder="请输入角色名称"
           [formControl]="searchValue"
           (keyup.enter)="onQueryData()"
         />
+        @if (searchValue.getRawValue()) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="重置"
+            (click)="onResetData()"
+            class="mr-5px"
+          >
+            <mat-icon aria-hidden="false">close</mat-icon>
+          </button>
+        }
       </mat-form-field>
-
-      <button
-        mat-flat-button
-        (click)="onQueryData()"
-      >
-        查询
-      </button>
-      <button
-        mat-raised-button
-        (click)="onResetData()"
-      >
-        重置
-      </button>
-    </div>
-
-    <div>
-      <button
-        mat-flat-button
-        (click)="onAddRole()"
-      >
-        新增角色
-      </button>
     </div>
   </header>
 
   <mat-divider></mat-divider>
 
-  <main class="h-0 flex-1">
-    <hs-dynamic-table
-      [tableConfig]="tableConfig()"
-      class="h-full"
-    ></hs-dynamic-table>
-  </main>
+  <ng-scrollbar
+    externalViewport
+    #scrollbarRef="ngScrollbar"
+    visibility="hover"
+    appearance="compact"
+    orientation="auto"
+    class="h-0 flex-1 px-12px"
+  >
+    <main
+      class="relative"
+      scrollViewport
+      hs-loading
+      [isLoading]="isLoading()"
+      hsEmptyState
+      emptyText="未找到角色"
+      emptyImgClass="scale-100"
+      [isEmptyState]="!isLoading() && !roleList().length"
+    >
+      <style>
+        ::ng-deep .mdc-list-item--activated .mdc-list-item__primary-text {
+          color: #2c7eac !important;
+        }
+      </style>
+      <mat-nav-list>
+        @for (role of roleList(); track role.id) {
+          <a
+            mat-list-item
+            href="#{{ role.id }}"
+            (click)="$event.preventDefault(); seletedRoleId.set(role.id)"
+            [activated]="seletedRoleId() === role.id"
+            >{{ role.name }}</a
+          >
+        }
+      </mat-nav-list>
+    </main>
+  </ng-scrollbar>
+
+  <div class="px-12px pb-8px">
+    <button class="w-full" mat-flat-button (click)="onAddRole()">新增角色</button>
+  </div>
 </content>
