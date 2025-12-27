@@ -26,6 +26,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/typeorm": "^11.0.0",
+    "@heartsync/types": "link:./types",
     "axios": "^1.9.0",
     "body-parser": "^2.2.0",
     "class-transformer": "^0.5.1",

@@ -42,6 +42,7 @@
     "@types/jstree": "^3.3.46",
     "@types/lodash-es": "^4.17.12",
     "@wangeditor/editor": "^5.1.23",
+    "@heartsync/types": "link:../types",
     "ace-builds": "^1.39.1",
     "angular-eslint": "^20.3.0",
     "angular-gridster2": "^19.0.0",

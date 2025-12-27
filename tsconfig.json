@@ -20,5 +20,6 @@
   },
   "exclude": [
     "ui-ngx",
+    "types",
   ]
 }
