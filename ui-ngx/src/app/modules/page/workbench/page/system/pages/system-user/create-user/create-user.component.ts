@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -23,14 +23,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserHttpService } from '@src/app/core/http/user.service';
-import {
-  IUserInfo,
-  IUserRequiredAction,
-} from '@src/app/shared/models/user.model';
+import { IUserInfo, IUserRequiredAction } from '@src/app/shared/models/user.model';
 import { userRequiredCtions } from '../data';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ChipsAutocompleteComponent } from '@shared/components/hs-chips-autocomplete/hs-chips-autocomplete.component';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'hs-create-user',
@@ -60,19 +58,16 @@ import { ChipsAutocompleteComponent } from '@shared/components/hs-chips-autocomp
 })
 export class CreateUserComponent implements OnInit {
   userForm = new FormGroup({
-    requiredActions: new FormControl(['CONFIGURE_TOTP'], [Validators.required]),
-    emailVerified: new FormControl(true),
-    username: new FormControl('async', [Validators.required]),
-    email: new FormControl('135684@qq.com', [
-      Validators.required,
-      Validators.email,
-    ]),
-    firstName: new FormControl('王'),
-    lastName: new FormControl('不读诗意'),
+    requiredActions: new FormControl([], [Validators.required]),
+    emailVerified: new FormControl(),
+    username: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
     groups: new FormControl([]),
   });
 
-  userRuquiredActions: Array<IUserRequiredAction> = [];
+  userRuquiredActions = signal<IUserRequiredAction[]>([]);
 
   constructor(
     private dialogRef: MatDialogRef<CreateUserComponent>,
@@ -101,14 +96,24 @@ export class CreateUserComponent implements OnInit {
   }
 
   loadUserRequiredActions() {
-    this.userHttpService.getUserRequiredCtions().subscribe(
-      (actions) => {
-        this.userRuquiredActions = actions;
-      },
-      (err) => {
-        this.userRuquiredActions = userRequiredCtions;
-      },
-    );
+    this.userHttpService
+      .getUserRequiredCtions()
+      .pipe(
+        map((actions) => {
+          return actions.map((action) => {
+            const actionLabel = userRequiredCtions.find(
+              (item) => item.providerId === action.providerId,
+            )?.label;
+            if (actionLabel) {
+              action.label = actionLabel;
+            }
+            return action;
+          });
+        }),
+      )
+      .subscribe((actions) => {
+        this.userRuquiredActions.set(actions);
+      });
   }
 
   ngOnInit() {

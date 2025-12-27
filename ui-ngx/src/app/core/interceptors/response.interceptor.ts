@@ -85,9 +85,10 @@ function handleError(
     authService: AuthService;
   },
 ): Observable<never> {
-  const errorMessage = error.error?.message || error.error?.error || error.message;
+  const errorMessage =
+    error.error?.errorMessage || error.error?.message || error.error?.error || error.message;
 
-  toastrService.error(errorMessage);
+  // toastrService.error(errorMessage);
 
   switch (error.status) {
     case 400: // Bad Request
@@ -96,7 +97,7 @@ function handleError(
 
     case 401: // Unauthorized
       console.warn('认证过期，重定向…');
-      toastrService.error('当前登录已过期，请重新登录。');
+      toastrService.error('401 当前登录已过期，请重新登录。');
       setTimeout(() => {
         authService.login();
       }, 800);
@@ -104,10 +105,22 @@ function handleError(
 
     case 403: // Forbidden
       console.error('Permission denied:', errorMessage);
+      toastrService.error('403 Forbidden 拒绝访问，请检查权限。');
       break;
 
     case 404: // Not Found
       console.error('Resource not found:', error.url);
+      break;
+
+    case 409: // Conflict
+      console.error('Conflict:', error.error);
+      if (errorMessage === 'User exists with same email') {
+        toastrService.error('409 已存在相同邮箱的用户，请检查后重试。');
+      }
+      if (errorMessage === 'User exists with same username') {
+        toastrService.error('409 已存在相同用户名的用户，请检查后重试。');
+      }
+      // toastrService.error('409 相关资源已存在，请检查后重试。');
       break;
 
     case 429: // Too Many Requests

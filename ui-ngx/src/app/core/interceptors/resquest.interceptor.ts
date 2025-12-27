@@ -23,13 +23,10 @@ const modifyRequest = (req: HttpRequest<unknown>, auth: AuthService): HttpReques
   }
 
   // 添加默认头
-  // if (!headers.has('Content-Type')) {
   headers = headers.set('Content-Type', 'application/json');
-  // }
-  headers = headers
-    // .set('Accept', 'application/json')
-    .set('X-Requested-With', 'XMLHttpRequest');
-  // .set('X-Client-Version', environment.version);
+  headers = headers.set('X-Requested-With', 'XMLHttpRequest');
+  headers = headers.set('X-Requested-With', 'XMLHttpRequest');
+  headers = headers.set('Accept-Language', 'zh-CN');
 
   // 处理FormData的特殊情况
   if (req.body instanceof FormData) {

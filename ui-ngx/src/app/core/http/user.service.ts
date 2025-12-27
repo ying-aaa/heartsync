@@ -32,12 +32,12 @@ export class UserHttpService {
 
   // 创建用户
   createUser(userInfo: IUserInfo) {
-    return this.http.post<IUserInfo>('/uc/admin/realms/master/users', userInfo);
+    return this.http.post<IUserInfo>(`/uc/admin/realms/${this.realm}/users`, userInfo);
   }
 
   // 创建用户时选择的用户必需操作
   getUserRequiredCtions() {
-    return this.http.get<Array<any>>(`/uc/admin/realms/master/authentication/required-actions`);
+    return this.http.get<Array<any>>(`/uc/admin/realms/${this.realm}/authentication/required-actions`);
   }
 
   // ----------------- 群组管理 -----------------
