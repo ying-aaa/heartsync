@@ -17,7 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import { IRoleMapping } from '@src/app/shared/models/user.model';
 import { ToastrService } from 'ngx-toastr';
 
@@ -50,7 +50,7 @@ export class RoleMappingComponent implements OnInit {
   });
 
   constructor(
-    private userHttpService: UserHttpService,
+    private authHttpService: AuthHttpService,
     private toastr: ToastrService,
   ) {
     effect(() => {
@@ -72,7 +72,7 @@ export class RoleMappingComponent implements OnInit {
         // 居中
         positionClass: 'toast-top-center',
       });
-      // this.userHttpService.createRole(roleInfo).subscribe(
+      // this.authHttpService.createRole(roleInfo).subscribe(
       //   (response) => {
       //     console.log('返回结果:', response);
       //   },

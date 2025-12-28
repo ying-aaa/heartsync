@@ -1,15 +1,9 @@
 <content class="p-20px text-14px flex flex-col">
   <main>
-    <form
-      [formGroup]="roleForm"
-      class="hs-density--5 max-w-xl pt-12px"
-    >
+    <form [formGroup]="roleForm" class="hs-density--5 max-w-xl pt-12px">
       <div class="flex mb-6 items-center">
         <span class="w-30">角色名称：</span>
-        <mat-form-field
-          appearance="outline"
-          class="flex-1"
-        >
+        <mat-form-field appearance="outline" class="flex-1">
           <input
             matInput
             formControlName="name"
@@ -18,17 +12,14 @@
           />
           @let nameValidate = roleForm.get('name')?.errors?.['required'];
           @if (nameValidate) {
-          <mat-error class="text-red-500"> 角色名称是必填项 </mat-error>
+            <mat-error class="text-red-500"> 角色名称是必填项 </mat-error>
           }
         </mat-form-field>
       </div>
 
       <div class="flex mb-6 items-center">
         <span class="w-30">角色描述：</span>
-        <mat-form-field
-          appearance="outline"
-          class="flex-1"
-        >
+        <mat-form-field appearance="outline" class="flex-1">
           <input
             matInput
             formControlName="description"
@@ -41,15 +32,8 @@
   <footer class="flex mb-6 items-center">
     <span class="w-30"></span>
     <div class="flex-1">
-      <button
-        mat-flat-button
-        (click)="onSubmit()"
-      >
-        保存
-      </button>
-      <button mat-button>
-        取消
-      </button>
+      <button mat-flat-button (click)="onSubmit()">保存</button>
+      <button mat-button>取消</button>
     </div>
   </footer>
 </content>

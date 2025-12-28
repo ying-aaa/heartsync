@@ -1,13 +1,6 @@
-import {
-  Component,
-  computed,
-  effect,
-  input,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, effect, input, OnInit, signal } from '@angular/core';
 import { HsDynamicTableModule } from '@shared/components/hs-table/hs-dynamic-table.module';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import {
   ActionColumn,
   IDynamicTable,
@@ -60,16 +53,14 @@ export class GroupsMembersComponent implements OnInit {
       getData: () => {
         const groupId = this.groupId();
         // 将返回数据包一层data
-        return this.userHttpService
-          .getGroupMembers(groupId, {})
-          .pipe(map((data) => ({ data })));
+        return this.authHttpService.getGroupMembers(groupId, {}).pipe(map((data) => ({ data })));
       },
       layouts: ['paginator', 'total', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],
     }),
   );
 
-  constructor(private userHttpService: UserHttpService) {
+  constructor(private authHttpService: AuthHttpService) {
     effect(() => {
       const groupId = this.groupId();
       groupId && this.pageLink.getData();

@@ -7,7 +7,12 @@
     class="hs-density--5 max-w-xl mx-auto pt-12px"
   >
     <div class="flex mb-6 items-center">
-      <span class="w-30">角色名称：</span>
+      <label class="w-120px text-right mr-20px">
+        @if (roleForm.get('name')!.invalid) {
+          <span class="color-red">*</span>
+        }
+        角色名称
+      </label>
       <mat-form-field appearance="outline" class="flex-1">
         <input
           matInput
@@ -23,7 +28,7 @@
     </div>
 
     <div class="flex mb-6 items-center">
-      <span class="w-30">角色描述：</span>
+      <label class="w-120px text-right mr-20px">角色描述</label>
       <mat-form-field appearance="outline" class="flex-1">
         <input
           matInput

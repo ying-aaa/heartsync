@@ -22,7 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import { IUserInfo, IUserRequiredAction } from '@src/app/shared/models/user.model';
 import { userRequiredCtions } from '../data';
 import { MatChipsModule } from '@angular/material/chips';
@@ -71,7 +71,7 @@ export class CreateUserComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<CreateUserComponent>,
-    private userHttpService: UserHttpService,
+    private authHttpService: AuthHttpService,
   ) {
     this.userForm.valueChanges.subscribe((values) => {
       console.log('Form updated:', values);
@@ -81,7 +81,7 @@ export class CreateUserComponent implements OnInit {
   onSubmit() {
     if (this.userForm.valid) {
       const userInfo: IUserInfo = this.userForm.value as any;
-      this.userHttpService.createUser(userInfo).subscribe(
+      this.authHttpService.createUser(userInfo).subscribe(
         (response) => {
           console.log('返回结果:', response);
         },
@@ -96,7 +96,7 @@ export class CreateUserComponent implements OnInit {
   }
 
   loadUserRequiredActions() {
-    this.userHttpService
+    this.authHttpService
       .getUserRequiredCtions()
       .pipe(
         map((actions) => {

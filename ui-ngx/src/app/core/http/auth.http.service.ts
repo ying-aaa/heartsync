@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import {
   IGroupInfo,
   IGroupRoleMappings,
   IRoleMapping,
+  IRoleRepresentation,
   IUserInfo,
   IUserRequiredAction,
 } from '@src/app/shared/models/user.model';
@@ -14,10 +15,13 @@ import { environment as env } from '@env/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class UserHttpService {
+export class AuthHttpService {
   private realm = env.keycloak.realm;
+  private clientId = env.keycloak.clientId;
+  private serverId = env.keycloak.serverId;
 
   constructor(private http: HttpClient) {}
+
   // ----------------- 用户管理 -----------------
   // 获取用户列表
   getUsers(pageLink: PageLink) {
@@ -37,7 +41,9 @@ export class UserHttpService {
 
   // 创建用户时选择的用户必需操作
   getUserRequiredCtions() {
-    return this.http.get<Array<any>>(`/uc/admin/realms/${this.realm}/authentication/required-actions`);
+    return this.http.get<Array<any>>(
+      `/uc/admin/realms/${this.realm}/authentication/required-actions`,
+    );
   }
 
   // ----------------- 群组管理 -----------------
@@ -91,6 +97,11 @@ export class UserHttpService {
     });
   }
 
+  // 创建领域角色
+  createRealmRole(roleInfo: IRoleRepresentation) {
+    return this.http.post<any>(`/uc/admin/realms/${this.realm}/roles`, roleInfo);
+  }
+
   // 根据角色id获取领域角色详情
   getRealmRoleById(id: string) {
     return this.http.get<IRoleMapping>(`/uc/admin/realms/${this.realm}/roles-by-id/${id}`);
@@ -119,5 +130,12 @@ export class UserHttpService {
   // 获取领域角色的属性
   getRealmRoleAttributes(roleName: string) {
     return this.http.get<IRoleMapping>(`/uc/admin/realms/${this.realm}/roles/${roleName}`);
+  }
+
+  // ----------------- 资源鉴权 -----------------
+  getResourcePermissions(resourceId: string) {
+    return this.http.get<any>(
+      `/uc/admin/realms/${this.realm}/authz/protection/resource_permissions/${resourceId}`,
+    );
   }
 }

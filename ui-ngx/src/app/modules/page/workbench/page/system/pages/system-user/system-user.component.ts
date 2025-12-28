@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { HsDynamicTableModule } from '@shared/components/hs-table/hs-dynamic-table.module';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import { isMobile } from '@src/app/core/utils';
 import {
   PageLink,
@@ -83,9 +83,7 @@ export class SystemUserComponent implements OnInit {
         ),
       ],
       getData: () => {
-        return this.userHttpService
-          .getUsers(this.pageLink)
-          .pipe(map((data) => ({ data })));
+        return this.authHttpService.getUsers(this.pageLink).pipe(map((data) => ({ data })));
       },
       layouts: ['paginator', 'total', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],
@@ -119,7 +117,7 @@ export class SystemUserComponent implements OnInit {
   }
 
   constructor(
-    private userHttpService: UserHttpService,
+    private authHttpService: AuthHttpService,
     private dialog: MatDialog,
   ) {
     this.searchValue.valueChanges.subscribe((value) => {

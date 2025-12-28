@@ -1,15 +1,8 @@
-import {
-  Component,
-  computed,
-  effect,
-  input,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, effect, input, OnInit, signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { IRoleMapping } from '@src/app/shared/models/user.model';
@@ -18,12 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'hs-role-attributes',
   templateUrl: './role-attributes.component.html',
-  imports: [
-    FormlyRunModule,
-    HsLoadingModule,
-    MatButtonModule,
-    MatDividerModule,
-  ],
+  imports: [FormlyRunModule, HsLoadingModule, MatButtonModule, MatDividerModule],
 })
 export class GroupsAttributesComponent implements OnInit {
   roleMapping = input<IRoleMapping | null>(null);
@@ -103,7 +91,7 @@ export class GroupsAttributesComponent implements OnInit {
   ];
 
   constructor(
-    private userHttpService: UserHttpService,
+    private authHttpService: AuthHttpService,
     private toastr: ToastrService,
   ) {
     effect(() => {
@@ -116,10 +104,7 @@ export class GroupsAttributesComponent implements OnInit {
 
   // 转换请求到的群组信息数据
   handlerGroupInfo(roleMapping: IRoleMapping) {
-    const attributes = Object.entries(roleMapping.attributes || {}) as [
-      string,
-      string[],
-    ][];
+    const attributes = Object.entries(roleMapping.attributes || {}) as [string, string[]][];
 
     const attr = attributes.map(([key, value]) => {
       return value.map((value) => ({ key, value }));

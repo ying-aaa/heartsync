@@ -1,7 +1,10 @@
-<content class="wh-full p-8px">
+<content class="wh-full p-8px bg-#f3f8fa" hs-loading [isLoading]="isLoading()">
   <nav></nav>
 
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="wh-full">
+    <mat-tab label="权限">
+      <hs-role-permission [roleId]="roleId()"></hs-role-permission>
+    </mat-tab>
     <mat-tab label="用户">
       <hs-role-user-list [roleMapping]="roleMapping()"></hs-role-user-list>
     </mat-tab>

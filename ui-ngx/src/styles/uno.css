@@ -112,6 +112,7 @@
 .mr-10px{margin-right:10px;}
 .mr-12px{margin-right:12px;}
 .mr-16px\!{margin-right:16px !important;}
+.mr-20px{margin-right:20px;}
 .mr-3px{margin-right:3px;}
 .mr-4px{margin-right:4px;}
 .mr-5px{margin-right:5px;}
@@ -154,6 +155,7 @@
 .h-full{height:100%;}
 .h-100px{height:100px;}
 .h-120px{height:120px;}
+.h-12px{height:12px;}
 .h-16px{height:16px;}
 .h-16px\!{height:16px !important;}
 .h-178px{height:178px;}
@@ -161,6 +163,7 @@
 .h-18px\!{height:18px !important;}
 .h-1px{height:1px;}
 .h-200px{height:200px;}
+.h-20px{height:20px;}
 .h-20px\!{height:20px !important;}
 .h-22px\!{height:22px !important;}
 .h-24px\!{height:24px !important;}
@@ -220,10 +223,12 @@
 .w-100px{width:100px;}
 .w-126px{width:126px;}
 .w-128px{width:128px;}
+.w-12px{width:12px;}
 .w-16px{width:16px;}
 .w-16px\!{width:16px !important;}
 .w-180px{width:180px;}
 .w-18px\!{width:18px !important;}
+.w-20px{width:20px;}
 .w-20px\!{width:20px !important;}
 .w-225px{width:225px;}
 .w-240px{width:240px;}
@@ -358,6 +363,7 @@
 .bg-\#d1e4ff{--un-bg-opacity:1;background-color:rgb(209 228 255 / var(--un-bg-opacity)) /* #d1e4ff */;}
 .bg-\#DC262620{--un-bg-opacity:0.13;background-color:rgb(220 38 38 / var(--un-bg-opacity)) /* #DC262620 */;}
 .bg-\#f0f1f4{--un-bg-opacity:1;background-color:rgb(240 241 244 / var(--un-bg-opacity)) /* #f0f1f4 */;}
+.bg-\#f3f8fa{--un-bg-opacity:1;background-color:rgb(243 248 250 / var(--un-bg-opacity)) /* #f3f8fa */;}
 .bg-\#fff,
 .bg-white{--un-bg-opacity:1;background-color:rgb(255 255 255 / var(--un-bg-opacity)) /* #fff */;}
 .bg-\#ffffff20{--un-bg-opacity:0.13;background-color:rgb(255 255 255 / var(--un-bg-opacity)) /* #ffffff20 */;}
@@ -402,6 +408,7 @@
 .px{padding-left:1rem;padding-right:1rem;}
 .px-10px{padding-left:10px;padding-right:10px;}
 .px-12px{padding-left:12px;padding-right:12px;}
+.px-12px\!{padding-left:12px !important;padding-right:12px !important;}
 .px-16px{padding-left:16px;padding-right:16px;}
 .px-16px\!{padding-left:16px !important;padding-right:16px !important;}
 .px-2{padding-left:0.5rem;padding-right:0.5rem;}
@@ -423,6 +430,7 @@
 .py-4px{padding-top:4px;padding-bottom:4px;}
 .py-6px{padding-top:6px;padding-bottom:6px;}
 .py-8px{padding-top:8px;padding-bottom:8px;}
+.pb-16px{padding-bottom:16px;}
 .pb-24px{padding-bottom:24px;}
 .pb-4px{padding-bottom:4px;}
 .pb-6px{padding-bottom:6px;}

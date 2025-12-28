@@ -81,3 +81,68 @@ export interface IRoleMapping {
   containerId: string;
   attributes?: IAnyPropObj;
 }
+
+/**
+ * 角色组合信息
+ */
+export interface IKcComposites {
+  /**
+   * 领域角色 ID 列表
+   */
+  realm?: string[];
+
+  /**
+   * 客户端角色 ID 列表（键为客户端 ID，值为角色 ID 数组）
+   */
+  client?: { [clientId: string]: string[] };
+}
+
+/**
+ * RoleRepresentation
+ */
+export interface IRoleRepresentation {
+  /**
+   * 角色 ID
+   */
+  id?: string;
+
+  /**
+   * 角色名称
+   */
+  name: string;
+
+  /**
+   * 角色描述
+   */
+  description?: string;
+
+  /**
+   * 是否需要作用域参数
+   */
+  scopeParamRequired?: boolean;
+
+  /**
+   * 是否为组合角色
+   */
+  composite?: boolean;
+
+  /**
+   * 组合角色的子角色信息
+   */
+  composites?: IKcComposites;
+
+  /**
+   * 是否为客户端角色
+   */
+  clientRole?: boolean;
+
+  /**
+   * 容器 ID（通常是客户端 ID 或领域 ID）
+   */
+  containerId?: string;
+
+  /**
+   * 角色属性（键值对）
+   */
+  attributes?: { [key: string]: string[] };
+}

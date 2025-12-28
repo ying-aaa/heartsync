@@ -24,7 +24,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
+import { IRoleRepresentation } from '@src/app/shared/models/user.model';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'hs-create-role',
   templateUrl: './create-role.component.html',
@@ -51,13 +53,14 @@ import { UserHttpService } from '@src/app/core/http/user.service';
 })
 export class CreateRoleComponent implements OnInit {
   roleForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    description: new FormControl(''),
+    name: new FormControl<string>('', [Validators.required]),
+    description: new FormControl<string>(''),
   });
 
   constructor(
     private dialogRef: MatDialogRef<CreateRoleComponent>,
-    private userHttpService: UserHttpService,
+    private authHttpService: AuthHttpService,
+    private toastrService: ToastrService,
   ) {
     this.roleForm.valueChanges.subscribe((values) => {
       console.log('Form updated:', values);
@@ -66,15 +69,11 @@ export class CreateRoleComponent implements OnInit {
 
   onSubmit() {
     if (this.roleForm.valid) {
-      const roleInfo = this.roleForm.value;
-      // this.userHttpService.createRole(roleInfo).subscribe(
-      //   (response) => {
-      //     console.log('返回结果:', response);
-      //   },
-      //   (error) => {
-      //     console.error('创建用户出错:', error);
-      //   },
-      // );
+      const roleInfo = this.roleForm.value as IRoleRepresentation;
+      this.authHttpService.createRealmRole(roleInfo).subscribe((response) => {
+        this.toastrService.success('角色创建成功');
+        this.dialogRef.close(true);
+      });
     } else {
       console.log('表单校验未通过');
       this.roleForm.markAllAsTouched();

@@ -88,8 +88,6 @@ function handleError(
   const errorMessage =
     error.error?.errorMessage || error.error?.message || error.error?.error || error.message;
 
-  // toastrService.error(errorMessage);
-
   switch (error.status) {
     case 400: // Bad Request
       console.error('Validation Error:', error.error);
@@ -119,6 +117,8 @@ function handleError(
       }
       if (errorMessage === 'User exists with same username') {
         toastrService.error('409 已存在相同用户名的用户，请检查后重试。');
+      } else {
+        toastrService.error(errorMessage);
       }
       // toastrService.error('409 相关资源已存在，请检查后重试。');
       break;

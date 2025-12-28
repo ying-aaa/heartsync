@@ -1,13 +1,6 @@
-import {
-  Component,
-  computed,
-  effect,
-  input,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, effect, input, OnInit, signal } from '@angular/core';
 import { HsDynamicTableModule } from '@shared/components/hs-table/hs-dynamic-table.module';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import {
   ActionColumn,
   IDynamicTable,
@@ -53,27 +46,24 @@ export class RoleLiitosrooliComponent implements OnInit {
       getData: () => {
         const roleId = this.roleId()!;
         // 将返回数据包一层data
-        return this.userHttpService
-          .getRoleLiitosrooliById(roleId, this.pageLink)
-          .pipe(
-            map((data) => {
-              return { data };
-            }),
-          );
+        return this.authHttpService.getRoleLiitosrooliById(roleId, this.pageLink).pipe(
+          map((data) => {
+            return { data };
+          }),
+        );
       },
       layouts: ['paginator', 'total', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],
     }),
   );
 
-  constructor(
-    private userHttpService: UserHttpService,
-  ) {
+  constructor(private authHttpService: AuthHttpService) {
     effect(() => {
       const roleId = this.roleId()!;
-      roleId && setTimeout(() => {
-        this.pageLink.getData();
-      }, 100);
+      roleId &&
+        setTimeout(() => {
+          this.pageLink.getData();
+        }, 100);
     });
   }
 

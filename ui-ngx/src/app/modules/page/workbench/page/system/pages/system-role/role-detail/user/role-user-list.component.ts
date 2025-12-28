@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { HsDynamicTableModule } from '@shared/components/hs-table/hs-dynamic-table.module';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import { isMobile } from '@src/app/core/utils';
 import {
   PageLink,
@@ -57,7 +57,7 @@ export class RoleUserListComponent implements OnInit {
         // ),
       ],
       getData: () => {
-        return this.userHttpService
+        return this.authHttpService
           .getRealmRoleUsers(this.roleMapping()!.name, this.pageLink)
           .pipe(map((data) => ({ data })));
       },
@@ -75,17 +75,15 @@ export class RoleUserListComponent implements OnInit {
     this.onQueryData();
   }
 
-  constructor(
-    private userHttpService: UserHttpService,
-  ) { 
+  constructor(private authHttpService: AuthHttpService) {
     effect(() => {
       const roleMapping = this.roleMapping();
       if (roleMapping) {
-        console.log("%c Line:83 🍻 roleMapping", "color:#2eafb0", roleMapping);
+        console.log('%c Line:83 🍻 roleMapping', 'color:#2eafb0', roleMapping);
         this.pageLink.getData();
       }
     });
-    
+
     this.searchValue.valueChanges.subscribe((value) => {
       this.pageLink.changeSearch('search', value);
     });

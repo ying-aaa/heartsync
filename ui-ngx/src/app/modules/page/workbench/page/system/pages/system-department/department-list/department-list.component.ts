@@ -1,8 +1,4 @@
-import {
-  CollectionViewer,
-  SelectionChange,
-  DataSource,
-} from '@angular/cdk/collections';
+import { CollectionViewer, SelectionChange, DataSource } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
   ChangeDetectionStrategy,
@@ -20,7 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTreeModule } from '@angular/material/tree';
 import { IAnyPropObj } from '@src/app/shared/models/common-component';
 import { HsLoadingComponent } from '@shared/components/hs-loading/hs-loading.component';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 
 export class DynamicFlatNode {
   constructor(
@@ -35,7 +31,7 @@ export class DynamicFlatNode {
 export class DynamicDatabase {
   dataMap = new Map<string, IAnyPropObj[]>();
 
-  constructor(private userHttpService: UserHttpService) {}
+  constructor(private authHttpService: AuthHttpService) {}
 
   initialData(): Observable<DynamicFlatNode[]> {
     return this.loadNodeData().pipe(
@@ -54,8 +50,8 @@ export class DynamicDatabase {
   loadNodeData(node?: DynamicFlatNode) {
     const nodeId = node?.item['id'];
     const request = nodeId
-      ? this.userHttpService.getSubGroups(nodeId, {})
-      : this.userHttpService.getGroups({});
+      ? this.authHttpService.getSubGroups(nodeId, {})
+      : this.authHttpService.getGroups({});
     return request.pipe(tap((data) => this.dataMap.set(nodeId, data)));
   }
 }
@@ -86,9 +82,7 @@ export class DynamicDataSource implements DataSource<DynamicFlatNode> {
       }
     });
 
-    return merge(collectionViewer.viewChange, this.dataChange).pipe(
-      map(() => this.data),
-    );
+    return merge(collectionViewer.viewChange, this.dataChange).pipe(map(() => this.data));
   }
 
   disconnect(collectionViewer: CollectionViewer): void {}
@@ -122,12 +116,7 @@ export class DynamicDataSource implements DataSource<DynamicFlatNode> {
       }
       if (children) {
         const nodes = children.map(
-          (item) =>
-            new DynamicFlatNode(
-              item,
-              node.level + 1,
-              this._database.isExpandable(item),
-            ),
+          (item) => new DynamicFlatNode(item, node.level + 1, this._database.isExpandable(item)),
         );
         this.data.splice(index + 1, 0, ...nodes);
       }
@@ -166,10 +155,7 @@ export class DepartmentListComponent {
   constructor() {
     const database = inject(DynamicDatabase);
 
-    this.treeControl = new FlatTreeControl<DynamicFlatNode>(
-      this.getLevel,
-      this.isExpandable,
-    );
+    this.treeControl = new FlatTreeControl<DynamicFlatNode>(this.getLevel, this.isExpandable);
     this.dataSource = new DynamicDataSource(this.treeControl, database);
 
     database.initialData().subscribe((data) => {

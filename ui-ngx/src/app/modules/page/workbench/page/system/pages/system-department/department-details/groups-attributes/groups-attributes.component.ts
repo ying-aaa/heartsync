@@ -1,13 +1,6 @@
-import {
-  Component,
-  computed,
-  effect,
-  input,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, effect, input, OnInit, signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { IAnyPropObj } from '@src/app/shared/models/common-component';
@@ -96,7 +89,7 @@ export class GroupsAttributesComponent implements OnInit {
     },
   ];
 
-  constructor(private userHttpService: UserHttpService) {
+  constructor(private authHttpService: AuthHttpService) {
     effect(() => {
       const groupId = this.groupId();
       groupId && this.loadGroupAttributes();
@@ -106,7 +99,7 @@ export class GroupsAttributesComponent implements OnInit {
   loadGroupAttributes() {
     const groupId = this.groupId();
     this.loadingStatus.set(true);
-    this.userHttpService.getGroupAttributes(groupId).subscribe(
+    this.authHttpService.getGroupAttributes(groupId).subscribe(
       (groupInfo: IGroupInfo) => {
         this.handlerGroupInfo(groupInfo);
         this.loadingStatus.set(false);
@@ -119,10 +112,7 @@ export class GroupsAttributesComponent implements OnInit {
 
   // 转换请求到的群组信息数据
   handlerGroupInfo(groupInfo: IGroupInfo) {
-    const attributes = Object.entries(groupInfo.attributes || {}) as [
-      string,
-      string[],
-    ][];
+    const attributes = Object.entries(groupInfo.attributes || {}) as [string, string[]][];
 
     const attr = attributes.map(([key, value]) => {
       return value.map((value) => ({ key, value }));

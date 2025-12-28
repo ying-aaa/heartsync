@@ -7,14 +7,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { HsDynamicTableModule } from '@shared/components/hs-table/hs-dynamic-table.module';
-import { UserHttpService } from '@src/app/core/http/user.service';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import {} from '@src/app/shared/models/common-component';
-import { map, Subject, takeUntil } from 'rxjs';
+import { map, Subject, takeUntil, throwError } from 'rxjs';
 import { isMobile } from '@src/app/core/utils';
 import { CreateRoleComponent } from './create-role/create-role.component';
 import { MatListModule } from '@angular/material/list';
-import { debounceTime, switchMap, tap, throttleTime } from 'rxjs/operators';
+import { catchError, debounceTime, switchMap, tap, throttleTime } from 'rxjs/operators';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
@@ -47,7 +47,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private userHttpService: UserHttpService,
+    private authHttpService: AuthHttpService,
     private dialog: MatDialog,
   ) {
     this.pageLink.setGetData(this.triggerRequest.bind(this));
@@ -64,9 +64,13 @@ export class RoleListComponent implements OnInit, OnDestroy {
       .pipe(
         tap((_) => this.isLoading.set(true)),
         throttleTime(500, undefined, { leading: true, trailing: false }),
-        switchMap(() => this.userHttpService.getRealmRoles(this.pageLink)),
+        switchMap(() => this.authHttpService.getRealmRoles(this.pageLink)),
         map((data) => ({ data })),
         takeUntil(this.destroy$),
+        catchError((err) => {
+          this.isLoading.set(false);
+          return throwError(() => err);
+        }),
       )
       .subscribe((res) => {
         this.isLoading.set(false);

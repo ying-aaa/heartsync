@@ -6,5 +6,6 @@ export const environment = {
     authUrl: 'https://wjy.apihub.net/uc',
     realm: 'heartsync',
     clientId: 'heartsync-client',
+    serverId: 'heartsync-server',
   },
 };
