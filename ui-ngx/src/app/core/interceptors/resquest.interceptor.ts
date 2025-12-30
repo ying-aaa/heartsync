@@ -23,7 +23,7 @@ const modifyRequest = (req: HttpRequest<unknown>, auth: AuthService): HttpReques
   }
 
   // 添加默认头
-  headers = headers.set('Content-Type', 'application/json');
+  // headers = headers.set('Content-Type', 'application/json');
   headers = headers.set('X-Requested-With', 'XMLHttpRequest');
   headers = headers.set('X-Requested-With', 'XMLHttpRequest');
   headers = headers.set('Accept-Language', 'zh-CN');

@@ -1,5 +1,6 @@
 import { Component, computed, input, OnInit, signal } from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { isUndefined } from '@src/app/core/utils';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
 @Component({
@@ -92,6 +93,33 @@ export class RolePermissionComponent implements OnInit {
   });
 
   constructor() {}
+
+  isUndefined = isUndefined;
+
+  toggleNode(node: any, isExpand: boolean) {
+    if (isExpand) {
+      const currentexpanded = node.expanded || isUndefined(node.expanded);
+      node.expanded = !currentexpanded;
+
+      const index = this.sectionList().findIndex((item) => item === node);
+      const level = node.level;
+      // 获取下一个节点level为0的索引
+      let nextIndex = this.sectionList().findIndex(
+        (item, idx, arr) => item.level <= level && idx > index && arr[index+1]?.level !== item.level,
+      );
+      nextIndex = nextIndex === -1 ? this.sectionList().length : nextIndex;
+      console.log("%c Line:111 🍞 nextIndex", "color:#e41a6a", index, nextIndex);
+      this.sectionList.update((list) => {
+        list.forEach((item, idx) => {
+          if (idx > index && idx < nextIndex) {
+            item.display = currentexpanded ? 'none' : 'flex';
+            item.expanded = !currentexpanded;
+          }
+        });
+        return list;
+      });
+    }
+  }
 
   ngOnInit() {}
 }
