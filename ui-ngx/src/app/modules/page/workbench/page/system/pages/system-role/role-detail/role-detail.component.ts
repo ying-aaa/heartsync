@@ -11,6 +11,7 @@ import { GroupsAttributesComponent } from './attributes/role-attributes.componen
 import { tap } from 'rxjs';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { RolePermissionComponent } from './permission/role-permission.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'hs-role-detail',
@@ -23,6 +24,7 @@ import { RolePermissionComponent } from './permission/role-permission.component'
     GroupsAttributesComponent,
     RolePermissionComponent,
     HsLoadingModule,
+    MatIconModule,
   ],
 })
 export class RoleDetailComponent implements OnInit {

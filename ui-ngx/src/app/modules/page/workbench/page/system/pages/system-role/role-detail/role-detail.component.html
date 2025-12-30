@@ -1,20 +1,51 @@
-<content class="wh-full p-8px bg-#f3f8fa" hs-loading [isLoading]="isLoading()">
+<style lang="scss">
+  :host ::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+    --mat-tab-header-inactive-label-text-color: var(--title-text-color);
+    --mat-tab-header-active-label-text-color: var(--mat-sys-primary);
+    --mat-tab-header-active-hover-label-text-color: var(--mat-sys-primary);
+    --mat-tab-header-active-focus-label-text-color: var(--mat-sys-primary);
+  }
+</style>
+
+<content class="wh-full" hs-loading [isLoading]="isLoading()">
   <nav></nav>
 
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="wh-full">
-    <mat-tab label="权限">
+    <mat-tab class="color-[var(--title-text-color)]!">
+      <ng-template mat-tab-label>
+        <mat-icon class="text-20px w-20px! h-20px! mr-6px"> security </mat-icon>
+        <span>权限</span> </ng-template
+      > 
       <hs-role-permission [roleId]="roleId()"></hs-role-permission>
     </mat-tab>
-    <mat-tab label="用户">
+    <mat-tab class="color-[var(--title-text-color)]!">
+      <ng-template mat-tab-label>
+        <mat-icon class="text-20px w-20px! h-20px! mr-6px"> person </mat-icon>
+        <span>用户</span> </ng-template
+      > 
       <hs-role-user-list [roleMapping]="roleMapping()"></hs-role-user-list>
     </mat-tab>
-    <mat-tab label="关联角色">
+    <mat-tab class="color-[var(--title-text-color)]!">
+      <ng-template mat-tab-label>
+        <mat-icon class="text-20px w-20px! h-20px! mr-6px"> group_work </mat-icon>
+        <span>关联角色</span> </ng-template
+      > 
       <hs-role-liitosrooli [roleId]="roleId()"></hs-role-liitosrooli>
     </mat-tab>
-    <mat-tab label="属性">
+    <mat-tab class="color-[var(--title-text-color)]!">
+      <ng-template mat-tab-label>
+        <!-- 属性: 用 "tune" 更合适 -->
+        <mat-icon class="text-20px w-20px! h-20px! mr-6px"> tune </mat-icon>
+        <span>属性</span> </ng-template
+      > 
       <hs-role-attributes [roleMapping]="roleMapping()"></hs-role-attributes>
     </mat-tab>
-    <mat-tab label="详情">
+    <mat-tab class="color-[var(--title-text-color)]!">
+      <ng-template mat-tab-label>
+        <!-- 详情: 用 "info" 更合适 -->
+        <mat-icon class="text-20px w-20px! h-20px! mr-6px"> info </mat-icon>
+        <span>详情</span> </ng-template
+      > 
       <hs-role-mapping [roleMapping]="roleMapping()"></hs-role-mapping>
     </mat-tab>
   </mat-tab-group>

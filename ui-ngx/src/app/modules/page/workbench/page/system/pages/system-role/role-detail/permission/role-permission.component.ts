@@ -105,10 +105,11 @@ export class RolePermissionComponent implements OnInit {
       const level = node.level;
       // 获取下一个节点level为0的索引
       let nextIndex = this.sectionList().findIndex(
-        (item, idx, arr) => item.level <= level && idx > index && arr[index+1]?.level !== item.level,
+        (item, idx, arr) =>
+          // 同级或下级，后面的元素，下个等级不等于当前等级
+          item.level <= level && idx > index && arr[index + 1]?.level !== item.level,
       );
       nextIndex = nextIndex === -1 ? this.sectionList().length : nextIndex;
-      console.log("%c Line:111 🍞 nextIndex", "color:#e41a6a", index, nextIndex);
       this.sectionList.update((list) => {
         list.forEach((item, idx) => {
           if (idx > index && idx < nextIndex) {

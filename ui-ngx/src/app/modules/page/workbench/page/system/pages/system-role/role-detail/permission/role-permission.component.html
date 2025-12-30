@@ -9,36 +9,33 @@
   <div scrollViewport>
     <content class="text-14px py-12px">
       @for (section of sectionGroup(); track i1; let i1 = $index) {
-      <div class="px-24px py-8px bg-#fff rounded-12px mb-12px">
-        @for (item of section; track i2; let i2 = $index) {
-        @let notLast = section[i2 + 1] && section[i2 + 1].level > item.level;
-        @let src = notLast ? '/assets/svg/folder-open.svg' : '/assets/svg/file.svg';
+        <div class="px-24px py-8px bg-[var(--base-bg-color)] select-none rounded-12px mb-12px">
+          @for (item of section; track i2; let i2 = $index) {
+            @let notLast = section[i2 + 1] && section[i2 + 1].level > item.level;
+            @let src = notLast ? '/assets/svg/folder-open.svg' : '/assets/svg/file.svg';
 
-        <div
-          class="h-36px flex items-center gap-12px"
-          [style.paddingLeft.px]="item.level * 32"
-          [style.display]="item.display"
-          ]
-          (click)="toggleNode(item, notLast)"
-        >
-          <!-- @if (item.optional) { -->
-          <mat-checkbox class="hs-density--5"></mat-checkbox>
-          <!-- } -->
-          <img
-            [src]="src"
-            class="w-20px h-20px"
-          />
-          <span class="color-#6B7280 cursor-pointer">{{ item.name }}</span>
-          @if (notLast) {
-          <img
-            src="/assets/workbench/fold.png"
-            class="w-12px h-12px transition-transform duration-300 ease-in-out"
-            [class]="(item.expanded || isUndefined(item.expanded)) ? 'rotate-90' : 'rotate-0'"
-          />
+            <div
+              class="h-36px flex items-center gap-12px cursor-pointer hover:bg-[var(--base-color-10)] rounded-8px"
+              [style.paddingLeft.px]="item.level * 32 + 12"
+              [style.display]="item.display"
+              ]
+              (click)="toggleNode(item, notLast)"
+            >
+              <!-- @if (item.optional) { -->
+              <mat-checkbox (click)="$event.stopPropagation()" class="hs-density--5"></mat-checkbox>
+              <!-- } -->
+              <img [src]="src" class="w-20px h-20px pointer-events-none" />
+              <span class="color-[var(--primary-text-color)] cursor-pointer">{{ item.name }}</span>
+              @if (notLast) {
+                <img
+                  src="/assets/workbench/fold.png"
+                  class="w-12px h-12px transition-transform duration-300 ease-in-out pointer-events-none"
+                  [class]="item.expanded || isUndefined(item.expanded) ? 'rotate-90' : 'rotate-0'"
+                />
+              }
+            </div>
           }
         </div>
-        }
-      </div>
       }
     </content>
   </div>

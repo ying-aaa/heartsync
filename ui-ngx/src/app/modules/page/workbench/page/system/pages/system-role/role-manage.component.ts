@@ -10,17 +10,16 @@ import { RoleDetailComponent } from './role-detail/role-detail.component';
 @Component({
   selector: 'hs-system-role',
   template: `
-    <content class="wh-full flex">
-      <aside class="w-250px h-full">
+    <content class="wh-full flex p-20px bg-[var(--primary-bg-color)]">
+      <aside class="w-250px h-full mr-24px">
         <hs-role-list #RoleList></hs-role-list>
       </aside>
-      <mat-divider [vertical]="true"></mat-divider>
       <main class="flex-1">
         <hs-role-detail [roleId]="RoleList.seletedRoleId()"></hs-role-detail>
       </main>
     </content>
   `,
-  imports: [RouterModule, MatDivider, RoleListComponent, RoleDetailComponent],
+  imports: [RouterModule, RoleListComponent, RoleDetailComponent],
 })
 export class SystemRoleComponent implements OnInit, OnDestroy {
   routePaths = signal<Route[]>(getRoutePathSegments(this.route));

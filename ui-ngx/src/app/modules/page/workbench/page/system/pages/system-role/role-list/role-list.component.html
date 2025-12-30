@@ -12,7 +12,7 @@
   }
 </style>
 
-<content class="wh-full flex flex-col overflow-hidden">
+<content class="wh-full flex flex-col overflow-hidden rounded-8px bg-[var(--base-bg-color)]">
   <header class="py-12px flex items-center justify-center">
     <div class="flex gap-12px">
       <mat-form-field appearance="outline" class="hs-density--5 w-225px">
@@ -62,14 +62,14 @@
           color: #2c7eac !important;
         }
       </style>
-      <mat-nav-list class="px-12px!">
+      <mat-nav-list class="px-12px! py-0!">
         @for (role of roleList(); track role.id) {
           <a
             mat-list-item
             href="#{{ role.id }}"
             (click)="$event.preventDefault(); seletedRoleId.set(role.id)"
             [activated]="seletedRoleId() === role.id"
-            class="opacity-80"
+            class="opacity-80 h-36px! my-4px"
             >{{ role.name }}</a
           >
         }
@@ -77,7 +77,7 @@
     </main>
   </ng-scrollbar>
 
-  <div class="px-12px pb-16px">
+  <div class="px-12px py-16px">
     <button class="w-full" mat-flat-button (click)="onAddRole()">新增角色</button>
   </div>
 </content>
