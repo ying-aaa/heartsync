@@ -1,5 +1,5 @@
 <content class="wh-full flex flex-col">
-  <header class="px-24px h-64px flex items-center justify-between">
+  <header class="px-24px h-64px rounded-8px flex items-center justify-between bg-[var(--base-bg-color)]">
     <div class="flex gap-12px">
       <mat-form-field
         appearance="outline"
@@ -7,6 +7,7 @@
       >
         <input
           matInput
+          type="text"
           placeholder="请输入用户信息"
           [formControl]="searchValue"
           (keyup.enter)="onQueryData()"
@@ -36,8 +37,6 @@
       </button>
     </div>
   </header>
-
-  <mat-divider></mat-divider>
 
   <main class="h-0 flex-1">
     <hs-dynamic-table

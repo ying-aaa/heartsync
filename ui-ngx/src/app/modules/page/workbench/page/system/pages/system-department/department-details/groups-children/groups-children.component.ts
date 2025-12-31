@@ -24,7 +24,8 @@ export class GroupsChildrenComponent implements OnInit {
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
       initExec: false,
-      tableStyle: { padding: '0 24px' },
+      tableStyle: {  },
+      trRowStyle: { backgroundColor: 'var(--primary-bg-color)' },
       pageLink: this.pageLink,
       tableColumn: [
         new TextColumn('name', '群组名称', {}, 300),

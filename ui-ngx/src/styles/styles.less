@@ -2,6 +2,10 @@
 @import 'jstree/dist/themes/default/style.css';
 @import 'themeMixin';
 
+* {
+  color: var(--primary-text-color);
+}
+
 html,
 body {
   height: 100%;
@@ -58,13 +62,16 @@ body {
   // 指定组件
   --mdc-outlined-text-field-outline-color: @base-line-color;
   --mdc-outlined-text-field-hover-outline-color: @base-hover-line-color;
-  --mat-divider-color: @base-divider-color;
+  --mat-divider-color: fade(@base-primary-color, 10%);
   // 表格背景
   --mat-table-background-color: @base-bg-color;
   // 表格线条
-  --mat-table-row-item-outline-color: @base-line-color;
+  --mat-table-row-item-outline-color: fade(@base-primary-color, 10%);
   // 弹出层背景
   --mdc-dialog-container-color: @base-bg-color;
+  // 表格文字颜色
+  --mat-table-header-headline-color: @primary-text-color;
+  --mat-table-row-item-label-text-color: @primary-text-color;
 
   // 滚动组件样式
   ng-scrollbar {

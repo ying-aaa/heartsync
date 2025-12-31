@@ -41,7 +41,8 @@ export class RoleUserListComponent implements OnInit {
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
       initExec: false,
-      tableStyle: { padding: '0 24px' },
+      tableStyle: { },
+      trRowStyle: { backgroundColor: 'var(--primary-bg-color)' },
       pageLink: this.pageLink,
       tableColumn: [
         new TextColumn('firstName', '姓名', {}, 300),

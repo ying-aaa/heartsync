@@ -10,7 +10,7 @@ import { RoleDetailComponent } from './role-detail/role-detail.component';
 @Component({
   selector: 'hs-system-role',
   template: `
-    <content class="wh-full flex p-20px bg-[var(--primary-bg-color)]">
+    <content class="wh-full flex">
       <aside class="w-250px h-full mr-24px">
         <hs-role-list #RoleList></hs-role-list>
       </aside>

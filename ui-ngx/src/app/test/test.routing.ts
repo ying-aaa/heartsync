@@ -6,16 +6,20 @@ export default [
     title: '测试',
     path: 'test',
     data: { preload: true, key: 'test' },
-    loadComponent: () =>
-      import('./test.component').then((m) => m.TestComponent),
+    loadComponent: () => import('./test.component').then((m) => m.TestComponent),
     children: [
       { path: '', redirectTo: 'upload', pathMatch: 'full' },
       {
         path: 'upload',
         title: '上传',
         data: { preload: true, key: 'upload', use: IRouterUse.MENU },
-        loadComponent: () =>
-          import('./upload/upload.component').then((m) => m.UploadComponent),
+        loadComponent: () => import('./upload/upload.component').then((m) => m.UploadComponent),
+      },
+      {
+        path: 'tab',
+        title: '选项卡',
+        data: { preload: true, key: 'tab', use: IRouterUse.MENU },
+        loadComponent: () => import('./tab/tab.component').then((m) => m.TabComponent),
       },
     ],
   },

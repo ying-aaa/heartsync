@@ -22,8 +22,8 @@ export class RoleLiitosrooliComponent implements OnInit {
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
       initExec: false,
-      tableStyle: { padding: '0 24px' },
       pageLink: this.pageLink,
+      trRowStyle: { backgroundColor: 'var(--primary-bg-color)' },
       tableColumn: [
         new TextColumn('name', '名称', {}, 300),
         new TextColumn('composite', '继承', {}, 300),

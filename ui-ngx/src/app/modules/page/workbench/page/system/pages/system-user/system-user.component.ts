@@ -39,7 +39,7 @@ export class SystemUserComponent implements OnInit {
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
       initExec: true,
-      tableStyle: { padding: '0 24px' },
+      trRowStyle: { backgroundColor: 'var(--primary-bg-color)' },
       pageLink: this.pageLink,
       tableColumn: [
         new TextColumn('firstName', '姓名', {}, 300),

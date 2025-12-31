@@ -8,12 +8,11 @@ import { HsThemeService } from '../core/services/theme.service';
 @Component({
   selector: 'hs-workbench',
   template: `
-    <div class="p-20px  flex color-#fff">
+    <div class="p-20px flex">
       @for (item of menuList; track $index) {
-        @let isActiveRoute =
-          item.path === outlet!.activatedRoute.routeConfig?.path;
+        @let isActiveRoute = item.path === outlet!.activatedRoute.routeConfig?.path;
         <div
-          class="h-40px line-height-40px rounded-8px mx-3px"
+          class="h-40px line-height-40px rounded-8px mx-3px bg-[var(--base-color-10)] color-#fff"
           [class]="{
             'bg-#2F90B9': isActiveRoute,
             'hover:bg-#2F90B930': !isActiveRoute,
@@ -21,10 +20,7 @@ import { HsThemeService } from '../core/services/theme.service';
           matRipple
           matRippleColor="#ffffff20"
         >
-          <a
-            class="flex items-center w-full h-full px-16px"
-            [routerLink]="item.path"
-          >
+          <a class="flex items-center w-full h-full px-16px" [routerLink]="item.path">
             {{ item.title }}
           </a>
         </div>
@@ -53,6 +49,6 @@ export class TestComponent {
   ) {
     this.menuList = this.route.routeConfig!.children!.filter(
       (item) => item.data?.['use'] === IRouterUse.MENU,
-    )!;
+    );
   }
 }

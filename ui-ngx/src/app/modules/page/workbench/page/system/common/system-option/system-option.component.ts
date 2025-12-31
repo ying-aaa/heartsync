@@ -9,7 +9,7 @@ import { HsSvgModule } from '@shared/components/hs-svg/hs-svg.module';
 @Component({
   selector: 'hs-system-option',
   templateUrl: './system-option.component.html',
-  imports: [MatTreeModule, MatButtonModule, MatIconModule, RouterModule, HsSvgModule, CommonModule],
+  imports: [MatTreeModule, MatButtonModule, MatIconModule, RouterModule, MatIconModule, CommonModule],
   styleUrls: ['./system-option.component.less'],
 })
 export class SystemOptionComponent implements OnInit {

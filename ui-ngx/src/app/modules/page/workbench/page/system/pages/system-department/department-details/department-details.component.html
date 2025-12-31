@@ -2,20 +2,34 @@
   <mat-tab-group
     mat-stretch-tabs="false"
     mat-align-tabs="start"
-    class="wh-full"
+    class="wh-full hs-tab-item-indicator-full"
   >
-    <mat-tab label="子组">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="text-20px w-20px! h-20px! mr-6px">groups</mat-icon>
+        子组
+      </ng-template>
       <hs-groups-children [activeGroup]="activeGroup()"></hs-groups-children>
     </mat-tab>
-    <mat-tab label="成员">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="text-20px w-20px! h-20px! mr-6px">person</mat-icon>
+        成员
+      </ng-template>
       <hs-groups-members [activeGroup]="activeGroup()"></hs-groups-members>
     </mat-tab>
-    <mat-tab label="属性">
-      <hs-groups-attributes
-        [activeGroup]="activeGroup()"
-      ></hs-groups-attributes>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="text-20px w-20px! h-20px! mr-6px">tune</mat-icon>
+        属性
+      </ng-template>
+      <hs-groups-attributes [activeGroup]="activeGroup()"></hs-groups-attributes>
     </mat-tab>
-    <mat-tab label="角色">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="text-20px w-20px! h-20px! mr-6px">security</mat-icon>
+        角色
+      </ng-template>
       <hs-groups-roles [activeGroup]="activeGroup()"></hs-groups-roles>
     </mat-tab>
   </mat-tab-group>

@@ -35,6 +35,7 @@ export class HsDynamicTableComponent implements OnInit {
 
   pageLink = computed(() => this.tableConfig().pageLink);
   tableStyle = computed(() => this.tableConfig().tableStyle);
+  trRowStyle = computed(() => this.tableConfig().trRowStyle);
 
   private loadedColumns = signal<any[] | null>(null);
 

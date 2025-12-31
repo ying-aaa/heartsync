@@ -22,13 +22,9 @@
         mat-icon-button
         disabled
       ></button>
-      <hs-svg
-        [name]="rla.isActive ? node.data.activeIcon : node.data.icon"
-        width="18px"
-        height="18px"
-        color="red"
-        class="mr-8px"
-      ></hs-svg>
+      <mat-icon class="text-20px! w-20px! h-20px! mr-8px">
+        {{node.data.icon}}
+      </mat-icon>
       {{ node.title }}
     </mat-tree-node>
     <mat-tree-node
@@ -36,7 +32,7 @@
       matTreeNodePadding
       matTreeNodeToggle
       [cdkTreeNodeTypeaheadLabel]="node.title"
-      class="cursor-pointer"
+      class="cursor-pointer hs-menu-item"
     >
       <button
         mat-icon-button
@@ -47,13 +43,9 @@
           {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
         </mat-icon>
       </button>
-      <hs-svg
-        [name]="node.data.icon"
-        width="18px"
-        height="18px"
-        color="red"
-        class="mr-8px"
-      ></hs-svg>
+      <mat-icon class="text-20px! w-20px! h-20px! mr-8px">
+        {{node.data.icon}}
+      </mat-icon>
       {{ node.title }}
     </mat-tree-node>
   </mat-tree>

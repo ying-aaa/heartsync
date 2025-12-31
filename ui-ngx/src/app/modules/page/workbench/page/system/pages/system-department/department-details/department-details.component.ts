@@ -5,6 +5,7 @@ import { IAnyPropObj } from '@src/app/shared/models/system.model';
 import { GroupsMembersComponent } from './groups-members/groups-members.component';
 import { GroupsAttributesComponent } from './groups-attributes/groups-attributes.component';
 import { GroupsRolesComponent } from './groups-roles/groups-roles.component';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'hs-department-details',
@@ -15,7 +16,8 @@ import { GroupsRolesComponent } from './groups-roles/groups-roles.component';
     GroupsMembersComponent,
     GroupsAttributesComponent,
     GroupsRolesComponent,
-  ],
+    MatIcon
+],
 })
 export class DepartmentDetailsComponent implements OnInit {
   activeGroup = input<IAnyPropObj | null>();

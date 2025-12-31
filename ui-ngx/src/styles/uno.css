@@ -360,6 +360,7 @@
 .bg-\[radial-gradient\(rgba\(12\,12\,12\,0\.171\)_2px\,transparent_0\)\]{background-image:radial-gradient(rgba(12,12,12,0.171) 2px,transparent 0);}
 .bg-\[var\(--base-bg-color\)\]{background-color:var(--base-bg-color) /* var(--base-bg-color) */;}
 .bg-\[var\(--base-color-05\)\]{background-color:var(--base-color-05) /* var(--base-color-05) */;}
+.bg-\[var\(--base-color-10\)\]{background-color:var(--base-color-10) /* var(--base-color-10) */;}
 .bg-\[var\(--primary-bg-color\)\]{background-color:var(--primary-bg-color) /* var(--primary-bg-color) */;}
 .bg-\#000{--un-bg-opacity:1;background-color:rgb(0 0 0 / var(--un-bg-opacity)) /* #000 */;}
 .bg-\#000\/30{background-color:rgb(0 0 0 / 0.3) /* #000 */;}
@@ -438,6 +439,7 @@
 .py-4px{padding-top:4px;padding-bottom:4px;}
 .py-6px{padding-top:6px;padding-bottom:6px;}
 .py-8px{padding-top:8px;padding-bottom:8px;}
+.pb-0{padding-bottom:0;}
 .pb-24px{padding-bottom:24px;}
 .pb-4px{padding-bottom:4px;}
 .pb-6px{padding-bottom:6px;}
@@ -478,6 +480,7 @@
 .text-16px\!{font-size:16px !important;}
 .text-18px{font-size:18px;}
 .text-18px\!{font-size:18px !important;}
+.text-20px\!{font-size:20px !important;}
 .text-22px{font-size:22px;}
 .text-24px\!{font-size:24px !important;}
 .text-28px{font-size:28px;}

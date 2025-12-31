@@ -433,6 +433,7 @@ type ConfigWithoutSelection = {
 
 type ConfigBase = {
   tableStyle?: IAnyPropObj;
+  trRowStyle?: IAnyPropObj;
   layouts?: ILayoutType[];
   pageSizes?: number[];
   pageDislabled?: boolean;
@@ -447,6 +448,7 @@ type ITableConfig = (ConfigWithSelection & ConfigBase) | (ConfigWithoutSelection
 
 export class IDynamicTable {
   public tableStyle: IAnyPropObj;
+  public trRowStyle: IAnyPropObj;
   public layouts: ILayoutType[];
   public selection: boolean;
   public pageSizes: number[];
@@ -470,6 +472,7 @@ export class IDynamicTable {
 
   constructor(config: ITableConfig) {
     this.tableStyle = config.tableStyle || {};
+    this.trRowStyle = config.trRowStyle || {};
     this.layouts = config.layouts || [];
     this.selection = config.selection ?? false;
     this.pageSizes = config.pageSizes || [];

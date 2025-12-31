@@ -134,7 +134,7 @@
           }
         }
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+        <tr [style]="trRowStyle()" mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns()"
