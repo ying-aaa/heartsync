@@ -5,6 +5,8 @@ import {
   Validators,
   FormsModule,
   ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -28,7 +30,22 @@ import { userRequiredCtions } from '../data';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ChipsAutocompleteComponent } from '@shared/components/hs-chips-autocomplete/hs-chips-autocomplete.component';
-import { map } from 'rxjs';
+import { map, switchMap } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+
+const nameRegex = /^[a-zA-Z\u4e00-\u9fa5\s'-.]+$/;
+const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/;
+const usernameRegex = /^[a-zA-Z0-9][a-zA-Z0-9_]*$/;
+
+export function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const password = control.get('password')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
+
+  if (password !== confirmPassword) {
+    return { passwordMismatch: true };
+  }
+  return null;
+}
 
 @Component({
   selector: 'hs-create-user',
@@ -57,21 +74,28 @@ import { map } from 'rxjs';
   ],
 })
 export class CreateUserComponent implements OnInit {
-  userForm = new FormGroup({
-    requiredActions: new FormControl([], [Validators.required]),
-    emailVerified: new FormControl(),
-    username: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
-    groups: new FormControl([]),
-  });
-
+  userForm = new FormGroup(
+    {
+      requiredActions: new FormControl([]),
+      emailVerified: new FormControl(),
+      firstName: new FormControl('', [Validators.required, Validators.pattern(nameRegex)]),
+      password: new FormControl('', [Validators.required, Validators.pattern(passwordRegex)]),
+      confirmPassword: new FormControl('', [
+        Validators.required,
+        Validators.pattern(passwordRegex),
+      ]),
+      username: new FormControl('', [Validators.required, Validators.pattern(usernameRegex)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      groups: new FormControl([]),
+    },
+    { validators: passwordMatchValidator },
+  );
   userRuquiredActions = signal<IUserRequiredAction[]>([]);
 
   constructor(
     private dialogRef: MatDialogRef<CreateUserComponent>,
     private authHttpService: AuthHttpService,
+    private toastrService: ToastrService,
   ) {
     this.userForm.valueChanges.subscribe((values) => {
       console.log('Form updated:', values);
@@ -81,14 +105,29 @@ export class CreateUserComponent implements OnInit {
   onSubmit() {
     if (this.userForm.valid) {
       const userInfo: IUserInfo = this.userForm.value as any;
-      this.authHttpService.createUser(userInfo).subscribe(
-        (response) => {
-          console.log('返回结果:', response);
-        },
-        (error) => {
-          console.error('创建用户出错:', error);
-        },
-      );
+      const password = userInfo.password!;
+      Reflect.deleteProperty(userInfo, 'password');
+      Reflect.deleteProperty(userInfo, 'confirmPassword');
+      this.authHttpService
+        .createUser(userInfo)
+        .pipe(
+          switchMap((response) => {
+            console.log('返回结果:', response);
+            this.dialogRef.close(true);
+            this.toastrService.success('用户创建成功');
+            const userId = response!.substring(response!.lastIndexOf('/') + 1);
+            return this.authHttpService.updateUserPassword(userId, password);
+          }),
+        )
+        .subscribe({
+          next: () => {
+            console.log('密码更新成功');
+          },
+          error: (err) => {
+            console.error('操作失败:', err);
+            this.toastrService.error('操作失败，请重试');
+          },
+        });
     } else {
       console.log('表单校验未通过');
       this.userForm.markAllAsTouched();

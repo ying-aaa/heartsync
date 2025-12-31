@@ -14,9 +14,12 @@ import {
   IDynamicTable,
   TextColumn,
   ActionColumn,
+  SelectionColumn,
+  TagColumn,
 } from '@src/app/shared/components/hs-table/table.model';
-import { map } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { CreateUserComponent } from './create-user/create-user.component';
+import { IUserInfo } from '@src/app/shared/models/user.model';
 
 @Component({
   selector: 'hs-system-user',
@@ -39,12 +42,35 @@ export class SystemUserComponent implements OnInit {
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
       initExec: true,
+      selection: true,
+      multipleFiled: 'id',
       trRowStyle: { backgroundColor: 'var(--primary-bg-color)' },
       pageLink: this.pageLink,
       tableColumn: [
         new TextColumn('firstName', '姓名', {}, 300),
         new TextColumn('username', '账号', {}, 300),
-        new TextColumn('department', '部门', {}, 300),
+        new TextColumn('email', '邮箱', {}, 300),
+        new TextColumn(
+          'department',
+          '部门',
+          {
+            styles: {
+              whiteSpace: 'pre-wrap',
+            },
+          },
+          300,
+        ),
+        new TagColumn(
+          'enabled',
+          '状态',
+          {
+            tagMap: [
+              { label: '弃用', value: true, color: 'primary' },
+              { label: '禁用', value: false, color: 'red' },
+            ],
+          },
+          300,
+        ),
         // new TagColumn(
         //   'lastName',
         //   '相关角色',
@@ -79,16 +105,44 @@ export class SystemUserComponent implements OnInit {
             },
           ],
           300,
-          'center',
         ),
       ],
       getData: () => {
-        return this.authHttpService.getUsers(this.pageLink).pipe(map((data) => ({ data })));
+        return this.getUsersWithDepartment().pipe(
+          map((data) => {
+            console.log('%c Line:89 🍩 data', 'color:#7f2b82', data);
+
+            return { data };
+          }),
+        );
       },
       layouts: ['paginator', 'total', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],
     }),
   );
+
+  getUsersWithDepartment(): Observable<IUserInfo[]> {
+    return this.authHttpService.getUsers(this.pageLink).pipe(
+      switchMap((users) => {
+        if (users.length === 0) {
+          return of([]);
+        }
+
+        const orgObservables = users.map((user) => this.authHttpService.getUserGroups(user.id));
+
+        return forkJoin(orgObservables).pipe(
+          map((department) => {
+            return users.map((user, index) => ({
+              ...user,
+              department: department[index].reduce((acc, cur) => {
+                return acc + cur.path + '\n';
+              }, ''),
+            }));
+          }),
+        );
+      }),
+    );
+  }
 
   onQueryData() {
     this.pageLink.getData();

@@ -17,6 +17,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { IAnyPropObj } from '@src/app/shared/models/common-component';
 import { HsLoadingComponent } from '@shared/components/hs-loading/hs-loading.component';
 import { AuthHttpService } from '@src/app/core/http/auth.http.service';
+import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 
 export class DynamicFlatNode {
   constructor(
@@ -50,8 +51,11 @@ export class DynamicDatabase {
   loadNodeData(node?: DynamicFlatNode) {
     const nodeId = node?.item['id'];
     const request = nodeId
-      ? this.authHttpService.getSubGroups(nodeId, {})
-      : this.authHttpService.getGroups({});
+      ? this.authHttpService.getSubGroups(nodeId, { first: 0, max: 50 })
+      : this.authHttpService.getGroups({
+          first: 0,
+          max: 50,
+        });
     return request.pipe(tap((data) => this.dataMap.set(nodeId, data)));
   }
 }
@@ -145,12 +149,14 @@ export class DynamicDataSource implements DataSource<DynamicFlatNode> {
     MatIconModule,
     MatProgressBarModule,
     HsLoadingComponent,
+    HsLoadingModule,
   ],
-  providers: [DynamicDatabase],
+  providers: [DynamicDatabase, HsLoadingModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DepartmentListComponent {
   activeGroup = model<IAnyPropObj | null>(null);
+  isLoading = signal<boolean>(true);
 
   constructor() {
     const database = inject(DynamicDatabase);
@@ -164,6 +170,7 @@ export class DepartmentListComponent {
         this.selectNode(data[0].item);
         // 展开第一层
         this.treeControl.expand(data[0]);
+        this.isLoading.set(false);
       }
     });
   }

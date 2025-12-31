@@ -27,7 +27,7 @@ export class AuthHttpService {
   getUsers(pageLink: PageLink) {
     const params = pageLink.toQueryHttp();
 
-    return this.http.get<Array<IUserRequiredAction>>(
+    return this.http.get<Array<IUserInfo>>(
       `/uc/admin/realms/${this.realm}/ui-ext/brute-force-user?briefRepresentation=true
       `,
       { params },
@@ -36,7 +36,16 @@ export class AuthHttpService {
 
   // 创建用户
   createUser(userInfo: IUserInfo) {
-    return this.http.post<IUserInfo>(`/uc/admin/realms/${this.realm}/users`, userInfo);
+    return this.http.post<string>(`/uc/admin/realms/${this.realm}/users`, userInfo);
+  }
+
+  // 更新用户密码
+  updateUserPassword(userId: string, password: string) {
+    return this.http.put<any>(`/uc/admin/realms/${this.realm}/users/${userId}/reset-password`, {
+      type: 'password',
+      temporary: false,
+      value: password,
+    });
   }
 
   // 创建用户时选择的用户必需操作
@@ -47,6 +56,14 @@ export class AuthHttpService {
   }
 
   // ----------------- 群组管理 -----------------
+  // 根据用户id获取用户加入的群组
+  getUserGroups(userId: string, params: any = {}) {
+    return this.http.get<Array<IGroupInfo>>(
+      `/uc/admin/realms/${this.realm}/users/${userId}/groups`,
+      { params },
+    );
+  }
+
   // 获取群组列表
   getGroups(params: any = {}) {
     return this.http.get<Array<IGroupInfo>>(`/uc/admin/realms/${this.realm}/groups`, {

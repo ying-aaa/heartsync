@@ -1,72 +1,48 @@
-@use '@angular/material' as mat;
+@use '@angular/material'as mat;
 $base-radius: 8px;
 
 .hs-density--5 {
-  @include mat.theme(
-    (
-      density: -5,
-    )
-  );
+  @include mat.theme((density: -5,
+    ));
 }
 
 .hs-density--4 {
-  @include mat.theme(
-    (
-      density: -4,
-    )
-  );
+  @include mat.theme((density: -4,
+    ));
 }
 
 .hs-density--3 {
-  @include mat.theme(
-    (
-      density: -3,
-    )
-  );
+  @include mat.theme((density: -3,
+    ));
 }
 
 .hs-density--2 {
-  @include mat.theme(
-    (
-      density: -2,
-    )
-  );
+  @include mat.theme((density: -2,
+    ));
 }
 
 .hs-density--1 {
-  @include mat.theme(
-    (
-      density: -1,
-    )
-  );
+  @include mat.theme((density: -1,
+    ));
 }
 
 .hs-density--0 {
-  @include mat.theme(
-    (
-      density: 0,
-    )
-  );
+  @include mat.theme((density: 0,
+    ));
 }
 
-@include mat.form-field-overrides(
-  (
-    disabled-input-text-placeholder-color: var(--base-placeholder-text-color),
+@include mat.form-field-overrides((disabled-input-text-placeholder-color: var(--base-placeholder-text-color),
     filled-input-text-placeholder-color: var(--base-placeholder-text-color),
     outlined-input-text-placeholder-color: var(--base-placeholder-text-color),
-  )
-);
+  ));
 
-@include mat.tabs-overrides(
-  (
-    active-label-text-color: var(--mat-sys-primary),
+@include mat.tabs-overrides((active-label-text-color: var(--mat-sys-primary),
     active-hover-label-text-color: var(--mat-sys-primary),
     active-focus-label-text-color: var(--mat-sys-primary),
     inactive-label-text-color: var(--title-text-color),
     inactive-hover-label-text-color: var(--title-text-color),
     inactive-focus-label-text-color: var(--title-text-color),
-  )
-);
+  ));
 
 .hs-icon-button-24 {
   &.mdc-icon-button {
@@ -106,25 +82,29 @@ $base-radius: 8px;
 .hs-tab-item-indicator-full {
   .mat-mdc-tab-label-container {
     border: none;
+
     .mat-mdc-tab-labels {
       padding: 4px;
       border-radius: 8px;
       width: var(--mat-tab-label-container-width, fit-content);
       background-color: var(--mat-tab-label-container-bg-color, rgba(47, 143, 185, 0.1));
       margin-bottom: 8px;
+
       .mdc-tab.mat-mdc-tab,
       .mat-ripple.mat-mdc-tab-ripple {
         border-radius: 8px;
       }
+
       .mdc-tab-indicator {
         border-radius: 8px;
+
         .mdc-tab-indicator__content.mdc-tab-indicator__content--underline {
           position: absolute;
           width: 100%;
           height: 100%;
           left: 0;
           top: 0;
-          background-color: var(--mdc-tab-indicator-content-bg-color, #fff);
+          background-color: var(--mdc-tab-indicator-content-bg-color, var(--secondary-text-color));
           border-radius: 8px;
           border: none;
         }
@@ -134,6 +114,7 @@ $base-radius: 8px;
 }
 
 html {
+
   // 按钮
   .mdc-button {
     --mat-sys-corner-full: 8px;
@@ -177,11 +158,8 @@ html {
 .mdc-button {
   // --mat-sys-corner-full: 8px;
 
-  @include mat.theme(
-    (
-      density: -1,
-    )
-  );
+  @include mat.theme((density: -1,
+    ));
 }
 
 .mat-mdc-option {
@@ -258,6 +236,7 @@ html {
 }
 
 mat-tab-body.mat-mdc-tab-body {
+
   &.mat-mdc-tab-body-active,
   .mat-mdc-tab-body-content {
     overflow: unset;

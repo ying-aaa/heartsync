@@ -1,34 +1,35 @@
 @import "themeMixin";
 
-.themeMixin ( {
-    :host {
-      display: block;
-      padding: 8px;
-      min-width: 220px;
+.themeMixin ({
+  :host {
+    display: block;
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding: 8px;
+    min-width: 220px;
 
-      .hs-node-item {
-        --mat-tree-node-min-height: 42px;
-        margin: 3px 0;
-        padding: 0 3px;
-        border-radius: 4px;
-        cursor: pointer;
-        color: var(--primary-text-color);
+    .hs-node-item {
+      --mat-tree-node-min-height: 42px;
+      margin: 3px 0;
+      padding: 0 3px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--primary-text-color);
 
-        &:hover {
-          background-color: @base-color-10;
-        }
-
-        &.hs-node-active {
-          background-color: rgba(47, 144, 185, 0.8);
-          color: #fff;
-
-          mat-icon {
-            color: #fff;
-          }
-        }
+      &:hover {
+        background-color: @base-color-10;
       }
 
-    }
-  }
+      &.hs-node-active {
+        background-color:rgba(47, 144, 185, .30);
+        color: var(--base-primary-color);
 
-);
+        mat-icon {
+          color: var(--base-primary-color);
+        }
+      }
+    }
+
+  }
+});

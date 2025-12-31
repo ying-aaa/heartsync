@@ -1,25 +1,23 @@
 @import "themeMixin";
 
-.themeMixin( {
-    :host {
-      ::ng-deep {
-        .hs-menu-item {
-          margin: 3px 0;
-          color: var(--primary-text-color);
+.themeMixin({
+  :host {
+    ::ng-deep {
+      .hs-menu-item {
+        margin: 3px 0;
+        color: var(--primary-text-color);
 
-          &:hover {
-            background-color:rgba(47, 144, 185, .10);
-            border-radius: 8px;
-          }
+        &:hover {
+          background-color:rgba(47, 144, 185, .10);
+          border-radius: 8px;
+        }
 
-          &.hs-menu-active {
-            background-color:rgba(47, 144, 185, .30);
-            color: var(--base-primary-color);
-            border-radius: 8px;
-          }
+        &.hs-menu-active {
+          background-color:rgba(47, 144, 185, .30);
+          color: var(--base-primary-color);
+          border-radius: 8px;
         }
       }
     }
   }
-
-);
+});

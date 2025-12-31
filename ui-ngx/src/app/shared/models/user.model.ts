@@ -2,12 +2,14 @@ import { IAnyPropObj } from './system.model';
 
 // ----------------- 用户管理 -----------------
 export interface IUserInfo {
+  id: string;
   attributes: IUserInfoAttributes;
   requiredActions: any[];
   emailVerified: boolean;
   email: string;
   firstName: string;
   lastName: string;
+  password?: string;
   groups: any[];
   enabled: boolean;
 }

@@ -19,7 +19,7 @@
       >
         @for (column of tableColumn(); track $index) {
           @if (column.type === ColumnType.SELECTION) {
-            <ng-container matColumnDef="selection">
+            <ng-container matColumnDef="select">
               <th mat-header-cell *matHeaderCellDef>
                 <mat-checkbox
                   [aria-label]="checkboxLabel()"
@@ -72,7 +72,7 @@
                   >
                     @switch (column.type) {
                       @case (ColumnType.TEXT) {
-                        {{ data[column.prop] ?? column.config?.defaultValue }}
+                        <span>{{ data[column.prop] ?? column.config?.defaultValue }}</span>
                       }
                       @case (ColumnType.CUSTOM) {
                         <img
@@ -134,7 +134,11 @@
           }
         }
 
-        <tr [style]="trRowStyle()" mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+        <tr
+          [style]="trRowStyle()"
+          mat-header-row
+          *matHeaderRowDef="displayedColumns(); sticky: true"
+        ></tr>
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns()"

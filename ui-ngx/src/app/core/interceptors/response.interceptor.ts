@@ -33,8 +33,9 @@ export function ResponentInterceptor(
 
           case 201: // Created
             console.log('Resource created:', response.headers.get('Location'));
+            const location = response.headers.get('Location');
             return response.clone({
-              body: (response.body as any)?.data,
+              body: (response.body as any)?.data || location,
             });
 
           case 204: // No Content

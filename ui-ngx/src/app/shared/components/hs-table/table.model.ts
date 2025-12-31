@@ -5,7 +5,7 @@ import { IAnyPropObj } from '../../models/common-component';
 import { HttpParams } from '@angular/common/http';
 
 export enum ColumnType {
-  SELECTION = 'selection',
+  SELECTION = 'select',
   TEXT = 'text',
   CUSTOM = 'custom',
   DATE = 'date',
@@ -100,7 +100,7 @@ export class ImgColumn extends BaseColumn<{ defaultValue?: any }> {
 
 interface TagMap {
   color: string;
-  value: string | number;
+  value: string | number | boolean;
   label: string;
 }
 
