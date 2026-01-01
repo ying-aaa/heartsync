@@ -20,6 +20,9 @@ import {
 import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { CreateUserComponent } from './create-user/create-user.component';
 import { IUserInfo } from '@src/app/shared/models/user.model';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ToastrService } from 'ngx-toastr';
+import { UserDetailComponent } from './user-detail/user-detail.component';
 
 @Component({
   selector: 'hs-system-user',
@@ -65,20 +68,12 @@ export class SystemUserComponent implements OnInit {
           '状态',
           {
             tagMap: [
-              { label: '弃用', value: true, color: 'primary' },
+              { label: '启用', value: true, color: 'primary' },
               { label: '禁用', value: false, color: 'red' },
             ],
           },
           300,
         ),
-        // new TagColumn(
-        //   'lastName',
-        //   '相关角色',
-        //   {
-        //     tagMap: [{ label: '管理员', value: 'active', color: 'green' }],
-        //   },
-        //   300,
-        // ),
         new ActionColumn(
           'actions',
           '操作',
@@ -86,35 +81,30 @@ export class SystemUserComponent implements OnInit {
             {
               name: '编辑',
               icon: 'border_color',
-              action: (row, event) => {
-                event.stopPropagation();
-              },
+              action: this.onEditUser.bind(this),
             },
             {
               name: '密码',
               icon: 'border_color',
-              action: (row, event) => {
-                event.stopPropagation();
-              },
+              action: this.onResetPassword.bind(this),
             },
             {
               name: '删除',
               icon: 'delete',
               moreName: '确认删除',
-              action: (row, event) => {},
+              action: (row, event) => {
+                this.authHttpService.deleteUser(row.id).subscribe(() => {
+                  this.toastrService.success('删除成功');
+                  this.pageLink.getData();
+                });
+              },
             },
           ],
           300,
         ),
       ],
       getData: () => {
-        return this.getUsersWithDepartment().pipe(
-          map((data) => {
-            console.log('%c Line:89 🍩 data', 'color:#7f2b82', data);
-
-            return { data };
-          }),
-        );
+        return this.getUsersWithDepartment().pipe(map((data) => ({ data })));
       },
       layouts: ['paginator', 'total', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],
@@ -153,9 +143,24 @@ export class SystemUserComponent implements OnInit {
     this.onQueryData();
   }
 
-  // 新增用户
+  onEditUser(userInfo: IUserInfo) {
+    const width = isMobile() ? '100vw' : '1200px';
+    const height = isMobile() ? '100vh' : '100vh';
+    this.dialog.open(UserDetailComponent, {
+      width,
+      height,
+      minWidth: width,
+      minHeight: height,
+      position: { right: '0' },
+      panelClass: 'hs-drawer-container',
+      autoFocus: false,
+      data: {
+        userInfo,
+      },
+    });
+  }
+
   onAddUser() {
-    // 打开用户添加对话框或页面
     const width = isMobile() ? '100vw' : '800px';
     const height = isMobile() ? '100vh' : 'auto';
     const dialogRef = this.dialog.open(CreateUserComponent, {
@@ -170,9 +175,24 @@ export class SystemUserComponent implements OnInit {
     });
   }
 
+  // 重置密码
+  onResetPassword(userInfo: IUserInfo) {
+    const dialogRef = this.dialog.open(ResetPasswordComponent, {
+      width: '600px',
+      data: {
+        userInfo,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.pageLink.getData();
+    });
+  }
+
   constructor(
-    private authHttpService: AuthHttpService,
     private dialog: MatDialog,
+    private toastrService: ToastrService,
+    private authHttpService: AuthHttpService,
   ) {
     this.searchValue.valueChanges.subscribe((value) => {
       this.pageLink.changeSearch('search', value);

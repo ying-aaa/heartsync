@@ -1,12 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, ViewChild } from '@angular/core';
 import {
   FormGroup,
   FormControl,
   Validators,
   FormsModule,
   ReactiveFormsModule,
-  AbstractControl,
-  ValidationErrors,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -32,20 +30,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ChipsAutocompleteComponent } from '@shared/components/hs-chips-autocomplete/hs-chips-autocomplete.component';
 import { map, switchMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { PasswordFormComponent } from '../password-form/password-form.component';
+import { SwitchComponent } from '@src/app/shared/components/hs-switch/hs-switch.component';
 
 const nameRegex = /^[a-zA-Z\u4e00-\u9fa5\s'-.]+$/;
-const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/;
 const usernameRegex = /^[a-zA-Z0-9][a-zA-Z0-9_]*$/;
-
-export function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-  const password = control.get('password')?.value;
-  const confirmPassword = control.get('confirmPassword')?.value;
-
-  if (password !== confirmPassword) {
-    return { passwordMismatch: true };
-  }
-  return null;
-}
 
 @Component({
   selector: 'hs-create-user',
@@ -71,25 +60,22 @@ export function passwordMatchValidator(control: AbstractControl): ValidationErro
     ChipsAutocompleteComponent,
     MatError,
     MatDialogModule,
+    PasswordFormComponent, // 导入密码组件
+    SwitchComponent,
   ],
 })
 export class CreateUserComponent implements OnInit {
-  userForm = new FormGroup(
-    {
-      requiredActions: new FormControl([]),
-      emailVerified: new FormControl(),
-      firstName: new FormControl('', [Validators.required, Validators.pattern(nameRegex)]),
-      password: new FormControl('', [Validators.required, Validators.pattern(passwordRegex)]),
-      confirmPassword: new FormControl('', [
-        Validators.required,
-        Validators.pattern(passwordRegex),
-      ]),
-      username: new FormControl('', [Validators.required, Validators.pattern(usernameRegex)]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      groups: new FormControl([]),
-    },
-    { validators: passwordMatchValidator },
-  );
+  @ViewChild(PasswordFormComponent) passwordFormComponent!: PasswordFormComponent;
+
+  userForm = new FormGroup({
+    requiredActions: new FormControl([]),
+    emailVerified: new FormControl(),
+    firstName: new FormControl('', [Validators.required, Validators.pattern(nameRegex)]),
+    username: new FormControl('', [Validators.required, Validators.pattern(usernameRegex)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    groups: new FormControl([]),
+  });
+
   userRuquiredActions = signal<IUserRequiredAction[]>([]);
 
   constructor(
@@ -103,11 +89,18 @@ export class CreateUserComponent implements OnInit {
   }
 
   onSubmit() {
+    if (!this.passwordFormComponent.isValid()) {
+      this.passwordFormComponent.markAllAsTouched();
+      return;
+    }
+
     if (this.userForm.valid) {
       const userInfo: IUserInfo = this.userForm.value as any;
-      const password = userInfo.password!;
-      Reflect.deleteProperty(userInfo, 'password');
-      Reflect.deleteProperty(userInfo, 'confirmPassword');
+      const password = this.passwordFormComponent.getPassword()!;
+      const temporary = this.passwordFormComponent.getTemporary();
+
+      userInfo.enabled = true;
+
       this.authHttpService
         .createUser(userInfo)
         .pipe(
@@ -116,7 +109,7 @@ export class CreateUserComponent implements OnInit {
             this.dialogRef.close(true);
             this.toastrService.success('用户创建成功');
             const userId = response!.substring(response!.lastIndexOf('/') + 1);
-            return this.authHttpService.updateUserPassword(userId, password);
+            return this.authHttpService.updateUserPassword(userId, password, temporary);
           }),
         )
         .subscribe({

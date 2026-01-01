@@ -44,6 +44,28 @@ $base-radius: 8px;
     inactive-focus-label-text-color: var(--title-text-color),
   ));
 
+.hs-drawer-container {
+  .mat-mdc-dialog-container.mdc-dialog {
+    animation: identifier 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  // 抽屉动画
+  @keyframes identifier {
+    from {
+      transform: translateX(100%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+
+  }
+
+  .mat-mdc-dialog-surface {
+    border-radius: 12px 0 0 12px;
+  }
+}
+
 .hs-icon-button-24 {
   &.mdc-icon-button {
     width: 24px;

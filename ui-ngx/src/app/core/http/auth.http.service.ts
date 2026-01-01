@@ -40,12 +40,17 @@ export class AuthHttpService {
   }
 
   // 更新用户密码
-  updateUserPassword(userId: string, password: string) {
+  updateUserPassword(userId: string, password: string, temporary?: boolean) {
     return this.http.put<any>(`/uc/admin/realms/${this.realm}/users/${userId}/reset-password`, {
       type: 'password',
-      temporary: false,
+      temporary: true,
       value: password,
     });
+  }
+
+  // 删除用户
+  deleteUser(userId: string) {
+    return this.http.delete<any>(`/uc/admin/realms/${this.realm}/users/${userId}`);
   }
 
   // 创建用户时选择的用户必需操作

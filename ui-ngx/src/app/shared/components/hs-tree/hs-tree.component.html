@@ -2,12 +2,7 @@
 
 <mat-form-field class="example-form-field w-full hs-density--5 mb-12px">
   <!-- <mat-label>搜索你的文件</mat-label> -->
-  <input
-    matInput
-    type="text"
-    placeholder="搜索你的文件"
-    [formControl]="fileName"
-  />
+  <input matInput type="text" placeholder="搜索你的文件" [formControl]="fileName" />
   @if (fileName.getRawValue()) {
     <button
       matSuffix
@@ -43,10 +38,7 @@
     @let is_loading = treeInstance?.jstree(true).is_loading('#');
     @if (treeInstance && !treeDataLength && !is_loading) {
       <div class="absolute-center w-full -z-1">
-        <hs-svg
-          name="empty"
-          title="暂无数据"
-        ></hs-svg>
+        <hs-svg name="empty" title="暂无数据"></hs-svg>
       </div>
     }
   </div>
@@ -76,16 +68,9 @@
         class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
       >
         @if (menu.matIcon) {
-          <mat-icon class="color-#2c7eac w-20px! h-20px! text-20px">{{
-            menu.icon
-          }}</mat-icon>
+          <mat-icon class="color-#2c7eac w-20px! h-20px! text-20px">{{ menu.icon }}</mat-icon>
         } @else {
-          <hs-svg
-            [name]="menu.icon"
-            width="16px"
-            height="16px"
-            containerClass="p-2px"
-          ></hs-svg>
+          <hs-svg [name]="menu.icon" width="16px" height="16px" containerClass="p-2px"></hs-svg>
         }
 
         <p class="font-medium ml-2">{{ menu.label }}</p>

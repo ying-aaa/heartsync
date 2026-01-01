@@ -1,10 +1,9 @@
 <content class="wh-full flex flex-col">
-  <header class="px-24px h-64px rounded-8px flex items-center justify-between bg-[var(--base-bg-color)]">
+  <header
+    class="px-24px h-64px rounded-8px flex items-center justify-between bg-[var(--base-bg-color)]"
+  >
     <div class="flex gap-12px">
-      <mat-form-field
-        appearance="outline"
-        class="hs-density--5 w-225px"
-      >
+      <mat-form-field appearance="outline" class="hs-density--5 w-225px">
         <input
           matInput
           type="text"
@@ -12,36 +11,29 @@
           [formControl]="searchValue"
           (keyup.enter)="onQueryData()"
         />
+        @if (searchValue.getRawValue()) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="searchValue.setValue('')"
+            class="mr-5px"
+          >
+            <mat-icon class="color-[var(--primary-text-color)]">close</mat-icon>
+          </button>
+        }
       </mat-form-field>
 
-      <button
-        mat-flat-button
-        (click)="onQueryData()"
-      >
-        查询
-      </button>
-      <button
-        mat-raised-button
-        (click)="onResetData()"
-      >
-        重置
-      </button>
+      <button mat-flat-button (click)="onQueryData()">查询</button>
+      <button mat-raised-button (click)="onResetData()">重置</button>
     </div>
 
     <div>
-      <button
-        mat-flat-button
-        (click)="onAddUser()"
-      >
-        新增用户
-      </button>
+      <button mat-flat-button (click)="onAddUser()">新增用户</button>
     </div>
   </header>
 
   <main class="h-0 flex-1">
-    <hs-dynamic-table
-      [tableConfig]="tableConfig()"
-      class="h-full"
-    ></hs-dynamic-table>
+    <hs-dynamic-table [tableConfig]="tableConfig()" class="h-full"></hs-dynamic-table>
   </main>
 </content>
