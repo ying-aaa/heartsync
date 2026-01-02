@@ -108,7 +108,7 @@ $base-radius: 8px;
     .mat-mdc-tab-labels {
       padding: 4px;
       border-radius: 8px;
-      width: var(--mat-tab-label-container-width, fit-content);
+      width: var(--mat-tab-label-container-width);
       background-color: var(--mat-tab-label-container-bg-color, rgba(47, 143, 185, 0.1));
       margin-bottom: 8px;
 

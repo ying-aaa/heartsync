@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SwitchComponent } from '@src/app/shared/components/hs-switch/hs-switch.component';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 
 const passwordRegex = /^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9\S]{8,20}$/;
 
@@ -34,7 +35,7 @@ export function passwordMatchValidator(control: AbstractControl): ValidationErro
     <div [formGroup]="passwordForm">
       <!-- 密码输入 -->
       <div class="flex mb-6 items-center">
-        <label class="w-120px text-right mr-20px">
+        <label class="w-160px text-right mr-20px">
           @if (passwordForm.get('password')!.invalid) {
             <span class="color-red">*</span>
           }
@@ -71,7 +72,7 @@ export function passwordMatchValidator(control: AbstractControl): ValidationErro
 
       <!-- 确认密码输入 -->
       <div class="flex mb-6 items-center">
-        <label class="w-120px text-right mr-20px">
+        <label class="w-160px text-right mr-20px">
           @if (passwordForm.get('confirmPassword')!.invalid) {
             <span class="color-red">*</span>
           }
@@ -106,12 +107,14 @@ export function passwordMatchValidator(control: AbstractControl): ValidationErro
       </div>
 
       <div class="flex mb-6 items-center">
-        <label class="w-120px text-right mr-20px">临时密码：</label>
+        <label class="w-160px text-right mr-20px flex items-center justify-end">
+          @let emailTooltip = '开启后，用户下次登录需要修改当前密码';
+          <mat-icon [matTooltip]="emailTooltip" class="text-18px! p-3px cursor-pointer">
+            question_mark
+          </mat-icon>
+          临时密码：
+        </label>
         <hs-switch formControlName="temporary"></hs-switch>
-        @let emailTooltip = '开启后，用户下次登录需要修改当前密码';
-        <mat-icon [matTooltip]="emailTooltip" class="text-18px! p-3px cursor-pointer"
-          >question_mark</mat-icon
-        >
       </div>
     </div>
   `,
@@ -141,6 +144,8 @@ export class PasswordFormComponent {
 
   hidePassword = signal(true);
   hideConfirmPassword = signal(true);
+
+  constructor(private authHttpService: AuthHttpService) {}
 
   getPassword(): string | null {
     return this.passwordForm.get('password')?.value!;

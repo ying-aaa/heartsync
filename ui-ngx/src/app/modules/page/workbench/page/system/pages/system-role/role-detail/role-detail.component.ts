@@ -3,7 +3,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { getParamFromRoute } from '@src/app/core/utils';
 import { RoleUserListComponent } from './user/role-user-list.component';
-import { IRoleMapping } from '@src/app/shared/models/user.model';
+import { IRoleInfo, IRoleMapping } from '@src/app/shared/models/user.model';
 import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import { RoleMappingComponent } from './mapping/role-mapping.component';
 import { RoleLiitosrooliComponent } from './liitosrooli/role-liitosrooli.component';
@@ -30,7 +30,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class RoleDetailComponent implements OnInit {
   roleId = input<string | null>(null);
 
-  roleMapping = signal<IRoleMapping | null>(null);
+  roleInfo = signal<IRoleInfo | null>(null);
 
   isLoading = signal<boolean>(false);
 
@@ -56,8 +56,8 @@ export class RoleDetailComponent implements OnInit {
         }),
       )
       .subscribe({
-        next: (roleMapping: IRoleMapping) => {
-          this.roleMapping.set(roleMapping);
+        next: (roleInfo: IRoleInfo) => {
+          this.roleInfo.set(roleInfo);
         },
       });
   }

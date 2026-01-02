@@ -3,7 +3,7 @@
     mat-dialog-title
     class="text-24px! line-height-36px! py-20px! color-[var(--title-text-color)]!"
   >
-    {{ data.userInfo.username }}
+    用户：{{ data.userInfo.username }}
   </div>
   <mat-divider></mat-divider>
   <mat-dialog-content class="h-0 flex-1 max-h-none!">
@@ -17,13 +17,18 @@
           <mat-icon class="text-20px w-20px! h-20px! mr-6px" matTooltip="详情">info</mat-icon>
           <span>详情</span>
         </ng-template>
-        <hs-create-user></hs-create-user>
+        <hs-user-form
+          class="block w-800px mx-auto"
+          [userId]="userId()"
+          [isEdit]="true"
+        ></hs-user-form>
       </mat-tab>
       <mat-tab class="color-[var(--title-text-color)]!">
         <ng-template mat-tab-label>
           <mat-icon class="text-20px w-20px! h-20px! mr-6px" matTooltip="凭证">vpn_key</mat-icon>
           <span>凭证</span>
         </ng-template>
+        <hs-user-credentials [userId]="userId()" [userInfo]="data.userInfo"></hs-user-credentials>
       </mat-tab>
       <mat-tab class="color-[var(--title-text-color)]!">
         <ng-template mat-tab-label>
@@ -32,12 +37,14 @@
           >
           <span>角色</span>
         </ng-template>
+        <hs-system-role-mappings [userId]="userId()"></hs-system-role-mappings>
       </mat-tab>
       <mat-tab class="color-[var(--title-text-color)]!">
         <ng-template mat-tab-label>
           <mat-icon class="text-20px w-20px! h-20px! mr-6px" matTooltip="组织">groups</mat-icon>
           <span>组织</span>
         </ng-template>
+        <hs-user-deparment [userId]="userId()"></hs-user-deparment>
       </mat-tab>
       <mat-tab class="color-[var(--title-text-color)]!">
         <ng-template mat-tab-label>

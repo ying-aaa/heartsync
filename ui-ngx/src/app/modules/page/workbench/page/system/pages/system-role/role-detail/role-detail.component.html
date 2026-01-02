@@ -15,7 +15,7 @@
         <mat-icon class="text-20px w-20px! h-20px! mr-6px"> person </mat-icon>
         <span>用户</span>
       </ng-template>
-      <hs-role-user-list [roleMapping]="roleMapping()"></hs-role-user-list>
+      <hs-role-user-list [roleInfo]="roleInfo()"></hs-role-user-list>
     </mat-tab>
     <mat-tab class="color-[var(--title-text-color)]!">
       <ng-template mat-tab-label>
@@ -29,14 +29,14 @@
         <mat-icon class="text-20px w-20px! h-20px! mr-6px"> tune </mat-icon>
         <span>属性</span>
       </ng-template>
-      <hs-role-attributes [roleMapping]="roleMapping()"></hs-role-attributes>
+      <hs-role-attributes [roleInfo]="roleInfo()"></hs-role-attributes>
     </mat-tab>
     <mat-tab class="color-[var(--title-text-color)]!">
       <ng-template mat-tab-label>
         <mat-icon class="text-20px w-20px! h-20px! mr-6px"> info </mat-icon>
         <span>详情</span>
       </ng-template>
-      <hs-role-mapping [roleMapping]="roleMapping()"></hs-role-mapping>
+      <hs-role-mapping [IRoleInfo]="roleInfo()"></hs-role-mapping>
     </mat-tab>
   </mat-tab-group>
 </content>

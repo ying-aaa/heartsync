@@ -18,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthHttpService } from '@src/app/core/http/auth.http.service';
-import { IRoleMapping } from '@src/app/shared/models/user.model';
+import { IRoleInfo, IRoleMapping } from '@src/app/shared/models/user.model';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -42,7 +42,7 @@ import { ToastrService } from 'ngx-toastr';
   ],
 })
 export class RoleMappingComponent implements OnInit {
-  roleMapping = input<IRoleMapping | null>(null);
+  IRoleInfo = input<IRoleInfo | null>(null);
 
   roleForm = new FormGroup({
     name: new FormControl({ value: '', disabled: true }),
@@ -54,7 +54,7 @@ export class RoleMappingComponent implements OnInit {
     private toastr: ToastrService,
   ) {
     effect(() => {
-      const roleMapping = this.roleMapping();
+      const roleMapping = this.IRoleInfo();
       if (roleMapping) {
         this.roleForm.patchValue(roleMapping);
       }

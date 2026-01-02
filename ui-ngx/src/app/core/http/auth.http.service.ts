@@ -4,6 +4,7 @@ import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import {
   IGroupInfo,
   IGroupRoleMappings,
+  IRoleInfo,
   IRoleMapping,
   IRoleRepresentation,
   IUserInfo,
@@ -39,11 +40,16 @@ export class AuthHttpService {
     return this.http.post<string>(`/uc/admin/realms/${this.realm}/users`, userInfo);
   }
 
+  // 更新用户信息
+  updateUserInfo(userId: string, userInfo: IUserInfo) {
+    return this.http.put<any>(`/uc/admin/realms/${this.realm}/users/${userId}`, userInfo);
+  }
+
   // 更新用户密码
   updateUserPassword(userId: string, password: string, temporary?: boolean) {
     return this.http.put<any>(`/uc/admin/realms/${this.realm}/users/${userId}/reset-password`, {
+      temporary,
       type: 'password',
-      temporary: true,
       value: password,
     });
   }
@@ -57,6 +63,31 @@ export class AuthHttpService {
   getUserRequiredCtions() {
     return this.http.get<Array<any>>(
       `/uc/admin/realms/${this.realm}/authentication/required-actions`,
+    );
+  }
+
+  // 用户信息
+  getUserInfo(userId: string, params: any = {}) {
+    return this.http.get<IUserInfo>(`/uc/admin/realms/${this.realm}/users/${userId}`, { params });
+  }
+
+  // 获取用户凭证
+  getUserCredentials(userId: string) {
+    return this.http.get<any>(`/uc/admin/realms/${this.realm}/users/${userId}/credentials`);
+  }
+
+  // 删除用户凭证
+  deleteUserCredential(userId: string, credentialId: string) {
+    return this.http.delete<any>(
+      `/uc/admin/realms/${this.realm}/users/${userId}/credentials/${credentialId}`,
+    );
+  }
+
+  // 获取用户角色映射
+  getUserRoleMappings(userId: string, params: any = {}) {
+    return this.http.get<IRoleMapping>(
+      `/uc/admin/realms/${this.realm}/users/${userId}/role-mappings`,
+      { params },
     );
   }
 
@@ -126,13 +157,13 @@ export class AuthHttpService {
 
   // 根据角色id获取领域角色详情
   getRealmRoleById(id: string) {
-    return this.http.get<IRoleMapping>(`/uc/admin/realms/${this.realm}/roles-by-id/${id}`);
+    return this.http.get<IRoleInfo>(`/uc/admin/realms/${this.realm}/roles-by-id/${id}`);
   }
 
   // 根据角色id获取角色关联的角色
   getRoleLiitosrooliById(id: string, pageLink: PageLink) {
     const params = pageLink.toQueryHttp();
-    return this.http.get<IRoleMapping[]>(
+    return this.http.get<IRoleInfo[]>(
       `/uc/admin/realms/${this.realm}/roles-by-id/${id}/composites`,
       {
         params,

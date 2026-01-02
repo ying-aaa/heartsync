@@ -5,7 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
-import { IRoleMapping } from '@src/app/shared/models/user.model';
+import { IRoleInfo } from '@src/app/shared/models/user.model';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   imports: [FormlyRunModule, HsLoadingModule, MatButtonModule, MatDividerModule],
 })
 export class GroupsAttributesComponent implements OnInit {
-  roleMapping = input<IRoleMapping | null>(null);
+  roleInfo = input<IRoleInfo | null>(null);
 
   loadingStatus = signal<boolean>(false);
 
@@ -95,16 +95,16 @@ export class GroupsAttributesComponent implements OnInit {
     private toastr: ToastrService,
   ) {
     effect(() => {
-      const roleMapping = this.roleMapping();
-      if (roleMapping) {
-        this.handlerGroupInfo(roleMapping);
+      const roleInfo = this.roleInfo();
+      if (roleInfo) {
+        this.handlerGroupInfo(roleInfo);
       }
     });
   }
 
   // 转换请求到的群组信息数据
-  handlerGroupInfo(roleMapping: IRoleMapping) {
-    const attributes = Object.entries(roleMapping.attributes || {}) as [string, string[]][];
+  handlerGroupInfo(roleInfo: IRoleInfo) {
+    const attributes = Object.entries(roleInfo.attributes || {}) as [string, string[]][];
 
     const attr = attributes.map(([key, value]) => {
       return value.map((value) => ({ key, value }));

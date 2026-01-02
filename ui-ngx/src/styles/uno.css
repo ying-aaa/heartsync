@@ -126,6 +126,7 @@
 .mt-12{margin-top:3rem;}
 .mt-12px\!{margin-top:12px !important;}
 .mt-1px{margin-top:1px;}
+.mt-20px{margin-top:20px;}
 .mt-22px\!{margin-top:22px !important;}
 .mt-30px{margin-top:30px;}
 .mt-5{margin-top:1.25rem;}
@@ -228,6 +229,7 @@
 .w-126px{width:126px;}
 .w-128px{width:128px;}
 .w-12px{width:12px;}
+.w-160px{width:160px;}
 .w-16px{width:16px;}
 .w-16px\!{width:16px !important;}
 .w-180px{width:180px;}
@@ -316,6 +318,7 @@
 .whitespace-normal{white-space:normal;}
 .whitespace-normal\!{white-space:normal !important;}
 .whitespace-nowrap{white-space:nowrap;}
+.break-all{word-break:break-all;}
 .b,
 .border,
 .border-1,

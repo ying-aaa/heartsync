@@ -148,11 +148,13 @@
 
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center" [attr.colspan]="displayedColumns().length">
-            @if (!loadingStatus()) {
-              <div class="absolute absolute-center text-18px">
-                <hs-svg name="empty" title="暂无数据"></hs-svg>
-              </div>
-            }
+            <div class="absolute absolute-center text-18px">
+              @if (!loadingStatus()) {
+                <ng-content select="[hs-empty]">
+                  <hs-svg name="empty" title="暂无数据"></hs-svg>
+                </ng-content>
+              }
+            </div>
           </td>
         </tr>
       </table>

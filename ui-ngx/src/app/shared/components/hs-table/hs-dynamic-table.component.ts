@@ -136,6 +136,7 @@ export class HsDynamicTableComponent implements OnInit {
   }
 
   getTableData() {
+    console.log('%c Line:139 🍅', 'color:#fca650');
     this.loadTableData$.next();
   }
 

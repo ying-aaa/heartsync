@@ -15,7 +15,7 @@ import {
   TextColumn,
   ActionColumn,
 } from '@src/app/shared/components/hs-table/table.model';
-import { IRoleMapping } from '@src/app/shared/models/user.model';
+import { IRoleInfo, IRoleMapping } from '@src/app/shared/models/user.model';
 import { map } from 'rxjs';
 
 @Component({
@@ -32,7 +32,7 @@ import { map } from 'rxjs';
   ],
 })
 export class RoleUserListComponent implements OnInit {
-  roleMapping = input<IRoleMapping | null>(null);
+  roleInfo = input<IRoleInfo | null>(null);
 
   searchValue = new FormControl('');
 
@@ -41,7 +41,7 @@ export class RoleUserListComponent implements OnInit {
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
       initExec: false,
-      tableStyle: { },
+      tableStyle: {},
       trRowStyle: { backgroundColor: 'var(--primary-bg-color)' },
       pageLink: this.pageLink,
       tableColumn: [
@@ -59,7 +59,7 @@ export class RoleUserListComponent implements OnInit {
       ],
       getData: () => {
         return this.authHttpService
-          .getRealmRoleUsers(this.roleMapping()!.name, this.pageLink)
+          .getRealmRoleUsers(this.roleInfo()!.name, this.pageLink)
           .pipe(map((data) => ({ data })));
       },
       layouts: ['paginator', 'total', 'first/last'],
@@ -78,9 +78,9 @@ export class RoleUserListComponent implements OnInit {
 
   constructor(private authHttpService: AuthHttpService) {
     effect(() => {
-      const roleMapping = this.roleMapping();
-      if (roleMapping) {
-        console.log('%c Line:83 🍻 roleMapping', 'color:#2eafb0', roleMapping);
+      const roleInfo = this.roleInfo();
+      if (roleInfo) {
+        console.log('%c Line:83 🍻 roleInfo', 'color:#2eafb0', roleInfo);
         this.pageLink.getData();
       }
     });

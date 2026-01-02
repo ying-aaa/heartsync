@@ -1,0 +1,21 @@
+<content class="wh-full flex flex-col">
+  <header
+    class="h-64px rounded-8px py-12px flex items-center justify-between bg-[var(--base-bg-color)]"
+  >
+    <div class="flex gap-12px hs-density--5">
+      <mat-form-field appearance="outline" class="hs-density--5">
+        <mat-label>搜索部门</mat-label>
+        <input matInput [formControl]="searchValue" placeholder="请输入角色名称" />
+      </mat-form-field>
+
+      <button mat-flat-button (click)="onQueryData()">查询</button>
+    </div>
+
+    <div class="flex gap-12px">
+      <!-- <button mat-flat-button color="primary" (click)="()">加入群组</button>
+      <button mat-raised-button color="warn" (click)="()">离开</button> -->
+    </div>
+  </header>
+
+  <hs-dynamic-table [tableConfig]="tableConfig()" class="h-full"></hs-dynamic-table>
+</content>

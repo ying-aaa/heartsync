@@ -13,6 +13,7 @@ export interface IUserInfo {
   password?: string;
   groups: any[];
   enabled: boolean;
+  createdTimestamp: number;
 }
 
 export interface IUserInfoAttributes {
@@ -72,10 +73,10 @@ export interface IClientMappings {
 export interface IClientMappingsAccount {
   id: string;
   client: string;
-  mappings: IRoleMapping[];
+  mappings: IRoleInfo[];
 }
 
-export interface IRoleMapping {
+export interface IRoleInfo {
   id: string;
   name: string;
   description: string;
@@ -83,6 +84,11 @@ export interface IRoleMapping {
   clientRole: boolean;
   containerId: string;
   attributes?: IAnyPropObj;
+}
+
+export interface IRoleMapping {
+  realmMappings: IRoleInfo[];
+  clientMappings: IClientMappings;
 }
 
 /**
@@ -148,4 +154,12 @@ export interface IRoleRepresentation {
    * 角色属性（键值对）
    */
   attributes?: { [key: string]: string[] };
+}
+
+export interface IUserCredential {
+  id: string;
+  type: string;
+  userLabel: string;
+  createdDate: string;
+  data: any;
 }

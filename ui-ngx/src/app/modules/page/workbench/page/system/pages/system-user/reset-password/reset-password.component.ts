@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, input, model, OnInit, ViewChild } from '@angular/core';
 import { PasswordFormComponent } from '../password-form/password-form.component';
 import { MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -31,7 +31,7 @@ import { MatInputModule } from '@angular/material/input';
 export class ResetPasswordComponent implements OnInit {
   @ViewChild(PasswordFormComponent) passwordFormComponent!: PasswordFormComponent;
 
-  username = new FormControl('');
+  username = model();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { userInfo: IUserInfo },
@@ -39,8 +39,8 @@ export class ResetPasswordComponent implements OnInit {
     private authHttpService: AuthHttpService,
     private toastrService: ToastrService,
   ) {
-    const username = this.data.userInfo.username;
-    this.username.setValue(username);
+    const username = this.data.userInfo?.username;
+    username && this.username.set(username);
   }
 
   ngOnInit() {}
@@ -56,7 +56,7 @@ export class ResetPasswordComponent implements OnInit {
     const temporary = this.passwordFormComponent.getTemporary();
     this.authHttpService.updateUserPassword(userId, password, temporary).subscribe((res) => {
       this.toastrService.success('密码重置成功');
-      this.matDialogRef.close(res);
+      this.matDialogRef.close(true);
     });
   }
 }

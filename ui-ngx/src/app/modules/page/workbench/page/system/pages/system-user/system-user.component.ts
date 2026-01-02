@@ -18,7 +18,7 @@ import {
   TagColumn,
 } from '@src/app/shared/components/hs-table/table.model';
 import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
-import { CreateUserComponent } from './create-user/create-user.component';
+import { UserFormComponent } from './user-form/user-form.component';
 import { IUserInfo } from '@src/app/shared/models/user.model';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ToastrService } from 'ngx-toastr';
@@ -163,7 +163,7 @@ export class SystemUserComponent implements OnInit {
   onAddUser() {
     const width = isMobile() ? '100vw' : '800px';
     const height = isMobile() ? '100vh' : 'auto';
-    const dialogRef = this.dialog.open(CreateUserComponent, {
+    const dialogRef = this.dialog.open(UserFormComponent, {
       width,
       height,
       minWidth: width,
