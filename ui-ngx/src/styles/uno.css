@@ -97,6 +97,8 @@
 .mb-12px\!{margin-bottom:12px !important;}
 .mb-18px{margin-bottom:18px;}
 .mb-32px{margin-bottom:32px;}
+.mb-4{margin-bottom:1rem;}
+.mb-40px\!{margin-bottom:40px !important;}
 .mb-4px{margin-bottom:4px;}
 .mb-5px{margin-bottom:5px;}
 .mb-6{margin-bottom:1.5rem;}
@@ -318,6 +320,7 @@
 .whitespace-normal{white-space:normal;}
 .whitespace-normal\!{white-space:normal !important;}
 .whitespace-nowrap{white-space:nowrap;}
+.whitespace-pre-wrap{white-space:pre-wrap;}
 .break-all{word-break:break-all;}
 .b,
 .border,
@@ -462,6 +465,7 @@
 .pt-10px\!{padding-top:10px !important;}
 .pt-12px{padding-top:12px;}
 .pt-20px{padding-top:20px;}
+.pt-20px\!{padding-top:20px !important;}
 .pt-30px\!{padding-top:30px !important;}
 .pt-3px{padding-top:3px;}
 .pt-48px{padding-top:48px;}

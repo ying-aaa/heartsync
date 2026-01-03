@@ -12,9 +12,9 @@ import {
 import { IUserInfo } from '@src/app/shared/models/user.model';
 import { UserFormComponent } from '../user-form/user-form.component';
 import { UserCredentialsComponent } from '../credentials/user-credentials.component';
-import { RoleMappingComponent } from '../../system-role/role-detail/mapping/role-mapping.component';
 import { UserRoleMappingsComponent } from '../../../common/system-role/system-role-mappings.component';
 import { UserDeparmentComponent } from '../deparment/user-deparment.component';
+import { UserSessionsComponent } from '../sessions/user-sessions.component';
 
 @Component({
   selector: 'hs-user-detail',
@@ -30,6 +30,7 @@ import { UserDeparmentComponent } from '../deparment/user-deparment.component';
     UserCredentialsComponent,
     UserRoleMappingsComponent,
     UserDeparmentComponent,
+    UserSessionsComponent,
   ],
 })
 export class UserDetailComponent implements OnInit {

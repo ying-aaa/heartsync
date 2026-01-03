@@ -34,14 +34,13 @@ export interface IUserGroup {
     MatSelectModule,
     HsDynamicTableModule,
   ],
-  standalone: true,
 })
 export class UserDeparmentComponent implements OnInit {
   userId = input<string | null>();
 
   searchValue = new FormControl('');
 
-  pageLink = new PageLink(0, 10);
+  pageLink = new PageLink(0, 10, [{ prop: 'search' }]);
 
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
@@ -74,7 +73,11 @@ export class UserDeparmentComponent implements OnInit {
     }),
   );
 
-  constructor(private authHttpService: AuthHttpService) {}
+  constructor(private authHttpService: AuthHttpService) {
+    this.searchValue.valueChanges.subscribe((value) => {
+      this.pageLink.changeSearch('search', value);
+    });
+  }
 
   ngOnInit() {
     if (this.userId()) {
@@ -94,7 +97,9 @@ export class UserDeparmentComponent implements OnInit {
       });
     }
     // 调用接口
-    return this.authHttpService.getUserGroups(this.userId()!) as Observable<IUserGroup[]>;
+    return this.authHttpService.getUserGroups(this.userId()!, this.pageLink) as Observable<
+      IUserGroup[]
+    >;
   }
 
   onLeaveDepartment(group: IUserGroup) {

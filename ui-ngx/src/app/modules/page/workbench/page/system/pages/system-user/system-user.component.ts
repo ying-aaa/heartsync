@@ -118,7 +118,9 @@ export class SystemUserComponent implements OnInit {
           return of([]);
         }
 
-        const orgObservables = users.map((user) => this.authHttpService.getUserGroups(user.id));
+        const orgObservables = users.map((user) =>
+          this.authHttpService.getUserGroups(user.id, new PageLink(0, 10)),
+        );
 
         return forkJoin(orgObservables).pipe(
           map((department) => {

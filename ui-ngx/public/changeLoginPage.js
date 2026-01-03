@@ -2,7 +2,6 @@
  * 调用该脚本，通过获取登录页样式配置，动态修改keyClock登录页的样式。
  */
 (function () {
-  console.log("%c Line:5 🥃", "color:#fca650");
   setTimeout(() => {
     document.body.style.display = "unset";
   }, 1000);
@@ -31,7 +30,7 @@
       "btnBg": "#3875c6",
       "btnTextColor": "#ffffff"
     },
-    "tenantCode": "gewu",
+    "tenantCode": "heartsync",
     "createdTime": 1693373699644,
     "updatedTime": 1748422993270
   }

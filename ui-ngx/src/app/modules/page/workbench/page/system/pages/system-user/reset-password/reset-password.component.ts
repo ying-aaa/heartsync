@@ -54,7 +54,7 @@ export class ResetPasswordComponent implements OnInit {
     const userId = this.data.userInfo.id;
     const password = this.passwordFormComponent.getPassword()!;
     const temporary = this.passwordFormComponent.getTemporary();
-    this.authHttpService.updateUserPassword(userId, password, temporary).subscribe((res) => {
+    this.authHttpService.resetUserPassword(userId, password, temporary).subscribe((res) => {
       this.toastrService.success('密码重置成功');
       this.matDialogRef.close(true);
     });

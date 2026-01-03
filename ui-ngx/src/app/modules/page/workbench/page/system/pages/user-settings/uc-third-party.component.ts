@@ -9,10 +9,7 @@ import { MatListModule } from '@angular/material/list';
   template: `
     <content class="wh-full">
       <div class="text-14px opacity-90">绑定后可使用第三方账户进行登录</div>
-      <mat-list
-        role="list"
-        class="mb-12px!"
-      >
+      <mat-list role="list" class="mb-12px!">
         <mat-list-item role="listitem">
           <img
             src="assets/svg/github.svg"
@@ -20,11 +17,7 @@ import { MatListModule } from '@angular/material/list';
             class="w-32px h-32px mr-8px bg-#fff rounded-32px"
           />
           <span class="inline-block w-30% line-height-24px">Github</span>
-          <button
-            mat-button
-            MatListItemMeta
-            class="absolute! right-0 top-50% -translate-y-50%"
-          >
+          <button mat-button MatListItemMeta class="absolute! right-0 top-50% -translate-y-50%">
             绑定
           </button>
         </mat-list-item>
@@ -36,11 +29,7 @@ import { MatListModule } from '@angular/material/list';
             class="w-32px h-32px mr-8px bg-#fff rounded-32px"
           />
           <span class="inline-block w-30% line-height-24px">微信</span>
-          <button
-            mat-button
-            MatListItemMeta
-            class="absolute! right-0 top-50% -translate-y-50%"
-          >
+          <button mat-button MatListItemMeta class="absolute! right-0 top-50% -translate-y-50%">
             绑定
           </button>
         </mat-list-item>
@@ -53,11 +42,7 @@ import { MatListModule } from '@angular/material/list';
             class="w-32px h-32px  mr-8px bg-#fff rounded-32px"
           />
           <span class="inline-block w-30% line-height-24px">QQ</span>
-          <button
-            mat-button
-            MatListItemMeta
-            class="absolute! right-0 top-50% -translate-y-50%"
-          >
+          <button mat-button MatListItemMeta class="absolute! right-0 top-50% -translate-y-50%">
             绑定
           </button>
         </mat-list-item>

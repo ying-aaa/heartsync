@@ -1,3 +1,4 @@
+import { KeycloakProfile } from 'keycloak-js';
 import { IAnyPropObj } from './system.model';
 
 // ----------------- 用户管理 -----------------
@@ -156,10 +157,37 @@ export interface IRoleRepresentation {
   attributes?: { [key: string]: string[] };
 }
 
+// 用户凭证
 export interface IUserCredential {
   id: string;
   type: string;
   userLabel: string;
   createdDate: string;
   data: any;
+}
+
+// 用户会话
+export interface IUserSession {
+  id: string;
+  username: string;
+  userId: string;
+  ipAddress: string;
+  start: number;
+  lastAccess: number;
+  rememberMe: boolean;
+  clients: IAnyPropObj;
+  transientUser: boolean;
+}
+
+export interface IUserGroup {
+  id: string;
+  name: string;
+  parentId: string;
+  path: string;
+  subGroups: IUserGroup[];
+}
+
+export interface IKeycloakProfile extends KeycloakProfile {
+  groups: IUserGroup[];
+  userProfileMetadata: any[];
 }

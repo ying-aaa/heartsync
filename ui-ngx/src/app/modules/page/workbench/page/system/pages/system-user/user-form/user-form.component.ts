@@ -133,7 +133,7 @@ export class UserFormComponent implements OnInit {
             this.dialogRef.close(true);
             this.toastrService.success('用户创建成功');
             const userId = response!.substring(response!.lastIndexOf('/') + 1);
-            return this.authHttpService.updateUserPassword(userId, password, temporary);
+            return this.authHttpService.resetUserPassword(userId, password, temporary);
           }),
         )
         .subscribe({
@@ -153,7 +153,7 @@ export class UserFormComponent implements OnInit {
   updateUser() {
     if (this.userFormRef.valid) {
       const userInfo: any = { ...this.userInfo(), ...this.userFormRef.value };
-      this.authHttpService.updateUserInfo(this.userId()!, userInfo).subscribe({
+      this.authHttpService.resetUserInfo(this.userId()!, userInfo).subscribe({
         next: () => {
           this.toastrService.success('用户更新成功');
           this.initUserInfo();

@@ -40,19 +40,31 @@ export class AuthHttpService {
     return this.http.post<string>(`/uc/admin/realms/${this.realm}/users`, userInfo);
   }
 
-  // 更新用户信息
-  updateUserInfo(userId: string, userInfo: IUserInfo) {
+  // 重置用户信息
+  resetUserInfo(userId: string, userInfo: IUserInfo) {
     return this.http.put<any>(`/uc/admin/realms/${this.realm}/users/${userId}`, userInfo);
   }
 
-  // 更新用户密码
-  updateUserPassword(userId: string, password: string, temporary?: boolean) {
+  // 更新用户信息
+  updateUserInfo(userInfo: IUserInfo) {
+    return this.http.post<any>(`/uc/realms/${this.realm}/account`, userInfo);
+  }
+
+  // 重置用户密码
+  resetUserPassword(userId: string, password: string, temporary?: boolean) {
     return this.http.put<any>(`/uc/admin/realms/${this.realm}/users/${userId}/reset-password`, {
       temporary,
       type: 'password',
       value: password,
     });
   }
+
+  // 更新用户密码
+  updateUserPassword(userId: string, password: string) {
+    return this.http.put<any>(`/uc/admin/realms/${this.realm}/account/password`, {});
+  }
+
+  // 用户重置自己的密码
 
   // 删除用户
   deleteUser(userId: string) {
@@ -91,13 +103,36 @@ export class AuthHttpService {
     );
   }
 
+  // 获取用户会话
+  getUserSessions(userId: string, params: any = {}) {
+    return this.http.get<any>(`/uc/admin/realms/${this.realm}/users/${userId}/sessions`, {
+      params,
+    });
+  }
+
+  // 退出会话
+  revokeSession(sessionId: string) {
+    return this.http.delete<any>(
+      `/uc/admin/realms/${this.realm}/sessions/${sessionId}?isOffline=false`,
+      {},
+    );
+  }
+
   // ----------------- 群组管理 -----------------
   // 根据用户id获取用户加入的群组
-  getUserGroups(userId: string, params: any = {}) {
+  getUserGroups(userId: string, pageLink: PageLink) {
+    const params = pageLink.toQueryHttp();
+    params.set('first', 0);
+    params.set('max', 101);
     return this.http.get<Array<IGroupInfo>>(
       `/uc/admin/realms/${this.realm}/users/${userId}/groups`,
       { params },
     );
+  }
+
+  // 获取当前用户加入的群组
+  getAuthUserGroups() {
+    return this.http.get<Array<IGroupInfo>>(`/uc/realms/${this.realm}/account/groups`);
   }
 
   // 获取群组列表

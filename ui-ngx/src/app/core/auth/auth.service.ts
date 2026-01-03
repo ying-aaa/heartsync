@@ -21,8 +21,7 @@ export class AuthService {
 
   readonly isAuthenticated = computed(() => this.state().isAuthenticated);
 
-  // 移除用户相关的计算属性，改用UserService
-  readonly username = computed(() => this.userService.username());
+  readonly nickname = computed(() => this.userService.nickname());
 
   constructor() {
     effect(() => {

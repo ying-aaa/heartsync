@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '@src/app/core/auth/auth.service';
 import { isMobile } from '@src/app/core/utils';
-import { UserSettingsComponent } from '../../user-settings/user-settings.component';
+import { UserSettingsComponent } from '@modules/page/workbench/page/system/pages/user-settings/user-settings.component';
 
 @Component({
   selector: 'hs-workbench-user-dropdown',
@@ -22,7 +22,7 @@ export class WorkbenchUserDropdownComponent implements OnInit {
 
   isAuthenticated = computed(() => this.authService.isAuthenticated());
 
-  username = computed(() => this.authService.username());
+  nickname = computed(() => this.authService.nickname());
 
   openUserSettings() {
     const width = isMobile() ? '100vw' : '880px';
