@@ -99,9 +99,9 @@ export class HsFileUploadComponent
   }
 
   private notifyValueChange(): void {
-      this.onChange(this._fileList);
-      this.fileListChange.emit(this._fileList);
-      this.cdr.detectChanges();
+    this.onChange(this._fileList);
+    this.fileListChange.emit(this._fileList);
+    this.cdr.detectChanges();
   }
 
   onFilesSelected(event: Event): void {
@@ -144,7 +144,7 @@ export class HsFileUploadComponent
       url: this.uploadUrl,
       isHTML5: true,
       additionalParameter: this.formData,
-      authToken: this.authToken,
+      authToken: this.authToken || 'Bearer ' + localStorage.getItem('access_token'),
       autoUpload: this.autoUpload,
       allowedFileType: this.allowedFileType,
       removeAfterUpload: true,
@@ -209,10 +209,8 @@ export class HsFileUploadComponent
       if (fileItem.isSuccess) {
         this._fileList[index].url = fileItem.serverResponse?.url || this._fileList[index].url;
         delete this._fileList[index].progress;
-        this.notifyValueChange();
-        return;
       }
-      this.fileListChange.emit(this._fileList);
+      this.notifyValueChange();
     }
   }
 

@@ -98,7 +98,7 @@ export class UserFormComponent implements OnInit {
     firstName: new FormControl('', [Validators.required, Validators.pattern(nameRegex)]),
     username: new FormControl('', [Validators.required, Validators.pattern(usernameRegex)]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    avater: new FormControl<IFileData[]>([]),
+    avatar: new FormControl<IFileData[]>([]),
     jobNumber: new FormControl(''),
     phoneNumber: new FormControl('', [Validators.pattern(phoneNumberRegex)]),
     description: new FormControl(''),
@@ -140,13 +140,13 @@ export class UserFormComponent implements OnInit {
       const userInfo: IUserInfo = this.userFormRef.value as any;
 
       userInfo.attributes = {
-        avater: [this.userFormRef.value.avater![0]?.url || ''],
+        avatar: [this.userFormRef.value.avatar![0]?.url || ''],
         jobNumber: [this.userFormRef.value.jobNumber || ''],
         phoneNumber: [this.userFormRef.value.phoneNumber || ''],
         description: [this.userFormRef.value.description || ''],
       };
 
-      Reflect.deleteProperty(userInfo, 'avater');
+      Reflect.deleteProperty(userInfo, 'avatar');
       Reflect.deleteProperty(userInfo, 'jobNumber');
       Reflect.deleteProperty(userInfo, 'phoneNumber');
       Reflect.deleteProperty(userInfo, 'description');
@@ -185,20 +185,21 @@ export class UserFormComponent implements OnInit {
     if (this.userFormRef.valid) {
       const userInfo: any = { ...this.userInfo(), ...this.userFormRef.value };
       userInfo.attributes = {
-        ...userInfo.attributes,
-        avater: [this.userFormRef.value.avater![0]?.url || ''],
+        ...(userInfo.attributes || {}),
+        avatar: [this.userFormRef.value.avatar![0]?.url || ''],
         jobNumber: [this.userFormRef.value.jobNumber || ''],
         phoneNumber: [this.userFormRef.value.phoneNumber || ''],
         description: [this.userFormRef.value.description || ''],
       };
 
-      Reflect.deleteProperty(userInfo, 'avater');
+      Reflect.deleteProperty(userInfo, 'avatar');
       Reflect.deleteProperty(userInfo, 'jobNumber');
       Reflect.deleteProperty(userInfo, 'phoneNumber');
       Reflect.deleteProperty(userInfo, 'description');
 
       this.authHttpService.resetUserInfo(this.userId()!, userInfo).subscribe({
         next: () => {
+          console.log('%c Line:202 🍯', 'color:#e41a6a');
           this.toastrService.success('用户更新成功');
           this.initUserInfo();
         },
@@ -241,20 +242,24 @@ export class UserFormComponent implements OnInit {
         }),
       )
       .subscribe((res) => {
-        console.log('%c 🌽 userInfo', 'color:#ea7e5c', res);
-        const { attributes } = res;
+        let attributes = res.attributes || {};
         this.userInfo.set(res);
-        this.userFormRef.patchValue({
+        const userInfo: any = {
           requiredActions: res.requiredActions || [],
           emailVerified: res.emailVerified,
           firstName: res.firstName,
           username: res.username,
           email: res.email,
-          avater: [{ id: 'user-avatar', name: 'user-avatar', url: attributes.avater?.[0] || '' }],
           jobNumber: attributes.jobNumber?.[0],
           phoneNumber: attributes.phoneNumber?.[0],
           description: attributes.description?.[0],
-        });
+        };
+        if (attributes.avatar?.[0]) {
+          userInfo.avatar = [
+            { id: 'user-avatar', name: 'user-avatar', url: attributes.avatar?.[0] || '' },
+          ];
+        }
+        this.userFormRef.patchValue(userInfo);
       });
   }
 

@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, OnInit, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,11 +10,9 @@ import { debounceTime } from 'rxjs';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { HsInlineEditorModule } from '@src/app/shared/components/hs-inline-editor/inline-editor.module';
-import {
-  ApplicationService,
-  IAppConfig,
-} from '@src/app/core/http/application.service';
+import { ApplicationService, IAppConfig } from '@src/app/core/http/application.service';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
+import { UserService } from '@src/app/core/auth/user.service';
 @Component({
   selector: 'hs-app-workbench',
   styleUrl: './app-workbench.component.less',
@@ -45,16 +38,18 @@ export class AppWorkbenchComponent implements OnInit {
 
   pageLink = new PageLink(0, 100);
 
+  nickname = computed(() => this.userService.nickname());
+
   constructor(
     private http: HttpClient,
     private applicationService: ApplicationService,
+    private userService: UserService,
   ) {
     this.appValue.valueChanges
       .pipe(debounceTime(500)) // 设置节流时间为500ms
       .subscribe((value) => {
         this.getAppList(value);
       });
-      
   }
 
   getAppList(value: string | null): void {

@@ -1,5 +1,6 @@
 import { KeycloakProfile } from 'keycloak-js';
 import { IAnyPropObj } from './system.model';
+import { IFileData } from './common-component';
 
 // ----------------- 用户管理 -----------------
 export interface IUserInfo {
@@ -14,12 +15,17 @@ export interface IUserInfo {
   password?: string;
   groups: any[];
   enabled: boolean;
+  avatar?: IFileData[];
+  jobNumber?: string;
+  phoneNumber?: string;
+  description?: string;
   createdTimestamp: number;
+  [key: string]: any;
 }
 
 export interface IUserInfoAttributes {
   locale?: string;
-  avater?: string[];
+  avatar?: string[];
   jobNumber?: string[];
   phoneNumber?: string[];
   description?: string[];

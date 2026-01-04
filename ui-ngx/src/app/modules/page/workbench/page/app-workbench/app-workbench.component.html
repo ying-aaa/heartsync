@@ -2,27 +2,18 @@
   <header class="py-12px flex justify-between items-end">
     <div class="h-120px flex flex-col justify-end gap-10px">
       <!-- <div> -->
-      <div class="text-24px font-bold">嗨，随心管理员</div>
+      <div class="text-24px font-bold">嗨，{{ nickname() }}</div>
       <div class="text-36px line-height-40px font-bold">下午好！</div>
       <!-- </div> -->
     </div>
     <div>
       <!-- <hs-inline-editor class="mb-8px"></hs-inline-editor> -->
 
-      <mat-form-field class="example-form-field w-240px">
+      <mat-form-field class="example-form-field w-240px" appearance="fill">
         <mat-label>搜索你的应用</mat-label>
-        <input
-          matInput
-          type="text"
-          [formControl]="appValue"
-        />
+        <input matInput type="text" [formControl]="appValue" />
         @if (appValue.getRawValue()) {
-          <button
-            matSuffix
-            mat-icon-button
-            aria-label="Clear"
-            (click)="appValue.setValue('')"
-          >
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="appValue.setValue('')">
             <mat-icon aria-hidden="false">close</mat-icon>
           </button>
         }
@@ -40,15 +31,9 @@
       <div scrollViewport>
         <div class="flex flex-wrap w-full pt-48px pb-24px gap-24px">
           @for (item of appList(); track $index) {
-            <div
-              class="workbench-app-card"
-              (click)="navigateToApp(item.id)"
-            >
+            <div class="workbench-app-card" (click)="navigateToApp(item.id)">
               <div class="w-120px h-120px rounded-16px">
-                <img
-                  class="wh-full rounded-12px"
-                  [src]="item.imageUrl"
-                />
+                <img class="wh-full rounded-12px" [src]="item.imageUrl" />
               </div>
               <div class="flex flex-col flex-1 text-14px">
                 <div class="text-18px line-height-36px">{{ item.name }}</div>
@@ -58,16 +43,10 @@
                 </div>
                 <div class="flex line-height-24px text-12px">
                   <!-- <span class="w-84px truncate"></span> -->
-                  <span class="truncate">{{
-                    item.updatedAt | date: 'YYYY-MM-dd HH:mm:ss'
-                  }}</span>
+                  <span class="truncate">{{ item.updatedAt | date: 'YYYY-MM-dd HH:mm:ss' }}</span>
                 </div>
-                <mat-divider
-                  class="w-100% mt-12px! mb-7px! my-auto!"
-                ></mat-divider>
-                <div
-                  class="flex line-height-24px h-0 flex-1 items-center justify-around"
-                >
+                <mat-divider class="w-100% mt-12px! mb-7px! my-auto!"></mat-divider>
+                <div class="flex line-height-24px h-0 flex-1 items-center justify-around">
                   @let actionaConfig =
                     [
                       { iconUrl: '/assets/workbench/edit.png', size: 16 },
@@ -75,17 +54,10 @@
                     ];
                   @for (item of actionaConfig; track $index) {
                     <span>
-                      <img
-                        [width]="item.size"
-                        [height]="item.size"
-                        [src]="item.iconUrl"
-                      />
+                      <img [width]="item.size" [height]="item.size" [src]="item.iconUrl" />
                     </span>
                     @if ($index < actionaConfig.length - 1) {
-                      <mat-divider
-                        [vertical]="true"
-                        class="h-80%"
-                      ></mat-divider>
+                      <mat-divider [vertical]="true" class="h-80%"></mat-divider>
                     }
                   }
                 </div>

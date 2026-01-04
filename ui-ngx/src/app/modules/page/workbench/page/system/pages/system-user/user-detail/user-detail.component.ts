@@ -15,6 +15,8 @@ import { UserCredentialsComponent } from '../credentials/user-credentials.compon
 import { UserRoleMappingsComponent } from '../../../common/system-role/system-role-mappings.component';
 import { UserDeparmentComponent } from '../deparment/user-deparment.component';
 import { UserSessionsComponent } from '../sessions/user-sessions.component';
+import { MatButtonModule } from '@angular/material/button';
+import { AuthHttpService } from '@src/app/core/http/auth.http.service';
 
 @Component({
   selector: 'hs-user-detail',
@@ -31,6 +33,7 @@ import { UserSessionsComponent } from '../sessions/user-sessions.component';
     UserRoleMappingsComponent,
     UserDeparmentComponent,
     UserSessionsComponent,
+    MatButtonModule,
   ],
 })
 export class UserDetailComponent implements OnInit {
@@ -41,9 +44,18 @@ export class UserDetailComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { userInfo: IUserInfo },
     public matDialogRef: MatDialogRef<UserDetailComponent>,
+    private authHttpService: AuthHttpService,
   ) {
     if (data.userInfo) {
       this.userId.set(data.userInfo.id);
+    }
+  }
+
+  simulationUser() {
+    if (window.confirm('确定要模拟登录此用户吗？')) {
+      this.authHttpService.simulationUser(this.userId()!).subscribe((res) => {
+        window.open(res.redirect);
+      });
     }
   }
 

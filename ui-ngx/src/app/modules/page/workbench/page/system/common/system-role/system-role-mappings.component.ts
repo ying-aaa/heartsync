@@ -112,7 +112,8 @@ export class UserRoleMappingsComponent implements OnInit {
 
   getRoleMappings() {
     this.authHttpService.getUserRoleMappings(this.userId()!).subscribe((res) => {
-      const { realmMappings, clientMappings } = res;
+      const realmMappings = res.realmMappings || [];
+      const clientMappings = res.clientMappings || {};
       const appList = [
         { name: 'realm', id: 'realm', label: '系统角色' },
         ...Object.values(clientMappings).map((value: IClientMappingsAccount) => ({

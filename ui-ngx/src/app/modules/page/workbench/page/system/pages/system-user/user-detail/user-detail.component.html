@@ -3,7 +3,11 @@
     mat-dialog-title
     class="text-24px! line-height-36px! py-20px! color-[var(--title-text-color)]!"
   >
-    用户：{{ data.userInfo.username }}
+    <div class="flex! justify-between items-center">
+      <span>用户：{{ data.userInfo.username }}</span>
+
+      <button mat-flat-button (click)="simulationUser()">模拟</button>
+    </div>
   </div>
   <mat-divider></mat-divider>
   <mat-dialog-content class="h-0 flex-1 max-h-none!">
@@ -17,10 +21,7 @@
           <mat-icon class="text-20px w-20px! h-20px! mr-6px" matTooltip="详情">info</mat-icon>
           <span>详情</span>
         </ng-template>
-        <hs-user-form
-          [userId]="userId()"
-          [isEdit]="true"
-        ></hs-user-form>
+        <hs-user-form [userId]="userId()" [isEdit]="true"></hs-user-form>
       </mat-tab>
       <mat-tab class="color-[var(--title-text-color)]!">
         <ng-template mat-tab-label>

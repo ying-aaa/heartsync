@@ -51,7 +51,10 @@ export class UserService {
       .pipe(
         debounceTime(300),
         switchMap(() =>
-          forkJoin([this.loadUserProfile(), this.authHttpService.getAuthUserGroups()]),
+          forkJoin([
+            this.loadUserProfile(),
+            // this.authHttpService.getAuthUserGroups()
+          ]),
         ),
         takeUntilDestroyed(this.destroyRef),
       )

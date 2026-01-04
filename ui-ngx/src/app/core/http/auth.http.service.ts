@@ -118,6 +118,11 @@ export class AuthHttpService {
     );
   }
 
+  // 模拟用户
+  simulationUser(userId: string) {
+    return this.http.post<any>(`/uc/admin/realms/${this.realm}/users/${userId}/impersonation`, {});
+  }
+
   // ----------------- 群组管理 -----------------
   // 根据用户id获取用户加入的群组
   getUserGroups(userId: string, pageLink: PageLink) {

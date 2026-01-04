@@ -46,6 +46,7 @@ export class AuthService {
             status: undefined,
           });
           this.userService.clearUser(); // 使用用户服务清除信息
+          localStorage.removeItem('access_token');
           break;
       }
     });
@@ -55,6 +56,7 @@ export class AuthService {
     const isAuthenticated = typeEventArgs<boolean>(event.args);
     this.state.update((s) => ({ ...s, isAuthenticated }));
     if (isAuthenticated) {
+      localStorage.setItem('access_token', this.getToken()!);
       this.userService.loadProfileTrigger.next();
     }
   }
