@@ -1,4 +1,4 @@
-import { input, Component, computed, OnInit } from '@angular/core';
+import { input, Component, computed, OnInit, effect } from '@angular/core';
 import { isImage, isVideo } from '@src/app/core/utils';
 @Component({
   selector: 'hs-file-grid-list',
@@ -97,5 +97,10 @@ export class HsFileGridListComponent implements OnInit {
 
   gridTemplateColumns = computed(() => `repeat(${this.cols()}, minmax(0, 1fr))`);
 
-  ngOnInit(): void {}
+  constructor() {
+
+  }
+
+  ngOnInit(): void {
+  }
 }

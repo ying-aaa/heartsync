@@ -18,7 +18,11 @@ export interface IUserInfo {
 }
 
 export interface IUserInfoAttributes {
-  locale: string;
+  locale?: string;
+  avater?: string[];
+  jobNumber?: string[];
+  phoneNumber?: string[];
+  description?: string[];
 }
 
 export interface IUserRequiredAction {

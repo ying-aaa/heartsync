@@ -1,167 +1,298 @@
-<content class="wh-full flex flex-col">
+<content
+  class="wh-full flex flex-col"
+  hs-loading
+  [isLoading]="isLoading()"
+>
   @if (!isEdit()) {
-    <div mat-dialog-title>创建用户</div>
-    <mat-divider></mat-divider>
+  <div mat-dialog-title>创建用户</div>
+  <mat-divider></mat-divider>
   }
   <mat-dialog-content class="h-0 flex-1 max-h-none!">
-    <form
-      [formGroup]="userFormRef"
-      (ngSubmit)="onSubmit()"
-      class="hs-density--3 max-w-xl mx-auto pt-12px"
+    <ng-scrollbar
+      externalViewport
+      #scrollbarRef="ngScrollbar"
+      visibility="hover"
+      appearance="compact"
+      orientation="auto"
+      class="h-full"
     >
-      @if (isEdit()) {
-        <div class="flex mb-6 items-center">
-          <label class="w-160px text-right mr-20px">
-            @if (userFormRef.get('firstName')!.invalid) {
+      <div scrollViewport>
+        <form
+          [formGroup]="userFormRef"
+          (ngSubmit)="onSubmit()"
+          class="hs-density--3 max-w-xl mx-auto pt-12px"
+        >
+          @if (isEdit()) {
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px">
+              @if (userFormRef.get('firstName')!.invalid) {
               <span class="color-red">*</span>
-            }
-            ID：</label
-          >
-          <mat-form-field appearance="outline" class="flex-1">
-            <input
-              readonly
-              matInput
-              [value]="userInfo().id"
-              class="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </mat-form-field>
-        </div>
-        <div class="flex mb-6 items-center">
-          <label class="w-160px text-right mr-20px">
-            @if (userFormRef.get('firstName')!.invalid) {
+              }
+              ID：</label>
+            <mat-form-field
+              appearance="outline"
+              class="flex-1"
+            >
+              <input
+                readonly
+                matInput
+                [value]="userInfo().id"
+                class="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </mat-form-field>
+          </div>
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px">
+              @if (userFormRef.get('firstName')!.invalid) {
               <span class="color-red">*</span>
-            }
-            创建时间：</label
-          >
-          <mat-form-field appearance="outline" class="flex-1">
-            <input
-              readonly
-              matInput
-              [value]="userInfo().createdTimestamp | date: 'yyyy-MM-dd HH:mm:ss'"
-              class="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </mat-form-field>
-        </div>
-      }
-      <div class="flex mb-6 items-center">
-        <label class="w-160px text-right mr-20px flex flex-center justify-end">
-          @let userTooltip =
-            '用户登录时需要执行操作。“验证电子邮件”将向用户发送电子邮件以验证其电子邮件地址。“更新个人资料”要求用户输入新的个人信息。“更新密码”要求用户输入新密码。“配置OTP”需要设置动态密码生成器。';
-          <mat-icon [matTooltip]="userTooltip" class="text-18px! p-3px cursor-pointer">
-            question_mark
-          </mat-icon>
-          必需的用户操作：
-        </label>
-        <mat-form-field appearance="outline" class="full-width" floatLabel="always" class="flex-1">
-          <hs-chips-autocomplete
-            formControlName="requiredActions"
-            [options]="userRuquiredActions()"
-            labelField="label"
-            valueField="providerId"
-          >
-          </hs-chips-autocomplete>
-          @let requiredActionsValidate = userFormRef.get('requiredActions')?.errors?.['required'];
-          @if (requiredActionsValidate) {
-            <mat-error class="text-red-500"> 用户必需操作是必填项 </mat-error>
+              }
+              创建时间：</label>
+            <mat-form-field
+              appearance="outline"
+              class="flex-1"
+            >
+              <input
+                readonly
+                matInput
+                [value]="userInfo().createdTimestamp | date: 'yyyy-MM-dd HH:mm:ss'"
+                class="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </mat-form-field>
+          </div>
           }
-        </mat-form-field>
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px flex flex-center justify-end">
+              @let userTooltip =
+              '用户登录时需要执行操作。“验证电子邮件”将向用户发送电子邮件以验证其电子邮件地址。“更新个人资料”要求用户输入新的个人信息。“更新密码”要求用户输入新密码。“配置OTP”需要设置动态密码生成器。';
+              <mat-icon
+                [matTooltip]="userTooltip"
+                class="text-18px! p-3px cursor-pointer"
+              >
+                question_mark
+              </mat-icon>
+              必需的用户操作：
+            </label>
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              floatLabel="always"
+              class="flex-1"
+            >
+              <hs-chips-autocomplete
+                formControlName="requiredActions"
+                [options]="userRuquiredActions()"
+                labelField="label"
+                valueField="providerId"
+                placeholder="请选择必须的用户操作"
+              >
+              </hs-chips-autocomplete>
+              @let requiredActionsValidate = userFormRef.get('requiredActions')?.errors?.['required'];
+              @if (requiredActionsValidate) {
+              <mat-error class="text-red-500"> 用户必需操作是必填项 </mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px flex flex-center justify-end">
+              @let emailTooltip = '用户的电子邮件是否已验证？';
+              <mat-icon
+                [matTooltip]="emailTooltip"
+                class="text-18px! p-3px cursor-pointer"
+              >
+                question_mark
+              </mat-icon>
+              电子邮箱验证：
+            </label>
+            <hs-switch formControlName="emailVerified"></hs-switch>
+          </div>
+
+          <h2 class="text-18px font-bold mb-6">常规设置</h2>
+
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px">
+              @if (userFormRef.get('username')!.invalid) {
+              <span class="color-red">*</span>
+              }
+              账号：</label>
+            <mat-form-field
+              appearance="outline"
+              class="flex-1"
+            >
+              <input
+                matInput
+                formControlName="username"
+                required
+                class="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="请输入用户账号"
+              />
+              @let userNameValidate = userFormRef.get('username')?.errors?.['required'];
+              @if (userNameValidate) {
+              <mat-error class="text-red-500"> 账号是必填项 </mat-error>
+              }
+              @let isUsername = userFormRef.get('username')?.errors?.['pattern'];
+              @if (isUsername) {
+              <mat-error class="text-red-500">账号只能包含字母、数字和下划线</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          @if (!isEdit()) {
+          <hs-password-form></hs-password-form>
+          }
+
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px">
+              @if (userFormRef.get('firstName')!.invalid) {
+              <span class="color-red">*</span>
+              }
+              姓名：</label>
+            <mat-form-field
+              appearance="outline"
+              class="flex-1"
+            >
+              <input
+                matInput
+                formControlName="firstName"
+                class="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="请输入用户姓名"
+              />
+              @let firstNameRequired = userFormRef.get('firstName')?.errors?.['required'];
+              @if (firstNameRequired) {
+              <mat-error class="text-red-500"> 姓名是必填项 </mat-error>
+              }
+              @let isFirstname = userFormRef.get('firstName')?.errors?.['pattern'];
+              @if (isFirstname) {
+              <mat-error class="text-red-500">名字只能包含字母、空格、连字符和撇号</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px">
+              @if (userFormRef.get('email')!.invalid) {
+              <span class="color-red">*</span>
+              }
+              电子邮件：</label>
+            <mat-form-field
+              appearance="outline"
+              class="flex-1"
+            >
+              <input
+                matInput
+                formControlName="email"
+                required
+                class="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="请输入用户邮箱"
+              />
+              @let emailRequired = userFormRef.get('email')?.errors?.['required'];
+              @if (emailRequired) {
+              <mat-error class="text-red-500"> 电子邮件是必填项 </mat-error>
+              }
+              @let isEmail = userFormRef.get('email')?.errors?.['email'];
+              @if (isEmail) {
+              <mat-error class="text-red-500">请输入正确的邮箱格式</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <h2 class="text-18px font-bold mb-6">信息设置</h2>
+
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px">
+              @if (userFormRef.get('jobNumber')!.invalid) {
+              <span class="color-red">*</span>
+              }
+              头像：</label>
+            <hs-file-upload
+              [fold]="true"
+              fileShowType="grid"
+              formControlName="avatar"
+              [multiple]="false"
+              [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
+              class="flex-1"
+              [maxCount]="1"
+              [cols]="3"
+              class="flex-1 w-120px h-120px block"
+            ></hs-file-upload>
+          </div>
+
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px">
+              @if (userFormRef.get('jobNumber')!.invalid) {
+              <span class="color-red">*</span>
+              }
+              工号：</label>
+            <mat-form-field
+              appearance="outline"
+              class="flex-1"
+            >
+              <input
+                matInput
+                formControlName="jobNumber"
+                class="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="请输入用户工号"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px">
+              @if (userFormRef.get('phoneNumber')!.invalid) {
+              <span class="color-red">*</span>
+              }
+              手机号：</label>
+            <mat-form-field
+              appearance="outline"
+              class="flex-1"
+            >
+              <input
+                matInput
+                formControlName="phoneNumber"
+                class="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="请输入手机号码"
+                type="tel"
+              />
+
+              @if(userFormRef.get('phoneNumber')?.errors?.['pattern']) {
+              <mat-error>请输入正确格式的手机号码</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <!-- 简介 -->
+          <div class="flex mb-6 items-center">
+            <label class="w-160px text-right mr-20px">简介：</label>
+            <mat-form-field
+              appearance="outline"
+              class="flex-1"
+            >
+              <input
+                type="textarea"
+                matInput
+                formControlName="description"
+                placeholder="请输入用户简介"
+                class="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </mat-form-field>
+          </div>
+        </form>
       </div>
 
-      <div class="flex mb-6 items-center">
-        <label class="w-160px text-right mr-20px flex flex-center justify-end">
-          @let emailTooltip = '用户的电子邮件是否已验证？';
-          <mat-icon [matTooltip]="emailTooltip" class="text-18px! p-3px cursor-pointer">
-            question_mark
-          </mat-icon>
-          电子邮箱验证：
-        </label>
-        <hs-switch formControlName="emailVerified"></hs-switch>
-      </div>
-
-      <h2 class="text-18px font-bold mb-6">常规设置</h2>
-
-      <div class="flex mb-6 items-center">
-        <label class="w-160px text-right mr-20px">
-          @if (userFormRef.get('firstName')!.invalid) {
-            <span class="color-red">*</span>
-          }
-          姓名：</label
-        >
-        <mat-form-field appearance="outline" class="flex-1">
-          <input
-            matInput
-            formControlName="firstName"
-            class="w-full p-2 border border-gray-300 rounded-md"
-          />
-          @let firstNameRequired = userFormRef.get('firstName')?.errors?.['required'];
-          @if (firstNameRequired) {
-            <mat-error class="text-red-500"> 姓名是必填项 </mat-error>
-          }
-          @let isFirstname = userFormRef.get('firstName')?.errors?.['pattern'];
-          @if (isFirstname) {
-            <mat-error class="text-red-500">名字只能包含字母、空格、连字符和撇号</mat-error>
-          }
-        </mat-form-field>
-      </div>
-
-      <div class="flex mb-6 items-center">
-        <label class="w-160px text-right mr-20px">
-          @if (userFormRef.get('username')!.invalid) {
-            <span class="color-red">*</span>
-          }
-          账号：</label
-        >
-        <mat-form-field appearance="outline" class="flex-1">
-          <input
-            matInput
-            formControlName="username"
-            required
-            class="w-full p-2 border border-gray-300 rounded-md"
-          />
-          @let userNameValidate = userFormRef.get('username')?.errors?.['required'];
-          @if (userNameValidate) {
-            <mat-error class="text-red-500"> 账号是必填项 </mat-error>
-          }
-          @let isUsername = userFormRef.get('username')?.errors?.['pattern'];
-          @if (isUsername) {
-            <mat-error class="text-red-500">账号只能包含字母、数字和下划线</mat-error>
-          }
-        </mat-form-field>
-      </div>
-
-      @if (!isEdit()) {
-        <hs-password-form></hs-password-form>
-      }
-
-      <div class="flex mb-6 items-center">
-        <label class="w-160px text-right mr-20px">
-          @if (userFormRef.get('email')!.invalid) {
-            <span class="color-red">*</span>
-          }
-          电子邮件：</label
-        >
-        <mat-form-field appearance="outline" class="flex-1">
-          <input
-            matInput
-            formControlName="email"
-            required
-            class="w-full p-2 border border-gray-300 rounded-md"
-          />
-          @let emailRequired = userFormRef.get('email')?.errors?.['required'];
-          @if (emailRequired) {
-            <mat-error class="text-red-500"> 电子邮件是必填项 </mat-error>
-          }
-          @let isEmail = userFormRef.get('email')?.errors?.['email'];
-          @if (isEmail) {
-            <mat-error class="text-red-500">请输入正确的邮箱格式</mat-error>
-          }
-        </mat-form-field>
-      </div>
-    </form>
+    </ng-scrollbar>
   </mat-dialog-content>
   <mat-divider></mat-divider>
-  <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>取消</button>
-    <button mat-flat-button (click)="onSubmit()">确定</button>
+  <mat-dialog-actions
+    class="w-600px mx-auto!"
+    align="end"
+  >
+    <button
+      mat-button
+      mat-dialog-close
+    >取消</button>
+    <button
+      mat-flat-button
+      (click)="onSubmit()"
+    >确定</button>
   </mat-dialog-actions>
 </content>

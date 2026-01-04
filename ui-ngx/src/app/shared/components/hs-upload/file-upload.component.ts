@@ -99,11 +99,9 @@ export class HsFileUploadComponent
   }
 
   private notifyValueChange(): void {
-    const valueCopy = [...this._fileList];
-    setTimeout(() => {
-      this.onChange(valueCopy);
-      this.fileListChange.emit(valueCopy);
-    });
+      this.onChange(this._fileList);
+      this.fileListChange.emit(this._fileList);
+      this.cdr.detectChanges();
   }
 
   onFilesSelected(event: Event): void {

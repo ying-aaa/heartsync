@@ -164,7 +164,7 @@ export class SystemUserComponent implements OnInit {
 
   onAddUser() {
     const width = isMobile() ? '100vw' : '800px';
-    const height = isMobile() ? '100vh' : 'auto';
+    const height = isMobile() ? '100vh' : '720px';
     const dialogRef = this.dialog.open(UserFormComponent, {
       width,
       height,

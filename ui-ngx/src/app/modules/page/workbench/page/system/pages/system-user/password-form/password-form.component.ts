@@ -48,6 +48,7 @@ export function passwordMatchValidator(control: AbstractControl): ValidationErro
             formControlName="password"
             required
             class="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="请输入密码"
           />
           <button
             mat-icon-button
@@ -85,6 +86,7 @@ export function passwordMatchValidator(control: AbstractControl): ValidationErro
             formControlName="confirmPassword"
             required
             class="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="请输入确认密码"
           />
           <button
             mat-icon-button

@@ -35,14 +35,20 @@ import { userRequiredCtions } from '../data';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ChipsAutocompleteComponent } from '@shared/components/hs-chips-autocomplete/hs-chips-autocomplete.component';
-import { map, of, switchMap } from 'rxjs';
+import { finalize, map, of, switchMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { PasswordFormComponent } from '../password-form/password-form.component';
 import { SwitchComponent } from '@src/app/shared/components/hs-switch/hs-switch.component';
 import { DatePipe } from '@angular/common';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
+import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-file.module';
+import { HS_BUCKET } from '@src/app/shared/models/public-api';
+import { IFileData } from '@src/app/shared/models/common-component';
 
 const nameRegex = /^[a-zA-Z\u4e00-\u9fa5\s'-.]+$/;
 const usernameRegex = /^[a-zA-Z0-9][a-zA-Z0-9_]*$/;
+const phoneNumberRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
 
 @Component({
   selector: 'hs-user-form',
@@ -71,10 +77,16 @@ const usernameRegex = /^[a-zA-Z0-9][a-zA-Z0-9_]*$/;
     PasswordFormComponent,
     SwitchComponent,
     DatePipe,
+    NgScrollbarModule,
+    HsLoadingModule,
+    HsUploadFileModule,
   ],
 })
 export class UserFormComponent implements OnInit {
   @ViewChild(PasswordFormComponent) passwordFormComponent!: PasswordFormComponent;
+
+  bucket = HS_BUCKET;
+  folderName = 'common-images';
 
   isEdit = input<boolean>(false);
 
@@ -86,12 +98,18 @@ export class UserFormComponent implements OnInit {
     firstName: new FormControl('', [Validators.required, Validators.pattern(nameRegex)]),
     username: new FormControl('', [Validators.required, Validators.pattern(usernameRegex)]),
     email: new FormControl('', [Validators.required, Validators.email]),
+    avater: new FormControl<IFileData[]>([]),
+    jobNumber: new FormControl(''),
+    phoneNumber: new FormControl('', [Validators.pattern(phoneNumberRegex)]),
+    description: new FormControl(''),
     groups: new FormControl([]),
   });
 
   userRuquiredActions = signal<IUserRequiredAction[]>([]);
 
   userInfo = signal<IUserInfo>({} as IUserInfo);
+
+  isLoading = signal(false);
 
   constructor(
     private dialogRef: MatDialogRef<UserFormComponent>,
@@ -120,6 +138,19 @@ export class UserFormComponent implements OnInit {
 
     if (this.userFormRef.valid) {
       const userInfo: IUserInfo = this.userFormRef.value as any;
+
+      userInfo.attributes = {
+        avater: [this.userFormRef.value.avater![0]?.url || ''],
+        jobNumber: [this.userFormRef.value.jobNumber || ''],
+        phoneNumber: [this.userFormRef.value.phoneNumber || ''],
+        description: [this.userFormRef.value.description || ''],
+      };
+
+      Reflect.deleteProperty(userInfo, 'avater');
+      Reflect.deleteProperty(userInfo, 'jobNumber');
+      Reflect.deleteProperty(userInfo, 'phoneNumber');
+      Reflect.deleteProperty(userInfo, 'description');
+
       const password = this.passwordFormComponent?.getPassword()!;
       const temporary = this.passwordFormComponent?.getTemporary();
 
@@ -153,6 +184,19 @@ export class UserFormComponent implements OnInit {
   updateUser() {
     if (this.userFormRef.valid) {
       const userInfo: any = { ...this.userInfo(), ...this.userFormRef.value };
+      userInfo.attributes = {
+        ...userInfo.attributes,
+        avater: [this.userFormRef.value.avater![0]?.url || ''],
+        jobNumber: [this.userFormRef.value.jobNumber || ''],
+        phoneNumber: [this.userFormRef.value.phoneNumber || ''],
+        description: [this.userFormRef.value.description || ''],
+      };
+
+      Reflect.deleteProperty(userInfo, 'avater');
+      Reflect.deleteProperty(userInfo, 'jobNumber');
+      Reflect.deleteProperty(userInfo, 'phoneNumber');
+      Reflect.deleteProperty(userInfo, 'description');
+
       this.authHttpService.resetUserInfo(this.userId()!, userInfo).subscribe({
         next: () => {
           this.toastrService.success('用户更新成功');
@@ -188,16 +232,30 @@ export class UserFormComponent implements OnInit {
   }
 
   initUserInfo() {
-    this.authHttpService.getUserInfo(this.userId()!).subscribe((res) => {
-      this.userInfo.set(res);
-      this.userFormRef.patchValue({
-        requiredActions: res.requiredActions || [],
-        emailVerified: res.emailVerified,
-        firstName: res.firstName,
-        username: res.username,
-        email: res.email,
+    this.isLoading.set(true);
+    this.authHttpService
+      .getUserInfo(this.userId()!)
+      .pipe(
+        finalize(() => {
+          this.isLoading.set(false);
+        }),
+      )
+      .subscribe((res) => {
+        console.log('%c 🌽 userInfo', 'color:#ea7e5c', res);
+        const { attributes } = res;
+        this.userInfo.set(res);
+        this.userFormRef.patchValue({
+          requiredActions: res.requiredActions || [],
+          emailVerified: res.emailVerified,
+          firstName: res.firstName,
+          username: res.username,
+          email: res.email,
+          avater: [{ id: 'user-avatar', name: 'user-avatar', url: attributes.avater?.[0] || '' }],
+          jobNumber: attributes.jobNumber?.[0],
+          phoneNumber: attributes.phoneNumber?.[0],
+          description: attributes.description?.[0],
+        });
       });
-    });
   }
 
   ngOnInit() {
