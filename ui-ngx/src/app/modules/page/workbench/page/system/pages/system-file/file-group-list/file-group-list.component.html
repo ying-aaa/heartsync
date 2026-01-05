@@ -1,0 +1,83 @@
+<style lang="less">
+  :host {
+    content {
+      ::ng-deep {
+        .hover-underline {
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<content class="wh-full flex flex-col overflow-hidden rounded-8px bg-[var(--base-bg-color)]">
+  <header class="py-12px flex items-center justify-center">
+    <div class="flex gap-12px">
+      <mat-form-field appearance="outline" class="hs-density--5 w-225px">
+        <input
+          matInput
+          placeholder="请输入组名称"
+          [formControl]="searchValue"
+          (keyup.enter)="onQueryData()"
+        />
+        @if (searchValue.getRawValue()) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="重置"
+            (click)="onResetData()"
+            class="mr-5px"
+          >
+            <mat-icon aria-hidden="false">close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </div>
+  </header>
+
+  <!-- <mat-divider></mat-divider> -->
+
+  <ng-scrollbar
+    externalViewport
+    #scrollbarRef="ngScrollbar"
+    visibility="hover"
+    appearance="compact"
+    orientation="auto"
+    class="h-0 flex-1"
+  >
+    <main
+      class="relative"
+      scrollViewport
+      hs-loading
+      [isLoading]="isLoading()"
+      hsEmptyState
+      emptyText="未找到组"
+      emptyImgClass="scale-100"
+      [isEmptyState]="!isLoading() && !fileGroupList().length"
+    >
+      <style>
+        ::ng-deep .mdc-list-item--activated .mdc-list-item__primary-text {
+          color: #2c7eac !important;
+        }
+      </style>
+      <mat-nav-list class="px-12px! py-0!">
+        @for (role of fileGroupList(); track role.id) {
+          <a
+            mat-list-item
+            href="#{{ role.id }}"
+            (click)="$event.preventDefault(); seletedGroupId.set(role.id)"
+            [activated]="seletedGroupId() === role.id"
+            class="opacity-80 h-36px! my-4px"
+            >{{ role.name }}</a
+          >
+        }
+      </mat-nav-list>
+    </main>
+  </ng-scrollbar>
+
+  <div class="px-12px py-16px">
+    <button class="w-full" mat-flat-button (click)="onAddGroup()">新增组</button>
+  </div>
+</content>

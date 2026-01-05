@@ -15,6 +15,7 @@ import { HsResource } from 'src/database/entities/hs-resource.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { UpdatedResourceDto } from './dto/updated-resource.dto';
+import { HsPaginationService } from 'src/common/services/pagination.service';
 
 @Injectable()
 export class HsUploadService {
@@ -26,6 +27,7 @@ export class HsUploadService {
     private readonly resourceRepository: Repository<HsResource>,
     @InjectRepository(HsResourceCategory)
     private readonly categoryRepository: Repository<HsResourceCategory>,
+    // private readonly paginationService: HsPaginationService,
   ) {
     this.minioClient = this.minioService.client;
   }
@@ -130,15 +132,13 @@ export class HsUploadService {
 
   // 获取分类下的资源列表
   async getResourcesByCategory(bucket: string, category_id: string) {
-    const category = await this.categoryRepository.findOne({
-      where: { id: category_id, bucket },
-    });
-    if (!category) {
-      throw new NotFoundException('分类不存在');
-    }
-
+    const where: {
+      bucket: string;
+      category_id?: string;
+    } = { bucket };
+    if (category_id !== 'all') where.category_id = category_id;
     return this.resourceRepository.find({
-      where: { bucket, category_id },
+      where,
     });
   }
 
@@ -229,7 +229,6 @@ export class HsUploadService {
 
   // 修改资源信息
   async updateResource(id: string, dto: UpdatedResourceDto) {
-    console.log('%c Line:232 🍢 id', 'color:#b03734', id);
     const { original_name, category_id: targetCategoryId } = dto;
     const resource = await this.resourceRepository.findOne({
       where: { id },
@@ -238,8 +237,7 @@ export class HsUploadService {
       throw new NotFoundException('资源不存在');
     }
 
-    const { bucket, category_id: sourceCategoryId, path, url } = resource;
-    console.log('%c Line:241 🍿 bucket', 'color:#2eafb0', bucket);
+    const { bucket, category_id: sourceCategoryId, path } = resource;
 
     if (targetCategoryId) {
       const category = await this.categoryRepository.findOne({
@@ -249,31 +247,29 @@ export class HsUploadService {
         throw new NotFoundException('分类不存在');
       }
       try {
-        const sourceKey = url;
-        console.log('%c Line:252 🥥 sourceKey', 'color:#93c0a4', sourceKey);
+        const sourceKey = path;
         // 旧的路径替换为新的路径
         const targetKey = path.replace(sourceCategoryId, targetCategoryId);
-        console.log('%c Line:255 🍩 targetKey', 'color:#465975', targetKey);
-        const res = await this.minioClient.statObject(bucket, sourceKey);
-        console.log('%c Line:255 🥟 res', 'color:#3f7cff', res);
 
+        //  先检查是否存在
+        await this.minioClient.statObject(bucket, sourceKey);
         // 复制对象到新路径
         await this.minioClient.copyObject(
           bucket,
           targetKey,
-          sourceKey,
+          `/${bucket}/${sourceKey}`,
           new Minio.CopyConditions(),
         );
-        console.log('%c Line:264 🌰', 'color:#3f7cff');
 
         // 删除原对象
         await this.minioClient.removeObject(bucket, sourceKey);
-        console.log('%c Line:268 🍰', 'color:#b03734');
       } catch (error) {
         throw new NotFoundException('资源移动失败' + error);
       }
 
       resource.category_id = targetCategoryId;
+      resource.path = resource.path.replace(sourceCategoryId, targetCategoryId);
+      resource.url = resource.url.replace(sourceCategoryId, targetCategoryId);
     }
 
     if (original_name) {

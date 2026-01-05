@@ -38,7 +38,10 @@ export class HsApplicationService {
     return this.applicationRepository.findOneBy({ id });
   }
 
-  async update(id: string, updateApplicationDto: any): Promise<HsApplicationEntity> {
+  async update(
+    id: string,
+    updateApplicationDto: any,
+  ): Promise<HsApplicationEntity> {
     await this.applicationRepository.update(id, updateApplicationDto);
     return this.applicationRepository.findOneBy({ id });
   }

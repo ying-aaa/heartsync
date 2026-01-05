@@ -97,13 +97,12 @@ export class UploadComponent implements OnInit {
     private uploadFileService: UploadFileService,
   ) {
     this.formGroup.valueChanges.subscribe((newModel) => {
-      this.model.set({...this.model()});
+      this.model.set({ ...this.model() });
     });
 
     effect(() => {
-
-      console.log("%c Line:106 🥒", "color:#7f2b82", this.model());
-    })
+      console.log('%c Line:106 🥒', 'color:#7f2b82', this.model());
+    });
   }
 
   ngOnInit() {}
