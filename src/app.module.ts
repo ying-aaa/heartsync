@@ -61,18 +61,18 @@ import {
   ],
   providers: [
     HsPaginationService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthGuard,
+    // },
     // {
     //   provide: APP_GUARD,
     //   useClass: ResourceGuard,
     // },
-    {
-      provide: APP_GUARD,
-      useClass: RoleGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RoleGuard,
+    // },
   ],
 })
 export class AppModule {

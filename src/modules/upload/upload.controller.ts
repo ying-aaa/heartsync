@@ -1,18 +1,22 @@
-// src/file/file.controller.ts
 import {
   Controller,
   Post,
   Get,
-  Delete,
   Query,
-  Param,
   UploadedFile,
   UseInterceptors,
+  Body,
+  Delete,
+  Param,
+  Put,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HsUploadService } from './upload.service';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
+import { UpdatedResourceDto } from './dto/updated-resource.dto';
 
-@Controller('files')
+@Controller('files') // 路径改为 resources
 export class HsFileController {
   constructor(private readonly uploadService: HsUploadService) {}
 
@@ -22,16 +26,52 @@ export class HsFileController {
     return this.uploadService.createBucket(bucketName);
   }
 
-  // 文件上传
+  // 创建分类（带排序）
+  @Post('categories')
+  async createCategory(@Body() category: CreateCategoryDto) {
+    return this.uploadService.createCategory(category);
+  }
+
+  // 修改分类
+  @Put('categories/:id')
+  async updateCategory(
+    @Param('id') id: string,
+    @Body() category: UpdateCategoryDto,
+  ) {
+    return this.uploadService.updateCategory(id, category);
+  }
+
+  // 获取分类列表（带排序）
+  @Get('categories')
+  async getCategories(@Query('bucket') bucket: string) {
+    return this.uploadService.getCategories(bucket);
+  }
+
+  // 获取分类下的资源列表
+  @Get('category')
+  async getResourcesByCategory(
+    @Query('category_id') category_id: string,
+    @Query('bucket') bucket: string,
+  ) {
+    return this.uploadService.getResourcesByCategory(bucket, category_id);
+  }
+
+  // 根据资源id获取资源信息
+  @Get('resources/:id')
+  async getResourceById(@Param('id') id: string) {
+    return this.uploadService.getResourceById(id);
+  }
+
+  // 资源上传
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(
+  async uploadResource(
     @UploadedFile() file: any,
     @Query('bucket') bucket: string,
     @Query('path') path?: string,
     @Query('access') access: 'public' | 'private' = 'public',
   ) {
-    return this.uploadService.uploadFile({
+    return this.uploadService.uploadResource({
       bucket,
       file,
       path,
@@ -39,31 +79,31 @@ export class HsFileController {
     });
   }
 
-  // 文件地址查询
-  @Get('url')
-  async getFileUrl(
-    @Query('bucket') bucket: string,
-    @Query('path') path?: string,
-    @Query('type') type: 'public' | 'private' = 'public',
+  // 修改资源信息
+  @Put('resources/:id')
+  async updateResource(
+    @Param('id') id: string,
+    @Body() resource: UpdatedResourceDto,
   ) {
-    return this.uploadService.getFileUrl(bucket, path, type);
+    return this.uploadService.updateResource(id, resource);
   }
 
-  // 文件列表查询
-  @Get('list')
-  async listFiles(
-    @Query('bucket') bucket: string,
-    @Query('path') path?: string,
-  ) {
-    return this.uploadService.listFiles(bucket, path);
-  }
+  // 删除分类
+  // @Delete("categories")
+  // async deleteCategory(
+  //   @Query('bucket') bucket: string,
+  //   @Query('path') path: string,
+  // ) {
+  //   return this.uploadService.deleteCategory(bucket, path);
+  // }
 
-  // 文件删除
+  // 删除资源
   @Delete()
-  async deleteFile(
+  async deleteResource(
     @Query('bucket') bucket: string,
+    @Query('id') id: string,
     @Query('path') path: string,
   ) {
-    return this.uploadService.deleteFile(bucket, path);
+    return this.uploadService.deleteResource(bucket, id, path);
   }
 }
