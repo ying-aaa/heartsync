@@ -12,10 +12,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { imageSize } from 'image-size';
 import { HsResourceCategory } from 'src/database/entities/hs-resource-category.entity';
 import { HsResource } from 'src/database/entities/hs-resource.entity';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { UpdatedResourceDto } from './dto/updated-resource.dto';
+import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
+import { QueryResourceDto, UpdatedResourceDto } from './dto/resource.dto';
 import { HsPaginationService } from 'src/common/services/pagination.service';
+import { PageOptionsDto } from 'src/common/dtos/pagination.dto';
 
 @Injectable()
 export class HsUploadService {
@@ -27,7 +27,7 @@ export class HsUploadService {
     private readonly resourceRepository: Repository<HsResource>,
     @InjectRepository(HsResourceCategory)
     private readonly categoryRepository: Repository<HsResourceCategory>,
-    // private readonly paginationService: HsPaginationService,
+    private readonly paginationService: HsPaginationService,
   ) {
     this.minioClient = this.minioService.client;
   }
@@ -131,15 +131,29 @@ export class HsUploadService {
   }
 
   // 获取分类下的资源列表
-  async getResourcesByCategory(bucket: string, category_id: string) {
-    const where: {
-      bucket: string;
-      category_id?: string;
-    } = { bucket };
-    if (category_id !== 'all') where.category_id = category_id;
-    return this.resourceRepository.find({
-      where,
-    });
+  async getResourcesByCategory(queryResourceDto: QueryResourceDto) {
+    if (
+      queryResourceDto.category_id === 'all' ||
+      !queryResourceDto.category_id
+    ) {
+      Reflect.deleteProperty(queryResourceDto, 'category_id');
+    }
+    return this.paginationService.paginate(
+      this.resourceRepository,
+      queryResourceDto as PageOptionsDto,
+    );
+    // const where: {
+    //   bucket: string;
+    //   category_id?: string;
+    // } = { bucket };
+    // if (category_id !== 'all') where.category_id = category_id;
+    // this.paginationService.paginate(
+    //   this.resourceRepository,
+    //   where as PageOptionsDto,
+    // );
+    // return this.resourceRepository.find({
+    //   where,
+    // });
   }
 
   // 根据资源id获取资源信息

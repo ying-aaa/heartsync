@@ -24,3 +24,10 @@ export interface IFileData {
 export interface IAnyPropObj {
   [key: string]: any;
 }
+
+export interface IFileGroup {
+  id: string;
+  name: string;
+  icon: string;
+  sort_order: number;
+}

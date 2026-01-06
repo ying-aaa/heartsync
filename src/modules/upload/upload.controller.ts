@@ -12,9 +12,8 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HsUploadService } from './upload.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { UpdatedResourceDto } from './dto/updated-resource.dto';
+import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
+import { QueryResourceDto, UpdatedResourceDto } from './dto/resource.dto';
 
 @Controller('files') // 路径改为 resources
 export class HsFileController {
@@ -49,11 +48,8 @@ export class HsFileController {
 
   // 获取分类下的资源列表
   @Get('category')
-  async getResourcesByCategory(
-    @Query('category_id') category_id: string,
-    @Query('bucket') bucket: string,
-  ) {
-    return this.uploadService.getResourcesByCategory(bucket, category_id);
+  async getResourcesByCategory(@Query() queryResourceDto: QueryResourceDto) {
+    return this.uploadService.getResourcesByCategory(queryResourceDto);
   }
 
   // 根据资源id获取资源信息

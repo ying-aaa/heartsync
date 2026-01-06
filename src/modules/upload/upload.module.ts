@@ -6,6 +6,7 @@ import { MinioModule } from 'nestjs-minio-client';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HsResourceCategory } from 'src/database/entities/hs-resource-category.entity';
 import { HsResource } from 'src/database/entities/hs-resource.entity';
+import { HsPaginationService } from 'src/common/services/pagination.service';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { HsResource } from 'src/database/entities/hs-resource.entity';
     }),
   ],
 
-  providers: [HsUploadService],
+  providers: [HsUploadService, HsPaginationService],
   controllers: [HsFileController],
 })
 export class HsUploadModule {}

@@ -44,19 +44,21 @@ $base-radius: 8px;
     inactive-focus-label-text-color: var(--title-text-color),
   ));
 
-@include mat.checkbox-overrides((
-  // 边框颜色
-  unselected-icon-color: var(--base-line-color),
-  unselected-hover-icon-color: var(--base-hover-line-color),
-  unselected-focus-icon-color: var(--base-color-30),
-  // 背景颜色
-  selected-icon-color: var(--base-primary-color),
-  selected-hover-icon-color: var(--base-primary-color),
-  selected-focus-icon-color: var(--base-primary-color),
-  // 文本颜色
-  label-text-color: var(--base-line-color),
-  selected-checkmark-color: var(--base-line-color!important),
-));
+@include mat.checkbox-overrides(( // 边框颜色
+    unselected-icon-color: var(--base-line-color),
+    unselected-hover-icon-color: var(--base-hover-line-color),
+    unselected-focus-icon-color: var(--base-color-30),
+    // 背景颜色
+    selected-icon-color: var(--base-primary-color),
+    selected-hover-icon-color: var(--base-primary-color),
+    selected-focus-icon-color: var(--base-primary-color),
+    // 文本颜色
+    label-text-color: var(--base-line-color),
+    selected-checkmark-color: var(--base-line-color !important),
+  ));
+
+// @include mat.button-overrides((filled-container-color: var(--base-primary-color),
+    //     text-label-text-color: var(--base-primary-color)));
 
 .hs-drawer-container {
   .mat-mdc-dialog-container.mdc-dialog {

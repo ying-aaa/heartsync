@@ -11,3 +11,8 @@ export class CreateCategoryDto {
   @IsOptional()
   sort_order?: number = 0;
 }
+
+export class UpdateCategoryDto {
+  @IsString()
+  name: string;
+}

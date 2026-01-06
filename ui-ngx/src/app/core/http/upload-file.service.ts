@@ -5,6 +5,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HS_BUCKET } from '@src/app/shared/models/system.model';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
+import { IFileGroup } from '@src/app/shared/models/common-component';
+import { IResponseStructure } from './request.model';
 /**
  * 创建分类 DTO
  */
@@ -79,7 +81,7 @@ export class UploadFileService {
 
   getCategories(): Observable<any> {
     const params = new HttpParams().set('bucket', this.bucket);
-    return this.http.get(`${this.apiUrl}/categories`, { params });
+    return this.http.get<IResponseStructure<IFileGroup[]>>(`${this.apiUrl}/categories`, { params });
   }
 
   /**
@@ -87,7 +89,10 @@ export class UploadFileService {
    * @param categoryId 分类 ID
    */
   getResourcesByCategory(categoryId: string, pageLink: PageLink): Observable<any> {
-    const params = new HttpParams().set('bucket', this.bucket).set('category_id', categoryId);
+    let params = pageLink.toQueryHttp();
+    params = params.set('bucket', this.bucket);
+    params = params.set('category_id', categoryId);
+
     return this.http.get(`${this.apiUrl}/category`, { params });
   }
 

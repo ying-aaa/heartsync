@@ -605,3 +605,21 @@ export function transformCss(styles: IAnyPropObj): string {
   });
   return styleStr;
 }
+
+const urls = {
+  js: '/assets/file-type/javascript.png',
+  css: '/assets/file-type/css.png',
+  annex: '/assets/file-type/annex.png',
+};
+
+export function getFileUrl(url: string): string {
+  if (isImage(url) || isVideo(url)) return url;
+
+  const extension = url.split('.').pop()?.toLowerCase();
+
+  if (extension && extension in urls) {
+    return urls[extension as keyof typeof urls];
+  }
+
+  return urls['annex'];
+}

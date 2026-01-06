@@ -6,11 +6,13 @@ import {
   TextColumn,
   DateColumn,
   ActionColumn,
+  CustomColumn,
 } from '@src/app/shared/components/hs-table/table.model';
 import { map } from 'rxjs';
 import { HsDynamicTableModule } from '@src/app/shared/components/hs-table/hs-dynamic-table.module';
 import { UploadFileService } from '@src/app/core/http/upload-file.service';
 import { FileSizePipe } from '@src/app/shared/pipes/file-size.pipe';
+import { getFileUrl } from '@src/app/core/utils';
 
 @Component({
   selector: 'hs-system-file',
@@ -23,7 +25,7 @@ export class SystemFileComponent implements OnInit {
 
   groupId = signal<string>('');
 
-  pageLink = new PageLink(0, 20, [{ prop: 'search' }], []);
+  pageLink = new PageLink(0, 10, [{ prop: 'search' }], []);
 
   tableConfig = signal<IDynamicTable>(
     new IDynamicTable({
@@ -32,6 +34,7 @@ export class SystemFileComponent implements OnInit {
       trRowStyle: { backgroundColor: 'var(--primary-bg-color)' },
       pageLink: this.pageLink,
       tableColumn: [
+        new CustomColumn('preview', '预览', {}, 100),
         new TextColumn('original_name', '文件名', {}, 240),
         new TextColumn('mime_type', '类型', {}, 100),
         new TextColumn('size', '大小', {}, 120),
@@ -50,16 +53,18 @@ export class SystemFileComponent implements OnInit {
       ],
       getData: () => {
         return this.uploadFileService.getResourcesByCategory(this.groupId()!, this.pageLink).pipe(
-          map((data) => ({
-            data: data.map((item: any) => ({
+          map((item) => ({
+            ...item,
+            data: item.data.map((item: any) => ({
               ...item,
+              preview: getFileUrl(item.url),
               size: this.fileSizePipe.transform(item.size),
               dimensions: `${item.width}*${item.height}`,
             })),
           })),
         );
       },
-      layouts: ['paginator', 'total', 'first/last'],
+      layouts: ['sizes', 'paginator', 'total', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],
     }),
   );

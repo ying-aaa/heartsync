@@ -513,6 +513,7 @@
 .text-red-500{--un-text-opacity:1;color:rgb(239 68 68 / var(--un-text-opacity)) /* #ef4444 */;}
 .color-\[var\(--base-color-70\)\]{color:var(--base-color-70) /* var(--base-color-70) */;}
 .color-\[var\(--base-color-80\)\]{color:var(--base-color-80) /* var(--base-color-80) */;}
+.color-\[var\(--base-primary-color\)\]\!{color:var(--base-primary-color) /* var(--base-primary-color) */ !important;}
 .color-\[var\(--primary-text-color\)\]{color:var(--primary-text-color) /* var(--primary-text-color) */;}
 .color-\[var\(--title-text-color\)\]{color:var(--title-text-color) /* var(--title-text-color) */;}
 .color-\[var\(--title-text-color\)\]\!{color:var(--title-text-color) /* var(--title-text-color) */ !important;}

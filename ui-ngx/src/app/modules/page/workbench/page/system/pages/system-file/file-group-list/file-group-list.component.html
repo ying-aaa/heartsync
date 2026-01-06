@@ -63,14 +63,18 @@
         }
       </style>
       <mat-nav-list class="px-12px! py-0!">
-        @for (role of fileGroupList(); track role.id) {
+        @for (item of fileGroupList(); track item.id) {
           <a
             mat-list-item
-            href="#{{ role.id }}"
-            (click)="$event.preventDefault(); seletedGroupId.set(role.id)"
-            [activated]="seletedGroupId() === role.id"
+            href="#{{ item.id }}"
+            (click)="$event.preventDefault(); seletedGroupId.set(item.id)"
+            [activated]="seletedGroupId() === item.id"
             class="opacity-80 h-36px! my-4px"
-            >{{ role.name }}</a
+          >
+            <mat-icon matListItemIcon class="color-[var(--base-primary-color)]!">{{
+              item.icon
+            }}</mat-icon>
+            {{ item.name }}</a
           >
         }
       </mat-nav-list>
