@@ -19,7 +19,11 @@ export class DashboardRuntimeComponent implements OnInit {
 
   private dashboardConfig = signal<IDashboardContext>({} as IDashboardContext);
 
-  gridsterOption = computed<GridsterConfig>(() => this.dashboardConfig().gridsterOption || {});
+  gridsterOption = computed<GridsterConfig>(() => ({
+    rows: 1,
+    columns: 1,
+    ...this.dashboardConfig().gridsterOption,
+  }));
 
   widgets = computed<Array<IDashboardWidgetContext>>(() => this.dashboardConfig().widgets || []);
 

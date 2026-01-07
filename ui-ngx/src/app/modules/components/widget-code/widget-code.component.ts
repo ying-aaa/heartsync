@@ -21,15 +21,11 @@ import { ICodeWidgetConfig } from '@src/app/shared/models/code-widget.model';
 import { ActivatedRoute } from '@angular/router';
 import { CodeWidgetService } from '@src/app/core/http/code-widget.service';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'hs-widget-code',
   templateUrl: './widget-code.component.html',
-  imports: [
-    HsLoadingModule,
-    FullscreenDirective,
-    MatIconModule,
-    MatButtonModule,
-  ],
+  imports: [HsLoadingModule, FullscreenDirective, MatIconModule, MatButtonModule],
 })
 export class WidgetCodeComponent implements OnInit {
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef })
@@ -77,6 +73,7 @@ export class WidgetCodeComponent implements OnInit {
       ReactiveFormsModule,
       FormlyRunModule,
       FormlyModule,
+      CommonModule,
     ];
     const preserveWhitespaces = true;
 
@@ -93,12 +90,10 @@ export class WidgetCodeComponent implements OnInit {
 
   loadWidgetInfo() {
     this.loadingStatus = true;
-    this.codeWidgetService
-      .getCodeWidgetById(this.widgetId() as string)
-      .subscribe((widgetInfo) => {
-        this.widgetInfo.set(widgetInfo);
-        this.loadResourceScript();
-      });
+    this.codeWidgetService.getCodeWidgetById(this.widgetId() as string).subscribe((widgetInfo) => {
+      this.widgetInfo.set(widgetInfo);
+      this.loadResourceScript();
+    });
   }
 
   setWidgetInfo(widgetInfo: ICodeWidgetConfig) {

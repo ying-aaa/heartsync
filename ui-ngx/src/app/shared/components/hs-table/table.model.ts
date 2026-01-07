@@ -402,7 +402,7 @@ export class PageLink extends QueryParams {
 
   // 改变当前页
   changePage(page: number): void {
-    if (page < 0 || page + 1 > Math.ceil(this.total / this.pageSize)) return;
+    if (page < 0 || (page + 1 > Math.ceil(this.total / this.pageSize) && this.total)) return;
     this.page = page;
     this.getData();
   }

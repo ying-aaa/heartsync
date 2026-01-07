@@ -34,7 +34,7 @@ export class SystemFileComponent implements OnInit {
       trRowStyle: { backgroundColor: 'var(--primary-bg-color)' },
       pageLink: this.pageLink,
       tableColumn: [
-        new CustomColumn('preview', '预览', {}, 100),
+        new CustomColumn('preview', '', {}, 100),
         new TextColumn('original_name', '文件名', {}, 240),
         new TextColumn('mime_type', '类型', {}, 100),
         new TextColumn('size', '大小', {}, 120),
@@ -77,7 +77,7 @@ export class SystemFileComponent implements OnInit {
       const groupId = this.fileGroup()!.seletedGroupId();
       if (groupId !== null) {
         this.groupId.set(groupId);
-        this.pageLink.getData();
+        this.pageLink.changePage(0);
       }
     });
   }

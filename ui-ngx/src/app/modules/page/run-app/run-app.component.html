@@ -5,6 +5,8 @@
 @let asideHeight = !isFullscreen() ? '100%' : 'calc(100% - ' + headerHeight() + 'px)'; -->
 <!-- <mat-divider></mat-divider> -->
 <main class="flex relative" [style]="{ height: mainHeight }">
-  <hs-side-menu [menuData]="menuData()"></hs-side-menu>
+  @if (!isMobile) {
+    <hs-side-menu [menuData]="menuData()"></hs-side-menu>
+  }
   <hs-app-content></hs-app-content>
 </main>

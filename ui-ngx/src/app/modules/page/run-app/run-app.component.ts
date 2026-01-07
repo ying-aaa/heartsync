@@ -1,7 +1,7 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
 import { SideMenuComponent } from './menu/side-menu.component';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
-import { getParamFromRoute } from '@src/app/core/utils';
+import { getParamFromRoute, isMobile } from '@src/app/core/utils';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
@@ -40,6 +40,8 @@ export class RunAppComponent implements OnInit {
   headerHeight = computed(() => this.runAppGlobalService.appHeaderConfig().headerStyle?.height);
 
   isFullscreen = computed(() => this.runAppMenuService.selectedMenuNode()?.isFullscreen);
+
+  isMobile = isMobile();
 
   constructor(
     private route: ActivatedRoute,
