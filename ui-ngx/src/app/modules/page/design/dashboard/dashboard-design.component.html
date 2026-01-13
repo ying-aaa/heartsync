@@ -28,11 +28,10 @@
             (click)="selectGridster(item)"
           >
             <!-- 内容 -->
-            <div id="#containter" class="wh-full overflow-y-auto overflow-x-hidden">
+            <div id="#containter" class="wh-full">
               <hs-widget-container
                 [widgetId]="item.widgetId!"
                 [widgetType]="item['type']"
-                [workSizeConfigStyle]="{}"
               ></hs-widget-container>
 
               @if (isRuntime()) {
@@ -41,9 +40,9 @@
                   [cdkContextMenuTriggerData]="{ widgetData: item }"
                   class="absolute wh-full top-0 left-0 select-shade"
                 >
-                  <div class="absolute top-0 left-0 z-999">
-                    <button mat-icon-button [matMenuTriggerFor]="MoreVert" (click)="test()">
-                      <mat-icon class="material-icons-round text-24px! w-24px! h-24px!">
+                  <div class="toolbar-container absolute -top-40px left-0 z-999 bg-[var(--base-bg-color)] rounded-t-6px p-2px">
+                    <button mat-icon-button class="hs-icon-button-32" [matMenuTriggerFor]="MoreVert" (click)="test()">
+                      <mat-icon class="material-icons-round">
                         more_vert
                       </mat-icon>
                     </button>
@@ -65,7 +64,7 @@
                       </button>
                     </mat-menu>
                   </div>
-                  <div class="absolute top-0 right-0 z-999">
+                  <div class="toolbar-container absolute -top-40px right-0 z-999 bg-[var(--base-bg-color)] rounded-t-6px p-2px">
                     <button mat-icon-button class="hs-icon-button-32">
                       <mat-icon class="material-icons-round"> edit </mat-icon>
                     </button>
@@ -73,7 +72,7 @@
                       <mat-icon class="material-icons-round"> download </mat-icon>
                     </button>
                     <button mat-icon-button class="hs-icon-button-32" [matMenuTriggerFor]="menu">
-                      <mat-icon class="material-icons-round"> delete </mat-icon>
+                      <mat-icon class="material-icons-round color-red-5"> delete </mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
                       <button

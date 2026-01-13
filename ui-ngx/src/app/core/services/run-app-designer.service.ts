@@ -5,9 +5,7 @@ interface IAppConfigType {
   value: string;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class RunAppDesignService {
   // 'menuGlobal', 'menuSingle', 'appHeader'
   configTypes: IAppConfigType[] = [

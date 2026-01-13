@@ -35,6 +35,8 @@
 .static{position:static;}
 .-right-22px{right:-22px;}
 .-top-16px{top:-16px;}
+.-top-36px{top:-36px;}
+.-top-40px{top:-40px;}
 .bottom-0{bottom:0;}
 .bottom-3px{bottom:3px;}
 .bottom-50px{bottom:50px;}
@@ -62,6 +64,7 @@
 .-z-999{z-index:-999;}
 .z-10{z-index:10;}
 .z-9{z-index:9;}
+.z-9\!{z-index:9 !important;}
 .z-999{z-index:999;}
 .z-999\!{z-index:999 !important;}
 .grid{display:grid;}
@@ -241,7 +244,6 @@
 .w-20px\!{width:20px !important;}
 .w-225px{width:225px;}
 .w-240px{width:240px;}
-.w-24px\!{width:24px !important;}
 .w-250px{width:250px;}
 .w-252px{width:252px;}
 .w-280px{width:280px;}
@@ -361,6 +363,7 @@
 .rounded-full{border-radius:9999px;}
 .rounded-lg{border-radius:0.5rem;}
 .rounded-md{border-radius:0.375rem;}
+.rounded-t-6px{border-top-left-radius:6px;border-top-right-radius:6px;}
 .border-dashed{border-style:dashed;}
 .border-dotted{border-style:dotted;}
 .border-none\!{border-style:none !important;}

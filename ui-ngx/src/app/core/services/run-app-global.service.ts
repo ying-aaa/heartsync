@@ -1,10 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { camelToKebabCase, getImageUrl, transformCss } from '../utils';
+import { transformCss } from '../utils';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class RunAppGlobalService {
   private readonly doc = inject(DOCUMENT);
 

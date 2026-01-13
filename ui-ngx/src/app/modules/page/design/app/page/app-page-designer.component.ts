@@ -9,14 +9,13 @@ import {
 } from '@angular/core';
 import { MatDivider } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { getParamFromRoute, handlerNgElStyle } from '@src/app/core/utils';
+import { getParamFromRoute } from '@src/app/core/utils';
 import { ActivatedRoute } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { RunAppComponent } from '@src/app/modules/page/run-app/run-app.component';
-import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,6 +24,7 @@ import { AppConfigComponent } from './app-config/app-config.component';
 import { VerseDesignModeSwitchComponent } from '@src/app/shared/components/ui-verse/verse-design-mode-switch/verse-design-mode-switch.component';
 import { FormsModule } from '@angular/forms';
 import { RunAppDesignService } from '@src/app/core/services/run-app-designer.service';
+import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
 
 @Component({
   selector: 'hs-app-page-designer',
@@ -46,6 +46,7 @@ import { RunAppDesignService } from '@src/app/core/services/run-app-designer.ser
     FormsModule,
     VerseDesignModeSwitchComponent,
   ],
+  providers: [RunAppMenuService],
 })
 export class AppPageDesignerComponent implements OnInit, AfterViewInit {
   @ViewChild('snav') snav!: MatSidenav;

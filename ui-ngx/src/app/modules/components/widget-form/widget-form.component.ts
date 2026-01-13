@@ -1,17 +1,6 @@
-import {
-  Component,
-  effect,
-  input,
-  OnInit,
-  Renderer2,
-  signal,
-  ViewContainerRef,
-} from '@angular/core';
+import { Component, effect, input, OnInit, signal } from '@angular/core';
 import { FormlyRunModule } from '../../formly/formly-run.module';
-import {
-  IEditorFormlyField,
-  IEditSizeConfig,
-} from '@src/app/shared/models/public-api';
+import { IEditorFormlyField } from '@src/app/shared/models/public-api';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { FormWidgetService } from '@src/app/core/http/form-widget.service';
@@ -28,7 +17,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class WidgetFormComponent implements OnInit {
   widgetId = input.required<string>();
-  sizeStyle = input<IEditSizeConfig | undefined>();
 
   widgetConfig = signal<IFormWidgetConfig>({} as IFormWidgetConfig);
 
@@ -39,16 +27,9 @@ export class WidgetFormComponent implements OnInit {
   formGroup = new FormGroup({});
   options: FormlyFormOptions = {};
 
-  constructor(
-    private formWidgetService: FormWidgetService,
-    private viewContainerRef: ViewContainerRef,
-    private renderer: Renderer2,
-  ) {
+  constructor(private formWidgetService: FormWidgetService) {
     effect(() => {
       this.getWidgetConfig(this.widgetId());
-    });
-    effect(() => {
-      this.setOutermostLayerFieldSize();
     });
   }
 
@@ -62,23 +43,10 @@ export class WidgetFormComponent implements OnInit {
     this.formWidgetService.getFormWidgetById(widgetId as string).subscribe({
       next: (widgetConfig: IFormWidgetConfig) => {
         this.widgetConfig.set(widgetConfig);
-        this.fields.set(widgetConfig.flatTypeField as IEditorFormlyField[] || []);
+        this.fields.set((widgetConfig.flatTypeField as IEditorFormlyField[]) || []);
         this.loadingState.set(false);
-        setTimeout(() => {
-          this.setOutermostLayerFieldSize();
-        }, 100);
       },
       error: (err: any) => console.error('Get widget error:', err),
     });
-  }
-
-  setOutermostLayerFieldSize() {
-    if (this.fields().length) return;
-    const hostElement = this.viewContainerRef.element.nativeElement;
-    const targetElement = hostElement.querySelector('.outermost-layer-field');
-    if (!hostElement || !targetElement) return;
-    const { width, height } = this.sizeStyle() as IEditSizeConfig;
-    this.renderer.setStyle(targetElement, 'width', width);
-    this.renderer.setStyle(targetElement, 'height', height);
   }
 }

@@ -1,0 +1,30 @@
+@if (loadingState()) {
+  <hs-loading></hs-loading>
+} @else {
+  @switch (widgetType) {
+    @case (IWidgetType.CODE) {
+      <hs-widget-code [widgetId]="widgetId()"> </hs-widget-code>
+    }
+    @case (IWidgetType.CHART) {
+      <hs-widget-chart></hs-widget-chart>
+    }
+    @case (IWidgetType.CESIUM) {
+      <hs-widget-cesium></hs-widget-cesium>
+    }
+    @case (IWidgetType.X6) {
+      x6
+    }
+    @case (IWidgetType.FORM) {
+      <hs-widget-form [widgetId]="widgetId()"> </hs-widget-form>
+    }
+    @case (IWidgetType.LIST) {
+      <hs-widget-list></hs-widget-list>
+    }
+    @case (IWidgetType.DETAIL) {
+      <hs-widget-detail></hs-widget-detail>
+    }
+    @default {
+      未找到该部件！
+    }
+  }
+}

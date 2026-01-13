@@ -1,60 +1,48 @@
-import { Component, Input, input, OnInit, signal } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { WidgetService } from '@src/app/core/http/widget.service';
-import { WidgetCesiumComponent } from '@src/app/modules/components/widget-cesium/widget-cesium.component';
-import { WidgetChartComponent } from '@src/app/modules/components/widget-chart/widget-chart.component';
-import { WidgetCodeComponent } from '@src/app/modules/components/widget-code/widget-code.component';
-import { WidgetDetailComponent } from '@src/app/modules/components/widget-detail/widget-detail.component';
-import { WidgetFormComponent } from '@src/app/modules/components/widget-form/widget-form.component';
-import { WidgetListComponent } from '@src/app/modules/components/widget-list/widget-list.component';
-import { IEditSizeConfig, IWidgetType } from '@src/app/shared/models/public-api';
-import { HsLoadingComponent } from '@src/app/shared/components/hs-loading/hs-loading.component';
+import { IWidgetType } from '@src/app/shared/models/public-api';
+import { WidgetComponent } from '../widget/widget.component';
+import { FullscreenDirective } from '@src/app/shared/directive/fullscreen.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'hs-widget-container',
   templateUrl: './widget-container.component.html',
-  imports: [
-    WidgetCodeComponent,
-    WidgetChartComponent,
-    WidgetCesiumComponent,
-    WidgetFormComponent,
-    WidgetListComponent,
-    WidgetFormComponent,
-    WidgetDetailComponent,
-    HsLoadingComponent,
-  ],
+  imports: [WidgetComponent, FullscreenDirective, MatIconButton, MatIcon],
 })
 export class WidgetContainerComponent implements OnInit {
-  workSizeConfigStyle = input<any>({} as IEditSizeConfig);
-
   widgetId = input.required<string>();
 
-  _widgetType: IWidgetType;
+  widgetType = input<IWidgetType>();
 
-  @Input()
-  get widgetType() {
-    return this._widgetType;
-  }
-  set widgetType(value: IWidgetType) {
-    this._widgetType = value;
-  }
+  widgetContext = {
+    widgetId: '',
+    widgetType: "",
+    anableFullscreen: true,
+    showTitle: true,
+    showTitleIcon: false,
+    title: '你好世界',
+    titleTooltip: '',
+    icon: '',
+    containerStyle: {
+      backgroundColor: 'var(--base-bg-color)',
+      color: 'rgba(0, 0, 0, .87)',
+      padding: '8px',
+      borderRadius: '8px',
+      boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 5px, rgba(16, 16, 16, 0.35) 0px 0px 20px -10px',
+    },
+    titleStyle: {
+      lineHeight: "32px",
+      padding: "0px"
+    },
+    iconStyle: {},
+    widgetStyle: {},
+  };
 
-  loadingState = signal(false);
-
-  IWidgetType = IWidgetType;
+  fullscreen = false;
 
   constructor(private WidgetHttpService: WidgetService) {}
 
-  ngOnInit() {
-    if (this._widgetType) return;
-    this.loadingState.set(true);
-    this.WidgetHttpService.findOneWidget(this.widgetId()).subscribe(
-      (res) => {
-        this._widgetType = res.type;
-        this.loadingState.set(false);
-      },
-      () => {
-        this.loadingState.set(false);
-      },
-    );
-  }
+  ngOnInit() {}
 }

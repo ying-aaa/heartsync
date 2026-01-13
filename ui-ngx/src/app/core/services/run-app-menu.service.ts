@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, Injectable, OnDestroy, signal } from '@angular/core';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { MenuHttpService } from '../http/menu.service';
 import { forkJoin, Observable, tap } from 'rxjs';
@@ -6,10 +6,8 @@ import { Router } from '@angular/router';
 import { ApplicationService, IAppConfig } from '@core/http/application.service';
 import { RunAppDesignService } from './run-app-designer.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class RunAppMenuService {
+@Injectable()
+export class RunAppMenuService implements OnDestroy {
   appId = signal<string | null>(null);
   appConfig = signal<IAppConfig>({} as IAppConfig);
   menuData = signal<IMenuNode[]>([]);
@@ -28,6 +26,10 @@ export class RunAppMenuService {
     private applicationService: ApplicationService,
     private runAppDesignService: RunAppDesignService,
   ) {}
+
+  ngOnDestroy(): void {
+    console.log("%c Line:32 🍭", "color:#b03734", "菜单服务销毁");
+  }
 
   loadAppAndMenu(appId: string): Observable<[IAppConfig, IMenuNode[]]> {
     this.appId.set(appId);
