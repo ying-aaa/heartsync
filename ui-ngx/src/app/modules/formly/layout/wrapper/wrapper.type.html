@@ -21,8 +21,8 @@
       [cdkDragData]="getDragFieldData(f)"
       [field]="f"
       [cdkDragDisabled]="!f._design"
-      (cdkDragStarted)="formEditorService.dragStart = true"
-      (cdkDragReleased)="formEditorService.dragStart = false"
+      (cdkDragStarted)="options.formState.dragStart = true"
+      (cdkDragReleased)="options.formState.dragStart = false"
     >
       <div
         class="position-preview border-3px border-solid border-#2f90b9"

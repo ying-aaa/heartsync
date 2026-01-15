@@ -41,8 +41,9 @@ export class FormlyFieldWrapper extends FieldType<IEditorFormlyField> {
 
   @HostListener('mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {
-    this.formEditorService.mousePosition.x = event.clientX;
-    this.formEditorService.mousePosition.y = event.clientY;
+    if(!this.options.formState.mousePosition) return;
+    this.options.formState.mousePosition.x = event.clientX;
+    this.options.formState.mousePosition.y = event.clientY;
   }
 
   canEnter = (drag: CdkDrag) => {
@@ -94,7 +95,7 @@ export class FormlyFieldWrapper extends FieldType<IEditorFormlyField> {
 
   private _isMouseInElement(droplistElement: HTMLElement): boolean {
     const rect: DOMRect = droplistElement.getBoundingClientRect();
-    const { x, y } = this.formEditorService.mousePosition;
+    const { x, y } = this.options.formState.mousePosition;
     const isInWidth = x >= rect.left && x <= rect.right;
     const isInHeight = y >= rect.top && y <= rect.bottom;
     return isInWidth && isInHeight;

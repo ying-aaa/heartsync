@@ -30,10 +30,6 @@ export class FormEditorService {
 
   // 选中的 Field
   public activeField = signal<IEditorFormlyField | null>(null);
-  _fieldSelected$ = new Subject<IEditorFormlyField | null>();
-  get fieldSelected$(): Observable<IEditorFormlyField | null> {
-    return this._fieldSelected$.asObservable();
-  }
 
   flatField$ = new BehaviorSubject([]);
 
@@ -118,7 +114,6 @@ export class FormEditorService {
   selectField(field: IEditorFormlyField | null): void {
     this.activeField.set(field);
     field && this.isShowConfigPanel.set(true);
-    this._fieldSelected$.next(field);
   }
 
   addField(

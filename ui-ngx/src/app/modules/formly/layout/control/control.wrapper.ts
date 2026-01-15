@@ -2,20 +2,17 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  effect,
   HostBinding,
   HostListener,
   OnDestroy,
   OnInit,
 } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
-import {
-  IEditorFormlyField,
-  IFieldType,
-} from '@src/app/shared/models/widget.model';
+import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.model';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { FormEditorService } from '@src/app/core/services/form-editor.service';
 
 @Component({
   selector: 'formly-wrapper-control',
@@ -30,7 +27,7 @@ export class FormlyWrapperContorl
 {
   @HostBinding('class.edit-mode')
   get isEditMode() {
-    return !!this.formEditorService.isEditMode();
+    return !!this.options.formState.isEditMode();
   }
 
   @HostBinding('class.show-border') get isShowBorder() {
@@ -51,7 +48,7 @@ export class FormlyWrapperContorl
       this.isEditMode &&
       this.isMouseInside &&
       !this._isActiveField &&
-      !this.formEditorService.dragStart
+      !this.options.formState.dragStart
     );
   }
 
@@ -59,17 +56,17 @@ export class FormlyWrapperContorl
 
   isMouseInside = false;
 
-  constructor(
-    public formEditorService: FormEditorService,
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor(private cdr: ChangeDetectorRef) {
     super();
+    effect(() => {
+      this._checkActiveField();
+    });
   }
 
   @HostListener('click', ['$event'])
   onClick(event: MouseEvent): void {
     if (!this.isEditMode) return;
-    this.formEditorService.selectField(this.field);
+    this.options.formState.selectField(this.field);
     event.stopPropagation();
   }
 
@@ -84,18 +81,11 @@ export class FormlyWrapperContorl
     this.isMouseInside = false;
   }
 
-  ngOnInit(): void {
-    this._checkActiveField();
-    this.formEditorService.fieldSelected$.subscribe(() => {
-      this._checkActiveField();
-      this.cdr.markForCheck();
-    });
-  }
+  ngOnInit(): void {}
 
   private _checkActiveField(): void {
-    this._isActiveField = this.formEditorService.isActiveField(
-      this.field.fieldId!,
-    );
+    this._isActiveField = this.field.fieldId! === this.options.formState.activeField()?.fieldId;
+    this.cdr.markForCheck();
   }
   ngOnDestroy(): void {}
 }

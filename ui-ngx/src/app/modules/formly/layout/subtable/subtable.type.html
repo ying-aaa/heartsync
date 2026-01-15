@@ -19,8 +19,8 @@
       [style.width]="getSubTableItemWidth(fieldGroup!, f)"
       cdkDrag
       [cdkDragData]="getDragFieldData(f)"
-      (cdkDragStarted)="formEditorService.dragStart = true"
-      (cdkDragReleased)="formEditorService.dragStart = false"
+      (cdkDragStarted)="options.formState.dragStart = true"
+      (cdkDragReleased)="options.formState.dragStart = false"
       class="subtable-border"
     >
       <div

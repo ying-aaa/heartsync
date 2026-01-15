@@ -12,7 +12,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { WidgetTitleBackComponent } from "./widget-title-back.component";
+import { WidgetTitleBackComponent } from './widget-title-back.component';
 
 @Component({
   selector: 'hs-widget-design-toolbar',
@@ -27,10 +27,16 @@ export class WidgetDesignToolbarComponent implements OnInit, AfterViewInit, OnDe
 
   constructor(private renderer: Renderer2) {}
 
+  // 预览配置代码
   onPreviewCode() {}
 
+  // 配置前置数据
+  onFrontData() {}
+
+  // 预览部件
   onPreviewWidget() {}
 
+  // 保存部件
   onSaveWidget() {}
 
   toggleHeaderMenu(is: boolean) {

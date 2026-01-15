@@ -1,8 +1,8 @@
-import { Component, Inject, OnInit, Optional, viewChild } from '@angular/core';
+import { Component, computed, Inject, OnInit, Optional, viewChild } from '@angular/core';
 import { WorkspaceToobarComponent } from './workspace-toobar/workspace-toobar.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { ConfigOption, FORMLY_CONFIG, FormlyModule } from '@ngx-formly/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormEditorService } from '../../../../../../../core/services/form-editor.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { IEditSizeType } from '@src/app/shared/models/public-api';
@@ -24,7 +24,19 @@ import { WidgetZoomComponent } from '../../../widget-zoom.component';
   ],
 })
 export class WorkspaceViewportComponent implements OnInit {
-  ZoomControl = viewChild<WidgetZoomComponent | undefined>('ZoomControl');
+
+  formGroup = new FormGroup({});
+
+  options = {
+    formState: {
+      fieldsId: 'workspace',
+      mousePosition:  { x: 0, y: 0 },
+      dragStart: false,
+      isEditMode: computed(() => this.formEditorService.isEditMode()),
+      activeField: computed(() => this.formEditorService.activeField()),
+      selectField: this.formEditorService.selectField.bind(this.formEditorService),
+    },
+  }
 
   constructor(
     public formEditorService: FormEditorService,

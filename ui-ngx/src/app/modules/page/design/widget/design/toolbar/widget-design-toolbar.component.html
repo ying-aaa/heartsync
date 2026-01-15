@@ -1,7 +1,6 @@
 <div class="px-8px h-48px flex justify-between items-center">
-  <hs-widget-title-back></hs-widget-title-back>
-
-  <div>
+  <div class="flex items-center">
+    <hs-widget-title-back></hs-widget-title-back>
     <button
       mat-button
       (click)="toggleHeaderMenu(!showHeaderMenu())"
@@ -13,12 +12,28 @@
         keyboard_arrow_down
       </mat-icon>{{showHeaderMenu() ? '收起' : '展开'}}
     </button>
+  </div>
 
+  <div>
     <button
       mat-button
       (click)="onPreviewCode()"
     >
-      <mat-icon matChipAvatar>settings_ethernet</mat-icon> 配置代码
+      <mat-icon>settings_ethernet</mat-icon> 配置代码
+    </button>
+    <button
+      mat-button
+      (click)="onFrontData()"
+    >
+      <mat-icon>
+        cloud
+      </mat-icon> 前置数据
+    </button>
+    <button
+      mat-button
+      (click)="onPreviewCode()"
+    >
+      <mat-icon>settings</mat-icon> 部件配置
     </button>
     <button
       mat-button

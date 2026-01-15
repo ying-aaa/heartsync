@@ -1,114 +1,32 @@
-<!-- <button
-  mat-raised-button
-  (click)="isLinear = !isLinear"
-  id="toggle-linear"
->
-  {{ !isLinear ? 'Enable linear mode' : 'Disable linear mode' }}
-</button> -->
 <mat-stepper
   [linear]="isLinear"
   #stepper
 >
   @for (f of field.fieldGroup; track $index) {
-    <mat-step>
-      <ng-template matStepLabel>{{ f.props?.label! }}</ng-template>
-      <div class="py-12px">
-        <formly-field [field]="f">
-          <div
-            class="position-preview w-full border-2px border-dashed"
-            *cdkDragPlaceholder
-          ></div>
-        </formly-field>
-      </div>
-      <div>
-        @if ($index !== 0) {
-          <button
-            mat-button
-            matStepperPrevious
-          >
-            返回
-          </button>
-        }
-        @if ($index !== field.fieldGroup!.length - 1) {
-          <button
-            mat-button
-            matStepperNext
-          >
-            下一个
-          </button>
-        }
-      </div>
-    </mat-step>
-  }
-
-  <!-- <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel>Fill out your name</ng-template>
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input
-          matInput
-          placeholder="Last name, First name"
-          formControlName="firstCtrl"
-          required
-        />
-      </mat-form-field>
-      <div>
-        <button
-          mat-button
-          matStepperNext
-        >
-          Next
-        </button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step
-    [stepControl]="secondFormGroup"
-    label="Fill out your address"
-  >
-    <form [formGroup]="secondFormGroup">
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input
-          matInput
-          formControlName="secondCtrl"
-          placeholder="Ex. 1 Main St, New York, NY"
-          required
-        />
-      </mat-form-field>
-      <div>
-        <button
-          mat-button
-          matStepperPrevious
-        >
-          Back
-        </button>
-        <button
-          mat-button
-          matStepperNext
-        >
-          Next
-        </button>
-      </div>
-    </form>
-  </mat-step>
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
+    <ng-template matStepLabel>{{ f.props?.label! }}</ng-template>
+    <div class="py-12px">
+      <formly-field [field]="f">
+      </formly-field>
+    </div>
     <div>
+      @if ($index !== 0) {
       <button
         mat-button
         matStepperPrevious
       >
-        Back
+        返回
       </button>
+      }
+      @if ($index !== field.fieldGroup!.length - 1) {
       <button
         mat-button
-        (click)="stepper.reset()"
+        matStepperNext
       >
-        Reset
+        下一个
       </button>
+      }
     </div>
-  </mat-step> -->
+  </mat-step>
+  }
 </mat-stepper>
