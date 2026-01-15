@@ -1,14 +1,20 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "declaration": true,
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "target": "ES2020",                // 目标ES版本（兼容主流项目）
+    "module": "ESNext",                // 模块系统
+    "moduleResolution": "NodeNext",    // 解析Node模块
+    "declaration": true,               // 生成.d.ts类型文件（核心！）
+    "declarationMap": true,            // 生成.d.ts.map，方便调试类型
+    "outDir": "./dist",                // 编译输出目录
+    "rootDir": "./src",                // 源码根目录
+    "strict": true,                    // 开启严格模式（必开，保证类型安全）
+    "esModuleInterop": true,           // 兼容CommonJS/ES模块
+    "skipLibCheck": true,              // 跳过第三方库的类型检查
+    "forceConsistentCasingInFileNames": true, // 强制文件名大小写一致
+    "noImplicitAny": true,             // 禁止隐式any
+    "noUnusedLocals": true,            // 禁止未使用的变量
+    "removeComments": false            // 保留注释（方便用户看类型注释）
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],             // 只编译src目录
+  "exclude": ["node_modules", "dist", "test"] // 排除目录
 }

@@ -57,7 +57,7 @@ const designPageRoutes = [
       icon: 'send_time_extension',
     },
     loadComponent: () =>
-      import('./widget/widget-design-router.component').then((m) => m.WidgetDesignRouterComponent),
+      import('./widget/widget-manage-router.component').then((m) => m.WidgetManageRouterComponent),
     children: widgetRoutes,
   },
   // 测试页

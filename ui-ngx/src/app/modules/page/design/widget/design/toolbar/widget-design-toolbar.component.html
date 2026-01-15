@@ -1,0 +1,37 @@
+<div class="px-8px h-48px flex justify-between items-center">
+  <hs-widget-title-back></hs-widget-title-back>
+
+  <div>
+    <button
+      mat-button
+      (click)="toggleHeaderMenu(!showHeaderMenu())"
+    >
+      <mat-icon
+        class="transition-transform duration-500 ease-in-out"
+        [class]="showHeaderMenu() ? '' : '-rotate-180'"
+      >
+        keyboard_arrow_down
+      </mat-icon>{{showHeaderMenu() ? '收起' : '展开'}}
+    </button>
+
+    <button
+      mat-button
+      (click)="onPreviewCode()"
+    >
+      <mat-icon matChipAvatar>settings_ethernet</mat-icon> 配置代码
+    </button>
+    <button
+      mat-button
+      (click)="onPreviewWidget()"
+    >
+      <mat-icon matChipAvatar>visibility</mat-icon> 预览
+    </button>
+    <button
+      mat-flat-button
+      (click)="onSaveWidget()"
+      class="px-16px! mx-8px"
+    >
+      <mat-icon matChipAvatar>save</mat-icon> 保存
+    </button>
+  </div>
+</div>

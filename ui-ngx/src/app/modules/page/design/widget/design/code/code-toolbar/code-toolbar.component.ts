@@ -5,7 +5,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
-import { WidgetTitleBackComponent } from '../../widget-title-back.component';
+import { WidgetTitleBackComponent } from '../../toolbar/widget-title-back.component';
 
 @Component({
   selector: 'hs-code-toolbar',

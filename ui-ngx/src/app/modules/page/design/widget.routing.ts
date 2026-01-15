@@ -1,84 +1,82 @@
 import { Routes } from '@angular/router';
 
 export default [
-  { path: '', redirectTo: '', pathMatch: 'full' },
+  { path: '', redirectTo: 'manage', pathMatch: 'full' },
   {
-    title: '部件资源',
-    path: '',
+    title: '部件管理',
+    path: 'manage',
     loadComponent: () =>
-      import('./widget/widget-manage.component').then(
-        (m) => m.WidgetManageComponent,
-      ),
+      import('./widget/widget-manage.component').then((m) => m.WidgetManageComponent),
   },
   {
     title: '部件预览',
     path: 'preview',
     loadComponent: () =>
-      import('./widget/preview/widget-preview.component').then(
-        (m) => m.WidgetPreviewComponent,
-      ),
+      import('./widget/preview/widget-preview.component').then((m) => m.WidgetPreviewComponent),
   },
   {
-    title: '表单',
-    path: 'form',
-    data: { widgetType: true },
+    title: '部件设计',
+    path: '',
     loadComponent: () =>
-      import('./widget/design/form/form-design.component').then(
-        (m) => m.FormDesignComponent,
+      import('./widget/design/widget-design-router.component').then(
+        (m) => m.WidgetDesignRouterComponent,
       ),
-  },
-  {
-    title: '列表',
-    path: 'list',
-    data: { widgetType: true },
-    loadComponent: () =>
-      import('./widget/design/list/list-design.component').then(
-        (m) => m.ListDesignComponent,
-      ),
-  },
-  {
-    title: '详情',
-    path: 'detail',
-    data: { widgetType: true },
-    loadComponent: () =>
-      import('./widget/design/detail/detail-design.component').then(
-        (m) => m.DetailDesignComponent,
-      ),
-  },
-  {
-    title: '代码',
-    path: 'code',
-    data: { widgetType: true },
-    loadComponent: () =>
-      import('./widget/design/code/code-design.component').then(
-        (m) => m.CodeDesignComponent,
-      ),
-  },
-  {
-    title: '图表',
-    path: 'chart',
-    data: {},
-    loadComponent: () =>
-      import('./widget/design/chart/chart-design.component').then(
-        (m) => m.ChartDesignComponent,
-      ),
-  },
-  {
-    title: 'cesium',
-    path: 'cesium',
-    data: { widgetType: true },
-    loadComponent: () =>
-      import('./widget/design/cesium/cesium-design.component').then(
-        (m) => m.CesiumDesignComponent,
-      ),
-  },
-  {
-    title: 'x6',
-    path: 'x6',
-    data: { widgetType: true },
-    loadComponent: () =>
-      import('./widget/design/x6/x6-design.component').then(
-        (m) => m.X6DesignComponent,
-      ),
+    children: [
+      {
+        title: '表单',
+        path: 'form',
+        data: { widgetType: true },
+        loadComponent: () =>
+          import('./widget/design/form/form-design.component').then((m) => m.FormDesignComponent),
+      },
+      {
+        title: '列表',
+        path: 'list',
+        data: { widgetType: true },
+        loadComponent: () =>
+          import('./widget/design/list/list-design.component').then((m) => m.ListDesignComponent),
+      },
+      {
+        title: '详情',
+        path: 'detail',
+        data: { widgetType: true },
+        loadComponent: () =>
+          import('./widget/design/detail/detail-design.component').then(
+            (m) => m.DetailDesignComponent,
+          ),
+      },
+      {
+        title: '代码',
+        path: 'code',
+        data: { widgetType: true },
+        loadComponent: () =>
+          import('./widget/design/code/code-design.component').then((m) => m.CodeDesignComponent),
+      },
+      {
+        title: '图表',
+        path: 'chart',
+        data: {},
+        loadComponent: () =>
+          import('./widget/design/chart/chart-design.component').then(
+            (m) => m.ChartDesignComponent,
+          ),
+      },
+      {
+        title: 'cesium',
+        path: 'cesium',
+        data: { widgetType: true },
+        loadComponent: () =>
+          import('./widget/design/cesium/cesium-design.component').then(
+            (m) => m.CesiumDesignComponent,
+          ),
+      },
+      {
+        title: 'x6',
+        path: 'x6',
+        data: { widgetType: true },
+        loadComponent: () =>
+          import('./widget/design/x6/x6-design.component').then((m) => m.X6DesignComponent),
+      },
+    ],
   },
 ] as Routes;

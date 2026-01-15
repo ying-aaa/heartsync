@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
 import { IRadioConfig } from '@src/app/shared/models/public-api';
-import { WidgetTitleBackComponent } from '../../widget-title-back.component';
+import { WidgetTitleBackComponent } from '../../toolbar/widget-title-back.component';
 const toolbarConfigs: IRadioConfig[] = [
   {
     label: '底图',

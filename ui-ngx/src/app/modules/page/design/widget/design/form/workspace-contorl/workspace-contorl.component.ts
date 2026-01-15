@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormEditorService } from '@app/core/services/form-editor.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { WidgetTitleBackComponent } from '../../widget-title-back.component';
+import { WidgetTitleBackComponent } from '../../toolbar/widget-title-back.component';
 
 @Component({
   selector: 'hs-workspace-contorl',

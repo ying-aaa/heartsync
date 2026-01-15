@@ -9,6 +9,7 @@ import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';
 import { WidgetContainerComponent } from '@src/app/modules/components/widget-container/widget-container.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { getParamFromRoute } from '@src/app/core/utils';
 @Component({
   selector: 'hs-widget-viewport',
   templateUrl: './widget-viewport.component.html',
@@ -31,9 +32,12 @@ export class WidgetViewportComponent {
 
   widgetType = computed(() => this.widgetEditorService.currentWidgetType());
 
+  appId: string = getParamFromRoute('appId', this.route)!;
+
   constructor(
     private widgetEditorService: WidgetEditorService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   workSizeConfig = computed(() => {
@@ -53,9 +57,8 @@ export class WidgetViewportComponent {
   toWidgetDesign() {
     const widgetId = this.widgetEditorService.currentWidgetId();
     const widgetType = this.widgetEditorService.currentWidgetType();
-    const currentUrl = this.router.url;
 
-    this.router.navigate([`${currentUrl}/${widgetType}`], {
+    this.router.navigate([`/design/${this.appId}/widget/${widgetType}`], {
       queryParams: { widgetId },
     });
   }
