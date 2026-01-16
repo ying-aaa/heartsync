@@ -3,13 +3,22 @@
     <hs-workspace-contorl></hs-workspace-contorl>
   </aside>
 
-  <mat-divider [vertical]="true" class="h-full"></mat-divider>
+  <mat-divider
+    [vertical]="true"
+    class="h-full"
+  ></mat-divider>
 
   <main class="w-0 flex-1">
-    <hs-workspace-viewport></hs-workspace-viewport>
+    <hs-workspace-viewport
+      #WorkspaceViewport
+      [options]="options"
+    ></hs-workspace-viewport>
   </main>
 
-  <mat-divider [vertical]="true" class="h-full"></mat-divider>
+  <mat-divider
+    [vertical]="true"
+    class="h-full"
+  ></mat-divider>
 
   <aside class="flex flex-col h-full w-312px py-12px pl-12px relative">
     <header>
@@ -20,7 +29,12 @@
       <mat-divider class="w-full"></mat-divider>
     </header>
 
-    <hs-formly-config class="w-full pt-10px!" [model]="formEditorService.activeField()">
+    <hs-formly-config
+      #FormlyConfig
+      class="w-full pt-10px!"
+      [model]="formEditorService.activeField()"
+      [options]="options"
+    >
     </hs-formly-config>
   </aside>
 </content>

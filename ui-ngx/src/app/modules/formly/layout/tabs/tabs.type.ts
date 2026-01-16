@@ -1,9 +1,4 @@
-import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDropList,
-  moveItemInArray,
-} from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
@@ -12,7 +7,7 @@ import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { FormEditorService } from '@core/services/form-editor.service';
+import { FormlyFormService } from '../../formly-form.service';
 
 @Component({
   selector: 'formly-field-tabs',
@@ -20,13 +15,12 @@ import { FormEditorService } from '@core/services/form-editor.service';
   styleUrls: ['./tabs.type.less'],
   imports: [CdkDrag, CdkDropList, MatTabsModule, FormlyModule],
 })
-export class FormlyFieldTabs
-  extends FieldType<IEditorFormlyField>
-  implements OnInit
-{
+export class FormlyFieldTabs extends FieldType<IEditorFormlyField> implements OnInit {
   IFieldType = IFieldType;
 
-  constructor(public formEditorService: FormEditorService) {
+  constructor(
+    private formlyFormService: FormlyFormService,
+  ) {
     super();
   }
   cdkDropListDropped(event: CdkDragDrop<IEditorFormlyField[]> | any) {
@@ -37,22 +31,16 @@ export class FormlyFieldTabs
     const { previousIndex: formIndex, currentIndex: toIndex } = event;
 
     if (action === ICdkDrapActionType.COPY) {
-      this.formEditorService.addField(field, toParent, toIndex);
+      this.formlyFormService.addField(field, toParent, toIndex);
+      this.formlyFormService.syncFormilyForm(this);
     }
     if (action === ICdkDrapActionType.MOVE) {
       if (event.previousContainer === event.container) {
-        this.formEditorService.moveField(
-          toParent,
-          event.previousIndex,
-          event.currentIndex,
-        );
+        this.formlyFormService.moveField(toParent, event.previousIndex, event.currentIndex);
+        this.formlyFormService.syncFormilyForm(this);
       } else {
-        this.formEditorService.transferField(
-          fromParent,
-          toParent,
-          formIndex,
-          toIndex,
-        );
+        this.formlyFormService.transferField(fromParent, toParent, formIndex, toIndex);
+        this.formlyFormService.syncFormilyForm(this);
       }
     }
     this.options.build!();

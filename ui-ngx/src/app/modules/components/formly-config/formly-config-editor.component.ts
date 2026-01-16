@@ -57,12 +57,16 @@ export class FormlyConfigEditorComponent implements OnInit {
     effect(() => {
       const type: string = this.type() || this.model()?.type;
       this.fields = this.getFieldConfig(type);
-      this.formGroup = new FormGroup({});
+      this.syncFormilyForm();
     });
   }
 
   private getFieldConfig(type: string): IEditorFormlyField[] {
     return CONFIT_RESOURCE[type];
+  }
+
+  syncFormilyForm() {
+    this.formGroup = new FormGroup({});
   }
   ngOnInit() {}
 }

@@ -1,59 +1,44 @@
 // panel-wrapper.component.ts
-import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDragPlaceholder,
-  CdkDropList,
-} from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
 import {
   ICdkDrapActionType,
   IEditorFormlyField,
-  IEditSizeType,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { CommonModule } from '@angular/common';
 import { ConcatUnitsPipe } from '@shared/pipes/units.pipe';
+import { FormlyFormService } from '../../formly-form.service';
 
 @Component({
   selector: 'formly-field-wrapper',
   templateUrl: './wrapper.type.html',
   styleUrls: ['./wrapper.type.less'],
   host: { '[class.formly-field-wrapper]': 'true' },
-  imports: [
-    CdkDropList,
-    CdkDrag,
-    FormlyModule,
-    CdkDragPlaceholder,
-    CommonModule,
-    ConcatUnitsPipe,
-  ],
+  imports: [CdkDropList, CdkDrag, FormlyModule, CdkDragPlaceholder, CommonModule, ConcatUnitsPipe],
 })
 export class FormlyFieldWrapper extends FieldType<IEditorFormlyField> {
   @ViewChild(CdkDropList) dropList!: CdkDropList;
 
   IFieldType = IFieldType;
-  constructor(public formEditorService: FormEditorService) {
+  constructor(private formlyFormService: FormlyFormService) {
     super();
   }
 
   @HostListener('mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {
-    if(!this.options.formState.mousePosition) return;
+    if (!this.options.formState.mousePosition) return;
     this.options.formState.mousePosition.x = event.clientX;
     this.options.formState.mousePosition.y = event.clientY;
   }
 
   canEnter = (drag: CdkDrag) => {
-    const isInDropContainer = this._isMouseInElement(
-      drag.dropContainer.element.nativeElement,
-    );
-    const index = this.formEditorService
+    const isInDropContainer = this._isMouseInElement(drag.dropContainer.element.nativeElement);
+    const index = this.options.formState
       .getConnectedTo(this.IFieldType.COLUMN)
       .indexOf(this.dropList.id);
-    const dropContainerIndex = this.formEditorService
+    const dropContainerIndex = this.options.formState
       .getConnectedTo(this.IFieldType.COLUMN)
       .indexOf(drag.dropContainer.id);
     return !(isInDropContainer && dropContainerIndex < index);
@@ -68,22 +53,17 @@ export class FormlyFieldWrapper extends FieldType<IEditorFormlyField> {
     const { previousIndex: formIndex, currentIndex: toIndex } = event;
 
     if (action === ICdkDrapActionType.COPY) {
-      this.formEditorService.addField(field, toParent, toIndex);
+      const newField = this.formlyFormService.addField(field, toParent, toIndex);
+      this.formlyFormService.syncFormilyForm(this);
+      this.options.formState.selectField && this.options.formState.selectField(newField);
     }
     if (action === ICdkDrapActionType.MOVE) {
       if (event.previousContainer === event.container) {
-        this.formEditorService.moveField(
-          toParent,
-          event.previousIndex,
-          event.currentIndex,
-        );
+        this.formlyFormService.moveField(toParent, event.previousIndex, event.currentIndex);
+        this.formlyFormService.syncFormilyForm(this);
       } else {
-        this.formEditorService.transferField(
-          fromParent,
-          toParent,
-          formIndex,
-          toIndex,
-        );
+        this.formlyFormService.transferField(fromParent, toParent, formIndex, toIndex);
+        this.formlyFormService.syncFormilyForm(this);
       }
     }
   }

@@ -13,6 +13,7 @@ import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.mo
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { FormlyFormService } from '../../formly-form.service';
 
 @Component({
   selector: 'formly-wrapper-control',
@@ -56,11 +57,29 @@ export class FormlyWrapperContorl
 
   isMouseInside = false;
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(
+    private formlyFormService: FormlyFormService,
+    private cdr: ChangeDetectorRef,
+  ) {
     super();
     effect(() => {
       this._checkActiveField();
     });
+  }
+
+  addField() {
+    this.formlyFormService.addField(
+      this.field,
+      this.field.parent!.fieldGroup!,
+      this.field.index! + 1,
+    );
+    this.formlyFormService.syncFormilyForm(this);
+  }
+
+  removeField() {
+    this.formlyFormService.removeField(this.field.parent!.fieldGroup!, this.field.index!);
+    this.formlyFormService.syncFormilyForm(this);
+    this.options.formState.selectField &&  this.options.formState.selectField(null)
   }
 
   @HostListener('click', ['$event'])
@@ -81,11 +100,12 @@ export class FormlyWrapperContorl
     this.isMouseInside = false;
   }
 
-  ngOnInit(): void {}
-
   private _checkActiveField(): void {
     this._isActiveField = this.field.fieldId! === this.options.formState.activeField()?.fieldId;
     this.cdr.markForCheck();
   }
+
+  ngOnInit(): void {}
+
   ngOnDestroy(): void {}
 }

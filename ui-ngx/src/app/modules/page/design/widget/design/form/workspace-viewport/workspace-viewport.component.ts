@@ -1,7 +1,7 @@
-import { Component, computed, Inject, OnInit, Optional, viewChild } from '@angular/core';
+import { Component, computed, Inject, input, OnInit, Optional, viewChild } from '@angular/core';
 import { WorkspaceToobarComponent } from './workspace-toobar/workspace-toobar.component';
 import { MatDividerModule } from '@angular/material/divider';
-import { ConfigOption, FORMLY_CONFIG, FormlyModule } from '@ngx-formly/core';
+import { ConfigOption, FORMLY_CONFIG, FormlyFormOptions, FormlyModule } from '@ngx-formly/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormEditorService } from '../../../../../../../core/services/form-editor.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
@@ -16,27 +16,12 @@ import { WidgetZoomComponent } from '../../../widget-zoom.component';
   selector: 'hs-workspace-viewport',
   templateUrl: './workspace-viewport.component.html',
   styleUrls: ['./workspace-viewport.component.less'],
-  imports: [
-    WorkspaceToobarComponent,
-    MatDividerModule,
-    FormlyEditorModule,
-    NgScrollbarModule,
-  ],
+  imports: [WorkspaceToobarComponent, MatDividerModule, FormlyEditorModule, NgScrollbarModule],
 })
 export class WorkspaceViewportComponent implements OnInit {
+  options = input.required<FormlyFormOptions>();
 
   formGroup = new FormGroup({});
-
-  options = {
-    formState: {
-      fieldsId: 'workspace',
-      mousePosition:  { x: 0, y: 0 },
-      dragStart: false,
-      isEditMode: computed(() => this.formEditorService.isEditMode()),
-      activeField: computed(() => this.formEditorService.activeField()),
-      selectField: this.formEditorService.selectField.bind(this.formEditorService),
-    },
-  }
 
   constructor(
     public formEditorService: FormEditorService,
@@ -45,6 +30,13 @@ export class WorkspaceViewportComponent implements OnInit {
 
   get getJsonField() {
     return this.formEditorService.getJsonField();
+  }
+
+  syncFormilyForm() {
+    this.formGroup = new FormGroup({});
+    if (this.options().build) {
+      this.options().build!();
+    }
   }
 
   ngOnInit() {}

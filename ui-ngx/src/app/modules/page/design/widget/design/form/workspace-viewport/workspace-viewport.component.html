@@ -19,10 +19,10 @@
       <div scrollViewport>
         <div class="render-canvar">
           <formly-form
-            [form]="formEditorService.formGroup"
+            [form]="formGroup"
             [fields]="formEditorService.fields()"
             [model]="formEditorService.model"
-            [options]="options"
+            [options]="options()"
           ></formly-form>
         </div>
       </div>

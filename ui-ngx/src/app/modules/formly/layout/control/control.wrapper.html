@@ -10,30 +10,22 @@
     [vertical]="true"
     class="h-full"
   ></mat-divider>
-  <!-- <button
+  <button
     mat-mini-fab
-    (click)="
-        formEditorService.addField(
-          field,
-          field.parent!.fieldGroup!,
-          field.index! + 1
-        )
-      "
+    (click)="addField()"
   >
     <mat-icon>content_copy</mat-icon>
-  </button> -->
+  </button>
   <mat-divider
     [vertical]="true"
     class="h-full"
   ></mat-divider>
-  <!-- <button
+  <button
     mat-mini-fab
-    (click)="
-        formEditorService.removeField(field.parent!.fieldGroup!, field.index!)
-      "
+    (click)="removeField()"
   >
     <mat-icon>delete</mat-icon>
-  </button> -->
+  </button>
 </div>
 }
 <!-- {{ field.props?.['wrapperAttr']?.backgroundColor }} -->

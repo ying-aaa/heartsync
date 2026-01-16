@@ -1,4 +1,4 @@
-@let connectedTo = formEditorService.getConnectedTo(IFieldType.MATTABS);
+@let connectedTo = options.formState.getConnectedTo ? options.formState.getConnectedTo(IFieldType.COLUMN) : [];
 <mat-tab-group
   cdkDropList
   cdkDropListOrientation="horizontal"

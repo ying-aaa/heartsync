@@ -1,4 +1,4 @@
-@let connectedTo = formEditorService.getConnectedTo(IFieldType.SUBTABLE);
+@let connectedTo = options.formState.getConnectedTo ? options.formState.getConnectedTo(IFieldType.COLUMN) : [];
 @let fieldGroup = field.fieldGroup;
 <div class="py-8px">{{ props.label }}</div>
 <div
@@ -15,9 +15,9 @@
 >
   @for (f of field.fieldGroup; track $index) {
     <formly-field
+      cdkDrag
       [field]="f"
       [style.width]="getSubTableItemWidth(fieldGroup!, f)"
-      cdkDrag
       [cdkDragData]="getDragFieldData(f)"
       (cdkDragStarted)="options.formState.dragStart = true"
       (cdkDragReleased)="options.formState.dragStart = false"

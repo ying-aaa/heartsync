@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
 import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.model';
-import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { CommonModule } from '@angular/common';
 
@@ -14,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class FormlyFieldGrid extends FieldType<IEditorFormlyField> {
   IFieldType = IFieldType;
 
-  constructor(public formEditorService: FormEditorService) {
+  constructor() {
     super();
   }
 

@@ -1,4 +1,4 @@
-import { Component, computed, effect, OnInit, signal } from '@angular/core';
+import { Component, effect, OnInit, signal } from '@angular/core';
 import { IRadioConfig } from '@src/app/shared/models/system.model';
 import { MatIconModule } from '@angular/material/icon';
 import { presetResource } from './preset-resource';
@@ -17,7 +17,7 @@ import {
   IEditorFormlyField,
   IFieldType,
 } from '@src/app/shared/models/widget.model';
-import { FormEditorService } from '../../../../core/services/form-editor.service';
+import { FormEditorService } from '@core/services/form-editor.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 @Component({

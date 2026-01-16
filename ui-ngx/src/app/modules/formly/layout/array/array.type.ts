@@ -9,11 +9,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
-import { FormEditorService } from '@src/app/core/services/form-editor.service';
 import { deepClone } from '@src/app/core/utils';
 import { IEditorFormlyField } from '@src/app/shared/models/widget.model';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import { ToastrService } from 'ngx-toastr';
+import { FormlyFormService } from '../../formly-form.service';
 
 @Component({
   selector: 'formly-field-array',
@@ -33,14 +33,14 @@ import { ToastrService } from 'ngx-toastr';
 export class FormlyFieldArray extends FieldArrayType<IEditorFormlyField> implements OnInit {
   constructor(
     private toastr: ToastrService,
-    private formEditorService: FormEditorService,
+    private formlyFormService: FormlyFormService,
   ) {
     super();
   }
 
   cdkDropListDropped(event: CdkDragDrop<string[]>) {
-    this.formEditorService.moveField(this.model, event.previousIndex, event.currentIndex);
-    this.options.build!();
+    this.formlyFormService.moveField(this.model, event.previousIndex, event.currentIndex);
+    this.formlyFormService.syncFormilyForm(this);
   }
 
   addField(toIndex: number) {
@@ -49,14 +49,13 @@ export class FormlyFieldArray extends FieldArrayType<IEditorFormlyField> impleme
 
     const value = deepClone(this.model?.at(-1) || {});
 
-    this.formEditorService.addField(
+    this.formlyFormService.addField(
       defaultAddValue || value,
       this.model,
       toIndex,
-      false,
       this.add.bind(this),
     );
-    this.options.build!();
+    this.formlyFormService.syncFormilyForm(this);
   }
 
   removeField(toIndex: number) {
@@ -69,8 +68,8 @@ export class FormlyFieldArray extends FieldArrayType<IEditorFormlyField> impleme
       return;
     }
 
-    this.formEditorService.removeField(this.model, toIndex, false, this.remove.bind(this));
-    this.options.build!();
+    this.formlyFormService.removeField(this.model, toIndex, this.remove.bind(this));
+    this.formlyFormService.syncFormilyForm(this);
   }
 
   getColumnItemWidth(fieldGroup: IEditorFormlyField[], itemField: IEditorFormlyField): string {

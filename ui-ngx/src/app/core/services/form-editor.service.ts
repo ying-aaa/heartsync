@@ -1,18 +1,13 @@
 import { effect, Injectable, signal } from '@angular/core';
-import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { FormGroup } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
-import { deepClone, extractProperties, generateUUID, PickConfig } from '@src/app/core/utils';
+import { deepClone, extractProperties, PickConfig } from '@src/app/core/utils';
 import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IFormSubTypes, IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 import { FormWidgetService } from '@src/app/core/http/form-widget.service';
-import { FieldArrayType, FormlyFormOptions } from '@ngx-formly/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class FormEditorService {
   HS_DEFAULT_ID = 'workspace';
 
@@ -23,11 +18,6 @@ export class FormEditorService {
 
   isShowConfigPanel = signal(false);
 
-  mousePosition: { x: number; y: number } = { x: 0, y: 0 };
-
-  // 当前是否在拖拽中
-  dragStart = false;
-
   // 选中的 Field
   public activeField = signal<IEditorFormlyField | null>(null);
 
@@ -35,14 +25,7 @@ export class FormEditorService {
 
   fieldsId = signal<number | undefined>(undefined);
   fields = signal<IEditorFormlyField[]>([]);
-  formGroup = new FormGroup({});
   model = {};
-
-  options: FormlyFormOptions = {
-    formState: {
-      fieldsId: 'workspace', // 自定义参数
-    },
-  };
 
   constructor(
     private formWidgetService: FormWidgetService,
@@ -67,9 +50,7 @@ export class FormEditorService {
               }
               this.isShowConfigPanel.set(false);
               this.selectField(null);
-              this.formGroup = new FormGroup({});
               this.flatField$.next(this.getFlatField());
-              this.options.build && this.options.build();
             },
             error: (err: any) => console.error('Get widget error:', err),
           });
@@ -107,101 +88,12 @@ export class FormEditorService {
         },
         error: (err: any) => console.error('Update widget error:', err),
       });
-    this.formGroup.patchValue(this.model);
     this.flatField$.next(this.getFlatField());
   }
 
   selectField(field: IEditorFormlyField | null): void {
     this.activeField.set(field);
     field && this.isShowConfigPanel.set(true);
-  }
-
-  addField(
-    field: IEditorFormlyField,
-    toParentField: IEditorFormlyField[],
-    toIndex: number,
-    selected = true,
-    add?: FieldArrayType['add'],
-  ) {
-    field = deepClone(field);
-
-    if (field._design) {
-      // 递归新的field为其添加id属性
-      function addFieldId(field: IEditorFormlyField) {
-        const key = generateUUID();
-        // 有一些外层容器不需要绑定key
-        field.key = field._bindKey ? key : '';
-        field.fieldId = `${field.type}_key_${key}`;
-
-        if (field.fieldGroup) {
-          field.fieldGroup.forEach(addFieldId);
-        }
-      }
-
-      // 执行递归
-      addFieldId(field);
-    }
-
-    // 新增 field 的默认row为1
-    if (field.props) {
-      field.props['row'] = 1;
-    }
-
-    // 插入
-    add ? add(toIndex, field) : toParentField.splice(toIndex, 0, field);
-
-    // 更新
-    this.formGroup = new FormGroup({});
-    this.options.build && this.options.build();
-
-    // 如果传入了选中，则需要选中
-    selected && this.selectField(field);
-
-    // 大纲更新
-    this.flatField$.next(this.getFlatField());
-  }
-
-  // 删除字段
-  removeField(
-    toParentField: IEditorFormlyField[],
-    toIndex: number,
-    clearSelected = true,
-    remove?: FieldArrayType['remove'],
-  ) {
-    remove ? remove(toIndex) : toParentField.splice(toIndex, 1);
-    this.formGroup = new FormGroup({});
-    this.options.build && this.options.build();
-    clearSelected && this.selectField(null);
-    this.flatField$.next(this.getFlatField());
-  }
-
-  // 移动字段
-  moveField(toParent: IEditorFormlyField[], fromIndex: number, toIndex: number) {
-    moveItemInArray(toParent, fromIndex, toIndex);
-    this.formGroup = new FormGroup({});
-    this.options.build && this.options.build();
-    this.flatField$.next(this.getFlatField());
-  }
-
-  // 容器内的field移动到另一个容器
-  transferField(
-    formParent: IEditorFormlyField[],
-    toParent: IEditorFormlyField[],
-    formIndex: number,
-    toIndex: number,
-  ) {
-    // 如果是移动到子表容器，设置子表的默认列数
-    if (toParent[0]?.parent?.type === IFieldType.SUBTABLE) {
-      if (formParent[formIndex].props) {
-        formParent[formIndex].props['row'] = 1;
-      }
-    }
-    // 执行移动
-    transferArrayItem(formParent, toParent, formIndex, toIndex);
-    this.formGroup = new FormGroup({});
-    this.options.build && this.options.build();
-    // 更新大纲
-    this.flatField$.next(this.getFlatField());
   }
 
   getConnectedTo(type: IFieldType) {
