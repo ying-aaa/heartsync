@@ -1,4 +1,4 @@
-import { IBaseWidgetConfig, IEditorFormlyField } from './widget.model';
+import { ITypeWidgetConfig, IEditorFormlyField } from './widget.model';
 
 export enum IFormSubTypes {
   FLAT = 'flat', // 网格布局
@@ -15,7 +15,7 @@ export interface IFormLogicConfig {}
 
 export interface IFormButtonConfig {}
 
-export interface IFormWidgetConfig extends IBaseWidgetConfig {
+export interface IFormWidgetConfig extends ITypeWidgetConfig {
   widgetId: string,
   formName: string;
   editName?: string;

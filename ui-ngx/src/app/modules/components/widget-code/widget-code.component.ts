@@ -22,6 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CodeWidgetService } from '@src/app/core/http/code-widget.service';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { CommonModule } from '@angular/common';
+import { IWidgetConfig } from '@src/app/shared/models/widget.model';
 @Component({
   selector: 'hs-widget-code',
   templateUrl: './widget-code.component.html',

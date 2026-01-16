@@ -1,6 +1,10 @@
 @let backgroundImageUrl = gridsterOption()['backgroundImageFileData']?.[0]?.url;
 
-<content class="wh-full" hs-loading [isLoading]="loadingStatus()">
+<content
+  class="wh-full"
+  hs-loading
+  [isLoading]="loadingStatus()"
+>
   <div
     class="wh-full relative"
     [style.backgroundColor]="gridsterOption()['backgroundColor']"
@@ -13,88 +17,115 @@
     }"
   >
     @if (!widgets().length && !loadingStatus()) {
-      <div class="wh-full flex-center text-22px absolute top-0 left-0">
-        <span>未配置部件</span>
-      </div>
+    <div class="wh-full flex-center text-22px absolute top-0 left-0">
+      <span>未配置部件</span>
+    </div>
     }
 
     @if (gridsterOption().gridType) {
-      <gridster [options]="gridsterOption()">
-        @for (item of widgets(); track item) {
-          <gridster-item
-            #gridsterItem
-            [item]="item"
-            [class.select-gridster-item]="item.widgetId === selectWidgetId()"
-            (click)="selectGridster(item)"
-          >
-            <!-- 内容 -->
-            <div id="#containter" class="wh-full">
-              <hs-widget-container
-                [widgetId]="item.widgetId!"
-                [widgetType]="item['type']"
-              ></hs-widget-container>
+    <gridster [options]="gridsterOption()">
+      @for (item of widgets(); track item) {
+      <gridster-item
+        #gridsterItem
+        [item]="item"
+        [class.select-gridster-item]="item.widgetId === selectWidgetId()"
+        (click)="selectGridster(item)"
+      >
+        <!-- 内容 -->
+        <div
+          id="#containter"
+          class="wh-full"
+        >
+          <hs-widget-container [widgetId]="item.widgetId!"></hs-widget-container>
 
-              @if (isRuntime()) {
-                <div
-                  [cdkContextMenuTriggerFor]="InnerMoreVert"
-                  [cdkContextMenuTriggerData]="{ widgetData: item }"
-                  class="absolute wh-full top-0 left-0 select-shade"
-                >
-                  <div class="toolbar-container absolute -top-40px left-0 z-999 bg-[var(--base-bg-color)] rounded-t-6px p-2px">
-                    <button mat-icon-button class="hs-icon-button-32" [matMenuTriggerFor]="MoreVert" (click)="test()">
-                      <mat-icon class="material-icons-round">
-                        more_vert
-                      </mat-icon>
-                    </button>
-                    <!-- 左侧菜单 -->
-                    <mat-menu #MoreVert="matMenu">
-                      <div class="ml-12px mb-8px">
-                        当前层数:
-                        <span class="ml-10px">{{
-                          item.layerIndex === undefined ? 1 : item.layerIndex
-                        }}</span>
-                      </div>
-                      <button mat-menu-item (click)="gridsterItem.bringToFront(1)">
-                        <mat-icon>arrow_upward</mat-icon>
-                        向上一层
-                      </button>
-                      <button mat-menu-item (click)="gridsterItem.sendToBack(1)">
-                        <mat-icon>arrow_downward</mat-icon>
-                        向下一层
-                      </button>
-                    </mat-menu>
-                  </div>
-                  <div class="toolbar-container absolute -top-40px right-0 z-999 bg-[var(--base-bg-color)] rounded-t-6px p-2px">
-                    <button mat-icon-button class="hs-icon-button-32">
-                      <mat-icon class="material-icons-round"> edit </mat-icon>
-                    </button>
-                    <button mat-icon-button class="hs-icon-button-32">
-                      <mat-icon class="material-icons-round"> download </mat-icon>
-                    </button>
-                    <button mat-icon-button class="hs-icon-button-32" [matMenuTriggerFor]="menu">
-                      <mat-icon class="material-icons-round color-red-5"> delete </mat-icon>
-                    </button>
-                    <mat-menu #menu="matMenu">
-                      <button
-                        mat-menu-item
-                        (mousedown)="removeItem($event, item)"
-                        (touchstart)="removeItem($event, item)"
-                      >
-                        确认删除
-                      </button>
-                    </mat-menu>
-                  </div>
+          @if (isRuntime()) {
+          <div
+            [cdkContextMenuTriggerFor]="InnerMoreVert"
+            [cdkContextMenuTriggerData]="{ widgetData: item }"
+            class="absolute wh-full top-0 left-0 select-shade"
+          >
+            <div
+              class="toolbar-container absolute -top-40px left-0 z-999 bg-[var(--base-bg-color)] rounded-t-6px p-2px">
+              <button
+                mat-icon-button
+                class="hs-icon-button-32"
+                [matMenuTriggerFor]="MoreVert"
+                (click)="test()"
+              >
+                <mat-icon class="material-icons-round">
+                  more_vert
+                </mat-icon>
+              </button>
+              <!-- 左侧菜单 -->
+              <mat-menu #MoreVert="matMenu">
+                <div class="ml-12px mb-8px">
+                  当前层数:
+                  <span class="ml-10px">{{
+                    item.layerIndex === undefined ? 1 : item.layerIndex
+                    }}</span>
                 </div>
-              }
+                <button
+                  mat-menu-item
+                  (click)="gridsterItem.bringToFront(1)"
+                >
+                  <mat-icon>arrow_upward</mat-icon>
+                  向上一层
+                </button>
+                <button
+                  mat-menu-item
+                  (click)="gridsterItem.sendToBack(1)"
+                >
+                  <mat-icon>arrow_downward</mat-icon>
+                  向下一层
+                </button>
+              </mat-menu>
             </div>
-          </gridster-item>
-        }
-      </gridster>
+            <div
+              class="toolbar-container absolute -top-40px right-0 z-999 bg-[var(--base-bg-color)] rounded-t-6px p-2px"
+            >
+              <button
+                mat-icon-button
+                class="hs-icon-button-32"
+              >
+                <mat-icon class="material-icons-round"> edit </mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="hs-icon-button-32"
+              >
+                <mat-icon class="material-icons-round"> download </mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="hs-icon-button-32"
+                [matMenuTriggerFor]="menu"
+              >
+                <mat-icon class="material-icons-round color-red-5"> delete </mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button
+                  mat-menu-item
+                  (mousedown)="removeItem($event, item)"
+                  (touchstart)="removeItem($event, item)"
+                >
+                  确认删除
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+          }
+        </div>
+      </gridster-item>
+      }
+    </gridster>
     }
   </div>
 </content>
 
-<ng-template #InnerMoreVert let-widgetData="widgetData">
+<ng-template
+  #InnerMoreVert
+  let-widgetData="widgetData"
+>
   <style>
     #hs-context-menu {
       background-color: var(--base-bg-color);
@@ -114,23 +145,28 @@
     class="absolute z-10 min-w-[180px] overflow-auto rounded-lg border border-slate-200 p-1.5 shadow-lg shadow-sm focus:outline-none"
   >
     @for (menu of gridsterItemContextMenuArr(); track $index) {
-      <li
-        cdkMenuItem
-        role="menuitem"
-        (click)="menu.action($event, widgetData)"
-        class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
-      >
-        @if (menu.matIcon) {
-          <mat-icon class="color-#2c7eac w-20px! h-20px! text-20px">{{ menu.icon }}</mat-icon>
-        } @else {
-          <hs-svg [name]="menu.icon" width="16px" height="16px" containerClass="p-2px"></hs-svg>
-        }
-
-        <p class="font-medium ml-2">{{ menu.label }}</p>
-      </li>
-      @if ($index !== gridsterItemContextMenuArr().length - 1) {
-        <mat-divider class="my-3px!"></mat-divider>
+    <li
+      cdkMenuItem
+      role="menuitem"
+      (click)="menu.action($event, widgetData)"
+      class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
+    >
+      @if (menu.matIcon) {
+      <mat-icon class="color-#2c7eac w-20px! h-20px! text-20px">{{ menu.icon }}</mat-icon>
+      } @else {
+      <hs-svg
+        [name]="menu.icon"
+        width="16px"
+        height="16px"
+        containerClass="p-2px"
+      ></hs-svg>
       }
+
+      <p class="font-medium ml-2">{{ menu.label }}</p>
+    </li>
+    @if ($index !== gridsterItemContextMenuArr().length - 1) {
+    <mat-divider class="my-3px!"></mat-divider>
+    }
     }
   </ul>
 </ng-template>

@@ -1,30 +1,34 @@
-@if (loadingState()) {
-  <hs-loading></hs-loading>
+@if (!widgetConfig()) {
+<div class="wh-full flex items-center justify-center text-gray-500">
+  未传入有效的部件配置！
+</div>
 } @else {
-  @switch (widgetType) {
-    @case (IWidgetType.CODE) {
-      <hs-widget-code [widgetId]="widgetId()"> </hs-widget-code>
-    }
-    @case (IWidgetType.CHART) {
-      <hs-widget-chart></hs-widget-chart>
-    }
-    @case (IWidgetType.CESIUM) {
-      <hs-widget-cesium></hs-widget-cesium>
-    }
-    @case (IWidgetType.X6) {
-      x6
-    }
-    @case (IWidgetType.FORM) {
-      <hs-widget-form [widgetId]="widgetId()"> </hs-widget-form>
-    }
-    @case (IWidgetType.LIST) {
-      <hs-widget-list></hs-widget-list>
-    }
-    @case (IWidgetType.DETAIL) {
-      <hs-widget-detail></hs-widget-detail>
-    }
-    @default {
-      未找到该部件！
-    }
-  }
+@switch (widgetConfig()?.type) {
+@case (IWidgetType.CODE) {
+<hs-widget-code [widgetId]="widgetConfig()?.id"></hs-widget-code>
+}
+@case (IWidgetType.CHART) {
+<hs-widget-chart></hs-widget-chart>
+}
+@case (IWidgetType.CESIUM) {
+<hs-widget-cesium></hs-widget-cesium>
+}
+@case (IWidgetType.X6) {
+<div class="wh-full flex items-center justify-center">x6</div>
+}
+@case (IWidgetType.FORM) {
+<hs-widget-form [widgetId]="widgetConfig()?.id"></hs-widget-form>
+}
+@case (IWidgetType.LIST) {
+<hs-widget-list></hs-widget-list>
+}
+@case (IWidgetType.DETAIL) {
+<hs-widget-detail></hs-widget-detail>
+}
+@default {
+<div class="wh-full flex items-center justify-center text-gray-500">
+  未找到类型为 {{ widgetConfig()?.type }} 的部件！
+</div>
+}
+}
 }

@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  input,
   Input,
   OnInit,
   TemplateRef,
@@ -9,6 +10,7 @@ import {
 } from '@angular/core';
 import { ScriptLoaderService } from '@src/app/core/services/script-loader.service';
 import { initCesiumConfig } from '@src/app/lib/cesium.config';
+import { IWidgetConfig } from '@src/app/shared/models/widget.model';
 import { Viewer } from 'cesium';
 
 declare var Cesium: any;
@@ -17,11 +19,10 @@ declare var Cesium: any;
   selector: 'hs-widget-cesium',
   templateUrl: './widget-cesium.component.html',
 })
-export class WidgetCesiumComponent implements OnInit, AfterViewInit {
+export class WidgetCesiumComponent implements OnInit, AfterViewInit {  
   @Input() styles = { width: '100%', height: '100%' };
 
-  cesiumInstance: TemplateRef<Element> | any =
-    viewChild<ElementRef>('cesiumContainer');
+  cesiumInstance: TemplateRef<Element> | any = viewChild<ElementRef>('cesiumContainer');
 
   public viewer: Viewer;
 

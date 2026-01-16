@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
+import { IWidgetConfig } from '@src/app/shared/models/widget.model';
 
 @Component({
   selector: 'hs-widget-chart',

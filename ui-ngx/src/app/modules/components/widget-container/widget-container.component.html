@@ -1,9 +1,24 @@
 <content
-  hs-fullscreen
   class="hs-widget-container overflow-hidden block wh-full relative flex flex-col"
+  hs-fullscreen
   [fullscreen]="fullscreen"
-  [style]="widgetContext.containerStyle"
+  [style]="widgetSettings().containerStyle"
 >
+  @if (loadingState()) {
+  <div class="absolute inset-0 wh-full flex items-center justify-center bg-white/90 z-20">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+  }
+
+  @if (!loadingState() && errorState()) {
+  <div class="absolute inset-0 wh-full flex flex-col items-center justify-center bg-red-50 text-red-600 p-4 z-20">
+    <mat-icon class="material-icons text-24px mb-2">error</mat-icon>
+    <span class="text-16px">{{ errorState() }}</span>
+  </div>
+  }
+
+  @if (!loadingState() && !errorState()) {
+  @if (widgetSettings().anableFullscreen) {
   <button
     mat-icon-button
     (click)="fullscreen = !fullscreen"
@@ -12,23 +27,28 @@
     @let fullscreenIcon = fullscreen ? 'fullscreen_exit' : 'fullscreen';
     <mat-icon class="material-icons">{{ fullscreenIcon }}</mat-icon>
   </button>
+  }
 
-  @if(widgetContext.showTitle) {
+  @if(widgetSettings().showTitle) {
   <div
-    [style]="widgetContext.titleStyle"
     class="hs-widget-header"
+    [style]="widgetSettings().titleStyle"
   >
-    @if (widgetContext.showTitleIcon) {
-    <mat-icon class="material-icons">{{ widgetContext.icon }}</mat-icon>
+    @if (widgetSettings().showTitleIcon && widgetSettings().icon) {
+    <mat-icon
+      class="material-icons"
+      [style]="widgetSettings().iconStyle"
+    >{{ widgetSettings().icon }}</mat-icon>
     }
-    <span>{{widgetContext.title}}</span>
+    <span [title]="widgetSettings().titleTooltip">{{ widgetSettings().title }}</span>
   </div>
   }
 
-  <div class="hs-widget-content flex-1">
+  <div class="hs-widget-content flex-1 relative">
     <hs-widget
-      [style]="widgetContext.widgetStyle"
-      [widgetId]="widgetId()"
-    > </hs-widget>
+      [style]="widgetSettings().widgetStyle"
+      [widgetConfig]="widgetContext()"
+    ></hs-widget>
   </div>
+  }
 </content>

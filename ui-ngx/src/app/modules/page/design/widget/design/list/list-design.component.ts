@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WorkspaceContorlComponent } from '../form/workspace-contorl/workspace-contorl.component';
 import { MatDivider } from '@angular/material/divider';
-import { WorkspaceViewportComponent } from '../form/workspace-viewport/workspace-viewport.component';
 import { FormlyConfigEditorComponent } from '@src/app/modules/components/formly-config/formly-config-editor.component';
 import { ActivatedRoute } from '@angular/router';
 import { FormEditorService } from '@src/app/core/services/form-editor.service';
@@ -13,7 +12,6 @@ import { FormEditorService } from '@src/app/core/services/form-editor.service';
   imports: [
     WorkspaceContorlComponent,
     MatDivider,
-    WorkspaceViewportComponent,
     FormlyConfigEditorComponent,
   ],
 })

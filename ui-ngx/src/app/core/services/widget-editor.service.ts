@@ -53,7 +53,7 @@ export class WidgetEditorService {
   }
 
   loadWidgetInfo() {
-    this.WidgetHttpService.findOneWidget(this.currentWidgetId()).subscribe((res) => {
+    this.WidgetHttpService.getWidgetById(this.currentWidgetId()).subscribe((res) => {
       this.currentWidgetConfig.set(res);
     });
   }

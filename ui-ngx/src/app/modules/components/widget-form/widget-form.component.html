@@ -1,22 +1,34 @@
-@if (loadingState()) {
-<div class="wh-full flex-center">
-  <mat-spinner></mat-spinner>
-</div>
-} @else {
-<formly-form
-  [form]="formGroup"
-  [fields]="fields()"
-  [model]="model"
-  [options]="options"
-></formly-form>
-}
+<div class="relative wh-full">
+  @if (loadingState()) {
+  <div class="absolute inset-0 wh-full flex-center bg-white/90 z-10">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
 
-@if (!loadingState() && !fields().length) {
-<div class="absolute top-0 left-0 wh-full flex-col flex-center pb-80px -z-999 opacity-80">
-  <img
-    class="w-180px h-180px"
-    src="assets/workbench/widget-workbench-tips.png"
-  />
-  <div class="mt-30px text-18px">暂无内容，拖拽组件进来吧！</div>
+  @if (!loadingState() && errorState()) {
+  <div class="absolute inset-0 wh-full flex-center bg-red-50 text-red-600 z-10">
+    <div class="text-18px font-medium">{{ errorState() }}</div>
+  </div>
+  }
+
+  @if (!loadingState() && !errorState()) {
+  @if (fields().length) {
+  <formly-form
+    [form]="formGroup"
+    [fields]="fields()"
+    [model]="model()"
+    [options]="options"
+  ></formly-form>
+  }
+  @else {
+  <div class="absolute inset-0 wh-full flex-col flex-center pb-80px opacity-80 z-0">
+    <img
+      class="w-180px h-180px"
+      src="assets/workbench/widget-workbench-tips.png"
+      alt="暂无内容提示图"
+    />
+    <div class="mt-30px text-18px text-gray-500">暂无内容，拖拽组件进来吧！</div>
+  </div>
+  }
+  }
 </div>
-}

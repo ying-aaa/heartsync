@@ -1,58 +1,28 @@
-import { Component, Input, input, OnInit, signal } from '@angular/core';
-import { WidgetService } from '@src/app/core/http/widget.service';
+import { Component, input } from '@angular/core';
 import { WidgetCesiumComponent } from '@src/app/modules/components/widget-cesium/widget-cesium.component';
 import { WidgetChartComponent } from '@src/app/modules/components/widget-chart/widget-chart.component';
 import { WidgetCodeComponent } from '@src/app/modules/components/widget-code/widget-code.component';
 import { WidgetDetailComponent } from '@src/app/modules/components/widget-detail/widget-detail.component';
 import { WidgetFormComponent } from '@src/app/modules/components/widget-form/widget-form.component';
 import { WidgetListComponent } from '@src/app/modules/components/widget-list/widget-list.component';
-import { IEditSizeConfig, IWidgetType } from '@src/app/shared/models/public-api';
-import { HsLoadingComponent } from '@src/app/shared/components/hs-loading/hs-loading.component';
+import { IWidgetConfig, IWidgetType } from '@src/app/shared/models/public-api';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'hs-widget',
   templateUrl: './widget.component.html',
   imports: [
+    CommonModule,
     WidgetCodeComponent,
     WidgetChartComponent,
     WidgetCesiumComponent,
     WidgetFormComponent,
     WidgetListComponent,
-    WidgetFormComponent,
     WidgetDetailComponent,
-    HsLoadingComponent,
   ],
 })
-export class WidgetComponent implements OnInit {
-  widgetId = input.required<string>();
-
-  _widgetType: IWidgetType;
-
-  @Input()
-  get widgetType() {
-    return this._widgetType;
-  }
-  set widgetType(value: IWidgetType) {
-    this._widgetType = value;
-  }
-
-  loadingState = signal(false);
+export class WidgetComponent {
+  widgetConfig = input.required<IWidgetConfig | undefined>();
 
   IWidgetType = IWidgetType;
-
-  constructor(private WidgetHttpService: WidgetService) {}
-
-  ngOnInit() {
-    if (this._widgetType) return;
-    this.loadingState.set(true);
-    this.WidgetHttpService.findOneWidget(this.widgetId()).subscribe(
-      (res) => {
-        this._widgetType = res.type;
-        this.loadingState.set(false);
-      },
-      () => {
-        this.loadingState.set(false);
-      },
-    );
-  }
 }

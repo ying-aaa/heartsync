@@ -1,4 +1,5 @@
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import { IFormWidgetConfig } from './form-widget.model';
 
 export interface IEditorFormlyField extends FormlyFieldConfig {
   /**
@@ -73,10 +74,9 @@ export interface IDataSourceConfig {}
 export interface IFormVariablesConfig {}
 
 // 组件配置接口
-export interface IBaseWidgetConfig {
+export interface ITypeWidgetConfig {
   id?: number; // 组件唯一标识
   appId?: string;
-  dashboardId?: string;
   workspaceName: string; // 工作台名称
   type?: IWidgetType; // 组件类型（表单、列表、详情、图表等）
   workSizeConfig?: IEditSizeConfig; // 工作区尺寸配置
@@ -87,4 +87,27 @@ export interface IBaseWidgetConfig {
   lastUpdateTime?: Date;
   lastUpdateUser?: string;
   variablesConfig?: IFormVariablesConfig;
+}
+
+export interface ICodeWidgetConfig extends ITypeWidgetConfig {}
+
+export interface IWidgetSettings {
+  anableFullscreen: boolean;
+  showTitle: boolean;
+  showTitleIcon: boolean;
+  title: string;
+  titleTooltip: string;
+  icon: string;
+  containerStyle: Record<string, string>;
+  titleStyle: Record<string, string>;
+  iconStyle: Record<string, string>;
+  widgetStyle: Record<string, string>;
+}
+
+export interface IWidgetConfig {
+  id: string;
+  appId: string;
+  type: IWidgetType;
+  settings: IWidgetSettings;
+  formWidgetConfig?: IFormWidgetConfig;
 }

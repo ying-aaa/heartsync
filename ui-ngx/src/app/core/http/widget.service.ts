@@ -33,7 +33,7 @@ export class WidgetService {
   }
 
   // 根据 ID 获取单个 Widget
-  findOneWidget(id: string): Observable<any> {
+  getWidgetById(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
