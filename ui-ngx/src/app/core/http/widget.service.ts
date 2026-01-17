@@ -32,6 +32,11 @@ export class WidgetService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
+  // 根据部件类型获取widget
+  findWidgetByType(type: IWidgetType): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/type/${type}`);
+  }
+
   // 根据 ID 获取单个 Widget
   getWidgetById(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);

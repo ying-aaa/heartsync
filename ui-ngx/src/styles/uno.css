@@ -82,6 +82,7 @@
 .mx-12px{margin-left:12px;margin-right:12px;}
 .mx-3px{margin-left:3px;margin-right:3px;}
 .mx-8px{margin-left:8px;margin-right:8px;}
+.mx-8px\!{margin-left:8px !important;margin-right:8px !important;}
 .mx-auto{margin-left:auto;margin-right:auto;}
 .mx-auto\!{margin-left:auto !important;margin-right:auto !important;}
 .my-12{margin-top:3rem;margin-bottom:3rem;}
@@ -130,6 +131,7 @@
 .mr-4px{margin-right:4px;}
 .mr-5px{margin-right:5px;}
 .mr-6px{margin-right:6px;}
+.mr-6px\!{margin-right:6px !important;}
 .mr-8px{margin-right:8px;}
 .mt-\[32px\]{margin-top:32px;}
 .mt-10px\!{margin-top:10px !important;}
@@ -280,7 +282,8 @@
 .w-fit{width:fit-content;}
 .w-full\!{width:100% !important;}
 .max-w-screen-xl{max-width:1280px;}
-.flex{display:flex;}
+.flex,
+.group:hover .group-hover\:flex{display:flex;}
 .flex\!{display:flex !important;}
 .flex-1{flex:1 1 0%;}
 .flex-row{flex-direction:row;}

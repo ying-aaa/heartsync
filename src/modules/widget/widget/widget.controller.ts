@@ -10,6 +10,7 @@ import {
 import { HsWidgetService } from './widget.service';
 import { CreateWidgetDto } from './dto/create-widget.dto';
 import { UpdateWidgetDto } from './dto/update-widget.dto';
+import { WidgetType } from 'src/database/entities/hs-widget.entity';
 
 @Controller('widgets')
 export class HsWidgetController {
@@ -23,6 +24,12 @@ export class HsWidgetController {
   @Get()
   findAll() {
     return this.widgetService.findAll();
+  }
+
+  // 根据部件类型获取部件
+  @Get('type/:type')
+  findByType(@Param('type') type: WidgetType) {
+    return this.widgetService.findByType(type);
   }
 
   @Get(':id')

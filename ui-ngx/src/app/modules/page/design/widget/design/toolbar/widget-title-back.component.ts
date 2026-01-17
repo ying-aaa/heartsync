@@ -30,7 +30,7 @@ export class WidgetTitleBackComponent implements OnInit {
   ) {}
 
   activeWidgetTypeName = computed(() =>
-    flatWidgetTypesList.get(this.widgetEditorService.currentWidgetType()),
+    flatWidgetTypesList.get(this.widgetEditorService.widgetType()),
   );
 
   activeWidgetName = computed(() => {

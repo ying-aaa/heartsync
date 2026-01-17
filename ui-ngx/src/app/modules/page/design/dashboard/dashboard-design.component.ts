@@ -160,7 +160,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   // 滑动网格生成时的回调
   onSwipeSpawnGrid(event: MouseEvent, item: GridsterItem) {
-    const widgetType = this.dashboardEditorService.currentWidgetType();
+    const widgetType = this.dashboardEditorService.widgetType();
     const widget = { ...item, name: '', type: widgetType };
     this.dashboardConfigService.addWidget(widget);
   }

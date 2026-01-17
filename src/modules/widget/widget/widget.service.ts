@@ -1,7 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { HsWidgetEntity } from '../../../database/entities/hs-widget.entity';
+import {
+  HsWidgetEntity,
+  WidgetType,
+} from '../../../database/entities/hs-widget.entity';
 import { CreateWidgetDto } from './dto/create-widget.dto';
 import { UpdateWidgetDto } from './dto/update-widget.dto';
 import { HsWidgetServiceFactory } from '../widget-service.factory';
@@ -51,6 +54,15 @@ export class HsWidgetService {
     return this.widgetRepository.find();
   }
 
+  async findByType(type: WidgetType): Promise<HsWidgetEntity[]> {
+    if (!type) {
+      throw new Error('请传入正确的小部件类型');
+    }
+    return this.widgetRepository.find({
+      where: { type },
+    });
+  }
+
   async findOne(id: string): Promise<HsWidgetEntity> {
     const widget = await this.widgetRepository.findOneBy({ id });
     if (!widget) {
@@ -59,7 +71,10 @@ export class HsWidgetService {
     return widget;
   }
 
-  async update(id: string, updateDto: UpdateWidgetDto): Promise<HsWidgetEntity> {
+  async update(
+    id: string,
+    updateDto: UpdateWidgetDto,
+  ): Promise<HsWidgetEntity> {
     const widget = await this.findOne(id);
     const updated = this.widgetRepository.merge(widget, updateDto);
     return this.widgetRepository.save(updated);

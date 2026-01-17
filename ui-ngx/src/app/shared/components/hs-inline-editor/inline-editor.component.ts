@@ -15,17 +15,15 @@ import {
   signal,
   Optional,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-  NgControl,
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { MatFormField } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { HsSwitchFormFieldComponent } from './hs-switch-form-field.component';
 
 type EditorType = 'text' | 'select' | 'switch' | 'slider' | 'progress';
+
+type TriggerEventType = 'click' | 'dblclick';
 
 @Component({
   selector: 'hs-inline-editor',
@@ -40,9 +38,7 @@ type EditorType = 'text' | 'select' | 'switch' | 'slider' | 'progress';
   ],
   standalone: false,
 })
-export class HsInlineEditorComponent
-  implements OnInit, OnDestroy, ControlValueAccessor
-{
+export class HsInlineEditorComponent implements OnInit, OnDestroy, ControlValueAccessor {
   @ViewChild('formFieldRef') formFieldRef: MatFormField;
   @ViewChild('inputRef') inputRef:
     | ElementRef<HTMLInputElement>
@@ -51,8 +47,9 @@ export class HsInlineEditorComponent
     | HsSwitchFormFieldComponent;
 
   value = input<string | boolean | number>('');
+  @Input() editorId!: string;
   @Input() type: EditorType = 'text';
-
+  @Input() triggerType: TriggerEventType = 'click';
   @Input() highlight: boolean = false;
   @Input() showButton = true;
   @Input() selectOptions: any = [];
@@ -73,9 +70,7 @@ export class HsInlineEditorComponent
   displayValue = computed(() => {
     const value = this.isUsingNgModel ? this.textValue() : this.value();
     if (this.type === 'select' && this.selectLabelField) {
-      const selectedOption = this.selectOptions.find(
-        (option: any) => option.value === value,
-      );
+      const selectedOption = this.selectOptions.find((option: any) => option.value === value);
       return selectedOption ? selectedOption[this.selectLabelField] : '';
     }
     return value;
@@ -104,7 +99,7 @@ export class HsInlineEditorComponent
   registerOnTouched(fn: any): void {}
   setDisabledState?(isDisabled: boolean): void {}
 
-  editTriggerEvent(event: Event) {
+  editTriggerEvent(event?: Event) {
     if (this.disabled) return;
     this.isEdit = true;
     this.editStart.emit();
@@ -136,7 +131,7 @@ export class HsInlineEditorComponent
     if (event.key === 'Enter') {
       this.confirmEdit();
     }
-  }
+  };
 
   globalClickListener = (event: Event) => {
     const target = event.target as HTMLElement;

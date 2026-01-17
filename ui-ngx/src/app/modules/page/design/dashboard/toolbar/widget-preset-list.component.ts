@@ -17,15 +17,14 @@ import { IWidgetType } from '@src/app/shared/models/widget.model';
 })
 export class WidgetPresetListComponent implements OnInit, AfterViewInit {
   widgetTypesList = widgetTypesList;
-  widgetType = IWidgetType;
 
   constructor(
     private dashboardEditorService: DashboardEditorService,
     private widgetEditorService: WidgetEditorService,
   ) {}
 
-  get currentWidgetType() {
-    return this.dashboardEditorService.currentWidgetType();
+  get widgetType() {
+    return this.dashboardEditorService.widgetType();
   }
 
   onSelectionChange(event: MatChipSelectionChange) {
@@ -44,7 +43,7 @@ export class WidgetPresetListComponent implements OnInit, AfterViewInit {
     let widgetType;
     if (widgetId) {
       this.dashboardEditorService.updateDragstartWidgetId(widgetId);
-      widgetType = this.widgetEditorService.currentWidgetType();
+      widgetType = this.widgetEditorService.widgetType();
     } else {
       widgetType = (ev.target as HTMLElement).getAttribute('ng-reflect-value');
     }

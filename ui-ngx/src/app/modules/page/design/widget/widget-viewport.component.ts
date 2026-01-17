@@ -30,7 +30,7 @@ export class WidgetViewportComponent {
 
   widgetId = computed(() => this.widgetEditorService.widgetId());
 
-  widgetType = computed(() => this.widgetEditorService.currentWidgetType());
+  widgetType = computed(() => this.widgetEditorService.widgetType());
 
   appId: string = getParamFromRoute('appId', this.route)!;
 
@@ -56,7 +56,7 @@ export class WidgetViewportComponent {
 
   toWidgetDesign() {
     const widgetId = this.widgetEditorService.widgetId();
-    const widgetType = this.widgetEditorService.currentWidgetType();
+    const widgetType = this.widgetEditorService.widgetType();
 
     this.router.navigate([`/design/${this.appId}/widget/${widgetType}`], {
       queryParams: { widgetId },

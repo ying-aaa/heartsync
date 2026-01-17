@@ -1,6 +1,5 @@
 import { effect, Injectable, signal } from '@angular/core';
 import { IRadioConfig, IWidgetType } from '@src/app/shared/models/public-api';
-import { IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 import { Router } from '@angular/router';
 import { WidgetService } from '../http/widget.service';
 
@@ -19,6 +18,16 @@ export const widgetTypesList: IRadioConfig[] = [
   { label: '详情', value: 'detail' },
 ];
 
+export const widgetTypeIcons = {
+  code: 'code',
+  chart: 'insert_chart',
+  cesium: 'public',
+  x6: 'device_hub',
+  form: 'assignment',
+  list: 'view_list',
+  detail: 'info',
+};
+
 export const flatWidgetTypesList = new Map(
   widgetTypesList.map(({ label, value }) => [value, label]),
 );
@@ -29,18 +38,16 @@ export const flatWidgetTypesList = new Map(
 export class WidgetEditorService {
   public widgetId = signal<string | null>(null);
 
-  public currentWidgetType = signal<IWidgetType>(IWidgetType.FORM);
+  public widgetType = signal<IWidgetType>(IWidgetType.FORM);
 
-  public widgetConfig = signal<any>(
-    {} as any,
-  );
+  public widgetConfig = signal<any>({} as any);
 
   constructor(
     private router: Router,
     private WidgetHttpService: WidgetService,
   ) {
     effect(() => {
-      if (this.currentWidgetType()) {
+      if (this.widgetType()) {
         this.widgetId.set(null);
       }
     });

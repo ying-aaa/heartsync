@@ -40,7 +40,7 @@ export class WorkspaceContorlComponent implements OnInit {
   ngOnInit() {}
 
   activeWidgetTypeName = computed(() =>
-    flatWidgetTypesList.get(this.widgetEditorService.currentWidgetType()),
+    flatWidgetTypesList.get(this.widgetEditorService.widgetType()),
   );
 
   activeWidgetName = computed(() => {

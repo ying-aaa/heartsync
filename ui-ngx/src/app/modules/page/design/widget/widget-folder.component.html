@@ -1,5 +1,5 @@
 <content class="h-full flex flex-col">
-  <div class="w-full overflow-hidden mb-12px">
+  <div class="w-full overflow-hidden">
     <hs-radio
       [configs]="widgetTypesList"
       [rows]="2"
@@ -7,13 +7,147 @@
     ></hs-radio>
   </div>
 
-  <div class="flex-1 h-0">
-    @if (appId) {
-      <hs-tree
-        [businessId]="appId"
-        [businessKey]="businessKey()"
-        [treeConfig]="treeConfig()"
-      ></hs-tree>
-    }
-  </div>
+  <content class="h-0 flex-1 flex flex-col overflow-hidden rounded-8px bg-[var(--base-bg-color)]">
+    <header class="py-12px px-8px">
+      <mat-form-field
+        appearance="outline"
+        class="hs-density--5 w-full"
+      >
+        <input
+          matInput
+          placeholder="请输入角色名称"
+          [formControl]="searchValue"
+          (keyup.enter)="onQueryData()"
+        />
+        @if (searchValue.getRawValue()) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="重置"
+          (click)="onResetData()"
+          class="mr-5px"
+        >
+          <mat-icon aria-hidden="false">close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
+    </header>
+
+    <!-- <mat-divider></mat-divider> -->
+
+    <ng-scrollbar
+      externalViewport
+      #scrollbarRef="ngScrollbar"
+      visibility="hover"
+      appearance="compact"
+      orientation="auto"
+      class="h-0 flex-1"
+    >
+      <main
+        class="relative"
+        scrollViewport
+        hs-loading
+        [isLoading]="isLoading()"
+        hsEmptyState
+        emptyText="未找到部件"
+        emptyImgClass="scale-100"
+        [isEmptyState]="!isLoading() && !widgetList().length"
+      >
+        <style>
+          ::ng-deep .mdc-list-item--activated .mdc-list-item__primary-text {
+            color: #2c7eac !important;
+          }
+        </style>
+        <mat-nav-list class="px-12px! py-0!">
+          @for (widget of widgetList(); track widget.id) {
+          <a
+            mat-list-item
+            (click)="$event.preventDefault(); updateWidgetId(widget.id)"
+            [activated]="widgetId() === widget.id"
+            class="opacity-80 h-36px! my-4px group"
+          >
+            <mat-icon
+              matListItemIcon
+              class="mr-6px! text-18px! w-18px! h-18px!"
+              [class.color-[var(--base-primary-color)]!]="widgetId() === widget.id"
+            >{{widgetTypeIcons[widgetType()]}}</mat-icon>
+            <span matListItemTitle>
+              <hs-inline-editor
+                #InlineEditorRef
+                [editorId]="widget.id"
+                type="text"
+                [value]="widget.name"
+                (editConfirm)="renameWidget($event)"
+                (editCancel)="cancelEditWidget()"
+                [showButton]="false"
+                [highlight]="false"
+                triggerType="dblclick"
+              ></hs-inline-editor>
+            </span>
+
+            @if(!editingWidget()) {
+            <div
+              matListItemMeta
+              class="mx-8px! hidden group-hover:flex"
+            >
+              <button
+                mat-icon-button
+                #menuTrigger
+                [matMenuTriggerFor]="menu"
+                [matMenuTriggerData]="{widget}"
+                class="hs-icon-button-32"
+                (click)="$event.stopPropagation(); $event.preventDefault()"
+              >
+                <mat-icon>
+                  more_vert
+                </mat-icon>
+              </button>
+            </div>
+            }
+          </a>
+          }
+        </mat-nav-list>
+        <mat-menu #menu="matMenu">
+          <ng-template
+            matMenuContent
+            let-widget="widget"
+          >
+            @for (menu of menuActions; track $index) {
+            <button
+              mat-menu-item
+              [matMenuTriggerFor]="menu.confirm ? confirm : null"
+              [matMenuTriggerData]="{ menu, widget }"
+              (click)="!menu.confirm && menu.action(widget)"
+            >
+              <mat-icon>{{menu.icon}}</mat-icon>
+              {{ menu.name }}
+            </button>
+            }
+          </ng-template>
+        </mat-menu>
+        <mat-menu #confirm="matMenu">
+          <ng-template
+            matMenuContent
+            let-menu="menu"
+            let-widget="widget"
+          >
+            <button
+              mat-menu-item
+              (click)="menu?.action(widget)"
+            >
+              {{menu?.confirmName}}
+            </button>
+          </ng-template>
+        </mat-menu>
+      </main>
+    </ng-scrollbar>
+
+    <div class="px-12px py-16px">
+      <button
+        class="w-full"
+        mat-flat-button
+        (click)="addWidget()"
+      >新增部件</button>
+    </div>
+  </content>
 </content>

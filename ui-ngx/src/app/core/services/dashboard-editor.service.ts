@@ -9,7 +9,7 @@ export class DashboardEditorService {
 
   public currentDashboardName = signal<string>('');
 
-  currentWidgetType = signal<IWidgetType>(IWidgetType.CODE);
+  widgetType = signal<IWidgetType>(IWidgetType.CODE);
 
   currentDragstartWidgetType = signal<IWidgetType>(IWidgetType.CODE);
 
@@ -33,8 +33,8 @@ export class DashboardEditorService {
   }
 
   updateWidgetType(type: IWidgetType) {
-    if (type === this.currentWidgetType()) return;
-    this.currentWidgetType.set(type);
+    if (type === this.widgetType()) return;
+    this.widgetType.set(type);
   }
 
   updateDragstartWidgetType(type: IWidgetType) {
