@@ -4,6 +4,7 @@ import { WidgetFolderComponent } from './widget-folder.component';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
 import { WidgetViewportComponent } from './widget-viewport.component';
 import { FormlyConfigEditorComponent } from '@src/app/modules/components/formly-config/formly-config-editor.component';
+import { HsSvgModule } from "@src/app/shared/components/hs-svg/hs-svg.module";
 
 @Component({
   selector: 'hs-widget-manage',
@@ -13,15 +14,17 @@ import { FormlyConfigEditorComponent } from '@src/app/modules/components/formly-
     MatDividerModule,
     WidgetViewportComponent,
     FormlyConfigEditorComponent,
-  ],
+    HsSvgModule
+],
 })
 export class WidgetManageComponent implements OnInit {
   constructor(private widgetEditorService: WidgetEditorService) {}
 
-  currentWidgetConfig = this.widgetEditorService.currentWidgetConfig;
+  widgetId = this.widgetEditorService.widgetId;
+  widgetConfig = this.widgetEditorService.widgetConfig;
   options = {
     formState: {
-      widgetConfig: this.currentWidgetConfig,
+      widgetConfig: this.widgetConfig,
     },
   };
 

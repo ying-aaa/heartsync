@@ -44,6 +44,6 @@ export class WorkspaceContorlComponent implements OnInit {
   );
 
   activeWidgetName = computed(() => {
-    return this.widgetEditorService.currentWidgetConfig().workspaceName;
+    return this.widgetEditorService.widgetConfig().workspaceName;
   });
 }

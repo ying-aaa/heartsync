@@ -33,7 +33,7 @@ export class WorkspaceToobarComponent implements OnInit {
   }
 
   previewWidget() {
-    const widgetId = this.formEditorService.fieldsId()!;
+    const widgetId = this.formEditorService.formWidgetId()!;
     this.widgetEditorService.previewWidget(
       this.appId,
       widgetId,

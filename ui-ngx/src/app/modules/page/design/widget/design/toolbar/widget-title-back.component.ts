@@ -34,7 +34,7 @@ export class WidgetTitleBackComponent implements OnInit {
   );
 
   activeWidgetName = computed(() => {
-    return this.widgetEditorService.currentWidgetConfig().name;
+    return this.widgetEditorService.widgetConfig().name;
   });
 
   toWidgetManage() {

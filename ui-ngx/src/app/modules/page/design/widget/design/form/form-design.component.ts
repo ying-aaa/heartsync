@@ -54,7 +54,7 @@ export class FormDesignComponent implements OnInit {
 
   initRouteWidget() {
     const widgetId = this.route.snapshot.queryParams['widgetId'];
-    widgetId && this.formEditorService.fieldsId.set(widgetId);
+    widgetId && this.formEditorService.formWidgetId.set(widgetId);
   }
 
   ngOnInit() {

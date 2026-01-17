@@ -278,6 +278,7 @@ export class HsTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // 绑定事件监听
     this.treeInstance.on('changed.jstree', (e: Event, data: any) => {
+      if(data.action === "delete_node") return;
       if (!this.newNodeFlag) {
         const selectEvent = this.treeConfig().selectEvent;
         selectEvent && selectEvent(data.node, this.treeInstance);

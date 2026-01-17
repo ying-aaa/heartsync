@@ -1,18 +1,26 @@
 <!-- {{ dbClickNode | json }} -->
 
-<mat-form-field class="example-form-field w-full hs-density--5 mb-12px">
+<mat-form-field
+  class="example-form-field w-full hs-density--5 mb-12px"
+  appearance="outline"
+>
   <!-- <mat-label>搜索你的文件</mat-label> -->
-  <input matInput type="text" placeholder="搜索你的文件" [formControl]="fileName" />
+  <input
+    matInput
+    type="text"
+    placeholder="搜索你的文件"
+    [formControl]="fileName"
+  />
   @if (fileName.getRawValue()) {
-    <button
-      matSuffix
-      mat-icon-button
-      aria-label="Clear"
-      (click)="fileName.setValue('')"
-      class="mr-5px"
-    >
-      <mat-icon aria-hidden="false">close</mat-icon>
-    </button>
+  <button
+    matSuffix
+    mat-icon-button
+    aria-label="Clear"
+    (click)="fileName.setValue('')"
+    class="mr-5px"
+  >
+    <mat-icon aria-hidden="false">close</mat-icon>
+  </button>
   }
 </mat-form-field>
 
@@ -37,9 +45,23 @@
     @let treeDataLength = treeInstance?.jstree(true).get_json('#').length;
     @let is_loading = treeInstance?.jstree(true).is_loading('#');
     @if (treeInstance && !treeDataLength && !is_loading) {
-      <div class="absolute-center w-full -z-1">
-        <hs-svg name="empty" title="暂无数据"></hs-svg>
-      </div>
+    <div class="absolute-center w-full -z-1">
+      <hs-svg
+        [name]="fileName.value ? 'empty' : 'empty-list'"
+        class="relative"
+      >
+        <p class="text-gray-500 px-12px text-center">{{ treeConfig().noDataText || '暂无数据' }}</p>
+      </hs-svg>
+    </div>
+    <!-- @if(treeConfig().noDataCreate && !fileName.value) {
+      <button
+        mat-button
+        (click)="createNode('file', dbClickNode)"
+        class="absolute-center-x! top-[calc(50%+200px)] z-999"
+      >
+        {{treeConfig().noDataCreateText || '创建文件'}}
+      </button>
+    } -->
     }
   </div>
 </ng-scrollbar>
@@ -49,6 +71,7 @@
     #hs-context-menu {
       background-color: var(--base-bg-color);
       border: 1px solid var(--base-color-10);
+
       li:hover {
         background-color: var(--base-color-10);
       }
@@ -62,22 +85,27 @@
     class="absolute z-10 min-w-[180px] overflow-auto rounded-lg border border-slate-200 p-1.5 shadow-lg shadow-sm focus:outline-none"
   >
     @for (menu of contextMenu; track $index) {
-      <li
-        role="menuitem"
-        (click)="menu.action()"
-        class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
-      >
-        @if (menu.matIcon) {
-          <mat-icon class="color-#2c7eac w-20px! h-20px! text-20px">{{ menu.icon }}</mat-icon>
-        } @else {
-          <hs-svg [name]="menu.icon" width="16px" height="16px" containerClass="p-2px"></hs-svg>
-        }
-
-        <p class="font-medium ml-2">{{ menu.label }}</p>
-      </li>
-      @if (menu.divider && $index !== contextMenu.length - 1) {
-        <mat-divider class="my-3px!"></mat-divider>
+    <li
+      role="menuitem"
+      (click)="menu.action()"
+      class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
+    >
+      @if (menu.matIcon) {
+      <mat-icon class="color-#2c7eac w-20px! h-20px! text-20px">{{ menu.icon }}</mat-icon>
+      } @else {
+      <hs-svg
+        [name]="menu.icon"
+        width="16px"
+        height="16px"
+        containerClass="p-2px"
+      ></hs-svg>
       }
+
+      <p class="font-medium ml-2">{{ menu.label }}</p>
+    </li>
+    @if (menu.divider && $index !== contextMenu.length - 1) {
+    <mat-divider class="my-3px!"></mat-divider>
+    }
     }
   </ul>
 </ng-template>

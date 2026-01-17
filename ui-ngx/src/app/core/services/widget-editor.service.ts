@@ -27,11 +27,11 @@ export const flatWidgetTypesList = new Map(
   providedIn: 'root',
 })
 export class WidgetEditorService {
-  public currentWidgetId = signal<string>('');
+  public widgetId = signal<string | null>(null);
 
   public currentWidgetType = signal<IWidgetType>(IWidgetType.FORM);
 
-  public currentWidgetConfig = signal<any>(
+  public widgetConfig = signal<any>(
     {} as any,
   );
 
@@ -41,20 +41,20 @@ export class WidgetEditorService {
   ) {
     effect(() => {
       if (this.currentWidgetType()) {
-        this.currentWidgetId.set('');
+        this.widgetId.set(null);
       }
     });
   }
 
-  setWidgetId(widgetId: string) {
-    // if (widgetId === this.currentWidgetId()) return;
-    this.currentWidgetId.set(widgetId);
-    this.loadWidgetInfo();
+  setWidgetId(widgetId: string | null) {
+    // if (widgetId === this.widgetId()) return;
+    this.widgetId.set(widgetId);
+    widgetId && this.loadWidgetInfo();
   }
 
   loadWidgetInfo() {
-    this.WidgetHttpService.getWidgetById(this.currentWidgetId()).subscribe((res) => {
-      this.currentWidgetConfig.set(res);
+    this.WidgetHttpService.getWidgetById(this.widgetId()!).subscribe((res) => {
+      this.widgetConfig.set(res);
     });
   }
 

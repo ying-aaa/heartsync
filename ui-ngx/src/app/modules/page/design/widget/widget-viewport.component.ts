@@ -28,7 +28,7 @@ import { getParamFromRoute } from '@src/app/core/utils';
 export class WidgetViewportComponent {
   zoomControl = viewChild.required<WidgetZoomComponent>('ZoomControl');
 
-  widgetId = computed(() => this.widgetEditorService.currentWidgetId());
+  widgetId = computed(() => this.widgetEditorService.widgetId());
 
   widgetType = computed(() => this.widgetEditorService.currentWidgetType());
 
@@ -41,7 +41,7 @@ export class WidgetViewportComponent {
   ) {}
 
   workSizeConfig = computed(() => {
-    const workSizeConfig = this.widgetEditorService.currentWidgetConfig().workSizeConfig || {
+    const workSizeConfig = this.widgetEditorService.widgetConfig().workSizeConfig || {
       width: 100,
       height: 100,
       widthUnits: '%',
@@ -55,7 +55,7 @@ export class WidgetViewportComponent {
   });
 
   toWidgetDesign() {
-    const widgetId = this.widgetEditorService.currentWidgetId();
+    const widgetId = this.widgetEditorService.widgetId();
     const widgetType = this.widgetEditorService.currentWidgetType();
 
     this.router.navigate([`/design/${this.appId}/widget/${widgetType}`], {

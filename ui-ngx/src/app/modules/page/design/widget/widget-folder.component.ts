@@ -24,11 +24,14 @@ export class WidgetFolderComponent implements OnInit {
   appId: string | null = getParamFromRoute('appId', this.route);
   businessKey = computed(() => this.widgetEditorService.currentWidgetType());
 
-  widgetId: string;
+  widgetId: string | null;
   // currentWidgetType = signal<IWidgetType>(IWidgetType.FORM);
   widgetType = this.widgetEditorService.currentWidgetType;
 
   treeConfig = signal<IFileTreeConfig>({
+    noDataText: '没有找到相关部件！',
+    noDataCreate: true,
+    noDataCreateText: '创建部件',
     featureList: [
       'createFile',
       'rename',
@@ -46,6 +49,7 @@ export class WidgetFolderComponent implements OnInit {
       try {
         const res = await firstValueFrom(this.widgetService.removeWidget(id));
         if (res.statusCode === 200) next = true;
+        if (id === this.widgetId) this.updateWidgetId(null);
       } catch (error) {
         next = false;
       }
@@ -92,7 +96,7 @@ export class WidgetFolderComponent implements OnInit {
     private route: ActivatedRoute,
   ) {}
 
-  updateWidgetId(widgetId: string) {
+  updateWidgetId(widgetId: string | null) {
     this.widgetId = widgetId;
     this.widgetEditorService.setWidgetId(this.widgetId);
   }

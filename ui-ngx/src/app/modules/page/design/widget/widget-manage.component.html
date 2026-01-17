@@ -9,7 +9,18 @@
   ></mat-divider>
 
   <main class="w-0 flex-1 h-full">
+    @if(widgetId()) {
     <hs-widget-viewport></hs-widget-viewport>
+    }@else{
+    <div class="wh-full flex items-center justify-center text-gray-500 text-18px">
+      <hs-svg
+        name="empty-page"
+        class="relative"
+      >
+        <p class="text-gray-500 px-12px text-center">创建或选择一个部件进行开发！</p>
+      </hs-svg>
+    </div>
+    }
   </main>
 
   <mat-divider
@@ -19,7 +30,7 @@
   <aside class="w-282px h-full p-8px">
     <hs-formly-config
       type="widget"
-      [model]="currentWidgetConfig()"
+      [model]="widgetConfig()"
       [options]="options"
     ></hs-formly-config>
   </aside>

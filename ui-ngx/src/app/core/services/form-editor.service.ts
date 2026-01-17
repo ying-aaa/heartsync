@@ -23,7 +23,7 @@ export class FormEditorService {
 
   flatField$ = new BehaviorSubject([]);
 
-  fieldsId = signal<number | undefined>(undefined);
+  formWidgetId = signal<number | undefined>(undefined);
   fields = signal<IEditorFormlyField[]>([]);
   model = {};
 
@@ -33,10 +33,10 @@ export class FormEditorService {
   ) {
     effect(
       () => {
-        if (this.fieldsId()) {
+        if (this.formWidgetId()) {
           this.fields.set([]);
           // 请求form配置
-          this.formWidgetService.getFormWidgetById(this.fieldsId()!).subscribe({
+          this.formWidgetService.getFormWidgetById(this.formWidgetId()!).subscribe({
             next: (widget: IFormWidgetConfig) => {
               this.widgetConfig.set(widget);
               const fieldConfig = widget.flatTypeField as IEditorFormlyField[];
