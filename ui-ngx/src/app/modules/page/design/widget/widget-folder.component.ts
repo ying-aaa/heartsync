@@ -149,7 +149,6 @@ export class WidgetFolderComponent implements OnInit {
       icon: 'edit',
       name: '重命名部件',
       action: (widget: any) => {
-        this.editingWidget.set(widget);
         this.operateTargetEditor(widget);
       },
     },
@@ -231,6 +230,7 @@ export class WidgetFolderComponent implements OnInit {
   }
 
   operateTargetEditor(widget: any) {
+    this.editingWidget.set(widget);
     const targetEditor = this.inlineEditorRefs().find((editor) => editor.editorId === widget.id);
     targetEditor?.editTriggerEvent();
   }

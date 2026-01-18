@@ -26,6 +26,9 @@ export class DashboardEditorService {
   updateRuntimeStatus(is: boolean) {
     if (is === this.isRuntime()) return;
     this.isRuntime.set(is);
+    // setTimeout(() => {
+    //   this.resizeGridster();
+    // }, 50);
   }
 
   setGridsterInstall(gridsterInstall: GridsterComponent) {

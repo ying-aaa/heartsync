@@ -70,6 +70,7 @@
 .z-9\!{z-index:9 !important;}
 .z-999{z-index:999;}
 .z-999\!{z-index:999 !important;}
+.z-99999{z-index:99999;}
 .grid{display:grid;}
 .cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}
 .grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}
@@ -82,7 +83,6 @@
 .mx-12px{margin-left:12px;margin-right:12px;}
 .mx-3px{margin-left:3px;margin-right:3px;}
 .mx-8px{margin-left:8px;margin-right:8px;}
-.mx-8px\!{margin-left:8px !important;margin-right:8px !important;}
 .mx-auto{margin-left:auto;margin-right:auto;}
 .mx-auto\!{margin-left:auto !important;margin-right:auto !important;}
 .my-12{margin-top:3rem;margin-bottom:3rem;}
@@ -122,6 +122,8 @@
 .ml-4{margin-left:1rem;}
 .ml-5px{margin-left:5px;}
 .ml-8px{margin-left:8px;}
+.ml-8px\!{margin-left:8px !important;}
+.mr-0\!{margin-right:0 !important;}
 .mr-10px{margin-right:10px;}
 .mr-12px{margin-right:12px;}
 .mr-16px\!{margin-right:16px !important;}
@@ -283,8 +285,10 @@
 .w-full\!{width:100% !important;}
 .max-w-screen-xl{max-width:1280px;}
 .flex,
-.group:hover .group-hover\:flex{display:flex;}
+.group:hover .group-hover\:flex,
+.parent:hover>.parent-hover\:flex{display:flex;}
 .flex\!{display:flex !important;}
+.hover\:flex:hover{display:flex;}
 .flex-1{flex:1 1 0%;}
 .flex-row{flex-direction:row;}
 .flex-row-reverse{flex-direction:row-reverse;}
@@ -477,6 +481,7 @@
 .pr-3px{padding-right:3px;}
 .pr-5px{padding-right:5px;}
 .pr-8px{padding-right:8px;}
+.pr-8px\!{padding-right:8px !important;}
 .pt-10px{padding-top:10px;}
 .pt-10px\!{padding-top:10px !important;}
 .pt-12px{padding-top:12px;}

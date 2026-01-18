@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, computed, effect, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  effect,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -14,6 +22,7 @@ import {
   GridsterItem,
   GridsterItemComponent,
   GridsterItemComponentInterface,
+  GridType,
   PushDirections,
   Resizable,
 } from 'angular-gridster2';
@@ -26,6 +35,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { CdkMenu, CdkMenuItem, CdkContextMenuTrigger } from '@angular/cdk/menu';
 import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
 import { MatDividerModule } from '@angular/material/divider';
+import { isDefined, isMobile } from '@src/app/core/utils';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { Subscription } from 'rxjs';
+import { MediaBreakpoints } from '@src/app/shared/models/constants';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 interface Safe extends GridsterConfig {
   draggable: Draggable;
@@ -66,6 +80,7 @@ interface IContextMenu {
     CdkContextMenuTrigger,
     GridsterItemComponent,
     WidgetContainerComponent,
+    NgScrollbarModule,
   ],
 })
 export class DashboardDesignComponent implements OnInit, AfterViewInit {
@@ -77,9 +92,11 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   loadingStatus = computed(() => this.dashboardConfigService.loadingStatus());
 
-  isRuntime = computed(() => !this.dashboardEditorService.isRuntime());
+  isRuntime = computed(() => this.dashboardEditorService.isRuntime());
 
   selectWidgetId = computed(() => this.dashboardEditorService.currentSelectWidgetId());
+
+  fixedRowHeight = signal<number>(70);
 
   gridsterItemContextMenu: IContextMenu = {
     rename: {
@@ -101,31 +118,36 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   };
 
   gridsterOption = computed<GridsterConfig>(() => {
-    const isRuntime = this.isRuntime();
+    const isDesign = !this.isRuntime();
     const gridsterOption = this.dashboardConfigService.gridsterOption();
+    const fixedRowHeight = this.fixedRowHeight();
     return {
       // 取自定义配置，即后端保存的
       ...gridsterOption,
-      compactType: 'none', // 防止自动压缩
-      pushItems: false, // 禁止推动其他 item
-      swap: false, // 禁止交换
+      gridType: GridType.Fit,
+      keepFixedHeightInMobile: true,
+      useTransformPositioning: true, // 开启硬件加速
+      rowHeight: '100px',
+      fixedRowHeight,
+      compactType: 'none',
       disableWindowResize: false,
-      allowMultiLayer: true, // ✅ 允许多层重叠
-      defaultLayerIndex: 2, // 默认层级
-      baseLayerIndex: 2, // 最底层
-      maxLayerIndex: 2, // 最大层级
+      allowMultiLayer: true,
+      defaultLayerIndex: 2,
+      baseLayerIndex: 2,
+      maxLayerIndex: 2,
+      outerMargin: true,
       /**
        * 下面为编辑时的配置，不会进行保存的
        *  */
       // 拖拽生成
-      enableEmptyCellDrop: isRuntime,
+      enableEmptyCellDrop: isDesign,
       // 滑动生成
-      enableEmptyCellDrag: isRuntime,
+      enableEmptyCellDrag: isDesign,
       draggable: {
-        enabled: isRuntime,
+        enabled: isDesign,
       },
       resizable: {
-        enabled: isRuntime,
+        enabled: isDesign,
       },
       // 拖拽预设到网格时的回调
       emptyCellDropCallback: this.onPresetDropToGrid.bind(this),
@@ -136,13 +158,68 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     };
   });
 
+  breakpointObserverSubscription: Subscription;
+
   constructor(
     private dashboardEditorService: DashboardEditorService,
     private dashboardConfigService: DashboardConfigService,
-  ) {}
+    private breakpointObserver: BreakpointObserver,
+  ) {
+    effect(() => {
+      const gridsterOption = this.gridsterOption();
+      this.dashboardEditorService.resizeGridster();
+    });
+
+    this.breakpointObserverSubscription = this.breakpointObserver
+      .observe(MediaBreakpoints['gt-sm'])
+      .subscribe(() => {
+        const fixedRowHeight = this.detectRowSize(this.gridsterOption(), isMobile(), true);
+        fixedRowHeight && this.fixedRowHeight.set(fixedRowHeight);
+      });
+  }
 
   test() {
     console.log('%c Line:155 🍺', 'color:#7f2b82');
+  }
+
+  private detectRowSize(
+    gridsterOpts: GridsterConfig,
+    isMobile: boolean,
+    autofillHeight: boolean,
+    parentHeight?: number,
+  ): number | null {
+    let rowHeight = null;
+    if (!autofillHeight) {
+      // 未启用自动填充：移动端使用配置的mobileRowHeight（默认70px）
+      if (isMobile) {
+        // rowHeight = isDefined(this.mobileRowHeight) ? this.mobileRowHeight : 70;
+        rowHeight = 70;
+      }
+    } else if (autofillHeight && isMobile) {
+      // 启用移动端自动填充：计算行高以填满容器
+      if (!parentHeight) {
+        parentHeight = this.gridster.el.offsetHeight; // 获取容器高度
+      }
+      if (parentHeight) {
+        // 计算所有活跃部件的总行数
+        let totalRows = 0;
+        for (const widget of this.widgets()) {
+          totalRows += widget.rows;
+        }
+        console.log(
+          '%c Line:211 🍣',
+          'color:#7f2b82',
+          totalRows,
+          (gridsterOpts.margin || 10) * (totalRows + (gridsterOpts.outerMargin ? 1 : -1)),
+        );
+        // 核心公式：行高 = (容器高度 - 间距总占用) / 总行数
+        rowHeight =
+          (parentHeight -
+            (gridsterOpts.margin || 10) * (totalRows + (gridsterOpts.outerMargin ? 1 : -1))) /
+          totalRows;
+      }
+    }
+    return rowHeight;
   }
 
   // 部件右键的菜单功能
@@ -205,6 +282,10 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dashboardEditorService.setGridsterInstall(this.gridster);
+    setTimeout(() => {
+      const fixedRowHeight = this.detectRowSize(this.gridsterOption(), isMobile(), true);
+      fixedRowHeight && this.fixedRowHeight.set(fixedRowHeight);
+    }, 2000);
   }
 
   ngOnInit() {}
