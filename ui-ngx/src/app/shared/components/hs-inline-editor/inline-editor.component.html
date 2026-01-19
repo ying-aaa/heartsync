@@ -6,7 +6,7 @@
   @if (!isEdit) {
     <div
       #editorTrigger
-      class="w-full cursor-text truncate px-3 py-2 rounded-6px line-height-16px"
+      class="w-full cursor-text truncate px-3 py-2 rounded-6px line-height-16px select-none hs-inline-text-context"
       [class.highlight-bg]="highlight && !disabled"
       [class.text-content]="!disabled && triggerType === 'click'"
       (click)="triggerType === 'click' && editTriggerEvent($event)"
@@ -59,7 +59,7 @@
     </mat-form-field>
 
     @if (showButton) {
-      <div class="absolute right-0 top-100% pt-3px">
+      <div class="absolute right-0 top-100% pt-3px z-99999">
         <button
           mat-icon-button
           (click)="confirmEdit()"

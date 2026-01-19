@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { HsWidgetService } from './widget.service';
 import { CreateWidgetDto } from './dto/create-widget.dto';
 import { UpdateWidgetDto } from './dto/update-widget.dto';
-import { WidgetType } from 'src/database/entities/hs-widget.entity';
+import { QueryWidgetDto } from './dto/query-widget.dto';
+import { PageDto } from 'src/common/dtos/page.dto';
+import { HsWidgetEntity } from 'src/database/entities/hs-widget.entity';
 
 @Controller('widgets')
 export class HsWidgetController {
@@ -22,14 +25,10 @@ export class HsWidgetController {
   }
 
   @Get()
-  findAll() {
-    return this.widgetService.findAll();
-  }
-
-  // 根据部件类型获取部件
-  @Get('type/:type')
-  findByType(@Param('type') type: WidgetType) {
-    return this.widgetService.findByType(type);
+  findAll(
+    @Query() queryWidgetDto: QueryWidgetDto,
+  ): Promise<PageDto<HsWidgetEntity>> {
+    return this.widgetService.findAll(queryWidgetDto);
   }
 
   @Get(':id')

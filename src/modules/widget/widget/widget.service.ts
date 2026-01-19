@@ -9,6 +9,9 @@ import { CreateWidgetDto } from './dto/create-widget.dto';
 import { UpdateWidgetDto } from './dto/update-widget.dto';
 import { HsWidgetServiceFactory } from '../widget-service.factory';
 import { HsFileTreeService } from 'src/modules/file-tree/file-tree.service';
+import { QueryWidgetDto } from './dto/query-widget.dto';
+import { PageDto } from 'src/common/dtos/page.dto';
+import { HsPaginationService } from 'src/common/services/pagination.service';
 @Injectable()
 export class HsWidgetService {
   constructor(
@@ -16,6 +19,7 @@ export class HsWidgetService {
     private readonly widgetRepository: Repository<HsWidgetEntity>,
     private widgetServiceFactory: HsWidgetServiceFactory,
     private readonly fileTreeService: HsFileTreeService,
+    private readonly paginationService: HsPaginationService,
   ) {}
 
   async create(
@@ -50,16 +54,24 @@ export class HsWidgetService {
     };
   }
 
-  async findAll(): Promise<HsWidgetEntity[]> {
-    return this.widgetRepository.find();
+  async findAll(
+    queryWidgetDto: QueryWidgetDto,
+  ): Promise<PageDto<HsWidgetEntity>> {
+    return this.paginationService.paginate(
+      this.widgetRepository,
+      queryWidgetDto,
+    );
   }
 
-  async findByType(type: WidgetType): Promise<HsWidgetEntity[]> {
+  async findByAppIdAndType(
+    appId: string,
+    type: WidgetType,
+  ): Promise<HsWidgetEntity[]> {
     if (!type) {
       throw new Error('请传入正确的小部件类型');
     }
     return this.widgetRepository.find({
-      where: { type },
+      where: { appId, type },
     });
   }
 

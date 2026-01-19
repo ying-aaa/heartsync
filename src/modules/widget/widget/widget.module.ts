@@ -7,6 +7,7 @@ import { HsFormWidgetModule } from '../types/form-widget/form-widget.module';
 import { HsWidgetServiceFactory } from '../widget-service.factory';
 import { HsFileTreeModule } from 'src/modules/file-tree/file-tree.module';
 import { HsCodeWidgetModule } from '../types/code-wieget/code-widget.module';
+import { HsPaginationService } from 'src/common/services/pagination.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { HsCodeWidgetModule } from '../types/code-wieget/code-widget.module';
     HsFileTreeModule,
   ],
   controllers: [HsWidgetController],
-  providers: [HsWidgetService, HsWidgetServiceFactory],
+  providers: [HsWidgetService, HsWidgetServiceFactory, HsPaginationService],
   exports: [HsWidgetService, HsFormWidgetModule, HsCodeWidgetModule],
 })
 export class HsWidgetModule {}

@@ -7,7 +7,7 @@ import {
   widgetTypeIcons,
   widgetTypesList,
 } from '@app/core/services/widget-editor.service';
-import { generateUUID, getParamFromRoute } from '@src/app/core/utils';
+import { deepClone, generateUUID, getParamFromRoute } from '@src/app/core/utils';
 import { ActivatedRoute } from '@angular/router';
 import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
 import { WidgetService } from '@src/app/core/http/widget.service';
@@ -138,7 +138,16 @@ export class WidgetFolderComponent implements OnInit {
   widgetTypeIcons = widgetTypeIcons;
 
   searchValue = new FormControl('');
-  pageLink = new PageLink(0, 20, [{ prop: 'search' }], []);
+  pageLink = new PageLink(
+    0,
+    100,
+    [
+      { prop: 'name', defaultValue: this.searchValue.value },
+      { prop: 'appId', defaultValue: this.appId },
+      { prop: 'type', defaultValue: this.widgetType() },
+    ],
+    [],
+  );
   widgetList = signal<any>([]);
   isLoading = signal<boolean>(false);
 
@@ -174,6 +183,7 @@ export class WidgetFolderComponent implements OnInit {
       const widgetType = this.widgetType();
       this.widgetList.set([]);
       if (widgetType) {
+        this.pageLink.changeSearch('type', widgetType);
         this.widgetId.set(null);
         this.requestTrigger$.next();
       }
@@ -185,8 +195,7 @@ export class WidgetFolderComponent implements OnInit {
       .pipe(
         tap((_) => this.isLoading.set(true)),
         throttleTime(500, undefined, { leading: true, trailing: false }),
-        switchMap(() => this.widgetService.findWidgetByType(this.widgetType())),
-        map((data) => ({ data })),
+        switchMap(() => this.widgetService.findAllWidget(this.pageLink)),
         takeUntil(this.destroy$),
         catchError((err) => {
           this.isLoading.set(false);
@@ -207,7 +216,7 @@ export class WidgetFolderComponent implements OnInit {
     this.searchValue.valueChanges
       .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe((value) => {
-        this.pageLink.changeSearch('search', value);
+        this.pageLink.changeSearch('name', value);
         this.triggerRequest();
       });
   }
@@ -225,6 +234,7 @@ export class WidgetFolderComponent implements OnInit {
   }
 
   updateWidgetId(widgetId: string | null) {
+    if (widgetId === this.widgetId()) return;
     this.widgetId.set(widgetId);
     this.widgetEditorService.setWidgetId(widgetId);
   }
@@ -235,7 +245,7 @@ export class WidgetFolderComponent implements OnInit {
     targetEditor?.editTriggerEvent();
   }
 
-  addWidget() {
+  addTempWidget() {
     // 先建一个临时部件给用户命名
     const tempWidget = {
       id: generateUUID(),
@@ -251,10 +261,37 @@ export class WidgetFolderComponent implements OnInit {
     }, 300);
   }
 
-  renameWidget(name: string) {
+  editConfirmWidget(widget: any, newName: string) {
+    if (widget.isCreate) {
+      widget.name = newName;
+      this.addWidget(widget);
+    } else {
+      this.renameWidget(widget.name, newName);
+    }
+  }
+
+  addWidget(widget: any) {
+    widget = deepClone<any>(widget);
+    Reflect.deleteProperty(widget, 'isCreate');
+    const widgetId = widget.id;
+    Reflect.deleteProperty(widget, 'id');
+    this.widgetService.createWidget(widget).subscribe({
+      next: (res) => {
+        this.widgetList.update((widgets) =>
+          widgets.map((widget: any) => (widget.id === widgetId ? res : widget)),
+        );
+        this.updateWidgetId(res.id);
+        this.cancelEditWidget();
+        this.toastrService.success('创建成功');
+      },
+    });
+  }
+
+  renameWidget(oldName: string, newName: string) {
+    if (oldName === newName) return this.cancelEditWidget();
     const widgetId = this.editingWidget()?.id;
     this.widgetService
-      .updateWidget(widgetId, { name })
+      .updateWidget(widgetId, { name: newName })
       .pipe(finalize(() => this.cancelEditWidget()))
       .subscribe({
         next: (res) => {
@@ -280,7 +317,10 @@ export class WidgetFolderComponent implements OnInit {
     });
   }
 
-  cancelEditWidget() {
+  cancelEditWidget(widget: any = null) {
+    if (widget && widget.isCreate) {
+      this.widgetList.update((widgets) => widgets.filter((widget: any) => widget.id !== widget.id));
+    }
     this.editingWidget.set(null);
   }
 
@@ -288,5 +328,6 @@ export class WidgetFolderComponent implements OnInit {
     this.initLoadData();
     this.handleSearchInput();
     this.triggerRequest();
+    (document.querySelector('hs-workbench-header')! as HTMLElement).style.display = 'none';
   }
 }
