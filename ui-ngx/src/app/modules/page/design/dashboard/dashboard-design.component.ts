@@ -26,20 +26,20 @@ import {
   PushDirections,
   Resizable,
 } from 'angular-gridster2';
-import { WidgetContainerComponent } from '@src/app/modules/components/widget-container/widget-container.component';
 import { IDashboardWidgetContext } from '@src/app/core/http/dashboard.service';
 import { DashboardConfigService } from '@src/app/core/services/dashboard-config.service';
 import { CommonModule } from '@angular/common';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { MatMenuModule } from '@angular/material/menu';
-import { CdkMenu, CdkMenuItem, CdkContextMenuTrigger } from '@angular/cdk/menu';
+import { CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
 import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
 import { MatDividerModule } from '@angular/material/divider';
-import { isDefined, isMobile } from '@src/app/core/utils';
+import { isMobile } from '@src/app/core/utils';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { Subscription } from 'rxjs';
 import { MediaBreakpoints } from '@src/app/shared/models/constants';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { DashboardWidgetDesignComponent } from "./dashboard-widget-design.component";
 
 interface Safe extends GridsterConfig {
   draggable: Draggable;
@@ -77,11 +77,10 @@ interface IContextMenu {
     MatDividerModule,
     MatCheckboxModule,
     GridsterComponent,
-    CdkContextMenuTrigger,
-    GridsterItemComponent,
-    WidgetContainerComponent,
     NgScrollbarModule,
-  ],
+    GridsterItemComponent,
+    DashboardWidgetDesignComponent
+],
 })
 export class DashboardDesignComponent implements OnInit, AfterViewInit {
   @ViewChild(GridsterComponent) gridster: GridsterComponent;
@@ -277,6 +276,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   // 选中网格部件
   selectGridster(item: IDashboardWidgetContext) {
+    if(this.isRuntime()) return;
     item.widgetId && this.dashboardEditorService.updateWidgetId(item.widgetId);
   }
 

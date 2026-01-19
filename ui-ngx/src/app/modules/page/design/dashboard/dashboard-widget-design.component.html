@@ -1,0 +1,104 @@
+<hs-widget-container [widgetId]="widget().widgetId!"></hs-widget-container>
+
+@if (!isRuntime()) {
+<div
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  class="absolute wh-full top-0 left-0 z-99999 select-shade cursor-pointer"
+  (mouseover)="handleTriggerMouseOver()"
+  (mouseout)="handleTriggerMouseOut($event)"
+  [attr.data-widget-id]="widget().widgetId"
+>
+</div>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="showToolbar() || isHover()"
+  [cdkConnectedOverlayPositions]="[
+    { 
+      originX: 'end', 
+      originY: 'top',    
+      overlayX: 'end', 
+      overlayY: 'bottom' 
+    }
+  ]"
+  [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.offsetWidth "
+>
+  <div
+    #toolbarContainer
+    class="hs-toolbar-wrapper w-full flex items-center justify-between"
+  >
+    <!-- 原有工具栏内容不变 -->
+    <div
+      class="toolbar-container shadow-md bg-[var(--base-bg-color)] rounded-t-6px p-2px"
+      (mouseleave)="handleToolbarMouseLeave()"
+      [attr.data-widget-id]="widget().widgetId"
+    >
+      <button
+        mat-icon-button
+        class="hs-icon-button-32"
+        [matMenuTriggerFor]="MoreVert"
+      >
+        <mat-icon class="material-icons-round"> more_vert </mat-icon>
+      </button>
+      <mat-menu #MoreVert="matMenu">
+        <div class="ml-12px mb-8px">
+          当前层数:
+          <span class="ml-10px">{{
+            widget().layerIndex === undefined ? 1 : widget().layerIndex
+            }}</span>
+        </div>
+        <button
+          mat-menu-item
+          (click)="gridsterItem().bringToFront(1)"
+        >
+          <mat-icon>arrow_upward</mat-icon>
+          向上一层
+        </button>
+        <button
+          mat-menu-item
+          (click)="gridsterItem().sendToBack(1)"
+        >
+          <mat-icon>arrow_downward</mat-icon>
+          向下一层
+        </button>
+      </mat-menu>
+    </div>
+    <div
+      class="toolbar-containe shadow-md bg-[var(--base-bg-color)] rounded-t-6px p-2px"
+      (mouseleave)="handleToolbarMouseLeave()"
+      [attr.data-widget-id]="widget().widgetId"
+    >
+      <button
+        mat-icon-button
+        class="hs-icon-button-32"
+      >
+        <mat-icon class="material-icons-round"> edit </mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="hs-icon-button-32"
+      >
+        <mat-icon class="material-icons-round"> download </mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="hs-icon-button-32"
+        [matMenuTriggerFor]="menu"
+      >
+        <mat-icon class="material-icons-round color-red-5"> delete </mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button
+          mat-menu-item
+          (mousedown)="removeItem($event, widget())"
+          (touchstart)="removeItem($event, widget())"
+        >
+          确认删除
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</ng-template>
+}
