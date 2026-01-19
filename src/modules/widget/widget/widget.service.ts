@@ -57,6 +57,7 @@ export class HsWidgetService {
   async findAll(
     queryWidgetDto: QueryWidgetDto,
   ): Promise<PageDto<HsWidgetEntity>> {
+    console.log('%c Line:60 🥔', 'color:#33a5ff', queryWidgetDto);
     return this.paginationService.paginate(
       this.widgetRepository,
       queryWidgetDto,

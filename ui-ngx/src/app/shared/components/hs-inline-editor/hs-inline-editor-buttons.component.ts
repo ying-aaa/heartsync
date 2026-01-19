@@ -1,4 +1,3 @@
-// hs-inline-editor-buttons.component.ts
 import { Component, Inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'hs-inline-editor-buttons',
   template: `
-    <div class="hs-inline-editor-buttons">
+    <div class="hs-inline-editor-buttons shadow flex gap-4px bg-[var(--base-bg-color)] text-[var(--primary-text-color)]">
       <button
         mat-icon-button
         (click)="onConfirm()"
@@ -26,7 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
   styles: [`
     .hs-inline-editor-buttons {
       display: flex;
-      gap: 4px; /* 按钮间距，可根据需要调整 */
+      gap: 4px;
     }
   `],
   standalone: true,

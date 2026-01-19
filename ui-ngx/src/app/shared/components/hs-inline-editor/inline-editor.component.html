@@ -1,81 +1,93 @@
 <div
+  #InlineEditorRef
   class="w-full text-14px relative"
   [class]="customClass"
   [style]="customStyle"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
 >
   @if (!isEdit) {
-    <div
-      #editorTrigger
-      class="w-full cursor-text truncate px-3 py-2 rounded-6px line-height-16px select-none hs-inline-text-context"
-      [class.highlight-bg]="highlight && !disabled"
-      [class.text-content]="!disabled && triggerType === 'click'"
-      (click)="triggerType === 'click' && editTriggerEvent($event)"
-      (dblclick)="triggerType === 'dblclick' && editTriggerEvent($event)"
-    >
-      <ng-content>{{ displayValue() }}</ng-content>
-    </div>
+  <div
+    #editorTrigger
+    class="w-full cursor-text truncate px-3 py-2 rounded-6px line-height-16px select-none hs-inline-text-context"
+    [class.highlight-bg]="highlight && !disabled"
+    [class.text-content]="!disabled && triggerType === 'click'"
+    (click)="triggerType === 'click' && editTriggerEvent($event)"
+    (dblclick)="triggerType === 'dblclick' && editTriggerEvent($event)"
+  >
+    <ng-content>{{ displayValue() }}</ng-content>
+  </div>
   } @else {
-    <mat-form-field
-      #formFieldRef
-      class="w-full hs-density--5"
-      appearance="outline"
-    >
-      @switch (type) {
-        @case ('text') {
-          <input
-            #inputRef
-            matInput
-            [(ngModel)]="textValue"
-            (change)="changeValue($event)"
-          />
-        }
-        @case ('select') {
-          <mat-select
-            #inputRef
-            [(ngModel)]="textValue"
-            (ngModelChange)="changeValue($event)"
-          >
-            @for (option of selectOptions; track $index) {
-              <mat-option
-                [value]="option.value"
-                [disabled]="option.disabled"
-              >
-                {{ option.label }}
-              </mat-option>
-            }
-          </mat-select>
-        }
-        @case ('switch') {
-          <hs-switch-form-field
-            #inputRef
-            [(checked)]="textValue"
-            (checkedChange)="changeValue($event)"
-          ></hs-switch-form-field>
-        }
-        @default {
-          <span>Unsupported type</span>
-        }
-      }
-    </mat-form-field>
-
-    @if (showButton) {
-      <div class="absolute right-0 top-100% pt-3px z-99999">
-        <button
-          mat-icon-button
-          (click)="confirmEdit()"
-          class="hs-icon-button-32"
-        >
-          <mat-icon class="material-icons-round"> check </mat-icon>
-        </button>
-
-        <button
-          mat-icon-button
-          (click)="cancelEdit()"
-          class="hs-icon-button-32"
-        >
-          <mat-icon class="material-icons-round"> close </mat-icon>
-        </button>
-      </div>
+  <mat-form-field
+    #formFieldRef
+    class="w-full hs-density--5"
+    appearance="outline"
+  >
+    @switch (type) {
+    @case ('text') {
+    <input
+      #inputRef
+      matInput
+      [(ngModel)]="textValue"
+      (change)="changeValue($event)"
+    />
     }
+    @case ('select') {
+    <mat-select
+      #inputRef
+      [(ngModel)]="textValue"
+      (ngModelChange)="changeValue($event)"
+    >
+      @for (option of selectOptions; track $index) {
+      <mat-option
+        [value]="option.value"
+        [disabled]="option.disabled"
+      >
+        {{ option.label }}
+      </mat-option>
+      }
+    </mat-select>
+    }
+    @case ('switch') {
+    <hs-switch-form-field
+      #inputRef
+      [(checked)]="textValue"
+      (checkedChange)="changeValue($event)"
+    ></hs-switch-form-field>
+    }
+    @default {
+    <span>Unsupported type</span>
+    }
+    }
+  </mat-form-field>
   }
 </div>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isEdit && showButton"
+  (detach)="!isEdit"
+  [cdkConnectedOverlayPositions]="[
+    { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top' }
+  ]"
+  [cdkConnectedOverlayOffsetY]="2"
+  [cdkConnectedOverlayOffsetX]="0"
+>
+  <div class="hs-inline-editor-buttons shadow flex gap-4px bg-[var(--base-bg-color)] text-[var(--primary-text-color)]">
+    <button
+      mat-icon-button
+      (click)="cancelEdit()"
+      class="hs-icon-button-32"
+    >
+      <mat-icon class="material-icons-round"> close </mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      (click)="confirmEdit()"
+      class="hs-icon-button-32"
+    >
+      <mat-icon class="material-icons-round"> check </mat-icon>
+    </button>
+  </div>
+</ng-template>

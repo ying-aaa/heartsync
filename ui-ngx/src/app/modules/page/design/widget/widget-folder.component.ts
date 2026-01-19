@@ -226,7 +226,7 @@ export class WidgetFolderComponent implements OnInit {
   }
 
   onQueryData(): void {
-    this.pageLink.getData();
+    this.requestTrigger$.next();
   }
 
   onResetData(): void {
@@ -255,9 +255,8 @@ export class WidgetFolderComponent implements OnInit {
       isCreate: true,
     };
     this.widgetList.update((widgets) => [...widgets, tempWidget]);
-    this.widgetId.set(tempWidget.id);
     setTimeout(() => {
-      this.menuActions[0].action(tempWidget);
+      this.operateTargetEditor(tempWidget);
     }, 300);
   }
 
@@ -319,7 +318,7 @@ export class WidgetFolderComponent implements OnInit {
 
   cancelEditWidget(widget: any = null) {
     if (widget && widget.isCreate) {
-      this.widgetList.update((widgets) => widgets.filter((widget: any) => widget.id !== widget.id));
+      this.widgetList.update((widgets) => widgets.filter((item: any) => item.id !== widget.id));
     }
     this.editingWidget.set(null);
   }
