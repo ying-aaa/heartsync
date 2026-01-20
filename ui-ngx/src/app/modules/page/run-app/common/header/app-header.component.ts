@@ -1,8 +1,6 @@
 import { Component, computed, HostBinding, HostListener, OnInit, signal } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
-import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
-import { AppLogoComponent } from '../common/app-logo/app-logo.component';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
 import {
   CdkDropList,
@@ -15,6 +13,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { RunAppDesignService } from '@core/services/run-app-designer.service';
 import { BaseDesignComponent } from '../base-design.component';
+import { AppLogoComponent } from '../app-logo/app-logo.component';
 
 @Component({
   selector: 'hs-app-header',

@@ -8,7 +8,7 @@ import { RunAppDesignService } from '@src/app/core/services/run-app-designer.ser
   template: ` <router-outlet></router-outlet> `,
   imports: [RouterOutlet],
   host: {
-    class: 'hs-app-content w-0 flex-1',
+    class: 'hs-app-content',
   },
 })
 export class AppContentComponent extends BaseDesignComponent implements OnInit {
