@@ -8,6 +8,7 @@
 <content class="block wh-full flex flex-col">
   <header>
     <hs-dashboard-toolbar
+      [isMobile]="isMobile()"
       [sidenavStart]="sidenavStart"
       [sidenavEnd]="sidenavEnd"
     ></hs-dashboard-toolbar>
@@ -17,19 +18,19 @@
     <mat-sidenav-container class="wh-full">
       <mat-sidenav
         #sidenavStart
-        mode="side"
-        opened
-        disableClose="true"
+        [mode]="isMobile() ? 'over' : 'side'"
+        [opened]="true"
+        [disableClose]="!isMobile()"
         [fixedInViewport]="false"
       >
-        <aside class="flex wh-full">
+        <aside class="flex wh-full bg-[var(--base-bg-color)]">
           <div class="w-full px-12px pt-12px pb-8px">
             @if (appId) {
-              <hs-tree
-                [businessId]="appId"
-                [businessKey]="businessKey"
-                [treeConfig]="treeConfig()"
-              ></hs-tree>
+            <hs-tree
+              [businessId]="appId"
+              [businessKey]="businessKey"
+              [treeConfig]="treeConfig()"
+            ></hs-tree>
             }
           </div>
           <!-- <mat-divider
@@ -40,18 +41,18 @@
       </mat-sidenav>
 
       <mat-sidenav-content>
-        <hs-dashboard-viewport></hs-dashboard-viewport>
+        <hs-dashboard-viewport [isMobile]="isMobile()"></hs-dashboard-viewport>
       </mat-sidenav-content>
 
       <mat-sidenav
         #sidenavEnd
-        mode="side"
+        [mode]="isMobile() ? 'over' : 'side'"
         [opened]="false"
-        disableClose="true"
+        [disableClose]="!isMobile()"
         position="end"
         [fixedInViewport]="false"
       >
-        <aside class="flex wh-full">
+        <aside class="flex wh-full bg-[var(--base-bg-color)]">
           <!-- <mat-divider
             [vertical]="true"
             class="h-full"

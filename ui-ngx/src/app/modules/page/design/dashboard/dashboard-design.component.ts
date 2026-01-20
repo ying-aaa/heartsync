@@ -1,11 +1,12 @@
 import {
-  AfterViewInit,
-  Component,
-  computed,
+  input,
   effect,
   OnInit,
   signal,
+  computed,
   ViewChild,
+  Component,
+  AfterViewInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,17 +15,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
-
 import {
-  Draggable,
-  GridsterComponent,
-  GridsterConfig,
+  GridType,
   GridsterItem,
+  GridsterConfig,
+  GridsterComponent,
   GridsterItemComponent,
   GridsterItemComponentInterface,
-  GridType,
-  PushDirections,
-  Resizable,
 } from 'angular-gridster2';
 import { IDashboardWidgetContext } from '@src/app/core/http/dashboard.service';
 import { DashboardConfigService } from '@src/app/core/services/dashboard-config.service';
@@ -34,18 +31,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
 import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
 import { MatDividerModule } from '@angular/material/divider';
-import { isMobile } from '@src/app/core/utils';
+import { deepClone, isMobile } from '@src/app/core/utils';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { Subscription } from 'rxjs';
-import { MediaBreakpoints } from '@src/app/shared/models/constants';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { DashboardWidgetDesignComponent } from "./dashboard-widget-design.component";
-
-interface Safe extends GridsterConfig {
-  draggable: Draggable;
-  resizable: Resizable;
-  pushDirections: PushDirections;
-}
+import { DashboardWidgetDesignComponent } from './dashboard-widget-design.component';
 
 interface IContextMenuConfig {
   label: string;
@@ -79,13 +68,16 @@ interface IContextMenu {
     GridsterComponent,
     NgScrollbarModule,
     GridsterItemComponent,
-    DashboardWidgetDesignComponent
-],
+    DashboardWidgetDesignComponent,
+  ],
 })
 export class DashboardDesignComponent implements OnInit, AfterViewInit {
-  @ViewChild(GridsterComponent) gridster: GridsterComponent;
+  @ViewChild(GridsterComponent, {
+    static: true,
+  })
+  gridster: GridsterComponent;
 
-  // public widgets: Array<IDashboardWidgetContext> = [];
+  isMobile = input<boolean>(isMobile());
 
   widgets = this.dashboardConfigService.widgets;
 
@@ -96,6 +88,8 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   selectWidgetId = computed(() => this.dashboardEditorService.currentSelectWidgetId());
 
   fixedRowHeight = signal<number>(70);
+
+  isDragging = signal<boolean>(false);
 
   gridsterItemContextMenu: IContextMenu = {
     rename: {
@@ -118,15 +112,36 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   gridsterOption = computed<GridsterConfig>(() => {
     const isDesign = !this.isRuntime();
-    const gridsterOption = this.dashboardConfigService.gridsterOption();
-    const fixedRowHeight = this.fixedRowHeight();
-    return {
+    const gridsterOption = deepClone(this.dashboardConfigService.gridsterOption());
+    const fixedRowHeight = this.detectRowSize(gridsterOption) || 70;
+    if (isDesign) {
+      // 编辑模式滚动
+      gridsterOption.gridType = GridType.ScrollVertical;
+    } else if (this.isMobile() && gridsterOption.gridType === GridType.Fit) {
+      // 手机端固定高度
+      gridsterOption.gridType = GridType.Fixed;
+    }
+
+    const baseDrag = {
+      enabled: isDesign,
+      start: () => {
+        this.isDragging.set(true);
+      },
+      stop: () => {
+        setTimeout(() => {
+          this.isDragging.set(false);
+        }, 100);
+      },
+    };
+
+    const options: GridsterConfig = {
       // 取自定义配置，即后端保存的
       ...gridsterOption,
-      gridType: GridType.Fit,
-      keepFixedHeightInMobile: true,
+      keepFixedHeightInMobile: this.isRuntime() && this.isMobile(),
       useTransformPositioning: true, // 开启硬件加速
-      rowHeight: '100px',
+      // 除了 fixed
+      rowHeight: '70px',
+      // fixed
       fixedRowHeight,
       compactType: 'none',
       disableWindowResize: false,
@@ -134,7 +149,6 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
       defaultLayerIndex: 2,
       baseLayerIndex: 2,
       maxLayerIndex: 2,
-      outerMargin: true,
       /**
        * 下面为编辑时的配置，不会进行保存的
        *  */
@@ -142,12 +156,8 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
       enableEmptyCellDrop: isDesign,
       // 滑动生成
       enableEmptyCellDrag: isDesign,
-      draggable: {
-        enabled: isDesign,
-      },
-      resizable: {
-        enabled: isDesign,
-      },
+      draggable: baseDrag,
+      resizable: baseDrag,
       // 拖拽预设到网格时的回调
       emptyCellDropCallback: this.onPresetDropToGrid.bind(this),
       // 滑动网格生成时的回调
@@ -155,6 +165,8 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
       // 变动网格item
       itemChangeCallback: this.itemChangeCallback.bind(this),
     };
+
+    return options;
   });
 
   breakpointObserverSubscription: Subscription;
@@ -162,61 +174,27 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   constructor(
     private dashboardEditorService: DashboardEditorService,
     private dashboardConfigService: DashboardConfigService,
-    private breakpointObserver: BreakpointObserver,
   ) {
     effect(() => {
       const gridsterOption = this.gridsterOption();
       this.dashboardEditorService.resizeGridster();
     });
-
-    this.breakpointObserverSubscription = this.breakpointObserver
-      .observe(MediaBreakpoints['gt-sm'])
-      .subscribe(() => {
-        const fixedRowHeight = this.detectRowSize(this.gridsterOption(), isMobile(), true);
-        fixedRowHeight && this.fixedRowHeight.set(fixedRowHeight);
-      });
   }
 
-  test() {
-    console.log('%c Line:155 🍺', 'color:#7f2b82');
-  }
-
-  private detectRowSize(
-    gridsterOpts: GridsterConfig,
-    isMobile: boolean,
-    autofillHeight: boolean,
-    parentHeight?: number,
-  ): number | null {
+  private detectRowSize(gridsterOpts: GridsterConfig): number | null {
+    const isMobile = this.isMobile();
+    const gridsterHeight = this.gridster?.el.offsetHeight;
     let rowHeight = null;
-    if (!autofillHeight) {
-      // 未启用自动填充：移动端使用配置的mobileRowHeight（默认70px）
-      if (isMobile) {
-        // rowHeight = isDefined(this.mobileRowHeight) ? this.mobileRowHeight : 70;
-        rowHeight = 70;
+    if (gridsterHeight) {
+      let totalRows = 0;
+      for (const widget of this.widgets()) {
+        totalRows += widget.rows;
       }
-    } else if (autofillHeight && isMobile) {
-      // 启用移动端自动填充：计算行高以填满容器
-      if (!parentHeight) {
-        parentHeight = this.gridster.el.offsetHeight; // 获取容器高度
-      }
-      if (parentHeight) {
-        // 计算所有活跃部件的总行数
-        let totalRows = 0;
-        for (const widget of this.widgets()) {
-          totalRows += widget.rows;
-        }
-        console.log(
-          '%c Line:211 🍣',
-          'color:#7f2b82',
-          totalRows,
-          (gridsterOpts.margin || 10) * (totalRows + (gridsterOpts.outerMargin ? 1 : -1)),
-        );
-        // 核心公式：行高 = (容器高度 - 间距总占用) / 总行数
-        rowHeight =
-          (parentHeight -
-            (gridsterOpts.margin || 10) * (totalRows + (gridsterOpts.outerMargin ? 1 : -1))) /
-          totalRows;
-      }
+      // 核心公式：行高 = (容器高度 - 间距总占用) / 总行数
+      rowHeight =
+        (gridsterHeight -
+          (gridsterOpts.margin || 10) * (totalRows + (gridsterOpts.outerMargin ? 1 : -1))) /
+        totalRows;
     }
     return rowHeight;
   }
@@ -276,16 +254,12 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   // 选中网格部件
   selectGridster(item: IDashboardWidgetContext) {
-    if(this.isRuntime()) return;
+    if (this.isRuntime()) return;
     item.widgetId && this.dashboardEditorService.updateWidgetId(item.widgetId);
   }
 
   ngAfterViewInit() {
     this.dashboardEditorService.setGridsterInstall(this.gridster);
-    setTimeout(() => {
-      const fixedRowHeight = this.detectRowSize(this.gridsterOption(), isMobile(), true);
-      fixedRowHeight && this.fixedRowHeight.set(fixedRowHeight);
-    }, 2000);
   }
 
   ngOnInit() {}

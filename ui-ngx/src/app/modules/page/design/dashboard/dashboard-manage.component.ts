@@ -9,10 +9,12 @@ import { DashboardToolbarComponent } from './toolbar/dashboard-toolbar.component
 import { HsTreeComponent } from '@src/app/shared/components/hs-tree/hs-tree.component';
 import { ActivatedRoute } from '@angular/router';
 import { IFileTreeConfig } from '@src/app/shared/components/hs-tree/tree.model';
-import { getParamFromRoute } from '@src/app/core/utils';
+import { getParamFromRoute, isMobile } from '@src/app/core/utils';
 import { DashboardService } from '@src/app/core/http/dashboard.service';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
+import { MediaBreakpoints } from '@src/app/shared/models/constants';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'hs-dashboard-manage',
@@ -30,12 +32,14 @@ import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.
   ],
 })
 export class DashboardManageComponent implements OnInit {
-  sidenavStart = viewChild.required<MatSidenav>('sidenavStart');
-  sidenavEnd = viewChild.required<MatSidenav>('sidenavEnd');
+  sidenavStart = viewChild<MatSidenav>('sidenavStart');
+  sidenavEnd = viewChild<MatSidenav>('sidenavEnd');
 
   appId: string | null = getParamFromRoute('appId', this.route);
   businessKey = 'dashboard';
   dashboardId: string;
+
+  breakpointObserverSubscription: Subscription;
 
   treeConfig = signal<IFileTreeConfig>({
     featureList: [
@@ -56,9 +60,7 @@ export class DashboardManageComponent implements OnInit {
       if (type === 'folder') return true;
       let next = false;
       try {
-        const res = await firstValueFrom(
-          this.dashboardService.removeDashboard(id),
-        );
+        const res = await firstValueFrom(this.dashboardService.removeDashboard(id));
         if (res.statusCode === 200) next = true;
       } catch (error) {
         next = false;
@@ -70,7 +72,7 @@ export class DashboardManageComponent implements OnInit {
       this.updateDashboardId(id);
       this.dashboardEditorService.updateDashboardName(name);
       this.dashboardEditorService.updateRuntimeStatus(true);
-      this.sidenavEnd().toggle(false);
+      this.sidenavEnd()?.toggle(false);
     },
     renameNodeSuccess: (node, jsTree) => {
       const { type, id, text: name } = node || {};
@@ -106,14 +108,31 @@ export class DashboardManageComponent implements OnInit {
     },
   });
 
+  isMobile = signal(isMobile());
+
   constructor(
-    private dashboardEditorService: DashboardEditorService,
-    private dashboardService: DashboardService,
     private route: ActivatedRoute,
+    private dashboardService: DashboardService,
+    private breakpointObserver: BreakpointObserver,
+    private dashboardEditorService: DashboardEditorService,
   ) {
+    this.breakpointObserverSubscription = this.breakpointObserver
+      .observe([MediaBreakpoints['lt-sm'], MediaBreakpoints['gt-sm']])
+      .subscribe((res: BreakpointState) => {
+        const isMobileScreen = this.breakpointObserver.isMatched(MediaBreakpoints['lt-sm']);
+        const isPcScreen = this.breakpointObserver.isMatched(MediaBreakpoints['gt-sm']);
+        const isTabletScreen = !isMobileScreen && !isPcScreen;
 
+        this.isMobile.set(isMobileScreen);
+
+        const sidenav = this.sidenavStart && this.sidenavStart();
+        if (isMobileScreen) {
+          sidenav?.close();
+        } else {
+          sidenav?.open();
+        }
+      });
   }
-
 
   updateDashboardId(dashboardId: string) {
     this.dashboardId = dashboardId;

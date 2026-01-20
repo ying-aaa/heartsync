@@ -22,8 +22,11 @@
     </div>
     }
 
-    @if (gridsterOption().gridType) {
-    <gridster [options]="gridsterOption()">
+    <!-- @if (gridsterOption().gridType) { -->
+    <gridster
+      [options]="gridsterOption()"
+      [class.overflow-hidden!]="isMobile() && isRuntime()"
+    >
       @for (item of widgets(); track item) {
       <gridster-item
         #gridsterItem
@@ -40,12 +43,13 @@
             [gridsterItem]="gridsterItem"
             [widget]="item"
             [isRuntime]="isRuntime()"
+            [isDragging]="isDragging()"
           ></hs-dashboard-widget-design>
         </div>
       </gridster-item>
       }
     </gridster>
-    }
+    <!-- } -->
   </div>
 </content>
 

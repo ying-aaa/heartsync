@@ -6,6 +6,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { GridType, DisplayGrid } from 'angular-gridster2';
+console.log('%c Line:9 🥕 GridType', 'color:#2eafb0', GridType);
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,13 +14,19 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatOptionModule } from '@angular/material/core';
 import { DashboardConfigService } from '@src/app/core/services/dashboard-config.service';
-import { ColorPickerDirective } from 'ngx-color-picker';
 import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-file.module';
 import { IFileData } from '@src/app/shared/models/common-component';
 import { HS_BUCKET } from '@src/app/shared/models/system.model';
 import { UploadFileService } from '@src/app/core/http/upload-file.service';
 import { ToastrService } from 'ngx-toastr';
 import { deepClone } from '@src/app/core/utils';
+import { HsColorPickerComponent } from '@src/app/shared/components/hs-color-picker/hs-color-picker.component';
+import {
+  backgroundImageModeOptions,
+  displayGridOptions,
+  gridTypeOptions,
+} from '@src/app/shared/models/constants';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'hs-dashboard-layout-settings',
@@ -37,8 +44,9 @@ import { deepClone } from '@src/app/core/utils';
     MatInputModule,
     MatCheckboxModule,
     MatSlideToggleModule,
-    ColorPickerDirective,
     HsUploadFileModule,
+    HsColorPickerComponent,
+    MatTooltipModule,
   ],
   host: {
     class: 'block h-40px',
@@ -52,15 +60,9 @@ export class DashboardLayoutSettingsComponent implements OnInit {
 
   fileList: IFileData[] = [];
 
-  gridTypes = Object.values(GridType);
-  displayGrid = Object.values(DisplayGrid);
-  backgroundModeTypes = [
-    { label: '宽度填满容器，高度按比例缩放', value: '100%' },
-    { label: '高度填满容器，宽度按比例缩放', value: 'auto 100%' },
-    { label: '铺满容器，裁剪多余部分', value: 'cover' },
-    { label: '完整显示，留白以适应容器', value: 'contain' },
-    { label: '保持原始尺寸，不缩放', value: 'auto' },
-  ];
+  gridTypeOptions = gridTypeOptions;
+  displayGridOptions = displayGridOptions;
+  backgroundImageModeOptions = backgroundImageModeOptions;
 
   constructor(
     private fb: FormBuilder,
@@ -72,8 +74,9 @@ export class DashboardLayoutSettingsComponent implements OnInit {
     this.form = this.fb.group({
       gridType: [GridType.Fit],
       margin: [10],
+      outerMargin: [true],
       displayGrid: [DisplayGrid.OnDragAndResize],
-      enableOccupiedCellDrop: [false],
+      enableOccupiedCellDrop: [true],
       minRows: [1],
       minCols: [1],
       backgroundColor: ['transparent'],
@@ -97,15 +100,9 @@ export class DashboardLayoutSettingsComponent implements OnInit {
 
   cancel() {
     const gridsterOption = this.dashboardConfigService.gridsterOption();
-    const backgroundImageFileData = deepClone(
-      gridsterOption?.['backgroundImageFileData'] || [],
-    );
+    const backgroundImageFileData = deepClone(gridsterOption?.['backgroundImageFileData'] || []);
     this.fileList.forEach((fileItem) => {
-      if (
-        !backgroundImageFileData.some(
-          (item: IFileData) => item.name === fileItem.name,
-        )
-      ) {
+      if (!backgroundImageFileData.some((item: IFileData) => item.name === fileItem.name)) {
         this.delItemFile(fileItem);
       }
     });
@@ -125,8 +122,6 @@ export class DashboardLayoutSettingsComponent implements OnInit {
     // 初始化设置form的值
     const gridsterOption = this.dashboardConfigService.gridsterOption();
     this.form.patchValue(gridsterOption!);
-    this.fileList = deepClone(
-      gridsterOption?.['backgroundImageFileData'] || [],
-    );
+    this.fileList = deepClone(gridsterOption?.['backgroundImageFileData'] || []);
   }
 }

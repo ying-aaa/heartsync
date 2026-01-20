@@ -1,3 +1,8 @@
-<content class="wh-full flex-center">
-  <hs-dashboard-design></hs-dashboard-design>
+<content class="wh-full flex flex-col">
+  @if(isDesign()) {
+  <header class="p-20px bg-[var(--gridster-bg-color)]">
+    <h2>{{ currentDashboardName() }}</h2>
+  </header>
+  }
+  <hs-dashboard-design [isMobile]="isMobile()" class="h-0! flex-1!"></hs-dashboard-design>
 </content>

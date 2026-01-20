@@ -33,6 +33,8 @@ import { VerseDesignModeSwitchComponent } from '@src/app/shared/components/ui-ve
   ],
 })
 export class DashboardToolbarComponent implements OnInit {
+  isMobile = input.required<boolean>();
+
   sidenavStart = input.required<MatSidenav>();
   sidenavEnd = input.required<MatSidenav>();
 
@@ -102,5 +104,6 @@ export class DashboardToolbarComponent implements OnInit {
     this.dashboardEditorService.resizeGridster();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

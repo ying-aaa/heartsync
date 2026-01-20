@@ -24,7 +24,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([includeBearerTokenInterceptor, RequestInterceptor, ResponentInterceptor])),
+    provideHttpClient(
+      withInterceptors([includeBearerTokenInterceptor, RequestInterceptor, ResponentInterceptor]),
+    ),
     provideHighlightOptions({
       lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
       coreLibraryLoader: () => import('highlight.js/lib/core'),

@@ -327,6 +327,6 @@ export class WidgetFolderComponent implements OnInit {
     this.initLoadData();
     this.handleSearchInput();
     this.triggerRequest();
-    // (document.querySelector('hs-workbench-header')! as HTMLElement).style.display = 'none';
+    (document.querySelector('hs-workbench-header')! as HTMLElement).style.display = 'none';
   }
 }

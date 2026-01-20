@@ -1,5 +1,8 @@
-<content class="px-8px flex items-center justify-between h-40px line-height-40px bg-##a7c1de">
-  <div class="flex-center gap-8px">
+<content
+  class="px-8px items-center justify-between  bg-##a7c1de"
+  [class.flex]="!isMobile() || isRuntime()"
+>
+  <div class="flex items-center gap-8px h-40px line-height-40px">
     @let isSidenavStartOpen = sidenavStart().opened;
     <button
       matSuffix
@@ -21,11 +24,12 @@
     </div>
   </div>
 
-
-  <div class="flex-center gap-16px">
+  <div class="flex items-center justify-end gap-16px h-40px line-height-40px">
     @if(!isRuntime()) {
     <!-- 预设列表 -->
+    @if(!isMobile()){
     <hs-widget-preset-list></hs-widget-preset-list>
+    }
     <!-- 控制已有内容显示 -->
     <verse-design-mode-switch
       [tooltip]="showWidgetList() ? '显示部件列表' : '关闭部件列表'"

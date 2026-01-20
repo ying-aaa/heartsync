@@ -1,6 +1,10 @@
 @let backgroundImageUrl = gridsterOption()['backgroundImageFileData']?.[0]?.url;
 
-<content class="wh-full" hs-loading [isLoading]="loadingStatus()">
+<content
+  class="wh-full"
+  hs-loading
+  [isLoading]="loadingStatus()"
+>
   <div
     class="wh-full relative"
     [style.backgroundColor]="gridsterOption()['backgroundColor']"
@@ -13,24 +17,29 @@
     }"
   >
     @if (!widgets().length && !loadingStatus()) {
-      <div class="wh-full flex-center text-22px absolute top-0 left-0">
-        <span>未配置部件</span>
-      </div>
+    <div class="wh-full flex-center text-22px absolute top-0 left-0">
+      <span>未配置部件</span>
+    </div>
     }
 
-    @if (gridsterOption().gridType) {
-      <gridster [options]="gridsterOption()">
-        @for (item of widgets(); track item) {
-          <gridster-item #gridsterItem [item]="item">
-            <!-- 内容 -->
-            <div id="#containter" class="wh-full overflow-y-auto overflow-x-hidden">
-              <hs-widget-container
-                [widgetId]="item.widgetId!"
-              ></hs-widget-container>
-            </div>
-          </gridster-item>
-        }
-      </gridster>
-    }
+    <gridster
+      [options]="gridsterOption()"
+      [class.overflow-hidden!]="isMobile()"
+    >
+      @for (item of widgets(); track item) {
+      <gridster-item
+        #gridsterItem
+        [item]="item"
+      >
+        <!-- 内容 -->
+        <div
+          id="#containter"
+          class="wh-full overflow-y-auto overflow-x-hidden"
+        >
+          <hs-widget-container [widgetId]="item.widgetId!"></hs-widget-container>
+        </div>
+      </gridster-item>
+      }
+    </gridster>
   </div>
 </content>

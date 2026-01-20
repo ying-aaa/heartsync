@@ -1,10 +1,9 @@
 <hs-widget-container [widgetId]="widget().widgetId!"></hs-widget-container>
-
 @if (!isRuntime()) {
 <div
   cdkOverlayOrigin
   #trigger="cdkOverlayOrigin"
-  class="absolute wh-full top-0 left-0 z-99999 select-shade cursor-pointer"
+  class="absolute wh-full top-0 left-0 z-9 select-shade cursor-pointer"
   (mouseover)="handleTriggerMouseOver()"
   (mouseout)="handleTriggerMouseOut($event)"
   [attr.data-widget-id]="widget().widgetId"
@@ -14,7 +13,7 @@
 <ng-template
   cdkConnectedOverlay
   [cdkConnectedOverlayOrigin]="trigger"
-  [cdkConnectedOverlayOpen]="showToolbar() || isHover()"
+  [cdkConnectedOverlayOpen]="!isDragging() && (showToolbar() || isHover())"
   [cdkConnectedOverlayPositions]="[
     { 
       originX: 'end', 

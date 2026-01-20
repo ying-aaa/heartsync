@@ -66,6 +66,7 @@ export class DashboardService {
   createDashboard(data: IDashboardContext): Observable<any> {
     data.gridsterOption = {
       gridType: GridType.Fit,
+      outerMargin: true,
       margin: 10,
       displayGrid: DisplayGrid.OnDragAndResize,
       enableOccupiedCellDrop: true,

@@ -68,7 +68,6 @@
 .z-9\!{z-index:9 !important;}
 .z-999{z-index:999;}
 .z-999\!{z-index:999 !important;}
-.z-99999{z-index:99999;}
 .grid{display:grid;}
 .cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}
 .grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}
@@ -286,6 +285,7 @@
 .group:hover .group-hover\:flex{display:flex;}
 .flex\!{display:flex !important;}
 .flex-1{flex:1 1 0%;}
+.flex-1\!{flex:1 1 0% !important;}
 .flex-row{flex-direction:row;}
 .flex-row-reverse{flex-direction:row-reverse;}
 .flex-col{flex-direction:column;}
@@ -382,6 +382,7 @@
 .bg-\[var\(--base-bg-color\)\]{background-color:var(--base-bg-color) /* var(--base-bg-color) */;}
 .bg-\[var\(--base-color-05\)\]{background-color:var(--base-color-05) /* var(--base-color-05) */;}
 .bg-\[var\(--base-color-10\)\]{background-color:var(--base-color-10) /* var(--base-color-10) */;}
+.bg-\[var\(--gridster-bg-color\)\]{background-color:var(--gridster-bg-color) /* var(--gridster-bg-color) */;}
 .bg-\[var\(--primary-bg-color\)\]{background-color:var(--primary-bg-color) /* var(--primary-bg-color) */;}
 .bg-\#000{--un-bg-opacity:1;background-color:rgb(0 0 0 / var(--un-bg-opacity)) /* #000 */;}
 .bg-\#000\/30{background-color:rgb(0 0 0 / 0.3) /* #000 */;}

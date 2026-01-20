@@ -34,6 +34,7 @@ export class DashboardWidgetDesignComponent implements OnInit, OnDestroy {
   gridsterItem = input.required<GridsterItemComponentInterface>();
   widget = input.required<any>();
   isRuntime = input.required<boolean>();
+  isDragging = input.required<boolean>();
 
   selectWidgetId = computed(() => this.dashboardEditorService.currentSelectWidgetId());
   showToolbar = signal<boolean>(false);
