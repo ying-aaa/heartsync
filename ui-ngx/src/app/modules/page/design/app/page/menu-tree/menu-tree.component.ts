@@ -41,7 +41,7 @@ import { IEventsType } from '@src/app/shared/models/public-api';
 import { AsyncPipe } from '@angular/common';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { HsIconComponent } from '@src/app/shared/components/hs-icon/hs-icon.component';
-import { IMatIconConfig } from '@src/app/shared/components/hs-icon/hs-icon.model';
+import { IIconConfig, IMatIconConfig } from '@src/app/shared/components/hs-icon/hs-icon.model';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
 
 interface IDropInfo {
@@ -510,33 +510,6 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   customDragTable: CustomDragTable | null = null;
 
-  defaultIconConfig: { [key: string]: IMatIconConfig } = {
-    folder_open: {
-      type: 'mat-icon',
-      matIconType: 'two-tone',
-      name: 'folder_open',
-      color: 'var(--base-primary-color)',
-      iconSize: 24,
-      bgSize: 32,
-    },
-    folder: {
-      type: 'mat-icon',
-      matIconType: 'two-tone',
-      name: 'folder',
-      color: 'var(--base-primary-color)',
-      iconSize: 24,
-      bgSize: 32,
-    },
-    description: {
-      type: 'mat-icon',
-      matIconType: 'two-tone',
-      name: 'description',
-      color: 'var(--base-primary-color)',
-      iconSize: 24,
-      bgSize: 32,
-    },
-  };
-
   constructor(
     private route: ActivatedRoute,
     private menuHttpService: MenuHttpService,
@@ -627,11 +600,12 @@ export class MenuTreeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return JSON.stringify({
       name,
-      type: 'two-tone',
+      type: 'mat-icon',
+      matIconType: 'filled',
       color: 'var(--base-primary-color)',
       iconSize: 24,
       bgSize: 32,
-    });
+    } as IIconConfig);
   }
 
   addChildNode(type: IMenuType, node: any) {
