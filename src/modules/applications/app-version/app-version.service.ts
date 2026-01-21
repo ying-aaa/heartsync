@@ -1,4 +1,3 @@
-// src/modules/app-version/app-version.service.ts
 import {
   Injectable,
   NotFoundException,
@@ -20,8 +19,6 @@ export class HsAppVersionService {
   constructor(
     @InjectRepository(HsAppVersionEntity)
     private readonly versionRepo: Repository<HsAppVersionEntity>,
-    @Inject(forwardRef(() => HsApplicationService))
-    private readonly appService: HsApplicationService,
   ) {}
 
   /**
@@ -30,19 +27,16 @@ export class HsAppVersionService {
    */
   async create(dto: CreateAppVersionDto): Promise<HsAppVersionEntity> {
     // 1. 校验应用是否存在
-    await this.appService.findOne(dto.applicationId);
+    // await this.appService.findOne(dto.appId);
 
-    // 2. 校验版本号是否重复
     const existVersion = await this.versionRepo.findOne({
-      where: { applicationId: dto.applicationId, versionCode: dto.versionCode },
+      where: { appId: dto.appId, versionCode: dto.versionCode },
     });
     if (existVersion) {
       throw new BadRequestException(
-        `应用${dto.applicationId}的版本号${dto.versionCode}已存在`,
+        `应用${dto.appId}的版本号${dto.versionCode}已存在`,
       );
     }
-
-    // 3. 创建版本
     const version = this.versionRepo.create({
       ...dto,
       status: HsAppVersionStatus.DRAFT,
@@ -64,12 +58,12 @@ export class HsAppVersionService {
 
   /**
    * 查询应用的最新版本（优先已发布）
-   * @param applicationId 应用ID
+   * @param appId 应用ID
    */
-  async findLatestVersion(applicationId: string): Promise<HsAppVersionEntity> {
+  async findLatestVersion(appId: string): Promise<HsAppVersionEntity> {
     // 优先查已发布版本（最新发布）
     const publishedVersion = await this.versionRepo.findOne({
-      where: { applicationId, status: HsAppVersionStatus.PUBLISHED },
+      where: { appId, status: HsAppVersionStatus.PUBLISHED },
       order: { publishTime: 'DESC' },
     });
     if (publishedVersion) {
@@ -78,11 +72,11 @@ export class HsAppVersionService {
 
     // 再查草稿版本（最新创建）
     const draftVersion = await this.versionRepo.findOne({
-      where: { applicationId, status: HsAppVersionStatus.DRAFT },
+      where: { appId, status: HsAppVersionStatus.DRAFT },
       order: { createTime: 'DESC' },
     });
     if (!draftVersion) {
-      throw new NotFoundException(`应用${applicationId}暂无版本数据`);
+      throw new NotFoundException(`应用${appId}暂无版本数据`);
     }
     return draftVersion;
   }

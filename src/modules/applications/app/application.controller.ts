@@ -1,4 +1,3 @@
-// src/modules/application/application.controller.ts
 import {
   Controller,
   Get,
@@ -12,15 +11,14 @@ import {
   Query,
   BadRequestException,
 } from '@nestjs/common';
-import {
-  HsApplicationService,
-  ApplicationWithConfig,
-} from './application.service';
+import { HsApplicationService } from './application.service';
 import { CreateApplicationWithConfigDto } from './dto/create-application-with-config.dto';
 import { UpdateApplicationWithConfigDto } from './dto/update-application-with-config.dto';
 import { QueryApplicationDto } from './dto/query-application.dto';
 import { RoleMatchingMode, Roles, Unprotected } from 'nest-keycloak-connect';
 import { PageDto } from 'src/common/dtos/page.dto';
+import { HsApplicationEntity } from 'src/database/entities/hs-application.entity';
+import { IAppWithConfig } from '@heartsync/types';
 
 @Controller('applications')
 export class HsApplicationController {
@@ -33,7 +31,7 @@ export class HsApplicationController {
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   async create(
     @Body() dto: CreateApplicationWithConfigDto,
-  ): Promise<ApplicationWithConfig> {
+  ): Promise<IAppWithConfig> {
     return this.appService.createWithConfig(dto);
   }
 
@@ -45,7 +43,7 @@ export class HsApplicationController {
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   async findAll(
     @Query() queryDto: QueryApplicationDto,
-  ): Promise<PageDto<ApplicationWithConfig>> {
+  ): Promise<PageDto<IAppWithConfig>> {
     return this.appService.findAll(queryDto);
   }
 
@@ -69,7 +67,7 @@ export class HsApplicationController {
   async findOne(
     @Param('id') id: string,
     @Query('versionId') versionId?: string,
-  ): Promise<ApplicationWithConfig> {
+  ): Promise<IAppWithConfig> {
     return this.appService.findOneWithConfig(id, versionId);
   }
 
@@ -81,7 +79,7 @@ export class HsApplicationController {
   async update(
     @Param('id') id: string,
     @Body() dto: UpdateApplicationWithConfigDto,
-  ): Promise<ApplicationWithConfig> {
+  ): Promise<IAppWithConfig> {
     return this.appService.updateWithConfig(id, dto);
   }
 

@@ -1,4 +1,3 @@
-// src/modules/application/application.service.ts
 import {
   Injectable,
   NotFoundException,
@@ -13,56 +12,43 @@ import { UpdateApplicationWithConfigDto } from './dto/update-application-with-co
 import { QueryApplicationDto } from './dto/query-application.dto';
 import { HsAppVersionService } from '../app-version/app-version.service';
 import { HsAppConfigService } from '../app-config/app-config.service';
-import { ISoftDeleteStatus } from '@heartsync/types';
+import { IAppWithConfig, ISoftDeleteStatus } from '@heartsync/types';
 import { HsPaginationService } from 'src/common/services/pagination.service';
 import { HsApplicationEntity } from 'src/database/entities/hs-application.entity';
 import { PageDto } from 'src/common/dtos/page.dto';
-
-/** 应用+配置整合返回类型 */
-export type ApplicationWithConfig = {
-  application: HsApplicationEntity;
-  version: any;
-  globalConfig: any;
-  menuConfig: any;
-  headerConfig: any;
-};
-
 @Injectable()
 export class HsApplicationService {
   constructor(
     @InjectRepository(HsApplicationEntity)
     private readonly appRepo: Repository<HsApplicationEntity>,
-    private readonly dataSource: DataSource, // 事务管理
+    private readonly dataSource: DataSource,
     @Inject(forwardRef(() => HsAppVersionService))
-    private readonly versionService: HsAppVersionService,
+    private versionService: HsAppVersionService,
     private readonly configService: HsAppConfigService,
     private readonly paginationService: HsPaginationService,
   ) {}
 
   /**
-   * 创建应用+版本+配置（整合接口，事务保障）
+   * 创建应用+版本+配置
    */
   async createWithConfig(
     dto: CreateApplicationWithConfigDto,
-  ): Promise<ApplicationWithConfig> {
-    // 开启数据库事务：确保应用、版本、配置原子性创建
+  ): Promise<IAppWithConfig> {
     return this.dataSource.transaction(async (manager) => {
       const application = manager.create(HsApplicationEntity, {
-        name: dto.name,
-        description: dto.description,
-        directoryId: dto.directoryId,
+        ...dto,
         isDeleted: ISoftDeleteStatus.UNDELETED,
       });
       const savedApp = await manager.save(application);
 
-      // 3. 创建初始版本（调用版本服务）
+      // 创建初始版本（调用版本服务）
       const version = await this.versionService.create({
-        applicationId: savedApp.id,
-        versionCode: dto.versionCode,
+        appId: savedApp.id,
+        versionCode: dto.versionCode || '初始版本',
         versionName: dto.versionName,
       });
 
-      // 4. 初始化配置（调用配置服务）
+      // 初始化配置（调用配置服务）
       const { globalConfig, menuConfig, headerConfig } =
         await this.configService.initConfigs(savedApp.id, version.id, {
           globalConfig: dto.globalConfig,
@@ -70,10 +56,10 @@ export class HsApplicationService {
           headerConfig: dto.headerConfig,
         });
 
-      // 5. 返回整合数据
+      // 整合数据
       return {
-        application: savedApp,
-        version,
+        ...savedApp,
+        version: version.versionCode,
         globalConfig,
         menuConfig,
         headerConfig,
@@ -86,7 +72,7 @@ export class HsApplicationService {
    */
   async findAll(
     queryDto: QueryApplicationDto,
-  ): Promise<PageDto<ApplicationWithConfig>> {
+  ): Promise<PageDto<IAppWithConfig>> {
     const pageResult = await this.paginationService.paginate(this.appRepo, {
       ...queryDto,
       isDeleted: ISoftDeleteStatus.UNDELETED,
@@ -95,7 +81,7 @@ export class HsApplicationService {
     // return pageResult;
 
     // 3. 为每个应用关联配置
-    const itemsWithConfig: ApplicationWithConfig[] = await Promise.all(
+    const itemsWithConfig: IAppWithConfig[] = await Promise.all(
       pageResult.data.map(async (app) => {
         return this.getApplicationWithConfig(app.id, queryDto.versionId);
       }),
@@ -113,7 +99,7 @@ export class HsApplicationService {
   async findOneWithConfig(
     appId: string,
     versionId?: string,
-  ): Promise<ApplicationWithConfig> {
+  ): Promise<IAppWithConfig> {
     // 1. 校验应用是否存在
     const application = await this.findOne(appId);
 
@@ -127,8 +113,8 @@ export class HsApplicationService {
       await this.configService.getConfigsByVersion(appId, targetVersion.id);
 
     return {
-      application,
-      version: targetVersion,
+      ...application,
+      version: targetVersion.versionCode,
       globalConfig,
       menuConfig,
       headerConfig,
@@ -141,8 +127,7 @@ export class HsApplicationService {
   async updateWithConfig(
     appId: string,
     dto: UpdateApplicationWithConfigDto,
-  ): Promise<ApplicationWithConfig> {
-    // 1. 校验应用是否存在
+  ): Promise<IAppWithConfig> {
     await this.findOne(appId);
 
     await this.appRepo.update(appId, {
@@ -151,11 +136,9 @@ export class HsApplicationService {
       directoryId: dto.directoryId,
     });
 
-    // 3. 更新配置（指定版本）
     if (dto.versionId) {
-      // 校验版本归属
       const version = await this.versionService.findOne(dto.versionId);
-      if (version.applicationId !== appId) {
+      if (version.appId !== appId) {
         throw new BadRequestException(`版本${dto.versionId}不属于应用${appId}`);
       }
 
@@ -167,11 +150,8 @@ export class HsApplicationService {
           dto.globalConfig,
         );
       }
-
-      // 可扩展：更新菜单/头部配置
     }
 
-    // 4. 返回更新后的完整数据
     return this.getApplicationWithConfig(appId, dto.versionId);
   }
 
@@ -179,18 +159,15 @@ export class HsApplicationService {
    * 软删除应用
    */
   async remove(appId: string): Promise<void> {
-    // 1. 校验应用是否存在
     const app = await this.findOne(appId);
 
     if (app.isDeleted === ISoftDeleteStatus.DELETED) {
       throw new BadRequestException(`应用${appId}已删除`);
     }
 
-    // 2. 软删除应用
     await this.appRepo.update(appId, { isDeleted: ISoftDeleteStatus.DELETED });
 
-    // 3. 可选：软删除关联配置
-    // （根据业务需求选择是否级联删除，此处仅为示例）
+    // （根据业务需求选择是否级联删除）
   }
 
   /**
@@ -222,22 +199,22 @@ export class HsApplicationService {
   private async getApplicationWithConfig(
     appId: string,
     versionId?: string,
-  ): Promise<ApplicationWithConfig> {
-    // 1. 查询应用基础信息
+  ): Promise<IAppWithConfig> {
+    // 查询应用基础信息
     const application = await this.findOne(appId);
 
-    // 2. 确定版本
+    // 确定版本
     const targetVersion = versionId
       ? await this.versionService.findOne(versionId)
       : await this.versionService.findLatestVersion(appId);
 
-    // 3. 查询配置
+    // 查询配置
     const { globalConfig, menuConfig, headerConfig } =
       await this.configService.getConfigsByVersion(appId, targetVersion.id);
 
     return {
-      application,
-      version: targetVersion,
+      ...application,
+      version: targetVersion.versionCode,
       globalConfig,
       menuConfig,
       headerConfig,

@@ -17,6 +17,10 @@ export enum ISoftDeleteStatus {
   DELETED = 1,
 }
 
+export const IAPP_TYPE = ['web'];
+
+export type IAppType = (typeof IAPP_TYPE)[number];
+
 export type IHeaderContentItemType =
   (typeof IHEADER_CONTENT_ITEM_TYPES)[number];
 
@@ -52,4 +56,23 @@ export interface IAppMenuConfig {
 export interface IAppHeaderConfig {
   headerContainerStyle: Record<string, string>;
   headerContentItems: IHeaderContentItem[];
+}
+
+export interface IAppData {
+  id: string;
+  directoryId: string;
+  name: string;
+  type: IAppType;
+  description: string;
+  imageUrl: string;
+  tags: Array<string>;
+  isDeleted: number;
+  [keyof: string]: any;
+}
+
+export interface IAppWithConfig extends IAppData {
+  version: string;
+  globalConfig: IAppGlobalConfig;
+  menuConfig: IAppMenuConfig;
+  headerConfig: IAppHeaderConfig;
 }

@@ -12,6 +12,6 @@ import { HsApplicationModule } from '../app/application.module';
   ],
   providers: [HsAppVersionService],
   controllers: [HsAppVersionController],
-  exports: [HsAppVersionService, HsApplicationModule],
+  exports: [HsAppVersionService],
 })
 export class HsAppVersionModule {}

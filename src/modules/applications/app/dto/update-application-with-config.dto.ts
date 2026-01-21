@@ -15,6 +15,11 @@ export class UpdateApplicationWithConfigDto {
   @IsOptional()
   description?: string;
 
+  /** 应用图标 */
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
+
   /** 目录ID */
   @IsString()
   @IsOptional()

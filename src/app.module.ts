@@ -23,6 +23,7 @@ import {
   ResourceGuard,
   RoleGuard,
 } from 'nest-keycloak-connect';
+import { HsAppVersionModule } from './modules/applications/app-version/app-version.module';
 @Module({
   exports: [HsPaginationService],
   imports: [
@@ -37,6 +38,7 @@ import {
     HsDashboardModule,
     HsFileTreeModule,
     HsApplicationModule,
+    HsAppVersionModule,
     HsDataSourceModule,
     HsAssetModule,
     HsDynamicTableModule,

@@ -4,7 +4,7 @@ export class CreateAppVersionDto {
   /** 应用ID */
   @IsString()
   @IsNotEmpty({ message: '应用ID不能为空' })
-  applicationId: string;
+  appId: string;
 
   /** 版本号 */
   @IsString()

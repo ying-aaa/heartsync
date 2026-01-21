@@ -1,4 +1,3 @@
-// src/modules/app-config/app-config.controller.ts
 import {
   Controller,
   Get,

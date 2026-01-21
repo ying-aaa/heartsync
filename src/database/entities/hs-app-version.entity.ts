@@ -17,7 +17,7 @@ export enum HsAppVersionStatus {
 }
 
 @Entity('hs_app_version', { comment: '应用版本表' })
-@Index(['applicationId', 'versionCode'], { unique: true })
+@Index(['appId', 'versionCode'], { unique: true })
 export class HsAppVersionEntity {
   /** 主键ID */
   @PrimaryGeneratedColumn('uuid')
@@ -25,17 +25,17 @@ export class HsAppVersionEntity {
 
   /** 应用ID */
   @Column({
-    name: 'application_id',
+    name: 'app_id',
     type: 'varchar',
     length: 64,
     comment: '应用ID',
   })
-  applicationId: string;
+  appId: string;
 
   /** 关联应用实体 */
   @ManyToOne(() => HsApplicationEntity)
-  @JoinColumn({ name: 'application_id' })
-  application: HsApplicationEntity;
+  @JoinColumn({ name: 'appId' })
+  app: HsApplicationEntity;
 
   /** 版本号（如V1.0.0） */
   @Column({
@@ -70,7 +70,7 @@ export class HsAppVersionEntity {
   /** 版本状态 */
   @Column({
     name: 'status',
-    type: 'tinyint',
+    type: 'smallint',
     default: HsAppVersionStatus.DRAFT,
     enum: HsAppVersionStatus,
     comment: '版本状态：0-草稿 1-待发布 2-已发布 3-已回滚',
@@ -80,7 +80,7 @@ export class HsAppVersionEntity {
   /** 发布时间 */
   @Column({
     name: 'publish_time',
-    type: 'datetime',
+    type: 'timestamp',
     nullable: true,
     comment: '发布时间',
   })

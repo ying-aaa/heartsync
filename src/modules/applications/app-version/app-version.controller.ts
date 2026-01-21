@@ -36,11 +36,9 @@ export class HsAppVersionController {
   /**
    * 查询应用最新版本
    */
-  @Get('latest/:applicationId')
-  async findLatest(
-    @Param('applicationId') applicationId: string,
-  ): Promise<HsAppVersionEntity> {
-    return this.versionService.findLatestVersion(applicationId);
+  @Get('latest/:appId')
+  async findLatest(@Param('appId') appId: string): Promise<HsAppVersionEntity> {
+    return this.versionService.findLatestVersion(appId);
   }
 
   /**

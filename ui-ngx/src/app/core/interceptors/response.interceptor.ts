@@ -91,6 +91,7 @@ function handleError(
 
   switch (error.status) {
     case 400: // Bad Request
+      toastrService.error(errorMessage);
       console.error('Validation Error:', error.error);
       break;
 
@@ -109,6 +110,7 @@ function handleError(
 
     case 404: // Not Found
       console.error('Resource not found:', error.url);
+      toastrService.error(errorMessage);
       break;
 
     case 409: // Conflict

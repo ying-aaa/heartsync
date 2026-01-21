@@ -20,6 +20,11 @@ export class CreateApplicationWithConfigDto {
   @IsOptional()
   description?: string;
 
+  /** 应用图标 */
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
+
   /** 目录ID */
   @IsString()
   @IsNotEmpty({ message: '目录ID不能为空' })
