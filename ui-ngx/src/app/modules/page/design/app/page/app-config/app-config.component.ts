@@ -1,4 +1,13 @@
-import { Component, computed, effect, OnInit, signal, untracked } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  OnDestroy,
+  OnInit,
+  signal,
+  untracked,
+  viewChild,
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDivider } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +15,7 @@ import { FormlyConfigComponent } from '@src/app/modules/components/formly-config
 import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
 import { RunAppDesignService } from '@core/services/run-app-designer.service';
 import { MatIcon } from '@angular/material/icon';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hs-app-config',
@@ -19,13 +29,17 @@ import { MatIcon } from '@angular/material/icon';
     MatIcon,
   ],
 })
-export class AppConfigComponent implements OnInit {
+export class AppConfigComponent implements OnInit, OnDestroy {
+  formlyConfigRef = viewChild<FormlyConfigComponent>('formlyConfigRef');
+
   model: any = signal({});
   options = {
     formState: {},
   };
 
   selectedConfigType = computed(() => this.runAppDesignService.selectedConfigType());
+
+  subscription: Subscription;
 
   constructor(
     private runAppGlobalService: RunAppGlobalService,
@@ -54,6 +68,10 @@ export class AppConfigComponent implements OnInit {
 
       console.log('%c Line:38 🍪 this.model', 'color:#3f7cff', this.model());
     });
+
+    this.subscription = this.runAppDesignService.triggerSync$.subscribe(() => {
+      this.formlyConfigRef()?.syncFormilyForm();
+    });
   }
 
   toggleConfig() {
@@ -65,4 +83,8 @@ export class AppConfigComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

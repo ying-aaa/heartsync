@@ -23,9 +23,9 @@ export class AppLayoutComponent implements OnInit {
 
   isDesigner = computed(() => this.runAppDesignService.isDesigner());
 
-  menuContainer = computed(() => this.runAppGlobalService.appMenuConfig().menuContainer);
+  menuContainerStyle = computed(() => this.runAppGlobalService.appMenuConfig().menuContainerStyle);
 
-  headerHeight = computed(() => this.runAppGlobalService.appHeaderConfig().headerStyle?.height);
+  headerHeight = computed(() => this.runAppGlobalService.appHeaderConfig().headerContainerStyle?.height);
 
   isFullscreen = computed(() => this.runAppMenuService.selectedMenuNode()?.isFullscreen);
 

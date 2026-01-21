@@ -31,13 +31,13 @@ export const app_global_config: IEditorFormlyField[] = enhanceFieldData([
     },
   },
   {
-    key: 'globalStyles.backgroundImage',
+    key: 'globalContainerStyle.backgroundImage',
     type: 'image-upload',
     defaultValue: [],
     props: { label: '背景图片', description: '请上传图片', maxCount: 1 },
   },
   {
-    key: 'customStyle',
+    key: 'customAppGlobalCssText',
     type: 'json-object',
     fieldId: 'input_key_2579558739748954',
     props: {

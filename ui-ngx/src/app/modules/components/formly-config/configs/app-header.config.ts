@@ -28,7 +28,7 @@ export const app_header_config: IEditorFormlyField[] = enhanceFieldData([
             type: 'template',
           },
           {
-            key: 'contentGroups',
+            key: 'headerContentItems',
             type: 'array',
             props: {
               appearance: 'outline',
@@ -103,8 +103,8 @@ export const app_header_config: IEditorFormlyField[] = enhanceFieldData([
                             value: 'message',
                           },
                           {
-                            label: '自定义',
-                            value: 'custom',
+                            label: '自定义部件',
+                            value: 'customWidget',
                           },
                         ],
                       },
@@ -279,7 +279,7 @@ export const app_header_config: IEditorFormlyField[] = enhanceFieldData([
         ],
       },
       {
-        key: 'headerStyle',
+        key: 'headerContainerStyle',
         type: 'column',
         props: {
           label: '样式',

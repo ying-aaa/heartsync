@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",                // 目标ES版本（兼容主流项目）
-    "module": "ESNext",                // 模块系统
+    "module": "NodeNext",                // 模块系统
     "moduleResolution": "NodeNext",    // 解析Node模块
     "declaration": true,               // 生成.d.ts类型文件（核心！）
     "declarationMap": true,            // 生成.d.ts.map，方便调试类型

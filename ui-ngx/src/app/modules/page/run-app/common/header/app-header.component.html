@@ -37,8 +37,8 @@
   cdkDropListOrientation="horizontal"
   (cdkDropListDropped)="dropEnd($event)"
 >
-  @if (contentGroups().length) {
-    @for (item of contentGroups(); track item) {
+  @if (headerContentItems().length) {
+    @for (item of headerContentItems(); track item) {
       <!-- <ng-container dynamicComponent [config]="item"></ng-container> -->
       <div
         cdkDrag

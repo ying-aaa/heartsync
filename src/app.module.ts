@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HsPaginationService } from './common/services/pagination.service';
 import { FileProxyMiddleware } from './common/middlewares/file-proxy.middleware';
-import { HsApplicationModule } from './modules/applications/application.module';
+import { HsApplicationModule } from './modules/applications/app/application.module';
 import { HsFileTreeModule } from './modules/file-tree/file-tree.module';
 import { SelfModule } from './modules/self/self.module';
 import { HsUploadModule } from './modules/upload/upload.module';

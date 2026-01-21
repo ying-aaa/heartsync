@@ -23,4 +23,8 @@ export class QueryApplicationDto extends PageOptionsDto {
   @IsOptional()
   @IsOptional()
   tags?: Record<string, any>;
+
+  @IsString()
+  @IsOptional()
+  versionId?: string;
 }

@@ -17,6 +17,7 @@
 
   <div class="pl-12px h-[calc(100%-59px)] flex flex-col">
     <hs-formly-config
+      #formlyConfigRef
       class="h-0! flex-1"
       [type]="selectedConfigType().value"
       [model]="model() || {}"

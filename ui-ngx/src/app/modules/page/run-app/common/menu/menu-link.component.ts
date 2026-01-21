@@ -33,7 +33,7 @@ export class MenuLinkComponent implements OnInit {
 
   leftPadding = computed(() => {
     const menuConfig = this.runAppGlobalService.appMenuConfig();
-    return this.level * menuConfig.menuContainer?.levelPadding || 8;
+    return this.level * menuConfig.menuContainerStyle?.levelPadding || 8;
   });
 
   constructor(

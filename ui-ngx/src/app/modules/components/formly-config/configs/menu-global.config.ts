@@ -1098,11 +1098,11 @@ const menuTabColumnConfig = () =>
 
 const menuTabConfig = () =>
   [
-    { label: '父菜单', value: 'parent' },
-    { label: '子菜单', value: 'children' },
+    { label: '父菜单', value: 'parentMenuItemStyle' },
+    { label: '子菜单', value: 'childMenuItemStyle' },
   ].map(({ label, value }) => columnConfig(label, value, [tabConfig(menuTabColumnConfig())]));
 
-const menuContainerConfig = columnConfig('菜单容器', 'menuContainer', [
+const menuContainerStyleConfig = columnConfig('菜单容器', 'menuContainerStyle', [
   {
     key: 'width',
     type: 'input',
@@ -1471,7 +1471,7 @@ const menuContainerConfig = columnConfig('菜单容器', 'menuContainer', [
 
 export const menu_global_config: IEditorFormlyField[] = enhanceFieldData([
   {
-    key: 'showType',
+    key: 'activeTab',
     type: 'grid-radio',
     defaultValue: 'menuContainer',
     props: {
@@ -1483,7 +1483,7 @@ export const menu_global_config: IEditorFormlyField[] = enhanceFieldData([
     },
   },
   {
-    ...menuContainerConfig,
+    ...menuContainerStyleConfig,
     expressions: {
       hide: (field: IEditorFormlyField) =>
         field.options?.formState.model.showType !== 'menuContainer',

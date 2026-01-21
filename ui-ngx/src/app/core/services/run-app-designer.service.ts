@@ -1,4 +1,6 @@
 import { Injectable, signal } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 interface IAppConfigType {
   label: string;
@@ -30,6 +32,8 @@ export class RunAppDesignService {
   isDesigner = signal(false);
 
   selectedConfigType = signal<IAppConfigType>(this.configTypes[0]);
+
+  triggerSync$ = new Subject<void>();
 
   constructor() {}
 

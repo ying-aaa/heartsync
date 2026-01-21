@@ -107,6 +107,10 @@ export class FormlyConfigComponent implements OnInit {
     return JSON.stringify(this.model(), null, 2);
   }
 
+  syncFormilyForm() {
+    this.formGroup = new FormGroup({});
+  }
+
   ngOnInit() {}
 
   ngOnDestroy() {

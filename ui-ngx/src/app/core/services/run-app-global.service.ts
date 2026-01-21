@@ -9,7 +9,8 @@ export class RunAppGlobalService {
   styleTag: HTMLStyleElement;
 
   appGlobalConfig = signal<any>({
-    globalStyles: {
+    appLayoutType: "",
+    globalContainerStyle: {
       backgroundImage: [
         {
           id: '6948379030027798',
@@ -19,13 +20,13 @@ export class RunAppGlobalService {
         },
       ],
     },
-    customStyle:
+    customAppGlobalCssText:
       '.hs-run-app-container{\n    background-attachment: scroll;\n    background-position: 0% 0%;\n    background-repeat: no-repeat;\n    background-color: transparent;\n    background-size: cover;\n}\n.hs-menu-container{\n  backdrop-filter: blur(20px);\n}',
   });
 
   appMenuConfig = signal({
-    themeId: '2',
-    parent: {
+    menuThemeId: '2',
+    parentMenuItemStyle: {
       default: {
         fontSizeUnits: 'px',
         borderTopWidthUnits: 'px',
@@ -86,7 +87,7 @@ export class RunAppGlobalService {
         height: 38,
       },
     },
-    children: {
+    childMenuItemStyle: {
       default: {
         fontSizeUnits: 'px',
         borderTopWidthUnits: 'px',
@@ -147,7 +148,7 @@ export class RunAppGlobalService {
         height: 38,
       },
     },
-    menuContainer: {
+    menuContainerStyle: {
       backgroundColor: 'rgba(44,53,76,.2)',
       width: 225,
       paddingTopUnits: 'px',
@@ -161,11 +162,10 @@ export class RunAppGlobalService {
       paddingLeft: 8,
       levelPadding: 20,
     },
-    showType: 'menuContainer',
   });
 
   appHeaderConfig = signal({
-    headerStyle: {
+    headerContainerStyle: {
       height: 54,
       paddingTopUnits: 'px',
       paddingRightUnits: 'px',
@@ -177,7 +177,7 @@ export class RunAppGlobalService {
       backgroundColor: 'rgba(106, 130, 199, 0.2)',
       color: 'rgb(255, 255, 255)',
     },
-    contentGroups: [
+    headerContentItems: [
       {
         type: 'logo',
         styles: {
@@ -231,21 +231,21 @@ export class RunAppGlobalService {
 
   drawCss() {
     const menuConfig = this.appMenuConfig();
-    const childrenDefault = transformCss(menuConfig.children?.default || {});
-    const childrenHover = transformCss(menuConfig.children?.hover || {});
-    const childrenActive = transformCss(menuConfig.children?.active || {});
-    const parentDefault = transformCss(menuConfig.parent?.default || {});
-    const parentHover = transformCss(menuConfig.parent?.hover || {});
-    const parentActive = transformCss(menuConfig.parent?.active || {});
-    const menuContainer = transformCss(menuConfig.menuContainer || {});
+    const childrenDefault = transformCss(menuConfig.childMenuItemStyle?.default || {});
+    const childrenHover = transformCss(menuConfig.childMenuItemStyle?.hover || {});
+    const childrenActive = transformCss(menuConfig.childMenuItemStyle?.active || {});
+    const parentDefault = transformCss(menuConfig.parentMenuItemStyle?.default || {});
+    const parentHover = transformCss(menuConfig.parentMenuItemStyle?.hover || {});
+    const parentActive = transformCss(menuConfig.parentMenuItemStyle?.active || {});
+    const menuContainerStyle = transformCss(menuConfig.menuContainerStyle || {});
 
     const headerConfig = this.appHeaderConfig();
-    const headerStyle = transformCss(headerConfig.headerStyle || {});
+    const headerContainerStyle = transformCss(headerConfig.headerContainerStyle || {});
 
     const appGlobalConfig = this.appGlobalConfig();
-    const globalStyles = transformCss(appGlobalConfig.globalStyles);
+    const globalContainerStyle = transformCss(appGlobalConfig.globalContainerStyle);
 
-    const customStyle = appGlobalConfig.customStyle;
+    const customAppGlobalCssText = appGlobalConfig.customAppGlobalCssText;
 
     this.styleTag = this.styleTag || this.doc.querySelector('style[id="hs-app-dynamic-style"]');
 
@@ -257,12 +257,12 @@ export class RunAppGlobalService {
 
     this.styleTag.textContent = `
         .hs-run-app-container{
-          ${globalStyles}
+          ${globalContainerStyle}
         }
         .hs-header-container{
-          ${headerStyle}}
+          ${headerContainerStyle}}
         .hs-menu-container{
-          ${menuContainer}
+          ${menuContainerStyle}
         }
         .hs-menu-item-parent {
           ${parentDefault}
@@ -282,7 +282,7 @@ export class RunAppGlobalService {
         .hs-menu-item-children.hs-menu-active {
           ${childrenActive}
         }
-        ${customStyle}
+        ${customAppGlobalCssText}
       `;
   }
 }

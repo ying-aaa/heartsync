@@ -1,4 +1,4 @@
-import { Component, computed, HostBinding, HostListener, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
 import { ConcatUnitsPipe } from '@src/app/shared/pipes/units.pipe';
@@ -34,9 +34,9 @@ import { AppLogoComponent } from '../app-logo/app-logo.component';
 export class AppHeaderComponent extends BaseDesignComponent implements OnInit {
   isMove = signal(false);
 
-  contentGroups = computed(() => {
-    const contentGroups = this.runAppGlobalService.appHeaderConfig().contentGroups;
-    return contentGroups;
+  headerContentItems = computed(() => {
+    const headerContentItems = this.runAppGlobalService.appHeaderConfig().headerContentItems;
+    return headerContentItems;
   });
 
   protected configTypeKey = 'appHeader';
@@ -54,9 +54,11 @@ export class AppHeaderComponent extends BaseDesignComponent implements OnInit {
 
   dropEnd(event: CdkDragDrop<string[]>) {
     this.runAppGlobalService.appHeaderConfig.update((appHeaderConfig) => {
-      moveItemInArray(appHeaderConfig.contentGroups, event.previousIndex, event.currentIndex);
+      moveItemInArray(appHeaderConfig.headerContentItems, event.previousIndex, event.currentIndex);
       return appHeaderConfig;
     });
+    this.runAppDesignService.triggerSync$.next();
+
     this.isMove.set(false);
   }
   ngOnInit() {}
