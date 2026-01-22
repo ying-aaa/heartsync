@@ -16,6 +16,8 @@ import { IAppWithConfig, ISoftDeleteStatus } from '@heartsync/types';
 import { HsPaginationService } from 'src/common/services/pagination.service';
 import { HsApplicationEntity } from 'src/database/entities/hs-application.entity';
 import { PageDto } from 'src/common/dtos/page.dto';
+import { IAppVersionStatus } from '@heartsync/types';
+import { HsAppVersionEntity } from 'src/database/entities/hs-app-version.entity';
 @Injectable()
 export class HsApplicationService {
   constructor(
@@ -35,31 +37,39 @@ export class HsApplicationService {
     dto: CreateApplicationWithConfigDto,
   ): Promise<IAppWithConfig> {
     return this.dataSource.transaction(async (manager) => {
-      const application = manager.create(HsApplicationEntity, {
+      const application = await manager.create(HsApplicationEntity, {
         ...dto,
         isDeleted: ISoftDeleteStatus.UNDELETED,
       });
       const savedApp = await manager.save(application);
 
       // 创建初始版本（调用版本服务）
-      const version = await this.versionService.create({
-        appId: savedApp.id,
-        versionCode: dto.versionCode || '初始版本',
-        versionName: dto.versionName,
-      });
+      const version = await this.versionService.create(
+        {
+          appId: savedApp.id,
+          versionCode: dto.versionCode || '初始版本',
+          versionName: dto.versionName,
+        },
+        manager,
+      );
 
       // 初始化配置（调用配置服务）
       const { globalConfig, menuConfig, headerConfig } =
-        await this.configService.initConfigs(savedApp.id, version.id, {
-          globalConfig: dto.globalConfig,
-          menuConfig: dto.menuConfig,
-          headerConfig: dto.headerConfig,
-        });
+        await this.configService.initConfigs(
+          savedApp.id,
+          version.id,
+          {
+            globalConfig: dto.globalConfig,
+            menuConfig: dto.menuConfig,
+            headerConfig: dto.headerConfig,
+          },
+          manager,
+        );
 
       // 整合数据
       return {
         ...savedApp,
-        version: version.versionCode,
+        version,
         globalConfig,
         menuConfig,
         headerConfig,
@@ -73,24 +83,85 @@ export class HsApplicationService {
   async findAll(
     queryDto: QueryApplicationDto,
   ): Promise<PageDto<IAppWithConfig>> {
-    const pageResult = await this.paginationService.paginate(this.appRepo, {
-      ...queryDto,
-      isDeleted: ISoftDeleteStatus.UNDELETED,
-    } as QueryApplicationDto);
+    const { versionCode, versionStatus, isPublished } = queryDto;
 
-    // return pageResult;
+    const queryBuilder = this.appRepo.createQueryBuilder('app');
 
-    // 3. 为每个应用关联配置
-    const itemsWithConfig: IAppWithConfig[] = await Promise.all(
-      pageResult.data.map(async (app) => {
-        return this.getApplicationWithConfig(app.id, queryDto.versionId);
-      }),
+    queryBuilder.leftJoinAndSelect('app.versions', 'version');
+
+    // 如果有指定版本ID，只查询该版本的应用
+    if (versionCode) {
+      queryBuilder.andWhere('version.version_code = :versionCode', {
+        versionCode,
+      });
+    } else {
+      // 如果没有，则查询最新版本，优先查询 publishTime 的最新值，如果没有，则查询createTime的最新值
+      queryBuilder.andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('v2.id')
+          .from(HsAppVersionEntity, 'v2')
+          .where('v2.app_id = app.id')
+          .orderBy('v2.publish_time', 'DESC', 'NULLS LAST')
+          .addOrderBy('v2.create_time', 'DESC')
+          .limit(1)
+          .getQuery();
+
+        return 'version.id = ' + subQuery;
+      });
+    }
+
+    if (versionStatus !== undefined) {
+      queryBuilder.andWhere('version.status = :versionStatus', {
+        versionStatus,
+      });
+    }
+
+    if (isPublished) {
+      queryBuilder.andWhere('version.status = :versionStatus', {
+        versionStatus: IAppVersionStatus.PUBLISHED,
+      });
+    }
+
+    Reflect.deleteProperty(queryDto, 'versionId');
+    Reflect.deleteProperty(queryDto, 'versionStatus');
+    Reflect.deleteProperty(queryDto, 'isPublished');
+
+    const pageResult = await this.paginationService.paginate(
+      queryBuilder,
+      queryDto,
+      'app',
     );
 
-    return {
-      ...pageResult,
-      data: itemsWithConfig,
-    };
+    return pageResult as any;
+
+    return;
+
+    // const pageResult = await this.paginationService.paginate(this.appRepo, {
+    //   ...queryDto,
+    //   isDeleted: ISoftDeleteStatus.UNDELETED,
+    // } as QueryApplicationDto);
+
+    // // return pageResult;
+
+    // // 3. 为每个应用关联配置
+    // const itemsWithConfig: IAppWithConfig[] = await Promise.all(
+    //   pageResult.data.map(async (app) => {
+    //     const targetVersion = queryDto.versionId
+    //       ? await this.versionService.findOne(queryDto.versionId)
+    //       : await this.versionService.findLatestVersion(app.id);
+    //     return {
+    //       ...app,
+    //       version: targetVersion,
+    //     } as unknown as IAppWithConfig;
+    //     // return this.getApplicationWithConfig(app.id, queryDto.versionId);
+    //   }),
+    // );
+
+    // return {
+    //   ...pageResult,
+    //   data: itemsWithConfig,
+    // };
   }
 
   /**
@@ -114,7 +185,7 @@ export class HsApplicationService {
 
     return {
       ...application,
-      version: targetVersion.versionCode,
+      version: targetVersion,
       globalConfig,
       menuConfig,
       headerConfig,
@@ -214,7 +285,7 @@ export class HsApplicationService {
 
     return {
       ...application,
-      version: targetVersion.versionCode,
+      version: targetVersion,
       globalConfig,
       menuConfig,
       headerConfig,

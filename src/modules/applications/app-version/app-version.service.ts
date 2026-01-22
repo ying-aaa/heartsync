@@ -2,32 +2,50 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
-  Inject,
   forwardRef,
+  Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  HsAppVersionEntity,
-  HsAppVersionStatus,
-} from 'src/database/entities/hs-app-version.entity';
-import { Repository } from 'typeorm';
-import { HsApplicationService } from '../app/application.service';
+import { HsAppVersionEntity } from 'src/database/entities/hs-app-version.entity';
+import { IAppVersionStatus } from '@heartsync/types';
+import { EntityManager, Repository } from 'typeorm';
 import { CreateAppVersionDto } from './dto/create-app-version.dto';
+import { HsApplicationService } from '../app/application.service';
+import { HsPaginationService } from 'src/common/services/pagination.service';
+import { PageDto } from 'src/common/dtos/page.dto';
+import { QueryAppVersionDto } from './dto/query-app-version.dto';
 
 @Injectable()
 export class HsAppVersionService {
   constructor(
     @InjectRepository(HsAppVersionEntity)
     private readonly versionRepo: Repository<HsAppVersionEntity>,
+    @Inject(forwardRef(() => HsApplicationService))
+    private readonly appService: HsApplicationService,
+    private readonly paginationService: HsPaginationService,
   ) {}
+
+  /**
+   * 查询应用所有版本
+   * @param appId 应用ID
+   */
+  async findAll(
+    queryDto: QueryAppVersionDto,
+  ): Promise<PageDto<HsAppVersionEntity>> {
+    return this.paginationService.paginate(this.versionRepo, queryDto);
+  }
 
   /**
    * 创建版本（独立接口）
    * @param dto 版本创建参数
    */
-  async create(dto: CreateAppVersionDto): Promise<HsAppVersionEntity> {
-    // 1. 校验应用是否存在
-    // await this.appService.findOne(dto.appId);
+  async create(
+    dto: CreateAppVersionDto,
+    manager?: EntityManager,
+  ): Promise<HsAppVersionEntity> {
+    if (!manager) {
+      await this.appService.findOne(dto.appId);
+    }
 
     const existVersion = await this.versionRepo.findOne({
       where: { appId: dto.appId, versionCode: dto.versionCode },
@@ -37,10 +55,15 @@ export class HsAppVersionService {
         `应用${dto.appId}的版本号${dto.versionCode}已存在`,
       );
     }
+
     const version = this.versionRepo.create({
       ...dto,
-      status: HsAppVersionStatus.DRAFT,
+      status: IAppVersionStatus.DRAFT,
     });
+
+    if (manager) {
+      return manager.save(version);
+    }
     return this.versionRepo.save(version);
   }
 
@@ -63,7 +86,7 @@ export class HsAppVersionService {
   async findLatestVersion(appId: string): Promise<HsAppVersionEntity> {
     // 优先查已发布版本（最新发布）
     const publishedVersion = await this.versionRepo.findOne({
-      where: { appId, status: HsAppVersionStatus.PUBLISHED },
+      where: { appId, status: IAppVersionStatus.PUBLISHED },
       order: { publishTime: 'DESC' },
     });
     if (publishedVersion) {
@@ -72,7 +95,7 @@ export class HsAppVersionService {
 
     // 再查草稿版本（最新创建）
     const draftVersion = await this.versionRepo.findOne({
-      where: { appId, status: HsAppVersionStatus.DRAFT },
+      where: { appId, status: IAppVersionStatus.DRAFT },
       order: { createTime: 'DESC' },
     });
     if (!draftVersion) {
@@ -92,11 +115,11 @@ export class HsAppVersionService {
   ): Promise<HsAppVersionEntity> {
     const version = await this.findOne(id);
 
-    if (version.status === HsAppVersionStatus.PUBLISHED) {
+    if (version.status === IAppVersionStatus.PUBLISHED) {
       throw new BadRequestException(`版本${version.versionCode}已发布`);
     }
 
-    version.status = HsAppVersionStatus.PUBLISHED;
+    version.status = IAppVersionStatus.PUBLISHED;
     version.publishTime = new Date();
     version.publishUserId = publishUserId;
 

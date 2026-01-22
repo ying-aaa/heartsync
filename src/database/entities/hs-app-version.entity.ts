@@ -8,13 +8,7 @@ import {
   Index,
 } from 'typeorm';
 import { HsApplicationEntity } from './hs-application.entity';
-
-export enum HsAppVersionStatus {
-  DRAFT = 0, // 草稿
-  PENDING_PUBLISH = 1, // 待发布
-  PUBLISHED = 2, // 已发布
-  ROLLED_BACK = 3, // 已回滚
-}
+import { IAppVersionStatus } from '@heartsync/types';
 
 @Entity('hs_app_version', { comment: '应用版本表' })
 @Index(['appId', 'versionCode'], { unique: true })
@@ -33,11 +27,11 @@ export class HsAppVersionEntity {
   appId: string;
 
   /** 关联应用实体 */
-  @ManyToOne(() => HsApplicationEntity)
-  @JoinColumn({ name: 'appId' })
+  @ManyToOne(() => HsApplicationEntity, (app) => app.versions)
+  @JoinColumn({ name: 'app_id' })
   app: HsApplicationEntity;
 
-  /** 版本号（如V1.0.0） */
+  /** 版本号 */
   @Column({
     name: 'version_code',
     type: 'varchar',
@@ -71,11 +65,11 @@ export class HsAppVersionEntity {
   @Column({
     name: 'status',
     type: 'smallint',
-    default: HsAppVersionStatus.DRAFT,
-    enum: HsAppVersionStatus,
+    default: IAppVersionStatus.DRAFT,
+    enum: IAppVersionStatus,
     comment: '版本状态：0-草稿 1-待发布 2-已发布 3-已回滚',
   })
-  status: HsAppVersionStatus;
+  status: IAppVersionStatus;
 
   /** 发布时间 */
   @Column({

@@ -1,2 +1,2 @@
-export * from './interfaces/user.interface';
-export * from './interfaces/app.interface';
+export * from './app.type';
+export * from './system.type';

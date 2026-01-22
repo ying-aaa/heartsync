@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { CreateGlobalConfigDto } from './dto/create-global-config.dto';
 import { CreateMenuConfigDto } from './dto/create-menu-config.dto';
 import { CreateHeaderConfigDto } from './dto/create-header-config.dto';
@@ -34,6 +34,7 @@ export class HsAppConfigService {
       menuConfig?: Omit<CreateMenuConfigDto, 'appId' | 'versionId'>;
       headerConfig?: Omit<CreateHeaderConfigDto, 'appId' | 'versionId'>;
     },
+    manager?: EntityManager,
   ) {
     // 1. 初始化全局配置
     const globalConfig = this.globalRepo.create({
@@ -42,7 +43,9 @@ export class HsAppConfigService {
       ...configs?.globalConfig,
       isDeleted: ISoftDeleteStatus.UNDELETED,
     });
-    const savedGlobal = await this.globalRepo.save(globalConfig);
+    const savedGlobal = await (manager
+      ? manager.save(globalConfig)
+      : this.globalRepo.save(globalConfig));
 
     // 2. 初始化菜单配置
     const menuConfig = this.menuRepo.create({
@@ -51,7 +54,9 @@ export class HsAppConfigService {
       ...configs?.menuConfig,
       isDeleted: ISoftDeleteStatus.UNDELETED,
     });
-    const savedMenu = await this.menuRepo.save(menuConfig);
+    const savedMenu = await (manager
+      ? manager.save(menuConfig)
+      : this.menuRepo.save(menuConfig));
 
     // 3. 初始化头部配置
     const headerConfig = this.headerRepo.create({
@@ -60,7 +65,9 @@ export class HsAppConfigService {
       ...configs?.headerConfig,
       isDeleted: ISoftDeleteStatus.UNDELETED,
     });
-    const savedHeader = await this.headerRepo.save(headerConfig);
+    const savedHeader = await (manager
+      ? manager.save(headerConfig)
+      : this.headerRepo.save(headerConfig));
 
     return {
       globalConfig: savedGlobal,

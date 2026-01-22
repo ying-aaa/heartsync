@@ -4,13 +4,14 @@ import { HsAppVersionService } from './app-version.service';
 import { HsAppVersionController } from './app-version.controller';
 import { HsAppVersionEntity } from 'src/database/entities/hs-app-version.entity';
 import { HsApplicationModule } from '../app/application.module';
+import { HsPaginationService } from 'src/common/services/pagination.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([HsAppVersionEntity]),
     forwardRef(() => HsApplicationModule),
   ],
-  providers: [HsAppVersionService],
+  providers: [HsAppVersionService, HsPaginationService],
   controllers: [HsAppVersionController],
   exports: [HsAppVersionService],
 })

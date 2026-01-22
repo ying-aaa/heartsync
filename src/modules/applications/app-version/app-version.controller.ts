@@ -11,10 +11,22 @@ import {
 import { HsAppVersionService } from './app-version.service';
 import { HsAppVersionEntity } from 'src/database/entities/hs-app-version.entity';
 import { CreateAppVersionDto } from './dto/create-app-version.dto';
+import { QueryAppVersionDto } from './dto/query-app-version.dto';
+import { PageDto } from 'src/common/dtos/page.dto';
 
 @Controller('app-versions')
 export class HsAppVersionController {
   constructor(private readonly versionService: HsAppVersionService) {}
+
+  /**
+   * 查询应用所有版本
+   */
+  @Get('all')
+  async findAll(
+    @Query() queryDto: QueryAppVersionDto,
+  ): Promise<PageDto<HsAppVersionEntity>> {
+    return this.versionService.findAll(queryDto);
+  }
 
   /**
    * 创建版本（独立接口）

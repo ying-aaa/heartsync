@@ -1,30 +1,45 @@
-import { IsString, IsOptional, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsEnum,
+  IsObject,
+} from 'class-validator';
 import { PageOptionsDto } from 'src/common/dtos/pagination.dto';
-
-export enum ApplicationStatus {
-  Active = 'active',
-  Disabled = 'disabled',
-  Pending = 'pending',
-}
-
+import { IAppVersionStatus } from '@heartsync/types';
+import { Transform } from 'class-transformer';
 export class QueryApplicationDto extends PageOptionsDto {
+  /** 应用名称（模糊查询用） */
   @IsString()
   @IsOptional()
   name?: string;
 
+  /** 目录ID */
   @IsString()
   @IsOptional()
   directoryId?: string;
 
-  @IsEnum(ApplicationStatus)
-  @IsOptional()
-  status?: ApplicationStatus = ApplicationStatus.Active;
-
-  @IsOptional()
+  /** 应用标签（JSONB类型筛选） */
+  @IsObject()
   @IsOptional()
   tags?: Record<string, any>;
 
+  /** 指定版本ID（精准筛选该版本的应用） */
   @IsString()
   @IsOptional()
-  versionId?: string;
+  versionCode?: string;
+
+  @Transform(({ value }) => {
+    if (value === undefined || value === null) return value;
+    const numValue = Number(value);
+    return isNaN(numValue) ? value : numValue;
+  })
+  @IsEnum(IAppVersionStatus)
+  @IsOptional()
+  versionStatus?: IAppVersionStatus;
+
+  /** 快捷筛选：是否只查已发布的应用（等价于 versionStatus = 2） */
+  @IsBoolean()
+  @IsOptional()
+  isPublished?: boolean;
 }

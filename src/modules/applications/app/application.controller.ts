@@ -17,7 +17,6 @@ import { UpdateApplicationWithConfigDto } from './dto/update-application-with-co
 import { QueryApplicationDto } from './dto/query-application.dto';
 import { RoleMatchingMode, Roles, Unprotected } from 'nest-keycloak-connect';
 import { PageDto } from 'src/common/dtos/page.dto';
-import { HsApplicationEntity } from 'src/database/entities/hs-application.entity';
 import { IAppWithConfig } from '@heartsync/types';
 
 @Controller('applications')

@@ -1,6 +1,7 @@
 import { HsBaseEntity } from 'src/database/entities/hs-base.entity';
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { ISoftDeleteStatus } from '@heartsync/types';
+import { HsAppVersionEntity } from './hs-app-version.entity';
 
 @Entity('hs_application', { comment: '系统应用表' })
 export class HsApplicationEntity extends HsBaseEntity {
@@ -19,11 +20,8 @@ export class HsApplicationEntity extends HsBaseEntity {
   @Column({ nullable: true })
   description: string;
 
-  @Column({ nullable: true })
-  version: string;
-
-  @Column({ default: 'active' })
-  status: string;
+  @OneToMany(() => HsAppVersionEntity, (version) => version.app)
+  versions: HsAppVersionEntity[];
 
   @Column('jsonb', { nullable: true })
   tags: any;

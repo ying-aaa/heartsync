@@ -1,5 +1,5 @@
 // common/services/pagination.service.ts
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { PageOptionsDto } from '../dtos/pagination.dto';
 import { PageDto } from '../dtos/page.dto';
 import { Injectable } from '@nestjs/common';
@@ -8,22 +8,34 @@ import { omit } from 'lodash';
 @Injectable()
 export class HsPaginationService {
   async paginate<T>(
-    repository: Repository<T>,
+    repoOrQueryBuilder: Repository<T> | SelectQueryBuilder<T>,
     pageOptionsDto: PageOptionsDto,
+    alias: string = 'entity',
   ): Promise<PageDto<T>> {
     const { page, pageSize, sortBy, order } = pageOptionsDto;
     const skip = page * pageSize;
 
-    const queryBuilder = repository.createQueryBuilder('entity');
+    let queryBuilder: SelectQueryBuilder<T>;
 
-    // 添加排序
-    if (sortBy && order) {
-      queryBuilder.orderBy(`entity.${sortBy}`, order);
+    if (repoOrQueryBuilder instanceof Repository) {
+      queryBuilder = repoOrQueryBuilder.createQueryBuilder(alias);
+
+      if (sortBy && order) {
+        queryBuilder.orderBy(`${alias}.${sortBy}`, order);
+      }
+
+      const where = omit(pageOptionsDto, [
+        'page',
+        'pageSize',
+        'sortBy',
+        'order',
+      ]);
+      if (Object.keys(where).length > 0) {
+        queryBuilder.where(where);
+      }
+    } else {
+      queryBuilder = repoOrQueryBuilder;
     }
-
-    const where = omit(pageOptionsDto, ['page', 'pageSize', 'sortBy', 'order']);
-
-    queryBuilder.where(where);
 
     const [data, total] = await queryBuilder
       .skip(skip)

@@ -24,6 +24,13 @@ export type IAppType = (typeof IAPP_TYPE)[number];
 export type IHeaderContentItemType =
   (typeof IHEADER_CONTENT_ITEM_TYPES)[number];
 
+export enum IAppVersionStatus {
+  DRAFT = 0, // 草稿
+  PENDING_PUBLISH = 1, // 待发布
+  PUBLISHED = 2, // 已发布
+  ROLLED_BACK = 3, // 已回滚
+}
+
 export interface IMenuItemStyle {
   default: Record<string, string>;
   hover: Record<string, string>;
@@ -67,11 +74,27 @@ export interface IAppData {
   imageUrl: string;
   tags: Array<string>;
   isDeleted: number;
-  [keyof: string]: any;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+  updatedBy: string;
+  byDepartment: string;
+}
+
+export interface IAppVersionData {
+  id: string;
+  appId: string;
+  versionName: string;
+  versionCode: string;
+  versionDesc: string;
+  status: number;
+  publishTime: Date;
+  publishUserId: string;
+  createTime: Date;
 }
 
 export interface IAppWithConfig extends IAppData {
-  version: string;
+  version: IAppVersionData;
   globalConfig: IAppGlobalConfig;
   menuConfig: IAppMenuConfig;
   headerConfig: IAppHeaderConfig;

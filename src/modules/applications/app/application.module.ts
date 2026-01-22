@@ -15,6 +15,6 @@ import { HsAppConfigModule } from '../app-config/app-config.module';
   ],
   providers: [HsApplicationService, HsPaginationService],
   controllers: [HsApplicationController],
-  exports: [HsAppConfigModule],
+  exports: [HsApplicationService, HsAppConfigModule],
 })
 export class HsApplicationModule {}
