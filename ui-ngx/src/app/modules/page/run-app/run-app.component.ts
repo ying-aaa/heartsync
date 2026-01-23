@@ -4,7 +4,6 @@ import { getParamFromRoute } from '@src/app/core/utils';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
-import { IAppConfig } from '@src/app/core/http/application.service';
 import { AppLayoutComponent } from './layout/app-layout.component';
 
 @Component({
@@ -23,8 +22,8 @@ export class RunAppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.runAppMenuService.loadAppAndMenu(this.appId!).subscribe({
-      next: ([appConfig, menuData]: [IAppConfig, IMenuNode[]]) => {},
+    this.runAppMenuService.loadAppMenu(this.appId!).subscribe({
+      next: (menuData: IMenuNode[]) => {},
       error: (err) => {},
     });
   }

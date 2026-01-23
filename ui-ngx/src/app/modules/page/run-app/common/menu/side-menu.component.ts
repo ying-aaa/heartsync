@@ -37,12 +37,11 @@ import { RunAppDesignService } from '@src/app/core/services/run-app-designer.ser
     HsLoadingModule,
   ],
   host: {
-    class: 'hs-menu-container wh-full block',
+    class: 'hs-menu-container wh-full block w-225px',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SideMenuComponent extends BaseDesignComponent implements OnInit {
-  menuData = input<IMenuNode[]>([]);
   loadingStatus = signal<boolean>(false);
 
   treeControl = new NestedTreeControl<IMenuNode>((node) => node.children);
@@ -50,7 +49,12 @@ export class SideMenuComponent extends BaseDesignComponent implements OnInit {
 
   protected configTypeKey = 'menuGlobal';
 
-  constructor(override runAppDesignService: RunAppDesignService) {
+  menuData = computed(() => this.runAppMenuService.menuData());
+
+  constructor(
+    override runAppDesignService: RunAppDesignService,
+    private runAppMenuService: RunAppMenuService,
+  ) {
     super(runAppDesignService);
 
     // 监听菜单数据变化

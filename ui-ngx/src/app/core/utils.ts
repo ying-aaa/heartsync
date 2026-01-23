@@ -587,6 +587,7 @@ export function getImageUrl(fileData: IFileData[] | IFileData | string): string 
  * @returns CSS 样式字符串
  * */
 export function transformCss(styles: IAnyPropObj): string {
+  styles = styles || {};
   let styleStr = '';
 
   Object.keys(styles).forEach((key) => {

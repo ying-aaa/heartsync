@@ -1486,15 +1486,15 @@ export const menu_global_config: IEditorFormlyField[] = enhanceFieldData([
     ...menuContainerStyleConfig,
     expressions: {
       hide: (field: IEditorFormlyField) =>
-        field.options?.formState.model.showType !== 'menuContainer',
+        field.options?.formState.model.activeTab !== 'menuContainer',
     },
   },
   {
     ...tabConfig(menuTabConfig()),
     expressions: {
-      hide: (field: IEditorFormlyField) => field.options?.formState.model.showType !== 'menuItem',
+      hide: (field: IEditorFormlyField) => field.options?.formState.model.activeTab !== 'menuItem',
     },
   },
 ]);
 
-console.log('%c Line:1195 🍆', 'color:#f5ce50', deepClone(menu_global_config));
+// console.log('%c Line:1195 🍆', 'color:#f5ce50', deepClone(menu_global_config));

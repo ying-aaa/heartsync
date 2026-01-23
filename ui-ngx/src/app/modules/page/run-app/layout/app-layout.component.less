@@ -1,0 +1,20 @@
+:host {
+  ::ng-deep {
+    .hs-header-container,
+    .hs-menu-container,
+    .hs-app-content {
+      cursor: pointer;
+      transition: background-color 0.2s;
+      outline: 2px dashed transparent;
+      border-radius: 3px;
+
+      &.design:hover {
+        outline-color: var(--base-primary-color);
+      }
+
+      &.active {
+        outline-color: var(--base-primary-color);
+      }
+    }
+  }
+}

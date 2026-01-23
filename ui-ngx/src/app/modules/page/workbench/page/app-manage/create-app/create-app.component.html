@@ -1,41 +1,143 @@
 <div mat-dialog-title>
   创建应用
-  <button mat-icon-button mat-dialog-close class="absolute-center-y! right-12px">
+  <button
+    mat-icon-button
+    mat-dialog-close
+    class="absolute-center-y! right-12px"
+  >
     <mat-icon>close1</mat-icon>
   </button>
 </div>
 <mat-divider></mat-divider>
 <mat-dialog-content class="h-0 flex-1 max-h-none!">
-  <content class="wh-full" [formGroup]="appForm">
-    <mat-form-field class="w-full mb-12px" appearance="outline">
-      <mat-label>应用名称</mat-label>
-      <input matInput style="resize: none" formControlName="name" />
-    </mat-form-field>
-    <mat-form-field class="w-full min-h-200px" appearance="outline">
-      <mat-label>应用描述</mat-label>
-      <textarea
-        matInput
-        style="resize: none"
-        formControlName="description"
-        class="h-full"
-      ></textarea>
-    </mat-form-field>
-    <div class="my-8px">
-      <label class="block text-16px mb-8px">应用图片：</label>
-      <hs-file-upload
-        fileShowType="grid"
-        [(fileList)]="fileList"
-        [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
-        (delItemFile)="delItemFile($event)"
-        [maxCount]="1"
-        [cols]="1"
-        class="flex-1 w-120px h-120px block"
-      ></hs-file-upload>
+  <ng-scrollbar
+    externalViewport
+    #scrollbarRef="ngScrollbar"
+    visibility="hover"
+    appearance="compact"
+    orientation="auto"
+    class="h-full"
+  >
+    <div scrollViewport>
+      <form
+        class="wh-full hs-density--3 max-w-xl mx-auto"
+        [formGroup]="appForm"
+      >
+        <div class="flex flex-col mb-24px">
+          <label class="mb-8px color-[var(----primary-text-color)]">应用图片：</label>
+          <hs-file-upload
+            fileShowType="grid"
+            [(fileList)]="fileList"
+            [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
+            (delItemFile)="delItemFile($event)"
+            [maxCount]="1"
+            [cols]="1"
+            class="flex-1 w-120px h-120px block"
+          ></hs-file-upload>
+        </div>
+        <div class="flex flex-col mb-24px">
+          <label class="mb-8px color-[var(----primary-text-color)]">
+            @if (appForm.get('name')!.invalid) {
+            <span class="color-red">*</span>
+            }
+            应用名称：</label>
+          <mat-form-field
+            class="w-full"
+            appearance="outline"
+          >
+            <input
+              matInput
+              formControlName="name"
+              required
+              class="w-full p-2 border border-gray-300 rounded-md"
+              placeholder="请输入应用名称"
+              maxLength="64"
+            />
+            @let userNameValidate = appForm.get('name')?.errors?.['required'];
+            @if (userNameValidate) {
+            <mat-error class="text-red-500"> 应用名称是必填项 </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="flex flex-col mb-24px">
+          <label class="mb-8px color-[var(----primary-text-color)]">
+            应用描述：</label>
+          <mat-form-field
+            class="w-full"
+            appearance="outline"
+          >
+            <textarea
+              matInput
+              formControlName="description"
+              class="w-full p-2 border border-gray-300 rounded-md"
+              placeholder="请输入应用的详细描述，帮助他人了解应用功能"
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <div class="grid grid-cols-2 gap-24px">
+          <div class="flex flex-col mb-24px">
+            <label class="mb-8px color-[var(----primary-text-color)]">
+              应用名称：</label>
+            <mat-form-field
+              class="w-full"
+              appearance="outline"
+            >
+              <input
+                matInput
+                formControlName="name"
+                required
+                class="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="请输入应用名称"
+                maxLength="64"
+              />
+            </mat-form-field>
+          </div>
+          <div class="flex flex-col mb-24px">
+            <label class="mb-8px color-[var(----primary-text-color)]">
+              应用名称：</label>
+            <mat-form-field
+              class="w-full"
+              appearance="outline"
+            >
+              <input
+                matInput
+                formControlName="name"
+                required
+                class="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="请输入应用名称"
+                maxLength="64"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="flex flex-col mb-24px">
+          <label class="mb-8px color-[var(----primary-text-color)]">
+            默认主题：</label>
+          <div class="grid grid-cols-3 gap-12px">
+            @for (item of themesList; track $index) {
+            <div class="flex-col items-center justify-center">
+              <img
+                [src]="item.thumbnail"
+                alt="theme"
+                class="w-100% aspect-[1920/1080] block"
+              />
+              <span class="mt-4px">{{ item.label }}</span>
+            </div>
+            }
+          </div>
+        </div>
+      </form>
     </div>
-  </content>
+  </ng-scrollbar>
 </mat-dialog-content>
 <mat-divider></mat-divider>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>取消</button>
-  <button mat-flat-button (click)="submit()">确定</button>
+  <button
+    mat-button
+    mat-dialog-close
+  >取消</button>
+  <button
+    mat-flat-button
+    (click)="submit()"
+  >确定</button>
 </mat-dialog-actions>

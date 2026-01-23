@@ -17,14 +17,16 @@ import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.modul
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { RunAppComponent } from '@src/app/modules/page/run-app/run-app.component';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { Subscription } from 'rxjs';
+import { finalize, Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MenuTreeComponent } from './menu-tree/menu-tree.component';
 import { AppConfigComponent } from './app-config/app-config.component';
 import { VerseDesignModeSwitchComponent } from '@src/app/shared/components/ui-verse/verse-design-mode-switch/verse-design-mode-switch.component';
 import { FormsModule } from '@angular/forms';
 import { RunAppDesignService } from '@src/app/core/services/run-app-designer.service';
-import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
+import { AppLayoutComponent } from '@modules/page/run-app/layout/app-layout.component';
+import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'hs-app-page-designer',
@@ -36,7 +38,6 @@ import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
     MatInputModule,
     NgScrollbarModule,
     HsLoadingModule,
-    RunAppComponent,
     MenuTreeComponent,
     MatDivider,
     MatButtonModule,
@@ -45,17 +46,17 @@ import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
     AppConfigComponent,
     FormsModule,
     VerseDesignModeSwitchComponent,
+    AppLayoutComponent,
   ],
-  providers: [RunAppMenuService],
 })
 export class AppPageDesignerComponent implements OnInit, AfterViewInit {
   @ViewChild('snav') snav!: MatSidenav;
   @ViewChild('RunApp', { read: ElementRef }) runApp!: ElementRef<RunAppComponent>;
 
+  appId: string = getParamFromRoute('appId', this.route)!;
+
   protected readonly isMobile = signal(true);
 
-  appId: string = getParamFromRoute('appId', this.route)!;
-  loadingStatus = false;
   isMenuModuleLoaded = false;
 
   isDesigner = this.runappDesignService.isDesigner;
@@ -115,15 +116,34 @@ export class AppPageDesignerComponent implements OnInit, AfterViewInit {
     },
   ]);
 
+  loadingStatus = signal(false);
+
   subscription: Subscription;
 
   constructor(
-    private route: ActivatedRoute,
-    private runappDesignService: RunAppDesignService,
     public renderer: Renderer2,
+    private route: ActivatedRoute,
+    private toastr: ToastrService,
+    private runappDesignService: RunAppDesignService,
+    private runAppGlobalService: RunAppGlobalService,
   ) {
     this.runappDesignService.setDesignMode(true);
   }
+
+  saveAppConfig() {
+    this.loadingStatus.set(true);
+    this.runAppGlobalService
+      .updateAppWithConfig(this.appId)
+      .pipe(
+        finalize(() => {
+          this.loadingStatus.set(false);
+        }),
+      )
+      .subscribe((res) => {
+        this.toastr.success('保存成功');
+      });
+  }
+
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
@@ -134,6 +154,4 @@ export class AppPageDesignerComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
-  initDesignApp() {}
 }

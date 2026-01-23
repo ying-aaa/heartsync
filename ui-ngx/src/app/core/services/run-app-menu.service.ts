@@ -1,15 +1,13 @@
 import { computed, Injectable, OnDestroy, signal } from '@angular/core';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { MenuHttpService } from '../http/menu.service';
-import { forkJoin, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { ApplicationService, IAppConfig } from '@core/http/application.service';
 import { RunAppDesignService } from './run-app-designer.service';
 
 @Injectable()
 export class RunAppMenuService implements OnDestroy {
   appId = signal<string | null>(null);
-  appConfig = signal<IAppConfig>({} as IAppConfig);
   menuData = signal<IMenuNode[]>([]);
 
   selectedMenuId = signal<string | null>(null);
@@ -23,24 +21,16 @@ export class RunAppMenuService implements OnDestroy {
   constructor(
     private router: Router,
     private menuHttpService: MenuHttpService,
-    private applicationService: ApplicationService,
     private runAppDesignService: RunAppDesignService,
   ) {}
 
-  ngOnDestroy(): void {
-    console.log("%c Line:32 🍭", "color:#b03734", "菜单服务销毁");
-  }
+  ngOnDestroy(): void {}
 
-  loadAppAndMenu(appId: string): Observable<[IAppConfig, IMenuNode[]]> {
+  loadAppMenu(appId: string): Observable<IMenuNode[]> {
     this.appId.set(appId);
-    return forkJoin([
-      this.applicationService.findApplicationById(appId),
-      this.menuHttpService.getMenusByAppId(appId),
-    ]).pipe(
-      tap(([config, menus]) => {
-        this.appConfig.set(config); // 写入信号/状态
+    return this.menuHttpService.getMenusByAppId(appId).pipe(
+      tap((menus) => {
         this.menuData.set(menus);
-
         this.navigateToDefaultDashboard();
       }),
     );

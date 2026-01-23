@@ -28,15 +28,15 @@ import { AppLogoComponent } from '../app-logo/app-logo.component';
     CdkDragPreview,
   ],
   host: {
-    class: 'hs-header-container wh-full block',
+    class: 'hs-header-container wh-full block h-56px',
   },
 })
 export class AppHeaderComponent extends BaseDesignComponent implements OnInit {
   isMove = signal(false);
 
   headerContentItems = computed(() => {
-    const headerContentItems = this.runAppGlobalService.appHeaderConfig().headerContentItems;
-    return headerContentItems;
+    const headerContentItems = this.runAppGlobalService.appHeaderConfig()?.headerContentItems;
+    return headerContentItems || [];
   });
 
   protected configTypeKey = 'appHeader';

@@ -29,15 +29,22 @@ export enum IAppVersionStatus {
 }
 
 export interface IMenuItemStyle {
-  default: Record<string, string>;
-  hover: Record<string, string>;
-  active: Record<string, string>;
+  default: {
+    [key: string]: any;
+  };
+  hover: {
+    [key: string]: any;
+  };
+  active: {
+    [key: string]: any;
+  };
 }
 
 export interface IHeaderContentItem {
-  type: 'text' | 'icon';
-  text?: string;
-  icon?: string;
+  type: IHeaderContentItemType;
+  styles?: {
+    [key: string]: any;
+  };
 }
 
 export interface IAppBaseConfig {
@@ -52,7 +59,7 @@ export interface IAppBaseConfig {
 export interface IAppGlobalConfig extends IAppBaseConfig {
   appLayoutType: IAppLayoutType;
   globalContainerStyle: {
-    backgroundImage: Array<Record<string, string>>;
+    backgroundImage: Array<Record<string, any>>;
   };
   customAppGlobalCssText: string;
 }
@@ -61,11 +68,11 @@ export interface IAppMenuConfig extends IAppBaseConfig {
   menuThemeId: string;
   parentMenuItemStyle: IMenuItemStyle;
   childMenuItemStyle: IMenuItemStyle;
-  menuContainerStyle: Record<string, string>;
+  menuContainerStyle: Record<string, any>;
 }
 
 export interface IAppHeaderConfig extends IAppBaseConfig {
-  headerContainerStyle: Record<string, string>;
+  headerContainerStyle: Record<string, any>;
   headerContentItems: IHeaderContentItem[];
   createTime: Date;
   updateTime: Date;

@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import { IBaseResponseData, IResponseStructure } from './request.model';
+import { IAppWithConfig } from '@heartsync/types';
 
 // 定义类型
 export interface CreateApplicationDto {
@@ -37,16 +38,12 @@ export class ApplicationService {
   constructor(private http: HttpClient) {}
 
   // 创建应用
-  createApplication(
-    createApplicationDto: CreateApplicationDto,
-  ): Observable<IAppConfig> {
+  createApplication(createApplicationDto: CreateApplicationDto): Observable<IAppConfig> {
     return this.http.post<IAppConfig>(this.apiUrl, createApplicationDto);
   }
 
   // 获取所有应用（分页）
-  findAllApplications(
-    pageLink: PageLink,
-  ): Observable<IResponseStructure<IAppConfig>> {
+  findAllApplications(pageLink: PageLink): Observable<IResponseStructure<IAppConfig>> {
     const params = pageLink.toQueryHttp();
     return this.http.get<IResponseStructure<IAppConfig>>(this.apiUrl, {
       params,
@@ -62,19 +59,13 @@ export class ApplicationService {
   }
 
   // 根据ID获取单个应用
-  findApplicationById(id: string): Observable<IAppConfig> {
-    return this.http.get<IAppConfig>(`${this.apiUrl}/${id}`);
+  getAppWithConfigById(id: string): Observable<IAppWithConfig> {
+    return this.http.get<IAppWithConfig>(`${this.apiUrl}/${id}`);
   }
 
   // 更新应用
-  updateApplication(
-    id: string,
-    updateApplicationDto: UpdateApplicationDto,
-  ): Observable<IAppConfig> {
-    return this.http.put<IAppConfig>(
-      `${this.apiUrl}/${id}`,
-      updateApplicationDto,
-    );
+  updateApplication(id: string, appData: IAppWithConfig): Observable<IAppWithConfig> {
+    return this.http.put<IAppWithConfig>(`${this.apiUrl}/${id}`, appData);
   }
 
   // 删除应用

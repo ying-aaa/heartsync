@@ -12,6 +12,7 @@ import { isMobile } from '@src/app/core/utils';
 @Component({
   selector: 'hs-app-layout',
   templateUrl: './app-layout.component.html',
+  styleUrls: ['./app-layout.component.less'],
   imports: [SideMenuComponent, AppHeaderComponent, AppContentComponent],
 })
 export class AppLayoutComponent implements OnInit {
@@ -25,7 +26,9 @@ export class AppLayoutComponent implements OnInit {
 
   menuContainerStyle = computed(() => this.runAppGlobalService.appMenuConfig().menuContainerStyle);
 
-  headerHeight = computed(() => this.runAppGlobalService.appHeaderConfig().headerContainerStyle?.height);
+  headerHeight = computed(
+    () => this.runAppGlobalService.appHeaderConfig().headerContainerStyle?.['height'],
+  );
 
   isFullscreen = computed(() => this.runAppMenuService.selectedMenuNode()?.isFullscreen);
 

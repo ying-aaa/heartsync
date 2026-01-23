@@ -69,7 +69,8 @@
 .z-999{z-index:999;}
 .z-999\!{z-index:999 !important;}
 .grid{display:grid;}
-.cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+.cols-3,
+.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}
 .grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}
 .grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr));}
 .grid-cols-6{grid-template-columns:repeat(6,minmax(0,1fr));}
@@ -102,6 +103,7 @@
 .mb-12px\!{margin-bottom:12px !important;}
 .mb-18px{margin-bottom:18px;}
 .mb-2{margin-bottom:0.5rem;}
+.mb-24px{margin-bottom:24px;}
 .mb-32px{margin-bottom:32px;}
 .mb-4{margin-bottom:1rem;}
 .mb-40px\!{margin-bottom:40px !important;}
@@ -140,6 +142,7 @@
 .mt-20px{margin-top:20px;}
 .mt-22px\!{margin-top:22px !important;}
 .mt-30px{margin-top:30px;}
+.mt-4px{margin-top:4px;}
 .mt-5{margin-top:1.25rem;}
 .mt-5px{margin-top:5px;}
 .mt-6{margin-top:1.5rem;}
@@ -152,6 +155,7 @@
 .contents{display:contents;}
 .hidden{display:none;}
 .hidden\!{display:none !important;}
+.aspect-\[1920\/1080\]{aspect-ratio:1920/1080;}
 .aspect-square{aspect-ratio:1/1;}
 .h-\[24px\],
 .h-24px{height:24px;}
@@ -303,6 +307,7 @@
 .transform{transform:translateX(var(--un-translate-x)) translateY(var(--un-translate-y)) translateZ(var(--un-translate-z)) rotate(var(--un-rotate)) rotateX(var(--un-rotate-x)) rotateY(var(--un-rotate-y)) rotateZ(var(--un-rotate-z)) skewX(var(--un-skew-x)) skewY(var(--un-skew-y)) scaleX(var(--un-scale-x)) scaleY(var(--un-scale-y)) scaleZ(var(--un-scale-z));}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .keyframes-spin{animation:spin;}
+.animate-spin{animation:spin 1s linear infinite;}
 .cursor-pointer{cursor:pointer;}
 .cursor-text{cursor:text;}
 .cursor-move{cursor:move;}
@@ -529,6 +534,7 @@
 .color-red-5,
 .text-red-500{--un-text-opacity:1;color:rgb(239 68 68 / var(--un-text-opacity)) /* #ef4444 */;}
 .text-red-600{--un-text-opacity:1;color:rgb(220 38 38 / var(--un-text-opacity)) /* #dc2626 */;}
+.color-\[var\(----primary-text-color\)\]{color:var(----primary-text-color) /* var(----primary-text-color) */;}
 .color-\[var\(--base-color-70\)\]{color:var(--base-color-70) /* var(--base-color-70) */;}
 .color-\[var\(--base-color-80\)\]{color:var(--base-color-80) /* var(--base-color-80) */;}
 .color-\[var\(--base-primary-color\)\]\!{color:var(--base-primary-color) /* var(--base-primary-color) */ !important;}

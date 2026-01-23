@@ -1,5 +1,6 @@
 import { Component, computed, OnInit } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
 
 @Component({
@@ -13,9 +14,9 @@ import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
   imports: [MatTooltipModule],
 })
 export class AppLogoComponent implements OnInit {
-  appConfig = computed(() => this.RunAppMenuService.appConfig());
+  appConfig = computed(() => this.runAppGlobalService.appData());
 
-  constructor(private RunAppMenuService: RunAppMenuService) {}
+  constructor(private runAppGlobalService: RunAppGlobalService) {}
 
   ngOnInit() {}
 }
