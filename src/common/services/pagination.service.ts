@@ -1,4 +1,3 @@
-// common/services/pagination.service.ts
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { PageOptionsDto } from '../dtos/pagination.dto';
 import { PageDto } from '../dtos/page.dto';
@@ -12,8 +11,33 @@ export class HsPaginationService {
     pageOptionsDto: PageOptionsDto,
     alias: string = 'entity',
   ): Promise<PageDto<T>> {
-    const { page, pageSize, sortBy, order } = pageOptionsDto;
+    const {
+      page,
+      pageSize,
+      sortBy,
+      order,
+      matchAll,
+      matchLink,
+      matchPrefix,
+      matchSuffix,
+    } = pageOptionsDto;
     const skip = page * pageSize;
+
+    const alls = matchAll
+      ? matchAll.split(',').map((field) => field.trim())
+      : [];
+
+    const likes = matchLink
+      ? matchLink.split(',').map((field) => field.trim())
+      : [];
+
+    const prefixs = matchPrefix
+      ? matchPrefix.split(',').map((field) => field.trim())
+      : [];
+
+    const suffixs = matchSuffix
+      ? matchSuffix.split(',').map((field) => field.trim())
+      : [];
 
     let queryBuilder: SelectQueryBuilder<T>;
 

@@ -6,13 +6,13 @@ import {
   Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, EntityManager } from 'typeorm';
 import { CreateApplicationWithConfigDto } from './dto/create-application-with-config.dto';
 import { UpdateApplicationWithConfigDto } from './dto/update-application-with-config.dto';
 import { QueryApplicationDto } from './dto/query-application.dto';
 import { HsAppVersionService } from '../app-version/app-version.service';
 import { HsAppConfigService } from '../app-config/app-config.service';
-import { IAppWithConfig, ISoftDeleteStatus } from '@heartsync/types';
+import { IAppData, IAppWithConfig, ISoftDeleteStatus } from '@heartsync/types';
 import { HsPaginationService } from 'src/common/services/pagination.service';
 import { HsApplicationEntity } from 'src/database/entities/hs-application.entity';
 import { PageDto } from 'src/common/dtos/page.dto';
@@ -199,31 +199,56 @@ export class HsApplicationService {
     appId: string,
     dto: UpdateApplicationWithConfigDto,
   ): Promise<IAppWithConfig> {
-    await this.findOne(appId);
+    // 外部事务入口
+    return this.appRepo.manager.transaction(
+      async (txManager: EntityManager) => {
+        // 更新应用基础信息
+        await txManager.update(this.appRepo.metadata.target, appId, {
+          name: dto.name,
+          description: dto.description,
+          directoryId: dto.directoryId,
+        });
 
-    await this.appRepo.update(appId, {
-      name: dto.name,
-      description: dto.description,
-      directoryId: dto.directoryId,
-    });
-
-    if (dto.versionId) {
-      const version = await this.versionService.findOne(dto.versionId);
-      if (version.appId !== appId) {
-        throw new BadRequestException(`版本${dto.versionId}不属于应用${appId}`);
-      }
-
-      // 更新全局配置
-      if (dto.globalConfig) {
-        await this.configService.updateGlobalConfig(
-          appId,
-          dto.versionId,
-          dto.globalConfig,
+        const application = await txManager.findOne<IAppData>(
+          this.appRepo.metadata.target,
+          { where: { id: appId } },
         );
-      }
-    }
 
-    return this.getApplicationWithConfig(appId, dto.versionId);
+        let targetVersion: HsAppVersionEntity;
+
+        if (dto.versionId) {
+          targetVersion = await txManager.findOne<HsAppVersionEntity>(
+            HsAppVersionEntity,
+            { where: { id: dto.versionId } },
+          );
+
+          if (!targetVersion) {
+            throw new BadRequestException(`版本${dto.versionId}不存在`);
+          }
+          if (targetVersion.appId !== appId) {
+            throw new BadRequestException(
+              `版本${dto.versionId}不属于应用${appId}`,
+            );
+          }
+        } else {
+          targetVersion = await this.versionService.findLatestVersion(appId);
+        }
+
+        // 更新全局配置：传递外部事务的 txManager
+        const appConfig = await this.configService.updateGlobalConfig(
+          appId,
+          targetVersion.id,
+          dto,
+          txManager, // 外部事务管理器
+        );
+
+        return {
+          ...application,
+          version: targetVersion,
+          ...appConfig,
+        };
+      },
+    );
   }
 
   /**

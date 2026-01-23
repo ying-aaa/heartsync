@@ -8,8 +8,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { HsAppConfigService } from './app-config.service';
-import { HsAppGlobalConfigEntity } from 'src/database/entities/hs-app-global-config.entity';
-import { IAppGlobalConfig } from '@heartsync/types';
+import { IAppConfig } from '@heartsync/types';
+import { UpdateApplicationWithConfigDto } from '../app/dto/update-application-with-config.dto';
 
 @Controller('app-configs')
 export class HsAppConfigController {
@@ -49,8 +49,8 @@ export class HsAppConfigController {
   async updateGlobalConfig(
     @Query('appId') appId: string,
     @Query('versionId') versionId: string,
-    @Body() dto: IAppGlobalConfig,
-  ): Promise<HsAppGlobalConfigEntity> {
+    @Body() dto: Omit<UpdateApplicationWithConfigDto, 'appId' | 'versionId'>,
+  ): Promise<IAppConfig> {
     return this.configService.updateGlobalConfig(appId, versionId, dto);
   }
 }

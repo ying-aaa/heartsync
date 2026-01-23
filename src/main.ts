@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
-import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
 async function bootstrap() {
@@ -11,7 +11,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // 忽略 DTO 中未定义的属性
-      forbidNonWhitelisted: true, // 禁止未定义的属性
+      forbidNonWhitelisted: false, // 禁止未定义的属性
       transform: true, // 自动转换请求体为 DTO 类型
       // exceptionFactory: (errors) => {
       //   const errorMessages = errors.map((err) => {

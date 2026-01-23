@@ -19,7 +19,7 @@ import { QueryAppVersionDto } from './dto/query-app-version.dto';
 export class HsAppVersionService {
   constructor(
     @InjectRepository(HsAppVersionEntity)
-    private readonly versionRepo: Repository<HsAppVersionEntity>,
+    public readonly versionRepo: Repository<HsAppVersionEntity>,
     @Inject(forwardRef(() => HsApplicationService))
     private readonly appService: HsApplicationService,
     private readonly paginationService: HsPaginationService,

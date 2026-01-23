@@ -11,6 +11,7 @@ import {
   IAppHeaderConfig,
   ISoftDeleteStatus,
 } from '@heartsync/types';
+import { Exclude } from 'class-transformer';
 
 @Entity('hs_app_header_config', { comment: '应用头部配置表' })
 @Index(['appId', 'versionId'], { unique: true })
@@ -54,6 +55,7 @@ export class HsAppHeaderConfigEntity implements IAppHeaderConfig {
   @UpdateDateColumn({ name: 'update_time', comment: '更新时间' })
   updateTime: Date;
 
+  @Exclude()
   @Column({
     name: 'is_deleted',
     type: 'smallint',
@@ -61,5 +63,5 @@ export class HsAppHeaderConfigEntity implements IAppHeaderConfig {
     enum: ISoftDeleteStatus,
     comment: '软删除：0-未删 1-已删',
   })
-  isDeleted: number;
+  isDeleted: ISoftDeleteStatus;
 }

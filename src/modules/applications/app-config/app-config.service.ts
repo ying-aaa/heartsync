@@ -7,7 +7,8 @@ import { CreateHeaderConfigDto } from './dto/create-header-config.dto';
 import { HsAppGlobalConfigEntity } from 'src/database/entities/hs-app-global-config.entity';
 import { HsAppHeaderConfigEntity } from 'src/database/entities/hs-app-header-config.entity';
 import { HsAppMenuConfigEntity } from 'src/database/entities/hs-app-menu-config.entity';
-import { ISoftDeleteStatus } from '@heartsync/types';
+import { IAppConfig, ISoftDeleteStatus } from '@heartsync/types';
+import { UpdateApplicationWithConfigDto } from '../app/dto/update-application-with-config.dto';
 
 @Injectable()
 export class HsAppConfigService {
@@ -80,24 +81,33 @@ export class HsAppConfigService {
    * 查询应用版本的配置
    * @param appId 应用ID
    * @param versionId 版本ID
+   * @param txManager 可选：事务管理器（用于事务内查询最新数据）
    */
-  async getConfigsByVersion(appId: string, versionId: string) {
-    // 查询全局配置
-    const globalConfig = await this.globalRepo.findOne({
+  async getConfigsByVersion(
+    appId: string,
+    versionId: string,
+    txManager?: EntityManager,
+  ): Promise<IAppConfig> {
+    const manager = txManager || this.globalRepo.manager;
+
+    const globalConfig = await manager.findOne(HsAppGlobalConfigEntity, {
       where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
     });
 
-    // 查询菜单配置
-    const menuConfig = await this.menuRepo.findOne({
-      where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
-    });
+    const menuConfig = await manager.findOne<HsAppMenuConfigEntity>(
+      this.menuRepo.metadata.target,
+      {
+        where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
+      },
+    );
 
-    // 查询头部配置
-    const headerConfig = await this.headerRepo.findOne({
-      where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
-    });
+    const headerConfig = await manager.findOne<HsAppHeaderConfigEntity>(
+      this.headerRepo.metadata.target,
+      {
+        where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
+      },
+    );
 
-    // 校验配置完整性
     if (!globalConfig || !menuConfig || !headerConfig) {
       throw new NotFoundException(`应用${appId}版本${versionId}的配置不完整`);
     }
@@ -111,21 +121,53 @@ export class HsAppConfigService {
    * @param versionId 版本ID
    * @param dto 配置更新参数
    */
+  // 注意：返回类型改为 getConfigsByVersion 的返回类型（需定义接口，比如 IAppAllConfig）
   async updateGlobalConfig(
     appId: string,
     versionId: string,
-    dto: Omit<CreateGlobalConfigDto, 'appId' | 'versionId'>,
-  ): Promise<HsAppGlobalConfigEntity> {
-    // 校验配置是否存在
-    const config = await this.globalRepo.findOne({
-      where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
-    });
-    if (!config) {
-      throw new NotFoundException(`全局配置不存在`);
-    }
+    dto: Omit<UpdateApplicationWithConfigDto, 'appId' | 'versionId'>,
+    txManager?: EntityManager | undefined,
+  ): Promise<IAppConfig> {
+    // 假设 IAppAllConfig = { globalConfig, menuConfig, headerConfig }
+    const updateLogic = async (manager: EntityManager) => {
+      // 1. 原有更新逻辑不变
+      const config = await manager.findOne(HsAppGlobalConfigEntity, {
+        where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
+      });
+      if (!config) {
+        throw new NotFoundException(`全局配置不存在`);
+      }
 
-    // 更新配置
-    await this.globalRepo.update({ appId, versionId }, dto);
-    return this.globalRepo.findOne({ where: { appId, versionId } });
+      const { globalConfig, menuConfig, headerConfig } = dto;
+      if (globalConfig)
+        await manager.update(
+          HsAppGlobalConfigEntity,
+          { appId, versionId },
+          globalConfig,
+        );
+      if (menuConfig)
+        await manager.update(
+          this.menuRepo.metadata.target,
+          { appId, versionId },
+          menuConfig,
+        );
+      if (headerConfig)
+        await manager.update(
+          this.headerRepo.metadata.target,
+          { appId, versionId },
+          headerConfig,
+        );
+
+      // 2. 调用 getConfigsByVersion，传递事务管理器（关键！）
+      return this.getConfigsByVersion(appId, versionId, manager);
+    };
+
+    if (txManager) {
+      return updateLogic(txManager);
+    } else {
+      return this.globalRepo.manager.transaction(async (innerTxManager) => {
+        return updateLogic(innerTxManager);
+      });
+    }
   }
 }

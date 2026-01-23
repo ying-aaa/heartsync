@@ -5,32 +5,8 @@ import {
   Max,
   IsString,
   Matches,
-  IsArray,
-  ValidateNested,
-  IsIn,
-  IsNotEmpty,
-  Length,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { IQUERY_MATCH_TYPES, IQueryMatchType } from '@heartsync/types';
-
-export class MatchConditionDto {
-  @IsString()
-  @IsNotEmpty({ message: '查询字段不能为空' })
-  @Length(1, 50, { message: '查询字段长度必须在1-50字符之间' })
-  readonly searchField: string;
-
-  @IsString()
-  @IsIn(IQUERY_MATCH_TYPES, {
-    message: `匹配类型只能是 ${IQUERY_MATCH_TYPES.join('/')}`,
-  })
-  readonly matchType: IQueryMatchType;
-
-  @IsString()
-  @IsNotEmpty({ message: '查询值不能为空' })
-  @Length(1, 100, { message: '查询值长度必须在1-100字符之间' })
-  readonly searchValue: string;
-}
 
 export class PageOptionsDto {
   @Type(() => Number)
@@ -42,7 +18,7 @@ export class PageOptionsDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @Max(9999)
+  @Max(100)
   @IsOptional()
   readonly pageSize: number = 10;
 
@@ -57,9 +33,31 @@ export class PageOptionsDto {
   })
   readonly order?: 'ASC' | 'DESC';
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => MatchConditionDto)
+  @IsString()
   @IsOptional()
-  readonly matchConditions?: MatchConditionDto[];
+  @Matches(/^([^,]+,?)+$/, {
+    message: '匹配字段必须是以逗号分隔的字符串',
+  })
+  matchAll?: string;
+
+  @IsString()
+  @IsOptional()
+  @Matches(/^([^,]+,?)+$/, {
+    message: '匹配字段必须是以逗号分隔的字符串',
+  })
+  matchLink?: string;
+
+  @IsString()
+  @IsOptional()
+  @Matches(/^([^,]+,?)+$/, {
+    message: '匹配字段必须是以逗号分隔的字符串',
+  })
+  matchPrefix?: string;
+
+  @IsString()
+  @IsOptional()
+  @Matches(/^([^,]+,?)+$/, {
+    message: '匹配字段必须是以逗号分隔的字符串',
+  })
+  matchSuffix?: string;
 }
