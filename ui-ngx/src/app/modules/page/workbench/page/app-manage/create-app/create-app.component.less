@@ -1,52 +1,56 @@
 @import "themeMixin";
 
-.themeMixin( {
-    :host {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
+.themeMixin({
+  :host {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 
-      content {
-        @media screen and (max-width: 736px) {
-          flex-direction: column;
+    content {
+      @media screen and (max-width: 736px) {
+        flex-direction: column;
 
-          &>main {
-            width: 100%;
-            // min-height: 410px;
-          }
-
-          &>aside {
-            width: 100%;
-            padding-left: 0;
-          }
-
-          mat-list {
-            margin-bottom: 80px;
-          }
+        &>main {
+          width: 100%;
+          // min-height: 410px;
         }
-      }
 
-      ::ng-deep {
-        .mat-mdc-form-field-flex, .mat-mdc-form-field-infix {
-          height: 100%;
-
-          textarea {
-            height: 100% !important;
-          }
+        &>aside {
+          width: 100%;
+          padding-left: 0;
         }
-      }
 
-      .file-upldate {
-        cursor: pointer;
-        background-color: @base-bg-color;
-        border: 1px solid @base-color-10;
-
-        &:hover {
-          border: 1px solid @base-color-30;
+        mat-list {
+          margin-bottom: 80px;
         }
       }
     }
-  }
 
-);
+    ::ng-deep {
+      .mat-mdc-form-field-flex, .mat-mdc-form-field-infix {
+        height: 100%;
+
+        textarea {
+          height: 100% !important;
+        }
+      }
+
+      .mat-expansion-panel-header {
+        padding: 0 8px;
+        --mat-expansion-header-collapsed-state-height: 48px;
+        border-radius: 8px;
+      }
+    }
+
+    .file-upldate {
+      cursor: pointer;
+      background-color: @base-bg-color;
+      border: 1px solid @base-color-10;
+
+      &:hover {
+        border: 1px solid @base-color-30;
+      }
+    }
+  }
+});

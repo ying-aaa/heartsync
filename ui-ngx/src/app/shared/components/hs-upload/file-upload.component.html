@@ -10,6 +10,7 @@
     [foldStartIndex]="foldStartIndex"
     class="w-full"
     [cols]="cols"
+    [canAdd]="fileList.length < maxCount"
   >
     <div class="grid-content wh-full">
       <ng-container *ngTemplateOutlet="btn"> </ng-container>

@@ -5,6 +5,8 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { IMenuNode } from '@src/app/shared/models/app-menu.model';
 import { AppLayoutComponent } from './layout/app-layout.component';
+import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'hs-run-app',
@@ -19,11 +21,15 @@ export class RunAppComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private runAppMenuService: RunAppMenuService,
+    private runAppGlobalService: RunAppGlobalService,
   ) {}
 
   ngOnInit() {
-    this.runAppMenuService.loadAppMenu(this.appId!).subscribe({
-      next: (menuData: IMenuNode[]) => {},
+    forkJoin([
+      this.runAppGlobalService.loadAppWithConfig(this.appId!),
+      this.runAppMenuService.loadAppMenu(this.appId!),
+    ]).subscribe({
+      next: (res) => {},
       error: (err) => {},
     });
   }

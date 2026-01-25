@@ -137,7 +137,6 @@ export class HsAppConfigService {
       if (!config) {
         throw new NotFoundException(`全局配置不存在`);
       }
-
       const { globalConfig, menuConfig, headerConfig } = dto;
       if (globalConfig)
         await manager.update(

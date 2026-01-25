@@ -6,27 +6,17 @@ import {
   IHEADER_CONTENT_ITEM_TYPES,
 } from '@heartsync/types';
 
-class HeaderContentItemDto {
+class HeaderContentItemDto implements IHeaderContentItem {
   @IsEnum(IHEADER_CONTENT_ITEM_TYPES, {
     message: '内容项类型不合法',
   })
   @IsOptional()
-  itemType?: IHeaderContentItemType = 'placeholder';
-
-  @IsEnum(['text', 'icon'], { message: '展示类型只能是text/icon' })
-  @IsOptional()
-  displayType?: 'text' | 'icon' = 'text';
-
-  @IsString()
-  @IsOptional()
-  text?: string;
-
-  @IsString()
-  @IsOptional()
-  icon?: string;
+  type: IHeaderContentItemType = 'placeholder';
 
   @IsOptional()
-  itemStyle?: Record<string, string> = {};
+  styles?: {
+    [key: string]: string;
+  };
 }
 
 export class CreateHeaderConfigDto {

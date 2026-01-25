@@ -22,6 +22,8 @@ import { HsUploadFileModule } from '@src/app/shared/components/hs-upload/upload-
 import { IFileData } from '@src/app/shared/models/common-component';
 import { HS_BUCKET } from '@src/app/shared/models/system.model';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'hs-create-app',
@@ -40,6 +42,9 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     ReactiveFormsModule,
     HsUploadFileModule,
     NgScrollbarModule,
+    MatRadioModule,
+    MatAccordion,
+    MatExpansionModule,
   ],
 })
 export class CreateAppComponent implements OnInit {
@@ -49,6 +54,9 @@ export class CreateAppComponent implements OnInit {
   appForm = new FormGroup({
     name: new FormControl('', Validators.required),
     description: new FormControl(''),
+    versionName: new FormControl('初始版本', Validators.required),
+    versionCode: new FormControl('V1.0.0', Validators.required),
+    themeId: new FormControl('default'),
   });
 
   fileList: IFileData[] = [];
@@ -57,17 +65,20 @@ export class CreateAppComponent implements OnInit {
     {
       label: '默认主题',
       value: 'default',
-      thumbnail: '/heartsync-files/19d0a4ca-2e93-4ac0-9301-900e803f95a8/08d9a9f2-9db4-4d1b-b441-9f406484a6db.jpg',
+      thumbnail:
+        '/heartsync-files/19d0a4ca-2e93-4ac0-9301-900e803f95a8/08d9a9f2-9db4-4d1b-b441-9f406484a6db.jpg',
     },
     {
       label: '璀璨灯火',
       value: 'brilliant-light',
-      thumbnail: '/heartsync-files/19d0a4ca-2e93-4ac0-9301-900e803f95a8/b5820166-9ef5-40c4-afb2-f2c703d60e12.jpg',
+      thumbnail:
+        '/heartsync-files/19d0a4ca-2e93-4ac0-9301-900e803f95a8/b5820166-9ef5-40c4-afb2-f2c703d60e12.jpg',
     },
     {
       label: '极光夜空',
       value: 'aurora-night',
-      thumbnail: '/heartsync-files/19d0a4ca-2e93-4ac0-9301-900e803f95a8/655ecd93-6702-49a2-80bc-4b2ac943521b.jpg',
+      thumbnail:
+        '/heartsync-files/19d0a4ca-2e93-4ac0-9301-900e803f95a8/655ecd93-6702-49a2-80bc-4b2ac943521b.jpg',
     },
   ];
 

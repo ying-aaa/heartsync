@@ -182,15 +182,16 @@ export class AppManageComponent implements OnInit {
 
   createRecord() {
     const width = isMobile() ? '100vw' : '800px';
-    const height = isMobile() ? '100vh' : '600px';
+    const height = isMobile() ? '100vh' : '70%';
     const dialogRef = this.dialog.open(CreateAppComponent, {
       data: {
         directoryId: this.directoryId,
       },
       width,
-      height,
-      minWidth: width,
-      minHeight: height,
+      // height: isMobile() ? '100vh' : '600px',
+      minHeight: isMobile() ? '100vh' : '600px',
+      maxWidth: width,
+      maxHeight: height,
     });
 
     dialogRef.afterClosed().subscribe((result) => {

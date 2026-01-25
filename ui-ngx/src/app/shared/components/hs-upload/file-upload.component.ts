@@ -105,7 +105,7 @@ export class HsFileUploadComponent
   }
 
   onFilesSelected(event: Event): void {
-    this.onTouched();
+    // this.onTouched();
     // 预览逻辑优化
     if (this._fileList && this._fileList.length > 0) {
       this._fileList.forEach((file) => {
@@ -122,7 +122,7 @@ export class HsFileUploadComponent
   }
 
   deleteItemFile(fileItem: IFileData) {
-    this.onTouched();
+    // this.onTouched();
     const index = this._fileList.findIndex((file) => file === fileItem || file.id === fileItem.id);
     if (index !== -1) {
       this._fileList.splice(index, 1);
@@ -166,7 +166,7 @@ export class HsFileUploadComponent
     };
 
     this.uploader.onAfterAddingFile = (fileItem: UploadedFile) => {
-      this.onTouched();
+      // this.onTouched();
       if (this._fileList.length >= this.maxCount) {
         this.uploader.removeFromQueue(fileItem);
         this._snackBar.open(`最多只能上传 ${this.maxCount} 个文件`, '确定', { duration: 2000 });
@@ -223,7 +223,7 @@ export class HsFileUploadComponent
     event.currentTarget!.classList.remove('dragging-over');
   }
   onDrop(event: any) {
-    this.onTouched();
+    // this.onTouched();
     event.preventDefault();
     event.currentTarget!.classList.remove('dragging-over');
     const files = event.dataTransfer?.files;
@@ -252,7 +252,7 @@ export class HsFileUploadComponent
   }
 
   registerOnTouched(fn: any): void {
-    this.onTouched = fn;
+    // this.onTouched = fn;
   }
 
   setDisabledState(isDisabled: boolean): void {

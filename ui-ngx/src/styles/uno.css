@@ -142,7 +142,6 @@
 .mt-20px{margin-top:20px;}
 .mt-22px\!{margin-top:22px !important;}
 .mt-30px{margin-top:30px;}
-.mt-4px{margin-top:4px;}
 .mt-5{margin-top:1.25rem;}
 .mt-5px{margin-top:5px;}
 .mt-6{margin-top:1.5rem;}
@@ -470,6 +469,7 @@
 .py-6px{padding-top:6px;padding-bottom:6px;}
 .py-8px{padding-top:8px;padding-bottom:8px;}
 .pb-0{padding-bottom:0;}
+.pb-20px{padding-bottom:20px;}
 .pb-24px{padding-bottom:24px;}
 .pb-4px{padding-bottom:4px;}
 .pb-6px{padding-bottom:6px;}

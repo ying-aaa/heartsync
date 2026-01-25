@@ -7,7 +7,7 @@ import { IFileShowType } from '@src/app/shared/models/common-component';
     <content>
       @switch (fileShowType()) {
         @case ('grid') {
-          <hs-file-grid-list [fileList]="fileList()" [cols]="cols()">
+          <hs-file-grid-list [fileList]="fileList()" [cols]="cols()" [canAdd]="canAdd()">
             <ng-content select="'.grid-content'"></ng-content>
           </hs-file-grid-list>
         }
@@ -42,6 +42,7 @@ export class HsFileRouterComponent implements OnInit {
   fileShowType = input<IFileShowType>('detail');
   foldStartIndex = input<number>(3);
   cols = input<number>(3);
+  canAdd = input<boolean>(true);
 
   ngOnInit(): void {}
 }

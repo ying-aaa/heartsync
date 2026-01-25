@@ -71,9 +71,11 @@ import { isImage, isVideo } from '@src/app/core/utils';
               </div>
             </div>
           }
-          <div class="wh-full flex-wrap aspect-square">
-            <ng-content></ng-content>
-          </div>
+          @if (canAdd()) {
+            <div class="wh-full flex-wrap aspect-square">
+              <ng-content> </ng-content>
+            </div>
+          }
         </div>
       </div>
     </ng-scrollbar>
@@ -88,6 +90,8 @@ export class HsFileGridListComponent implements OnInit {
     transform: (value: number) => Math.min(value, 5),
   });
 
+  canAdd = input<boolean>(true);
+
   download = input<boolean>(false);
   preview = input<boolean>(true);
   remove = input<boolean>(true);
@@ -97,10 +101,7 @@ export class HsFileGridListComponent implements OnInit {
 
   gridTemplateColumns = computed(() => `repeat(${this.cols()}, minmax(0, 1fr))`);
 
-  constructor() {
+  constructor() {}
 
-  }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }
