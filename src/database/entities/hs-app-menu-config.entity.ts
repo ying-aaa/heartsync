@@ -9,7 +9,7 @@ import {
 import {
   IAppMenuConfig,
   IMenuItemStyle,
-  ISoftDeleteStatus,
+  IWhetherStatus,
 } from '@heartsync/types';
 import { Exclude } from 'class-transformer';
 
@@ -76,8 +76,8 @@ export class HsAppMenuConfigEntity implements IAppMenuConfig {
     name: 'is_deleted',
     type: 'smallint',
     default: 0,
-    enum: ISoftDeleteStatus,
+    enum: IWhetherStatus,
     comment: '软删除：0-未删 1-已删',
   })
-  isDeleted: ISoftDeleteStatus;
+  isDeleted: IWhetherStatus;
 }

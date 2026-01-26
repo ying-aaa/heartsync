@@ -1,32 +1,28 @@
-import { Component, computed, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { WorkbenchHeaderComponent } from '../common/workbench-header/workbench-header.component';
-import { ActivatedRoute, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { IAppConfig } from '@src/app/core/http/application.service';
 import { getParamFromRoute } from '@src/app/core/utils';
 import { RunAppGlobalService } from '@src/app/core/services/run-app-global.service';
 import { finalize, forkJoin } from 'rxjs';
 import { RunAppMenuService } from '@src/app/core/services/run-app-menu.service';
 import { RunAppDesignService } from '@src/app/core/services/run-app-designer.service';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { ImgUrlPipe } from "@shared/pipes/img-url.pipe";
 
 @Component({
   selector: 'hs-design',
   templateUrl: './design.component.html',
-  imports: [WorkbenchHeaderComponent, RouterModule, MatTooltipModule],
+  imports: [WorkbenchHeaderComponent, RouterModule, MatTooltipModule, MatProgressSpinnerModule, ImgUrlPipe],
   providers: [RunAppGlobalService, RunAppMenuService, RunAppDesignService],
 })
 export class DesignComponent implements OnInit {
-  @ViewChild('outlet', { static: true }) outlet!: RouterOutlet;
-
   appId: string = getParamFromRoute('appId', this.route)!;
 
-  appConfig = signal<IAppConfig>({} as IAppConfig);
   loadingState = signal<boolean>(false);
 
-  imageUrl = computed(() => this.appConfig().imageUrl);
-  name = computed(() => this.appConfig().name);
-
-  hiddenMenu = false;
+  imageUrl = computed(() => this.runAppGlobalService.appData().imageUrl);
+  name = computed(() => this.runAppGlobalService.appData().name);
 
   constructor(
     private route: ActivatedRoute,
@@ -36,14 +32,6 @@ export class DesignComponent implements OnInit {
 
   ngOnInit() {
     this.loadAppConfig();
-    setTimeout(() => {
-      this.onActivate();
-    }, 50);
-  }
-
-  onActivate() {
-    const routeConfig = this.outlet.activatedRoute.routeConfig;
-    this.hiddenMenu = routeConfig?.data?.['hiddenMenu'];
   }
 
   loadAppConfig() {

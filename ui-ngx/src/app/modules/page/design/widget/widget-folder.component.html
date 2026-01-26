@@ -73,9 +73,11 @@
           @let isActivated = widget.id === widgetId();
           <a
             mat-list-item
-            [disableRipple]="isActivated"
-            (click)="$event.preventDefault(); updateWidgetId(widget.id)"
+            [id]="widget.id"
             [activated]="isActivated"
+            [disableRipple]="isActivated"
+            [draggable]="dashboardDesign()"
+            (click)=" !dashboardDesign() && updateWidgetId(widget.id, $event)"
             class="opacity-80 h-36px! my-4px cursor-pointer group pr-8px!"
           >
             <mat-icon
@@ -92,6 +94,7 @@
                 (editStart)="editingWidget.set(widget)"
                 (editConfirm)="editConfirmWidget(widget, $event)"
                 (editCancel)="cancelEditWidget(widget)"
+                [disabled]="dashboardDesign()"
                 [showButton]="true"
                 [highlight]="false"
                 triggerType="dblclick"
@@ -100,7 +103,7 @@
               ></hs-inline-editor>
             </span>
 
-            @if (!editingWidget()) {
+            @if (!editingWidget() && !dashboardDesign()) {
             <div
               matListItemMeta
               class="ml-8px! mr-0! hidden group-hover:flex"
@@ -156,6 +159,8 @@
       </main>
     </ng-scrollbar>
 
+    @if(!dashboardDesign()) {
+
     <div class="px-12px py-16px">
       <button
         class="w-full"
@@ -163,5 +168,6 @@
         (click)="addTempWidget()"
       >新增部件</button>
     </div>
+    }
   </content>
 </content>

@@ -52,6 +52,7 @@ export class CreateAppComponent implements OnInit {
   folderName = 'application';
 
   appForm = new FormGroup({
+    imageUrl: new FormControl([]),
     name: new FormControl('', Validators.required),
     description: new FormControl(''),
     versionName: new FormControl('初始版本', Validators.required),
@@ -112,9 +113,9 @@ export class CreateAppComponent implements OnInit {
         ...this.appForm.value,
       } as CreateApplicationDto;
 
-      if (this.fileList[0]?.url) {
-        createApplicationData.imageUrl = this.fileList[0].url;
-      }
+      // if (this.fileList[0]?.url) {
+      //   createApplicationData.imageUrl = this.fileList[0].url;
+      // }
 
       this.applicationService.createApplication(createApplicationData).subscribe((appData) => {
         this._snackBar.open('新增应用成功!!!', '确定', {

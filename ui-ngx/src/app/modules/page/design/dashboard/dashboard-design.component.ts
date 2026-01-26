@@ -31,7 +31,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
 import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
 import { MatDividerModule } from '@angular/material/divider';
-import { deepClone, isMobile } from '@src/app/core/utils';
+import { deepClone, generateUUID, isMobile } from '@src/app/core/utils';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { Subscription } from 'rxjs';
 import { DashboardWidgetDesignComponent } from './dashboard-widget-design.component';
@@ -204,11 +204,15 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     return Object.values(this.gridsterItemContextMenu);
   }
 
-  // 拖拽预设到网格时的回调
+  /**
+   * 拖拽预设到网格时的回调，通过在widget-preset-list组件监听document全局拖拽事件获取元素id
+   * @param event 鼠标事件
+   * @param item 网格项
+   */
   onPresetDropToGrid(event: MouseEvent, item: GridsterItem) {
     const widgetType = this.dashboardEditorService.currentDragstartWidgetType();
     const widgetId = this.dashboardEditorService.currentDragstartWidgetId();
-    const widget = { ...item, name: '', type: widgetType, widgetId };
+    const widget = { ...item, name: '', type: widgetType, widgetId, id: generateUUID() };
     this.dashboardConfigService.addWidget(widget);
   }
 
@@ -255,7 +259,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   // 选中网格部件
   selectGridster(item: IDashboardWidgetContext) {
     if (this.isRuntime()) return;
-    item.widgetId && this.dashboardEditorService.updateWidgetId(item.widgetId);
+    item.id && this.dashboardEditorService.updateWidgetId(item.id);
   }
 
   ngAfterViewInit() {

@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import { CreateGlobalConfigDto } from '../../app-config/dto/create-global-config.dto';
 import { CreateMenuConfigDto } from '../../app-config/dto/create-menu-config.dto';
 import { CreateHeaderConfigDto } from '../../app-config/dto/create-header-config.dto';
+import { FileListDto } from 'src/common/dtos/common.dto';
 
 export class UpdateApplicationWithConfigDto {
   /** 应用名称 */
@@ -16,9 +17,15 @@ export class UpdateApplicationWithConfigDto {
   description?: string;
 
   /** 应用图标 */
-  @IsString()
   @IsOptional()
-  imageUrl?: string;
+  @ValidateNested({ each: true })
+  @Type(() => FileListDto)
+  imageUrl?: FileListDto[] = [
+    {
+      name: 'app.png',
+      url: '/assets/workbench/app.png',
+    },
+  ];
 
   /** 目录ID */
   @IsString()

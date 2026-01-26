@@ -6,27 +6,31 @@
     flex-direction: column;
   }
 </style>
-@if (!hiddenMenu ) {
+@if (!loadingState() ) {
 <hs-workbench-header
   [outlet]="outlet"
   [logoSkip]="'/workbench/manage'"
 >
   @if(!loadingState()) {
-    <img
+  <img
     class="w-40px h-40px mr-8px rounded-8px"
-    [src]="imageUrl()"
+    [src]="imageUrl() | imgUrl"
   />
   <span
-    class="flex-1 h-full line-height-64px truncate"
+    class="
+    flex-1
+    h-full
+    line-height-64px
+    truncate"
     [matTooltip]="'HeartSync 工作台'"
   >{{ name() }}</span>
   }
 </hs-workbench-header>
-}
-
 <div class="h-0 flex-1">
-  <router-outlet
-    #outlet="outlet"
-    (activate)="onActivate()"
-  ></router-outlet>
+  <router-outlet #outlet="outlet"></router-outlet>
 </div>
+}@else {
+<div class="wh-full flex-center">
+  <mat-spinner></mat-spinner>
+</div>
+}

@@ -1,6 +1,10 @@
 <div mat-dialog-title>
   创建应用
-  <button mat-icon-button mat-dialog-close class="absolute-center-y! right-12px">
+  <button
+    mat-icon-button
+    mat-dialog-close
+    class="absolute-center-y! right-12px"
+  >
     <mat-icon>close1</mat-icon>
   </button>
 </div>
@@ -15,12 +19,16 @@
     class="h-full"
   >
     <div scrollViewport>
-      <form class="wh-full hs-density--3 max-w-xl mx-auto pb-20px" [formGroup]="appForm">
+      <form
+        class="wh-full hs-density--3 max-w-xl mx-auto pb-20px"
+        [formGroup]="appForm"
+      >
         <div class="flex flex-col mb-24px">
           <label class="text-14px mb-8px color-[var(----primary-text-color)]">应用图片：</label>
+          <!-- [(fileList)]="fileList" -->
           <hs-file-upload
             fileShowType="grid"
-            [(fileList)]="fileList"
+            formControlName="imageUrl"
             [uploadUrl]="'/api/files/upload?bucket=' + bucket + '&path=' + folderName"
             (delItemFile)="delItemFile($event)"
             [maxCount]="1"
@@ -31,11 +39,13 @@
         <div class="flex flex-col mb-24px">
           <label class="text-14px mb-8px color-[var(----primary-text-color)]">
             @if (appForm.get('name')!.invalid) {
-              <span class="color-red">*</span>
+            <span class="color-red">*</span>
             }
-            应用名称：</label
+            应用名称：</label>
+          <mat-form-field
+            class="w-full"
+            appearance="outline"
           >
-          <mat-form-field class="w-full" appearance="outline">
             <input
               matInput
               formControlName="name"
@@ -46,13 +56,16 @@
             />
             @let userNameValidate = appForm.get('name')?.errors?.['required'];
             @if (userNameValidate) {
-              <mat-error class="text-red-500"> 应用名称是必填项 </mat-error>
+            <mat-error class="text-red-500"> 应用名称是必填项 </mat-error>
             }
           </mat-form-field>
         </div>
         <div class="flex flex-col mb-24px">
           <label class="text-14px mb-8px color-[var(----primary-text-color)]"> 应用描述：</label>
-          <mat-form-field class="w-full" appearance="outline">
+          <mat-form-field
+            class="w-full"
+            appearance="outline"
+          >
             <textarea
               matInput
               formControlName="description"
@@ -70,9 +83,11 @@
             <div class="grid grid-cols-2 gap-12px">
               <div class="flex flex-col mb-24px">
                 <label class="text-14px mb-8px color-[var(----primary-text-color)]">
-                  版本名称：</label
+                  版本名称：</label>
+                <mat-form-field
+                  class="w-full"
+                  appearance="outline"
                 >
-                <mat-form-field class="w-full" appearance="outline">
                   <input
                     matInput
                     formControlName="versionName"
@@ -85,9 +100,11 @@
               </div>
               <div class="flex flex-col mb-24px">
                 <label class="text-14px mb-8px color-[var(----primary-text-color)]">
-                  版本号：</label
+                  版本号：</label>
+                <mat-form-field
+                  class="w-full"
+                  appearance="outline"
                 >
-                <mat-form-field class="w-full" appearance="outline">
                   <input
                     matInput
                     formControlName="versionCode"
@@ -101,21 +118,20 @@
             </div>
             <div class="flex flex-col mb-24px">
               <label class="text-14px mb-8px color-[var(----primary-text-color)]">
-                初始化主题：</label
-              >
+                初始化主题：</label>
               <mat-radio-group formControlName="themeId">
                 <div class="grid grid-cols-3 gap-12px">
                   @for (item of themesList; track $index) {
-                    <div class="flex flex-col items-center justify-center">
-                      <img
-                        [src]="item.thumbnail"
-                        alt="theme"
-                        class="w-100% aspect-[1920/1080] block rounded-8px"
-                      />
-                      <mat-radio-button [value]="item.value">
-                        <div class="py-16px cursor-pointer">{{ item.label }}</div></mat-radio-button
-                      >
-                    </div>
+                  <div class="flex flex-col items-center justify-center">
+                    <img
+                      [src]="item.thumbnail"
+                      alt="theme"
+                      class="w-100% aspect-[1920/1080] block rounded-8px"
+                    />
+                    <mat-radio-button [value]="item.value">
+                      <div class="py-16px cursor-pointer">{{ item.label }}</div>
+                    </mat-radio-button>
+                  </div>
                   }
                 </div>
               </mat-radio-group>
@@ -128,6 +144,12 @@
 </mat-dialog-content>
 <mat-divider></mat-divider>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>取消</button>
-  <button mat-flat-button (click)="submit()">确定</button>
+  <button
+    mat-button
+    mat-dialog-close
+  >取消</button>
+  <button
+    mat-flat-button
+    (click)="submit()"
+  >确定</button>
 </mat-dialog-actions>

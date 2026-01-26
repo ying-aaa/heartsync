@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import dayjs from 'dayjs';
-import { isNotEmpty, isNumber, isString } from '@src/app/core/utils';
+import { isDefined, isNotEmpty, isNumber, isString } from '@src/app/core/utils';
 import { IAnyPropObj } from '../../models/common-component';
 import { HttpParams } from '@angular/common/http';
 
@@ -144,8 +144,10 @@ export class TagColumn extends BaseColumn<TagConfigType> {
       return value;
     } else if (typeof value === 'string') {
       return value.split(',').map((item) => item.trim());
-    } else {
+    } else if(isDefined(value)) {
       return [value];
+    }else{
+      return [];
     }
   }
 

@@ -31,7 +31,6 @@ export class RunAppMenuService implements OnDestroy {
     return this.menuHttpService.getMenusByAppId(appId).pipe(
       tap((menus) => {
         this.menuData.set(menus);
-        this.navigateToDefaultDashboard();
       }),
     );
   }

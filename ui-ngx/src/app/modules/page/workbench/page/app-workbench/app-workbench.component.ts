@@ -6,13 +6,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
 import { HttpClient } from '@angular/common/http';
-import { debounceTime } from 'rxjs';
+import { debounceTime, map } from 'rxjs';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { HsInlineEditorModule } from '@src/app/shared/components/hs-inline-editor/inline-editor.module';
-import { ApplicationService, IAppConfig } from '@src/app/core/http/application.service';
+import { ApplicationService } from '@src/app/core/http/application.service';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import { UserService } from '@src/app/core/auth/user.service';
+import { ImgUrlPipe } from '@shared/pipes/img-url.pipe';
+import { IAppData, IAppVersionData } from '@heartsync/types';
+import { IResponseStructure } from '@src/app/core/http/request.model';
 @Component({
   selector: 'hs-app-workbench',
   styleUrl: './app-workbench.component.less',
@@ -30,11 +33,12 @@ import { UserService } from '@src/app/core/auth/user.service';
     NgScrollbarModule,
     HsInlineEditorModule,
     DatePipe,
+    ImgUrlPipe,
   ],
 })
 export class AppWorkbenchComponent implements OnInit {
   appValue = new FormControl('');
-  appList = signal<IAppConfig[]>([]);
+  appList = signal<(IAppData & IAppVersionData)[]>([]);
 
   pageLink = new PageLink(0, 100);
 
@@ -53,13 +57,30 @@ export class AppWorkbenchComponent implements OnInit {
   }
 
   getAppList(value: string | null): void {
-    this.applicationService.findAllApplications(this.pageLink).subscribe({
-      next: (res) => {
-        this.pageLink.updateTotal(res.total);
-        this.appList.set(res.data);
-      },
-      error: (err) => console.error('err ->', err),
-    });
+    this.applicationService
+      .findAllApplications(this.pageLink)
+      .pipe(
+        map((res) => ({
+          ...res,
+          data: res.data.map((item) => {
+            const version: IAppVersionData = item.versions?.[0] || ({} as IAppVersionData);
+            version.versionId = version.id;
+            Reflect.deleteProperty(version, 'id');
+
+            return {
+              ...item,
+              ...version,
+            };
+          }),
+        })),
+      )
+      .subscribe({
+        next: (res: IResponseStructure<IAppData & IAppVersionData>) => {
+          this.pageLink.updateTotal(res.total);
+          this.appList.set(res.data);
+        },
+        error: (err) => console.error('err ->', err),
+      });
   }
 
   navigateToApp(appId: string): void {

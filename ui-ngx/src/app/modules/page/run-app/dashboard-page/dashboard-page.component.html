@@ -3,9 +3,17 @@
 
   仪表板ID -> {{ dashboardId }} -->
   @if (dashboardId()) {
-    <hs-dashboard-runtime [dashboardId]="dashboardId()!" class="wh-full"></hs-dashboard-runtime>
+  <hs-dashboard-runtime
+    [dashboardId]="dashboardId()!"
+    class="wh-full"
+  ></hs-dashboard-runtime>
   } @else {
-    <!-- 仪表板不存在 -->
-    <div class="wh-full flex-center text-32px color-#999 ng-star-inserted">菜单未开发</div>
+  <!-- 仪表板不存在 -->
+  <div class="wh-full flex-center">
+    <hs-svg
+      name="empty-page"
+      title="未找到页面内容！"
+    ></hs-svg>
+  </div>
   }
 </content>

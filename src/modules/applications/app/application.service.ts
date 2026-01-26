@@ -12,7 +12,7 @@ import { UpdateApplicationWithConfigDto } from './dto/update-application-with-co
 import { QueryApplicationDto } from './dto/query-application.dto';
 import { HsAppVersionService } from '../app-version/app-version.service';
 import { HsAppConfigService } from '../app-config/app-config.service';
-import { IAppData, IAppWithConfig, ISoftDeleteStatus } from '@heartsync/types';
+import { IAppData, IAppWithConfig, IWhetherStatus } from '@heartsync/types';
 import { HsPaginationService } from 'src/common/services/pagination.service';
 import { HsApplicationEntity } from 'src/database/entities/hs-application.entity';
 import { PageDto } from 'src/common/dtos/page.dto';
@@ -37,9 +37,17 @@ export class HsApplicationService {
     dto: CreateApplicationWithConfigDto,
   ): Promise<IAppWithConfig> {
     return this.dataSource.transaction(async (manager) => {
+      if (!dto.imageUrl || !dto.imageUrl.length) {
+        dto.imageUrl = [
+          {
+            name: 'app.png',
+            url: '/assets/workbench/app.png',
+          },
+        ];
+      }
       const application = await manager.create(HsApplicationEntity, {
         ...dto,
-        isDeleted: ISoftDeleteStatus.UNDELETED,
+        isDeleted: IWhetherStatus.UNDELETED,
       });
       const savedApp = await manager.save(application);
 
@@ -139,7 +147,7 @@ export class HsApplicationService {
 
     // const pageResult = await this.paginationService.paginate(this.appRepo, {
     //   ...queryDto,
-    //   isDeleted: ISoftDeleteStatus.UNDELETED,
+    //   isDeleted: IWhetherStatus.UNDELETED,
     // } as QueryApplicationDto);
 
     // // return pageResult;
@@ -257,11 +265,11 @@ export class HsApplicationService {
   async remove(appId: string): Promise<void> {
     const app = await this.findOne(appId);
 
-    if (app.isDeleted === ISoftDeleteStatus.DELETED) {
+    if (app.isDeleted === IWhetherStatus.DELETED) {
       throw new BadRequestException(`应用${appId}已删除`);
     }
 
-    await this.appRepo.update(appId, { isDeleted: ISoftDeleteStatus.DELETED });
+    await this.appRepo.update(appId, { isDeleted: IWhetherStatus.DELETED });
 
     // （根据业务需求选择是否级联删除）
   }
@@ -271,7 +279,7 @@ export class HsApplicationService {
    */
   async hasData(condition: { directoryId: string }): Promise<boolean> {
     const count = await this.appRepo.count({
-      where: { ...condition, isDeleted: ISoftDeleteStatus.UNDELETED },
+      where: { ...condition, isDeleted: IWhetherStatus.UNDELETED },
     });
     return count > 0;
   }
@@ -281,7 +289,7 @@ export class HsApplicationService {
    */
   async findOne(appId: string): Promise<HsApplicationEntity> {
     const app = await this.appRepo.findOne({
-      where: { id: appId, isDeleted: ISoftDeleteStatus.UNDELETED },
+      where: { id: appId, isDeleted: IWhetherStatus.UNDELETED },
     });
     if (!app) {
       throw new NotFoundException(`应用ID${appId}不存在或已删除`);

@@ -63,8 +63,8 @@ export class DashboardEditorService {
   }
 
   // 更新当前选中的小部件ID
-  updateWidgetId(widgetId: string) {
-    this.currentSelectWidgetId.set(widgetId);
+  updateWidgetId(id: string) {
+    this.currentSelectWidgetId.set(id);
   }
 
   // 触发Gridster的onResize事件

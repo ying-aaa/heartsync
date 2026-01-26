@@ -9,7 +9,10 @@
     [isLoading]="loadingStatus()"
     [style]="tableStyle()"
   >
-    <section tabindex="0" scrollViewport>
+    <section
+      tabindex="0"
+      scrollViewport
+    >
       <table
         class="wh-full hs-density--5"
         mat-table
@@ -18,120 +21,135 @@
         (matSortChange)="onSortChange($event)"
       >
         @for (column of tableColumn(); track $index) {
-          @if (column.type === ColumnType.SELECTION) {
-            <ng-container matColumnDef="select">
-              <th mat-header-cell *matHeaderCellDef>
-                <mat-checkbox
-                  [aria-label]="checkboxLabel()"
-                  (change)="$event ? toggleAllRows() : null"
-                  [checked]="selection.hasValue() && isAllSelected()"
-                  [indeterminate]="selection.hasValue() && !isAllSelected()"
-                >
-                </mat-checkbox>
-              </th>
-              <td mat-cell *matCellDef="let row">
-                <mat-checkbox
-                  (click)="$event.stopPropagation()"
-                  (change)="$event ? selection.toggle(row) : null"
-                  [checked]="selection.isSelected(row)"
-                  [aria-label]="checkboxLabel(row)"
-                >
-                </mat-checkbox>
-              </td>
-            </ng-container>
-          } @else {
-            <ng-container matColumnDef="{{ column.prop }}">
-              <div>
-                @if (pageLink().isSortField(column.prop)) {
-                  <th
-                    mat-sort-header
-                    mat-header-cell
-                    *matHeaderCellDef
-                    [style.textAlign]="column.align"
-                    [style.width]="column.getWidth(column.width)"
-                  >
-                    <b>{{ column.label }}</b>
-                  </th>
-                } @else {
-                  <th
-                    mat-header-cell
-                    *matHeaderCellDef
-                    [style.textAlign]="column.align"
-                    [style.width]="column.getWidth(column.width)"
-                  >
-                    <b>{{ column.label }}</b>
-                  </th>
+        @if (column.type === ColumnType.SELECTION) {
+        <ng-container matColumnDef="select">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+          >
+            <mat-checkbox
+              [aria-label]="checkboxLabel()"
+              (change)="$event ? toggleAllRows() : null"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()"
+            >
+            </mat-checkbox>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let row"
+          >
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)"
+              [aria-label]="checkboxLabel(row)"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        } @else {
+        <ng-container matColumnDef="{{ column.prop }}">
+          <div>
+            @if (pageLink().isSortField(column.prop)) {
+            <th
+              mat-sort-header
+              mat-header-cell
+              *matHeaderCellDef
+              [style.textAlign]="column.align"
+              [style.width]="column.getWidth(column.width)"
+            >
+              <b>{{ column.label }}</b>
+            </th>
+            } @else {
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              [style.textAlign]="column.align"
+              [style.width]="column.getWidth(column.width)"
+            >
+              <b>{{ column.label }}</b>
+            </th>
+            }
+            <td
+              mat-cell
+              *matCellDef="let data"
+              [style.textAlign]="column.align"
+            >
+              @let styles = column.config?.styles;
+              @let click = column.config?.click;
+              <div
+                [ngStyle]="styles"
+                [class]="column.className"
+                (click)="click && click(data, $event)"
+              >
+                @switch (column.type) {
+                @case (ColumnType.TEXT) {
+                <span>{{ data[column.prop] ?? column.config?.defaultValue }}</span>
                 }
-                <td mat-cell *matCellDef="let data" [style.textAlign]="column.align">
-                  @let styles = column.config?.styles;
-                  @let click = column.config?.click;
-                  <div
-                    [ngStyle]="styles"
-                    [class]="column.className"
-                    (click)="click && click(data, $event)"
+                @case (ColumnType.CUSTOM) {
+                <img
+                  hs-image-preview
+                  class="w-40px h-40px"
+                  [src]="data[column.prop]"
+                  [previewSrc]="data[column.prop] "
+                />
+                }
+                @case (ColumnType.DATE) {
+                {{ column.format(data[column.prop]) }}
+                }
+                @case (ColumnType.IMG) {
+                <img
+                  hs-image-preview
+                  class="w-40px h-40px"
+                  [src]="(data[column.prop] ?? column.config?.defaultValue)  | imgUrl"
+                  [previewSrc]="(data[column.prop] ?? column.config?.defaultValue) | imgUrl"
+                />
+                }
+                @case (ColumnType.TAG) {
+                <mat-chip-set>
+                  @for (chip of column.getChips(data[column.prop]); track $index) {
+                  <mat-chip
+                    [color]="column.getColor(chip)"
+                    [disabled]="chip.disabled"
+                    [removable]="chip.removable"
                   >
-                    @switch (column.type) {
-                      @case (ColumnType.TEXT) {
-                        <span>{{ data[column.prop] ?? column.config?.defaultValue }}</span>
-                      }
-                      @case (ColumnType.CUSTOM) {
-                        <img
-                          hs-image-preview
-                          class="w-40px h-40px"
-                          [src]="data[column.prop]"
-                          [previewSrc]="data[column.prop]"
-                        />
-                      }
-                      @case (ColumnType.DATE) {
-                        {{ column.format(data[column.prop]) }}
-                      }
-                      @case (ColumnType.IMG) {
-                        <img
-                          hs-image-preview
-                          class="w-40px h-40px"
-                          [src]="data[column.prop] ?? column.config?.defaultValue"
-                          [previewSrc]="data[column.prop] ?? column.config?.defaultValue"
-                        />
-                      }
-                      @case (ColumnType.TAG) {
-                        <mat-chip-set aria-label="Dog selection">
-                          <!-- {{data[column.prop]}} -->
-                          @for (chip of column.getChips(data[column.prop]); track $index) {
-                            <mat-chip
-                              [color]="column.getColor(chip)"
-                              [disabled]="chip.disabled"
-                              [removable]="chip.removable"
-                            >
-                              {{ column.getLabel(chip) }}
-                              <mat-icon *ngIf="chip.removable" matChipRemove>cancel</mat-icon>
-                            </mat-chip>
-                          }
-                        </mat-chip-set>
-                      }
-                      @case (ColumnType.ACTION) {
-                        @for (action of column.config; track $index) {
-                          <button
-                            mat-button
-                            #menuTrigger
-                            [matMenuTriggerFor]="action.moreName && menu"
-                            (click)="!action.moreName && action.action(data, $event)"
-                          >
-                            {{ action?.name }}
-                          </button>
+                    {{ column.getLabel(chip) }}
+                    <mat-icon
+                      *ngIf="chip.removable"
+                      matChipRemove
+                    >cancel</mat-icon>
+                  </mat-chip>
+                  }
+                </mat-chip-set>
+                }
+                @case (ColumnType.ACTION) {
+                @for (action of column.config; track $index) {
+                <button
+                  mat-button
+                  #menuTrigger
+                  [matMenuTriggerFor]="action.moreName && menu"
+                  (click)="!action.moreName && action.action(data, $event)"
+                >
+                  {{ action?.name }}
+                </button>
 
-                          <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="action.action(data, $event)">
-                              {{ action?.moreName }}
-                            </button>
-                          </mat-menu>
-                        }
-                      }
-                    }
-                  </div>
-                </td>
+                <mat-menu #menu="matMenu">
+                  <button
+                    mat-menu-item
+                    (click)="action.action(data, $event)"
+                  >
+                    {{ action?.moreName }}
+                  </button>
+                </mat-menu>
+                }
+                }
+                }
               </div>
-            </ng-container>
-          }
+            </td>
+          </div>
+        </ng-container>
+        }
         }
 
         <tr
@@ -146,13 +164,22 @@
           class="cursor-pointer"
         ></tr>
 
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell text-center" [attr.colspan]="displayedColumns().length">
+        <tr
+          class="mat-row"
+          *matNoDataRow
+        >
+          <td
+            class="mat-cell text-center"
+            [attr.colspan]="displayedColumns().length"
+          >
             <div class="absolute absolute-center text-18px">
               @if (!loadingStatus()) {
-                <ng-content select="[hs-empty]">
-                  <hs-svg name="empty-list" title="暂无数据"></hs-svg>
-                </ng-content>
+              <ng-content select="[hs-empty]">
+                <hs-svg
+                  name="empty-list"
+                  title="暂无数据"
+                ></hs-svg>
+              </ng-content>
               }
             </div>
           </td>
@@ -164,20 +191,20 @@
   @let matchLayout = tableConfig().matchLayout;
   @let pageSizeOptions = matchLayout('sizes') ? tableConfig().pageSizes : [];
   @if (matchLayout('paginator')) {
-    <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
 
-    <mat-paginator
-      #paginator
-      [length]="pageLink().total"
-      [pageIndex]="pageLink().page"
-      [pageSize]="pageLink().pageSize"
-      [showFirstLastButtons]="matchLayout('first/last')"
-      [hidePageSize]="!matchLayout('sizes')"
-      [pageSizeOptions]="pageSizeOptions"
-      [disabled]="tableConfig().pageDislabled"
-      (page)="onPageChange($event)"
-    >
-      <div>你好世界</div>
-    </mat-paginator>
+  <mat-paginator
+    #paginator
+    [length]="pageLink().total"
+    [pageIndex]="pageLink().page"
+    [pageSize]="pageLink().pageSize"
+    [showFirstLastButtons]="matchLayout('first/last')"
+    [hidePageSize]="!matchLayout('sizes')"
+    [pageSizeOptions]="pageSizeOptions"
+    [disabled]="tableConfig().pageDislabled"
+    (page)="onPageChange($event)"
+  >
+    <div>你好世界</div>
+  </mat-paginator>
   }
 </content>

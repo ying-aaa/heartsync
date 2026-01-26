@@ -8,6 +8,7 @@ import { ColumnType, IDynamicTable } from '@src/app/shared/components/hs-table/t
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { Subject, Subscription, switchMap, takeUntil } from 'rxjs';
 import { HsSvgModule } from '@shared/components/hs-svg/hs-svg.module';
+import { ImgUrlPipe } from "@shared/pipes/img-url.pipe";
 
 @Component({
   selector: 'hs-app-card-list',
@@ -21,7 +22,8 @@ import { HsSvgModule } from '@shared/components/hs-svg/hs-svg.module';
     HsLoadingModule,
     MatDividerModule,
     HsSvgModule,
-  ],
+    ImgUrlPipe
+],
 })
 export class AppCardListComponent implements OnInit, OnDestroy {
   tableConfig = input.required<IDynamicTable>();

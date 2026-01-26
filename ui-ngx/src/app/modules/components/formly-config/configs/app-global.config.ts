@@ -3,9 +3,9 @@ import { enhanceFieldData } from './public-api';
 
 export const app_global_config: IEditorFormlyField[] = enhanceFieldData([
   {
-    key: 'layout',
+    key: 'appLayoutType',
     type: 'select',
-    defaultValue: 'up-down',
+    defaultValue: 'default',
     props: {
       label: '布局',
       typeName: '下拉单选',
@@ -21,7 +21,7 @@ export const app_global_config: IEditorFormlyField[] = enhanceFieldData([
       options: [
         {
           label: '默认布局',
-          value: 'up-down',
+          value: 'default',
         },
         {
           label: '左右布局',

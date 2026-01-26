@@ -7,7 +7,7 @@ import { CreateHeaderConfigDto } from './dto/create-header-config.dto';
 import { HsAppGlobalConfigEntity } from 'src/database/entities/hs-app-global-config.entity';
 import { HsAppHeaderConfigEntity } from 'src/database/entities/hs-app-header-config.entity';
 import { HsAppMenuConfigEntity } from 'src/database/entities/hs-app-menu-config.entity';
-import { IAppConfig, ISoftDeleteStatus } from '@heartsync/types';
+import { IAppConfig, IWhetherStatus } from '@heartsync/types';
 import { UpdateApplicationWithConfigDto } from '../app/dto/update-application-with-config.dto';
 
 @Injectable()
@@ -42,7 +42,7 @@ export class HsAppConfigService {
       appId,
       versionId,
       ...configs?.globalConfig,
-      isDeleted: ISoftDeleteStatus.UNDELETED,
+      isDeleted: IWhetherStatus.UNDELETED,
     });
     const savedGlobal = await (manager
       ? manager.save(globalConfig)
@@ -53,7 +53,7 @@ export class HsAppConfigService {
       appId,
       versionId,
       ...configs?.menuConfig,
-      isDeleted: ISoftDeleteStatus.UNDELETED,
+      isDeleted: IWhetherStatus.UNDELETED,
     });
     const savedMenu = await (manager
       ? manager.save(menuConfig)
@@ -64,7 +64,7 @@ export class HsAppConfigService {
       appId,
       versionId,
       ...configs?.headerConfig,
-      isDeleted: ISoftDeleteStatus.UNDELETED,
+      isDeleted: IWhetherStatus.UNDELETED,
     });
     const savedHeader = await (manager
       ? manager.save(headerConfig)
@@ -91,20 +91,20 @@ export class HsAppConfigService {
     const manager = txManager || this.globalRepo.manager;
 
     const globalConfig = await manager.findOne(HsAppGlobalConfigEntity, {
-      where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
+      where: { appId, versionId, isDeleted: IWhetherStatus.UNDELETED },
     });
 
     const menuConfig = await manager.findOne<HsAppMenuConfigEntity>(
       this.menuRepo.metadata.target,
       {
-        where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
+        where: { appId, versionId, isDeleted: IWhetherStatus.UNDELETED },
       },
     );
 
     const headerConfig = await manager.findOne<HsAppHeaderConfigEntity>(
       this.headerRepo.metadata.target,
       {
-        where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
+        where: { appId, versionId, isDeleted: IWhetherStatus.UNDELETED },
       },
     );
 
@@ -132,7 +132,7 @@ export class HsAppConfigService {
     const updateLogic = async (manager: EntityManager) => {
       // 1. 原有更新逻辑不变
       const config = await manager.findOne(HsAppGlobalConfigEntity, {
-        where: { appId, versionId, isDeleted: ISoftDeleteStatus.UNDELETED },
+        where: { appId, versionId, isDeleted: IWhetherStatus.UNDELETED },
       });
       if (!config) {
         throw new NotFoundException(`全局配置不存在`);

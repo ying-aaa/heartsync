@@ -9,13 +9,25 @@
     <div>
       <!-- <hs-inline-editor class="mb-8px"></hs-inline-editor> -->
 
-      <mat-form-field class="example-form-field w-240px" appearance="fill">
+      <mat-form-field
+        class="example-form-field w-240px"
+        appearance="fill"
+      >
         <mat-label>搜索你的应用</mat-label>
-        <input matInput type="text" [formControl]="appValue" />
+        <input
+          matInput
+          type="text"
+          [formControl]="appValue"
+        />
         @if (appValue.getRawValue()) {
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="appValue.setValue('')">
-            <mat-icon aria-hidden="false">close</mat-icon>
-          </button>
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="appValue.setValue('')"
+        >
+          <mat-icon aria-hidden="false">close</mat-icon>
+        </button>
         }
       </mat-form-field>
     </div>
@@ -31,38 +43,55 @@
       <div scrollViewport>
         <div class="flex flex-wrap w-full pt-48px pb-24px gap-24px">
           @for (item of appList(); track $index) {
-            <div class="workbench-app-card" (click)="navigateToApp(item.id)">
-              <div class="w-120px h-120px rounded-16px">
-                <img class="wh-full rounded-12px" [src]="item.imageUrl" />
+          <div
+            class="workbench-app-card"
+            (click)="navigateToApp(item.id)"
+          >
+            <div class="w-120px h-120px rounded-16px">
+              <img
+                class="wh-full rounded-12px"
+                [src]="item.imageUrl | imgUrl"
+              />
+            </div>
+            <div class="flex flex-col flex-1 text-14px">
+              <div class="text-18px line-height-36px">{{ item.name }}</div>
+              <div class="flex line-height-24px">
+                <div class="w-84px">当前版本：</div>
+                <div>{{item.versionCode}}</div>
               </div>
-              <div class="flex flex-col flex-1 text-14px">
-                <div class="text-18px line-height-36px">{{ item.name }}</div>
-                <div class="flex line-height-24px">
-                  <div class="w-84px">当前版本：</div>
-                  <div>12</div>
-                </div>
-                <div class="flex line-height-24px text-12px">
-                  <!-- <span class="w-84px truncate"></span> -->
-                  <span class="truncate">{{ item.updatedAt | date: 'YYYY-MM-dd HH:mm:ss' }}</span>
-                </div>
-                <mat-divider class="w-100% mt-12px! mb-7px! my-auto!"></mat-divider>
-                <div class="flex line-height-24px h-0 flex-1 items-center justify-around">
-                  @let actionaConfig =
-                    [
-                      { iconUrl: '/assets/workbench/edit.png', size: 16 },
-                      { iconUrl: '/assets/workbench/preview.png', size: 20 },
-                    ];
-                  @for (item of actionaConfig; track $index) {
-                    <span>
-                      <img [width]="item.size" [height]="item.size" [src]="item.iconUrl" />
-                    </span>
-                    @if ($index < actionaConfig.length - 1) {
-                      <mat-divider [vertical]="true" class="h-80%"></mat-divider>
-                    }
+              <div class="flex line-height-24px text-12px">
+                <!-- <span class="w-84px truncate"></span> -->
+                <span class="truncate">{{ item.updatedAt | date: 'YYYY-MM-dd HH:mm:ss' }}</span>
+              </div>
+              <mat-divider class="w-100% mt-12px! mb-7px! my-auto!"></mat-divider>
+              <div class="flex line-height-24px h-0 flex-1 items-center justify-around">
+                @let actionaConfig =
+                [
+                { iconUrl: '/assets/workbench/edit.png', size: 16 },
+                { iconUrl: '/assets/workbench/preview.png', size: 20 },
+                ];
+                @for (item of actionaConfig; track $index) {
+                <span>
+                  <img
+                    [width]="item.size"
+                    [height]="item.size"
+                    [src]="item.iconUrl"
+                  />
+                </span>
+                @if ($index <
+                  actionaConfig.length
+                  -
+                  1)
+                  {
+                  <mat-divider
+                  [vertical]="true"
+                  class="h-80%"
+                ></mat-divider>
                   }
-                </div>
+                  }
               </div>
             </div>
+          </div>
           }
         </div>
       </div>

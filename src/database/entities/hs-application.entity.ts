@@ -1,8 +1,9 @@
 import { HsBaseEntity } from 'src/database/entities/hs-base.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
-import { ISoftDeleteStatus } from '@heartsync/types';
+import { IWhetherStatus } from '@heartsync/types';
 import { HsAppVersionEntity } from './hs-app-version.entity';
 import { Exclude } from 'class-transformer';
+import { FileListDto } from 'src/common/dtos/common.dto';
 
 @Entity('hs_application', { comment: '系统应用表' })
 export class HsApplicationEntity extends HsBaseEntity {
@@ -28,11 +29,17 @@ export class HsApplicationEntity extends HsBaseEntity {
 
   @Column({
     name: 'image_url',
+    type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'json',
     nullable: true,
-    default: '',
-    comment: '应用描述',
+    default: `[
+        {
+            "name": "app.png",
+            "url": "/assets/workbench/app.png"
+        }
+    ]`,
+    comment: '应用图片',
   })
-  imageUrl: string;
+  imageUrl: FileListDto[];
 
   @Column({
     name: 'description',
@@ -53,8 +60,8 @@ export class HsApplicationEntity extends HsBaseEntity {
     name: 'is_deleted',
     type: 'smallint',
     default: 0,
-    enum: ISoftDeleteStatus,
+    enum: IWhetherStatus,
     comment: '软删除：0-未删 1-已删',
   })
-  isDeleted: ISoftDeleteStatus;
+  isDeleted: IWhetherStatus;
 }

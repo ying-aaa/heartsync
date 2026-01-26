@@ -14,6 +14,7 @@ import { HsLoadingModule } from '@shared/directive/loading/loading.module';
 import { MatSortModule } from '@angular/material/sort';
 import { HsSvgModule } from '@shared/components//hs-svg/hs-svg.module';
 import { MatMenuModule } from '@angular/material/menu';
+import { ImgUrlPipe } from "@shared/pipes/img-url.pipe";
 
 const dynamicTableComponents: Type<any>[] = [HsDynamicTableComponent];
 
@@ -34,7 +35,8 @@ const dynamicTableComponents: Type<any>[] = [HsDynamicTableComponent];
     MatPaginatorModule,
     HsImagePreviewModule,
     CdkVirtualScrollViewport,
-  ],
+    ImgUrlPipe
+],
   exports: [...dynamicTableComponents],
 })
 export class HsDynamicTableModule {}

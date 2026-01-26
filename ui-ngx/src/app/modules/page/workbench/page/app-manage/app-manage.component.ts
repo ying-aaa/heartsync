@@ -26,6 +26,7 @@ import {
   TagColumn,
   TextColumn,
 } from '@src/app/shared/components/hs-table/table.model';
+import { IAppVersionData, IAppVersionStatus } from '@heartsync/types';
 
 @Component({
   selector: 'hs-app-manage',
@@ -117,8 +118,10 @@ export class AppManageComponent implements OnInit {
           '状态',
           {
             tagMap: [
-              { label: '激活', value: 'active', color: 'green' },
-              { label: '关闭', value: 'close', color: 'red' },
+              { label: '草稿', value: IAppVersionStatus.DRAFT, color: 'blue' },
+              { label: '待发布', value: IAppVersionStatus.PENDING_PUBLISH, color: 'orange' },
+              { label: '已发布', value: IAppVersionStatus.PUBLISHED, color: 'green' },
+              { label: '已回滚', value: IAppVersionStatus.ROLLED_BACK, color: 'red' },
             ],
           },
           300,
@@ -165,8 +168,21 @@ export class AppManageComponent implements OnInit {
         ),
       ],
       getData: () => {
-        // 模拟数据请求REQUES
-        return this.applicationService.findAllApplications(this.pageLink).pipe(delay(0));
+        return this.applicationService.findAllApplications(this.pageLink).pipe(
+          map((res) => ({
+            ...res,
+            data: res.data.map((item) => {
+              const version: IAppVersionData = item.versions?.[0] || ({} as IAppVersionData);
+              version.versionId = version.id;
+              Reflect.deleteProperty(version, 'id');
+
+              return {
+                ...item,
+                ...version,
+              };
+            }),
+          })),
+        );
       },
       layouts: ['paginator', 'total', 'first/last'],
       pageSizes: [5, 10, 20, 50, 100],

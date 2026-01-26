@@ -14,6 +14,7 @@ import {
 import { RunAppDesignService } from '@core/services/run-app-designer.service';
 import { BaseDesignComponent } from '../base-design.component';
 import { AppLogoComponent } from '../app-logo/app-logo.component';
+import { WorkbenchUserDropdownComponent } from '../../../common/workbench-header/workbench-user-dropdown/workbench-user-dropdown.component';
 
 @Component({
   selector: 'hs-app-header',
@@ -26,6 +27,7 @@ import { AppLogoComponent } from '../app-logo/app-logo.component';
     CdkDrag,
     CdkDragPlaceholder,
     CdkDragPreview,
+    WorkbenchUserDropdownComponent,
   ],
   host: {
     class: 'hs-header-container wh-full block h-56px',

@@ -1,4 +1,4 @@
-import { IBaseData, ISoftDeleteStatus } from './system.type';
+import { IBaseData, IFileData, IWhetherStatus } from './system.type';
 
 export const IAPP_LAYOUT_TYPES = ['default', 'left-right'] as const;
 
@@ -53,7 +53,7 @@ export interface IAppBaseConfig {
   versionId: string;
   createTime: Date;
   updateTime: Date;
-  isDeleted?: ISoftDeleteStatus;
+  isDeleted?: IWhetherStatus;
 }
 
 export interface IAppGlobalConfig extends IAppBaseConfig {
@@ -84,13 +84,14 @@ export interface IAppData extends IBaseData {
   type: IAppType;
   description: string;
   versions?: Array<IAppVersionData>;
-  imageUrl: string;
+  imageUrl: IFileData[];
   tags: Array<string>;
 }
 
 export interface IAppVersionData {
   id: string;
   appId: string;
+  versionId?: string;
   app?: IAppData;
   versionName: string;
   versionCode: string;

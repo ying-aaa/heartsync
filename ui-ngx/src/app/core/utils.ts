@@ -1,6 +1,7 @@
 import { Renderer2 } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
-import { IAnyPropObj, IFileData } from '@shared/models/common-component';
+import { IFileData } from '@heartsync/types';
+import { IAnyPropObj } from '@shared/models/common-component';
 
 /** 判断一个值是否为 Object
  * @param {any} value

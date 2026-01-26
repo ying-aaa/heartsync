@@ -37,8 +37,8 @@ export class WidgetPresetListComponent implements OnInit, AfterViewInit {
 
   @HostListener('document:dragstart', ['$event'])
   onPresetDragStart(ev: DragEvent) {
-    const parentElement = (ev.target as HTMLElement).parentElement!;
-    const widgetId = parentElement.getAttribute('id');
+    const traget = (ev.target as HTMLElement)!;
+    const widgetId = traget.getAttribute('id');
 
     let widgetType;
     if (widgetId) {

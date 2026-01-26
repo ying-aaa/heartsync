@@ -16,23 +16,21 @@ import { isMobile } from '@src/app/core/utils';
   imports: [SideMenuComponent, AppHeaderComponent, AppContentComponent],
 })
 export class AppLayoutComponent implements OnInit {
-  loadingState = signal<boolean>(false);
-
   menuData = computed(() => this.runAppMenuService.menuData());
-
-  selectedConfigType = computed(() => this.runAppDesignService.selectedConfigType().value);
 
   isDesigner = computed(() => this.runAppDesignService.isDesigner());
 
   menuContainerStyle = computed(() => this.runAppGlobalService.appMenuConfig().menuContainerStyle);
 
   headerHeight = computed(
-    () => this.runAppGlobalService.appHeaderConfig().headerContainerStyle?.['height'],
+    () => this.runAppGlobalService.appHeaderConfig().headerContainerStyle?.['height'] || 56,
   );
 
   isFullscreen = computed(() => this.runAppMenuService.selectedMenuNode()?.isFullscreen);
 
   isMobile = isMobile();
+
+  appLayoutType = computed(() => this.runAppGlobalService.appGlobalConfig().appLayoutType);
 
   constructor(
     private route: ActivatedRoute,

@@ -1,5 +1,5 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { Component, computed, effect, OnInit, signal, viewChildren } from '@angular/core';
+import { Component, computed, effect, input, OnInit, signal, viewChildren } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HsRadioComponent } from '@src/app/shared/components/hs-radio/hs-radio.component';
 import {
@@ -67,6 +67,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class WidgetFolderComponent implements OnInit {
   inlineEditorRefs = viewChildren<HsInlineEditorComponent>('InlineEditorRef');
+
+  dashboardDesign = input<boolean>(false);
 
   appId: string | null = getParamFromRoute('appId', this.route);
   businessKey = computed(() => this.widgetEditorService.widgetType());
@@ -205,7 +207,7 @@ export class WidgetFolderComponent implements OnInit {
       .subscribe((res) => {
         this.isLoading.set(false);
         this.widgetList.set(res.data);
-        if (!this.widgetId() && res.data.length) {
+        if (!this.widgetId() && res.data.length && !this.dashboardDesign()) {
           const widgetId = res.data[0]?.id;
           this.updateWidgetId(widgetId);
         }
@@ -233,7 +235,8 @@ export class WidgetFolderComponent implements OnInit {
     this.searchValue.setValue('');
   }
 
-  updateWidgetId(widgetId: string | null) {
+  updateWidgetId(widgetId: string | null, event?: Event) {
+    event && event.preventDefault();
     if (widgetId === this.widgetId()) return;
     this.widgetId.set(widgetId);
     this.widgetEditorService.setWidgetId(widgetId);

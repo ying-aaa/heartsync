@@ -1,26 +1,25 @@
-<!-- @let asideTop = !isFullscreen() ? '0' : headerHeight() + 'px';
-@let asideHeight = !isFullscreen() ? '100%' : 'calc(100% - ' + headerHeight() + 'px)'; -->
-<!-- <mat-divider></mat-divider> -->
-<!-- <hs-app-header></hs-app-header> -->
 @let mainHeight = isFullscreen() ? '100%' : 'calc(100% - ' + headerHeight() + 'px)';
-
 @let contentHeight = 'calc(100% - ' + headerHeight() + 'px)';
-
-<!-- <content class="wh-full relative">
-  <hs-app-header></hs-app-header>
-  <div
-    class="flex"
-    [style.height]="mainHeight"
-  >
-    @if (!isMobile) {
-    <hs-side-menu [menuData]="menuData()"></hs-side-menu>
-    }
-    <main class="w-0 flex-1">
-      <hs-app-content></hs-app-content>
-    </main>
-  </div>
-</content> -->
-
+@switch (appLayoutType()) {
+@case("default") {
+<div class="w-full h-full flex items-center justify-center">
+  <content class="wh-full relative">
+    <hs-app-header></hs-app-header>
+    <div
+      class="flex"
+      [style.height]="mainHeight"
+    >
+      @if (!isMobile) {
+      <hs-side-menu></hs-side-menu>
+      }
+      <main class="w-0 flex-1">
+        <hs-app-content></hs-app-content>
+      </main>
+    </div>
+  </content>
+</div>
+}
+@case("left-right") {
 <content class="wh-full flex">
   <hs-side-menu></hs-side-menu>
   <div class="w-0 flex-1 h-full">
@@ -30,3 +29,5 @@
     </main>
   </div>
 </content>
+}
+}

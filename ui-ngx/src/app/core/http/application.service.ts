@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PageLink } from '@src/app/shared/components/hs-table/table.model';
 import { IBaseResponseData, IResponseStructure } from './request.model';
-import { IAppWithConfig } from '@heartsync/types';
+import { IAppData, IAppWithConfig } from '@heartsync/types';
 
 // 定义类型
 export interface CreateApplicationDto {
@@ -19,16 +19,6 @@ export interface UpdateApplicationDto {
   description?: string;
 }
 
-export interface IAppConfig extends IBaseResponseData {
-  directoryId: string;
-  name: string;
-  type?: string; // 默认值为 'web'
-  imageUrl?: string;
-  description?: string;
-  version?: string;
-  status: string;
-  tags?: any;
-}
 @Injectable({
   providedIn: 'root',
 })
@@ -38,14 +28,14 @@ export class ApplicationService {
   constructor(private http: HttpClient) {}
 
   // 创建应用
-  createApplication(createApplicationDto: CreateApplicationDto): Observable<IAppConfig> {
-    return this.http.post<IAppConfig>(this.apiUrl, createApplicationDto);
+  createApplication(createApplicationDto: CreateApplicationDto): Observable<IAppData> {
+    return this.http.post<IAppData>(this.apiUrl, createApplicationDto);
   }
 
   // 获取所有应用（分页）
-  findAllApplications(pageLink: PageLink): Observable<IResponseStructure<IAppConfig>> {
+  findAllApplications(pageLink: PageLink): Observable<IResponseStructure<IAppData>> {
     const params = pageLink.toQueryHttp();
-    return this.http.get<IResponseStructure<IAppConfig>>(this.apiUrl, {
+    return this.http.get<IResponseStructure<IAppData>>(this.apiUrl, {
       params,
     });
   }
