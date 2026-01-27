@@ -1,13 +1,51 @@
-<content class="contents" hs-loading [isLoading]="loadingStatus()">
+<content
+  class="contents"
+  hs-loading
+  [isLoading]="loadingStatus()"
+>
   <div mat-dialog-title>
     {{ title }}
-    <button mat-icon-button mat-dialog-close class="absolute-center-y! right-12px">
+    <button
+      mat-icon-button
+      mat-dialog-close
+      class="absolute-center-y! right-12px"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </div>
   <mat-divider></mat-divider>
-  <mat-dialog-content class="h-0 flex-1 max-h-none!">
-    <formly-form [form]="sourceForm" [fields]="sourceFields" [model]="sourceModel"></formly-form>
+  <mat-dialog-content class="h-0 flex-1 p-0! max-h-none!">
+    <ng-scrollbar
+      class="wh-full"
+      #scrollbarRef="ngScrollbar"
+      externalViewport
+      visibility="hover"
+      appearance="compact"
+      orientation="auto"
+      #NgScrollbar
+    >
+      <div scrollViewport>
+        <div class="wh-full p-20px hs-density--5">
+          <formly-form
+            class="wh-full"
+            [form]="sourceForm"
+            [fields]="sourceFields()"
+            [model]="sourceModel"
+          ></formly-form>
+          <ng-template
+            #passwordToggleTpl
+            let-field="field"
+          >
+            <mat-icon
+              class="password-toggle-icon cursor-pointer"
+              (click)="field.props.showPassword = !field.props.showPassword"
+            >
+              {{ field.props.showPassword ? 'visibility' : 'visibility_off' }}
+            </mat-icon>
+          </ng-template>
+        </div>
+      </div>
+    </ng-scrollbar>
   </mat-dialog-content>
   <mat-divider> </mat-divider>
   <mat-dialog-actions align="end">
@@ -19,7 +57,14 @@
     >
       测试连接
     </button>
-    <button mat-button mat-dialog-close>取消</button>
-    <button mat-flat-button color="primary" (click)="submit()">{{ confirmText }}</button>
+    <button
+      mat-button
+      mat-dialog-close
+    >取消</button>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="submit()"
+    >{{ confirmText }}</button>
   </mat-dialog-actions>
 </content>

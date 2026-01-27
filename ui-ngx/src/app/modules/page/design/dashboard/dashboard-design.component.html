@@ -31,7 +31,7 @@
       <gridster-item
         #gridsterItem
         [item]="item"
-        [class.select-gridster-item]="item.widgetId === selectWidgetId()"
+        [class.select-gridster-item]="item.id === selectWidgetId()"
         (click)="selectGridster(item)"
       >
         <!-- 内容 -->

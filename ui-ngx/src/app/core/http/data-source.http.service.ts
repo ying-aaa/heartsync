@@ -12,7 +12,7 @@ export interface IDataSource extends IBaseResponseData {
   host: string;
   port: number;
   username: string;
-  password: string;
+  password?: string;
   database?: string;
   status: string;
   options?: Record<string, any>;

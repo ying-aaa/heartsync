@@ -16,14 +16,16 @@ import { HsAssetModule } from './modules/asset/asset.module';
 import { HsDynamicTableModule } from './modules/dynamic-table/dynamic-table.module';
 import { KeycloakConfigService } from './keycloak/keycloak-config.service';
 import { KeycloakModule } from './keycloak/keycloak.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import {
   AuthGuard,
   KeycloakConnectModule,
   ResourceGuard,
   RoleGuard,
 } from 'nest-keycloak-connect';
-import { HsAppVersionModule } from './modules/applications/app-version/app-version.module';
+import { BaseEntitySubscriber } from './common/subscribers/base.entity.subscriber';
+import { UserInterceptor } from './common/interceptors/user.interceptor';
+import { RequestContextMiddleware } from './common/middlewares/request-context.middleware';
 @Module({
   exports: [HsPaginationService],
   imports: [
@@ -38,7 +40,6 @@ import { HsAppVersionModule } from './modules/applications/app-version/app-versi
     HsDashboardModule,
     HsFileTreeModule,
     HsApplicationModule,
-    HsAppVersionModule,
     HsDataSourceModule,
     HsAssetModule,
     HsDynamicTableModule,
@@ -57,29 +58,36 @@ import { HsAppVersionModule } from './modules/applications/app-version/app-versi
         database: configService.get('DB_NAME'),
         autoLoadEntities: true,
         synchronize: true,
+        subscribers: [BaseEntitySubscriber],
       }),
       inject: [ConfigService],
     }),
   ],
   providers: [
     HsPaginationService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AuthGuard,
-    // },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: UserInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
     // {
     //   provide: APP_GUARD,
     //   useClass: ResourceGuard,
     // },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: RoleGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    },
   ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
+      .apply(RequestContextMiddleware)
+      .forRoutes('*')
       .apply(FileProxyMiddleware)
       .forRoutes({ path: 'heartsync-files', method: RequestMethod.ALL });
   }

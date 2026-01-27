@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   Column,
@@ -51,6 +52,7 @@ export class HsDataSourceEntity {
   @Column({ type: 'varchar', comment: '数据库登录用户名' })
   username: string;
 
+  @Exclude()
   @Column({ type: 'varchar', comment: '加密后的数据库密码' })
   password: string;
 
@@ -62,6 +64,7 @@ export class HsDataSourceEntity {
     default: 'utf8',
   })
   clientCharset: string;
+
   // 服务器字符集
   @Column({
     type: 'varchar',

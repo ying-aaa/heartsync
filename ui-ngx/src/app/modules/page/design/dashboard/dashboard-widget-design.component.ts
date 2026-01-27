@@ -50,7 +50,7 @@ export class DashboardWidgetDesignComponent implements OnInit, OnDestroy {
   ) {
     effect(() => {
       const selectWidgetId = this.selectWidgetId();
-      this.showToolbar.set(selectWidgetId === this.widget().widgetId);
+      this.showToolbar.set(selectWidgetId === this.widget().id);
     });
   }
 

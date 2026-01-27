@@ -28,6 +28,8 @@ export enum IAppVersionStatus {
   ROLLED_BACK = 3, // 已回滚
 }
 
+export const IAPP_TEMPLATE_TYPES = ['system', 'user'] as const;
+export type IAppTemplateType = (typeof IAPP_TEMPLATE_TYPES)[number];
 export interface IMenuItemStyle {
   default: {
     [key: string]: any;

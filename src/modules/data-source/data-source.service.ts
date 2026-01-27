@@ -16,6 +16,7 @@ import { QueryDataSourceDto } from './dto/query-data-source.dto';
 import { HsPaginationService } from 'src/common/services/pagination.service';
 import { HsDbFactoryService } from 'src/common/services/db-factory.service';
 import { HsLoggerService } from 'src/common/services/logger.service';
+import { UpdateDataSourceDto } from './dto/update-data-source.dto';
 
 /**
  * 数据源服务：处理数据源的CRUD、连接测试、表列表查询
@@ -81,6 +82,19 @@ export class HsDataSourceService {
   }
 
   /**
+   * 更新数据源（密码不更新）
+   * @param id 数据源ID
+   * @param data 数据源配置（明文密码）
+   * @returns 更新后的数据源实体
+   */
+  async update(id: string, data: Partial<UpdateDataSourceDto>) {
+    await this.findOne(id);
+    const { password } = data;
+    if (!password) delete data.password;
+    return this.dataSourceRepo.update(id, data);
+  }
+
+  /**
    * 获取所有数据源列表
    * @returns 数据源实体数组
    */
@@ -110,10 +124,18 @@ export class HsDataSourceService {
 
   // 根据请求源信息测试🔗
   async testConnection(data: Partial<HsDataSourceEntity>) {
-    const encryptedPwd = CryptoUtil.encrypt(data.password || '');
+    const { id } = data;
+    const noPassword = !Reflect.has(data, 'password');
+    let password: string;
+    if (id && noPassword) {
+      const dataSource = await this.findOne(id);
+      password = dataSource.password;
+    } else {
+      password = CryptoUtil.encrypt(data.password);
+    }
     const dataSource = this.dataSourceRepo.create({
       ...data,
-      password: encryptedPwd,
+      password,
     });
     return this.poolService.testConnection(dataSource);
   }

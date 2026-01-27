@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, OnInit, signal } from '@angular/core';
 import { AppContentComponent } from '../common/content/app-content.component';
 import { AppHeaderComponent } from '../common/header/app-header.component';
 import { SideMenuComponent } from '../common/menu/side-menu.component';
@@ -38,7 +38,13 @@ export class AppLayoutComponent implements OnInit {
     private runAppMenuService: RunAppMenuService,
     private runAppGlobalService: RunAppGlobalService,
     private runAppDesignService: RunAppDesignService,
-  ) {}
+    private el: ElementRef,
+  ) {
+    effect(() => {
+      const appId = this.runAppGlobalService.appData().id;
+      this.el.nativeElement.id = appId;
+    });
+  }
 
   ngOnInit() {}
 }

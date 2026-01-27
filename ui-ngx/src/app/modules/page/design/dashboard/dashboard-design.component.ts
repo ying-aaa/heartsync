@@ -212,7 +212,14 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   onPresetDropToGrid(event: MouseEvent, item: GridsterItem) {
     const widgetType = this.dashboardEditorService.currentDragstartWidgetType();
     const widgetId = this.dashboardEditorService.currentDragstartWidgetId();
-    const widget = { ...item, name: '', type: widgetType, widgetId, id: generateUUID() };
+    const widget = {
+      ...item,
+      name: '',
+      widgetId,
+      layerIndex: 0,
+      type: widgetType,
+      id: generateUUID(),
+    };
     this.dashboardConfigService.addWidget(widget);
   }
 

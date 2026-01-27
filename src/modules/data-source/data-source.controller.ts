@@ -6,12 +6,14 @@ import {
   Body,
   Param,
   Query,
+  Put,
 } from '@nestjs/common';
 import { HsDataSourceService } from './data-source.service';
 import { CreateDataSourceDto } from './dto/create-data-source.dto';
 import { HsDataSourceEntity } from 'src/database/entities/hs-data-source.entity';
 import { PageDto } from 'src/common/dtos/page.dto';
 import { QueryDataSourceDto } from './dto/query-data-source.dto';
+import { UpdateDataSourceDto } from './dto/update-data-source.dto';
 
 /**
  * 数据源控制器：提供RESTful API接口
@@ -31,11 +33,20 @@ export class HsDataSourceController {
   }
 
   /**
+   * 更新数据源
+   * PUT /api/data-sources/:id
+   */
+  @Put(':id')
+  update(@Param('id') id: string, @Body() data: UpdateDataSourceDto) {
+    return this.service.update(id, data);
+  }
+
+  /**
    * 测试数据源连接
    * GET /api/data-sources/test
    */
   @Post('/test')
-  testConnection(@Body() data: CreateDataSourceDto) {
+  testConnection(@Body() data: UpdateDataSourceDto) {
     return this.service.testConnection(data);
   }
 

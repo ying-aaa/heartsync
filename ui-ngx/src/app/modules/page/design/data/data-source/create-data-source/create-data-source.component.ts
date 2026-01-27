@@ -1,10 +1,20 @@
-import { Component, Inject, OnInit, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  signal,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 import { DataSourceHttpService, IDataSource } from '@src/app/core/http/data-source.http.service';
 import { HsThemeService } from '@src/app/core/services/theme.service';
 import { ToastrService } from 'ngx-toastr';
-const sourceFields = [
+const sourceFields = (that: CreateDataSourceComponent) => [
   {
     key: '',
     type: 'grid',
@@ -20,7 +30,7 @@ const sourceFields = [
         columnGapUnits: 'px',
       },
     },
-    className: 'hs-density--1 ',
+    className: 'hs-density--3',
     fieldGroup: [
       {
         key: '',
@@ -37,7 +47,7 @@ const sourceFields = [
             rowGapUnits: 'px',
           },
         },
-        className: 'hs-density--1 ',
+        className: 'hs-density--3',
         fieldGroup: [
           {
             key: 'appId',
@@ -57,7 +67,7 @@ const sourceFields = [
               required: false,
               readonly: true,
             },
-            className: 'hs-density--0 ',
+            className: 'hs-density--3',
           },
           {
             key: '',
@@ -74,7 +84,7 @@ const sourceFields = [
                 columnGapUnits: 'px',
               },
             },
-            className: 'hs-density--1 ',
+            className: 'hs-density--3',
             fieldGroup: [
               {
                 key: '',
@@ -91,7 +101,7 @@ const sourceFields = [
                     rowGapUnits: 'px',
                   },
                 },
-                className: 'hs-density--1 ',
+                className: 'hs-density--3',
                 fieldGroup: [
                   {
                     key: 'name',
@@ -111,7 +121,7 @@ const sourceFields = [
                       required: true,
                       readonly: false,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--3',
                   },
                   {
                     key: 'host',
@@ -131,7 +141,7 @@ const sourceFields = [
                       required: true,
                       readonly: false,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--3',
                   },
                   {
                     key: 'username',
@@ -151,7 +161,7 @@ const sourceFields = [
                       required: true,
                       readonly: false,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--3',
                   },
                   {
                     key: 'database',
@@ -171,7 +181,7 @@ const sourceFields = [
                       required: true,
                       readonly: false,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--3',
                   },
                   {
                     key: 'maxPoolCount',
@@ -191,7 +201,7 @@ const sourceFields = [
                       required: false,
                       readonly: false,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--3',
                   },
                 ],
               },
@@ -210,7 +220,7 @@ const sourceFields = [
                     rowGapUnits: 'px',
                   },
                 },
-                className: 'hs-density--1 ',
+                className: 'hs-density--3',
                 fieldGroup: [
                   {
                     key: 'type',
@@ -243,7 +253,7 @@ const sourceFields = [
                         },
                       ],
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--3',
                   },
                   {
                     key: 'port',
@@ -263,7 +273,7 @@ const sourceFields = [
                       required: true,
                       readonly: false,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--3',
                   },
                   {
                     key: 'password',
@@ -275,15 +285,20 @@ const sourceFields = [
                       typeName: '密码',
                       icon: 'password',
                       row: 1,
-                      placeholder: '登录密码',
+                      placeholder: '数据库密码',
                       disabled: false,
                       appearance: 'outline',
                       density: 0,
                       description: '',
                       required: true,
                       readonly: false,
+                      suffix: that.passwordToggleTpl, // 关联密码显隐模板
+                      showPassword: false,
                     },
-                    className: 'hs-density--0 ',
+                    expressions: {
+                      'props.type': 'field.props.showPassword ? "text" : "password"',
+                    },
+                    className: 'hs-density--3',
                   },
                   {
                     key: 'timeout',
@@ -303,7 +318,7 @@ const sourceFields = [
                       required: false,
                       readonly: false,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--3',
                   },
                   {
                     key: 'minPoolCount',
@@ -323,7 +338,7 @@ const sourceFields = [
                       required: false,
                       readonly: false,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--3',
                   },
                 ],
               },
@@ -334,18 +349,19 @@ const sourceFields = [
     ],
   },
 ];
-
 @Component({
   selector: 'hs-create-data-source',
   templateUrl: './create-data-source.component.html',
   standalone: false,
 })
-export class CreateDataSourceComponent implements OnInit {
+export class CreateDataSourceComponent implements OnInit, AfterViewInit {
+  @ViewChild('passwordToggleTpl') passwordToggleTpl!: TemplateRef<MatIcon>;
+
   sourceForm: FormGroup = new FormGroup({});
-  sourceModel = {
+  sourceModel: IDataSource = {
     appId: this.data.appId,
-  };
-  sourceFields = sourceFields;
+  } as IDataSource;
+  sourceFields = signal<FormlyFieldConfig[]>([]);
 
   loadingStatus = signal<boolean>(false);
 
@@ -363,35 +379,41 @@ export class CreateDataSourceComponent implements OnInit {
     this.data.type === 'edit' && this.loadDataSource();
   }
 
+  ngAfterViewInit(): void {
+    this.sourceFields.set(sourceFields(this));
+  }
+
   matRippleColor = () => this.hsThemeService.getCurrentThemeConfig(['#00000010', '#ffffff10']);
 
   loadDataSource() {
     if (this.data.id) {
+      this.loadingStatus.set(true);
       this.dataSourceHttpService.findOne(this.data.id).subscribe((res) => {
-        this.sourceForm.patchValue(res);
+        this.sourceModel = { ...res, password: '******' };
+        this.loadingStatus.set(false);
       });
     }
   }
 
   submit(): void {
-    if (this.data.type === 'edit') {
-      this.toastr.warning(' 编辑功能暂未开发！');
-      return;
-    }
     this.sourceForm.markAllAsTouched();
     if (!this.sourceForm.valid) return;
     const { type, id } = this.data;
+    const sourceData = this.sourceModel;
+    if (sourceData.password === '******') {
+      Reflect.deleteProperty(sourceData, 'password');
+    }
     const observable =
       type === 'create'
-        ? this.dataSourceHttpService.create(this.sourceForm.value as IDataSource)
-        : this.dataSourceHttpService.update(id!, this.sourceForm.value as IDataSource);
+        ? this.dataSourceHttpService.create(sourceData)
+        : this.dataSourceHttpService.update(id!, sourceData);
 
     this.loadingStatus.set(true);
 
     observable.subscribe(
       (appData) => {
         this.loadingStatus.set(false);
-        this.toastr.success(`${this.confirmText}}数据源成功!!!`, '', {
+        this.toastr.success(`${this.confirmText}数据源成功!!!`, '', {
           positionClass: 'toast-top-center',
         });
         this.dialogRef.close(appData);
@@ -410,6 +432,9 @@ export class CreateDataSourceComponent implements OnInit {
     this.sourceForm.markAllAsTouched();
     if (!this.sourceForm.valid) return;
     const sourceData = this.sourceModel;
+    if (sourceData.password === '******') {
+      Reflect.deleteProperty(sourceData, 'password');
+    }
     this.loadingStatus.set(true);
     this.dataSourceHttpService.testConnection(sourceData as IDataSource).subscribe({
       next: (res) => {
@@ -425,7 +450,7 @@ export class CreateDataSourceComponent implements OnInit {
       },
       error: (err) => {
         this.loadingStatus.set(false);
-        this.toastr.error(err.message);
+        this.toastr.error('测试连接失败 ' + err.message);
       },
     });
   }
