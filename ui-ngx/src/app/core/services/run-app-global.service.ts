@@ -54,35 +54,33 @@ export class RunAppGlobalService {
     }
 
     this.styleTag.textContent = `
-      #${this.appData().id} {
-        .hs-run-app-container{
+        #hs-app-${this.appData().id} .hs-run-app-container{
           ${globalContainerStyle}
         }
-        .hs-header-container{
+        #hs-app-${this.appData().id} .hs-header-container{
           ${headerContainerStyle}}
-        .hs-menu-container{
+        #hs-app-${this.appData().id} .hs-menu-container{
           ${menuContainerStyle}
         }
-        .hs-menu-item-parent {
+        #hs-app-${this.appData().id} .hs-menu-item-parent {
           ${parentDefault}
         }
-        .hs-menu-item-parent:hover {
+        #hs-app-${this.appData().id} .hs-menu-item-parent:hover {
           ${parentHover}
         }
-        .hs-menu-item-parent.hs-menu-active {
+        #hs-app-${this.appData().id} .hs-menu-item-parent.hs-menu-active {
           ${parentActive}
         }
-        .hs-menu-item-children {
+        #hs-app-${this.appData().id} .hs-menu-item-children {
           ${childrenDefault}
         }
-        .hs-menu-item-children:hover {
+        #hs-app-${this.appData().id} .hs-menu-item-children:hover {
           ${childrenHover}
         }
-        .hs-menu-item-children.hs-menu-active {
+        #hs-app-${this.appData().id} .hs-menu-item-children.hs-menu-active {
           ${childrenActive}
         }
-        ${customAppGlobalCssText}
-      }
+        #hs-app-${this.appData().id} ${customAppGlobalCssText || ''}
     `;
 
     console.log('%c Line:293 🍎', 'color:#f5ce50', this.styleTag.textContent);

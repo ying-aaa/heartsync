@@ -42,7 +42,7 @@ export class AppLayoutComponent implements OnInit {
   ) {
     effect(() => {
       const appId = this.runAppGlobalService.appData().id;
-      this.el.nativeElement.id = appId;
+      this.el.nativeElement.id = `hs-app-${appId}`;
     });
   }
 
