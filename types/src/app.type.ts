@@ -66,11 +66,26 @@ export interface IAppGlobalConfig extends IAppBaseConfig {
   customAppGlobalCssText: string;
 }
 
+export interface IMenuLogicConfig {
+  show?: IWhetherStatus;
+  ur?: IFileData;
+  text?: string;
+  styles?: Record<string, any>;
+}
+
+export interface IMenuShrinkConfig {
+  show?: IWhetherStatus;
+  styles?: Record<string, any>;
+}
+
 export interface IAppMenuConfig extends IAppBaseConfig {
-  menuThemeId: string;
+  isSelectParentWhenChild: number;
   parentMenuItemStyle: IMenuItemStyle;
   childMenuItemStyle: IMenuItemStyle;
   menuContainerStyle: Record<string, any>;
+  menuLogoConfig: IMenuLogicConfig;
+  menuShrinkConfig: IMenuShrinkConfig;
+  extendConfig?: Record<string, any>;
 }
 
 export interface IAppHeaderConfig extends IAppBaseConfig {

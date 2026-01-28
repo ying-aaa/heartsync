@@ -6590,7 +6590,7 @@ namespace-emitter@^2.0.1:
   resolved "https://registry.npmmirror.com/namespace-emitter/-/namespace-emitter-2.0.1.tgz#978d51361c61313b4e6b8cf6f3853d08dfa2b17c"
   integrity sha512-N/sMKHniSDJBjfrkbS/tpkPj4RAbvW3mr8UAzvlMHyun93XEm83IAvhWtJVHo+RHn/oO8Job5YN4b+wRjSVp5g==
 
-nanoid@^3.1.25, nanoid@^3.2.0:
+nanoid@^3.1.25, nanoid@^3.2.0, nanoid@^3.3.11:
   version "3.3.11"
   resolved "https://registry.npmmirror.com/nanoid/-/nanoid-3.3.11.tgz#4f4f112cefbe303202f2199838128936266d185b"
   integrity sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==
@@ -7233,6 +7233,11 @@ postcss-modules-values@^4.0.0:
   dependencies:
     icss-utils "^5.0.0"
 
+postcss-prefixwrap@^1.57.2:
+  version "1.57.2"
+  resolved "https://registry.npmmirror.com/postcss-prefixwrap/-/postcss-prefixwrap-1.57.2.tgz#707eb15d5220cfca9bef9acfec76673d73bd052b"
+  integrity sha512-HKfOJJCFUtZiUu6CaWmxb6JxYZetn8McOuFUa0t4CJ0ZtcxCPlD8COSPu6804xNc4WPBu34BI0h96wkONLd9lQ==
+
 postcss-selector-parser@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmmirror.com/postcss-selector-parser/-/postcss-selector-parser-7.0.0.tgz"
@@ -7261,6 +7266,15 @@ postcss@^8.5.1:
   integrity sha512-6oz2beyjc5VMn/KV1pPw8fliQkhBXrVn1Z3TVyqZxU8kZpzEKhBdmCFqI6ZbmGtamQvQGuU1sgPTk8ZrXDD7jQ==
   dependencies:
     nanoid "^3.3.8"
+    picocolors "^1.1.1"
+    source-map-js "^1.2.1"
+
+postcss@^8.5.6:
+  version "8.5.6"
+  resolved "https://registry.npmmirror.com/postcss/-/postcss-8.5.6.tgz#2825006615a619b4f62a9e7426cc120b349a8f3c"
+  integrity sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==
+  dependencies:
+    nanoid "^3.3.11"
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 

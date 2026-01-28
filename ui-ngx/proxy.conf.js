@@ -1,5 +1,5 @@
-const forwardUrl = 'https://wjy.apihub.net';
-// const forwardUrl = 'http://localhost:3000';
+// const forwardUrl = 'https://wjy.apihub.net';
+const forwardUrl = 'http://localhost:3000';
 const on_line_url = 'https://wjy.apihub.net';
 
 const PROXY_CONFIG = {

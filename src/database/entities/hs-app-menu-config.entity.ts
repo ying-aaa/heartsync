@@ -9,6 +9,8 @@ import {
 import {
   IAppMenuConfig,
   IMenuItemStyle,
+  IMenuLogicConfig,
+  IMenuShrinkConfig,
   IWhetherStatus,
 } from '@heartsync/types';
 import { Exclude } from 'class-transformer';
@@ -31,13 +33,32 @@ export class HsAppMenuConfigEntity implements IAppMenuConfig {
   versionId: string;
 
   @Column({
-    name: 'menu_theme_id',
-    type: 'varchar',
-    length: 32,
-    default: '2',
-    comment: '菜单主题ID',
+    name: 'is_select_parent_when_child',
+    type: 'smallint',
+    default: 0,
+    enum: IWhetherStatus,
+    comment: '选中子菜单时，是否自动选中父元素',
   })
-  menuThemeId: string;
+  isSelectParentWhenChild: number;
+
+  @Column({
+    name: 'logo_config',
+    type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'json',
+    nullable: true,
+    default: () => `'{}'`,
+    comment: '菜单logo配置',
+  })
+  menuLogoConfig: IMenuLogicConfig;
+
+  @Column({
+    name: 'shrink_config',
+    type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'json',
+    nullable: true,
+    default: () => `'{}'`,
+    comment: '菜单收缩配置',
+  })
+  menuShrinkConfig: IMenuShrinkConfig;
+
   @Column({
     name: 'parent_menu_item_style',
     type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'json',

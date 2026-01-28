@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { deepClone, transformCss } from '../utils';
+import { deepClone, scopedCss, transformCss } from '../utils';
 import { ApplicationService } from '../http/application.service';
 import { tap } from 'rxjs';
 import { IAppGlobalConfig, IAppHeaderConfig, IAppMenuConfig } from '@heartsync/types';
@@ -53,37 +53,39 @@ export class RunAppGlobalService {
       this.doc.head.appendChild(this.styleTag);
     }
 
-    this.styleTag.textContent = `
-        #hs-app-${this.appData().id} .hs-run-app-container{
+    const appId = `#hs-app-${this.appData().id}`;
+
+    const cssText = `
+        .hs-run-app-container{
           ${globalContainerStyle}
         }
-        #hs-app-${this.appData().id} .hs-header-container{
+        .hs-header-container{
           ${headerContainerStyle}}
-        #hs-app-${this.appData().id} .hs-menu-container{
+        .hs-menu-container{
           ${menuContainerStyle}
         }
-        #hs-app-${this.appData().id} .hs-menu-item-parent {
+        .hs-menu-item-parent {
           ${parentDefault}
         }
-        #hs-app-${this.appData().id} .hs-menu-item-parent:hover {
+        .hs-menu-item-parent:hover {
           ${parentHover}
         }
-        #hs-app-${this.appData().id} .hs-menu-item-parent.hs-menu-active {
+        .hs-menu-item-parent.hs-menu-active {
           ${parentActive}
         }
-        #hs-app-${this.appData().id} .hs-menu-item-children {
+        .hs-menu-item-children {
           ${childrenDefault}
         }
-        #hs-app-${this.appData().id} .hs-menu-item-children:hover {
+        .hs-menu-item-children:hover {
           ${childrenHover}
         }
-        #hs-app-${this.appData().id} .hs-menu-item-children.hs-menu-active {
+        .hs-menu-item-children.hs-menu-active {
           ${childrenActive}
         }
-        #hs-app-${this.appData().id} ${customAppGlobalCssText || ''}
+        ${customAppGlobalCssText || ''}
     `;
 
-    console.log('%c Line:293 🍎', 'color:#f5ce50', this.styleTag.textContent);
+    this.styleTag.textContent = scopedCss(cssText, appId);
   }
 
   loadAppWithConfig(appId: string) {

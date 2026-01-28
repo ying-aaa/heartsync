@@ -12,7 +12,7 @@ import { RunAppGlobalService } from '@src/app/core/services/run-app-global.servi
     <a
       mat-button
       class="hs-menu-link hs-menu-item-parent"
-      [class.hs-menu-active]="selectedMenuId() === section.id"
+      [class.hs-menu-active]="isActive()"
       [style.paddingLeft.px]="leftPadding()"
       (click)="onMenuClick()"
     >
@@ -41,6 +41,19 @@ export class MenuToggleComponent implements OnInit {
   IMenuType = IMenuType;
 
   selectedMenuId = computed(() => this.runAppMenuService.selectedMenuId());
+  selectMenuParentId = computed(() => this.runAppMenuService.selectMenuParentId());
+
+  isActive = computed(() => {
+    const selectedMenuId = this.runAppMenuService.selectedMenuId();
+    const selectMenuParentId = this.runAppMenuService.selectMenuParentId();
+    const isSelectParentWhenChild =
+      this.runAppGlobalService.appMenuConfig().isSelectParentWhenChild;
+
+    return (
+      selectedMenuId === this.section.id ||
+      (isSelectParentWhenChild && selectMenuParentId === this.section.id)
+    );
+  });
 
   leftPadding = computed(() => {
     const menuConfig = this.runAppGlobalService.appMenuConfig();

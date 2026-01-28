@@ -16,6 +16,10 @@ export class RunAppMenuService implements OnDestroy {
     const menuId = this.selectedMenuId();
     return menuId ? this.findNode(menuId, menuData) : null;
   });
+  selectMenuParentId = computed(() => {
+    const menuNode = this.selectedMenuNode();
+    return menuNode?.parentMenuId;
+  });
   selectedDashboardId = computed(() => this.selectedMenuNode()?.dashboardId);
 
   constructor(

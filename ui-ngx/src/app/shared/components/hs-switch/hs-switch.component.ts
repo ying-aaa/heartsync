@@ -1,6 +1,11 @@
 import { Component, forwardRef, Input, Output, EventEmitter } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+export interface ISwitchCustomValues {
+  active: any;
+  inactive: any;
+}
+
 @Component({
   selector: 'hs-switch',
   templateUrl: './hs-switch.component.html',
@@ -14,20 +19,27 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
 })
 export class SwitchComponent implements ControlValueAccessor {
-  value: boolean = false;
+  innerValue: boolean = false;
+
+  @Input() customValues: ISwitchCustomValues = {
+    active: true,
+    inactive: false,
+  };
 
   @Input() disabled: boolean = false;
-
   @Input() label: string = '';
 
-  @Output() valueChange = new EventEmitter<boolean>();
+  @Output() valueChange = new EventEmitter<any>();
 
   onChange: any = () => {};
   onTouched: any = () => {};
 
-  writeValue(value: boolean): void {
-    this.value = value;
-    this.valueChange.emit(value);
+  writeValue(externalValue: any): void {
+    if (externalValue === null || externalValue === undefined) {
+      this.innerValue = false;
+      return;
+    }
+    this.innerValue = externalValue === this.customValues.active;
   }
 
   registerOnChange(fn: any): void {
@@ -43,11 +55,13 @@ export class SwitchComponent implements ControlValueAccessor {
   }
 
   onToggle(): void {
-    if (!this.disabled) {
-      this.value = !this.value;
-      this.onChange(this.value);
-      this.onTouched();
-      this.valueChange.emit(this.value);
-    }
+    if (this.disabled) return;
+
+    this.innerValue = !this.innerValue;
+    const outputValue = this.innerValue ? this.customValues.active : this.customValues.inactive;
+
+    this.onChange(outputValue);
+    this.onTouched();
+    this.valueChange.emit(outputValue);
   }
 }

@@ -625,3 +625,62 @@ export function getFileUrl(url: string): string {
 
   return urls['annex'];
 }
+
+/**
+ * 给未知CSS字符串添加作用域前缀，使其仅作用于指定元素的后代
+ * @param {string} rawCss - 在线编辑的原始CSS字符串
+ * @param {string} scopeSelector - 目标作用域选择器（如 .target-scope、#my-scope）
+ * @returns {string} 处理后的作用域化CSS
+ */
+export function scopedCss(rawCss: string, scopeSelector: any) {
+  if (!rawCss || !scopeSelector) return rawCss;
+
+  // 步骤1：处理CSS注释（先临时替换，避免注释内的内容被误处理）
+  const commentReg = /(\/\*[\s\S]*?\*\/)/g;
+  const comments: any[] = [];
+  let cssWithoutComment = rawCss.replace(commentReg, (match: any) => {
+    const index = comments.length;
+    comments.push(match);
+    return `/*__COMMENT_${index}__*/`; // 用占位符替换注释
+  });
+
+  // 步骤2：拆分CSS规则（按 } 分割，处理@media/@keyframes等特殊规则）
+  const ruleReg = /([^{]+)\{([^}]*)\}/g;
+  let processedCss = cssWithoutComment.replace(
+    ruleReg,
+    (match: any, selectorPart: string, stylePart: string) => {
+      // 处理特殊规则（@media/@keyframes/@supports等）：不修改其内部选择器的前缀
+      if (selectorPart.trim().startsWith('@')) {
+        // 递归处理@media内部的CSS规则
+        const innerProcessed = stylePart.replace(
+          ruleReg,
+          (innerMatch: any, innerSelector: string, innerStyle: any) => {
+            return `${scopeSelector} ${innerSelector.trim()}{${innerStyle}}`;
+          },
+        );
+        return `${selectorPart.trim()}{${innerProcessed}}`;
+      }
+
+      // 处理普通选择器：给每个顶级选择器添加作用域前缀
+      const selectors = selectorPart
+        .split(',')
+        .map((s: string) => s.trim())
+        .filter((s: any) => s);
+      const scopedSelectors = selectors.map((selector: string) => {
+        // 排除空选择器、:root等全局选择器（如需兼容可调整）
+        if (selector === '' || selector === ':root') return selector;
+        return `${scopeSelector} ${selector}`; // 核心：添加父元素前缀
+      });
+
+      return `${scopedSelectors.join(',')}{${stylePart}}`;
+    },
+  );
+
+  // 步骤3：还原注释占位符
+  processedCss = processedCss.replace(
+    /\/\*__COMMENT_(\d+)__\*\//g,
+    (_: any, index: number) => comments[index] || '',
+  );
+
+  return processedCss;
+}

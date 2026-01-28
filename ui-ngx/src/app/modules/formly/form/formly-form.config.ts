@@ -7,6 +7,7 @@ import { FormlyFieldJsonObject } from './json-object/json-object.type';
 import { FormlyFieldGridRadio } from './radio/radio.type';
 import { FormlyFieldUpload } from './upload/upload.type';
 import { HS_BUCKET } from '@src/app/shared/models/system.model';
+import { FormlyFieldSwitch } from './switch/switch.type';
 
 const appearance = 'outline';
 const density = 5;
@@ -385,4 +386,19 @@ export const formlyFormTypes = [
     },
     wrappers: ['layout'],
   },
+  {
+    name: 'switch',
+    component: FormlyFieldSwitch,
+    defaultOptions: {
+      props: {
+        ...baseProps,
+        typeName: '开关',
+        label: '开关',
+      },
+      expressions: {
+        ...baseExpressions,
+      },
+    },
+    wrappers: ['layout'],
+  }
 ];
