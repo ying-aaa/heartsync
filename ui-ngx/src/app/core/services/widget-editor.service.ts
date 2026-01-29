@@ -1,7 +1,8 @@
 import { effect, Injectable, signal } from '@angular/core';
-import { IRadioConfig, IWidgetType } from '@src/app/shared/models/public-api';
+import { IRadioConfig, IWidgetType, IWidgetTypeAbstract } from '@src/app/shared/models/public-api';
 import { Router } from '@angular/router';
 import { WidgetService } from '../http/widget.service';
+import { FormEditorService } from './form-editor.service';
 
 export interface IWidgetSelected {
   widgetName?: string;
@@ -32,25 +33,23 @@ export const flatWidgetTypesList = new Map(
   widgetTypesList.map(({ label, value }) => [value, label]),
 );
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class WidgetEditorService {
-  public widgetId = signal<string | null>(null);
+  widgetId = signal<string | null>(null);
 
-  public widgetType = signal<IWidgetType>(IWidgetType.FORM);
+  widgetConfig = signal<any>({} as any);
 
-  public widgetConfig = signal<any>({} as any);
+  widgetTypeService = signal<IWidgetTypeAbstract | null>(null);
 
+  widgetType = signal<IWidgetType>(IWidgetType.FORM);
+  
   constructor(
     private router: Router,
     private WidgetHttpService: WidgetService,
-  ) {
-    effect(() => {
-      if (this.widgetType()) {
-        this.widgetId.set(null);
-      }
-    });
+  ) {}
+
+  setWidgetTypeService(widgetTypeService: IWidgetTypeAbstract | null) {
+    this.widgetTypeService.set(widgetTypeService);
   }
 
   setWidgetId(widgetId: string | null) {
@@ -65,7 +64,11 @@ export class WidgetEditorService {
     });
   }
 
-  previewWidget(appId: string, widgetId: number, widgetType: IWidgetType) {
+  previewWidget(appId?: string, widgetId?: string, widgetType?: IWidgetType) {
+    appId = appId || this.widgetConfig().appId;
+    widgetId = widgetId || this.widgetId()!;
+    widgetType = widgetType || this.widgetType();
+
     this.router.navigate([`/design/${appId}/widget/preview`], {
       queryParams: { widgetId, widgetType },
     });

@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnDestroy,
   OnInit,
@@ -10,9 +11,11 @@ import {
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { WidgetTitleBackComponent } from './widget-title-back.component';
+import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
+import { HsCodeComponent } from '@src/app/shared/components/hs-code/hs-code.component';
 
 @Component({
   selector: 'hs-widget-design-toolbar',
@@ -25,19 +28,42 @@ export class WidgetDesignToolbarComponent implements OnInit, AfterViewInit, OnDe
 
   showHeaderMenu = signal<boolean>(true);
 
-  constructor(private renderer: Renderer2) {}
+  widgetTypeService = computed(() => this.widgetEditorService.widgetTypeService()!);
+
+  constructor(
+    private dialog: MatDialog,
+    private renderer: Renderer2,
+    private widgetEditorService: WidgetEditorService,
+  ) {}
 
   // 预览配置代码
-  onPreviewCode() {}
+  onPreviewConfigCode() {
+    const dialogRef = this.dialog.open(HsCodeComponent, {
+      data: {
+        code: this.widgetTypeService().getJsonConfig.bind(this.widgetTypeService()),
+        minHeight: '80vh',
+      },
+      minWidth: '1200px',
+      height: '80vh',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 
   // 配置前置数据
   onFrontData() {}
 
   // 预览部件
-  onPreviewWidget() {}
+  onPreviewWidget() {
+    this.widgetEditorService.previewWidget();
+  }
 
   // 保存部件
-  onSaveWidget() {}
+  onSaveWidget() {
+    this.widgetTypeService().saveWidgetConfig();
+  }
 
   toggleHeaderMenu(is: boolean) {
     // 隐藏或展示元素 hs-workbench-header

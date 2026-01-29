@@ -1,13 +1,13 @@
-import { 
-  Component, 
-  computed, 
-  effect, 
-  input, 
-  OnInit, 
+import {
+  Component,
+  computed,
+  effect,
+  input,
+  OnInit,
   signal,
   ViewChild,
   ElementRef,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
 import { GridsterItemComponentInterface } from 'angular-gridster2';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
@@ -37,7 +37,8 @@ export class DashboardWidgetDesignComponent implements OnInit, OnDestroy {
   isDragging = input.required<boolean>();
 
   selectWidgetId = computed(() => this.dashboardEditorService.currentSelectWidgetId());
-  showToolbar = signal<boolean>(false);
+  // 当前选中的widgetId
+  isActive = signal<boolean>(false);
   isHover = signal<boolean>(false);
 
   @ViewChild('toolbarContainer') toolbarContainer!: ElementRef<HTMLElement>;
@@ -46,11 +47,11 @@ export class DashboardWidgetDesignComponent implements OnInit, OnDestroy {
   constructor(
     private dashboardEditorService: DashboardEditorService,
     private dashboardConfigService: DashboardConfigService,
-    private elementRef: ElementRef<HTMLElement>
+    private elementRef: ElementRef<HTMLElement>,
   ) {
     effect(() => {
       const selectWidgetId = this.selectWidgetId();
-      this.showToolbar.set(selectWidgetId === this.widget().id);
+      this.isActive.set(selectWidgetId === this.widget().id);
     });
   }
 
@@ -61,28 +62,14 @@ export class DashboardWidgetDesignComponent implements OnInit, OnDestroy {
     this.closeOtherWidgetsHover(currentWidgetId);
   }
 
-  handleTriggerMouseOut(event: MouseEvent) {
-    const relatedTarget = event.relatedTarget as HTMLElement;
-    const currentWidgetId = this.widget().widgetId;
-    if (!relatedTarget) {
-      this.isHover.set(false);
-      return;
-    }
-
-    const targetWidgetId = relatedTarget.closest('[data-widget-id]')?.getAttribute('data-widget-id');
-    if (targetWidgetId !== currentWidgetId) {
-      this.isHover.set(false);
-    }
-  }
-
-  handleToolbarMouseLeave() {
+  handleTriggerMouseOut() {
     this.isHover.set(false);
   }
 
   private closeOtherWidgetsHover(currentWidgetId: string) {
     const allWidgetElements = document.querySelectorAll('hs-dashboard-widget-design');
-    
-    allWidgetElements.forEach(element => {
+
+    allWidgetElements.forEach((element) => {
       if (element === this.elementRef.nativeElement) return;
 
       const widgetComponent = (element as any).componentInstance;

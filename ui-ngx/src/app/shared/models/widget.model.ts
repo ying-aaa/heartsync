@@ -111,3 +111,8 @@ export interface IWidgetConfig {
   settings: IWidgetSettings;
   formWidgetConfig?: IFormWidgetConfig;
 }
+
+export interface IWidgetTypeAbstract {
+  getJsonConfig: () => string;
+  saveWidgetConfig: () => void;
+}

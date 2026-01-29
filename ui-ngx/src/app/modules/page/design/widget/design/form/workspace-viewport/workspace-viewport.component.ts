@@ -28,8 +28,8 @@ export class WorkspaceViewportComponent implements OnInit {
     @Optional() @Inject(FORMLY_CONFIG) configs: ConfigOption[] = [],
   ) {}
 
-  get getJsonField() {
-    return this.formEditorService.getJsonField();
+  get getJsonConfig() {
+    return this.formEditorService.getJsonConfig();
   }
 
   syncFormilyForm() {

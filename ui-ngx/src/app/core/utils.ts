@@ -564,11 +564,11 @@ export function camelToKebabCase(str: string): string {
 export function getImageUrl(fileData: IFileData[] | IFileData | string): string | undefined {
   if (Array.isArray(fileData) && fileData.length) {
     const file = fileData[0];
-    return file.url || file.path || 'unset';
+    return file.url || file.path || undefined;
   }
   if (typeof fileData === 'object') {
     fileData = fileData as IFileData;
-    return fileData.url || fileData.path || 'unset';
+    return fileData.url || fileData.path || undefined;
   }
 
   if (typeof fileData === 'string') {
@@ -576,10 +576,10 @@ export function getImageUrl(fileData: IFileData[] | IFileData | string): string 
       const fileDataObj = JSON.parse(fileData) as IFileData;
       return getImageUrl(fileDataObj);
     } catch (error) {
-      return fileData || 'unset';
+      return fileData || undefined;
     }
   }
-  return 'unset';
+  return undefined;
 }
 
 /**
@@ -599,7 +599,9 @@ export function transformCss(styles: IAnyPropObj): string {
       styleStr += `${hyphenKey}: ${value}${styles[unitKey]};`;
     } else if (!key.endsWith('Units')) {
       if (key === 'backgroundImage') {
-        styleStr += `${hyphenKey}: url(${getImageUrl(value)});`;
+        if (getImageUrl(value)) {
+          styleStr += `${hyphenKey}: url(${getImageUrl(value)});`;
+        }
       } else {
         styleStr += `${hyphenKey}: ${value};`;
       }

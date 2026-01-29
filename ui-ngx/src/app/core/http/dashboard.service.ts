@@ -2,13 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IWidgetType } from '@src/app/shared/models/widget.model';
-import {
-  DisplayGrid,
-  GridsterConfig,
-  GridsterItem,
-  GridType,
-} from 'angular-gridster2';
+import { DisplayGrid, GridsterConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { IFileData } from '@src/app/shared/models/common-component';
+import { IWhetherStatus } from '@heartsync/types';
 
 export enum DashboardType {}
 
@@ -20,6 +16,7 @@ export interface IDashboardWidgetContext extends GridsterItem {
   type: IWidgetType;
   config?: Record<string, any>;
   image?: string;
+  isNew?: IWhetherStatus;
 }
 
 export interface IGridsterOption extends GridsterConfig {
@@ -81,10 +78,7 @@ export class DashboardService {
   }
 
   // 更新仪表盘
-  updateDashboard(
-    id: string,
-    data: IDashboardContext,
-  ): Observable<IDashboardContext> {
+  updateDashboard(id: string, data: IDashboardContext): Observable<IDashboardContext> {
     return this.http.put<IDashboardContext>(`${this.apiUrl}/${id}`, data);
   }
 

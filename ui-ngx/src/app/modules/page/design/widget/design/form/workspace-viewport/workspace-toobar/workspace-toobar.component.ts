@@ -29,7 +29,7 @@ export class WorkspaceToobarComponent implements OnInit {
   ngOnInit() {}
 
   updateFields() {
-    this.formEditorService.updateFields();
+    this.formEditorService.saveWidgetConfig();
   }
 
   previewWidget() {
@@ -44,7 +44,7 @@ export class WorkspaceToobarComponent implements OnInit {
   openFieldCode() {
     const dialogRef = this.dialog.open(HsCodeComponent, {
       data: {
-        code: this.formEditorService.getJsonField.bind(this.formEditorService),
+        code: this.formEditorService.getJsonConfig.bind(this.formEditorService),
         minHeight: '80vh',
       },
       minWidth: '1200px',

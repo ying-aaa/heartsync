@@ -94,7 +94,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
         columnGapUnits: 'px',
       },
     },
-    className: 'hs-density--1 ',
+    className: 'hs-density--5',
     fieldGroup: [
       {
         key: '',
@@ -111,7 +111,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
             rowGapUnits: 'px',
           },
         },
-        className: 'hs-density--1 ',
+        className: 'hs-density--5',
         fieldGroup: [
           {
             key: '',
@@ -128,7 +128,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
                 columnGapUnits: 'px',
               },
             },
-            className: 'hs-density--1 ',
+            className: 'hs-density--5',
             fieldGroup: [
               {
                 key: '',
@@ -145,7 +145,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
                     rowGapUnits: 'px',
                   },
                 },
-                className: 'hs-density--1 ',
+                className: 'hs-density--5',
                 fieldGroup: [
                   {
                     key: 'appId',
@@ -165,7 +165,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
                       required: false,
                       readonly: true,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--5',
                   },
                   {
                     key: 'name',
@@ -185,7 +185,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
                       required: false,
                       readonly: false,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--5',
                   },
                 ],
               },
@@ -204,7 +204,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
                     rowGapUnits: 'px',
                   },
                 },
-                className: 'hs-density--1 ',
+                className: 'hs-density--5',
                 fieldGroup: [
                   {
                     key: 'directoryId',
@@ -224,7 +224,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
                       required: false,
                       readonly: true,
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--5',
                   },
                   {
                     key: 'dataSourceId',
@@ -244,7 +244,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
                       readonly: false,
                       options: [],
                     },
-                    className: 'hs-density--0 ',
+                    className: 'hs-density--5',
                     hooks: {
                       onInit: (field: IEditorFormlyField) => {
                         const pageLink = new PageLink(0, 9999, [{ prop: 'appId' }]);
@@ -298,7 +298,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
       row: 1,
       density: 1,
     },
-    className: 'hs-density--1 ',
+    className: 'hs-density--5',
     fieldGroup: [
       {
         key: '',
@@ -314,7 +314,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
             rowGapUnits: 'px',
           },
         },
-        className: 'hs-density--1 ',
+        className: 'hs-density--5',
         fieldGroup: [
           {
             key: 'schemaName',
@@ -334,7 +334,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
               readonly: false,
               options: [],
             },
-            className: 'hs-density--0 ',
+            className: 'hs-density--5',
             expressionProperties: {
               'props.disabled': '!model.dataSourceId',
             },
@@ -382,7 +382,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
               readonly: false,
               options: [],
             },
-            className: 'hs-density--0 ',
+            className: 'hs-density--5',
             expressionProperties: {
               'props.disabled': '!model.dataSourceId || !model.schemaName', // 禁用直到 category 被选择
             },
@@ -406,7 +406,7 @@ const assetFields = (that: CreateDataAssetComponent) => [
             rowGapUnits: 'px',
           },
         },
-        className: 'hs-density--1 ',
+        className: 'hs-density--5',
         fieldGroup: [],
       },
     ],

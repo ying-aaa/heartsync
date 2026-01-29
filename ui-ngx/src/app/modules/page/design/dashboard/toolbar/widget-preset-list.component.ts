@@ -1,13 +1,7 @@
 import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
-import {
-  MatChipSelectionChange,
-  MatChipsModule,
-} from '@angular/material/chips';
+import { MatChipSelectionChange, MatChipsModule } from '@angular/material/chips';
 import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
-import {
-  WidgetEditorService,
-  widgetTypesList,
-} from '@src/app/core/services/widget-editor.service';
+import { WidgetEditorService, widgetTypesList } from '@src/app/core/services/widget-editor.service';
 import { IWidgetType } from '@src/app/shared/models/widget.model';
 
 @Component({
@@ -39,18 +33,18 @@ export class WidgetPresetListComponent implements OnInit, AfterViewInit {
   onPresetDragStart(ev: DragEvent) {
     const traget = (ev.target as HTMLElement)!;
     const widgetId = traget.getAttribute('id');
-
+    const isNew = Boolean(traget.getAttribute('is-new'));
+    this.dashboardEditorService.isNew = isNew;
     let widgetType;
     if (widgetId) {
       this.dashboardEditorService.updateDragstartWidgetId(widgetId);
       widgetType = this.widgetEditorService.widgetType();
     } else {
+      this.dashboardEditorService.updateDragstartWidgetId(null);
       widgetType = (ev.target as HTMLElement).getAttribute('ng-reflect-value');
     }
 
-    this.dashboardEditorService.updateDragstartWidgetType(
-      widgetType as IWidgetType,
-    );
+    this.dashboardEditorService.updateDragstartWidgetType(widgetType as IWidgetType);
   }
 
   ngOnInit() {}

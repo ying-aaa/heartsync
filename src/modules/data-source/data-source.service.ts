@@ -89,8 +89,11 @@ export class HsDataSourceService {
    */
   async update(id: string, data: Partial<UpdateDataSourceDto>) {
     await this.findOne(id);
-    const { password } = data;
-    if (!password) delete data.password;
+    if (!data.password) {
+      Reflect.deleteProperty(data, 'password');
+    } else {
+      data.password = CryptoUtil.encrypt(data.password);
+    }
     return this.dataSourceRepo.update(id, data);
   }
 

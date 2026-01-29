@@ -3,6 +3,8 @@
     @for (item of widgetTypesList; track $index) {
     <mat-chip-option
       draggable="true"
+      is-new="true"
+      [id]="''"
       [value]="item.value"
       (selectionChange)="onSelectionChange($event)"
     >

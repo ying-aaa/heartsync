@@ -15,6 +15,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
 import { MediaBreakpoints } from '@src/app/shared/models/constants';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
 
 @Component({
   selector: 'hs-dashboard-manage',
@@ -30,6 +31,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
     DashboardToolbarComponent,
     HsTreeComponent,
   ],
+  providers: [WidgetEditorService],
 })
 export class DashboardManageComponent implements OnInit {
   sidenavStart = viewChild<MatSidenav>('sidenavStart');

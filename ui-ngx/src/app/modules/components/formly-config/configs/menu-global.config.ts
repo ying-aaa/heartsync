@@ -990,6 +990,18 @@ const baseConfig = () => [
               hideLabel: true,
             },
           },
+          {
+            key: 'backgroundImage',
+            type: 'image-upload',
+            defaultValue: [],
+            props: {
+              label: '背景图片',
+              layout: 'top',
+              hideLabel: true,
+              description: '请上传图片',
+              maxCount: 1,
+            },
+          },
         ],
       },
     ],
@@ -1421,7 +1433,7 @@ const menuContainerStyleConfig = columnConfig('菜单容器', 'menuContainerStyl
 
 const menuConfig = columnConfig('菜单容器', '', [
   {
-    key: "isSelectParentWhenChild",
+    key: 'isSelectParentWhenChild',
     type: 'switch',
     defaultValue: 0,
     props: {

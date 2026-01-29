@@ -13,13 +13,15 @@ export class DashboardEditorService {
 
   currentDragstartWidgetType = signal<IWidgetType>(IWidgetType.CODE);
 
-  currentDragstartWidgetId = signal<string>('');
+  currentDragstartWidgetId = signal<string | null>(null);
 
   currentSelectWidgetId = signal<string>('');
 
   gridsterInstall: GridsterComponent;
 
   isRuntime = signal(true);
+
+  isNew: boolean = false;
 
   constructor() {}
 
@@ -45,7 +47,7 @@ export class DashboardEditorService {
     this.currentDragstartWidgetType.set(type);
   }
 
-  updateDragstartWidgetId(widgetId: string) {
+  updateDragstartWidgetId(widgetId: string | null) {
     if (widgetId === this.currentDragstartWidgetId()) return;
     this.currentDragstartWidgetId.set(widgetId);
   }

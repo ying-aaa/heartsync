@@ -2,13 +2,17 @@ import { effect, Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { deepClone, extractProperties, PickConfig } from '@src/app/core/utils';
-import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.model';
+import {
+  IEditorFormlyField,
+  IFieldType,
+  IWidgetTypeAbstract,
+} from '@src/app/shared/models/widget.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IFormSubTypes, IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 import { FormWidgetService } from '@src/app/core/http/form-widget.service';
 
 @Injectable()
-export class FormEditorService {
+export class FormEditorService implements IWidgetTypeAbstract {
   HS_DEFAULT_ID = 'workspace';
 
   widgetConfig = signal<IFormWidgetConfig>({} as IFormWidgetConfig);
@@ -23,7 +27,7 @@ export class FormEditorService {
 
   flatField$ = new BehaviorSubject([]);
 
-  formWidgetId = signal<number | undefined>(undefined);
+  formWidgetId = signal<string | undefined>(undefined);
   fields = signal<IEditorFormlyField[]>([]);
   model = {};
 
@@ -64,7 +68,7 @@ export class FormEditorService {
     return this.activeField()?.fieldId === fieldId;
   }
 
-  updateFields() {
+  saveWidgetConfig() {
     // 提交时转换子表 fieldGroup 和 fieldArray.fieldGroup 配置
     const fields = updateField(deepClone(this.fields()), (field) => {
       field.fieldArray = {
@@ -134,7 +138,7 @@ export class FormEditorService {
   }
 
   // 用于代码展示
-  getJsonField() {
+  getJsonConfig() {
     return JSON.stringify(this.getEffectField(), null, 2);
   }
 

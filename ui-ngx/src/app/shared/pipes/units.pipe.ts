@@ -19,7 +19,9 @@ export class ConcatUnitsPipe implements PipeTransform {
         result[key] = `${value}${units}`;
       } else {
         if (key === 'backgroundImage' || key === 'background-image') {
-          result[key] = `url(${getImageUrl(value)});`;
+          if (getImageUrl(value)) {
+            result[key] = `url(${getImageUrl(value)});`;
+          }
         } else {
           result[key] = value;
         }
