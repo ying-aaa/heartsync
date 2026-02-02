@@ -1,85 +1,85 @@
-// src/modules/form/entities/form-widget.entity.ts
 import { Column, Entity } from 'typeorm';
 import { HsBaseEntity } from 'src/database/entities/hs-base.entity';
-
-export enum IFormSubTypes {
-  FLAT = 'flat', // 网格布局
-  CANVAS = 'canvas', // 网格布局
-}
-
-export interface IEditorFormlyField {
-  /**
-   * 组件的显示名称
-   */
-  label?: string;
-  fieldGroup?: IEditorFormlyField[];
-  fieldId?: string;
-  parent?: IEditorFormlyField;
-  index?: number;
-  canHaveChildren?: boolean;
-  childrenPath?: string; // Lodash path
-  _design?: boolean;
-  _form?: true;
-  [key: string]: any;
-}
-
-export interface IFormStyle {}
-
-export interface IFormCanvasTypeField {}
-
-export interface IFormFlowConfig {}
-
-export interface IFormLogicConfig {}
-
-export interface IFormButtonConfig {}
+import {
+  IEditorFormlyField,
+  IFormButtonConfig,
+  IFormWidgetConfig,
+  IFormWidgetSubTypes,
+  IWhetherStatus,
+  IWidgetSettings,
+  IWidgetType,
+} from '@heartsync/types';
 
 @Entity('hs_form_widget', { comment: '表单部件表' })
-export class HsFormWidgetEntity extends HsBaseEntity {
-  @Column({ name: 'widget_id', type: 'varchar', nullable: false })
-  widgetId: string;
+export class HsFormWidgetEntity
+  extends HsBaseEntity
+  implements IFormWidgetConfig
+{
+  @Column({ name: 'name', type: 'varchar', nullable: false, comment: '名称' })
+  name: string;
 
-  @Column({ name: 'form_name', type: 'varchar', nullable: false })
-  formName: string;
+  @Column({ name: 'app_id', type: 'varchar', length: 64, comment: '应用ID' })
+  appId: string;
 
-  @Column({ name: 'edit_name', type: 'varchar', nullable: true })
-  editName?: string;
+  @Column({
+    name: 'type',
+    type: 'enum',
+    enum: IWidgetType,
+    nullable: false,
+    comment: '部件类型',
+  })
+  type: IWidgetType;
 
   @Column({
     name: 'sub_type',
     type: 'varchar',
     nullable: true,
-    default: IFormSubTypes.FLAT,
+    default: IFormWidgetSubTypes.FLAT,
+    comment: '表单类型',
   })
-  subType?: IFormSubTypes;
+  subType: IFormWidgetSubTypes;
 
-  @Column({ name: 'form_style', type: 'simple-json', nullable: true })
-  formStyle?: IFormStyle;
+  @Column({
+    name: 'settings',
+    type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'json',
+    nullable: true,
+    comment: '部件设置',
+    default: () => "'{}'",
+  })
+  settings: IWidgetSettings;
 
   @Column({
     name: 'flat_type_field',
-    type: 'simple-json',
+    type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'json',
     nullable: true,
-    default: [],
+    default: () => "'[]'",
+    comment: '表单字段',
   })
-  flatTypeField: IEditorFormlyField;
-
-  @Column({ name: 'canvas_type_field', type: 'simple-json', nullable: true })
-  canvasTypeField?: IEditorFormlyField;
+  flatTypeField: IEditorFormlyField[];
 
   @Column({
-    name: 'is_use_flow',
+    name: 'canvas_type_field',
+    type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'json',
+    nullable: true,
+    default: () => "'[]'",
+    comment: '表单字段',
+  })
+  canvasTypeField?: any[];
+
+  @Column({
+    name: 'use_flow',
     type: 'boolean',
     nullable: false,
     default: false,
+    comment: '是否使用流程',
   })
-  isUseFlow?: boolean;
+  useFlow?: IWhetherStatus;
 
-  @Column({ name: 'flow_config', type: 'simple-json', nullable: true })
-  flowConfig?: IFormFlowConfig;
-
-  @Column({ name: 'logic_config', type: 'simple-json', nullable: true })
-  logicConfig?: IFormLogicConfig;
-
-  @Column({ name: 'button_config', type: 'simple-json', nullable: true })
+  @Column({
+    name: 'button_config',
+    type: 'simple-json',
+    nullable: true,
+    comment: '表单按钮',
+  })
   buttonConfig?: IFormButtonConfig;
 }

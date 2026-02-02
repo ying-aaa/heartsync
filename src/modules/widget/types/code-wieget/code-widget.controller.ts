@@ -7,7 +7,7 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
-import { HsCodeWidgetEntity } from '../../../../database/entities/hs-code-widget.entity';
+import { HsCodeWidgetEntity } from 'src/database/entities/hs-code-widget.entity';
 import { HsCodeWidgetsService } from './code-widget.service';
 
 @Controller('/widget/code')
@@ -18,10 +18,7 @@ export class HsCodeWidgetsController {
   async createHsCodeWidget(
     @Body() createHsCodeWidgetDto: any,
   ): Promise<HsCodeWidgetEntity> {
-    return await this.hsCodeWidgetsService.createWidget(
-      createHsCodeWidgetDto.widgetId,
-      createHsCodeWidgetDto,
-    );
+    return await this.hsCodeWidgetsService.createWidget(createHsCodeWidgetDto);
   }
 
   @Get()
@@ -33,7 +30,7 @@ export class HsCodeWidgetsController {
   async getHsCodeWidgetById(
     @Param('widgetId') widgetId: string,
   ): Promise<HsCodeWidgetEntity> {
-    return await this.hsCodeWidgetsService.getHsCodeWidgetById(widgetId);
+    return await this.hsCodeWidgetsService.getWidgetById(widgetId);
   }
 
   @Put(':widgetId')

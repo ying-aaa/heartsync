@@ -42,7 +42,7 @@ export class WidgetEditorService {
   widgetTypeService = signal<IWidgetTypeAbstract | null>(null);
 
   widgetType = signal<IWidgetType>(IWidgetType.FORM);
-  
+
   constructor(
     private router: Router,
     private WidgetHttpService: WidgetService,
@@ -59,7 +59,7 @@ export class WidgetEditorService {
   }
 
   loadWidgetInfo() {
-    this.WidgetHttpService.getWidgetById(this.widgetId()!).subscribe((res) => {
+    this.WidgetHttpService.getWidgetById(this.widgetId()!, this.widgetType()).subscribe((res) => {
       this.widgetConfig.set(res);
     });
   }

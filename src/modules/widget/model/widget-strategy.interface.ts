@@ -1,11 +1,16 @@
-import { WidgetType } from '../../../database/entities/hs-widget.entity';
+import { IWidgetType } from '@heartsync/types';
+import { Repository } from 'typeorm';
 
 export interface WidgetStrategy {
-  readonly type: WidgetType;
+  readonly type: IWidgetType;
 
-  createWidget(widgetId: string, config: Record<string, any>): Promise<any>;
+  widgetsRepository: Repository<any>;
+
+  createWidget(config: Record<string, any>): Promise<any>;
 
   updateWidget(widgetId: string, config: Record<string, any>): Promise<any>;
+
+  getWidgetById(widgetId: string): Promise<any>;
 
   deleteWidget(widgetId: string): Promise<any>;
 }

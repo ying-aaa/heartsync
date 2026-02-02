@@ -1,15 +1,6 @@
 import { HsBaseEntity } from 'src/database/entities/hs-base.entity';
 import { Entity, Column, BeforeUpdate } from 'typeorm';
-
-export enum WidgetType {
-  CODE = 'code',
-  CHART = 'chart',
-  CESIUM = 'cesium',
-  X6 = 'x6',
-  FORM = 'form',
-  LIST = 'list',
-  DETAIL = 'detail',
-}
+import { IWidgetType } from '@heartsync/types';
 
 @Entity('hs_widget', { comment: '部件表' })
 export class HsWidgetEntity extends HsBaseEntity {
@@ -18,10 +9,10 @@ export class HsWidgetEntity extends HsBaseEntity {
 
   @Column({
     type: 'enum',
-    enum: WidgetType,
-    default: WidgetType.CODE,
+    enum: IWidgetType,
+    default: IWidgetType.CODE,
   })
-  type: WidgetType;
+  type: IWidgetType;
 
   @Column({ type: 'varchar', name: 'app_id' })
   appId: string;

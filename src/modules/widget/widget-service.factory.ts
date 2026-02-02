@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { WidgetType } from '../../database/entities/hs-widget.entity';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { WidgetStrategy } from './model/widget-strategy.interface';
 import { HsFormWidgetsService } from './types/form-widget/form-widget.service';
 import { HsCodeWidgetsService } from './types/code-wieget/code-widget.service';
+import { IWidgetType } from '@heartsync/types';
 
 @Injectable()
 export class HsWidgetServiceFactory {
@@ -11,14 +11,14 @@ export class HsWidgetServiceFactory {
     private codeWidgetsService: HsCodeWidgetsService,
   ) {}
 
-  getService(type: string): WidgetStrategy {
+  getService(type: IWidgetType): WidgetStrategy {
     switch (type) {
-      case WidgetType.FORM:
+      case IWidgetType.FORM:
         return this.formWidgetsService;
-      case WidgetType.CODE:
+      case IWidgetType.CODE:
         return this.codeWidgetsService;
       default:
-        throw new Error('小部件类型无效');
+        throw new BadRequestException('小部件类型无效');
     }
   }
 }

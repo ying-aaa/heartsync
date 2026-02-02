@@ -41,8 +41,10 @@ export class WidgetService {
   }
 
   // 根据 ID 获取单个 Widget
-  getWidgetById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  getWidgetById(id: string, type: IWidgetType): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`, {
+      params: { type },
+    });
   }
 
   // 更新 Widget

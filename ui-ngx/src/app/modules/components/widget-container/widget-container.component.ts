@@ -22,6 +22,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner'; // 新�
 })
 export class WidgetContainerComponent implements OnInit {
   widgetId = input<string>();
+  widgetType = input<IWidgetType>();
   widgetConfig = input<IWidgetConfig>();
 
   loadingState = signal(false);
@@ -74,8 +75,9 @@ export class WidgetContainerComponent implements OnInit {
   ): void {
     this.loadingState.set(false);
     this.errorState.set(null);
+    const type = this.widgetType();
 
-    if (!id && !externalConfig) {
+    if (!id && !externalConfig && !type) {
       this.errorState.set('部件容器未找到');
       console.error(this.errorState());
       return;
@@ -85,8 +87,7 @@ export class WidgetContainerComponent implements OnInit {
       this.useExternalConfig(externalConfig);
       return;
     }
-
-    this.fetchConfigById(id!);
+    this.fetchConfigById(id!, type!);
   }
 
   private useExternalConfig(config: IWidgetConfig): void {
@@ -98,10 +99,10 @@ export class WidgetContainerComponent implements OnInit {
     this.updateWidgetContext(config);
   }
 
-  private fetchConfigById(id: string): void {
+  private fetchConfigById(id: string, type: IWidgetType): void {
     this.loadingState.set(true);
 
-    this.widgetHttpService.getWidgetById(id).subscribe({
+    this.widgetHttpService.getWidgetById(id, type).subscribe({
       next: (widgetConfig: IWidgetConfig) => {
         this.loadingState.set(false);
         this.updateWidgetContext(widgetConfig);

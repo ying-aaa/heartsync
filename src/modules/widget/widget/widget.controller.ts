@@ -9,18 +9,18 @@ import {
   Query,
 } from '@nestjs/common';
 import { HsWidgetService } from './widget.service';
-import { CreateWidgetDto } from './dto/create-widget.dto';
-import { UpdateWidgetDto } from './dto/update-widget.dto';
-import { QueryWidgetDto } from './dto/query-widget.dto';
 import { PageDto } from 'src/common/dtos/page.dto';
 import { HsWidgetEntity } from 'src/database/entities/hs-widget.entity';
+import { BaseWidgetDto } from './dto/base-widget.dto';
+import { IWidgetType } from '@heartsync/types';
+import { QueryWidgetDto } from './dto/query-widget.dto';
 
 @Controller('widgets')
 export class HsWidgetController {
   constructor(private readonly widgetService: HsWidgetService) {}
 
   @Post()
-  create(@Body() createDto: CreateWidgetDto) {
+  create(@Body() createDto: BaseWidgetDto) {
     return this.widgetService.create(createDto);
   }
 
@@ -32,17 +32,17 @@ export class HsWidgetController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.widgetService.findOne(id);
+  findOne(@Param('id') id: string, @Query('type') type: IWidgetType) {
+    return this.widgetService.findOne(id, type);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDto: UpdateWidgetDto) {
+  update(@Param('id') id: string, @Body() updateDto: BaseWidgetDto) {
     return this.widgetService.update(id, updateDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.widgetService.remove(id);
+  remove(@Param('id') id: string, @Query('type') type: IWidgetType) {
+    return this.widgetService.remove(id, type);
   }
 }

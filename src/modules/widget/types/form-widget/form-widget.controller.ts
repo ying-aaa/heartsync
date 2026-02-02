@@ -11,6 +11,7 @@ import { HsFormWidgetEntity } from '../../../../database/entities/hs-form-widget
 import { HsFormWidgetsService } from './form-widget.service';
 // import { UpdateFormWidgetDto } from './dto/update-form-widget.dto';
 import { CreateFormWidgetDto } from './dto/create-form-widget.dto';
+import { UpdateFormWidgetDto } from './dto/update-form-widget.dto';
 
 @Controller('/widget/form')
 export class HsFormWidgetsController {
@@ -20,10 +21,7 @@ export class HsFormWidgetsController {
   async createFormWidget(
     @Body() createFormWidgetDto: CreateFormWidgetDto,
   ): Promise<HsFormWidgetEntity> {
-    return await this.formWidgetsService.createWidget(
-      createFormWidgetDto.widgetId,
-      createFormWidgetDto,
-    );
+    return await this.formWidgetsService.createWidget(createFormWidgetDto);
   }
 
   @Get()
@@ -31,11 +29,11 @@ export class HsFormWidgetsController {
     return await this.formWidgetsService.getAllFormWidgets();
   }
 
-  @Get(':widgetId')
+  @Get(':id')
   async getFormWidgetById(
-    @Param('widgetId') widgetId: string,
+    @Param('id') id: string,
   ): Promise<HsFormWidgetEntity> {
-    return await this.formWidgetsService.getFormWidgetByWidgetId(widgetId);
+    return await this.formWidgetsService.getWidgetById(id);
   }
 
   // @Get('widget/:widgetId')
@@ -45,19 +43,16 @@ export class HsFormWidgetsController {
   //   return await this.formWidgetsService.getFormWidgetByWidgetId(widgetId);
   // }
 
-  @Put(':widgetId')
+  @Put(':id')
   async updateFormWidget(
-    @Param('widgetId') widgetId: string,
-    @Body() updateFormWidgetDto: any,
+    @Param('id') id: string,
+    @Body() updateFormWidgetDto: UpdateFormWidgetDto,
   ): Promise<HsFormWidgetEntity> {
-    return await this.formWidgetsService.updateWidget(
-      widgetId,
-      updateFormWidgetDto,
-    );
+    return await this.formWidgetsService.updateWidget(id, updateFormWidgetDto);
   }
 
-  @Delete(':widgetId')
-  async deleteFormWidget(@Param('widgetId') widgetId: string): Promise<void> {
-    return await this.formWidgetsService.deleteWidget(widgetId);
+  @Delete(':id')
+  async deleteFormWidget(@Param('id') id: string): Promise<void> {
+    return await this.formWidgetsService.deleteWidget(id);
   }
 }

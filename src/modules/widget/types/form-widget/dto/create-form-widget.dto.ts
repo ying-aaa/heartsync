@@ -1,90 +1,35 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, IsBoolean } from 'class-validator';
 import {
-  IEditorFormlyField,
-  IFormButtonConfig,
-  IFormFlowConfig,
-  IFormLogicConfig,
-  IFormStyle,
-  IFormSubTypes,
-} from '../../../../../database/entities/hs-form-widget.entity';
+  IsEnum,
+  IsOptional,
+  IsObject,
+  IsArray,
+  IsBoolean,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { IFormWidgetSubTypes, IWhetherStatus } from '@heartsync/types';
+import { BaseWidgetDto } from 'src/modules/widget/widget/dto/base-widget.dto';
 
-export class CreateFormWidgetDto {
-  @ApiProperty({ description: 'Widget ID', example: 'widget123' })
-  @IsString()
-  widgetId: string;
-
-  @ApiProperty({ description: 'Form Name', example: 'My Form' })
-  @IsString()
-  formName: string;
-
-  @ApiProperty({
-    description: 'Edit Name',
-    example: 'Edit My Form',
-    required: false,
-  })
+export class CreateFormWidgetDto extends BaseWidgetDto {
   @IsOptional()
-  @IsString()
-  editName?: string;
+  @IsEnum(IFormWidgetSubTypes, { message: '表单子类型为无效值' })
+  subType?: IFormWidgetSubTypes;
 
-  @ApiProperty({
-    description: 'Sub Type',
-    example: { type: 'text' },
-    required: false,
-  })
   @IsOptional()
-  subType?: IFormSubTypes;
+  @IsArray({ message: '扁平化表单字段必须为数组' })
+  @Type(() => Object)
+  flatField?: any[];
 
-  @ApiProperty({
-    description: 'Form Style',
-    example: { color: 'blue' },
-    required: false,
-  })
   @IsOptional()
-  formStyle?: IFormStyle;
+  @IsArray({ message: '画布类型表单字段必须为数组' })
+  @Type(() => Object)
+  canvasField?: any[];
 
-  @ApiProperty({
-    description: 'Flat Type Field',
-    example: { type: 'text' },
-    required: false,
-  })
   @IsOptional()
-  flatTypeField?: IEditorFormlyField;
+  @IsBoolean({ message: '是否使用流程必须为布尔值' })
+  useFlow?: IWhetherStatus;
 
-  @ApiProperty({
-    description: 'Canvas Type Field',
-    example: { type: 'canvas' },
-    required: false,
-  })
   @IsOptional()
-  canvasTypeField?: IEditorFormlyField;
-
-  @ApiProperty({ description: 'Is Use Flow', example: false })
-  @IsBoolean()
-  @IsOptional()
-  isUseFlow: boolean;
-
-  @ApiProperty({
-    description: 'Flow Config',
-    example: { steps: [] },
-    required: false,
-  })
-  @IsOptional()
-  flowConfig?: IFormFlowConfig;
-
-  @ApiProperty({
-    description: 'Logic Config',
-    example: { rules: [] },
-    required: false,
-  })
-  @IsOptional()
-  logicConfig?: IFormLogicConfig;
-
-  @ApiProperty({
-    description: 'Button Config',
-    example: { label: 'Submit' },
-    required: false,
-  })
-  @IsOptional()
-  buttonConfig?: IFormButtonConfig;
+  @IsObject({ message: '按钮配置必须为JSON对象' })
+  @Type(() => Object)
+  buttonConfig?: Record<string, any>;
 }

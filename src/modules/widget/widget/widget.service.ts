@@ -1,71 +1,45 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  HsWidgetEntity,
-  WidgetType,
-} from '../../../database/entities/hs-widget.entity';
-import { CreateWidgetDto } from './dto/create-widget.dto';
-import { UpdateWidgetDto } from './dto/update-widget.dto';
+import { HsWidgetEntity } from '../../../database/entities/hs-widget.entity';
 import { HsWidgetServiceFactory } from '../widget-service.factory';
-import { HsFileTreeService } from 'src/modules/file-tree/file-tree.service';
-import { QueryWidgetDto } from './dto/query-widget.dto';
 import { PageDto } from 'src/common/dtos/page.dto';
 import { HsPaginationService } from 'src/common/services/pagination.service';
+import { BaseWidgetDto } from './dto/base-widget.dto';
+import { IWidgetType } from '@heartsync/types';
+import { QueryWidgetDto } from './dto/query-widget.dto';
 @Injectable()
 export class HsWidgetService {
   constructor(
     @InjectRepository(HsWidgetEntity)
     private readonly widgetRepository: Repository<HsWidgetEntity>,
     private widgetServiceFactory: HsWidgetServiceFactory,
-    private readonly fileTreeService: HsFileTreeService,
     private readonly paginationService: HsPaginationService,
   ) {}
 
   async create(
-    createDto: CreateWidgetDto,
+    createDto: BaseWidgetDto,
   ): Promise<HsWidgetEntity & { widgetTypeData: any }> {
-    const data = {
-      ...createDto,
-      version: 1, // 初始版本
-    };
+    const { type } = createDto;
 
-    const { nodeId } = createDto;
-    if (nodeId) {
-      const nodeData = await this.fileTreeService.getNodeById(nodeId);
-      if (nodeData) {
-        data['id'] = nodeId;
-      }
-    }
-
-    const widget = this.widgetRepository.create(data);
-    const widgetData = await this.widgetRepository.save(widget);
-
-    const { id: widgetId, type, name } = widgetData;
     const widgetService = this.widgetServiceFactory.getService(type);
 
-    const widgetTypeData = await widgetService.createWidget(widgetId, {
-      formName: name,
-    });
-    return {
-      ...widgetData,
-      widgetTypeData,
-      updateVersion: widgetData.updateVersion.bind(widgetData),
-    };
+    const widgetTypeData = await widgetService.createWidget(createDto);
+    return widgetTypeData;
   }
 
-  async findAll(
-    queryWidgetDto: QueryWidgetDto,
-  ): Promise<PageDto<HsWidgetEntity>> {
+  async findAll(queryWidgetDto: QueryWidgetDto): Promise<PageDto<any>> {
+    const { type } = queryWidgetDto;
+    const widgetService = this.widgetServiceFactory.getService(type);
     return this.paginationService.paginate(
-      this.widgetRepository,
+      widgetService.widgetsRepository,
       queryWidgetDto,
     );
   }
 
   async findByAppIdAndType(
     appId: string,
-    type: WidgetType,
+    type: IWidgetType,
   ): Promise<HsWidgetEntity[]> {
     if (!type) {
       throw new Error('请传入正确的小部件类型');
@@ -75,36 +49,19 @@ export class HsWidgetService {
     });
   }
 
-  async findOne(id: string): Promise<HsWidgetEntity> {
-    const widget = await this.widgetRepository.findOneBy({ id });
-    if (!widget) {
-      throw new NotFoundException(`没有找到小部件 ${id}`);
-    }
-    return widget;
+  async findOne(id: string, type: IWidgetType): Promise<HsWidgetEntity> {
+    const widgetService = this.widgetServiceFactory.getService(type);
+    return widgetService.getWidgetById(id);
   }
 
-  async update(
-    id: string,
-    updateDto: UpdateWidgetDto,
-  ): Promise<HsWidgetEntity> {
-    const widget = await this.findOne(id);
+  async update(id: string, updateDto: BaseWidgetDto): Promise<HsWidgetEntity> {
+    const widget = await this.findOne(id, updateDto.type);
     const updated = this.widgetRepository.merge(widget, updateDto);
     return this.widgetRepository.save(updated);
   }
 
-  async remove(id: string): Promise<void> {
-    const widgetData = await this.widgetRepository.findOne({
-      where: { id },
-    });
-
-    if (!widgetData) {
-      throw new NotFoundException(`没有找到小部件${id}`);
-    }
-
-    await this.widgetRepository.delete(id);
-
-    const { id: widgetId, type } = widgetData;
+  async remove(id: string, type: IWidgetType): Promise<void> {
     const widgetService = this.widgetServiceFactory.getService(type);
-    await widgetService.deleteWidget(widgetId);
+    await widgetService.deleteWidget(id);
   }
 }
