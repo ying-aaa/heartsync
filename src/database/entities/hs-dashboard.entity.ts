@@ -1,58 +1,56 @@
 import { Entity, Column } from 'typeorm';
 import { HsBaseEntity } from './hs-base.entity';
+import {
+  IDashboardEntity,
+  IDashboardType,
+  IDashboardWidgetConfig,
+} from '@heartsync/types';
 
-export enum DashboardType {
-  GRIDSTER = 'gridster',
-}
-
-@Entity('hs_dashboard', { comment: '仪表盘表' })
-export class HsDashboardEntity extends HsBaseEntity {
-  @Column({ length: 255 })
+@Entity('hs_dashboard', { comment: '仪表板表' })
+export class HsDashboardEntity
+  extends HsBaseEntity
+  implements IDashboardEntity
+{
+  @Column({
+    type: 'varchar',
+    length: 255,
+    comment: '仪表板名称',
+  })
   name: string;
 
   @Column({
     type: 'enum',
-    enum: DashboardType,
-    default: DashboardType.GRIDSTER,
+    name: 'type',
+    enum: IDashboardType,
+    default: IDashboardType.GRIDSTER,
+    comment: '仪表板类型',
   })
-  type: DashboardType;
+  type: IDashboardType;
 
-  @Column({ type: 'varchar', name: 'app_id' })
+  @Column({
+    type: 'varchar',
+    nullable: false,
+    name: 'app_id',
+    comment: '关联的应用ID',
+  })
   appId: string;
 
-  @Column('varchar', { nullable: true })
-  description?: string;
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    comment: '描述',
+    default: '',
+  })
+  description: string = '';
 
-  @Column('json', { name: 'gridster_option', default: {} })
-  gridsterOption?: Record<string, any>;
-
-  @Column('json', { name: 'layout_config', default: {} })
-  layoutConfig: Record<string, any>;
-
-  @Column('jsonb', { default: [] })
-  widgets: Widgets[];
-
-  @Column('jsonb', { name: 'data_sources', nullable: true, default: {} })
-  dataSources?: Record<string, any>;
-
-  @Column('jsonb', { name: 'accessControl', nullable: true, default: {} })
-  access_control?: Record<string, any>;
-
-  @Column({ default: 1 })
-  version: number;
-}
-
-export class Widgets {
-  id: string;
-  widget_id: string;
-  name: string;
-  description: string;
-  type: 'form' | 'list' | 'custom' | 'cesium' | 'detail';
-  config?: Record<string, any>;
-  image: string;
-  cols: number;
-  rows: number;
-  x: number;
-  y: number;
-  layerIndex: number;
+  @Column({
+    type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'json',
+    nullable: false,
+    comment: 'gridster配置',
+    default: () => `'{"gridsterOption":{},"gridsterWidget":[]}'`,
+  })
+  gridsterConfig: {
+    gridsterOption: any;
+    gridsterWidget: IDashboardWidgetConfig[];
+  };
 }

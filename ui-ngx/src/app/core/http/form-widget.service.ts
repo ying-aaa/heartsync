@@ -1,9 +1,8 @@
-// src/app/services/form-widget.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { IFormWidgetConfig } from '@shared/models/form-widget.model'; // 确保引入正确的类型
+import { IFormWidgetConfig } from '@heartsync/types';
 
 @Injectable({
   providedIn: 'root',
@@ -41,7 +40,7 @@ export class FormWidgetService {
   updateFormWidget(
     formWidget: IFormWidgetConfig,
   ): Observable<IFormWidgetConfig> {
-    const url = `${this.apiUrl}/${formWidget.widgetId}`;
+    const url = `${this.apiUrl}/${formWidget.id}`;
     return this.http
       .put<IFormWidgetConfig>(url, formWidget)
       .pipe(catchError(this.handleError));

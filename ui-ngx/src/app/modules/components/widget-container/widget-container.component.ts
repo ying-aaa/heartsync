@@ -7,6 +7,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner'; // 新增：用于*ngIf等指令
+import { IWidgetTypesConfig } from '@heartsync/types';
 
 @Component({
   selector: 'hs-widget-container',
@@ -23,13 +24,14 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner'; // 新�
 export class WidgetContainerComponent implements OnInit {
   widgetId = input<string>();
   widgetType = input<IWidgetType>();
-  widgetConfig = input<IWidgetConfig>();
+  widgetConfigInput = input<IWidgetTypesConfig>();
 
   loadingState = signal(false);
   errorState = signal<string | null>(null);
 
-  widgetContext = signal<IWidgetConfig>({
+  widgetConfig = signal<IWidgetTypesConfig>({
     id: '',
+    name: '',
     appId: '',
     type: IWidgetType.FORM,
     settings: {
@@ -53,16 +55,16 @@ export class WidgetContainerComponent implements OnInit {
       iconStyle: {},
       widgetStyle: {},
     },
-  });
+  } as IWidgetTypesConfig);
 
-  widgetSettings = computed(() => this.widgetContext().settings);
+  widgetSettings = computed(() => this.widgetConfig().settings);
 
   fullscreen = false;
 
   constructor(private widgetHttpService: WidgetService) {
     effect(() => {
       const currentId = this.widgetId();
-      const currentConfig = this.widgetConfig();
+      const currentConfig = this.widgetConfigInput();
       this.handleConfigSource(currentId, currentConfig);
     });
   }
@@ -93,19 +95,19 @@ export class WidgetContainerComponent implements OnInit {
   private useExternalConfig(config: IWidgetConfig): void {
     if (this.widgetId()) {
       console.warn(
-        `容器同时传入了 widgetId(${this.widgetId()}) 和 widgetConfig，将优先使用 widgetConfig`,
+        `容器同时传入了 widgetId(${this.widgetId()}) 和 widgetConfig，将优先使用 widgetConfigInput`,
       );
     }
-    this.updateWidgetContext(config);
+    this.updatewidgetConfig(config);
   }
 
   private fetchConfigById(id: string, type: IWidgetType): void {
     this.loadingState.set(true);
 
     this.widgetHttpService.getWidgetById(id, type).subscribe({
-      next: (widgetConfig: IWidgetConfig) => {
+      next: (widgetConfigInput: IWidgetConfig) => {
         this.loadingState.set(false);
-        this.updateWidgetContext(widgetConfig);
+        this.updatewidgetConfig(widgetConfigInput);
       },
       error: (err: any) => {
         this.loadingState.set(false);
@@ -116,8 +118,8 @@ export class WidgetContainerComponent implements OnInit {
     });
   }
 
-  private updateWidgetContext(config: IWidgetConfig): void {
-    this.widgetContext.update((prev) => ({
+  private updatewidgetConfig(config: IWidgetConfig): void {
+    this.widgetConfig.update((prev) => ({
       ...prev,
       ...config,
     }));

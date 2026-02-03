@@ -1,4 +1,4 @@
-<div class="line-height-24px h-24px relative min-w-300px max-w-300px">
+<div class="line-height-24px h-24px relative flex items-center">
   <button
     matSuffix
     mat-icon-button
@@ -10,19 +10,29 @@
     <mat-icon
       class="material-icons-round"
       matChipAvatar
-      >arrow_back
+    >arrow_back
     </mat-icon>
   </button>
 
-  <div class="pl-50px flex">
-    <span class="text-20px font-bold mr-8px"
-      >{{ activeWidgetTypeName() }} :</span
-    >
+  <div class="pl-50px flex items-center">
+    <span class="text-20px font-bold mr-8px">{{ activeWidgetTypeName() }} :</span>
     <div
       [matTooltip]="activeWidgetName()"
-      class="text-16px truncate flex-1 w-0 mt-1px"
+      class="text-16px truncate w-120px max-w-120px mt-1px"
     >
       {{ activeWidgetName() }}
     </div>
   </div>
+
+  <button
+    mat-button
+    (click)="toggleHeaderMenu(!showHeaderMenu())"
+  >
+    <mat-icon
+      class="transition-transform duration-500 ease-in-out"
+      [class]="showHeaderMenu() ? '' : '-rotate-180'"
+    >
+      keyboard_arrow_down
+    </mat-icon>{{showHeaderMenu() ? '收起' : '展开'}}
+  </button>
 </div>

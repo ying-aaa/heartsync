@@ -1,40 +1,46 @@
-<content class="flex h-full">
-  <aside class="w-284px px-12px pt-12px pb-6px">
-    <hs-workspace-contorl></hs-workspace-contorl>
-  </aside>
+<content class="flex flex-col h-full">
+  <header>
+    <hs-form-design-toolbar></hs-form-design-toolbar>
+  </header>
+  <mat-divider class="w-full"></mat-divider>
+  <div class="flex flex-1 h-0">
+    <aside class="w-284px px-12px pt-12px pb-6px">
+      <hs-workspace-contorl></hs-workspace-contorl>
+    </aside>
 
-  <mat-divider
-    [vertical]="true"
-    class="h-full"
-  ></mat-divider>
+    <mat-divider
+      [vertical]="true"
+      class="h-full"
+    ></mat-divider>
 
-  <main class="w-0 flex-1">
-    <hs-workspace-viewport
-      #WorkspaceViewport
-      [options]="options"
-    ></hs-workspace-viewport>
-  </main>
+    <main class="w-0 flex-1">
+      <hs-workspace-viewport
+        #WorkspaceViewport
+        [options]="options"
+      ></hs-workspace-viewport>
+    </main>
 
-  <mat-divider
-    [vertical]="true"
-    class="h-full"
-  ></mat-divider>
+    <mat-divider
+      [vertical]="true"
+      class="h-full"
+    ></mat-divider>
 
-  <aside class="flex flex-col h-full w-312px py-12px pl-12px relative">
-    <header>
-      @let activeFieldTypeName = formEditorService.activeField()?.props?.['typeName'];
-      <div class="relative mb-12px flex justify-between items-center line-height-24px pr-12px">
-        {{ activeFieldTypeName || '选择组件后进行配置' }}
-      </div>
-      <mat-divider class="w-full"></mat-divider>
-    </header>
+    <aside class="flex flex-col h-full w-312px py-12px pl-12px relative">
+      <header>
+        @let activeFieldTypeName = formEditorService.activeField()?.props?.['typeName'];
+        <div class="relative mb-12px flex justify-between items-center line-height-24px pr-12px">
+          {{ activeFieldTypeName || '选择组件后进行配置' }}
+        </div>
+        <mat-divider class="w-full"></mat-divider>
+      </header>
 
-    <hs-formly-config
-      #FormlyConfig
-      class="w-full pt-10px!"
-      [model]="formEditorService.activeField()"
-      [options]="options"
-    >
-    </hs-formly-config>
-  </aside>
+      <hs-formly-config
+        #FormlyConfig
+        class="w-full pt-10px!"
+        [model]="formEditorService.activeField()"
+        [options]="options"
+      >
+      </hs-formly-config>
+    </aside>
+  </div>
 </content>

@@ -1,8 +1,8 @@
 export const IQUERY_MATCH_TYPES = ['all', 'like', 'prefix', 'suffix'] as const;
 export type IQueryMatchType = (typeof IQUERY_MATCH_TYPES)[number];
 export enum IWhetherStatus {
-  UNDELETED = 0,
-  DELETED = 1,
+  NO = 0,
+  YES = 1,
 }
 export interface IBaseData {
   id: string;

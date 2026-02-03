@@ -9,8 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { FormlyFormOptions } from '@ngx-formly/core';
-import { BaseDesignComponent } from '../base-design.component';
-import { IWidgetType, IWidgetTypeAbstract } from '@src/app/shared/models/widget.model';
+import { IWidgetType } from '@src/app/shared/models/widget.model';
+import { FormDesignToolbarComponent } from './form-design-toolbar/form-design-toolbar.component';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
 
 @Component({
@@ -25,20 +25,19 @@ import { WidgetEditorService } from '@src/app/core/services/widget-editor.servic
     MatIconModule,
     MatButtonModule,
     NgScrollbarModule,
+    FormDesignToolbarComponent,
   ],
   providers: [FormEditorService],
 })
-export class FormDesignComponent extends BaseDesignComponent implements OnInit {
+export class FormDesignComponent implements OnInit {
   workspaceViewport = viewChild<WorkspaceViewportComponent>('WorkspaceViewport');
   formlyConfig = viewChild<FormlyConfigEditorComponent>('FormlyConfig');
 
   constructor(
-    public formEditorService: FormEditorService,
-    public override widgetEditorService: WidgetEditorService,
     private route: ActivatedRoute,
-  ) {
-    super(formEditorService, widgetEditorService);
-  }
+    public formEditorService: FormEditorService,
+    public widgetEditorService: WidgetEditorService,
+  ) {}
 
   options: FormlyFormOptions = {
     formState: {

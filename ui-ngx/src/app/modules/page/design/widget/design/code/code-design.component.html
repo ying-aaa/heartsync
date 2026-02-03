@@ -2,7 +2,7 @@
   <header>
     <hs-code-toolbar
       [loadCustomComponent]="loadCustomComponent.bind(this)"
-      [saveWidgetInfo]="saveWidgetInfo.bind(this)"
+      [saveWidgetConfig]="saveWidgetConfig.bind(this)"
     ></hs-code-toolbar>
   </header>
 
@@ -18,31 +18,31 @@
           (dragEnd)="log('dragEnd', $event)"
         >
           @if (action.isPresentA) {
-            <as-split-area [visible]="action.isVisibleA">
-              <hs-json-object-editor
-                title="css"
-                [type]="'css'"
-                [(ngModel)]="widgetInfo().templateCss"
-              ></hs-json-object-editor>
-            </as-split-area>
+          <as-split-area [visible]="action.isVisibleA">
+            <hs-json-object-editor
+              title="css"
+              [type]="'css'"
+              [(ngModel)]="widgetInfo().templateCss"
+            ></hs-json-object-editor>
+          </as-split-area>
           }
           @if (action.isPresentB) {
-            <as-split-area [visible]="action.isVisibleB">
-              <hs-json-object-editor
-                title="html"
-                [type]="'html'"
-                [(ngModel)]="widgetInfo().templateHtml"
-              ></hs-json-object-editor>
-            </as-split-area>
+          <as-split-area [visible]="action.isVisibleB">
+            <hs-json-object-editor
+              title="html"
+              [type]="'html'"
+              [(ngModel)]="widgetInfo().templateHtml"
+            ></hs-json-object-editor>
+          </as-split-area>
           }
           @if (action.isPresentC) {
-            <as-split-area [visible]="action.isVisibleC">
-              <hs-json-object-editor
-                title="javascript"
-                [type]="'javascript'"
-                [(ngModel)]="widgetInfo().templateJs"
-              ></hs-json-object-editor>
-            </as-split-area>
+          <as-split-area [visible]="action.isVisibleC">
+            <hs-json-object-editor
+              title="javascript"
+              [type]="'javascript'"
+              [(ngModel)]="widgetInfo().templateJs"
+            ></hs-json-object-editor>
+          </as-split-area>
           }
         </as-split>
       </as-split-area>

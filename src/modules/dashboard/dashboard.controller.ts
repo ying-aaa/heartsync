@@ -8,8 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { HsDashboardService } from './dashboard.service';
-import { HsDashboardEntity } from 'src/database/entities/hs-dashboard.entity';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
+import { UpdateDashboardDto } from './dto/update-dashboard.dto';
 
 @Controller('dashboards')
 export class HsDashboardController {
@@ -31,10 +31,7 @@ export class HsDashboardController {
   }
 
   @Put(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateData: Partial<HsDashboardEntity>,
-  ) {
+  update(@Param('id') id: string, @Body() updateData: UpdateDashboardDto) {
     return this.dashboardService.update(id, updateData);
   }
 

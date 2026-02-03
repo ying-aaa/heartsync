@@ -14,6 +14,7 @@ import { HsWidgetEntity } from 'src/database/entities/hs-widget.entity';
 import { BaseWidgetDto } from './dto/base-widget.dto';
 import { IWidgetType } from '@heartsync/types';
 import { QueryWidgetDto } from './dto/query-widget.dto';
+import { UpdateWidgetDto } from './dto/update-widget.dto';
 
 @Controller('widgets')
 export class HsWidgetController {
@@ -37,8 +38,12 @@ export class HsWidgetController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDto: BaseWidgetDto) {
-    return this.widgetService.update(id, updateDto);
+  update(
+    @Param('id') id: string,
+    @Query('type') type: IWidgetType,
+    @Body() updateDto: UpdateWidgetDto,
+  ) {
+    return this.widgetService.update(id, type, updateDto);
   }
 
   @Delete(':id')

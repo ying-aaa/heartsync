@@ -1,165 +1,63 @@
-// create-dashboard.dto.ts
 import { Type } from 'class-transformer';
 import {
-  IsArray,
-  IsBoolean,
-  IsNotEmpty,
-  IsObject,
-  IsOptional,
   IsString,
-  IsNumber,
-  IsIn,
-  ValidateNested,
-  IsInt,
-  Min,
+  IsNotEmpty,
   IsEnum,
+  IsOptional,
+  IsObject,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { DashboardType } from 'src/database/entities/hs-dashboard.entity';
+import { IDashboardGridsterConfig, IDashboardType } from '@heartsync/types';
+import { GridsterConfigDto } from './gridster-config.dto';
 
-// 公共基础DTO
-class BaseDashboardDto {
-  @ApiProperty({ description: '仪表板标题' })
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
-  @ApiProperty({ required: false, description: '仪表板描述' })
-  @IsString()
-  @IsOptional()
-  description?: string;
-
-  @ApiProperty({ type: Object, description: '网格配置' })
-  @IsObject()
-  @IsOptional()
-  gridsterOption: Record<string, any>;
-
-  @ApiProperty({ type: Object, description: '布局配置' })
-  @IsObject()
-  @IsOptional()
-  layoutConfig: Record<string, any>;
-
-  @ApiProperty({ type: [Object], description: '部件列表' })
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => WidgetsDto)
-  @IsOptional()
-  widgets: WidgetsDto[];
-
-  @ApiProperty({ required: false, type: Object, description: '数据源配置' })
-  @IsObject()
-  @IsOptional()
-  dataSources?: Record<string, any>;
-
-  @ApiProperty({ required: false, type: Object, description: '访问控制配置' })
-  @IsObject()
-  @IsOptional()
-  accessControl?: Record<string, any>;
-
-  @IsString()
-  @IsNotEmpty()
-  appId: string;
-}
-
-// 创建DTO
-export class CreateDashboardDto extends BaseDashboardDto {
-  @ApiProperty({ required: false, default: true, description: '是否启用' })
-  @IsBoolean()
-  @IsOptional()
-  isActive?: boolean = true;
-
-  @IsString()
-  @IsOptional()
+/**
+ * 仪表板创建DTO - 新增仪表板接口入参
+ */
+export class CreateDashboardDto {
+  /**
+   * 仪表板节点ID（可选，默认空字符串）
+   */
+  @IsNotEmpty({ message: '节点id不能为空' })
+  @IsString({ message: '节点id必须为字符串' })
   nodeId: string;
 
-  @IsEnum(DashboardType)
-  @IsOptional()
-  type: DashboardType;
-}
-
-// 更新DTO
-export class UpdateDashboardDto extends BaseDashboardDto {
-  @ApiProperty({ description: '版本号' })
-  @IsInt()
-  @Min(1)
-  version: number;
-
-  @ApiProperty({ required: false, description: '是否启用' })
-  @IsBoolean()
-  @IsOptional()
-  isActive?: boolean;
-}
-
-// 部件DTO
-export class WidgetsDto {
-  @ApiProperty({ description: '部件实例ID' })
-  @IsString()
-  id: string;
-
-  @ApiProperty({ description: '部件定义ID' })
-  @IsString()
-  widget_id: string;
-
-  @ApiProperty({ description: '部件标题' })
-  @IsString()
+  /**
+   * 仪表板名称（必传，非空）
+   */
+  @IsString({ message: '仪表板名称必须为字符串' })
+  @IsNotEmpty({ message: '仪表板名称不能为空' })
   name: string;
 
-  @ApiProperty({ required: false, description: '部件描述' })
-  @IsString()
-  @IsOptional()
-  description?: string;
-
-  @ApiProperty({
-    enum: ['form', 'list', 'custom', 'cesium', 'detail'],
-    description: '部件类型',
+  /**
+   * 仪表板类型（必传，枚举值）
+   * 默认值：IDashboardType.GRIDSTER（与实体一致）
+   */
+  @IsEnum(IDashboardType, {
+    message: `仪表板类型必须为${Object.values(IDashboardType).join('/')}`,
   })
-  @IsIn(['form', 'list', 'custom', 'cesium', 'detail'])
-  type: 'form' | 'list' | 'custom' | 'cesium' | 'detail';
+  type: IDashboardType = IDashboardType.GRIDSTER;
 
-  @ApiProperty({ type: Object, required: false, description: '部件配置' })
-  @IsObject()
+  /**
+   * 关联的应用ID（必传，非空）
+   */
+  @IsString({ message: '关联应用ID必须为字符串' })
+  @IsNotEmpty({ message: '关联应用ID不能为空' })
+  appId: string;
+
+  /**
+   * 仪表板描述（可选，默认空字符串）
+   */
   @IsOptional()
-  config?: Record<string, any>;
+  @IsString({ message: '描述必须为字符串' })
+  description: string = '';
 
-  @ApiProperty({ description: '部件预览图URL' })
-  @IsString()
-  image: string;
-
-  @ApiProperty({ description: '占位列数' })
-  @IsInt()
-  @Min(1)
-  cols: number;
-
-  @ApiProperty({ description: '占位行数' })
-  @IsInt()
-  @Min(1)
-  rows: number;
-
-  @ApiProperty({ description: 'X轴位置' })
-  @IsNumber()
-  x: number;
-
-  @ApiProperty({ description: 'Y轴位置' })
-  @IsNumber()
-  y: number;
-
-  @ApiProperty({ description: '层级索引' })
-  @IsInt()
-  layerIndex: number;
-
-  // @ApiProperty({ description: '最大行数' })
-  // @IsInt()
-  // maxItemRows: number;
-
-  // @ApiProperty({ description: '最大列数' })
-  // @IsInt()
-  // maxItemCols: number;
-
-  // @ApiProperty({ description: '最小行数' })
-  // @IsInt()
-  // minItemRows: number;
-
-  // @ApiProperty({ description: '最小列数' })
-  // @IsInt()
-  // minItemCols: number;
+  /**
+   * 仪表板配置（可选，默认空对象）
+   */
+  @IsOptional()
+  @Type(() => GridsterConfigDto)
+  @IsObject({ message: '配置必须为对象' })
+  gridsterConfig: IDashboardGridsterConfig = {
+    gridsterOption: {},
+    gridsterWidget: [],
+  };
 }

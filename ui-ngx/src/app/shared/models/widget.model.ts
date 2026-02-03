@@ -112,7 +112,9 @@ export interface IWidgetConfig {
   formWidgetConfig?: IFormWidgetConfig;
 }
 
-export interface IWidgetTypeAbstract {
-  getJsonConfig: () => string;
-  saveWidgetConfig: () => void;
+export interface IWidgetToolbarConfig {
+  name: string;
+  icon: string;
+  action: () => void;
+  tooltip?: string;
 }

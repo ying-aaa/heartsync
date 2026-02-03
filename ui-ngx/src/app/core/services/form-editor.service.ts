@@ -2,17 +2,13 @@ import { effect, Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { deepClone, extractProperties, PickConfig } from '@src/app/core/utils';
-import {
-  IEditorFormlyField,
-  IFieldType,
-  IWidgetTypeAbstract,
-} from '@src/app/shared/models/widget.model';
+import { IEditorFormlyField, IFieldType } from '@src/app/shared/models/widget.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IFormSubTypes, IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 import { FormWidgetService } from '@src/app/core/http/form-widget.service';
+import { IFormWidgetConfig, IFormWidgetSubTypes } from '@heartsync/types';
 
 @Injectable()
-export class FormEditorService implements IWidgetTypeAbstract {
+export class FormEditorService {
   HS_DEFAULT_ID = 'workspace';
 
   widgetConfig = signal<IFormWidgetConfig>({} as IFormWidgetConfig);
@@ -44,7 +40,7 @@ export class FormEditorService implements IWidgetTypeAbstract {
             next: (widget: IFormWidgetConfig) => {
               this.widgetConfig.set(widget);
               const fieldConfig = widget.flatTypeField as IEditorFormlyField[];
-              if (widget.subType === IFormSubTypes.FLAT) {
+              if (widget.subType === IFormWidgetSubTypes.FLAT) {
                 // 获取时转换fieldGroup和fieldArray的配置，因为运行需要fieldArray， 开发需要fieldGroup
                 const fields = updateField(fieldConfig, (field) => {
                   field.fieldGroup = field.fieldArray.fieldGroup;

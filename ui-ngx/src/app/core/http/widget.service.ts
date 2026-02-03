@@ -48,12 +48,14 @@ export class WidgetService {
   }
 
   // 更新 Widget
-  updateWidget(id: string, updateDto: UpdateWidgetDto): Observable<any> {
-    return this.http.patch<any>(`${this.apiUrl}/${id}`, updateDto);
+  updateWidget(id: string, updateDto: UpdateWidgetDto, params: any): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/${id}`, updateDto, { params });
   }
 
   // 删除 Widget
-  removeWidget(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  removeWidget(id: string, type: IWidgetType): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`, {
+      params: { type },
+    });
   }
 }

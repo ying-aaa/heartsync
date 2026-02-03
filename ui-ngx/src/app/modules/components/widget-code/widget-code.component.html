@@ -1,17 +1,7 @@
-<div
-  class="wh-full relative"
-  hs-loading
-  [isLoading]="loadingStatus || !widgetInfo().id"
-  hs-fullscreen
-  [fullscreen]="fullscreen"
->
-  <button
-    mat-icon-button
-    (click)="fullscreen = !fullscreen"
-    class="absolute! right-12px top-12px"
-  >
-    @let fullscreenIcon = fullscreen ? 'fullscreen_exit' : 'fullscreen';
-    <mat-icon class="material-icons">{{ fullscreenIcon }}</mat-icon>
-  </button>
+<div class="wh-full relative">
+  @if(loadingStatus || !widgetInfo().id) {
+  <mat-spinner class="absolute-center"></mat-spinner>
+  }@else {
   <ng-container #dynamicComponentContainer></ng-container>
+  }
 </div>

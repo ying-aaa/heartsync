@@ -92,3 +92,8 @@ export interface ICodeWidgetConfig extends IWidgetBaseConfig, IBaseData {
 }
 
 export interface IListWidgetConfig extends IWidgetBaseConfig {}
+
+export type IWidgetTypesConfig =
+  | IFormWidgetConfig
+  | ICodeWidgetConfig
+  | IListWidgetConfig;

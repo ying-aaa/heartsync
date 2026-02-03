@@ -20,7 +20,7 @@ import { WidgetTitleBackComponent } from '../../toolbar/widget-title-back.compon
 })
 export class CodeToolbarComponent implements OnInit {
   @Input() loadCustomComponent = () => {};
-  @Input() saveWidgetInfo = () => {};
+  @Input() saveWidgetConfig = () => {};
 
   constructor(
     public widgetEditorService: WidgetEditorService,

@@ -74,9 +74,9 @@ export class HsCodeWidgetEntity
 
   @Column({
     name: 'resource_script',
-    type: 'simple-json',
+    type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'json',
     nullable: true,
-    default: [],
+    default: () => "'[]'",
     comment: '模板资源脚本',
   })
   resourceScript: Array<IResourceScript>;

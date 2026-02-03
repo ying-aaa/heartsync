@@ -1,5 +1,5 @@
 import { effect, Injectable, signal } from '@angular/core';
-import { IRadioConfig, IWidgetType, IWidgetTypeAbstract } from '@src/app/shared/models/public-api';
+import { IRadioConfig, IWidgetType } from '@src/app/shared/models/public-api';
 import { Router } from '@angular/router';
 import { WidgetService } from '../http/widget.service';
 import { FormEditorService } from './form-editor.service';
@@ -39,8 +39,6 @@ export class WidgetEditorService {
 
   widgetConfig = signal<any>({} as any);
 
-  widgetTypeService = signal<IWidgetTypeAbstract | null>(null);
-
   widgetType = signal<IWidgetType>(IWidgetType.FORM);
 
   constructor(
@@ -48,14 +46,10 @@ export class WidgetEditorService {
     private WidgetHttpService: WidgetService,
   ) {}
 
-  setWidgetTypeService(widgetTypeService: IWidgetTypeAbstract | null) {
-    this.widgetTypeService.set(widgetTypeService);
-  }
-
-  setWidgetId(widgetId: string | null) {
-    // if (widgetId === this.widgetId()) return;
+  setWidgetId(widgetId: string | null, load: boolean = false) {
     this.widgetId.set(widgetId);
-    widgetId && this.loadWidgetInfo();
+    if (widgetId === null) return this.widgetConfig.set({} as any);
+    load && this.loadWidgetInfo();
   }
 
   loadWidgetInfo() {

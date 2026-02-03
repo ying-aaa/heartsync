@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { HsWidgetEntity } from '../../../database/entities/hs-widget.entity';
 import { HsWidgetServiceFactory } from '../widget-service.factory';
 import { PageDto } from 'src/common/dtos/page.dto';
@@ -8,6 +8,7 @@ import { HsPaginationService } from 'src/common/services/pagination.service';
 import { BaseWidgetDto } from './dto/base-widget.dto';
 import { IWidgetType } from '@heartsync/types';
 import { QueryWidgetDto } from './dto/query-widget.dto';
+import { UpdateWidgetDto } from './dto/update-widget.dto';
 @Injectable()
 export class HsWidgetService {
   constructor(
@@ -19,12 +20,13 @@ export class HsWidgetService {
 
   async create(
     createDto: BaseWidgetDto,
+    manager?: EntityManager,
   ): Promise<HsWidgetEntity & { widgetTypeData: any }> {
     const { type } = createDto;
 
     const widgetService = this.widgetServiceFactory.getService(type);
 
-    const widgetTypeData = await widgetService.createWidget(createDto);
+    const widgetTypeData = await widgetService.createWidget(createDto, manager);
     return widgetTypeData;
   }
 
@@ -42,7 +44,7 @@ export class HsWidgetService {
     type: IWidgetType,
   ): Promise<HsWidgetEntity[]> {
     if (!type) {
-      throw new Error('请传入正确的小部件类型');
+      throw new BadRequestException('请传入正确的小部件类型');
     }
     return this.widgetRepository.find({
       where: { appId, type },
@@ -54,14 +56,18 @@ export class HsWidgetService {
     return widgetService.getWidgetById(id);
   }
 
-  async update(id: string, updateDto: BaseWidgetDto): Promise<HsWidgetEntity> {
-    const widget = await this.findOne(id, updateDto.type);
-    const updated = this.widgetRepository.merge(widget, updateDto);
-    return this.widgetRepository.save(updated);
+  async update(
+    id: string,
+    type: IWidgetType,
+    updateDto: UpdateWidgetDto,
+  ): Promise<HsWidgetEntity> {
+    const widgetService = this.widgetServiceFactory.getService(type);
+    await this.findOne(id, type);
+    return widgetService.updateWidget(id, updateDto);
   }
 
   async remove(id: string, type: IWidgetType): Promise<void> {
     const widgetService = this.widgetServiceFactory.getService(type);
-    await widgetService.deleteWidget(id);
+    return widgetService.deleteWidget(id);
   }
 }

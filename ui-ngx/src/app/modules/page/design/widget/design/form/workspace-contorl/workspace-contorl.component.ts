@@ -4,15 +4,11 @@ import { PresetComponentsComponent } from '@src/app/modules/page/common/preset-c
 import { WidgetOutlineComponent } from './widget-outline/widget-outline.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
-import {
-  flatWidgetTypesList,
-  WidgetEditorService,
-} from '@app/core/services/widget-editor.service';
+import { flatWidgetTypesList, WidgetEditorService } from '@app/core/services/widget-editor.service';
 import { MatButtonModule } from '@angular/material/button';
 import { FormEditorService } from '@app/core/services/form-editor.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { WidgetTitleBackComponent } from '../../toolbar/widget-title-back.component';
 
 @Component({
   selector: 'hs-workspace-contorl',
@@ -27,7 +23,6 @@ import { WidgetTitleBackComponent } from '../../toolbar/widget-title-back.compon
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    WidgetTitleBackComponent,
   ],
 })
 export class WorkspaceContorlComponent implements OnInit {

@@ -42,7 +42,7 @@ export class HsAppConfigService {
       appId,
       versionId,
       ...configs?.globalConfig,
-      isDeleted: IWhetherStatus.UNDELETED,
+      isDeleted: IWhetherStatus.NO,
     });
     const savedGlobal = await (manager
       ? manager.save(globalConfig)
@@ -53,7 +53,7 @@ export class HsAppConfigService {
       appId,
       versionId,
       ...configs?.menuConfig,
-      isDeleted: IWhetherStatus.UNDELETED,
+      isDeleted: IWhetherStatus.NO,
     });
     const savedMenu = await (manager
       ? manager.save(menuConfig)
@@ -64,7 +64,7 @@ export class HsAppConfigService {
       appId,
       versionId,
       ...configs?.headerConfig,
-      isDeleted: IWhetherStatus.UNDELETED,
+      isDeleted: IWhetherStatus.NO,
     });
     const savedHeader = await (manager
       ? manager.save(headerConfig)
@@ -91,20 +91,20 @@ export class HsAppConfigService {
     const manager = txManager || this.globalRepo.manager;
 
     const globalConfig = await manager.findOne(HsAppGlobalConfigEntity, {
-      where: { appId, versionId, isDeleted: IWhetherStatus.UNDELETED },
+      where: { appId, versionId, isDeleted: IWhetherStatus.NO },
     });
 
     const menuConfig = await manager.findOne<HsAppMenuConfigEntity>(
       this.menuRepo.metadata.target,
       {
-        where: { appId, versionId, isDeleted: IWhetherStatus.UNDELETED },
+        where: { appId, versionId, isDeleted: IWhetherStatus.NO },
       },
     );
 
     const headerConfig = await manager.findOne<HsAppHeaderConfigEntity>(
       this.headerRepo.metadata.target,
       {
-        where: { appId, versionId, isDeleted: IWhetherStatus.UNDELETED },
+        where: { appId, versionId, isDeleted: IWhetherStatus.NO },
       },
     );
 
@@ -132,7 +132,7 @@ export class HsAppConfigService {
     const updateLogic = async (manager: EntityManager) => {
       // 1. 原有更新逻辑不变
       const config = await manager.findOne(HsAppGlobalConfigEntity, {
-        where: { appId, versionId, isDeleted: IWhetherStatus.UNDELETED },
+        where: { appId, versionId, isDeleted: IWhetherStatus.NO },
       });
       if (!config) {
         throw new NotFoundException(`全局配置不存在`);

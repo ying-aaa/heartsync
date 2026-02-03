@@ -76,65 +76,6 @@ export class WidgetFolderComponent implements OnInit {
   widgetId = signal<string | null>(null);
   widgetType = this.widgetEditorService.widgetType;
 
-  treeConfig = signal<IFileTreeConfig>({
-    noDataText: '没有找到相关部件！',
-    noDataCreate: true,
-    noDataCreateText: '创建部件',
-    featureList: [
-      'createFile',
-      'rename',
-      'remove',
-      'copy',
-      'cut',
-      'paste',
-      // 'dnd',
-      'blank',
-      'search',
-    ],
-    deleteEvent: async (node, jsTree) => {
-      const { id } = node;
-      let next = false;
-      try {
-        const res = await firstValueFrom(this.widgetService.removeWidget(id));
-        if (res.statusCode === 200) next = true;
-        if (id === this.widgetId) this.updateWidgetId(null);
-      } catch (error) {
-        next = false;
-      }
-      return next;
-    },
-    selectEvent: (node, jsTree) => {
-      const { type, id } = node || {};
-      if (type === 'folder') return;
-      if (id) {
-        this.updateWidgetId(id);
-      }
-    },
-    createNodeSuccess: (node, jsTree) => {
-      const { id: nodeId, text: name } = node;
-      this.widgetService
-        .createWidget({
-          nodeId,
-          name,
-          appId: this.appId!,
-          type: this.widgetType(),
-        })
-        .subscribe({
-          next: () => this.updateWidgetId(nodeId),
-        });
-    },
-    renameNodeSuccess: (node, jsTree) => {
-      const { id: nodeId, text: name } = node;
-      this.widgetService
-        .updateWidget(nodeId, {
-          name,
-        })
-        .subscribe({
-          next: () => this.updateWidgetId(nodeId),
-        });
-    },
-  });
-
   widgetTypesList = widgetTypesList;
 
   widgetTypeIcons = widgetTypeIcons;
@@ -197,12 +138,15 @@ export class WidgetFolderComponent implements OnInit {
       .pipe(
         tap((_) => this.isLoading.set(true)),
         throttleTime(500, undefined, { leading: true, trailing: false }),
-        switchMap(() => this.widgetService.findAllWidget(this.pageLink)),
+        switchMap(() =>
+          this.widgetService.findAllWidget(this.pageLink).pipe(
+            catchError((err) => {
+              this.isLoading.set(false);
+              return [{ data: [] }];
+            }),
+          ),
+        ),
         takeUntil(this.destroy$),
-        catchError((err) => {
-          this.isLoading.set(false);
-          return throwError(() => err);
-        }),
       )
       .subscribe((res) => {
         this.isLoading.set(false);
@@ -239,7 +183,7 @@ export class WidgetFolderComponent implements OnInit {
     event && event.preventDefault();
     if (widgetId === this.widgetId()) return;
     this.widgetId.set(widgetId);
-    this.widgetEditorService.setWidgetId(widgetId);
+    this.widgetEditorService.setWidgetId(widgetId, true);
   }
 
   operateTargetEditor(widget: any) {
@@ -293,7 +237,7 @@ export class WidgetFolderComponent implements OnInit {
     if (oldName === newName) return this.cancelEditWidget();
     const widgetId = this.editingWidget()?.id;
     this.widgetService
-      .updateWidget(widgetId, { name: newName })
+      .updateWidget(widgetId, { name: newName }, { type: this.widgetType() })
       .pipe(finalize(() => this.cancelEditWidget()))
       .subscribe({
         next: (res) => {
@@ -307,12 +251,13 @@ export class WidgetFolderComponent implements OnInit {
   }
 
   removeWidget(widgetId: string) {
-    this.widgetService.removeWidget(widgetId).subscribe({
+    this.widgetService.removeWidget(widgetId, this.widgetType()).subscribe({
       next: (res) => {
         if (res.statusCode === 200) {
           this.widgetList.update((widgets) =>
             widgets.filter((widget: any) => widget.id !== widgetId),
           );
+          this.updateWidgetId(null);
           this.toastrService.success('删除成功');
         }
       },

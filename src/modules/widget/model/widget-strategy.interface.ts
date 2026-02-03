@@ -1,12 +1,15 @@
 import { IWidgetType } from '@heartsync/types';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 export interface WidgetStrategy {
   readonly type: IWidgetType;
 
   widgetsRepository: Repository<any>;
 
-  createWidget(config: Record<string, any>): Promise<any>;
+  createWidget(
+    config: Record<string, any>,
+    manager?: EntityManager,
+  ): Promise<any>;
 
   updateWidget(widgetId: string, config: Record<string, any>): Promise<any>;
 

@@ -13,7 +13,7 @@ import { SplitAreaComponent, SplitComponent } from 'angular-split';
 import { CodeToolbarComponent } from './code-toolbar/code-toolbar.component';
 import { FormlyRunModule } from '@src/app/modules/formly/formly-run.module';
 import { WidgetCodeComponent } from '@src/app/modules/components/widget-code/widget-code.component';
-import { ComponentPortal, PortalModule } from '@angular/cdk/portal';
+import { PortalModule } from '@angular/cdk/portal';
 import { ICodeWidgetConfig } from '@src/app/shared/models/code-widget.model';
 import { CodeWidgetService } from '@src/app/core/http/code-widget.service';
 import { ActivatedRoute } from '@angular/router';
@@ -51,7 +51,7 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
     if (event.ctrlKey && event.key.toLowerCase() === 's') {
       event.preventDefault();
       event.preventDefault();
-      this.saveWidgetInfo();
+      this.saveWidgetConfig();
     }
   }
 
@@ -182,7 +182,7 @@ export class CodeDesignComponent implements OnInit, AfterViewInit {
     });
   }
 
-  saveWidgetInfo() {
+  saveWidgetConfig() {
     this.codeWidgetService.updateCodeWidget(this.widgetInfo()).subscribe({
       next: () => {
         this.WidgetCode.loadResourceScript();

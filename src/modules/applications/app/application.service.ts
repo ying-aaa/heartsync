@@ -47,7 +47,7 @@ export class HsApplicationService {
       }
       const application = await manager.create(HsApplicationEntity, {
         ...dto,
-        isDeleted: IWhetherStatus.UNDELETED,
+        isDeleted: IWhetherStatus.NO,
       });
       const savedApp = await manager.save(application);
 
@@ -147,7 +147,7 @@ export class HsApplicationService {
 
     // const pageResult = await this.paginationService.paginate(this.appRepo, {
     //   ...queryDto,
-    //   isDeleted: IWhetherStatus.UNDELETED,
+    //   isDeleted: IWhetherStatus.NO,
     // } as QueryApplicationDto);
 
     // // return pageResult;
@@ -265,11 +265,11 @@ export class HsApplicationService {
   async remove(appId: string): Promise<void> {
     const app = await this.findOne(appId);
 
-    if (app.isDeleted === IWhetherStatus.DELETED) {
+    if (app.isDeleted === IWhetherStatus.YES) {
       throw new BadRequestException(`应用${appId}已删除`);
     }
 
-    await this.appRepo.update(appId, { isDeleted: IWhetherStatus.DELETED });
+    await this.appRepo.update(appId, { isDeleted: IWhetherStatus.YES });
 
     // （根据业务需求选择是否级联删除）
   }
@@ -279,7 +279,7 @@ export class HsApplicationService {
    */
   async hasData(condition: { directoryId: string }): Promise<boolean> {
     const count = await this.appRepo.count({
-      where: { ...condition, isDeleted: IWhetherStatus.UNDELETED },
+      where: { ...condition, isDeleted: IWhetherStatus.NO },
     });
     return count > 0;
   }
@@ -289,7 +289,7 @@ export class HsApplicationService {
    */
   async findOne(appId: string): Promise<HsApplicationEntity> {
     const app = await this.appRepo.findOne({
-      where: { id: appId, isDeleted: IWhetherStatus.UNDELETED },
+      where: { id: appId, isDeleted: IWhetherStatus.NO },
     });
     if (!app) {
       throw new NotFoundException(`应用ID${appId}不存在或已删除`);

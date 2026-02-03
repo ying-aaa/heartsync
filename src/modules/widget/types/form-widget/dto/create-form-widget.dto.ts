@@ -17,7 +17,7 @@ export class CreateFormWidgetDto extends BaseWidgetDto {
   @IsOptional()
   @IsArray({ message: '扁平化表单字段必须为数组' })
   @Type(() => Object)
-  flatField?: any[];
+  flatTypeField?: any[];
 
   @IsOptional()
   @IsArray({ message: '画布类型表单字段必须为数组' })

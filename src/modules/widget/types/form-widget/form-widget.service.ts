@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { HsFormWidgetEntity } from '../../../../database/entities/hs-form-widget.entity'; // 确保实体类名已改为 HsFormWidgetEntity
 import { IWidgetType } from '@heartsync/types';
 import { CreateFormWidgetDto } from './dto/create-form-widget.dto';
@@ -18,9 +18,12 @@ export class HsFormWidgetsService implements WidgetStrategy {
 
   async createWidget(
     createFormWidgetDto: CreateFormWidgetDto,
+    manager?: EntityManager,
   ): Promise<HsFormWidgetEntity> {
     const formWidget = this.widgetsRepository.create(createFormWidgetDto);
-    return await this.widgetsRepository.save(formWidget);
+    return await (manager
+      ? manager.save(formWidget)
+      : this.widgetsRepository.save(formWidget));
   }
 
   async getAllFormWidgets(): Promise<HsFormWidgetEntity[]> {
@@ -28,7 +31,11 @@ export class HsFormWidgetsService implements WidgetStrategy {
   }
 
   async getWidgetById(id: string): Promise<HsFormWidgetEntity> {
-    return await this.widgetsRepository.findOneBy({ id });
+    const widget = await this.widgetsRepository.findOneBy({ id });
+    if (!widget) {
+      throw new BadRequestException('部件不存在');
+    }
+    return widget;
   }
 
   // async getFormWidgetByWidgetId(widgetId: string): Promise<HsFormWidgetEntity> {
@@ -44,6 +51,7 @@ export class HsFormWidgetsService implements WidgetStrategy {
   }
 
   async deleteWidget(id: string): Promise<void> {
+    await this.getWidgetById(id);
     await this.widgetsRepository.delete({ id });
   }
 }

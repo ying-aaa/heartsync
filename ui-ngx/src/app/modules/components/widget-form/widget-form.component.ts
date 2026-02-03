@@ -4,9 +4,9 @@ import { IEditorFormlyField } from '@src/app/shared/models/public-api';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { FormWidgetService } from '@src/app/core/http/form-widget.service';
-import { IFormWidgetConfig } from '@src/app/shared/models/form-widget.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common'; // 新增：用于*ngIf等指令
+import { IFormWidgetConfig } from '@heartsync/types';
 
 @Component({
   selector: 'hs-widget-form',

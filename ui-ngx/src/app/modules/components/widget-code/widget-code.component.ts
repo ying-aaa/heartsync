@@ -16,17 +16,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormlyModule } from '@ngx-formly/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { FullscreenDirective } from '@src/app/shared/directive/fullscreen.directive';
 import { ICodeWidgetConfig } from '@src/app/shared/models/code-widget.model';
 import { ActivatedRoute } from '@angular/router';
 import { CodeWidgetService } from '@src/app/core/http/code-widget.service';
 import { HsLoadingModule } from '@src/app/shared/directive/loading/loading.module';
 import { CommonModule } from '@angular/common';
-import { IWidgetConfig } from '@src/app/shared/models/widget.model';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'hs-widget-code',
   templateUrl: './widget-code.component.html',
-  imports: [HsLoadingModule, FullscreenDirective, MatIconModule, MatButtonModule],
+  imports: [HsLoadingModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule],
 })
 export class WidgetCodeComponent implements OnInit {
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef })

@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { HsCodeWidgetEntity } from '../../../../database/entities/hs-code-widget.entity';
 import { WidgetStrategy } from '../../model/widget-strategy.interface';
 import { IWidgetType } from '@heartsync/types';
+import { CreateCodeWidgetDto } from './dto/create-code-widget.dto';
 
 @Injectable()
 export class HsCodeWidgetsService implements WidgetStrategy {
@@ -14,9 +15,14 @@ export class HsCodeWidgetsService implements WidgetStrategy {
     public widgetsRepository: Repository<HsCodeWidgetEntity>,
   ) {}
 
-  async createWidget(createHsCodeWidgetDto: any): Promise<HsCodeWidgetEntity> {
-    const hsCodeWidget = this.widgetsRepository.create(createHsCodeWidgetDto);
-    return await this.widgetsRepository.save(hsCodeWidget as any);
+  async createWidget(
+    createHsCodeWidgetDto: CreateCodeWidgetDto,
+    manager?: EntityManager,
+  ): Promise<HsCodeWidgetEntity> {
+    const codeWidget = this.widgetsRepository.create(createHsCodeWidgetDto);
+    return await (manager
+      ? manager.save(codeWidget)
+      : this.widgetsRepository.save(codeWidget));
   }
 
   async getAllHsCodeWidgets(): Promise<HsCodeWidgetEntity[]> {
@@ -24,7 +30,11 @@ export class HsCodeWidgetsService implements WidgetStrategy {
   }
 
   async getWidgetById(id: string): Promise<HsCodeWidgetEntity> {
-    return await this.widgetsRepository.findOneBy({ id });
+    const widget = await this.widgetsRepository.findOneBy({ id });
+    if (!widget) {
+      throw new BadRequestException('部件不存在');
+    }
+    return widget;
   }
 
   async updateWidget(
@@ -36,6 +46,7 @@ export class HsCodeWidgetsService implements WidgetStrategy {
   }
 
   async deleteWidget(id: string): Promise<void> {
+    await this.getWidgetById(id);
     await this.widgetsRepository.delete({ id });
   }
 }

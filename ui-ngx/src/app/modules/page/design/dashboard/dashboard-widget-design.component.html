@@ -1,5 +1,8 @@
 @if(!widget().isNew) {
-<hs-widget-container [widgetId]="widget().widgetId!"></hs-widget-container>
+<hs-widget-container
+  [widgetId]="widget().widgetId!"
+  [widgetType]="widget().type"
+></hs-widget-container>
 }@else{
 <div class="wh-full flex-center">待保存</div>
 }
