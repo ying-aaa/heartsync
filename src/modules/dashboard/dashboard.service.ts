@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HsDashboardEntity } from 'src/database/entities/hs-dashboard.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
 import { HsFileTreeService } from '../file-tree/file-tree.service';
 import { HsWidgetService } from '../widget/widget/widget.service';
@@ -9,7 +9,10 @@ import {
   IDashboardConfig,
   IDashboardWidgetConfig,
   IWhetherStatus,
+  IWidgetContext,
+  IWidgetTypesConfig,
 } from '@heartsync/types';
+import { HsWidgetEntity } from 'src/database/entities/hs-widget.entity';
 @Injectable()
 export class HsDashboardService {
   constructor(
@@ -22,12 +25,11 @@ export class HsDashboardService {
 
   async create(
     createDashboardDto: CreateDashboardDto,
-  ): Promise<HsDashboardEntity> {
+  ): Promise<IDashboardConfig> {
     const data = {
       ...createDashboardDto,
     };
-    const { nodeId, gridsterConfig } = createDashboardDto;
-    const { gridsterWidget } = gridsterConfig;
+    const nodeId = createDashboardDto.nodeId;
 
     if (nodeId) {
       const nodeData = await this.fileTreeService.getNodeById(nodeId);
@@ -36,12 +38,13 @@ export class HsDashboardService {
       }
     }
 
-    Reflect.deleteProperty(data, 'nodeId');
+    const gridsterConfig = createDashboardDto.gridsterConfig;
+    const { gridsterWidgets } = gridsterConfig;
 
-    await this.dataSource.transaction(async (manager) => {
+    return this.dataSource.transaction(async (manager) => {
       const dashboard = manager.create(HsDashboardEntity, data);
       await manager.save(dashboard);
-      for (const widget of gridsterWidget) {
+      for (const widget of gridsterWidgets) {
         if (widget.isNew === IWhetherStatus.YES) {
           await this.widgetService.create(
             {
@@ -62,19 +65,61 @@ export class HsDashboardService {
   async update(
     id: string,
     updateData: Partial<HsDashboardEntity>,
-  ): Promise<HsDashboardEntity> {
-    await this.dashboardRepository.update(id, {
-      ...updateData,
+  ): Promise<IDashboardConfig> {
+    const { gridsterConfig, name } = updateData;
+    const { gridsterWidgets } = gridsterConfig;
+    return this.dashboardRepository.manager.transaction(async (manager) => {
+      for (let i = 0; i < gridsterWidgets.length; i++) {
+        const widget = gridsterWidgets[i];
+        if (widget.isNew === IWhetherStatus.YES) {
+          const widgetData = await this.widgetService.create(
+            {
+              name: widget.name || '【仪表板】' + name + '部件' + i,
+              type: widget.type,
+              appId: updateData.appId,
+            },
+            manager,
+          );
+          widget.widgetId = widgetData.id;
+        }
+        Reflect.deleteProperty(widget, 'isNew');
+      }
+      await manager.update(this.dashboardRepository.metadata.target, id, {
+        ...updateData,
+      });
+
+      return this.findById(id, manager);
     });
-    return this.dashboardRepository.findOneBy({ id });
   }
 
-  async findById(id: string): Promise<IDashboardConfig> {
-    const dashboard = this.dashboardRepository.findOneBy({ id });
-    const gridsterWidget = (await dashboard).gridsterConfig.gridsterWidget;
-    const widgets: Record<string, IDashboardWidgetConfig> = {};
-    for (const widget of gridsterWidget) {
-      widgets[widget.id] = widget;
+  async findById(
+    id: string,
+    manager?: EntityManager,
+  ): Promise<IDashboardConfig> {
+    const findLogic = async (manager) => {
+      const dashboard = await manager.findOne(HsDashboardEntity, {
+        where: { id },
+      });
+      const gridsterWidgets = dashboard.gridsterConfig.gridsterWidgets;
+      const widgets: IWidgetContext = {} as IWidgetContext;
+      for (const widget of gridsterWidgets) {
+        widgets[widget.widgetId] = await this.widgetService.findOne(
+          widget.widgetId,
+          widget.type,
+          manager,
+        );
+      }
+      return {
+        ...dashboard,
+        widgets,
+      };
+    };
+    if (manager) {
+      return findLogic(manager);
+    } else {
+      return this.dashboardRepository.manager.transaction(async (manager) => {
+        return findLogic(manager);
+      });
     }
   }
 

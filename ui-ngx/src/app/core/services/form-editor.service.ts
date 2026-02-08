@@ -40,7 +40,7 @@ export class FormEditorService {
             next: (widget: IFormWidgetConfig) => {
               this.widgetConfig.set(widget);
               const fieldConfig = widget.flatTypeField as IEditorFormlyField[];
-              if (widget.subType === IFormWidgetSubTypes.FLAT) {
+              if (widget.subType === 'flat') {
                 // 获取时转换fieldGroup和fieldArray的配置，因为运行需要fieldArray， 开发需要fieldGroup
                 const fields = updateField(fieldConfig, (field) => {
                   field.fieldGroup = field.fieldArray.fieldGroup;

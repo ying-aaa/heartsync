@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { IWidgetType } from '@src/app/shared/models/widget.model';
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { IFileData } from '@src/app/shared/models/common-component';
-import { IWhetherStatus } from '@heartsync/types';
+import { IDashboardConfig, IWhetherStatus } from '@heartsync/types';
 
 export enum DashboardType {}
 
@@ -50,36 +50,39 @@ export class DashboardService {
   constructor(private http: HttpClient) {}
 
   // 获取单个仪表盘
-  getDashboard(id: string): Observable<IDashboardContext> {
-    return this.http.get<IDashboardContext>(`${this.apiUrl}/${id}`);
+  getDashboard(id: string): Observable<IDashboardConfig> {
+    return this.http.get<IDashboardConfig>(`${this.apiUrl}/${id}`);
   }
 
   // 获取所有仪表盘
-  getAllDashboards(): Observable<IDashboardContext[]> {
-    return this.http.get<IDashboardContext[]>(this.apiUrl);
+  getAllDashboards(): Observable<IDashboardConfig[]> {
+    return this.http.get<IDashboardConfig[]>(this.apiUrl);
   }
 
   // 创建仪表盘
-  createDashboard(data: IDashboardContext): Observable<any> {
-    data.gridsterOption = {
-      gridType: GridType.Fit,
-      outerMargin: true,
-      margin: 10,
-      displayGrid: DisplayGrid.OnDragAndResize,
-      enableOccupiedCellDrop: true,
-      minCols: 1,
-      minRows: 1,
-      backgroundColor: 'transparent',
-      backgroundImageFileData: [],
-      backgroundSize: 'cover',
-      // backgroundPosition: 'center',
+  createDashboard(data: IDashboardConfig): Observable<any> {
+    data.gridsterConfig = {
+      gridsterOption: {
+        gridType: GridType.Fit,
+        outerMargin: true,
+        margin: 10,
+        displayGrid: DisplayGrid.OnDragAndResize,
+        enableOccupiedCellDrop: true,
+        minCols: 1,
+        minRows: 1,
+        backgroundColor: 'transparent',
+        backgroundImageFileData: [],
+        backgroundSize: 'cover',
+        // backgroundPosition: 'center',
+      },
+      gridsterWidgets: [],
     };
     return this.http.post(this.apiUrl, data);
   }
 
   // 更新仪表盘
-  updateDashboard(id: string, data: IDashboardContext): Observable<IDashboardContext> {
-    return this.http.put<IDashboardContext>(`${this.apiUrl}/${id}`, data);
+  updateDashboard(id: string, data: IDashboardConfig): Observable<IDashboardConfig> {
+    return this.http.put<IDashboardConfig>(`${this.apiUrl}/${id}`, data);
   }
 
   // 删除仪表盘

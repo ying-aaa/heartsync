@@ -84,7 +84,7 @@ export class WidgetFormComponent implements OnInit {
 
     if (!config.flatTypeField) {
       this.errorState.set('部件加载失败');
-      console.error("外部传入的 widgetConfig 缺少 flatTypeField 字段，无法渲染表单");
+      console.error('外部传入的 widgetConfig 缺少 flatTypeField 字段，无法渲染表单');
       return;
     }
 

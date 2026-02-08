@@ -30,12 +30,26 @@ export class HsFormWidgetsService implements WidgetStrategy {
     return await this.widgetsRepository.find();
   }
 
-  async getWidgetById(id: string): Promise<HsFormWidgetEntity> {
-    const widget = await this.widgetsRepository.findOneBy({ id });
-    if (!widget) {
-      throw new BadRequestException('部件不存在');
+  async getWidgetById(
+    id: string,
+    manager?: EntityManager,
+  ): Promise<HsFormWidgetEntity> {
+    const findLogic = async (manager: EntityManager) => {
+      const widget = await manager.findOne(HsFormWidgetEntity, {
+        where: { id },
+      });
+      if (!widget) {
+        throw new BadRequestException('部件不存在');
+      }
+      return widget;
+    };
+    if (manager) {
+      return findLogic(manager);
+    } else {
+      return this.widgetsRepository.manager.transaction(async (manager) => {
+        return findLogic(manager);
+      });
     }
-    return widget;
   }
 
   // async getFormWidgetByWidgetId(widgetId: string): Promise<HsFormWidgetEntity> {

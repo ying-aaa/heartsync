@@ -58,6 +58,6 @@ export class CreateDashboardDto {
   @IsObject({ message: '配置必须为对象' })
   gridsterConfig: IDashboardGridsterConfig = {
     gridsterOption: {},
-    gridsterWidget: [],
+    gridsterWidgets: [],
   };
 }

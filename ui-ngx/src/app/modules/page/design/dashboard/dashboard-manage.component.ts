@@ -16,6 +16,7 @@ import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.
 import { MediaBreakpoints } from '@src/app/shared/models/constants';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
+import { IDashboardConfig, IDashboardType } from '@heartsync/types';
 
 @Component({
   selector: 'hs-dashboard-manage',
@@ -80,7 +81,7 @@ export class DashboardManageComponent implements OnInit {
       const { type, id, text: name } = node || {};
       if (type === 'folder') return;
       if (id) {
-        this.dashboardService.updateDashboard(id, { name }).subscribe({
+        this.dashboardService.updateDashboard(id, { name } as IDashboardConfig).subscribe({
           next: () => {},
         });
       }
@@ -94,7 +95,7 @@ export class DashboardManageComponent implements OnInit {
           name,
           appId: this.appId!,
           type: 'gridster',
-        })
+        } as IDashboardConfig)
         .subscribe({
           next: () => {
             this.updateDashboardId(nodeId);

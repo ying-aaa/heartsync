@@ -1,10 +1,6 @@
 @let backgroundImageUrl = gridsterOption()['backgroundImageFileData']?.[0]?.url;
 
-<content
-  class="wh-full"
-  hs-loading
-  [isLoading]="loadingStatus()"
->
+<content class="wh-full" hs-loading [isLoading]="loadingStatus()">
   <div
     class="wh-full relative"
     [style.backgroundColor]="gridsterOption()['backgroundColor']"
@@ -16,47 +12,39 @@
       'background-attachment': 'scroll',
     }"
   >
-    @if (!widgets().length && !loadingStatus()) {
-    <div class="wh-full flex-center text-22px absolute top-0 left-0">
-      <span>未配置部件</span>
-    </div>
+    @if (!gridsterWidgets().length && !loadingStatus()) {
+      <div class="wh-full flex-center text-22px absolute top-0 left-0">
+        <span>未配置部件</span>
+      </div>
     }
 
     <!-- @if (gridsterOption().gridType) { -->
-    <gridster
-      [options]="gridsterOption()"
-      [class.overflow-hidden!]="isMobile() && isRuntime()"
-    >
-      @for (item of widgets(); track item) {
-      <gridster-item
-        #gridsterItem
-        [item]="item"
-        [class.select-gridster-item]="item.id === selectWidgetId()"
-        (click)="selectGridster(item)"
-      >
-        <!-- 内容 -->
-        <div
-          id="#containter"
-          class="wh-full"
+    <gridster [options]="gridsterOption()" [class.overflow-hidden!]="isMobile() && isRuntime()">
+      @for (item of gridsterWidgets(); track item.id) {
+        <gridster-item
+          #gridsterItem
+          [item]="item"
+          [class.select-gridster-item]="item.id === selectWidgetId()"
+          (click)="selectGridster(item)"
         >
-          <hs-dashboard-widget-design
-            [gridsterItem]="gridsterItem"
-            [widget]="item"
-            [isRuntime]="isRuntime()"
-            [isDragging]="isDragging()"
-          ></hs-dashboard-widget-design>
-        </div>
-      </gridster-item>
+          <!-- 内容 -->
+          <div id="#containter" class="wh-full">
+            <hs-dashboard-widget-design
+              [gridsterItem]="gridsterItem"
+              [gridsterWidgets]="item"
+              [widget]="widgets()[item.widgetId]"
+              [isRuntime]="isRuntime()"
+              [isDragging]="isDragging()"
+            ></hs-dashboard-widget-design>
+          </div>
+        </gridster-item>
       }
     </gridster>
     <!-- } -->
   </div>
 </content>
 
-<ng-template
-  #InnerMoreVert
-  let-widgetData="widgetData"
->
+<ng-template #InnerMoreVert let-widgetData="widgetData">
   <style>
     #hs-context-menu {
       background-color: var(--base-bg-color);
@@ -76,28 +64,23 @@
     class="absolute z-10 min-w-[180px] overflow-auto rounded-lg border border-slate-200 p-1.5 shadow-lg shadow-sm focus:outline-none"
   >
     @for (menu of gridsterItemContextMenuArr(); track $index) {
-    <li
-      cdkMenuItem
-      role="menuitem"
-      (click)="menu.action($event, widgetData)"
-      class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
-    >
-      @if (menu.matIcon) {
-      <mat-icon class="color-#2c7eac w-20px! h-20px! text-20px">{{ menu.icon }}</mat-icon>
-      } @else {
-      <hs-svg
-        [name]="menu.icon"
-        width="16px"
-        height="16px"
-        containerClass="p-2px"
-      ></hs-svg>
-      }
+      <li
+        cdkMenuItem
+        role="menuitem"
+        (click)="menu.action($event, widgetData)"
+        class="cursor-pointer flex w-full text-sm items-center rounded-md p-8px transition-all"
+      >
+        @if (menu.matIcon) {
+          <mat-icon class="color-#2c7eac w-20px! h-20px! text-20px">{{ menu.icon }}</mat-icon>
+        } @else {
+          <hs-svg [name]="menu.icon" width="16px" height="16px" containerClass="p-2px"></hs-svg>
+        }
 
-      <p class="font-medium ml-2">{{ menu.label }}</p>
-    </li>
-    @if ($index !== gridsterItemContextMenuArr().length - 1) {
-    <mat-divider class="my-3px!"></mat-divider>
-    }
+        <p class="font-medium ml-2">{{ menu.label }}</p>
+      </li>
+      @if ($index !== gridsterItemContextMenuArr().length - 1) {
+        <mat-divider class="my-3px!"></mat-divider>
+      }
     }
   </ul>
 </ng-template>

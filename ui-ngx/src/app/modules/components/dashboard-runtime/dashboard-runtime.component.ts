@@ -13,6 +13,7 @@ import {
 } from 'angular-gridster2';
 import { WidgetContainerComponent } from '../widget-container/widget-container.component';
 import { SystemService } from '@src/app/core/services/system.service';
+import { IDashboardConfig } from '@heartsync/types';
 
 @Component({
   selector: 'hs-dashboard-runtime',
@@ -28,10 +29,10 @@ export class DashboardRuntimeComponent implements OnInit {
 
   dashboardId = input<string | null>(null);
 
-  private dashboardConfig = signal<IDashboardContext>({} as IDashboardContext);
+  private dashboardConfig = signal<IDashboardConfig>({} as IDashboardConfig);
 
   gridsterOption = computed<GridsterConfig>(() => {
-    const gridsterOption = this.dashboardConfig().gridsterOption || {};
+    const gridsterOption = this.dashboardConfig().gridsterConfig.gridsterOption || {};
     if (this.isMobile() && gridsterOption?.gridType === GridType.Fit) {
       gridsterOption.gridType = GridType.Fixed;
     }
@@ -57,7 +58,9 @@ export class DashboardRuntimeComponent implements OnInit {
     return options;
   });
 
-  widgets = computed<Array<IDashboardWidgetContext>>(() => this.dashboardConfig().widgets || []);
+  gridsterWidgets = computed<Array<IDashboardWidgetContext>>(
+    () => this.dashboardConfig().gridsterConfig.gridsterWidgets || [],
+  );
 
   isMobile = computed(() => this.systenService.isMobile());
 
@@ -72,7 +75,7 @@ export class DashboardRuntimeComponent implements OnInit {
       if (dashboardId) {
         this.loadGridsterOption(dashboardId);
       } else {
-        this.dashboardConfig.set({} as IDashboardContext);
+        this.dashboardConfig.set({} as IDashboardConfig);
       }
     });
   }
@@ -83,7 +86,7 @@ export class DashboardRuntimeComponent implements OnInit {
     let rowHeight = null;
     if (gridsterHeight) {
       let totalRows = 0;
-      for (const widget of this.widgets()) {
+      for (const widget of this.gridsterWidgets()) {
         totalRows += widget.rows;
       }
       // 核心公式：行高 = (容器高度 - 间距总占用) / 总行数

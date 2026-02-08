@@ -29,12 +29,26 @@ export class HsCodeWidgetsService implements WidgetStrategy {
     return await this.widgetsRepository.find();
   }
 
-  async getWidgetById(id: string): Promise<HsCodeWidgetEntity> {
-    const widget = await this.widgetsRepository.findOneBy({ id });
-    if (!widget) {
-      throw new BadRequestException('部件不存在');
+  async getWidgetById(
+    id: string,
+    manager?: EntityManager,
+  ): Promise<HsCodeWidgetEntity> {
+    const findLogic = async (manager: EntityManager) => {
+      const widget = await manager.findOne(HsCodeWidgetEntity, {
+        where: { id },
+      });
+      if (!widget) {
+        throw new BadRequestException('部件不存在');
+      }
+      return widget;
+    };
+    if (manager) {
+      return findLogic(manager);
+    } else {
+      return this.widgetsRepository.manager.transaction(async (manager) => {
+        return findLogic(manager);
+      });
     }
-    return widget;
   }
 
   async updateWidget(

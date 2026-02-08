@@ -1,119 +1,92 @@
-@if(!widget().isNew) {
-<hs-widget-container
-  [widgetId]="widget().widgetId!"
-  [widgetType]="widget().type"
-></hs-widget-container>
-}@else{
-<div class="wh-full flex-center">待保存</div>
+@if (!gridsterWidgets().isNew) {
+  <hs-widget-container
+    [widgetId]="gridsterWidgets().widgetId!"
+    [widgetType]="gridsterWidgets().type"
+  ></hs-widget-container>
+} @else {
+  <div class="wh-full flex-center">待保存</div>
 }
 @if (!isRuntime()) {
-<div
-  cdkOverlayOrigin
-  #trigger="cdkOverlayOrigin"
-  class="absolute wh-full top-0 left-0 z-9 select-shade cursor-pointer"
-  (mouseover)="handleTriggerMouseOver()"
-  (mouseout)="handleTriggerMouseOut()"
->
-</div>
-
-<ng-template
-  cdkConnectedOverlay
-  [cdkConnectedOverlayOrigin]="trigger"
-  [cdkConnectedOverlayOpen]="!isDragging() && (isActive() || isHover())"
-  [cdkConnectedOverlayPositions]="[
-    { 
-      originX: 'end', 
-      originY: 'top',    
-      overlayX: 'end', 
-      overlayY: 'bottom' 
-    }
-  ]"
-  [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.offsetWidth"
->
   <div
-    #toolbarContainer
-    class="w-full pb-16px relative top-16px z-99999"
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+    class="absolute wh-full top-0 left-0 z-9 select-shade cursor-pointer"
     (mouseover)="handleTriggerMouseOver()"
     (mouseout)="handleTriggerMouseOut()"
+  ></div>
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="!isDragging() && (isActive() || isHover())"
+    [cdkConnectedOverlayPositions]="[
+      {
+        originX: 'end',
+        originY: 'top',
+        overlayX: 'end',
+        overlayY: 'bottom',
+      },
+    ]"
+    [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.offsetWidth"
   >
     <div
-      class="hs-toolbar-wrapper w-full flex items-center justify-between"
-      (mouseout)="$event.stopPropagation()"
+      #toolbarContainer
+      class="w-full pb-16px relative top-16px z-99999"
+      (mouseover)="handleTriggerMouseOver()"
+      (mouseout)="handleTriggerMouseOut()"
     >
       <div
-        class="toolbar-container shadow-md bg-[var(--base-bg-color)] rounded-t-6px p-2px"
-        [attr.data-widget-id]="widget().widgetId"
+        class="hs-toolbar-wrapper w-full flex items-center justify-between"
+        (mouseout)="$event.stopPropagation()"
       >
-        <button
-          mat-icon-button
-          class="hs-icon-button-32"
-          [matMenuTriggerFor]="MoreVert"
+        <div
+          class="toolbar-container shadow-md bg-[var(--base-bg-color)] rounded-t-6px p-2px"
+          [attr.data-widget-id]="gridsterWidgets().widgetId"
         >
-          <mat-icon class="material-icons-round"> more_vert </mat-icon>
-        </button>
-        <mat-menu
-          #MoreVert="matMenu"
-          (closed)="handleTriggerMouseOut()"
-        >
-          <div class="ml-12px mb-8px">
-            当前层数:
-            <span class="ml-10px">{{
-              widget().layerIndex === undefined ? 1 : widget().layerIndex
+          <button mat-icon-button class="hs-icon-button-32" [matMenuTriggerFor]="MoreVert">
+            <mat-icon class="material-icons-round"> more_vert </mat-icon>
+          </button>
+          <mat-menu #MoreVert="matMenu" (closed)="handleTriggerMouseOut()">
+            <div class="ml-12px mb-8px">
+              当前层数:
+              <span class="ml-10px">{{
+                gridsterWidgets().layerIndex === undefined ? 1 : gridsterWidgets().layerIndex
               }}</span>
-          </div>
-          <button
-            mat-menu-item
-            (click)="gridsterItem().bringToFront(1)"
-          >
-            <mat-icon>arrow_upward</mat-icon>
-            向上一层
+            </div>
+            <button mat-menu-item (click)="gridsterItem().bringToFront(1)">
+              <mat-icon>arrow_upward</mat-icon>
+              向上一层
+            </button>
+            <button mat-menu-item (click)="gridsterItem().sendToBack(1)">
+              <mat-icon>arrow_downward</mat-icon>
+              向下一层
+            </button>
+          </mat-menu>
+        </div>
+        <div
+          class="toolbar-containe shadow-md bg-[var(--base-bg-color)] rounded-t-6px p-2px"
+          [attr.data-widget-id]="gridsterWidgets().widgetId"
+        >
+          <button mat-icon-button class="hs-icon-button-32">
+            <mat-icon class="material-icons-round"> edit </mat-icon>
           </button>
-          <button
-            mat-menu-item
-            (click)="gridsterItem().sendToBack(1)"
-          >
-            <mat-icon>arrow_downward</mat-icon>
-            向下一层
+          <button mat-icon-button class="hs-icon-button-32">
+            <mat-icon class="material-icons-round"> download </mat-icon>
           </button>
-        </mat-menu>
-      </div>
-      <div
-        class="toolbar-containe shadow-md bg-[var(--base-bg-color)] rounded-t-6px p-2px"
-        [attr.data-widget-id]="widget().widgetId"
-      >
-        <button
-          mat-icon-button
-          class="hs-icon-button-32"
-        >
-          <mat-icon class="material-icons-round"> edit </mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          class="hs-icon-button-32"
-        >
-          <mat-icon class="material-icons-round"> download </mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          class="hs-icon-button-32"
-          [matMenuTriggerFor]="menu"
-        >
-          <mat-icon class="material-icons-round color-red-5"> delete </mat-icon>
-        </button>
-        <mat-menu
-          #menu="matMenu"
-          (closed)="handleTriggerMouseOut()"
-        >
-          <button
-            mat-menu-item
-            (mousedown)="removeItem($event, widget())"
-            (touchstart)="removeItem($event, widget())"
-          >
-            确认删除
+          <button mat-icon-button class="hs-icon-button-32" [matMenuTriggerFor]="menu">
+            <mat-icon class="material-icons-round color-red-5"> delete </mat-icon>
           </button>
-        </mat-menu>
+          <mat-menu #menu="matMenu" (closed)="handleTriggerMouseOut()">
+            <button
+              mat-menu-item
+              (mousedown)="removeItem($event, gridsterWidgets())"
+              (touchstart)="removeItem($event, gridsterWidgets())"
+            >
+              确认删除
+            </button>
+          </mat-menu>
+        </div>
       </div>
     </div>
-  </div>
-</ng-template>
+  </ng-template>
 }

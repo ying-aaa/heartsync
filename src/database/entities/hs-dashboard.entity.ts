@@ -47,10 +47,10 @@ export class HsDashboardEntity
     type: process.env.DB_TYPE === 'postgres' ? 'jsonb' : 'json',
     nullable: false,
     comment: 'gridster配置',
-    default: () => `'{"gridsterOption":{},"gridsterWidget":[]}'`,
+    default: () => `'{"gridsterOption":{},"gridsterWidgets":[]}'`,
   })
   gridsterConfig: {
     gridsterOption: any;
-    gridsterWidget: IDashboardWidgetConfig[];
+    gridsterWidgets: IDashboardWidgetConfig[];
   };
 }

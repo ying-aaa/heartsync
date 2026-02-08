@@ -6,7 +6,7 @@ import { HsWidgetServiceFactory } from '../widget-service.factory';
 import { PageDto } from 'src/common/dtos/page.dto';
 import { HsPaginationService } from 'src/common/services/pagination.service';
 import { BaseWidgetDto } from './dto/base-widget.dto';
-import { IWidgetType } from '@heartsync/types';
+import { IWidgetType, IWidgetTypesConfig } from '@heartsync/types';
 import { QueryWidgetDto } from './dto/query-widget.dto';
 import { UpdateWidgetDto } from './dto/update-widget.dto';
 @Injectable()
@@ -51,9 +51,13 @@ export class HsWidgetService {
     });
   }
 
-  async findOne(id: string, type: IWidgetType): Promise<HsWidgetEntity> {
+  async findOne(
+    id: string,
+    type: IWidgetType,
+    manager?: EntityManager,
+  ): Promise<IWidgetTypesConfig> {
     const widgetService = this.widgetServiceFactory.getService(type);
-    return widgetService.getWidgetById(id);
+    return widgetService.getWidgetById(id, manager);
   }
 
   async update(

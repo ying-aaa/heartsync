@@ -13,7 +13,7 @@ export interface WidgetStrategy {
 
   updateWidget(widgetId: string, config: Record<string, any>): Promise<any>;
 
-  getWidgetById(widgetId: string): Promise<any>;
+  getWidgetById(widgetId: string, manager?: EntityManager): Promise<any>;
 
   deleteWidget(widgetId: string): Promise<any>;
 }

@@ -1,4 +1,4 @@
-import { IBaseData } from './system.type';
+import { IBaseData, IWhetherStatus } from './system.type';
 import { IWidgetType, IWidgetTypesConfig } from './widget.type';
 
 export enum IDashboardType {
@@ -12,17 +12,19 @@ export interface IDashboardWidgetConfig {
   cols: number;
   name: string;
   rows: number;
+  widgetId: string;
   type: IWidgetType;
   layerIndex: number;
-  isNew?: 1;
+  isNew?: IWhetherStatus;
 }
 
 export interface IDashboardGridsterConfig {
   gridsterOption: any;
-  gridsterWidget: IDashboardWidgetConfig[];
+  gridsterWidgets: IDashboardWidgetConfig[];
 }
 
 export interface IDashboardEntity extends IBaseData {
+  nodeId?: string;
   id: string;
   name: string;
   type: IDashboardType;
@@ -31,8 +33,8 @@ export interface IDashboardEntity extends IBaseData {
   gridsterConfig: IDashboardGridsterConfig;
 }
 
+export type IWidgetContext = Record<string, IWidgetTypesConfig>;
+
 export interface IDashboardConfig extends IDashboardEntity {
-  widgets?: {
-    [key in string]: IWidgetTypesConfig;
-  };
+  widgets?: IWidgetContext;
 }

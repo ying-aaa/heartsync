@@ -35,6 +35,8 @@ import { deepClone, generateUUID, isMobile } from '@src/app/core/utils';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { Subscription } from 'rxjs';
 import { DashboardWidgetDesignComponent } from './dashboard-widget-design.component';
+import { IDashboardWidgetConfig } from '@heartsync/types';
+import { A11yModule } from '@angular/cdk/a11y';
 
 interface IContextMenuConfig {
   label: string;
@@ -69,6 +71,7 @@ interface IContextMenu {
     NgScrollbarModule,
     GridsterItemComponent,
     DashboardWidgetDesignComponent,
+    A11yModule,
   ],
 })
 export class DashboardDesignComponent implements OnInit, AfterViewInit {
@@ -79,7 +82,9 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   isMobile = input<boolean>(isMobile());
 
-  widgets = this.dashboardConfigService.widgets;
+  gridsterWidgets = this.dashboardConfigService.gridsterWidgets;
+
+  widgets = computed(() => this.dashboardConfigService.widgets());
 
   loadingStatus = computed(() => this.dashboardConfigService.loadingStatus());
 
@@ -187,7 +192,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     let rowHeight = null;
     if (gridsterHeight) {
       let totalRows = 0;
-      for (const widget of this.widgets()) {
+      for (const widget of this.gridsterWidgets()) {
         totalRows += widget.rows;
       }
       // 核心公式：行高 = (容器高度 - 间距总占用) / 总行数
@@ -213,15 +218,19 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     const widgetType = this.dashboardEditorService.currentDragstartWidgetType();
     const widgetId = this.dashboardEditorService.currentDragstartWidgetId();
     const isNew = this.dashboardEditorService.isNew;
-    console.log("%c Line:216 🥤 this.dashboardEditorService.isNew", "color:#ea7e5c", this.dashboardEditorService.isNew);
-    const widget: IDashboardWidgetContext = {
+    console.log(
+      '%c Line:216 🥤 this.dashboardEditorService.isNew',
+      'color:#ea7e5c',
+      this.dashboardEditorService.isNew,
+    );
+    const widget = {
       ...item,
       name: '',
       layerIndex: 0,
       type: widgetType,
       id: generateUUID(),
       isNew: isNew ? 1 : 0,
-    };
+    } as IDashboardWidgetConfig;
     if (widgetId) {
       widget.widgetId = widgetId;
     }
@@ -231,7 +240,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
   // 滑动网格生成时的回调
   onSwipeSpawnGrid(event: MouseEvent, item: GridsterItem) {
     const widgetType = this.dashboardEditorService.widgetType();
-    const widget = { ...item, name: '', type: widgetType };
+    const widget = { ...item, name: '', type: widgetType } as IDashboardWidgetConfig;
     this.dashboardConfigService.addWidget(widget);
   }
 

@@ -8,5 +8,5 @@ export class GridsterConfigDto {
 
   @ValidateNested({ each: true })
   @Type(() => GridsterWidgetConfigDto)
-  gridsterWidget: GridsterWidgetConfigDto[] = [];
+  gridsterWidgets: GridsterWidgetConfigDto[] = [];
 }

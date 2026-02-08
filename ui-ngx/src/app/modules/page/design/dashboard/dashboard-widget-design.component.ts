@@ -17,6 +17,7 @@ import { DashboardConfigService } from '@src/app/core/services/dashboard-config.
 import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.service';
 import { MatButtonModule } from '@angular/material/button';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { IWidgetTypesConfig } from '@heartsync/types';
 
 @Component({
   selector: 'hs-dashboard-widget-design',
@@ -32,7 +33,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
 })
 export class DashboardWidgetDesignComponent implements OnInit, OnDestroy {
   gridsterItem = input.required<GridsterItemComponentInterface>();
-  widget = input.required<any>();
+  gridsterWidgets = input.required<any>();
+  widget = input.required<IWidgetTypesConfig>();
   isRuntime = input.required<boolean>();
   isDragging = input.required<boolean>();
 
@@ -51,12 +53,12 @@ export class DashboardWidgetDesignComponent implements OnInit, OnDestroy {
   ) {
     effect(() => {
       const selectWidgetId = this.selectWidgetId();
-      this.isActive.set(selectWidgetId === this.widget().id);
+      this.isActive.set(selectWidgetId === this.gridsterWidgets().id);
     });
   }
 
   handleTriggerMouseOver() {
-    const currentWidgetId = this.widget().widgetId;
+    const currentWidgetId = this.gridsterWidgets().widgetId;
     this.isHover.set(true);
 
     this.closeOtherWidgetsHover(currentWidgetId);
