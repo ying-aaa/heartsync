@@ -18,15 +18,13 @@
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "typeRoots": ["node_modules/@types"],
     "module": "ES2022",
     "useDefineForClassFields": false,
     "strictPropertyInitialization": false,
     "skipLibCheck": false,
-    "lib": [
-      "ES2022",
-      "dom"
-    ],
+    "lib": ["ES2022", "dom"],
+    "typeRoots": ["node_modules/@types", "src/typings"],
+    "types": ["jquery", "tooltipster"],
     "paths": {
       "@src/*": ["src/*"],
       "@app/*": ["src/app/*"],
@@ -42,6 +40,7 @@
       "@assets/*": ["src/assets/*"],
       "@modules/*": ["src/app/modules/*"],
       "@environments/*": ["src/environments/*"],
+      "tooltipster": ["node_modules/tooltipster/dist/js/tooltipster.bundle.min.js"]
     },
     "allowSyntheticDefaultImports": true
   },

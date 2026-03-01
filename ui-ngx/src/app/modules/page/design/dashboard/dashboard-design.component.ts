@@ -7,6 +7,7 @@ import {
   ViewChild,
   Component,
   AfterViewInit,
+  Renderer2,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,10 +34,11 @@ import { HsSvgModule } from '@src/app/shared/components/hs-svg/hs-svg.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { deepClone, generateUUID, isMobile } from '@src/app/core/utils';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { Subscription } from 'rxjs';
 import { DashboardWidgetDesignComponent } from './dashboard-widget-design.component';
 import { IDashboardWidgetConfig } from '@heartsync/types';
 import { A11yModule } from '@angular/cdk/a11y';
+import { fromEvent, Subscription } from 'rxjs';
+import { debounceTime, share } from 'rxjs/operators';
 
 interface IContextMenuConfig {
   label: string;
@@ -94,7 +96,7 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
   fixedRowHeight = signal<number>(70);
 
-  isDragging = signal<boolean>(false);
+  private scrollSubscription?: Subscription;
 
   gridsterItemContextMenu: IContextMenu = {
     rename: {
@@ -129,14 +131,8 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
 
     const baseDrag = {
       enabled: isDesign,
-      start: () => {
-        this.isDragging.set(true);
-      },
-      stop: () => {
-        setTimeout(() => {
-          this.isDragging.set(false);
-        }, 100);
-      },
+      start: () => {},
+      stop: () => {},
     };
 
     const options: GridsterConfig = {
@@ -174,11 +170,10 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     return options;
   });
 
-  breakpointObserverSubscription: Subscription;
-
   constructor(
     private dashboardEditorService: DashboardEditorService,
     private dashboardConfigService: DashboardConfigService,
+    private renderer: Renderer2,
   ) {
     effect(() => {
       const gridsterOption = this.gridsterOption();
@@ -218,11 +213,6 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     const widgetType = this.dashboardEditorService.currentDragstartWidgetType();
     const widgetId = this.dashboardEditorService.currentDragstartWidgetId();
     const isNew = this.dashboardEditorService.isNew;
-    console.log(
-      '%c Line:216 🥤 this.dashboardEditorService.isNew',
-      'color:#ea7e5c',
-      this.dashboardEditorService.isNew,
-    );
     const widget = {
       ...item,
       name: '',
@@ -283,9 +273,15 @@ export class DashboardDesignComponent implements OnInit, AfterViewInit {
     item.id && this.dashboardEditorService.updateWidgetId(item.id);
   }
 
+  ngOnInit() {}
+
   ngAfterViewInit() {
     this.dashboardEditorService.setGridsterInstall(this.gridster);
   }
 
-  ngOnInit() {}
+  ngOnDestroy(): void {
+    if (this.scrollSubscription) {
+      this.scrollSubscription.unsubscribe();
+    }
+  }
 }

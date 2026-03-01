@@ -1,4 +1,4 @@
-import { Component, input, signal, effect, OnInit, computed } from '@angular/core';
+import { Component, input, signal, effect, OnInit, computed, untracked } from '@angular/core';
 import { WidgetService } from '@src/app/core/http/widget.service';
 import { IWidgetConfig, IWidgetType } from '@src/app/shared/models/public-api';
 import { WidgetComponent } from '../widget/widget.component';
@@ -25,6 +25,7 @@ export class WidgetContainerComponent implements OnInit {
   widgetId = input<string>();
   widgetType = input<IWidgetType>();
   widgetConfigInput = input<IWidgetTypesConfig>();
+  loadingStateInput = input<boolean>();
 
   loadingState = signal(false);
   errorState = signal<string | null>(null);
@@ -34,30 +35,10 @@ export class WidgetContainerComponent implements OnInit {
     name: '',
     appId: '',
     type: IWidgetType.FORM,
-    settings: {
-      anableFullscreen: true,
-      showTitle: true,
-      showTitleIcon: false,
-      title: '你好世界',
-      titleTooltip: '',
-      icon: '',
-      containerStyle: {
-        backgroundColor: 'var(--base-bg-color)',
-        color: 'rgba(0, 0, 0, .87)',
-        padding: '8px',
-        borderRadius: '8px',
-        boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 5px, rgba(16, 16, 16, 0.35) 0px 0px 20px -10px',
-      },
-      titleStyle: {
-        lineHeight: '32px',
-        padding: '0px',
-      },
-      iconStyle: {},
-      widgetStyle: {},
-    },
+    settings: {},
   } as IWidgetTypesConfig);
 
-  widgetSettings = computed(() => this.widgetConfig().settings);
+  widgetSettings = computed(() => this.widgetConfig().settings || {});
 
   fullscreen = false;
 
@@ -66,6 +47,12 @@ export class WidgetContainerComponent implements OnInit {
       const currentId = this.widgetId();
       const currentConfig = this.widgetConfigInput();
       this.handleConfigSource(currentId, currentConfig);
+    });
+    effect(() => {
+      const loadingState = this.loadingStateInput();
+      untracked(() => {
+        this.loadingState.set(loadingState || false);
+      });
     });
   }
 

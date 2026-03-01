@@ -1,5 +1,9 @@
 import { IBaseData, IWhetherStatus } from './system.type';
-import { IWidgetType, IWidgetTypesConfig } from './widget.type';
+import {
+  IWidgetSettings,
+  IWidgetType,
+  IWidgetTypesConfig,
+} from './widget.type';
 
 export enum IDashboardType {
   GRIDSTER = 'gridster',
@@ -15,6 +19,7 @@ export interface IDashboardWidgetConfig {
   widgetId: string;
   type: IWidgetType;
   layerIndex: number;
+  settings: IWidgetSettings;
   isNew?: IWhetherStatus;
 }
 

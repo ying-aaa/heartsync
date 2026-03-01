@@ -1,12 +1,11 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { GridType, DisplayGrid } from 'angular-gridster2';
-console.log('%c Line:9 🥕 GridType', 'color:#2eafb0', GridType);
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -64,13 +63,16 @@ export class DashboardLayoutSettingsComponent implements OnInit {
   displayGridOptions = displayGridOptions;
   backgroundImageModeOptions = backgroundImageModeOptions;
 
+  dashboardConfigService: DashboardConfigService;
+
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
     private uploadFileService: UploadFileService,
-    private dashboardConfigService: DashboardConfigService,
     private dialogRef: MatDialogRef<DashboardLayoutSettingsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { dashboardConfigService: DashboardConfigService },
   ) {
+    this.dashboardConfigService = data.dashboardConfigService;
     this.form = this.fb.group({
       gridType: [GridType.Fit],
       margin: [10],

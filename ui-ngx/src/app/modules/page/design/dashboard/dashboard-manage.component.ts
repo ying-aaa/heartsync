@@ -1,4 +1,4 @@
-import { Component, effect, OnInit, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, OnInit, signal, viewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { WidgetFolderComponent } from '../widget/widget-folder.component';
 import { DashboardViewportComponent } from './dashboard-viewport.component';
@@ -16,7 +16,8 @@ import { DashboardEditorService } from '@src/app/core/services/dashboard-editor.
 import { MediaBreakpoints } from '@src/app/shared/models/constants';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { WidgetEditorService } from '@src/app/core/services/widget-editor.service';
-import { IDashboardConfig, IDashboardType } from '@heartsync/types';
+import { IDashboardConfig } from '@heartsync/types';
+import { DashboardWidgetConfigComponent } from './dashboard-widget-config.component';
 
 @Component({
   selector: 'hs-dashboard-manage',
@@ -31,6 +32,7 @@ import { IDashboardConfig, IDashboardType } from '@heartsync/types';
     MatIconModule,
     DashboardToolbarComponent,
     HsTreeComponent,
+    DashboardWidgetConfigComponent,
   ],
   providers: [WidgetEditorService],
 })
@@ -43,6 +45,10 @@ export class DashboardManageComponent implements OnInit {
   dashboardId: string;
 
   breakpointObserverSubscription: Subscription;
+
+  widgetConfigOpen = computed(() => this.dashboardEditorService.widgetConfigOpen());
+  dashboardListOpen = computed(() => this.dashboardEditorService.dashboardListOpen());
+  widgetListOpen = computed(() => this.dashboardEditorService.widgetListOpen());
 
   treeConfig = signal<IFileTreeConfig>({
     featureList: [
@@ -123,18 +129,22 @@ export class DashboardManageComponent implements OnInit {
       .observe([MediaBreakpoints['lt-sm'], MediaBreakpoints['gt-sm']])
       .subscribe((res: BreakpointState) => {
         const isMobileScreen = this.breakpointObserver.isMatched(MediaBreakpoints['lt-sm']);
-        const isPcScreen = this.breakpointObserver.isMatched(MediaBreakpoints['gt-sm']);
-        const isTabletScreen = !isMobileScreen && !isPcScreen;
+        // const isPcScreen = this.breakpointObserver.isMatched(MediaBreakpoints['gt-sm']);
+        // const isTabletScreen = !isMobileScreen && !isPcScreen;
 
         this.isMobile.set(isMobileScreen);
 
-        const sidenav = this.sidenavStart && this.sidenavStart();
-        if (isMobileScreen) {
-          sidenav?.close();
-        } else {
-          sidenav?.open();
-        }
+        this.dashboardEditorService.updateDashboardListOpen(!isMobileScreen);
       });
+
+    effect(() => {
+      const widgetConfigOpen = this.widgetConfigOpen();
+      if (widgetConfigOpen) {
+        this.dashboardEditorService.updateWidgetListOpen(false);
+        this.dashboardEditorService.updateDashboardListOpen(false);
+        this.dashboardEditorService.resizeGridster();
+      }
+    });
   }
 
   updateDashboardId(dashboardId: string) {

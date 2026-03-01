@@ -34,6 +34,8 @@ export class WidgetViewportComponent {
 
   widgetConfig = computed(() => this.widgetEditorService.widgetConfig());
 
+  loadingState = computed(() => this.widgetEditorService.loadingState());
+
   appId: string = getParamFromRoute('appId', this.route)!;
 
   constructor(

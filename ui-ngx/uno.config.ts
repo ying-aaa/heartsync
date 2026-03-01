@@ -112,6 +112,7 @@ export default defineConfig({
     'absolute-center-y': 'absolute top-50% -translate-y-50%',
     'backdrop-fit': 'bg-center bg-cover object-cover object-center',
     'border-line': 'border-1px border-solid border-color-[var(--base-divider-color)]',
+    'object-fit': 'object-cover object-center',
   },
   cli: {
     entry: {

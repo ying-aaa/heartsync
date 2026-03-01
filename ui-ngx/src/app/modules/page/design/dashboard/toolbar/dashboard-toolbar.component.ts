@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  effect,
-  input,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, effect, input, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -35,16 +28,13 @@ import { VerseDesignModeSwitchComponent } from '@src/app/shared/components/ui-ve
 export class DashboardToolbarComponent implements OnInit {
   isMobile = input.required<boolean>();
 
-  sidenavStart = input.required<MatSidenav>();
-  sidenavEnd = input.required<MatSidenav>();
-
   showWidgetList = signal<boolean>(false);
 
   isRuntime = this.dashboardEditorService.isRuntime;
 
-  currentDashboardName = computed(() =>
-    this.dashboardEditorService.currentDashboardName(),
-  );
+  currentDashboardName = computed(() => this.dashboardEditorService.currentDashboardName());
+
+  dashboardListOpen = computed(() => this.dashboardEditorService.dashboardListOpen());
 
   constructor(
     private dashboardEditorService: DashboardEditorService,
@@ -53,7 +43,7 @@ export class DashboardToolbarComponent implements OnInit {
   ) {
     effect(() => {
       const showWidgetList = this.showWidgetList();
-      this.sidenavEnd().toggle(showWidgetList);
+      this.dashboardEditorService.updateWidgetListOpen(showWidgetList);
       this.resizeGridster();
     });
   }
@@ -63,7 +53,9 @@ export class DashboardToolbarComponent implements OnInit {
     const width = isMobile() ? '100vw' : '800px';
     const height = isMobile() ? '100vh' : '600px';
     const dialogRef = this.dialog.open(DashboardLayoutSettingsComponent, {
-      data: {},
+      data: {
+        dashboardConfigService: this.dashboardConfigService,
+      },
       width,
       height,
       minWidth: width,
@@ -77,6 +69,8 @@ export class DashboardToolbarComponent implements OnInit {
   updateRuntimeStatus(is: boolean) {
     this.dashboardEditorService.updateRuntimeStatus(is);
     this.showWidgetList.set(false);
+    this.dashboardEditorService.updateDashboardListOpen(false);
+    this.dashboardEditorService.updateWidgetConfigStatus(false);
   }
 
   // 保存
@@ -94,8 +88,9 @@ export class DashboardToolbarComponent implements OnInit {
   }
 
   // 侧边栏显隐
-  toggleSidenav(sidenav: MatSidenav) {
-    sidenav.toggle();
+  toggleSidenav() {
+    const dashboardListOpen = this.dashboardEditorService.dashboardListOpen();
+    this.dashboardEditorService.updateDashboardListOpen(!dashboardListOpen);
     this.resizeGridster();
   }
 
@@ -104,6 +99,5 @@ export class DashboardToolbarComponent implements OnInit {
     this.dashboardEditorService.resizeGridster();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

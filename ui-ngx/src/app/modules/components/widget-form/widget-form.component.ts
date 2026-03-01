@@ -11,13 +11,9 @@ import { IFormWidgetConfig } from '@heartsync/types';
 @Component({
   selector: 'hs-widget-form',
   templateUrl: './widget-form.component.html',
-  imports: [
-    FormlyRunModule,
-    MatProgressSpinnerModule,
-    CommonModule, // 新增：补充模板指令依赖
-  ],
+  imports: [FormlyRunModule, MatProgressSpinnerModule, CommonModule],
   host: {
-    class: 'relative block w-full min-h-[300px]', // 修正：w-100% → w-full，min-h-300px → min-h-[300px]（CSS规范）
+    class: 'relative block w-full min-h-[300px] h-full',
   },
 })
 export class WidgetFormComponent implements OnInit {

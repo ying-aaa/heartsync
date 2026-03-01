@@ -1,0 +1,47 @@
+.tooltipster-sidetip.hs-widget-edit-active-tooptip {
+  position: absolute !important;
+  height: auto !important;
+
+  .tooltipster-box {
+    user-select: none;
+    background: transparent;
+    border: unset;
+    box-shadow: unset;
+
+    .tooltipster-content {
+      padding: 0;
+      font-size: 12px;
+      line-height: 12px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.76);
+      overflow: hidden;
+
+      .hs-widget-action-container {}
+    }
+  }
+
+  .tooltipster-arrow {
+    .tooltipster-arrow-uncropped {
+      .tooltipster-arrow-background {
+        border-width: 12px;
+      }
+    }
+  }
+
+  &.tooltipster-top {
+    .tooltipster-arrow {
+      bottom: -1px;
+
+      .tooltipster-arrow-uncropped {
+        .tooltipster-arrow-border {
+          border-top-color: rgba(0, 0, 0, 0.38);
+        }
+
+        .tooltipster-arrow-background {
+          border-top-color: #fff;
+          left: -2px;
+        }
+      }
+    }
+  }
+}

@@ -81,6 +81,11 @@
                 "glob": "worker-javascript.js",
                 "input": "./node_modules/ace-builds/src-min-noconflict/",
                 "output": "/"
+              },
+              {
+                "glob": "tooltipster.bundle.min.js",
+                "input": "./node_modules/tooltipster/dist/js/",
+                "output": "/"
               }
             ],
             "styles": [
@@ -88,6 +93,8 @@
               "src/styles/mat.scss",
               "src/styles/uno.css",
               "node_modules/ngx-toastr/toastr.css",
+              "node_modules/tooltipster/dist/css/tooltipster.bundle.min.css",
+              "node_modules/tooltipster/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css",
               {
                 "input": "node_modules/highlight.js/styles/atom-one-dark.css",
                 "bundleName": "atom-one-dark",
@@ -188,10 +195,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/styles.less"
-            ],
+            "styles": ["@angular/material/prebuilt-themes/azure-blue.css", "src/styles.less"],
             "scripts": []
           }
         }

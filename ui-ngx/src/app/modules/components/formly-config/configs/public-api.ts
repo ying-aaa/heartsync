@@ -17,6 +17,7 @@ import { menu_global_config } from './menu-global.config';
 import { app_header_config } from './app-header.config';
 import { generateUUID } from '@src/app/core/utils';
 import { app_global_config } from './app-global.config';
+import { dashboard_widget_config } from './dashboard-widget.config';
 
 /**
  * 增强字段数据：同时添加fieldId和单位字段（units）
@@ -66,4 +67,6 @@ export const CONFIT_RESOURCE: { [key: string]: IEditorFormlyField[] } = {
   // 应用头配置
   appHeader: app_header_config,
   appGlobal: app_global_config,
+  // 仪表板部件配置
+  dashboardWidget: dashboard_widget_config,
 };

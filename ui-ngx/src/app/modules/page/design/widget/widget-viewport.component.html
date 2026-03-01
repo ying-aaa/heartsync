@@ -1,7 +1,4 @@
-<content
-  #ContainerElement
-  class="wh-full"
->
+<content #ContainerElement class="wh-full">
   <div class="widget-wrapper flex-center">
     <div
       cdkDrag
@@ -14,36 +11,23 @@
 
       <!-- 内容 -->
       <div class="wh-full">
-        <ng-scrollbar
-          class="wh-full!"
-          #scrollbarRef="ngScrollbar"
-          externalViewport
-          visibility="hover"
-          appearance="compact"
-          orientation="auto"
-        >
-          <div scrollViewport>
-            <div class="p-20px wh-full">
-              <!-- 移入遮罩层 -->
-              <div class="viewport-overlay-layer wh-full absolute"></div>
+        <div class="p-20px wh-full">
+          <!-- 移入遮罩层 -->
+          <div class="viewport-overlay-layer wh-full absolute"></div>
 
-              <hs-widget-container
-                class="widget-container"
-                [widgetConfigInput]="widgetConfig()"
-              ></hs-widget-container>
-            </div>
-          </div>
-        </ng-scrollbar>
+          <hs-widget-container
+            class="widget-container"
+            [widgetConfigInput]="widgetConfig()"
+            [loadingStateInput]="loadingState()"
+          ></hs-widget-container>
+        </div>
       </div>
 
       <!-- 遮罩层 -->
       <div
-        class="viewport-overlay-layer-btn px-16px! mx-8px absolute top-50% left-50% -translate-x-50% -translate-y-50%"
+        class="viewport-overlay-layer-btn px-16px! mx-8px absolute z-999 top-50% left-50% -translate-x-50% -translate-y-50%"
       >
-        <button
-          mat-flat-button
-          (click)="toWidgetDesign()"
-        >
+        <button mat-flat-button (click)="toWidgetDesign()">
           <mat-icon matChipAvatar>design_services</mat-icon> 去设计
         </button>
       </div>

@@ -1,34 +1,33 @@
 <div class="relative wh-full">
   @if (loadingState()) {
-  <div class="absolute inset-0 wh-full flex-center bg-white/90 z-10">
-    <mat-spinner></mat-spinner>
-  </div>
+    <div class="absolute inset-0 wh-full flex-center bg-white/90 z-10">
+      <mat-spinner></mat-spinner>
+    </div>
   }
 
   @if (!loadingState() && errorState()) {
-  <div class="absolute inset-0 wh-full flex-center bg-red-50 text-red-600 z-10">
-    <div class="text-18px font-medium">{{ errorState() }}</div>
-  </div>
+    <div class="absolute inset-0 wh-full flex-center bg-red-50 text-red-600 z-10">
+      <div class="text-18px font-medium">{{ errorState() }}</div>
+    </div>
   }
 
   @if (!loadingState() && !errorState()) {
-  @if (fields().length) {
-  <formly-form
-    [form]="formGroup"
-    [fields]="fields()"
-    [model]="model()"
-    [options]="options"
-  ></formly-form>
-  }
-  @else {
-  <div class="absolute inset-0 wh-full flex-col flex-center pb-80px opacity-80 z-0">
-    <img
-      class="w-180px h-180px"
-      src="assets/svg/empty-page.svg"
-      alt="暂无内容提示图"
-    />
-    <div class="mt-30px text-18px text-gray-500">这个部件没有内容</div>
-  </div>
-  }
+    @if (fields().length) {
+      <formly-form
+        [form]="formGroup"
+        [fields]="fields()"
+        [model]="model()"
+        [options]="options"
+      ></formly-form>
+    } @else {
+      <div class="absolute inset-0 wh-full flex-col flex-center pb-80px opacity-80 z-0">
+        <img
+          class="w-120px h-120px scale-200"
+          src="assets/svg/empty-page.svg"
+          alt="暂无内容提示图"
+        />
+        <div class="mt-30px text-18px text-gray-500">这个表单部件没有内容</div>
+      </div>
+    }
   }
 </div>

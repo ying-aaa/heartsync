@@ -1,77 +1,70 @@
 <content
-  class="px-8px items-center justify-between  bg-##a7c1de"
+  class="px-8px items-center justify-between bg-##a7c1de"
   [class.flex]="!isMobile() || isRuntime()"
 >
   <div class="flex items-center gap-8px h-40px line-height-40px">
-    @let isSidenavStartOpen = sidenavStart().opened;
+    @let isSidenavStartOpen = dashboardListOpen();
     <button
       matSuffix
       mat-icon-button
-      (click)="toggleSidenav(sidenavStart())"
+      (click)="toggleSidenav()"
       [matTooltip]="isSidenavStartOpen ? '隐藏资源目录' : '显示资源目录'"
       class="p-4px!"
     >
-      <mat-icon class="material-icons-round text-32px w-32px! h-32px!">{{ isSidenavStartOpen ? 'arrow_left' :
-        'arrow_right' }}
+      <mat-icon class="material-icons-round text-32px w-32px! h-32px!"
+        >{{ isSidenavStartOpen ? 'arrow_left' : 'arrow_right' }}
       </mat-icon>
     </button>
 
-    <div
-      [matTooltip]="currentDashboardName()"
-      class="w-180px truncate"
-    >
+    <div [matTooltip]="currentDashboardName()" class="w-180px truncate">
       <span class="text-14px">仪表板：</span>{{ currentDashboardName() }}
     </div>
   </div>
 
   <div class="flex items-center justify-end gap-16px h-40px line-height-40px">
-    @if(!isRuntime()) {
-    <!-- 预设列表 -->
-    @if(!isMobile()){
-    <hs-widget-preset-list></hs-widget-preset-list>
-    }
-    <!-- 控制已有内容显示 -->
-    <verse-design-mode-switch
-      [tooltip]="showWidgetList() ? '显示部件列表' : '关闭部件列表'"
-      [(ngModel)]="showWidgetList"
-    ></verse-design-mode-switch>
-    <!-- 布局设置按钮 -->
-    <button
-      mat-icon-button
-      class="p-6px!"
-      (click)="openLayoutSettings()"
-    >
-      <mat-icon class="material-icons-round  text-28px w-28px! h-28px!">settings</mat-icon>
-    </button>
-    <!-- 保存取消按钮 -->
-    <div class="flex-center gap-8px">
-      <button
-        mat-raised-button
-        class="btn-save min-w-72px! w-72px! h-32px! p-5px! rounded-5px!"
-        (click)="saveConfig()"
-      >
-        <mat-icon class="material-icons-round">save</mat-icon>
-        保存
+    @if (!isRuntime()) {
+      <!-- 预设列表 -->
+      @if (!isMobile()) {
+        <hs-widget-preset-list></hs-widget-preset-list>
+      }
+      <!-- 控制已有内容显示 -->
+      <verse-design-mode-switch
+        [tooltip]="showWidgetList() ? '显示部件列表' : '关闭部件列表'"
+        [(ngModel)]="showWidgetList"
+      ></verse-design-mode-switch>
+      <!-- 布局设置按钮 -->
+      <button mat-icon-button class="p-6px!" (click)="openLayoutSettings()">
+        <mat-icon class="material-icons-round text-28px w-28px! h-28px!">settings</mat-icon>
       </button>
+      <!-- 保存取消按钮 -->
+      <div class="flex-center gap-8px">
+        <button
+          mat-raised-button
+          class="btn-save min-w-72px! w-72px! h-32px! p-5px! rounded-5px!"
+          (click)="saveConfig()"
+        >
+          <mat-icon class="material-icons-round">save</mat-icon>
+          保存
+        </button>
 
+        <button
+          mat-button
+          class="min-w-72px! w-72px! h-32px! p-5px! rounded-5px!"
+          (click)="cancel(true)"
+        >
+          <mat-icon class="material-icons-round">cancel</mat-icon>
+          取消
+        </button>
+      </div>
+    } @else {
       <button
-        mat-button
+        mat-flat-button
         class="min-w-72px! w-72px! h-32px! p-5px! rounded-5px!"
-        (click)="cancel(true)"
+        (click)="updateRuntimeStatus(false)"
       >
-        <mat-icon class="material-icons-round">cancel</mat-icon>
-        取消
+        <mat-icon class="material-icons-round">edit</mat-icon>
+        编辑
       </button>
-    </div>
-    }@else {
-    <button
-      mat-flat-button
-      class="min-w-72px! w-72px! h-32px! p-5px! rounded-5px!"
-      (click)="updateRuntimeStatus(false)"
-    >
-      <mat-icon class="material-icons-round">edit</mat-icon>
-      编辑
-    </button>
     }
   </div>
 </content>

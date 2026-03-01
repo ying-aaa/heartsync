@@ -19,7 +19,11 @@
     }
 
     <!-- @if (gridsterOption().gridType) { -->
-    <gridster [options]="gridsterOption()" [class.overflow-hidden!]="isMobile() && isRuntime()">
+    <gridster
+      #gridster
+      [options]="gridsterOption()"
+      [class.overflow-hidden!]="isMobile() && isRuntime()"
+    >
       @for (item of gridsterWidgets(); track item.id) {
         <gridster-item
           #gridsterItem
@@ -30,11 +34,12 @@
           <!-- 内容 -->
           <div id="#containter" class="wh-full">
             <hs-dashboard-widget-design
+              #WidgetDesign
+              [gridster]="gridster"
               [gridsterItem]="gridsterItem"
               [gridsterWidgets]="item"
               [widget]="widgets()[item.widgetId]"
               [isRuntime]="isRuntime()"
-              [isDragging]="isDragging()"
             ></hs-dashboard-widget-design>
           </div>
         </gridster-item>

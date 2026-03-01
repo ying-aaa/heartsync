@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HsDashboardEntity } from 'src/database/entities/hs-dashboard.entity';
 import { DataSource, EntityManager, Repository } from 'typeorm';
@@ -13,6 +13,7 @@ import {
   IWidgetTypesConfig,
 } from '@heartsync/types';
 import { HsWidgetEntity } from 'src/database/entities/hs-widget.entity';
+import { widgetSettings } from 'src/config/constants';
 @Injectable()
 export class HsDashboardService {
   constructor(
@@ -46,6 +47,10 @@ export class HsDashboardService {
       await manager.save(dashboard);
       for (const widget of gridsterWidgets) {
         if (widget.isNew === IWhetherStatus.YES) {
+          // 设置默认仪表板部件样式
+          if (!widget.settings) {
+            widget.settings = widgetSettings;
+          }
           await this.widgetService.create(
             {
               name: widget.name,
@@ -54,8 +59,8 @@ export class HsDashboardService {
             },
             manager,
           );
-          Reflect.deleteProperty(widget, 'isNew');
         }
+        Reflect.deleteProperty(widget, 'isNew');
       }
 
       return dashboard;
@@ -72,9 +77,12 @@ export class HsDashboardService {
       for (let i = 0; i < gridsterWidgets.length; i++) {
         const widget = gridsterWidgets[i];
         if (widget.isNew === IWhetherStatus.YES) {
+          if (!widget.settings) {
+            widget.settings = widgetSettings;
+          }
           const widgetData = await this.widgetService.create(
             {
-              name: widget.name || '【仪表板】' + name + '部件' + i,
+              name: widget.name || `仪表板【${name}】部件${i}`,
               type: widget.type,
               appId: updateData.appId,
             },
@@ -100,6 +108,9 @@ export class HsDashboardService {
       const dashboard = await manager.findOne(HsDashboardEntity, {
         where: { id },
       });
+      if (!dashboard) {
+        throw new BadRequestException('仪表板不存在');
+      }
       const gridsterWidgets = dashboard.gridsterConfig.gridsterWidgets;
       const widgets: IWidgetContext = {} as IWidgetContext;
       for (const widget of gridsterWidgets) {

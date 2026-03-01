@@ -11,8 +11,7 @@ import {
   IWidgetTypesConfig,
 } from '@heartsync/types';
 
-// dashboard-config.service.ts
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DashboardConfigService {
   private dashboardConfig = signal<IDashboardConfig>({} as IDashboardConfig);
 

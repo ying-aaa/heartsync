@@ -2678,10 +2678,17 @@
   resolved "https://registry.npmmirror.com/@types/jasmine/-/jasmine-5.1.5.tgz"
   integrity sha512-SaCZ3kM5NjOiJqMRYwHpLbTfUC2Dyk1KS3QanNFsUYPGTk70CWVK/J9ueun6zNhw/UkgV7xl8V4ZLQZNRbfnNw==
 
-"@types/jquery@*", "@types/jquery@^3.5.32":
+"@types/jquery@*":
   version "3.5.32"
   resolved "https://registry.npmmirror.com/@types/jquery/-/jquery-3.5.32.tgz"
   integrity sha512-b9Xbf4CkMqS02YH8zACqN1xzdxc3cO735Qe5AbSUFmyOiaWAbcpqh9Wna+Uk0vgACvoQHpWDg2rGdHkYPLmCiQ==
+  dependencies:
+    "@types/sizzle" "*"
+
+"@types/jquery@^3.5.33":
+  version "3.5.33"
+  resolved "https://registry.npmmirror.com/@types/jquery/-/jquery-3.5.33.tgz#f42f40bac3edd84abdc9f6297d28e570fe463b35"
+  integrity sha512-SeyVJXlCZpEki5F0ghuYe+L+PprQta6nRZqhONt9F13dWBtR/ftoaIbdRQ7cis7womE+X2LKhsDdDtkkDhJS6g==
   dependencies:
     "@types/sizzle" "*"
 
@@ -2790,6 +2797,13 @@
   version "1.15.8"
   resolved "https://registry.npmmirror.com/@types/sortablejs/-/sortablejs-1.15.8.tgz"
   integrity sha512-b79830lW+RZfwaztgs1aVPgbasJ8e7AXtZYHTELNXZPsERt4ymJdjV4OccDbHQAvHrCcFpbF78jkm0R6h/pZVg==
+
+"@types/tooltipster@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.npmmirror.com/@types/tooltipster/-/tooltipster-0.0.35.tgz#16aaa68716d51a5542857806f3ae13abb3c69067"
+  integrity sha512-vYbL732eEigtw16rBHvOBUGUY5gk0ZGcE5Y08PAcHi/Pg4eZrIvRQ3FNP03Z/apobm97ByaXuTp3PV4TAsqRgQ==
+  dependencies:
+    "@types/jquery" "*"
 
 "@types/trusted-types@^2.0.7":
   version "2.0.7"
@@ -8380,6 +8394,11 @@ toidentifier@1.0.1:
   version "1.0.1"
   resolved "https://registry.npmmirror.com/toidentifier/-/toidentifier-1.0.1.tgz"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
+
+tooltipster@^4.2.8:
+  version "4.2.8"
+  resolved "https://registry.npmmirror.com/tooltipster/-/tooltipster-4.2.8.tgz#ad1970dd71ad853034e64e3fdd1745f7f3485071"
+  integrity sha512-Znmbt5UMzaiFCRlVaRtfRZYQqxrmNlj1+3xX/aT0OiA3xkQZhXYGbLJmZPigx0YiReYZpO7Lm2XKbUxXsiU/pg==
 
 topojson-client@^3.1.0:
   version "3.1.0"

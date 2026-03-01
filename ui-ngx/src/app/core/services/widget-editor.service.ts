@@ -41,6 +41,8 @@ export class WidgetEditorService {
 
   widgetType = signal<IWidgetType>(IWidgetType.FORM);
 
+  loadingState = signal(false);
+
   constructor(
     private router: Router,
     private WidgetHttpService: WidgetService,
@@ -53,8 +55,10 @@ export class WidgetEditorService {
   }
 
   loadWidgetInfo() {
+    this.loadingState.set(true);
     this.WidgetHttpService.getWidgetById(this.widgetId()!, this.widgetType()).subscribe((res) => {
       this.widgetConfig.set(res);
+      this.loadingState.set(false);
     });
   }
 

@@ -5,50 +5,45 @@
   [style]="widgetSettings().containerStyle"
 >
   @if (loadingState()) {
-  <div class="absolute inset-0 wh-full flex items-center justify-center bg-white/90 z-20">
-    <mat-spinner diameter="40"></mat-spinner>
-  </div>
+    <div class="absolute inset-0 wh-full flex items-center justify-center bg-white/90 z-20">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
   }
 
   @if (!loadingState() && errorState()) {
-  <div class="absolute inset-0 wh-full flex flex-col items-center justify-center bg-red-50 text-red-600 p-4 z-20">
-    <mat-icon class="material-icons text-24px mb-2">error</mat-icon>
-    <span class="text-16px">{{ errorState() }}</span>
-  </div>
+    <div
+      class="absolute inset-0 wh-full flex flex-col items-center justify-center bg-red-50 text-red-600 p-4 z-20"
+    >
+      <mat-icon class="material-icons text-24px mb-2">error</mat-icon>
+      <span class="text-16px">{{ errorState() }}</span>
+    </div>
   }
 
   @if (!loadingState() && !errorState()) {
-  @if (widgetSettings().anableFullscreen) {
-  <button
-    mat-icon-button
-    (click)="fullscreen = !fullscreen"
-    class="absolute! right-12px top-12px z-9!"
-  >
-    @let fullscreenIcon = fullscreen ? 'fullscreen_exit' : 'fullscreen';
-    <mat-icon class="material-icons">{{ fullscreenIcon }}</mat-icon>
-  </button>
-  }
-
-  @if(widgetSettings().showTitle) {
-  <div
-    class="hs-widget-header"
-    [style]="widgetSettings().titleStyle"
-  >
-    @if (widgetSettings().showTitleIcon && widgetSettings().icon) {
-    <mat-icon
-      class="material-icons"
-      [style]="widgetSettings().iconStyle"
-    >{{ widgetSettings().icon }}</mat-icon>
+    @if (widgetSettings().anableFullscreen) {
+      <button
+        mat-icon-button
+        (click)="fullscreen = !fullscreen"
+        class="absolute! right-12px top-12px z-9!"
+      >
+        @let fullscreenIcon = fullscreen ? 'fullscreen_exit' : 'fullscreen';
+        <mat-icon class="material-icons">{{ fullscreenIcon }}</mat-icon>
+      </button>
     }
-    <span [title]="widgetSettings().titleTooltip">{{ widgetSettings().title }}</span>
-  </div>
-  }
 
-  <div class="hs-widget-content flex-1 relative">
-    <hs-widget
-      [style]="widgetSettings().widgetStyle"
-      [widgetConfig]="widgetConfig()"
-    ></hs-widget>
-  </div>
+    @if (widgetSettings().showTitle) {
+      <div class="hs-widget-header" [style]="widgetSettings().titleStyle">
+        @if (widgetSettings().showTitleIcon && widgetSettings().icon) {
+          <mat-icon class="material-icons" [style]="widgetSettings().iconStyle">{{
+            widgetSettings().icon
+          }}</mat-icon>
+        }
+        <span [title]="widgetSettings().titleTooltip">{{ widgetSettings().title }}</span>
+      </div>
+    }
+
+    <div class="hs-widget-content flex-1 relative">
+      <hs-widget [style]="widgetSettings().widgetStyle" [widgetConfig]="widgetConfig()"></hs-widget>
+    </div>
   }
 </content>
