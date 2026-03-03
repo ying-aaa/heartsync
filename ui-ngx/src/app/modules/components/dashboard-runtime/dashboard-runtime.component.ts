@@ -13,7 +13,7 @@ import {
 } from 'angular-gridster2';
 import { WidgetContainerComponent } from '../widget-container/widget-container.component';
 import { SystemService } from '@src/app/core/services/system.service';
-import { IDashboardConfig } from '@heartsync/types';
+import { IDashboardConfig, IWidgetTypesConfig } from '@heartsync/types';
 
 @Component({
   selector: 'hs-dashboard-runtime',
@@ -62,6 +62,8 @@ export class DashboardRuntimeComponent implements OnInit {
     () => this.dashboardConfig().gridsterConfig.gridsterWidgets || [],
   );
 
+  widgets = computed(() => this.dashboardConfig().widgets || {});
+
   isMobile = computed(() => this.systenService.isMobile());
 
   loadingStatus = signal(false);
@@ -106,6 +108,10 @@ export class DashboardRuntimeComponent implements OnInit {
         this.loadingStatus.set(false);
       },
     });
+  }
+
+  mergeObj(obj1: Object, obj2: Object): IWidgetTypesConfig {
+    return { ...obj1, ...obj2 } as IWidgetTypesConfig;
   }
 
   ngOnInit() {}

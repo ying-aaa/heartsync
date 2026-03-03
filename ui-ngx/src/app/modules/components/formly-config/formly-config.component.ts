@@ -24,10 +24,10 @@ import { throttleTime } from 'rxjs/operators';
     >
       <div scrollViewport>
         <div class="pr-12px">
-          <button mat-button (click)="openFormModelDialog()">
+          <!-- <button mat-button (click)="openFormModelDialog()">
             <mat-icon matChipAvatar>settings_ethernet</mat-icon>
             查看填写信息
-          </button>
+          </button> -->
           <ng-content></ng-content>
           <formly-form [form]="formGroup" [fields]="fields" [options]="options()" [model]="model()">
           </formly-form>

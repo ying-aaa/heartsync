@@ -31,6 +31,9 @@ import { MatTabsModule } from '@angular/material/tabs';
             [type]="'dashboardWidget'"
           ></hs-formly-config>
         </mat-tab>
+        <mat-tab label="前置数据">
+          <div class="flex-center wh-full text-36px color-#666">开发中...</div>
+        </mat-tab>
       </mat-tab-group>
     </content>
   `,

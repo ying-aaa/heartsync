@@ -55,6 +55,7 @@ export class WidgetFormComponent implements OnInit {
     this.formConfig.set(null);
 
     if (!id && !externalConfig) {
+      this.loadingState.set(false);
       this.errorState.set('组件必须传入 widgetId 或 widgetConfig 其中一个');
       console.error(this.errorState());
       return;
@@ -80,10 +81,11 @@ export class WidgetFormComponent implements OnInit {
 
     if (!config.flatTypeField) {
       this.errorState.set('部件加载失败');
+      this.loadingState.set(false);
       console.error('外部传入的 widgetConfig 缺少 flatTypeField 字段，无法渲染表单');
       return;
     }
-
+    
     this.formConfig.set(config);
     this.fields.set(config.flatTypeField as IEditorFormlyField[]);
     this.refreshFormlyForm();
@@ -103,6 +105,7 @@ export class WidgetFormComponent implements OnInit {
         this.loadingState.set(false);
 
         if (!widgetConfig.flatTypeField) {
+          this.loadingState.set(false);
           this.errorState.set(`部件加载失败`);
           console.error(this.errorState());
           return;

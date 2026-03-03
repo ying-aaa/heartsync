@@ -56,6 +56,7 @@ export class HsRadioComponent implements OnInit, ControlValueAccessor {
   }
 
   onOptionClick(item: IRadioConfig): void {
+    if(item.disabled) return;
     if (!this._disabled) {
       this.value = item.value;
     }

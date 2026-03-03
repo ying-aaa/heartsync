@@ -91,7 +91,7 @@ export class HsApplicationService {
   async findAll(
     queryDto: QueryApplicationDto,
   ): Promise<PageDto<IAppWithConfig>> {
-    const { versionCode, versionStatus, isPublished } = queryDto;
+    const { versionCode, versionStatus, isPublished, directoryId } = queryDto;
 
     const queryBuilder = this.appRepo.createQueryBuilder('app');
 
@@ -130,6 +130,17 @@ export class HsApplicationService {
         versionStatus: IAppVersionStatus.PUBLISHED,
       });
     }
+
+    if (directoryId) {
+      queryBuilder.andWhere('app.directoryId = :directoryId', {
+        directoryId,
+      });
+    }
+
+    // 查询未删除的应用
+    queryBuilder.andWhere('app.is_deleted = :isDeleted', {
+      isDeleted: IWhetherStatus.NO,
+    });
 
     Reflect.deleteProperty(queryDto, 'versionId');
     Reflect.deleteProperty(queryDto, 'versionStatus');

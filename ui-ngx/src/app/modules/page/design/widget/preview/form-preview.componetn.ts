@@ -11,13 +11,13 @@ import { PreviewToolbarComponent } from './preview-toolbar.component';
   selector: 'hs-form-preview',
   template: `
     <hs-preview-toolbar>
-      <button
+      <!-- <button
         mat-button
         (click)="openFormModelDialog()"
       >
         <mat-icon matChipAvatar>settings_ethernet</mat-icon>
         查看填写信息
-      </button>
+      </button> -->
 
       <button
         mat-flat-button

@@ -38,7 +38,8 @@ export class HsCodeWidgetsService implements WidgetStrategy {
         where: { id },
       });
       if (!widget) {
-        throw new BadRequestException('部件不存在');
+        // throw new BadRequestException('部件不存在');
+        return {} as any;
       }
       return widget;
     };

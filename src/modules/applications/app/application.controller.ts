@@ -38,8 +38,8 @@ export class HsApplicationController {
    * 分页查询应用列表（含配置）
    */
   @Get()
-  @Roles({ roles: ['super-admin'], mode: RoleMatchingMode.ALL })
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  // @Roles({ roles: ['super-admin'], mode: RoleMatchingMode.ALL })
+  // @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   async findAll(
     @Query() queryDto: QueryApplicationDto,
   ): Promise<PageDto<IAppWithConfig>> {

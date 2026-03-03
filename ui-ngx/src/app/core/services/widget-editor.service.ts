@@ -11,12 +11,12 @@ export interface IWidgetSelected {
 
 export const widgetTypesList: IRadioConfig[] = [
   { label: '代码', value: 'code' },
-  { label: '图表', value: 'chart' },
-  { label: 'cesium', value: 'cesium' },
-  { label: 'x6', value: 'x6' },
+  { label: '图表', value: 'chart', disabled: true },
+  { label: 'cesium', value: 'cesium', disabled: true },
+  { label: 'x6', value: 'x6', disabled: true },
   { label: '表单', value: 'form' },
-  { label: '列表', value: 'list' },
-  { label: '详情', value: 'detail' },
+  { label: '列表', value: 'list', disabled: true },
+  { label: '详情', value: 'detail', disabled: true },
 ];
 
 export const widgetTypeIcons = {
