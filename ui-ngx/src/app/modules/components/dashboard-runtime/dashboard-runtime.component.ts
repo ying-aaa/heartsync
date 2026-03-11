@@ -32,7 +32,7 @@ export class DashboardRuntimeComponent implements OnInit {
   private dashboardConfig = signal<IDashboardConfig>({} as IDashboardConfig);
 
   gridsterOption = computed<GridsterConfig>(() => {
-    const gridsterOption = this.dashboardConfig().gridsterConfig.gridsterOption || {};
+    const gridsterOption = this.dashboardConfig().gridsterConfig?.gridsterOption || {};
     if (this.isMobile() && gridsterOption?.gridType === GridType.Fit) {
       gridsterOption.gridType = GridType.Fixed;
     }

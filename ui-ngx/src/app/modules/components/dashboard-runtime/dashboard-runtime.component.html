@@ -36,8 +36,8 @@
           id="#containter"
           class="wh-full overflow-y-auto overflow-x-hidden"
         >
-          @let widgetConfigInput = mergeObj(widgets()[item.widgetId!], item);
-          <hs-widget-container [widgetConfigInput]="widgetConfigInput"></hs-widget-container>
+          <!-- @let widgetConfigInput = mergeObj(widgets()[item.widgetId!], item); -->
+          <hs-widget-container [widgetConfigInput]="widgets()[item.widgetId!]"></hs-widget-container>
         </div>
       </gridster-item>
       }
